@@ -203,12 +203,12 @@ function OperateArm(partName, surgeonFact, useOven)
         end
     end
 
-    FixDeepWound(partName)
+    FixDeepWound(player, partName, useOven)
     player:transmitModData();
 end
 
 
-function FixDeepWound(partName)
+function FixDeepWound(player, partName, useOven)
 
     local a_rightArm = {"RightArm", "RightForearm", "RightHand"}
     local a_rightForearm = {"RightForearm", "RightHand"}
@@ -240,11 +240,17 @@ function FixDeepWound(partName)
 
 
     for k,v in pairs(chosen_array) do 
-        local tmpBodyPart = bodyDamage:getBodyPart(TOC_getBodyPart(v));
+        local tmpBodyPart = player:getBodyDamage():getBodyPart(TOC_getBodyPart(v));
         tmpBodyPart:setDeepWounded(false);      -- Basically like stictching
         tmpBodyPart:setDeepWoundTime(0);     
-        bodyPart:setBleeding(true);
-        bodyPart:setBleedingTime(10);   -- Reset the bleeding   
+        if useOven then 
+            tmpBodyPart:setBleeding(false)
+            tmpBodyPart:setBleedingTime(0)      -- no bleeding since it's been cauterized
+        else 
+
+            tmpBodyPart:setBleeding(true);
+            tmpBodyPart:setBleedingTime(10);   -- Reset the bleeding   
+        end
 
     end
 

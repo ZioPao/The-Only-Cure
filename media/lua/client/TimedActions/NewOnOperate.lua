@@ -38,7 +38,7 @@ function ISOperateArm:findArgs()
             local weight = math.floor(self.kit:getWeight() * 10 + 0.5)
             if weight == 1 then
                 surgeonFact = surgeonFact + 2;
-            elseif weight == surgeonFact2 then
+            elseif weight == surgeonFact then
                 surgeonFact = surgeonFact + 4;
             elseif weight == 3 then
                 surgeonFact = surgeonFact + 6;
