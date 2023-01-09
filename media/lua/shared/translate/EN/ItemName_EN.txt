@@ -1,0 +1,31 @@
+DisplayName_EN = {
+    ItemName_TOC.WoodenHook = "Wooden hook",
+    ItemName_TOC.MetalHook = "Metal hook",
+    ItemName_TOC.MetalHand = "Metal Hand",
+
+    ItemName_TOC.WoodenHook_right_noHand = "Wooden hook",
+    ItemName_TOC.WoodenHook_left_noHand = "Wooden hook",
+    ItemName_TOC.WoodenHook_right_noForearm = "Wooden hook",
+    ItemName_TOC.WoodenHook_right_noForearm = "Wooden hook",
+
+    ItemName_TOC.MetalHook_right_noHand = "Metal hook",
+    ItemName_TOC.MetalHook_left_noHand = "Metal hook",
+    ItemName_TOC.MetalHook_right_noForearm = "Metal hook",
+    ItemName_TOC.MetalHook_left_noForearm = "Metal hook",
+
+    ItemName_TOC.MetalHand_right_noHand = "Metal Hand",
+    ItemName_TOC.MetalHand_left_noHand = "Metal Hand",
+    ItemName_TOC.MetalHand_right_noForearm = "Metal Hand",
+    ItemName_TOC.MetalHand_left_noForearm = "Metal Hand",
+
+    ItemName_TOC.Improvised_surgeon_kit = "Improvised surgeon kit",
+    ItemName_TOC.Surgeon_kit = "Surgeon kit",
+    ItemName_TOC.Real_surgeon_kit = "Real surgeon kit",
+
+    ItemName_TOC.SurgeonMag1 = "Surgeon magazine for dummies",
+    ItemName_TOC.SurgeonMag2 = "Surgeon magazine for students",
+    ItemName_TOC.SurgeonMag3 = "Surgeon magazine for experts",
+    ItemName_TOC.ProthesisMag1 = "Prothesis magazine for dummies",
+    ItemName_TOC.ProthesisMag2 = "Prothesis magazine for experienced",
+    ItemName_TOC.ProthesisMag3 = "Prothesis magazine for experts",
+}

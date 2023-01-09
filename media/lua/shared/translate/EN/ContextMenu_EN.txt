@@ -1,0 +1,4 @@
+ContextMenu_EN = {
+	ContextMenu_Cut_Arm = "Cut arm",
+	ContextMenu_Operate_Arm = "Operate arm",
+} 

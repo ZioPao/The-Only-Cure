@@ -1,0 +1,9 @@
+name=The only cure second test
+poster=generic.png
+require=UIAPI
+description=Cut your arm and survive. TEST PAO
+id=Amputation2
+icon=icon.png
+url=xx
+modversion=0.4.1
+pzversion=41.65

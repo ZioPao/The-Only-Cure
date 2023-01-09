@@ -1,0 +1,18 @@
+IGUI_EN = {
+    IGUI_ItemCat_Prosthesis = "Prosthesis",
+    IGUI_ItemCat_Surgeon_kit = "Surgeon kit",
+
+    IGUI_TOC_health_Cut = "Is cut",
+    IGUI_TOC_health_Cica = " and heal",
+    IGUI_TOC_health_Operate = " and operate",
+    IGUI_TOC_health_time1 = "     - There is a long time left before heal",
+    IGUI_TOC_health_time2 = "     - There is some time left before heal",
+    IGUI_TOC_health_time3 = "     - There is a little time left before heal",
+    IGUI_TOC_health_time4 = "     - No idea how long until it's healed.",
+
+    IGUI_char_Hand_multi = "Time multi due to amp/tot",
+
+    IGUI_perks_RightHand = "Right hand",
+    IGUI_perks_LeftHand = "Left hand",
+    IGUI_perks_Protheses = "Protheses skills",
+}

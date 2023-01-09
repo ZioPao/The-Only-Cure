@@ -1,0 +1,35 @@
+module base {
+
+    sound Cut_sound {
+        category = TOC, 
+        loop = true,
+        is3D = true,
+        clip { 
+          file = media/sound/Cut_sound.ogg, 
+          distanceMax = 3,
+          volume = 1.0,
+        }
+    }
+
+    sound Operate_sound {
+        category = TOC, 
+        loop = true,
+        is3D = true,
+        clip { 
+          file = media/sound/Hit_sound.ogg, 
+          distanceMax = 3,
+          volume = 1.0,
+        }
+    }
+
+    sound Burn_sound {
+        category = TOC,
+        loop = false,
+        is3D = true,
+        clip {
+          file = media/sound/Burn_sound.ogg,
+          distanceMax = 5,
+          volume = 1.0,
+        }
+    }
+}

@@ -1,0 +1,125 @@
+module TOC
+{
+	imports
+	{
+		Base
+		TOC
+	}
+
+/*************RECIPES*******************/
+
+recipe Combine improvised surgeon kit
+	{
+		Nails,
+		Thread=3,
+
+		Result: Improvised_surgeon_kit,
+		Time: 30.0,
+		NeedToBeLearn: false,
+		CanBeDoneFromFloor: false,
+		OnGiveXP: NoXP_OnGiveXP,
+		SkillRequired: FirstAid=2,
+		Category: Surgeon,
+		Tooltip: Recipe_Tooltip_Improvised_surgeon_kit,
+		NeedToBeLearn: true,
+	}
+
+recipe Combine surgeon kit
+	{
+		Needle,
+		Thread=3,
+		Bandage,
+		AlcoholWipes/Disinfectant,
+
+		Result: Surgeon_kit,
+		Time: 30.0,
+		NeedToBeLearn: false,
+		CanBeDoneFromFloor: false,
+		OnGiveXP: NoXP_OnGiveXP,
+		SkillRequired: FirstAid=4,
+		Category: Surgeon,
+		Tooltip: Recipe_Tooltip_Surgeon_kit,
+		NeedToBeLearn: true,
+	}
+
+recipe Combine real surgeon kit
+	{
+		SutureNeedle,
+		Thread=3,
+		AlcoholWipes/Disinfectant,
+		SutureNeedleHolder,
+		Tweezers,
+		Gloves_Surgical,
+		Scalpel,
+		CottonBalls,
+		Bandage,
+
+
+		Result: Real_surgeon_kit,
+		Time: 30.0,
+		NeedToBeLearn: false,
+		CanBeDoneFromFloor: false,
+		OnGiveXP: NoXP_OnGiveXP,
+		SkillRequired: FirstAid=4,
+		Category: Surgeon,
+		Tooltip: Recipe_Tooltip_Real_surgeon_kit,
+		NeedToBeLearn: true,
+	}
+
+recipe Make wooden hook
+	{
+		Nails=10,
+		Plank=3,
+		keep [Recipe.GetItemTypes.Saw],
+		keep [Recipe.GetItemTypes.Hammer],
+
+		Result: WoodenHook,
+		Time: 100.0,
+		NeedToBeLearn: false,
+		CanBeDoneFromFloor: false,
+		OnGiveXP: NoXP_OnGiveXP,
+		SkillRequired: Carpentry=4,
+		Category: Surgeon,
+		Tooltip: Recipe_Tooltip_Wooden_hook,
+		NeedToBeLearn: true,
+	}
+
+recipe Make metal hook
+	{
+		SheetMetal,
+        BlowTorch=7,
+        keep WeldingMask,
+
+		Result: MetalHook,
+		Time: 250.0,
+		NeedToBeLearn: false,
+		CanBeDoneFromFloor: false,
+		OnGiveXP: NoXP_OnGiveXP,
+		SkillRequired: MetalWelding=4,
+		Category: Surgeon,
+		Tooltip: Recipe_Tooltip_Metal_hook,
+		NeedToBeLearn: true,
+	}
+
+recipe Make metal hand
+	{
+		Nails=10,
+		Plank,
+		keep [Recipe.GetItemTypes.Saw],
+		keep [Recipe.GetItemTypes.Hammer],
+		SheetMetal,
+        BlowTorch=7,
+        keep WeldingMask,
+
+		Result: MetalHand,
+		Time: 250.0,
+		NeedToBeLearn: false,
+		CanBeDoneFromFloor: false,
+		OnGiveXP: NoXP_OnGiveXP,
+		SkillRequired: Carpentry=8,
+		SkillRequired: MetalWelding=8,
+		Category: Surgeon,
+		Tooltip: Recipe_Tooltip_Metal_hand,
+		NeedToBeLearn: true,
+	}
+}

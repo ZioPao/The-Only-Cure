@@ -1,0 +1,375 @@
+module TOC
+{
+imports
+	{
+		Base
+	}
+/****************** Cloth that look like a cut arm ******************/
+    item ArmRight_noHand
+        {
+            Type = Clothing,
+            ClothingItem = ArmRight_noHand,
+            BodyLocation = ArmRight,
+
+            Weight = 0,
+            CombatSpeedModifier = 0.9,
+            Insulation = 1.0,
+            WindResistance = 1.0,
+            WaterResistance = 1.0,
+        }
+
+    item ArmRight_noForearm
+        {
+            Type = Clothing,
+            ClothingItem = ArmRight_noForeArm,
+            BodyLocation = ArmRight,
+
+            Weight = 0,
+            CombatSpeedModifier = 0.8,
+            Insulation = 1.0,
+            WindResistance = 1.0,
+            WaterResistance = 1.0,
+        }
+
+    item ArmRight_noArm
+        {
+            Type = Clothing,
+            ClothingItem = ArmRight_noArm,
+            BodyLocation = ArmRight,
+
+            Weight = 0,
+            CombatSpeedModifier = 0.7,
+            Insulation = 1.0,
+            WindResistance = 1.0,
+            WaterResistance = 1.0,
+        }
+
+    item ArmLeft_noHand
+        {
+            Type = Clothing,
+            ClothingItem = ArmLeft_noHand,
+            BodyLocation = ArmLeft,
+
+            Weight = 0,
+            CombatSpeedModifier = 0.9,
+            Insulation = 1.0,
+            WindResistance = 1.0,
+            WaterResistance = 1.0,
+        }
+
+    item ArmLeft_noForearm
+        {
+            Type = Clothing,
+            ClothingItem = ArmLeft_noForeArm,
+            BodyLocation = ArmLeft,
+
+            Weight = 0,
+            CombatSpeedModifier = 0.8,
+            Insulation = 1.0,
+            WindResistance = 1.0,
+            WaterResistance = 1.0,
+        }
+
+    item ArmLeft_noArm
+        {
+            Type = Clothing,
+            ClothingItem = ArmLeft_noArm,
+            BodyLocation = ArmLeft,
+
+            Weight = 0,
+            CombatSpeedModifier = 0.7,
+            Insulation = 1.0,
+            WindResistance = 1.0,
+            WaterResistance = 1.0,
+        }
+
+/************************ Other items ************************/
+	item Improvised_surgeon_kit
+        {
+            Type = Normal,
+            Weight = 0.1,
+
+            DisplayCategory = Surgeon_kit,
+            DisplayName = Improvised surgeon kit,
+            Tooltip = Tooltip_Improvised_surgeon_kit,
+            Icon = surgeonKit,
+        }
+
+    item Surgeon_kit
+        {
+            Type = Normal,
+            Weight = 0.2,
+
+            DisplayCategory = Surgeon_kit,
+            DisplayName = Surgeon kit,
+            Tooltip = Tooltip_Surgeon_kit,
+            Icon = surgeonKit,
+        }
+
+    item Real_surgeon_kit
+        {
+            Type = Normal,
+            Weight = 0.3,
+
+            DisplayCategory = Surgeon_kit,
+            DisplayName = Real surgeon kit,
+            Tooltip = Tooltip_Real_surgeon_kit,
+            Icon = surgeonKit,
+        }
+
+/************************ Prothese cloth ************************/
+    item WoodenHook_right_noHand
+        {
+            Weight = 1,
+            Type = Clothing,
+            DisplayCategory = Prosthesis,
+            DisplayName	= DisplayName_woodenHook,
+            ClothingItem = ArmRight_WoodenHook,
+            BodyLocation = ArmRight_Prot,
+            Icon = woodenHook,
+            Tooltip = Tooltip_equip_prothesis_hand,
+            WaterResistance = 15,
+        }
+
+    item WoodenHook_left_noHand
+        {
+            Weight = 1,
+            Type = Clothing,
+            DisplayCategory = Prosthesis,
+            DisplayName	= DisplayName_woodenHook,
+            ClothingItem = ArmLeft_WoodenHook,
+            BodyLocation = ArmLeft_Prot,
+            Icon = woodenHook,
+            Tooltip = Tooltip_equip_prothesis_hand,
+            WaterResistance = 15,
+        }
+
+    item MetalHook_right_noHand
+        {
+            Weight = 0.5,
+            Type = Clothing,
+            DisplayCategory = Prosthesis,
+            DisplayName	= DisplayName_metalHook,
+            ClothingItem = ArmRight_MetalHook,
+            BodyLocation = ArmRight_Prot,
+            Icon = metalHook,
+            Tooltip = Tooltip_equip_prothesis_hand,
+            WaterResistance = 13,
+        }
+
+    item MetalHook_left_noHand
+        {
+            Weight = 0.5,
+            Type = Clothing,
+            DisplayCategory = Prosthesis,
+            DisplayName	= DisplayName_metalHook,
+            ClothingItem = ArmLeft_MetalHook,
+            BodyLocation = ArmLeft_Prot,
+            Icon = metalHook,
+            Tooltip = Tooltip_equip_prothesis_hand,
+            WaterResistance = 13,
+        }
+
+    item MetalHand_right_noHand
+        {
+            Weight = 0.3,
+            Type = Clothing,
+            DisplayCategory = Prosthesis,
+            DisplayName	= DisplayName_metalHand,
+            ClothingItem = ArmRight_MetalHamd,
+            BodyLocation = ArmRight_Prot,
+            Icon = metalHand,
+            Tooltip = Tooltip_equip_prothesis_hand,
+            WaterResistance = 11,
+        }
+
+    item MetalHand_left_noHand
+        {
+            Weight = 0.3,
+            Type = Clothing,
+            DisplayCategory = Prosthesis,
+            DisplayName	= DisplayName_metalHand,
+            ClothingItem = ArmLeft_MetalHand,
+            BodyLocation = ArmLeft_Prot,
+            Icon = metalHand,
+            Tooltip = Tooltip_equip_prothesis_hand",
+            WaterResistance = 11,
+        }
+
+    item WoodenHook_right_noForearm
+        {
+            Weight = 2,
+            Type = Clothing,
+            DisplayCategory = Prosthesis,
+            DisplayName	= DisplayName_woodenHook,
+            ClothingItem = ArmRight_WoodenHook_fore,
+            BodyLocation = ArmRight_Prot,
+            Icon = woodenHook,
+            Tooltip = Tooltip_equip_prothesis_fore,
+            WaterResistance = 16,
+        }
+
+    item WoodenHook_left_noForearm
+        {
+            Weight = 2,
+            Type = Clothing,
+            DisplayCategory = Prosthesis,
+            DisplayName	= DisplayName_woodenHook,
+            ClothingItem = ArmLeft_WoodenHook_fore,
+            BodyLocation = ArmLeft_Prot,
+            Icon = woodenHook,
+            Tooltip = Tooltip_equip_prothesis_fore,
+            WaterResistance = 16,
+        }
+
+    item MetalHook_right_noForearm
+        {
+            Weight = 1.5,
+            Type = Clothing,
+            DisplayCategory = Prosthesis,
+            DisplayName	= DisplayName_metalHook,
+            ClothingItem = ArmRight_MetalHook_fore,
+            BodyLocation = ArmRight_Prot,
+            Icon = metalHook,
+            Tooltip = Tooltip_equip_prothesis_fore,
+            WaterResistance = 14,
+        }
+
+    item MetalHook_left_noForearm
+        {
+            Weight = 1.5,
+            Type = Clothing,
+            DisplayCategory = Prosthesis,
+            DisplayName	= DisplayName_metalHook,
+            ClothingItem = ArmLeft_MetalHook_fore,
+            BodyLocation = ArmLeft_Prot,
+            Icon = metalHook,
+            Tooltip = Tooltip_equip_prothesis_fore,
+            WaterResistance = 14,
+        }
+
+    item MetalHand_right_noForearm
+        {
+            Weight = 1.2,
+            Type = Clothing,
+            DisplayCategory = Prosthesis,
+            DisplayName	= DisplayName_metalHand,
+            ClothingItem = ArmRight_MetalHand_fore,
+            BodyLocation = ArmRight_Prot,
+            Icon = metalHand,
+            Tooltip = Tooltip_equip_prothesis_fore,
+            WaterResistance = 12,
+        }
+
+    item MetalHand_left_noForearm
+        {
+            Weight = 1.2,
+            Type = Clothing,
+            DisplayCategory = Prosthesis,
+            DisplayName	= DisplayName_metalHand,
+            ClothingItem = ArmLeft_MetalHand_fore,
+            BodyLocation = ArmLeft_Prot,
+            Icon = metalHand,
+            Tooltip = Tooltip_equip_prothesis_fore,
+            WaterResistance = 12,
+        }
+
+/************************ Prothese items ************************/
+
+item WoodenHook
+        {
+            Weight = 1,
+            Type = Normal,
+            DisplayCategory = Prosthesis,
+            DisplayName	= DisplayName_woodenHook,
+            Icon = woodenHook,
+            Tooltip = Tooltip_prothesis_hand,
+        }
+
+item MetalHook
+        {
+            Weight = 0.5,
+            Type = Normal,
+            DisplayCategory = Prosthesis,
+            DisplayName	= DisplayName_metalHook,
+            Icon = metalHook,
+            Tooltip = Tooltip_prothesis_hand,
+        }
+
+item MetalHand
+        {
+            Weight = 0.3,
+            Type = Normal,
+            DisplayCategory = Prosthesis,
+            DisplayName	= DisplayName_metalHand,
+            Icon = metalHand,
+            Tooltip = Tooltip_prothesis_hand,
+        }
+
+/**************************** Mags ****************************/
+item SurgeonMag1
+    {
+        Weight = 0.1,
+        Type = Literature,
+        DisplayName = ,
+        Icon = surgeonMag1,
+        TeachedRecipes = Combine improvised surgeon kit,
+        ReplaceOnUse = SurgeonMag1,
+        Tooltip = Tooltip_SurgeonMag1,
+    }
+
+item SurgeonMag2
+    {
+        Weight = 0.1,
+        Type = Literature,
+        DisplayName = ,
+        Icon = surgeonMag2,
+        TeachedRecipes = Combine surgeon kit,
+        ReplaceOnUse = SurgeonMag2,
+        Tooltip = Tooltip_SurgeonMag2,
+    }
+
+item SurgeonMag3
+    {
+        Weight = 0.1,
+        Type = Literature,
+        DisplayName = ,
+        Icon = surgeonMag3,
+        TeachedRecipes = Combine real surgeon kit,
+        ReplaceOnUse = SurgeonMag3,
+        Tooltip = Tooltip_SurgeonMag3,
+    }
+
+item ProthesisMag1
+    {
+        Weight = 0.1,
+        Type = Literature,
+        DisplayName = ,
+        Icon = ProthesisMag1,
+        TeachedRecipes = Make wooden hook,
+        ReplaceOnUse = ProthesisMag1,
+        Tooltip = Tooltip_ProthesisMag1,
+    }
+
+item ProthesisMag2
+    {
+        Weight = 0.1,
+        Type = Literature,
+        DisplayName = ,
+        Icon = ProthesisMag2,
+        TeachedRecipes = Make metal hook,
+        ReplaceOnUse = ProthesisMag2,
+        Tooltip = Tooltip_ProthesisMag2,
+    }
+
+item ProthesisMag3
+    {
+        Weight = 0.1,
+        Type = Literature,
+        DisplayName = ,
+        Icon = ProthesisMag3,
+        TeachedRecipes = Make metal hand,
+        ReplaceOnUse = ProthesisMag3,
+        Tooltip = Tooltip_ProthesisMag2,
+    }
+}
