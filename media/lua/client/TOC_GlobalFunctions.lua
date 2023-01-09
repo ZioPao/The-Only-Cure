@@ -29,6 +29,11 @@ function CutArm(partName, surgeonFact, useBandage, bandageAlcool, usePainkiller,
 
     --TODO this is broken
     -- Bandage
+
+
+    if useBandage then
+        bodyPart:setBandaged(true, 10)
+        
     --if useBandage and bandageAlcool then
     --    bodyPart:setBandaged(true, 10, true, bandage:getType());
     --elseif useBandage and not bandageAlcool then
@@ -212,7 +217,7 @@ function OperateArm(partName, surgeonFact, useOven)
         end
     end
 
-    FixDeepWound(partname)
+    FixDeepWound(partName)
 
 
     player:transmitModData();
