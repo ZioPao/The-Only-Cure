@@ -1,4 +1,4 @@
-local function operateLocal(partName)
+local function operateLocal(worldobjects, partName)
     local player = getPlayer();
     ISTimedActionQueue.add(ISOperateArm:new(player, player, _, partName, true));
 end

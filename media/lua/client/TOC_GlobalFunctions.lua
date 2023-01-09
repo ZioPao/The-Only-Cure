@@ -75,10 +75,12 @@ function CutArm(partName, surgeonFact, useBandage, bandageAlcool, usePainkiller,
     end
 
     --Heal the infection
+
+    -- dude what the fuck is this code
     local bd = player:getBodyDamage()
     if bodyPart:getType() == BodyPartType.Hand_R then
         if bd:getInfectionLevel() < 20 and modData.RightHand.IsInfected and not (modData.RightForearm.IsInfected or modData.RightArm.IsInfected or modData.LeftArm.IsInfected or modData.LeftForearm.IsInfected or modData.LeftHand.IsInfected or modData.OtherBody_IsInfected) then
-            player:Say("I healed !");
+            player:Say("I'm gonna be fine!");
             bd:getBodyPart(BodyPartType.Hand_R):SetBitten(false);
             cureInfection(bd);
         else
@@ -87,7 +89,7 @@ function CutArm(partName, surgeonFact, useBandage, bandageAlcool, usePainkiller,
         modData.RightHand.IsInfected = false;
     elseif bodyPart:getType() == BodyPartType.ForeArm_R then
         if bd:getInfectionLevel() < 20 and modData.RightForearm.IsInfected and not (modData.RightArm.IsInfected or modData.LeftArm.IsInfected or modData.LeftForearm.IsInfected or modData.LeftHand.IsInfected or modData.OtherBody_IsInfected) then
-            player:Say("I healed !");
+            player:Say("I'm gonna be fine!");
             bd:getBodyPart(BodyPartType.Hand_R):SetBitten(false); bd:getBodyPart(BodyPartType.ForeArm_R):SetBitten(false);
             cureInfection(bd);
         else
@@ -106,7 +108,7 @@ function CutArm(partName, surgeonFact, useBandage, bandageAlcool, usePainkiller,
         modData.RightHand.IsInfected = false; modData.RightForearm.IsInfected = false; modData.RightArm.IsInfected = false;
     elseif bodyPart:getType() == BodyPartType.Hand_L then
         if bd:getInfectionLevel() < 20 and modData.LeftHand.IsInfected and not (modData.RightForearm.IsInfected or modData.RightArm.IsInfected or modData.LeftArm.IsInfected or modData.LeftForearm.IsInfected or modData.RightHand.IsInfected or modData.OtherBody_IsInfected) then
-            player:Say("I healed !");
+            player:Say("I'm gonna be fine!");
             bd:getBodyPart(BodyPartType.Hand_L):SetBitten(false);
             cureInfection(bd);
         else
@@ -115,7 +117,7 @@ function CutArm(partName, surgeonFact, useBandage, bandageAlcool, usePainkiller,
         modData.LeftHand.IsInfected = false;
     elseif bodyPart:getType() == BodyPartType.ForeArm_L then
         if bd:getInfectionLevel() < 20 and modData.LeftForearm.IsInfected and not (modData.RightForearm.IsInfected or modData.RightArm.IsInfected or modData.LeftArm.IsInfected or modData.RightHand.IsInfected or modData.OtherBody_IsInfected) then
-            player:Say("I healed !");
+            player:Say("I'm gonna be fine!");
             bd:getBodyPart(BodyPartType.Hand_L):SetBitten(false); bd:getBodyPart(BodyPartType.ForeArm_L):SetBitten(false);
             cureInfection(bd);
         else
@@ -124,7 +126,7 @@ function CutArm(partName, surgeonFact, useBandage, bandageAlcool, usePainkiller,
         modData.LeftHand.IsInfected = false; modData.LeftForearm.IsInfected = false;
     elseif bodyPart:getType() == BodyPartType.UpperArm_L then
         if bd:getInfectionLevel() < 20 and modData.LeftArm.IsInfected and not (modData.RightForearm.IsInfected or modData.RightArm.IsInfected or modData.RightHand.IsInfected or modData.OtherBody_IsInfected) then
-            player:Say("I healed !");
+            player:Say("I'm gonna be fine!");
             bd:getBodyPart(BodyPartType.Hand_L):SetBitten(false); bd:getBodyPart(BodyPartType.ForeArm_L):SetBitten(false); bd:getBodyPart(BodyPartType.UpperArm_L):SetBitten(false);
             cureInfection(bd);
         else
@@ -144,9 +146,7 @@ function OperateArm(partName, surgeonFact, useOven)
     local modData = player:getModData().TOC;
 
     if useOven then
-        local stats = character:getStats();
-        bodyPart:AddDamage(100);
-        bodyPart:setAdditionalPain(100);
+        local stats = player:getStats();
         stats:setEndurance(0);
         stats:setStress(100);
     end
@@ -203,12 +203,12 @@ function OperateArm(partName, surgeonFact, useOven)
         end
     end
 
-    FixDeepWound(player, partName, useOven)
+    SetBodyPartsStatus(player, partName, useOven)
     player:transmitModData();
 end
 
 
-function FixDeepWound(player, partName, useOven)
+function SetBodyPartsStatus(player, partName, useOven)
 
     local a_rightArm = {"RightArm", "RightForearm", "RightHand"}
     local a_rightForearm = {"RightForearm", "RightHand"}
@@ -244,6 +244,8 @@ function FixDeepWound(player, partName, useOven)
         tmpBodyPart:setDeepWounded(false);      -- Basically like stictching
         tmpBodyPart:setDeepWoundTime(0);     
         if useOven then 
+            tmpBodyPart:AddDamage(100)
+            tmpBodyPart:setAdditionalPain(100);
             tmpBodyPart:setBleeding(false)
             tmpBodyPart:setBleedingTime(0)      -- no bleeding since it's been cauterized
         else 
