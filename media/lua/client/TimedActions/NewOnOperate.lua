@@ -22,7 +22,7 @@ end
 
 function ISOperateArm:start()
     self:setActionAnim("MedicalCheck");
-    if self.UseOven then
+    if self.useOven then
         self.sound = self.patient:getEmitter():playSound("Burn_sound")
         self:forceComplete();
     end
@@ -31,17 +31,17 @@ end
 function ISOperateArm:findArgs()
     local surgeonFact = self.surgeon:getPerkLevel(Perks.Doctor);
 
-    if self.UseOven then 
-        surgeonFact = surgeonFact + 100;
+    if self.useOven then
+        surgeonFact = surgeonFact + 100
     else
         if self.kit then
             local weight = math.floor(self.kit:getWeight() * 10 + 0.5)
             if weight == 1 then
-                surgeonFact = surgeonFact + 2;
+                surgeonFact = surgeonFact + 2
             elseif weight == surgeonFact then
-                surgeonFact = surgeonFact + 4;
+                surgeonFact = surgeonFact + 4
             elseif weight == 3 then
-                surgeonFact = surgeonFact + 6;
+                surgeonFact = surgeonFact + 6
             end
         end
     
@@ -57,19 +57,19 @@ function ISOperateArm:perform()
     local surgeonFact, useOven = self:findArgs();
 
     if self.patient ~= self.surgeon and isClient() then
-        SendOperateArm(self.patient, self.partName, surgeonFact, useOven);
+        SendOperateArm(self.patient, self.partName, surgeonFact, useOven)
     else
-        OperateArm(self.partName, surgeonFact, useOven);
+        OperateArm(self.partName, surgeonFact, useOven)
     end
-    self.surgeon:getXp():AddXP(Perks.Doctor, 400);
+    self.surgeon:getXp():AddXP(Perks.Doctor, 400)
     if self.kit then
-        self.surgeon:getInventory():Remove(self.kit);
+        self.surgeon:getInventory():Remove(self.kit)
     end
 
-    ISBaseTimedAction.perform(self);
+    ISBaseTimedAction.perform(self)
 end
 
-function ISOperateArm:new(patient, surgeon, kit, partName, UseOven)
+function ISOperateArm:new(patient, surgeon, kit, partName, useOven)
     local o = ISBaseTimedAction.new(self, patient);
     o.partName = partName;
     o.patient = patient;
@@ -78,12 +78,23 @@ function ISOperateArm:new(patient, surgeon, kit, partName, UseOven)
     o.patientY = patient:getY();
     o.surgeon = surgeon;
     o.kit = kit;
-    o.UseOven = UseOven;
-    if UseOven then o.maxTime = 30 else o.maxTime = 200 - (surgeon:getPerkLevel(Perks.Doctor) * 10) end
+
+    o.useOven = useOven
+
+
+    --o.UseOven = UseOven;
+    if useOven then 
+        o.maxTime = 30 
+    else 
+        o.maxTime = 200 - (surgeon:getPerkLevel(Perks.Doctor) * 10) 
+    end
     o.stopOnWalk = true;
     o.stopOnRun = true;
     o.ignoreHandsWounds = false;
     o.fromHotbar = true;
-    if o.patient:isTimedActionInstant() then o.maxTime = 1; end
+    if o.patient:isTimedActionInstant()then
+         o.maxTime = 1
+    end
+    
     return o;
 end
