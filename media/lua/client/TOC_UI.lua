@@ -132,15 +132,16 @@ local function setDescUI(partName)
     descUI["textTitle"]:setText(getDisplayText_TOC(partName));
     descUI.partNameAct = partName;
 
-
-
-    if partData.IsCut and partData.IsCicatrized and partData.IsEquiped then -- Cut and equip
+    -- Cut and equip
+    if partData.IsCut and partData.IsCicatrized and partData.IsEquiped then 
         descUI["textEtat"]:setText("Cut and healed");
         descUI["textEtat"]:setColor(1, 0, 1, 0);
         descUI["b1"]:setText("Unequip");
         descUI["b1"]:addArg("option", "Unequip");
         descUI["b1"]:setVisible(true);
-    elseif partData.IsCut and partData.IsCicatrized and not partData.IsEquiped and partData.ToDisplay then -- Cut and healed
+
+    -- Cut and healed
+    elseif partData.IsCut and partData.IsCicatrized and not partData.IsEquiped and partData.ToDisplay then 
         descUI["textEtat"]:setText("Cut and healed");
         descUI["textEtat"]:setColor(1, 0, 1, 0);
         if partName == "RightArm" or partName == "LeftArm" then
@@ -151,10 +152,9 @@ local function setDescUI(partName)
             descUI["b1"]:setVisible(true);
         end
 
-
-    elseif partData.IsCut and not partData.IsCicatrized and partData.ToDisplay then -- Cut not healed
-
-        if partData.IsOperated then:
+     -- Cut but not healed
+    elseif partData.IsCut and not partData.IsCicatrized and partData.ToDisplay then
+                if partData.IsOperated then
             if partData.CicaTimeLeft > 1000 then
                 descUI["textEtat"]:setText("Still a long way to go")
                 descUI["textEtat"]:setColor(1, 0.8, 1, 0.2);
@@ -162,12 +162,13 @@ local function setDescUI(partName)
                 descUI["textEtat"]:setText("Starting to get better")
                 descUI["textEtat"]:setColor(1, 0.8, 1, 0.2)
 
-            elseif partData.CicaTime > 100
+            elseif partData.CicaTimeLeft > 100 then
                 descUI["textEtat"]:setText("Almost cicatrized");
                 descUI["textEtat"]:setColor(1, 0.8, 1, 0.2);
+            end
         else
             if partData.CicaTimeLeft > 1000 then
-                descUI["textEtat"]:setText("It hurts so much..." .. partData.CicaTimeLeft)
+                descUI["textEtat"]:setText("It hurts so much...")
                 descUI["textEtat"]:setColor(1, 1, 0, 0)
             elseif partData.CicaTimeLeft > 500 then
                 descUI["textEtat"]:setText("It still hurts a lot")
@@ -175,13 +176,17 @@ local function setDescUI(partName)
             elseif partData.CicaTimeLeft > 500 then
                 descUI["textEtat"]:setText("I think it's almost over...")
                 descUI["textEtat"]:setColor(1, 0.8, 1, 0.2)
+            end
+        end
 
+
+        -- Set visibility
         if partData.IsOperated then
-            descUI["b1"]:setVisible(false)
+            descUI["b1"]:setVisible(false);
         else
-            descUI["b1"]:setText("Operate")
-            descUI["b1"]:addArg("option", "Operate")
-            descUI["b1"]:setVisible(true)
+            descUI["b1"]:setText("Operate");
+            descUI["b1"]:addArg("option", "Operate");
+            descUI["b1"]:setVisible(true);
         end
     elseif partData.IsCut and not partData.ToDisplay then -- Empty (hand if forearm cut)
         descUI["textEtat"]:setText("Nothing here...");

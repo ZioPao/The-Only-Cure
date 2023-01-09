@@ -46,15 +46,9 @@ local function healUpdatePart(partName, modData, player)
     if bodyPart:getFractureTime()>0 then bodyPart:setFractureTime(0)         end
 
     -- During healing
-    -- this will not happen every 10 sec or some shit like that.
-    -- We will allow stitching. Surgery is needed only to have a faster cicatrization
-
-
-
     if modData_part.IsCut and not modData_part.IsCicatrized then
-
-         if modData_part.CicaTimeLeft < 0 then 
-            player:Say(getText('UI_ContextMenu_My') .. partName .. getText('UI_ContextMenu_Now_cut'))       -- dunno if this works. 
+        if modData_part.CicaTimeLeft < 0 then
+            player:Say(getText('UI_ContextMenu_My') .. partName .. getText('UI_ContextMenu_Now_cut'))
             modData_part.IsCicatrized = true;
             player:getTraits():add("Brave")
             player:getTraits():add("Insensitive")
@@ -63,9 +57,7 @@ local function healUpdatePart(partName, modData, player)
             bodyPart:setBleedingTime(0);
             bodyPart:setDeepWoundTime(0);
             player:transmitModData()
-         end
-
-
+        end
     end
 
     --Phantom pain

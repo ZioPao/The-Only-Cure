@@ -26,19 +26,12 @@ function CutArm(partName, surgeonFact, useBandage, bandageAlcool, usePainkiller,
     stats:setEndurance(0 + surgeonFact);
     stats:setStress(100 - surgeonFact);
 
-
-    --TODO this is broken
     -- Bandage
-
-
-    if useBandage then
-        bodyPart:setBandaged(true, 10)
-        
-    --if useBandage and bandageAlcool then
-    --    bodyPart:setBandaged(true, 10, true, bandage:getType());
-    --elseif useBandage and not bandageAlcool then
-    --    bodyPart:setBandaged(true, 10, false, bandage:getType());
-    --end
+    if useBandage and bandageAlcool then
+        bodyPart:setBandaged(true, 10, true, bandage:getType());
+    elseif useBandage and not bandageAlcool then
+        bodyPart:setBandaged(true, 10, false, bandage:getType());
+    end
 
     -- Painkiller
     if usePainkiller then
@@ -143,13 +136,6 @@ function CutArm(partName, surgeonFact, useBandage, bandageAlcool, usePainkiller,
     --Equip cloth
     local cloth = player:getInventory():AddItem(find_clothName2_TOC(partName));
     player:setWornItem(cloth:getBodyLocation(), cloth);
-
-    -- Set the correct stats for the injury
-    bodyPart:setBleeding(true);
-    bodyPart:setDeepWounded(true);
-    bodyPart:setBleedingTime(100);
-    bodyPart:setDeepWoundTime(100);
-
     player:transmitModData();
 end
 
@@ -157,7 +143,7 @@ function OperateArm(partName, surgeonFact, useOven)
     local player = getPlayer();
     local modData = player:getModData().TOC;
 
-    if UseOven then
+    if useOven then
         local stats = character:getStats();
         bodyPart:AddDamage(100);
         bodyPart:setAdditionalPain(100);
@@ -168,13 +154,13 @@ function OperateArm(partName, surgeonFact, useOven)
     if partName == "RightHand" and not modData.RightHand.IsOperated then
         modData.RightHand.IsOperated = true;
         modData.RightHand.CicaTimeLeft = modData.RightHand.CicaTimeLeft - (surgeonFact * 200);
-        if UseOven then modData.RightHand.IsBurn = true end
+        if useOven then modData.RightHand.IsBurn = true end
     elseif partName == "RightForearm" and not modData.RightForearm.IsOperated then
         modData.RightForearm.IsOperated = true;
         modData.RightHand.IsOperated = true;
         modData.RightForearm.CicaTimeLeft = modData.RightForearm.CicaTimeLeft - (surgeonFact * 200);
         modData.RightHand.CicaTimeLeft = modData.RightHand.CicaTimeLeft - (surgeonFact * 200);
-        if UseOven then
+        if useOven then
             modData.TOC.RightHand.IsBurn = true;
             modData.TOC.RightForearm.IsBurn = true;
         end
@@ -185,7 +171,7 @@ function OperateArm(partName, surgeonFact, useOven)
         modData.RightArm.CicaTimeLeft = modData.RightArm.CicaTimeLeft - (surgeonFact * 200);
         modData.RightForearm.CicaTimeLeft = modData.RightForearm.CicaTimeLeft - (surgeonFact * 200);
         modData.RightHand.CicaTimeLeft = modData.RightHand.CicaTimeLeft - (surgeonFact * 200);
-        if UseOven then
+        if useOven then
             modData.RightHand.IsBurn = true;
             modData.RightForearm.IsBurn = true;
             modData.RightArm.IsBurn = true;
@@ -193,13 +179,13 @@ function OperateArm(partName, surgeonFact, useOven)
     elseif partName == "LeftHand" and not modData.LeftHand.IsOperated then
         modData.LeftHand.IsOperated = true;
         modData.LeftHand.CicaTimeLeft = modData.LeftHand.CicaTimeLeft - (surgeonFact * 200);
-        if UseOven then modData.LeftHand.IsBurn = true end
+        if useOven then modData.LeftHand.IsBurn = true end
     elseif partName == "LeftForearm" and not modData.LeftForearm.IsOperated then
         modData.LeftForearm.IsOperated = true;
         modData.LeftHand.IsOperated = true;
         modData.LeftForearm.CicaTimeLeft = modData.LeftForearm.CicaTimeLeft - (surgeonFact * 200);
         modData.LeftHand.CicaTimeLeft = modData.LeftHand.CicaTimeLeft - (surgeonFact * 200);
-        if UseOven then
+        if useOven then
             modData.LeftHand.IsBurn = true;
             modData.LeftForearm.IsBurn = true;
         end
@@ -210,7 +196,7 @@ function OperateArm(partName, surgeonFact, useOven)
         modData.LeftArm.CicaTimeLeft = modData.LeftArm.CicaTimeLeft - (surgeonFact * 200);
         modData.LeftForearm.CicaTimeLeft = modData.LeftForearm.CicaTimeLeft - (surgeonFact * 200);
         modData.LeftHand.CicaTimeLeft = modData.LeftHand.CicaTimeLeft - (surgeonFact * 200);
-        if UseOven then
+        if useOven then
             modData.LeftHand.IsBurn = true;
             modData.LeftForearm.IsBurn = true;
             modData.LeftArm.IsBurn = true;
@@ -218,23 +204,21 @@ function OperateArm(partName, surgeonFact, useOven)
     end
 
     FixDeepWound(partName)
-
-
     player:transmitModData();
 end
 
 
 function FixDeepWound(partName)
 
-    a_rightArm = {"RightArm", "RightForearm", "RightHand"}
-    a_rightForearm = {"RightForearm", "RightHand"}
-    a_rightHand = {"RightHand"}
+    local a_rightArm = {"RightArm", "RightForearm", "RightHand"}
+    local a_rightForearm = {"RightForearm", "RightHand"}
+    local a_rightHand = {"RightHand"}
 
-    a_leftArm = {"LeftArm", "LeftForearm", "LeftHand"}
-    a_leftForearm = {"LeftForearm", "LeftHand"}
-    a_leftHand = {"LeftHand"}
+    local a_leftArm = {"LeftArm", "LeftForearm", "LeftHand"}
+    local a_leftForearm = {"LeftForearm", "LeftHand"}
+    local a_leftHand = {"LeftHand"}
 
-    
+    local chosen_array = {}
     if partName == "RightArm" then
         chosen_array = a_rightArm        
 

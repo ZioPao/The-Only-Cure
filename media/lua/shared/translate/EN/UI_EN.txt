@@ -6,14 +6,14 @@ UI_EN = {
     UI_ContextMenu_CutArm = "Cut arm",
 
     UI_prof_surgeon = "Surgeon",
-    UI_profdesc_surgeon = "You are a surgeon ! Start with all recipe of the mod the only cure.<br>You are also better to cut and operate.",
+    UI_profdesc_surgeon = "You are a surgeon! Start with all recipe of the mod the only cure.<br>You are also better to cut and operate.",
 
     UI_trait_Amputee1 = "Amputee hand",
-    UI_trait_Amputee1desc = "Begin the game a hand cut and heal but also a metal hook.",
+    UI_trait_Amputee1desc = "Begin the game without a hand but also a metal hook.",
     UI_trait_Amputee2 = "Amputee forearm",
-    UI_trait_Amputee2desc = "Begin the game a forearm cut and heal but also a metal hook.",
+    UI_trait_Amputee2desc = "Begin the game without a forearm but also a metal hook.",
     UI_trait_Amputee3 = "Amputee arm",
-    UI_trait_Amputee3desc = "Begin the game an arm cut and heal, good luck.",
+    UI_trait_Amputee3desc = "Begin the game without an arm, good luck.",
     UI_trait_Insensitive = "Insensitive to pain",
     UI_trait_Insensitivedesc = "Reduces maximum pain.",
 
@@ -25,8 +25,8 @@ UI_EN = {
     UI_ContextMenu_LeftArm = "Left arm",
 
     UI_ContextMenu_My = "My ",
-    UI_ContextMenu_Now_cut = " is now heal !",
+    UI_ContextMenu_Now_cut = " is now healed!",
 
     UI_ContextMenu_Heal_from_zomb = "I heal from zombification !",
-    UI_ContextMenu_Cut_for_nothing = "I cut for nothing..."
+    UI_ContextMenu_Cut_for_nothing = "I did it for nothing..."
 }

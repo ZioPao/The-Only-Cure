@@ -24,7 +24,6 @@ end
 local function everyTenMinutes()
     local player = getPlayer()
     local modData = player:getModData()
-
     if modData.TOC ~= nil then
         local names = {"RightHand", "RightForearm", "RightArm", "LeftHand", "LeftForearm", "LeftArm"}
 
@@ -34,14 +33,8 @@ local function everyTenMinutes()
 
         --Reduit le temps de cicatri restant
         for i,name in pairs(names) do
-            
             if modData.TOC[name].IsCut and not modData.TOC[name].IsCicatrized then
-                
-                if modData.TOC[name].IsOperated then
-                    modData.TOC[name].CicaTimeLeft = modData.TOC[name].CicaTimeLeft - 1;
-                else
-                    modData.TOC[name].CicaTimeLeft = modData.TOC[name].CicaTimeLeft - 10;
-
+                modData.TOC[name].CicaTimeLeft = modData.TOC[name].CicaTimeLeft - 1;
                 player:transmitModData()
             end
         end
