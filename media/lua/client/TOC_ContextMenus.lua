@@ -22,8 +22,8 @@ end
 
 
 local function CheckIfCanBeOperated(modData)
-    if modData.TOC.RightHand.IsCut and not modData.RightHand.IsOperated 
-    or modData.TOC.RightForeArm.IsCut and not modData.RightForearm.IsOperated 
+    if modData.TOC.RightHand.IsCut and not modData.RightHand.IsOperated
+    or modData.TOC.RightForearm.IsCut and not modData.RightForearm.IsOperated 
     or modData.TOC.RightArm.IsCut and not modData.RightArm.IsOperated 
     or modData.TOC.LeftHand.IsCut and not modData.LeftHand.IsOperated
     or modData.TOC.LeftForearm.IsCut and not modData.LeftForearm.IsOperated 
