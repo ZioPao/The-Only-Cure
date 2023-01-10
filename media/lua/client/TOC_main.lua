@@ -46,6 +46,7 @@ local function initVariable(_, player)
     if modData.TOC == nil then
 
         -- https://stackoverflow.com/questions/20915164/lua-loop-for-creating-variables-in-table
+
         
         local rightHand = "RightHand"
         local rightForearm = "RightForearm"
@@ -86,15 +87,24 @@ local function initVariable(_, player)
         end
 
 
-        -- Manual stuff
-        
-
+        -- Manual stuff, just a temporary fix since this is kinda awful
+        modData.TOC[rightHand].depends_on = {}
         modData.TOC[rightForearm].depends_on = {rightHand}
         modData.TOC[rightArm].depends_on = { rightHand, rightForearm }
         
+        modData.TOC[leftHand].depends_on = {}
         modData.TOC[leftForearm].depends_on = { leftHand }
         modData.TOC[leftArm].depends_on = { leftHand, leftForearm }
+
         
+        -- Setup cicatrization times
+        modData.TOC[rightHand].cicatrization_base_time = 1700
+        modData.TOC[leftHand].cicatrization_base_time = 1700
+        modData.TOC[rightForearm].cicatrization_base_time = 1800
+        modData.TOC[leftForearm].cicatrization_base_time = 1800
+        modData.TOC[rightArm].cicatrization_base_time = 2000
+        modData.TOC[leftArm].cicatrization_base_time = 2000
+
 
 
 

@@ -1,4 +1,19 @@
-local function cureInfection(bodyDamage)
+
+local function CheckIfStillInfected(toc_data)
+    for k,v in pairs(Bodyparts) do
+        if toc_data[v].is_infected == true then
+            getPlayer().Say("I'm still infected...")
+            return true
+        end
+
+    end
+
+    return false
+
+end
+
+
+local function CureInfection(bodyDamage)
     bodyDamage:setInfected(false);
     bodyDamage:setInfectionMortalityDuration(-1);
     bodyDamage:setInfectionTime(-1);
@@ -8,14 +23,20 @@ local function cureInfection(bodyDamage)
         local bodyPart = bodyParts:get(i);
         bodyPart:SetInfected(false);
     end
+
+    getPlayer().Say("I'm gonna be fine")
+
 end
 
 function CutArm(partName, surgeonFact, useBandage, bandageAlcool, usePainkiller, painkillerCount)
-    local player = getPlayer();
-    local modData = player:getModData().TOC;
-    local bodyPart = player:getBodyDamage():getBodyPart(TOC_getBodyPart(partName));
 
-    --Set dommage of bodypart & stress & endu
+
+
+    local player = getPlayer();
+    local toc_data = player:getModData().TOC;
+    local bodyPart = player:getBodyDamage():getBodyPart(TOC_getBodyPart(partName));     -- why the fuck do we we need this
+
+    --Set damage of body part & stress & endurance
     local stats = player:getStats();
     bodyPart:AddDamage(100 - surgeonFact);
     bodyPart:setAdditionalPain(100 - surgeonFact);
@@ -27,113 +48,56 @@ function CutArm(partName, surgeonFact, useBandage, bandageAlcool, usePainkiller,
     stats:setStress(100 - surgeonFact);
 
     -- Bandage
-    if useBandage and bandageAlcool then
-        bodyPart:setBandaged(true, 10, true, bandage:getType());
-    elseif useBandage and not bandageAlcool then
-        bodyPart:setBandaged(true, 10, false, bandage:getType());
-    end
+    --if useBandage and bandageAlcool then
+    --    bodyPart:setBandaged(true, 10, true, bandage:getType());
+    --elseif useBandage and not bandageAlcool then
+    --    bodyPart:setBandaged(true, 10, false, bandage:getType());
+    --end
 
     -- Painkiller
-    if usePainkiller then
-        for _ = 1,painkillerCount+1 do
-            player:getBodyDamage():JustTookPill(painkiller);
-        end
-        if painkillerCount < 10 then addSound(player, player:getX(), player:getY(), player:getZ(), 50-painkillerCount*5, 50-painkillerCount*5) end
-    else
-        addSound(player, player:getX(), player:getY(), player:getZ(), 50, 50)
-    end
+    --if usePainkiller then
+    --    for _ = 1,painkillerCount+1 do
+    --        player:getBodyDamage():JustTookPill(painkiller);
+    --    end
+    --    if painkillerCount < 10 then addSound(player, player:getX(), player:getY(), player:getZ(), 50-painkillerCount*5, 50-painkillerCount*5) end
+    --else
+    --    addSound(player, player:getX(), player:getY(), player:getZ(), 50, 50)
+    --end
 
     -- Change modData
-    if bodyPart:getType() == BodyPartType.Hand_R then
-        modData.RightHand.IsCut = true;
-        modData.RightHand.ToDisplay = true;
-        modData.RightHand.CicaTimeLeft = 1700 - surgeonFact * 50;
-    elseif bodyPart:getType() == BodyPartType.ForeArm_R then
-        modData.RightForearm.IsCut = true; modData.RightHand.IsCut = true;
-        modData.RightForearm.ToDisplay = true; modData.RightHand.ToDisplay = false;
-        modData.RightHand.is_cauterized = false;
-        modData.RightForearm.CicaTimeLeft = 1800 - surgeonFact * 50; modData.RightHand.CicaTimeLeft = 1800 - surgeonFact * 50;
-    elseif bodyPart:getType() == BodyPartType.UpperArm_R then
-        modData.RightArm.IsCut = true; modData.RightForearm.IsCut = true; modData.RightHand.IsCut = true;
-        modData.RightArm.ToDisplay = true; modData.RightForearm.ToDisplay = false; modData.RightHand.ToDisplay = false;
-        modData.RightHand.is_cauterized = false; modData.RightForearm.is_cauterized = false;
-        modData.RightArm.CicaTimeLeft = 2000 - surgeonFact * 50; modData.RightForearm.CicaTimeLeft = 2000 - surgeonFact * 50; modData.RightHand.CicaTimeLeft = 2000 - surgeonFact * 50;
-    elseif bodyPart:getType() == BodyPartType.Hand_L then
-        modData.LeftHand.IsCut = true;
-        modData.LeftHand.ToDisplay = true;
-        modData.LeftHand.CicaTimeLeft = 1700 - surgeonFact * 50;
-    elseif bodyPart:getType() == BodyPartType.ForeArm_L then
-        modData.LeftForearm.IsCut = true; modData.LeftHand.IsCut = true;
-        modData.LeftForearm.ToDisplay = true; modData.LeftHand.ToDisplay = false;
-        modData.LeftHand.is_cauterized = false;
-        modData.LeftForearm.CicaTimeLeft = 1800 - surgeonFact * 50; modData.LeftHand.CicaTimeLeft = 1800 - surgeonFact * 50;
-    elseif bodyPart:getType() == BodyPartType.UpperArm_L then
-        modData.LeftArm.IsCut = true; modData.LeftForearm.IsCut = true; modData.LeftHand.IsCut = true;
-        modData.LeftArm.ToDisplay = true; modData.LeftForearm.ToDisplay = false; modData.LeftHand.ToDisplay = false;
-        modData.LeftHand.is_cauterized = false; modData.LeftForearm.is_cauterized = false;
-        modData.LeftArm.CicaTimeLeft = 2000 - surgeonFact * 50; modData.LeftForearm.CicaTimeLeft = 2000 - surgeonFact * 50; modData.LeftHand.CicaTimeLeft = 2000 - surgeonFact * 50;
+
+    local current_bodypart = bodyPart:getType()
+    local body_damage = player:getBodyDamage()
+
+    for k,v in pairs(Bodyparts) do
+        
+        if v == partName then
+            toc_data[v].is_cut = true
+            toc_data[v].is_amputation_shown = true
+            toc_data[v].cicatrization_time = toc_data[v].cicatrization_base_time - surgeonFact * 50
+
+
+            -- Heal the infection here
+            if toc_data[v].is_infected and body_damage.getInfectionLevel() < 20 then
+                toc_data[v].is_infected = false
+                current_bodypart:SetBitten(false)
+
+                -- Second check, let's see if there is any other infected limb.
+                if CheckIfStillInfected(toc_data) == false then
+                    CureInfection(body_damage)
+                end
+
+            end
+
+            for depended_k, depended_v in pairs(toc_data[v].depends_on) do
+                toc_data[depended_v].is_cut = true
+                toc_data[depended_v].is_amputation_shown = true
+                toc_data[depended_v].cicatrization_time = toc_data[v].cicatrization_base_time - surgeonFact * 50
+            end
+        end
     end
 
-    --Heal the infection
 
-    -- dude what the fuck is this code
-    local bd = player:getBodyDamage()
-    if bodyPart:getType() == BodyPartType.Hand_R then
-        if bd:getInfectionLevel() < 20 and modData.RightHand.IsInfected and not (modData.RightForearm.IsInfected or modData.RightArm.IsInfected or modData.LeftArm.IsInfected or modData.LeftForearm.IsInfected or modData.LeftHand.IsInfected or modData.OtherBody_IsInfected) then
-            player:Say("I'm gonna be fine!");
-            bd:getBodyPart(BodyPartType.Hand_R):SetBitten(false);
-            cureInfection(bd);
-        else
-            player:Say("I did that for nothing...");
-        end
-        modData.RightHand.IsInfected = false;
-    elseif bodyPart:getType() == BodyPartType.ForeArm_R then
-        if bd:getInfectionLevel() < 20 and modData.RightForearm.IsInfected and not (modData.RightArm.IsInfected or modData.LeftArm.IsInfected or modData.LeftForearm.IsInfected or modData.LeftHand.IsInfected or modData.OtherBody_IsInfected) then
-            player:Say("I'm gonna be fine!");
-            bd:getBodyPart(BodyPartType.Hand_R):SetBitten(false); bd:getBodyPart(BodyPartType.ForeArm_R):SetBitten(false);
-            cureInfection(bd);
-        else
-            player:Say("I did that for nothing...");
-        end
-        modData.RightHand.IsInfected = false;
-        modData.RightForearm.IsInfected = false;
-    elseif bodyPart:getType() == BodyPartType.UpperArm_R then
-        if bd:getInfectionLevel() < 20 and modData.RightArm.IsInfected and not (modData.LeftArm.IsInfected or modData.LeftForearm.IsInfected or modData.LeftHand.IsInfected or modData.OtherBody_IsInfected) then
-            player:Say("I healed !");
-            bd:getBodyPart(BodyPartType.Hand_R):SetBitten(false); bd:getBodyPart(BodyPartType.ForeArm_R):SetBitten(false); bd:getBodyPart(BodyPartType.UpperArm_R):SetBitten(false);
-            cureInfection(bd);
-        else
-            player:Say("I did that for nothing...");
-        end
-        modData.RightHand.IsInfected = false; modData.RightForearm.IsInfected = false; modData.RightArm.IsInfected = false;
-    elseif bodyPart:getType() == BodyPartType.Hand_L then
-        if bd:getInfectionLevel() < 20 and modData.LeftHand.IsInfected and not (modData.RightForearm.IsInfected or modData.RightArm.IsInfected or modData.LeftArm.IsInfected or modData.LeftForearm.IsInfected or modData.RightHand.IsInfected or modData.OtherBody_IsInfected) then
-            player:Say("I'm gonna be fine!");
-            bd:getBodyPart(BodyPartType.Hand_L):SetBitten(false);
-            cureInfection(bd);
-        else
-            player:Say("I did that for nothing...");
-        end
-        modData.LeftHand.IsInfected = false;
-    elseif bodyPart:getType() == BodyPartType.ForeArm_L then
-        if bd:getInfectionLevel() < 20 and modData.LeftForearm.IsInfected and not (modData.RightForearm.IsInfected or modData.RightArm.IsInfected or modData.LeftArm.IsInfected or modData.RightHand.IsInfected or modData.OtherBody_IsInfected) then
-            player:Say("I'm gonna be fine!");
-            bd:getBodyPart(BodyPartType.Hand_L):SetBitten(false); bd:getBodyPart(BodyPartType.ForeArm_L):SetBitten(false);
-            cureInfection(bd);
-        else
-            player:Say("I did that for nothing...");
-        end
-        modData.LeftHand.IsInfected = false; modData.LeftForearm.IsInfected = false;
-    elseif bodyPart:getType() == BodyPartType.UpperArm_L then
-        if bd:getInfectionLevel() < 20 and modData.LeftArm.IsInfected and not (modData.RightForearm.IsInfected or modData.RightArm.IsInfected or modData.RightHand.IsInfected or modData.OtherBody_IsInfected) then
-            player:Say("I'm gonna be fine!");
-            bd:getBodyPart(BodyPartType.Hand_L):SetBitten(false); bd:getBodyPart(BodyPartType.ForeArm_L):SetBitten(false); bd:getBodyPart(BodyPartType.UpperArm_L):SetBitten(false);
-            cureInfection(bd);
-        else
-            player:Say("I did that for nothing...");
-        end
-        modData.LeftHand.IsInfected = false; modData.LeftForearm.IsInfected = false; modData.LeftArm.IsInfected = false;
-    end
 
     --Equip cloth
     local cloth = player:getInventory():AddItem(find_clothName2_TOC(partName));
@@ -143,7 +107,7 @@ end
 
 function OperateArm(partName, surgeonFact, useOven)
     local player = getPlayer();
-    local modData = player:getModData().TOC;
+    local toc_data = player:getModData().TOC;
 
     if useOven then
         local stats = player:getStats();
@@ -151,58 +115,25 @@ function OperateArm(partName, surgeonFact, useOven)
         stats:setStress(100);
     end
 
-    if partName == "RightHand" and not modData.RightHand.IsOperated then
-        modData.RightHand.IsOperated = true;
-        modData.RightHand.CicaTimeLeft = modData.RightHand.CicaTimeLeft - (surgeonFact * 200);
-        if useOven then modData.RightHand.is_cauterized = true end
-    elseif partName == "RightForearm" and not modData.RightForearm.IsOperated then
-        modData.RightForearm.IsOperated = true;
-        modData.RightHand.IsOperated = true;
-        modData.RightForearm.CicaTimeLeft = modData.RightForearm.CicaTimeLeft - (surgeonFact * 200);
-        modData.RightHand.CicaTimeLeft = modData.RightHand.CicaTimeLeft - (surgeonFact * 200);
-        if useOven then
-            modData.TOC.RightHand.is_cauterized = true;
-            modData.TOC.RightForearm.is_cauterized = true;
-        end
-    elseif partName == "RightArm" and not modData.RightArm.IsOperated then
-        modData.RightArm.IsOperated = true;
-        modData.RightForearm.IsOperated = true;
-        modData.RightHand.IsOperated = true;
-        modData.RightArm.CicaTimeLeft = modData.RightArm.CicaTimeLeft - (surgeonFact * 200);
-        modData.RightForearm.CicaTimeLeft = modData.RightForearm.CicaTimeLeft - (surgeonFact * 200);
-        modData.RightHand.CicaTimeLeft = modData.RightHand.CicaTimeLeft - (surgeonFact * 200);
-        if useOven then
-            modData.RightHand.is_cauterized = true;
-            modData.RightForearm.is_cauterized = true;
-            modData.RightArm.is_cauterized = true;
-        end
-    elseif partName == "LeftHand" and not modData.LeftHand.IsOperated then
-        modData.LeftHand.IsOperated = true;
-        modData.LeftHand.CicaTimeLeft = modData.LeftHand.CicaTimeLeft - (surgeonFact * 200);
-        if useOven then modData.LeftHand.is_cauterized = true end
-    elseif partName == "LeftForearm" and not modData.LeftForearm.IsOperated then
-        modData.LeftForearm.IsOperated = true;
-        modData.LeftHand.IsOperated = true;
-        modData.LeftForearm.CicaTimeLeft = modData.LeftForearm.CicaTimeLeft - (surgeonFact * 200);
-        modData.LeftHand.CicaTimeLeft = modData.LeftHand.CicaTimeLeft - (surgeonFact * 200);
-        if useOven then
-            modData.LeftHand.is_cauterized = true;
-            modData.LeftForearm.is_cauterized = true;
-        end
-    elseif partName == "LeftArm" and not modData.LeftArm.IsOperated then
-        modData.LeftArm.IsOperated = true;
-        modData.LeftForearm.IsOperated = true;
-        modData.LeftHand.IsOperated = true;
-        modData.LeftArm.CicaTimeLeft = modData.LeftArm.CicaTimeLeft - (surgeonFact * 200);
-        modData.LeftForearm.CicaTimeLeft = modData.LeftForearm.CicaTimeLeft - (surgeonFact * 200);
-        modData.LeftHand.CicaTimeLeft = modData.LeftHand.CicaTimeLeft - (surgeonFact * 200);
-        if useOven then
-            modData.LeftHand.is_cauterized = true;
-            modData.LeftForearm.is_cauterized = true;
-            modData.LeftArm.is_cauterized = true;
-        end
-    end
 
+    for k,v in pairs(Bodyparts) do
+
+        if not toc_data[v].is_operated then
+            toc_data[v].is_operated = true
+            toc_data[v].cicatrization_time = toc_data[v].cicatrization_time - (surgeonFact * 200)
+    
+            if useOven then toc_data[v].is_cauterized = true end
+    
+    
+            for depended_k, depended_v in pairs(toc_data[v].depends_on) do
+                toc_data[depended_v].is_operated = true
+                toc_data[depended_v].cicatrization_time = toc_data[depended_v].cicatrization_time - (surgeonFact * 200)
+                if useOven then toc_data[depended_v].is_cauterized = true end
+    
+            end
+        end
+        
+    end
     SetBodyPartsStatus(player, partName, useOven)
     player:transmitModData();
 end
@@ -257,3 +188,4 @@ function SetBodyPartsStatus(player, partName, useOven)
     end
 
 end 
+

@@ -155,25 +155,25 @@ local function setDescUI(partName)
      -- Cut but not healed
     elseif partData.is_cut and not partData.is_cicatrized and partData.ToDisplay then
                 if partData.IsOperated then
-            if partData.CicaTimeLeft > 1000 then
+            if partData.cicatrization_time > 1000 then
                 descUI["textEtat"]:setText("Still a long way to go")
                 descUI["textEtat"]:setColor(1, 0.8, 1, 0.2);
-            elseif partData.CicaTimeLeft > 500 then
+            elseif partData.cicatrization_time > 500 then
                 descUI["textEtat"]:setText("Starting to get better")
                 descUI["textEtat"]:setColor(1, 0.8, 1, 0.2)
 
-            elseif partData.CicaTimeLeft > 100 then
+            elseif partData.cicatrization_time > 100 then
                 descUI["textEtat"]:setText("Almost cicatrized");
                 descUI["textEtat"]:setColor(1, 0.8, 1, 0.2);
             end
         else
-            if partData.CicaTimeLeft > 1000 then
+            if partData.cicatrization_time > 1000 then
                 descUI["textEtat"]:setText("It hurts so much...")
                 descUI["textEtat"]:setColor(1, 1, 0, 0)
-            elseif partData.CicaTimeLeft > 500 then
+            elseif partData.cicatrization_time > 500 then
                 descUI["textEtat"]:setText("It still hurts a lot")
                 descUI["textEtat"]:setColor(1, 0.8, 1, 0.2)
-            elseif partData.CicaTimeLeft > 500 then
+            elseif partData.cicatrization_time > 500 then
                 descUI["textEtat"]:setText("I think it's almost over...")
                 descUI["textEtat"]:setColor(1, 0.8, 1, 0.2)
             end

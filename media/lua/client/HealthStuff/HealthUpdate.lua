@@ -47,7 +47,7 @@ local function healUpdatePart(partName, modData, player)
 
     -- During healing
     if modData_part.is_cut and not modData_part.is_cicatrized then
-        if modData_part.CicaTimeLeft < 0 then
+        if modData_part.cicatrization_time < 0 then
             player:Say(getText('UI_ContextMenu_My') .. partName .. getText('UI_ContextMenu_Now_cut'))
             modData_part.is_cicatrized = true;
             player:getTraits():add("Brave")
@@ -79,7 +79,7 @@ local function isOtherArmInfect(modData, partName)
     names[partName] = nil;
 
     for i,v in pairs(names) do
-        if modData.TOC[v].IsInfected then return true end
+        if modData.TOC[v].is_infected then return true end
     end
     return false
 end
