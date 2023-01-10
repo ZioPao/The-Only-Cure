@@ -51,12 +51,12 @@ function CutArm(partName, surgeonFact, useBandage, bandageAlcool, usePainkiller,
     elseif bodyPart:getType() == BodyPartType.ForeArm_R then
         modData.RightForearm.IsCut = true; modData.RightHand.IsCut = true;
         modData.RightForearm.ToDisplay = true; modData.RightHand.ToDisplay = false;
-        modData.RightHand.IsBurn = false;
+        modData.RightHand.is_cauterized = false;
         modData.RightForearm.CicaTimeLeft = 1800 - surgeonFact * 50; modData.RightHand.CicaTimeLeft = 1800 - surgeonFact * 50;
     elseif bodyPart:getType() == BodyPartType.UpperArm_R then
         modData.RightArm.IsCut = true; modData.RightForearm.IsCut = true; modData.RightHand.IsCut = true;
         modData.RightArm.ToDisplay = true; modData.RightForearm.ToDisplay = false; modData.RightHand.ToDisplay = false;
-        modData.RightHand.IsBurn = false; modData.RightForearm.IsBurn = false;
+        modData.RightHand.is_cauterized = false; modData.RightForearm.is_cauterized = false;
         modData.RightArm.CicaTimeLeft = 2000 - surgeonFact * 50; modData.RightForearm.CicaTimeLeft = 2000 - surgeonFact * 50; modData.RightHand.CicaTimeLeft = 2000 - surgeonFact * 50;
     elseif bodyPart:getType() == BodyPartType.Hand_L then
         modData.LeftHand.IsCut = true;
@@ -65,12 +65,12 @@ function CutArm(partName, surgeonFact, useBandage, bandageAlcool, usePainkiller,
     elseif bodyPart:getType() == BodyPartType.ForeArm_L then
         modData.LeftForearm.IsCut = true; modData.LeftHand.IsCut = true;
         modData.LeftForearm.ToDisplay = true; modData.LeftHand.ToDisplay = false;
-        modData.LeftHand.IsBurn = false;
+        modData.LeftHand.is_cauterized = false;
         modData.LeftForearm.CicaTimeLeft = 1800 - surgeonFact * 50; modData.LeftHand.CicaTimeLeft = 1800 - surgeonFact * 50;
     elseif bodyPart:getType() == BodyPartType.UpperArm_L then
         modData.LeftArm.IsCut = true; modData.LeftForearm.IsCut = true; modData.LeftHand.IsCut = true;
         modData.LeftArm.ToDisplay = true; modData.LeftForearm.ToDisplay = false; modData.LeftHand.ToDisplay = false;
-        modData.LeftHand.IsBurn = false; modData.LeftForearm.IsBurn = false;
+        modData.LeftHand.is_cauterized = false; modData.LeftForearm.is_cauterized = false;
         modData.LeftArm.CicaTimeLeft = 2000 - surgeonFact * 50; modData.LeftForearm.CicaTimeLeft = 2000 - surgeonFact * 50; modData.LeftHand.CicaTimeLeft = 2000 - surgeonFact * 50;
     end
 
@@ -154,15 +154,15 @@ function OperateArm(partName, surgeonFact, useOven)
     if partName == "RightHand" and not modData.RightHand.IsOperated then
         modData.RightHand.IsOperated = true;
         modData.RightHand.CicaTimeLeft = modData.RightHand.CicaTimeLeft - (surgeonFact * 200);
-        if useOven then modData.RightHand.IsBurn = true end
+        if useOven then modData.RightHand.is_cauterized = true end
     elseif partName == "RightForearm" and not modData.RightForearm.IsOperated then
         modData.RightForearm.IsOperated = true;
         modData.RightHand.IsOperated = true;
         modData.RightForearm.CicaTimeLeft = modData.RightForearm.CicaTimeLeft - (surgeonFact * 200);
         modData.RightHand.CicaTimeLeft = modData.RightHand.CicaTimeLeft - (surgeonFact * 200);
         if useOven then
-            modData.TOC.RightHand.IsBurn = true;
-            modData.TOC.RightForearm.IsBurn = true;
+            modData.TOC.RightHand.is_cauterized = true;
+            modData.TOC.RightForearm.is_cauterized = true;
         end
     elseif partName == "RightArm" and not modData.RightArm.IsOperated then
         modData.RightArm.IsOperated = true;
@@ -172,22 +172,22 @@ function OperateArm(partName, surgeonFact, useOven)
         modData.RightForearm.CicaTimeLeft = modData.RightForearm.CicaTimeLeft - (surgeonFact * 200);
         modData.RightHand.CicaTimeLeft = modData.RightHand.CicaTimeLeft - (surgeonFact * 200);
         if useOven then
-            modData.RightHand.IsBurn = true;
-            modData.RightForearm.IsBurn = true;
-            modData.RightArm.IsBurn = true;
+            modData.RightHand.is_cauterized = true;
+            modData.RightForearm.is_cauterized = true;
+            modData.RightArm.is_cauterized = true;
         end
     elseif partName == "LeftHand" and not modData.LeftHand.IsOperated then
         modData.LeftHand.IsOperated = true;
         modData.LeftHand.CicaTimeLeft = modData.LeftHand.CicaTimeLeft - (surgeonFact * 200);
-        if useOven then modData.LeftHand.IsBurn = true end
+        if useOven then modData.LeftHand.is_cauterized = true end
     elseif partName == "LeftForearm" and not modData.LeftForearm.IsOperated then
         modData.LeftForearm.IsOperated = true;
         modData.LeftHand.IsOperated = true;
         modData.LeftForearm.CicaTimeLeft = modData.LeftForearm.CicaTimeLeft - (surgeonFact * 200);
         modData.LeftHand.CicaTimeLeft = modData.LeftHand.CicaTimeLeft - (surgeonFact * 200);
         if useOven then
-            modData.LeftHand.IsBurn = true;
-            modData.LeftForearm.IsBurn = true;
+            modData.LeftHand.is_cauterized = true;
+            modData.LeftForearm.is_cauterized = true;
         end
     elseif partName == "LeftArm" and not modData.LeftArm.IsOperated then
         modData.LeftArm.IsOperated = true;
@@ -197,9 +197,9 @@ function OperateArm(partName, surgeonFact, useOven)
         modData.LeftForearm.CicaTimeLeft = modData.LeftForearm.CicaTimeLeft - (surgeonFact * 200);
         modData.LeftHand.CicaTimeLeft = modData.LeftHand.CicaTimeLeft - (surgeonFact * 200);
         if useOven then
-            modData.LeftHand.IsBurn = true;
-            modData.LeftForearm.IsBurn = true;
-            modData.LeftArm.IsBurn = true;
+            modData.LeftHand.is_cauterized = true;
+            modData.LeftForearm.is_cauterized = true;
+            modData.LeftArm.is_cauterized = true;
         end
     end
 

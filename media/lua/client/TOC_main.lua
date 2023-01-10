@@ -1,10 +1,10 @@
 local function dropItem(player, modData)
-    if (modData.TOC.RightHand.IsCut and not (modData.TOC.RightHand.IsEquiped or modData.TOC.RightForearm.IsEquiped)) or (modData.TOC.RightForearm.IsCut and not modData.TOC.RightForearm.IsEquiped) then
+    if (modData.TOC.RightHand.is_cut and not (modData.TOC.RightHand.IsEquiped or modData.TOC.RightForearm.IsEquiped)) or (modData.TOC.RightForearm.is_cut and not modData.TOC.RightForearm.IsEquiped) then
         if player:getPrimaryHandItem() ~= nil then
             if player:getPrimaryHandItem():getName() ~= "Bare Hands" then player:dropHandItems() end
         end
     end
-    if (modData.TOC.LeftHand.IsCut and not (modData.TOC.LeftHand.IsEquiped or modData.TOC.LeftForearm.IsEquiped)) or (modData.TOC.LeftForearm.IsCut and not modData.TOC.LeftForearm.IsEquiped) then
+    if (modData.TOC.LeftHand.is_cut and not (modData.TOC.LeftHand.IsEquiped or modData.TOC.LeftForearm.IsEquiped)) or (modData.TOC.LeftForearm.is_cut and not modData.TOC.LeftForearm.IsEquiped) then
         if player:getSecondaryHandItem() ~= nil then
             if player:getSecondaryHandItem():getName() ~= "Bare Hands" then player:dropHandItems() end
         end
@@ -33,8 +33,8 @@ local function everyTenMinutes()
 
         --Reduit le temps de cicatri restant
         for i,name in pairs(names) do
-            if modData.TOC[name].IsCut and not modData.TOC[name].IsCicatrized then
-                modData.TOC[name].CicaTimeLeft = modData.TOC[name].CicaTimeLeft - 1;
+            if modData.TOC[name].is_cut and not modData.TOC[name].is_cicatrized then
+                modData.TOC[name].cicatrization_time = modData.TOC[name].cicatrization_time - 1;
                 player:transmitModData()
             end
         end
@@ -44,106 +44,79 @@ end
 local function initVariable(_, player)
     local modData = player:getModData()
     if modData.TOC == nil then
-        modData.TOC = {};
-        modData.TOC.RightHand = {};
-        modData.TOC.RightForearm = {};
-        modData.TOC.RightArm = {};
-        modData.TOC.LeftHand = {};
-        modData.TOC.LeftForearm = {};
-        modData.TOC.LeftArm = {};
 
-        modData.TOC.RightHand.IsCut = false;
-        modData.TOC.RightForearm.IsCut = false;
-        modData.TOC.RightArm.IsCut = false;
-        modData.TOC.LeftHand.IsCut = false;
-        modData.TOC.LeftForearm.IsCut = false;
-        modData.TOC.LeftArm.IsCut = false;
+        -- https://stackoverflow.com/questions/20915164/lua-loop-for-creating-variables-in-table
+        
+        local rightHand = "RightHand"
+        local rightForearm = "RightForearm"
+        local rightArm = "RightArm"
 
-        modData.TOC.RightHand.IsInfected = false;
-        modData.TOC.RightForearm.IsInfected = false;
-        modData.TOC.RightArm.IsInfected = false;
-        modData.TOC.LeftHand.IsInfected = false;
-        modData.TOC.LeftForearm.IsInfected = false;
-        modData.TOC.LeftArm.IsInfected = false;
+        local leftHand = "LeftHand"
+        local leftForearm = "LeftForearm"
+        local leftArm = "LeftArm"
 
-        modData.TOC.RightHand.IsOperated = false;
-        modData.TOC.RightForearm.IsOperated = false;
-        modData.TOC.RightArm.IsOperated = false;
-        modData.TOC.LeftHand.IsOperated = false;
-        modData.TOC.LeftForearm.IsOperated = false;
-        modData.TOC.LeftArm.IsOperated = false;
 
-        modData.TOC.RightHand.IsCicatrized = false;
-        modData.TOC.RightForearm.IsCicatrized = false;
-        modData.TOC.RightArm.IsCicatrized = false;
-        modData.TOC.LeftHand.IsCicatrized = false;
-        modData.TOC.LeftForearm.IsCicatrized = false;
-        modData.TOC.LeftArm.IsCicatrized = false;
 
-        modData.TOC.RightHand.IsEquiped = false;
-        modData.TOC.RightForearm.IsEquiped = false;
-        modData.TOC.RightArm.IsEquiped = false;
-        modData.TOC.LeftHand.IsEquiped = false;
-        modData.TOC.LeftForearm.IsEquiped = false;
-        modData.TOC.LeftArm.IsEquiped = false;
+        Bodyparts = { "RightHand", "RightForearm", "RightArm", "LeftHand", "LeftForearm", "LeftArm"}
+        
+        modData.TOC = {
+            RightHand = {},
+            RightForearm = {},
+            RightArm = {},
 
-        modData.TOC.RightHand.IsBurn = false;
-        modData.TOC.RightForearm.IsBurn = false;
-        modData.TOC.RightArm.IsBurn = false;
-        modData.TOC.LeftHand.IsBurn = false;
-        modData.TOC.LeftForearm.IsBurn = false;
-        modData.TOC.LeftArm.IsBurn = false;
+            LeftHand = {},
+            LeftForearm = {},
+            LeftArm = {}
+        }
 
-        modData.TOC.RightHand.EquipFact = 1.0;
-        modData.TOC.RightForearm.EquipFact = 1.0;
-        modData.TOC.RightArm.EquipFact = 1.0;
-        modData.TOC.LeftHand.EquipFact = 1.0;
-        modData.TOC.LeftForearm.EquipFact = 1.0;
-        modData.TOC.LeftArm.EquipFact = 1.0;
+        for k,v in pairs(Bodyparts) do
+            modData.TOC[v].is_cut = false
+            modData.TOC[v].is_infected = false
+            modData.TOC[v].is_operated = false
+            modData.TOC[v].is_cicatrized = false
+            modData.TOC[v].is_cauterized = false
+            modData.TOC[v].is_amputation_shown = false
 
-        modData.TOC.RightHand.Equip_mat_id = nil;
-        modData.TOC.RightForearm.Equip_mat_id = nil;
-        modData.TOC.RightArm.Equip_mat_id = nil;
-        modData.TOC.LeftHand.Equip_mat_id = nil;
-        modData.TOC.LeftForearm.Equip_mat_id = nil;
-        modData.TOC.LeftArm.Equip_mat_id = nil;
+            modData.TOC[v].cicatrization_time = 0
+            
+            
+            modData.TOC[v].has_prothesis_equipped = false
+            modData.TOC[v].prothesis_factor = 1.0       -- Every prothesis has the same... does this even make sense here?
+            modData.TOC[v].prothesis_material_id = nil           
+        end
 
-        modData.TOC.RightHand.CicaTimeLeft = 0;
-        modData.TOC.RightForearm.CicaTimeLeft = 0;
-        modData.TOC.RightArm.CicaTimeLeft = 0;
-        modData.TOC.LeftHand.CicaTimeLeft = 0;
-        modData.TOC.LeftForearm.CicaTimeLeft = 0;
-        modData.TOC.LeftArm.CicaTimeLeft = 0;
 
-        modData.TOC.RightHand.ToDisplay = false;
-        modData.TOC.RightForearm.ToDisplay = false;
-        modData.TOC.RightArm.ToDisplay = false;
-        modData.TOC.LeftHand.ToDisplay = false;
-        modData.TOC.LeftForearm.ToDisplay = false;
-        modData.TOC.LeftArm.ToDisplay = false;
+        -- Manual stuff
+        
 
-        modData.TOC.InitDone = true;
-        modData.TOC.OtherBody_IsInfected = false;
+        modData.TOC[rightForearm].depends_on = {rightHand}
+        modData.TOC[rightArm].depends_on = { rightHand, rightForearm }
+        
+        modData.TOC[leftForearm].depends_on = { leftHand }
+        modData.TOC[leftArm].depends_on = { leftHand, leftForearm }
+        
+
+
 
         if player:HasTrait("amputee1") then
             local cloth = player:getInventory():AddItem("TOC.ArmLeft_noHand");
             player:setWornItem(cloth:getBodyLocation(), cloth);
-            modData.TOC.LeftHand.IsCut=true; modData.TOC.LeftHand.IsOperated=true; modData.TOC.LeftHand.ToDisplay=true; modData.TOC.LeftHand.IsCicatrized=true;
+            modData.TOC.LeftHand.is_cut=true; modData.TOC.LeftHand.is_operated=true; modData.TOC.LeftHand.is_amputation_shown=true; modData.TOC.LeftHand.is_cicatrized=true;
             player:getInventory():AddItem("TOC.MetalHook");
         end
         if player:HasTrait("amputee2") then
             local cloth = player:getInventory():AddItem("TOC.ArmLeft_noForearm");
             player:setWornItem(cloth:getBodyLocation(), cloth);
-            modData.TOC.LeftHand.IsCut=true; modData.TOC.LeftHand.IsOperated=true;
-            modData.TOC.LeftForearm.IsCut=true; modData.TOC.LeftForearm.IsOperated=true; modData.TOC.LeftForearm.ToDisplay=true; modData.TOC.LeftForearm.IsCicatrized=true;
+            modData.TOC.LeftHand.is_cut=true; modData.TOC.LeftHand.is_operated=true;
+            modData.TOC.LeftForearm.is_cut=true; modData.TOC.LeftForearm.is_operated=true; modData.TOC.LeftForearm.is_amputation_shown=true; modData.TOC.LeftForearm.is_cicatrized=true;
             player:getInventory():AddItem("TOC.MetalHook");
         end
         if player:HasTrait("amputee3") then
             local cloth = player:getInventory():AddItem("TOC.ArmLeft_noArm");
             player:setWornItem(cloth:getBodyLocation(), cloth);
-            modData.TOC.LeftHand.IsCut=true; modData.TOC.LeftHand.IsOperated=true;
-            modData.TOC.LeftForearm.IsCut=true; modData.TOC.LeftForearm.IsOperated=true;
-            modData.TOC.LeftArm.IsCut=true; modData.TOC.LeftArm.IsOperated=true; modData.TOC.LeftArm.ToDisplay=true; modData.TOC.LeftArm.IsCicatrized=true;
+            modData.TOC.LeftHand.is_cut=true; modData.TOC.LeftHand.is_operated=true;
+            modData.TOC.LeftForearm.is_cut=true; modData.TOC.LeftForearm.is_operated=true;
+            modData.TOC.LeftArm.is_cut=true; modData.TOC.LeftArm.is_operated=true; modData.TOC.LeftArm.is_amputation_shown=true; modData.TOC.LeftArm.is_cicatrized=true;
             player:getInventory():AddItem("TOC.MetalHook");
         end
 

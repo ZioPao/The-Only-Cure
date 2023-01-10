@@ -26,26 +26,26 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
         local otherPartNames = {"RightArm", "LeftArm"}
 
         for i,name in ipairs(protPartNames) do
-            if modData.TOC[name].IsCut then
-                if modData.TOC[name].IsEquiped then
-                    maxTime = maxTime * modData.TOC[name].EquipFact;
+            if modData.TOC[name].is_cut then
+                if modData.TOC[name].has_prothesis_equipped then
+                    maxTime = maxTime * modData.TOC[name].EquipFact     --todo this is dumb
                 else
                     maxTime = maxTime * 2;
                 end
-                if modData.TOC[name].IsBurn then maxTime = maxTime * burnFact end
+                if modData.TOC[name].is_cauterized then maxTime = maxTime * burnFact end
             end
         end
 
         for i,name in ipairs(otherPartNames) do
-            if modData.TOC[name].IsCut then
+            if modData.TOC[name].is_cut then
                 maxTime = maxTime * 2
-                if modData.TOC[name].IsBurn then maxTime = maxTime * burnFact end
+                if modData.TOC[name].is_cauterized then maxTime = maxTime * burnFact end
             end
         end
 
         -- Protheses perks stuff
-        if modData.TOC.RightHand.IsCut then maxTime = maxTime * (1 + (9 - self.character:getPerkLevel(Perks.RightHand)) / 20) end
-        if modData.TOC.LeftHand.IsCut then maxTime = maxTime * (1 + (9 - self.character:getPerkLevel(Perks.LeftHand)) / 20) end
+        if modData.TOC.RightHand.is_cut then maxTime = maxTime * (1 + (9 - self.character:getPerkLevel(Perks.RightHand)) / 20) end
+        if modData.TOC.LeftHand.is_cut then maxTime = maxTime * (1 + (9 - self.character:getPerkLevel(Perks.LeftHand)) / 20) end
 
         if maxTime > 10 * maxTime_org then maxTime = 10 * maxTime_org end
     end
@@ -117,38 +117,38 @@ function ISEquipWeaponAction:perform()
 
     local modData = self.character:getModData()
     if not self.item:isRequiresEquippedBothHands() then
-        if modData.TOC.RightHand.IsCut then
-            if modData.TOC.RightForearm.IsCut then
-                if not modData.TOC.RightForearm.IsEquiped then
+        if modData.TOC.RightHand.is_cut then
+            if modData.TOC.RightForearm.is_cut then
+                if not modData.TOC.RightForearm.has_prothesis_equipped then
                     self.character:setPrimaryHandItem(nil);
                     self.character:setSecondaryHandItem(self.item);
                 end
             else
-                if not modData.TOC.RightHand.IsEquiped then
+                if not modData.TOC.RightHand.has_prothesis_equipped then
                     self.character:setPrimaryHandItem(nil);
                     self.character:setSecondaryHandItem(self.item);
                 end
             end
         end
-        if modData.TOC.LeftHand.IsCut then
-            if modData.TOC.LeftForearm.IsCut then
-                if not modData.TOC.LeftForearm.IsEquiped then
+        if modData.TOC.LeftHand.is_cut then
+            if modData.TOC.LeftForearm.is_cut then
+                if not modData.TOC.LeftForearm.has_prothesis_equipped then
                     self.character:setPrimaryHandItem(self.item);
                     self.character:setSecondaryHandItem(nil);
                 end
             else
-                if not modData.TOC.LeftHand.IsEquiped then
+                if not modData.TOC.LeftHand.has_prothesis_equipped then
                     self.character:setPrimaryHandItem(self.item);
                     self.character:setSecondaryHandItem(nil);
                 end
             end
         end
-        if (modData.TOC.RightHand.IsCut and not (modData.TOC.RightHand.IsEquiped or modData.TOC.RightForearm.IsEquiped)) and (modData.TOC.LeftHand.IsCut and not (modData.TOC.LeftHand.IsEquiped or modData.TOC.LeftForearm.IsEquiped)) then
+        if (modData.TOC.RightHand.is_cut and not (modData.TOC.RightHand.has_prothesis_equipped or modData.TOC.RightForearm.has_prothesis_equipped)) and (modData.TOC.LeftHand.is_cut and not (modData.TOC.LeftHand.has_prothesis_equipped or modData.TOC.LeftForearm.has_prothesis_equipped)) then
             self.character:dropHandItems();
         end
     end
 
-    if self.item:isRequiresEquippedBothHands() and ((modData.TOC.RightHand.IsCut and not modData.TOC.RightHand.IsEquiped) or (modData.TOC.RightForearm.IsCut and not modData.TOC.RightForearm.IsEquiped) or (modData.TOC.LeftHand.IsCut and not modData.TOC.LeftHand.IsEquiped) or (modData.TOC.LeftForearm.IsCut and not modData.TOC.LeftForearm.IsEquiped)) then
+    if self.item:isRequiresEquippedBothHands() and ((modData.TOC.RightHand.is_cut and not modData.TOC.RightHand.has_prothesis_equipped) or (modData.TOC.RightForearm.is_cut and not modData.TOC.RightForearm.has_prothesis_equipped) or (modData.TOC.LeftHand.is_cut and not modData.TOC.LeftHand.has_prothesis_equipped) or (modData.TOC.LeftForearm.is_cut and not modData.TOC.LeftForearm.has_prothesis_equipped)) then
         self.character:dropHandItems();
     end
 

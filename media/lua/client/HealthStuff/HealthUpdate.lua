@@ -12,14 +12,14 @@ local function healUpdatePart(partName, modData, player)
     if bodyPart:bandaged() then isBand = true; bandLife = bodyPart:getBandageLife(); bandType = bodyPart:getBandageType() end
 
     --Set max heal
-    if modData_part.IsCicatrized and bodyPart:getHealth() > 80 then
+    if modData_part.is_cicatrized and bodyPart:getHealth() > 80 then
         bodyPart:SetHealth(80);
     elseif bodyPart:getHealth() > 40 then
         bodyPart:SetHealth(40);
     end
 
     --Heal
-    if modData_part.IsCicatrized then
+    if modData_part.is_cicatrized then
         if bodyPart:deepWounded()   then bodyPart:setDeepWounded(false) end
         if bodyPart:bleeding()      then bodyPart:setBleeding(false) end
     end
@@ -42,14 +42,14 @@ local function healUpdatePart(partName, modData, player)
     if bodyPart:haveBullet()        then bodyPart:setHaveBullet(false, 0)    end
     if bodyPart:isInfectedWound()   then bodyPart:setInfectedWound(false)    end
     if bodyPart:isBurnt()           then bodyPart:setBurnTime(0)             end
-    if bodyPart:isCut()             then bodyPart:setCut(false, false)       end
+    if bodyPart:isCut()             then bodyPart:setCut(false, false)       end        --Lacerations?
     if bodyPart:getFractureTime()>0 then bodyPart:setFractureTime(0)         end
 
     -- During healing
-    if modData_part.IsCut and not modData_part.IsCicatrized then
+    if modData_part.is_cut and not modData_part.is_cicatrized then
         if modData_part.CicaTimeLeft < 0 then
             player:Say(getText('UI_ContextMenu_My') .. partName .. getText('UI_ContextMenu_Now_cut'))
-            modData_part.IsCicatrized = true;
+            modData_part.is_cicatrized = true;
             player:getTraits():add("Brave")
             player:getTraits():add("Insensitive")
             bodyPart:setBleeding(false);
@@ -61,11 +61,15 @@ local function healUpdatePart(partName, modData, player)
     end
 
     --Phantom pain
-    if modData_part.ToDisplay then
-        if ZombRand(1, 100) < 10 then
-            if modData_part.IsBurn then x = 60 else x = 30 end
-            bodyPart:setAdditionalPain(ZombRand(1, x));
+    if modData_part.is_amputation_shown and ZombRand(1, 100) < 10 then
+        
+        if modData_part.is_cauterized then
+            local added_pain = 60
+        else
+            local added_pain = 30
         end
+        
+        bodyPart:setAdditionalPain(ZombRand(1,added_pain))
     end
     if isBand then bodyPart:setBandaged(true, bandLife, false, bandType) end
 end
@@ -82,11 +86,14 @@ end
 
 function UpdatePlayerHealth(player, modData)
     local bodyDamage = player:getBodyDamage()
-    local partNames = {"RightHand", "RightForearm", "RightArm", "LeftHand", "LeftForearm", "LeftArm"}
+    --local partNames = {"RightHand", "RightForearm", "RightArm", "LeftHand", "LeftForearm", "LeftArm"}
 
     if player:HasTrait("Insensitive") then bodyDamage:setPainReduction(49) end
 
-    for i,name in pairs(partNames) do
-        if modData.TOC[name].IsCut then healUpdatePart(name, modData, player) end
+    for i,name in pairs(Bodyparts) do
+        if modData.TOC[name].is_cut then
+            healUpdatePart(name, modData, player)
+                
+        end
     end
 end

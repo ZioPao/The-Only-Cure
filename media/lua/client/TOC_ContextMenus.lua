@@ -22,12 +22,12 @@ end
 
 
 local function CheckIfCanBeOperated(modData)
-    if modData.TOC.RightHand.IsCut and not modData.TOC.RightHand.IsOperated
-    or modData.TOC.RightForearm.IsCut and not modData.TOC.RightForearm.IsOperated
-    or modData.TOC.RightArm.IsCut and not modData.TOC.RightArm.IsOperated
-    or modData.TOC.LeftHand.IsCut and not modData.TOC.LeftHand.IsOperated
-    or modData.TOC.LeftForearm.IsCut and not modData.TOC.LeftForearm.IsOperated
-    or modData.TOC.LeftArm.IsCut and not modData.TOC.LeftArm.IsOperated then
+    if modData.TOC.RightHand.is_cut and not modData.TOC.RightHand.is_operated
+    or modData.TOC.RightForearm.is_cut and not modData.TOC.RightForearm.is_operated
+    or modData.TOC.RightArm.is_cut and not modData.TOC.RightArm.is_operated
+    or modData.TOC.LeftHand.is_cut and not modData.TOC.LeftHand.is_operated
+    or modData.TOC.LeftForearm.is_cut and not modData.TOC.LeftForearm.is_operated
+    or modData.TOC.LeftArm.is_cut and not modData.TOC.LeftArm.is_operated then
         return true
     else
         return false
@@ -58,26 +58,18 @@ local function TOC_onFillWorldObjectContextMenu(playerId, context, worldobjects,
                             local rootMenu = context:addOption(getText('UI_ContextMenu_OperateOven'), worldobjects, nil);
                             local subMenu = context:getNew(context);
                             context:addSubMenu(rootMenu, subMenu)
-                            if modData.TOC.RightHand.IsCut and not modData.TOC.RightForearm.IsCut and not modData.TOC.RightHand.IsOperated then
-                                subMenu:addOption(getText('UI_ContextMenu_RightHand'), worldobjects, operateLocal, "RightHand");
-                            end
-                            if modData.TOC.LeftHand.IsCut and not modData.TOC.LeftForearm.IsCut and not modData.TOC.LeftHand.IsOperated then
-                                subMenu:addOption(getText('UI_ContextMenu_LeftHand'), worldobjects, operateLocal, "LeftHand");
-                            end
-                            if modData.TOC.RightForearm.IsCut and not modData.TOC.RightArm.IsCut and not modData.TOC.RightForearm.IsOperated then
-                                subMenu:addOption(getText('UI_ContextMenu_RightForearm'), worldobjects, operateLocal, "RightForearm");
-                            end
-                            if modData.TOC.LeftForearm.IsCut and not modData.TOC.LeftArm.IsCut and not modData.TOC.LeftForearm.IsOperated then
-                                subMenu:addOption(getText('UI_ContextMenu_LeftForearm'), worldobjects, operateLocal, "LeftForearm");
-                            end
-                            if modData.TOC.RightArm.IsCut and not modData.TOC.RightArm.IsOperated then
-                                subMenu:addOption(getText('UI_ContextMenu_RightArm'), worldobjects, operateLocal, "RightArm");
-                            end
-                            if modData.TOC.LeftArm.IsCut and not modData.TOC.LeftArm.IsOperated then
-                                subMenu:addOption(getText('UI_ContextMenu_LeftArm'), worldobjects, operateLocal, "LeftArm");
+
+                            for k, v in pairs(Bodyparts) do
+                                -- todo this is awful but it should work
+                                if modData.TOC[v].is_cut and not modData.TOC[v].is_operated then
+                                    subMenu:addOption(getText('UI_ContextMenu_' .. v), worldobjects, operateLocal, v);
+
+                                end
+
+
                             end
 
-                            break       -- stop cycling like an idiot
+
                         end
                     end
                 end
@@ -92,6 +84,7 @@ local function TOC_onFillWorldObjectContextMenu(playerId, context, worldobjects,
                 end
             end
             if clickedPlayer then
+                -- Pretty sure this check is kinda broken
                 if not ((-1 < clickedPlayer:getX() - player:getX() and clickedPlayer:getX() - player:getX() < 1) and (-1 < clickedPlayer:getY() - player:getY() and clickedPlayer:getY() - player:getY() < 1)) then
                     return false;
                 end
@@ -105,20 +98,14 @@ local function TOC_onFillWorldObjectContextMenu(playerId, context, worldobjects,
                 context:addSubMenu(rootOption, rootMenu);
                 context:addSubMenu(cutOption, cutMenu);
                 context:addSubMenu(operateOption, operateMenu);
+                -- todo add checks so that we don't show these menus if a player has already beeen operated or amputated
+                for k, v in pairs(Bodyparts) do
+                    cutMenu:addOption(getText('UI_ContextMenu_' .. v), worldobjects, otherPlayerLocal, v, "Cut", clickedPlayer)
+                    operateMenu:addOption(getText('UI_ContextMenu_' .. v), worldobjects, otherPlayerLocal, v, "Operate", clickedPlayer);
 
-                cutMenu:addOption(getText('UI_ContextMenu_RightHand'), worldobjects, otherPlayerLocal, "RightHand", "Cut", clickedPlayer);
-                cutMenu:addOption(getText('UI_ContextMenu_LeftHand'), worldobjects, otherPlayerLocal, "LeftHand", "Cut", clickedPlayer);
-                cutMenu:addOption(getText('UI_ContextMenu_RightForearm'), worldobjects, otherPlayerLocal, "RightForearm", "Cut", clickedPlayer);
-                cutMenu:addOption(getText('UI_ContextMenu_LeftForearm'), worldobjects, otherPlayerLocal, "LeftForearm", "Cut", clickedPlayer);
-                cutMenu:addOption(getText('UI_ContextMenu_RightArm'), worldobjects, otherPlayerLocal, "RightArm", "Cut", clickedPlayer);
-                cutMenu:addOption(getText('UI_ContextMenu_LeftArm'), worldobjects, otherPlayerLocal, "LeftArm", "Cut", clickedPlayer);
+                end
 
-                operateMenu:addOption(getText('UI_ContextMenu_RightHand'), worldobjects, otherPlayerLocal, "RightHand", "Operate", clickedPlayer);
-                operateMenu:addOption(getText('UI_ContextMenu_LeftHand'), worldobjects, otherPlayerLocal, "LeftHand", "Operate", clickedPlayer);
-                operateMenu:addOption(getText('UI_ContextMenu_RightForearm'), worldobjects, otherPlayerLocal, "RightForearm", "Operate", clickedPlayer);
-                operateMenu:addOption(getText('UI_ContextMenu_LeftForearm'), worldobjects, otherPlayerLocal, "LeftForearm", "Operate", clickedPlayer);
-                operateMenu:addOption(getText('UI_ContextMenu_RightArm'), worldobjects, otherPlayerLocal, "RightArm", "Operate", clickedPlayer);
-                operateMenu:addOption(getText('UI_ContextMenu_LeftArm'), worldobjects, otherPlayerLocal, "LeftArm", "Operate", clickedPlayer);
+
             end
         end
     end
