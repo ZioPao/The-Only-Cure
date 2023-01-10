@@ -58,7 +58,6 @@ local function initVariable(_, player)
 
 
 
-        Bodyparts = { "RightHand", "RightForearm", "RightArm", "LeftHand", "LeftForearm", "LeftArm"}
         
         modData.TOC = {
             RightHand = {},
@@ -70,7 +69,7 @@ local function initVariable(_, player)
             LeftArm = {}
         }
 
-        for k,v in pairs(Bodyparts) do
+        for k,v in pairs(GetBodyParts()) do
             modData.TOC[v].is_cut = false
             modData.TOC[v].is_infected = false
             modData.TOC[v].is_operated = false

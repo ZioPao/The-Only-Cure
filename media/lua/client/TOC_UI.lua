@@ -45,13 +45,13 @@ end
             else
                 name = "media/ui/TOC/" .. partName .. "/Prothesis.png";
             end
-        elseif partData.is_cut and partData.is_cicatrized and not partData.has_prothesis_equipped and partData.ToDisplay then -- Cut and heal
+        elseif partData.is_cut and partData.is_cicatrized and not partData.has_prothesis_equipped and partData.is_amputation_shown then -- Cut and heal
             name = "media/ui/TOC/" .. partName .. "/Cut.png";
-        elseif partData.is_cut and not partData.is_cicatrized and partData.ToDisplay and not partData.IsOperated then -- Cut not heal
+        elseif partData.is_cut and not partData.is_cicatrized and partData.is_amputation_shown and not partData.IsOperated then -- Cut not heal
             name = "media/ui/TOC/" .. partName .. "/Bleed.png";
-        elseif partData.is_cut and not partData.is_cicatrized and partData.ToDisplay and partData.IsOperated then -- Cut not heal
+        elseif partData.is_cut and not partData.is_cicatrized and partData.is_amputation_shown and partData.IsOperated then -- Cut not heal
             name = "media/ui/TOC/" .. partName .. "/Operate.png";
-        elseif partData.is_cut and not partData.ToDisplay then -- Empty (like hand if forearm cut)
+        elseif partData.is_cut and not partData.is_amputation_shown then -- Empty (like hand if forearm cut)
             name = "media/ui/TOC/Empty.png";
         elseif not partData.is_cut and getPlayer():getBodyDamage():getBodyPart(TOC_getBodyPart(partName)):bitten() then -- Not cut but bitten
             name = "media/ui/TOC/" .. partName .. "/Bite.png";
@@ -141,7 +141,7 @@ local function setDescUI(partName)
         descUI["b1"]:setVisible(true);
 
     -- Cut and healed
-    elseif partData.is_cut and partData.is_cicatrized and not partData.has_prothesis_equipped and partData.ToDisplay then 
+    elseif partData.is_cut and partData.is_cicatrized and not partData.has_prothesis_equipped and partData.is_amputation_shown then 
         descUI["textEtat"]:setText("Cut and healed");
         descUI["textEtat"]:setColor(1, 0, 1, 0);
         if partName == "RightArm" or partName == "LeftArm" then
@@ -153,7 +153,7 @@ local function setDescUI(partName)
         end
 
      -- Cut but not healed
-    elseif partData.is_cut and not partData.is_cicatrized and partData.ToDisplay then
+    elseif partData.is_cut and not partData.is_cicatrized and partData.is_amputation_shown then
                 if partData.IsOperated then
             if partData.cicatrization_time > 1000 then
                 descUI["textEtat"]:setText("Still a long way to go")
@@ -188,7 +188,7 @@ local function setDescUI(partName)
             descUI["b1"]:addArg("option", "Operate");
             descUI["b1"]:setVisible(true);
         end
-    elseif partData.is_cut and not partData.ToDisplay then -- Empty (hand if forearm cut)
+    elseif partData.is_cut and not partData.is_amputation_shown then -- Empty (hand if forearm cut)
         descUI["textEtat"]:setText("Nothing here...");
         descUI["textEtat"]:setColor(1, 1, 1, 1);
         descUI["b1"]:setVisible(false);
@@ -328,7 +328,7 @@ local function confirmPress(button, args)
     local player = getPlayer();
     if confirmUI.actionAct == "Cut" then
         if args.option == "yes" then
-            ISTimedActionQueue.add(is_cutArm:new(player, player, descUI.partNameAct));
+            ISTimedActionQueue.add(IsCutArm:new(player, player, descUI.partNameAct));
         else
             getPlayer():Say("Never mind");
         end
@@ -354,7 +354,7 @@ local function confirmPressMP(button, args)
     if confirmUIMP.actionAct == "Cut" then
         if args.option == "yes" then
             getPlayer():Say("Hold on, I believe in you!");
-            ISTimedActionQueue.add(is_cutArm:new(confirmUIMP.patient, player, confirmUIMP.partNameAct));
+            ISTimedActionQueue.add(IsCutArm:new(confirmUIMP.patient, player, confirmUIMP.partNameAct));
         else
             getPlayer():Say("Alright...");
         end

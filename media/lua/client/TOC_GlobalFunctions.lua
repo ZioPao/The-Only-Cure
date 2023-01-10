@@ -1,6 +1,6 @@
 
 local function CheckIfStillInfected(toc_data)
-    for k,v in pairs(Bodyparts) do
+    for k,v in pairs(GetBodyParts()) do
         if toc_data[v].is_infected == true then
             getPlayer().Say("I'm still infected...")
             return true
@@ -69,7 +69,7 @@ function CutArm(partName, surgeonFact, useBandage, bandageAlcool, usePainkiller,
     local current_bodypart = bodyPart:getType()
     local body_damage = player:getBodyDamage()
 
-    for k,v in pairs(Bodyparts) do
+    for k,v in pairs(GetBodyParts()) do
         
         if v == partName then
             toc_data[v].is_cut = true
@@ -116,7 +116,7 @@ function OperateArm(partName, surgeonFact, useOven)
     end
 
 
-    for k,v in pairs(Bodyparts) do
+    for k,v in pairs(GetBodyParts()) do
 
         if not toc_data[v].is_operated then
             toc_data[v].is_operated = true

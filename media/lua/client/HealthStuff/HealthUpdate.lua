@@ -63,13 +63,14 @@ local function healUpdatePart(partName, modData, player)
     --Phantom pain
     if modData_part.is_amputation_shown and ZombRand(1, 100) < 10 then
         
+        local added_pain = 0
         if modData_part.is_cauterized then
-            local added_pain = 60
+            added_pain = 60
         else
-            local added_pain = 30
+            added_pain = 30
         end
         
-        bodyPart:setAdditionalPain(ZombRand(1,added_pain))
+        bodyPart:setAdditionalPain(ZombRand(1, added_pain))
     end
     if isBand then bodyPart:setBandaged(true, bandLife, false, bandType) end
 end
@@ -90,7 +91,7 @@ function UpdatePlayerHealth(player, modData)
 
     if player:HasTrait("Insensitive") then bodyDamage:setPainReduction(49) end
 
-    for i,name in pairs(Bodyparts) do
+    for i,name in pairs(GetBodyParts()) do
         if modData.TOC[name].is_cut then
             healUpdatePart(name, modData, player)
                 

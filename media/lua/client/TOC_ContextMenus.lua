@@ -59,7 +59,7 @@ local function TOC_onFillWorldObjectContextMenu(playerId, context, worldobjects,
                             local subMenu = context:getNew(context);
                             context:addSubMenu(rootMenu, subMenu)
 
-                            for k, v in pairs(Bodyparts) do
+                            for k, v in pairs(GetBodyParts()) do
                                 -- todo this is awful but it should work
                                 if modData.TOC[v].is_cut and not modData.TOC[v].is_operated then
                                     subMenu:addOption(getText('UI_ContextMenu_' .. v), worldobjects, operateLocal, v);
@@ -99,7 +99,7 @@ local function TOC_onFillWorldObjectContextMenu(playerId, context, worldobjects,
                 context:addSubMenu(cutOption, cutMenu);
                 context:addSubMenu(operateOption, operateMenu);
                 -- todo add checks so that we don't show these menus if a player has already beeen operated or amputated
-                for k, v in pairs(Bodyparts) do
+                for k, v in pairs(GetBodyParts()) do
                     cutMenu:addOption(getText('UI_ContextMenu_' .. v), worldobjects, otherPlayerLocal, v, "Cut", clickedPlayer)
                     operateMenu:addOption(getText('UI_ContextMenu_' .. v), worldobjects, otherPlayerLocal, v, "Operate", clickedPlayer);
 
