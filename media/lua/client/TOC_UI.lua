@@ -47,9 +47,9 @@ end
             end
         elseif partData.is_cut and partData.is_cicatrized and not partData.has_prothesis_equipped and partData.is_amputation_shown then -- Cut and heal
             name = "media/ui/TOC/" .. partName .. "/Cut.png";
-        elseif partData.is_cut and not partData.is_cicatrized and partData.is_amputation_shown and not partData.IsOperated then -- Cut not heal
+        elseif partData.is_cut and not partData.is_cicatrized and partData.is_amputation_shown and not partData.is_operated then -- Cut not heal
             name = "media/ui/TOC/" .. partName .. "/Bleed.png";
-        elseif partData.is_cut and not partData.is_cicatrized and partData.is_amputation_shown and partData.IsOperated then -- Cut not heal
+        elseif partData.is_cut and not partData.is_cicatrized and partData.is_amputation_shown and partData.is_operated then -- Cut not heal
             name = "media/ui/TOC/" .. partName .. "/Operate.png";
         elseif partData.is_cut and not partData.is_amputation_shown then -- Empty (like hand if forearm cut)
             name = "media/ui/TOC/Empty.png";
@@ -154,7 +154,7 @@ local function setDescUI(partName)
 
      -- Cut but not healed
     elseif partData.is_cut and not partData.is_cicatrized and partData.is_amputation_shown then
-                if partData.IsOperated then
+        if partData.is_operated then
             if partData.cicatrization_time > 1000 then
                 descUI["textEtat"]:setText("Still a long way to go")
                 descUI["textEtat"]:setColor(1, 0.8, 1, 0.2);
@@ -181,7 +181,7 @@ local function setDescUI(partName)
 
 
         -- Set visibility
-        if partData.IsOperated then
+        if partData.is_operated then
             descUI["b1"]:setVisible(false);
         else
             descUI["b1"]:setText("Operate");

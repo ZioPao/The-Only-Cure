@@ -115,25 +115,19 @@ function OperateArm(partName, surgeonFact, useOven)
         stats:setStress(100);
     end
 
+    if toc_data[partName].is_operated == false then
+        toc_data[partName].is_operated = true
+        toc_data[partName].cicatrization_time = toc_data[partName].cicatrization_time - (surgeonFact * 200)
+        if useOven then toc_data[partName].is_cauterized = true end
+        for depended_k, depended_v in pairs(toc_data[partName].depends_on) do
+            toc_data[depended_v].is_operated = true
+            toc_data[depended_v].cicatrization_time = toc_data[depended_v].cicatrization_time - (surgeonFact * 200)
+            if useOven then toc_data[depended_v].is_cauterized = true end
 
-    for k,v in pairs(GetBodyParts()) do
-
-        if not toc_data[v].is_operated then
-            toc_data[v].is_operated = true
-            toc_data[v].cicatrization_time = toc_data[v].cicatrization_time - (surgeonFact * 200)
-    
-            if useOven then toc_data[v].is_cauterized = true end
-    
-    
-            for depended_k, depended_v in pairs(toc_data[v].depends_on) do
-                toc_data[depended_v].is_operated = true
-                toc_data[depended_v].cicatrization_time = toc_data[depended_v].cicatrization_time - (surgeonFact * 200)
-                if useOven then toc_data[depended_v].is_cauterized = true end
-    
-            end
         end
-        
+
     end
+
     SetBodyPartsStatus(player, partName, useOven)
     player:transmitModData();
 end
@@ -179,10 +173,9 @@ function SetBodyPartsStatus(player, partName, useOven)
             tmpBodyPart:setAdditionalPain(100);
             tmpBodyPart:setBleeding(false)
             tmpBodyPart:setBleedingTime(0)      -- no bleeding since it's been cauterized
-        else 
-
+        else
             tmpBodyPart:setBleeding(true);
-            tmpBodyPart:setBleedingTime(10);   -- Reset the bleeding   
+            tmpBodyPart:setBleedingTime(ZombRand(1, 5));   -- Reset the bleeding, maybe make it random
         end
 
     end

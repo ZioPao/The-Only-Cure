@@ -87,7 +87,6 @@ end
 
 function UpdatePlayerHealth(player, modData)
     local bodyDamage = player:getBodyDamage()
-    --local partNames = {"RightHand", "RightForearm", "RightArm", "LeftHand", "LeftForearm", "LeftArm"}
 
     if player:HasTrait("Insensitive") then bodyDamage:setPainReduction(49) end
 

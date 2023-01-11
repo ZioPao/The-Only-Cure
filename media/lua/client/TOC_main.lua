@@ -1,3 +1,9 @@
+if not TheOnlyCure then
+    TheOnlyCure = {}
+end
+
+
+
 local function dropItem(player, modData)
     if (modData.TOC.RightHand.is_cut and not (modData.TOC.RightHand.IsEquiped or modData.TOC.RightForearm.IsEquiped)) or (modData.TOC.RightForearm.is_cut and not modData.TOC.RightForearm.IsEquiped) then
         if player:getPrimaryHandItem() ~= nil then
