@@ -1,10 +1,41 @@
+local function CutLocal(_, patient, surgeon, partName)
 
-local function operateLocal(worldobjects, partName)
-    local player = getPlayer();
-    ISTimedActionQueue.add(ISOperateArm:new(player, player, _, partName, true));
+
+    if IsSawInInventory(surgeon) ~= nil then
+        ISTimedActionQueue.add(IsCutArm:new(patient, surgeon, partName));
+    else
+        surgeon:Say("I don't have a saw on me")
+
+    end
+
 end
 
-local function otherPlayerLocal(_, partName, action, patient)
+local function OperateLocal(_, patient, surgeon, partName, useOven)
+    --local player = getPlayer();
+    -- todo add a check if the player has already been amputated or somethin
+
+    if useOven then
+        ISTimedActionQueue.add(ISOperateArm:new(patient, surgeon, _, partName, useOven));
+    else
+
+        local kit = GetKitInInventory(surgeon)
+        if kit ~= nil then
+            ISTimedActionQueue.add(ISOperateArm:new(patient, surgeon, kit, partName, false))
+
+        else
+            surgeon:Say("I don't have a kit on me")
+        end
+
+    end
+
+
+
+end
+
+
+
+local function otherPlayerLocal(_, partName, action, surgeon, patient)
+
     local ui = GetConfirmUIMP();
     if not ui then 
         MakeConfirmUIMP();
@@ -18,7 +49,11 @@ local function otherPlayerLocal(_, partName, action, patient)
     ui.actionAct = action;
     ui.partNameAct = partName;
     ui.patient = patient;
-    SetConfirmUIMP("Wait server");
+    --SetConfirmUIMP("Wait server")
+
+
+
+   
 end
 
 
@@ -38,6 +73,70 @@ end
 
 
 
+function ISWorldObjectContextMenu.OnFillTOCMenu(player, context, worldObjects, test)
+
+
+    local clickedPlayersTable = {}      --todo awful workaround
+    local clickedPlayer = nil
+
+    local player_obj = getSpecificPlayer(player)
+    --local players = getOnlinePlayers()     
+
+    for k,v in ipairs(worldObjects) do
+            -- help detecting a player by checking nearby squares
+        for x=v:getSquare():getX()-1,v:getSquare():getX()+1 do
+            for y=v:getSquare():getY()-1,v:getSquare():getY()+1 do
+                local sq = getCell():getGridSquare(x,y,v:getSquare():getZ());
+                if sq then
+                    for i=0,sq:getMovingObjects():size()-1 do
+                        local o = sq:getMovingObjects():get(i)
+                        if instanceof(o, "IsoPlayer") then
+                            clickedPlayer = o
+
+                            if clickedPlayersTable[clickedPlayer:getUsername()] == nil then
+                                clickedPlayersTable[clickedPlayer:getUsername()] = true
+                                
+                                local rootOption = context:addOption("The Only Cure on " .. clickedPlayer:getUsername())
+                                local rootMenu = context:getNew(context)
+                                local cutOption = rootMenu:addOption("Cut");
+                                local operateOption = rootMenu:addOption("Operate");
+                                local cutMenu = context:getNew(context);
+                                local operateMenu = context:getNew(context);
+
+                                context:addSubMenu(rootOption, rootMenu);
+                                context:addSubMenu(cutOption, cutMenu);
+                                context:addSubMenu(operateOption, operateMenu);
+                                -- todo add checks so that we don't show these menus if a player has already beeen operated or amputated
+
+
+
+
+                                for k_part, v_part in ipairs(GetBodyParts()) do
+
+                                    --todo right now it doesnt check for a saw.
+                                    if clickedPlayer == player_obj then
+                                        cutMenu:addOption(getText('UI_ContextMenu_' .. v_part), worldObjects, CutLocal, player_obj, player_obj, v_part)
+                                        operateMenu:addOption(getText('UI_ContextMenu_' .. v_part), worldObjects, OperateLocal,  player_obj, player_obj, v_part)
+                                    else
+                                        cutMenu:addOption(getText('UI_ContextMenu_' .. v_part), worldObjects, otherPlayerLocal, v_part, "Cut", player_obj, clickedPlayer)
+                                        operateMenu:addOption(getText('UI_ContextMenu_' .. v_part), worldObjects, otherPlayerLocal, v_part, "Operate", player_obj, clickedPlayer);
+    
+                                    end
+
+                                   
+                                end
+
+
+                                break
+                            end
+
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
 
 
 
@@ -67,7 +166,7 @@ function ISWorldObjectContextMenu.OnFillOperateWithOven(player, context, worldOb
                             context:addSubMenu(rootMenu, subMenu)
                             is_main_menu_already_created = true
                         end
-                        subMenu:addOption(getText('UI_ContextMenu_' .. v_bodypart), worldObjects, operateLocal, v_bodypart)
+                        subMenu:addOption(getText('UI_ContextMenu_' .. v_bodypart), worldObjects, OperateLocal, getSpecificPlayer(player), getSpecificPlayer(player), v_bodypart, true)
                     end
                 end
             end
@@ -109,42 +208,13 @@ end
     -- for _,object in ipairs(worldobjects) do
     --     local square = object:getSquare()
     --     if square then
-    --         for i=1,square:getObjects():size() do
-    --             local object2 = square:getObjects():get(i-1);
-    --             --For the oven operate part
-
-
-    --             if CheckIfCanBeOperated(modData) then
-                    
-       
-    --                 if instanceof(object2, "IsoStove") and (player:HasTrait("Brave") or player:getPerkLevel(Perks.Strength) >= 6) then
-    --                     if not object2:isMicrowave() and object2:getCurrentTemperature() > 250 then
-    --                         local rootMenu = context:addOption(getText('UI_ContextMenu_OperateOven'), worldobjects, nil);
-    --                         local subMenu = context:getNew(context);
-    --                         context:addSubMenu(rootMenu, subMenu)
-
-    --                         for k, v in pairs(GetBodyParts()) do
-    --                             -- todo this is awful but it should work
-    --                             if modData.TOC[v].is_cut and not modData.TOC[v].is_operated then
-    --                                 subMenu:addOption(getText('UI_ContextMenu_' .. v), worldobjects, operateLocal, v);
-
-    --                             end
-
-
-    --                         end
-
-
-    --                     end
-    --                 end
-    --             end
-    --         end
-
     --         local movingObjects = square:getMovingObjects()
     --         for i = 0, movingObjects:size() - 1 do
     --             local o = movingObjects:get(i)
     --             if instanceof(o, "IsoPlayer") then
     --                 clickedPlayer = o;
-    --                 break
+    --                 print("Found player")
+                    
     --             end
     --         end
     --         if clickedPlayer then
@@ -177,3 +247,4 @@ end
 
 --Events.OnTick.Add(TheOnlyCure.CheckState);
 Events.OnFillWorldObjectContextMenu.Add(ISWorldObjectContextMenu.OnFillOperateWithOven)       -- this is probably too much 
+Events.OnFillWorldObjectContextMenu.Add(ISWorldObjectContextMenu.OnFillTOCMenu)

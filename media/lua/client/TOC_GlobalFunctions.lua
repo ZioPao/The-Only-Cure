@@ -28,6 +28,7 @@ local function CureInfection(bodyDamage)
 
 end
 
+-- TODO change it to CutLimb or CutBodyPart
 function CutArm(partName, surgeonFact, useBandage, bandageAlcool, usePainkiller, painkillerCount)
 
 
@@ -134,6 +135,7 @@ end
 
 
 function SetBodyPartsStatus(player, partName, useOven)
+    -- TODO use GetBodyParts with depends_on
 
     local a_rightArm = {"RightArm", "RightForearm", "RightHand"}
     local a_rightForearm = {"RightForearm", "RightHand"}
@@ -182,3 +184,16 @@ function SetBodyPartsStatus(player, partName, useOven)
 
 end 
 
+
+function GetKitInInventory(surgeon)
+    local playerInv = surgeon:getInventory();
+    local item = playerInv:getItemFromType('TOC.Real_surgeon_kit') or playerInv:getItemFromType('TOC.Surgeon_kit') or playerInv:getItemFromType('TOC.Improvised_surgeon_kit')
+    return item
+
+end
+
+function IsSawInInventory(surgeon)
+    local playerInv = surgeon:getInventory()
+    local item = playerInv:getItemFromType('Saw') or playerInv:getItemFromType('GardenSaw') or playerInv:getItemFromType('Chainsaw')
+    return item
+end

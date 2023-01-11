@@ -18,11 +18,15 @@ end
         end
     end
 
+
+    -- TODO Remove this crap
     local function isPlayerHaveSaw()
         local playerInv = getPlayer():getInventory();
         local item = playerInv:getItemFromType('Saw') or playerInv:getItemFromType('GardenSaw') or playerInv:getItemFromType('Chainsaw');
         return item;
     end
+
+
 
     local function isPlayerHavePainkiller()
         local playerInv = getPlayer():getInventory();
@@ -270,7 +274,7 @@ function SetConfirmUIMP(action, isBitten, userName, partName)
     confirmUIMP:bringToTop();
     confirmUIMP:open();
     if action == "Cut" then
-        confirmUIMP["text4"]:setText("You gonna " .. action .. " the " .. getDisplayText_TOC(partName) .. " of " .. userName);
+        confirmUIMP["text4"]:setText("You're gonna " .. action .. " the " .. getDisplayText_TOC(partName) .. " of " .. userName);
         if isPlayerHaveBandage() and isPlayerHavePainkiller() then
             confirmUIMP["text2"]:setText("You have bandage and painkiller");
             confirmUIMP["text2"]:setColor(1, 0, 1, 0);
@@ -290,7 +294,7 @@ function SetConfirmUIMP(action, isBitten, userName, partName)
             confirmUIMP["b1"]:setVisible(true);
             confirmUIMP["b2"]:setVisible(true);
         else
-            confirmUIMP["text3"]:setText("You miss a saw");
+            confirmUIMP["text3"]:setText("You're missing a saw");
             confirmUIMP["text3"]:setColor(1, 1, 0, 0);
             confirmUIMP["b1"]:setVisible(false);
             confirmUIMP["b2"]:setVisible(true);
