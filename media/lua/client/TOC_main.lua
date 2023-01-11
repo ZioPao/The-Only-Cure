@@ -5,12 +5,12 @@ end
 
 
 local function dropItem(player, modData)
-    if (modData.TOC.RightHand.is_cut and not (modData.TOC.RightHand.IsEquiped or modData.TOC.RightForearm.IsEquiped)) or (modData.TOC.RightForearm.is_cut and not modData.TOC.RightForearm.IsEquiped) then
+    if (modData.TOC.RightHand.is_cut and not (modData.TOC.RightHand.has_prothesis_equipped or modData.TOC.RightForearm.has_prothesis_equipped)) or (modData.TOC.RightForearm.is_cut and not modData.TOC.RightForearm.has_prothesis_equipped) then
         if player:getPrimaryHandItem() ~= nil then
             if player:getPrimaryHandItem():getName() ~= "Bare Hands" then player:dropHandItems() end
         end
     end
-    if (modData.TOC.LeftHand.is_cut and not (modData.TOC.LeftHand.IsEquiped or modData.TOC.LeftForearm.IsEquiped)) or (modData.TOC.LeftForearm.is_cut and not modData.TOC.LeftForearm.IsEquiped) then
+    if (modData.TOC.LeftHand.is_cut and not (modData.TOC.LeftHand.has_prothesis_equipped or modData.TOC.LeftForearm.has_prothesis_equipped)) or (modData.TOC.LeftForearm.is_cut and not modData.TOC.LeftForearm.has_prothesis_equipped) then
         if player:getSecondaryHandItem() ~= nil then
             if player:getSecondaryHandItem():getName() ~= "Bare Hands" then player:dropHandItems() end
         end
@@ -34,8 +34,8 @@ local function everyTenMinutes()
         local names = {"RightHand", "RightForearm", "RightArm", "LeftHand", "LeftForearm", "LeftArm"}
 
         --Augmente l'xp si equip
-        if modData.TOC.RightHand.IsEquiped  or modData.TOC.RightForearm.IsEquiped   then player:getXp():AddXP(Perks.RightHand, 4) end
-        if modData.TOC.LeftHand.IsEquiped   or modData.TOC.LeftForearm.IsEquiped    then player:getXp():AddXP(Perks.LeftHand, 4) end
+        if modData.TOC.RightHand.has_prothesis_equipped  or modData.TOC.RightForearm.has_prothesis_equipped   then player:getXp():AddXP(Perks.RightHand, 4) end
+        if modData.TOC.LeftHand.has_prothesis_equipped   or modData.TOC.LeftForearm.has_prothesis_equipped    then player:getXp():AddXP(Perks.LeftHand, 4) end
 
         --Reduit le temps de cicatri restant
         for i,name in pairs(names) do
