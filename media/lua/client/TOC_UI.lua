@@ -130,8 +130,12 @@ end
 -- end Usefull
 
 -- Function to update text/button of UIs
-local function setDescUI(partName)
-    local modData = getPlayer():getModData().TOC;
+local function setDescUI(player, partName)
+
+    --we can easily fix this crap from here for MP compat
+
+    -- TODO set correct player
+    local modData = player:getModData().TOC;
     local partData = modData[partName];
     descUI["textTitle"]:setText(getDisplayText_TOC(partName));
     descUI.partNameAct = partName;
@@ -384,13 +388,16 @@ end
 local function mainPress(button, args)
     descUI:open();
     descUI:setPositionPixel(mainUI:getRight(), mainUI:getY());
-    setDescUI(args.part);
+    setDescUI(args.player, args.part)
 end
 
 local function descPress(button, args)
     local player = getPlayer();
     local playerInv = player:getInventory();
     if args.option == "Cut" then
+
+
+        -- TODO Change to correct player
         local modData = player:getModData().TOC;
         -- Do not cut if prothesis equip
         if (string.find(descUI.partNameAct, "Right") and (modData["RightHand"].has_prothesis_equipped or modData["RightForearm"].has_prothesis_equipped)) 
@@ -418,27 +425,42 @@ end
 
 
 -- Make the UIS
-local function makeMainUI()
+local function makeMainUI(character)
+
+
     mainUI = NewUI();
-    mainUI:setTitle("The only cure main menu");
+    mainUI:setTitle("The Only Cure Menu");
     mainUI:setWidthPercent(0.1);
 
-    mainUI:addImageButton("b11", "", mainPress);
-    mainUI["b11"]:addArg("part", "RightArm");
+    mainUI:addImageButton("b11", "", mainPress)
+    mainUI["b11"]:addArg("part", "RightArm")
+    mainUI["b11"]:addArg("player", character)
+
+
     mainUI:addImageButton("b12", "", mainPress);
     mainUI["b12"]:addArg("part", "LeftArm");
+    mainUI["b12"]:addArg("player", character)
+
     mainUI:nextLine();
 
     mainUI:addImageButton("b21", "", mainPress);
     mainUI["b21"]:addArg("part", "RightForearm");
+    mainUI["b21"]:addArg("player", character)
+
+
     mainUI:addImageButton("b22", "", mainPress);
     mainUI["b22"]:addArg("part", "LeftForearm");
+    mainUI["b22"]:addArg("player", character)
+
     mainUI:nextLine();
 
     mainUI:addImageButton("b31", "", mainPress);
     mainUI["b31"]:addArg("part", "RightHand");
+    mainUI["b31"]:addArg("player", character)
+
     mainUI:addImageButton("b32", "", mainPress);
     mainUI["b32"]:addArg("part", "LeftHand");
+    mainUI["b32"]:addArg("player", character)
 
     mainUI:saveLayout();
 end
@@ -469,7 +491,7 @@ local function makeDescUI()
     descUI:addEmpty();
     descUI:nextLine();
 
-    descUI:addText("textEtat", "Is Cut !", "Medium", "Center");
+    descUI:addText("textEtat", "Is Cut!", "Medium", "Center");
     descUI["textEtat"]:setColor(1, 1, 0, 0);
     descUI:nextLine();
 
@@ -547,6 +569,24 @@ function MakeConfirmUIMP()
     confirmUIMP:close();
 end
 
+
+function ISHealthPanel:OnCreateTheOnlyCureUI()
+
+    -- how do we pass the correct player here?
+    --print(self.character)
+    if ISHealthPanel.otherPlayer then
+        makeMainUI(ISHealthPanel.otherPlayer)
+    else
+        makeMainUI(getPlayer())
+    end
+    makeDescUI()
+    makeConfirmUI()
+
+    if isClient() then MakeConfirmUIMP() end
+    mainUI:close()
+end
+
+
 local function onCreateUI()
     makeMainUI();
 	makeDescUI();
@@ -555,14 +595,15 @@ local function onCreateUI()
     mainUI:close();
 end
 
-Events.OnCreateUI.Add(onCreateUI)
+Events.OnCreateUI.Add(ISHealthPanel.OnCreateTheOnlyCureUI)
 
 
 -- Add button to health panel
 function ISNewHealthPanel.onClick_TOC(button)
-    mainUI:toggle();
-    mainUI:setInCenterOfScreen();
-    setImageMainUI();
+
+    mainUI:toggle()
+    mainUI:setInCenterOfScreen()
+    setImageMainUI()
 end
 
 local ISHealthPanel_createChildren = ISHealthPanel.createChildren
@@ -572,8 +613,9 @@ function ISHealthPanel:createChildren()
 
     self.fitness:setWidth(self.fitness:getWidth()/1.5);
 
-    self.TOCButton = ISButton:new(self.fitness:getRight(), self.healthPanel.y, 20, 20, "", self, ISNewHealthPanel.onClick_TOC);
-    self.TOCButton:setImage(getTexture("media/ui/TOC/iconForMenu.png"));
+    --TODO make it bigger
+    self.TOCButton = ISButton:new(self.fitness:getRight(), self.healthPanel.y, 20, 20, "", self, ISNewHealthPanel.onClick_TOC)
+    self.TOCButton:setImage(getTexture("media/ui/TOC/iconForMenu.png"))
     self.TOCButton.anchorTop = false
     self.TOCButton.anchorBottom = true
     self.TOCButton:initialise();
@@ -590,3 +632,7 @@ function ISHealthPanel:render()
     ISHealthPanel_render(self);
     self.TOCButton:setY(self.fitness:getY());
 end
+
+
+
+
