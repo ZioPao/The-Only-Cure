@@ -61,8 +61,10 @@ function FixSingleBodyPartType(body_part_type, use_oven)
         body_part_type:setBleeding(false)
         body_part_type:setBleedingTime(0)      -- no bleeding since it's been cauterized
     else
-        body_part_type:setBleeding(true);
-        body_part_type:setBleedingTime(ZombRand(1, 5));   -- Reset the bleeding, maybe make it random
+        -- TODO Think a little better about this
+        body_part_type:setBleeding(false)
+        
+        --body_part_type:setBleedingTime(ZombRand(1, 5))   -- Reset the bleeding, maybe make it random
     end
 end
 

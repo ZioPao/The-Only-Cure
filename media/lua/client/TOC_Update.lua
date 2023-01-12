@@ -34,10 +34,13 @@ function TheOnlyCure.CheckIfPlayerIsInfected(player, toc_data)
 
     for _, v in ipairs(GetLimbsBodyPartTypes()) do
 
-        local toc_bodypart = TheOnlyCure.FindBodyPartFromBodyPartType(toc_data, v)
-        if body_damage:getBodyPart(v):bitten() and not toc_data[toc_bodypart].is_cut then
-            toc_data[toc_bodypart].is_infected = true
-            player:transmitModData()
+        local toc_bodypart = TheOnlyCure.FindTocDataPartNameFromBodyPartType(toc_data, v) 
+        if body_damage:getBodyPart(v):bitten() and toc_bodypart ~= nil then
+            if toc_bodypart.is_cut then
+                toc_data[toc_bodypart].is_infected = true
+                player:transmitModData()  
+            end
+ 
         end
     end
 

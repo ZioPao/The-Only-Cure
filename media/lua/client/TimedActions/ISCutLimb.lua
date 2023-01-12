@@ -87,9 +87,9 @@ function ISCutLimb:perform()
     end
 
     if self.patient ~= self.surgeon and isClient() then
-        SendCutArm(self.patient, self.partName, surgeonFact, useBandage, bandageAlcool, usePainkiller, painkillerCount);
+        SendCutLimb(self.patient, self.part_name, surgeon_factor, bandage_table, painkiller_table)
     else
-        CutArm(self.partName, surgeonFact, useBandage, bandageAlcool, usePainkiller, painkillerCount);
+        TheOnlyCure.CutLimb(self.part_name, surgeon_factor, bandage_table, painkiller_table)
     end
     self.surgeon:getXp():AddXP(Perks.Doctor, 400);
 
