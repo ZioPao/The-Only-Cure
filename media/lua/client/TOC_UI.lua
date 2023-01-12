@@ -323,16 +323,15 @@ function SetConfirmUIMP(action, isBitten, userName, partName)
     end
 end
 
-local function setImageMainUI()
-    local modData = getPlayer():getModData().TOC
-    mainUI["b11"]:setPath(getImageName("RightArm", modData));
-    mainUI["b12"]:setPath(getImageName("LeftArm", modData));
+local function setImageMainUI(toc_data)
+    mainUI["b11"]:setPath(getImageName("RightArm", toc_data));
+    mainUI["b12"]:setPath(getImageName("LeftArm", toc_data));
 
-    mainUI["b21"]:setPath(getImageName("RightForearm", modData));
-    mainUI["b22"]:setPath(getImageName("LeftForearm", modData));
+    mainUI["b21"]:setPath(getImageName("RightForearm", toc_data));
+    mainUI["b22"]:setPath(getImageName("LeftForearm", toc_data));
 
-    mainUI["b31"]:setPath(getImageName("RightHand", modData));
-    mainUI["b32"]:setPath(getImageName("LeftHand", modData));
+    mainUI["b31"]:setPath(getImageName("RightHand", toc_data));
+    mainUI["b32"]:setPath(getImageName("LeftHand", toc_data));
 end
 
 
@@ -433,22 +432,18 @@ end
 
 local function SetCorrectArgsMainUI(toc_data)
 
-    --mainUI["b11"]:addArg("part", "RightArm")
+
+    -- TODO Make it less shitty
     mainUI["b11"]:addArg("toc_data", toc_data)
 
-    --mainUI["b12"]:addArg("part", "LeftArm");
     mainUI["b12"]:addArg("toc_data", toc_data)
 
-    --mainUI["b21"]:addArg("part", "RightForearm")
     mainUI["b21"]:addArg("toc_data", toc_data)
 
-    --mainUI["b22"]:addArg("part", "LeftForearm")
     mainUI["b22"]:addArg("toc_data", toc_data)
 
-    --mainUI["b31"]:addArg("part", "RightHand")
     mainUI["b31"]:addArg("toc_data", toc_data)
    
-    --mainUI["b32"]:addArg("part", "LeftHand");
     mainUI["b32"]:addArg("toc_data", toc_data)
 
 end
@@ -632,7 +627,6 @@ function ISNewHealthPanel.onClick_TOC(button)
     -- button.character is patient
     -- button.otherPlayer is surgeon 
 
-    sendClientCommand(button.otherPlayer, "TOC", "GetPlayerData",  {button.otherPlayer:getOnlineID(), button.character:getOnlineID()})
 
     -- if MP_other_player_toc_data ~= nil then
     --     print("It works")
@@ -641,11 +635,15 @@ function ISNewHealthPanel.onClick_TOC(button)
     --     print("Nopepppp")
     -- end
 
-    if button.character ~= button.otherPlayer then
-        
+    if button.otherPlayer then
+            
+        if button.character ~= button.otherPlayer then
+            sendClientCommand(button.otherPlayer, "TOC", "GetPlayerData",  {button.otherPlayer:getOnlineID(), button.character:getOnlineID()})
+            SetCorrectArgsMainUI(MP_other_player_toc_data)      --other player is the surgeon
+        else
+            SetCorrectArgsMainUI(getPlayer():getModData().TOC)      --myself?
 
-        SetCorrectArgsMainUI(MP_other_player_toc_data)      --other player is the surgeon
-
+        end
     else
         SetCorrectArgsMainUI(getPlayer():getModData().TOC)      --myself?
 
@@ -656,7 +654,23 @@ function ISNewHealthPanel.onClick_TOC(button)
 
 
     mainUI:setInCenterOfScreen()
-    setImageMainUI()
+
+
+    if button.otherPlayer then
+
+        if button.character ~= button.otherPlayer then
+            sendClientCommand(button.otherPlayer, "TOC", "GetPlayerData",  {button.otherPlayer:getOnlineID(), button.character:getOnlineID()})
+            setImageMainUI(MP_other_player_toc_data)
+    
+        else
+            setImageMainUI(getPlayer():getModData().TOC)
+    
+        end
+    else
+        setImageMainUI(getPlayer():getModData().TOC)
+
+    end
+
 end
 
 local ISHealthPanel_createChildren = ISHealthPanel.createChildren

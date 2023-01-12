@@ -16,6 +16,9 @@ local function OnTocServerCommand(module, command, args)
             -- todo maybe we cant send a table like this. Let's try something easier
             --local moneyAmount = playerTwo:getInventory():getCountTypeRecurse("Money")
             print("Giving info")
+
+            -- not fast enough, wont get toc_data in time. FInd a better way to send and get data
+            
             sendClientCommand(patient, "TOC", "SendPlayerData", {surgeon_id, toc_data})
 
         elseif command == 'SendTocData' then
