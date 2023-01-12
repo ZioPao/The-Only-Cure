@@ -1,35 +1,24 @@
-local function CutLocal(_, patient, surgeon, partName)
-
-
+local function CutLocal(_, patient, surgeon, part_name)
     if IsSawInInventory(surgeon) ~= nil then
-        ISTimedActionQueue.add(IsCutArm:new(patient, surgeon, partName));
+        ISTimedActionQueue.add(ISCutLimb:new(patient, surgeon, part_name));
     else
         surgeon:Say("I don't have a saw on me")
-
     end
-
 end
 
-local function OperateLocal(_, patient, surgeon, partName, useOven)
+local function OperateLocal(_, patient, surgeon, part_name, use_oven)
     --local player = getPlayer();
     -- todo add a check if the player has already been amputated or somethin
-
-    if useOven then
-        ISTimedActionQueue.add(ISOperateArm:new(patient, surgeon, _, partName, useOven));
+    if use_oven then
+        ISTimedActionQueue.add(ISOperateLimb:new(patient, surgeon, _, part_name, use_oven));
     else
-
         local kit = GetKitInInventory(surgeon)
         if kit ~= nil then
-            ISTimedActionQueue.add(ISOperateArm:new(patient, surgeon, kit, partName, false))
-
+            ISTimedActionQueue.add(ISOperateLimb:new(patient, surgeon, kit, part_name, false))
         else
             surgeon:Say("I don't have a kit on me")
         end
-
     end
-
-
-
 end
 
 
@@ -43,39 +32,15 @@ function TheOnlyCure.TryActionOnOtherPlayerLocal(_, part_name, action, surgeon, 
 
     if action == "Cut" then
         AskCanCutLimb(patient, part_name)
-        AskCanCutArm(patient, part_name);
+        --AskCanCutArm(patient, part_name);
     elseif action == "Operate" then
         AskCanOperateLimb(patient, part_name)
-        AskCanOperateArm(patient, part_name);
+        --AskCanOperateArm(patient, part_name);
     end
     ui.actionAct = action;
     ui.partNameAct = part_name;
     ui.patient = patient;
     SetConfirmUIMP("Wait server")
-end
-
-
-
-local function otherPlayerLocal(_, partName, action, surgeon, patient)
-
-    local ui = GetConfirmUIMP();
-    if not ui then 
-        MakeConfirmUIMP();
-        ui = GetConfirmUIMP();
-    end
-    if action == "Cut" then
-        AskCanCutArm(patient, partName);
-    else
-        AskCanOperateArm(patient, partName);
-    end
-    ui.actionAct = action;
-    ui.partNameAct = partName;
-    ui.patient = patient;
-    SetConfirmUIMP("Wait server")
-
-
-
-   
 end
 
 
@@ -140,8 +105,8 @@ function ISWorldObjectContextMenu.OnFillTOCMenu(player, context, worldObjects, t
                                         cutMenu:addOption(getText('UI_ContextMenu_' .. v_part), worldObjects, CutLocal, player_obj, player_obj, v_part)
                                         operateMenu:addOption(getText('UI_ContextMenu_' .. v_part), worldObjects, OperateLocal,  player_obj, player_obj, v_part)
                                     else
-                                        cutMenu:addOption(getText('UI_ContextMenu_' .. v_part), worldObjects, otherPlayerLocal, v_part, "Cut", player_obj, clickedPlayer)
-                                        operateMenu:addOption(getText('UI_ContextMenu_' .. v_part), worldObjects, otherPlayerLocal, v_part, "Operate", player_obj, clickedPlayer);
+                                        cutMenu:addOption(getText('UI_ContextMenu_' .. v_part), worldObjects, TheOnlyCure.TryActionOnOtherPlayerLocal, v_part, "Cut", player_obj, clickedPlayer)
+                                        operateMenu:addOption(getText('UI_ContextMenu_' .. v_part), worldObjects, TheOnlyCure.TryActionOnOtherPlayerLocal, v_part, "Operate", player_obj, clickedPlayer);
     
                                     end
 
