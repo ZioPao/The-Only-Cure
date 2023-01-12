@@ -174,7 +174,7 @@ function TheOnlyCure.UpdateEveryTenMinutes()
 
     -- Updates the cicatrization time
     for _, part_name in pairs(GetBodyParts()) do
-        if toc_data[part_name].is_cut and toc_data[part_naem].is_cicatrized then
+        if toc_data[part_name].is_cut and toc_data[part_name].is_cicatrized then
             toc_data[part_name].cicatrization_time = toc_data[part_name].cicatrization_time - 1     -- TODO Make it more "dynamic"
 
             

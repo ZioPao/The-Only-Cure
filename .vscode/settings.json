@@ -1,6 +1,15 @@
 {
     "todo-tree.tree.scanMode": "workspace",
     "Lua.diagnostics.globals": [
-        "ZombRand"
+        "ZombRand",
+        "getPlayer",
+        "BodyPartType",
+        "ProceduralDistributions",
+        "Events",
+        "getText",
+        "Perks",
+        "getPlayerByOnlineID",
+        "getTexture",
+        "ISTimedActionQueue"
     ]
 }

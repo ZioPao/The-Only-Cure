@@ -608,15 +608,6 @@ function OnCreateTheOnlyCureUI()
     mainUI:close()
 end
 
-
-local function onCreateUI()
-    makeMainUI();
-	makeDescUI();
-    makeConfirmUI();
-    if isClient() then MakeConfirmUIMP() end
-    mainUI:close();
-end
-
 Events.OnCreateUI.Add(OnCreateTheOnlyCureUI)
 
 
@@ -626,17 +617,7 @@ function ISNewHealthPanel.onClick_TOC(button)
 
     -- button.character is patient
     -- button.otherPlayer is surgeon 
-
-
-    -- if MP_other_player_toc_data ~= nil then
-    --     print("It works")
-    --     print(MP_other_player_toc_data)
-    -- else
-    --     print("Nopepppp")
-    -- end
-
-    if button.otherPlayer then
-            
+    if button.otherPlayer then  
         if button.character ~= button.otherPlayer then
             sendClientCommand(button.otherPlayer, "TOC", "GetPlayerData",  {button.otherPlayer:getOnlineID(), button.character:getOnlineID()})
             SetCorrectArgsMainUI(MP_other_player_toc_data)      --other player is the surgeon
@@ -698,20 +679,4 @@ local ISHealthPanel_render = ISHealthPanel.render
 function ISHealthPanel:render()
     ISHealthPanel_render(self);
     self.TOCButton:setY(self.fitness:getY());
-end
-
-
-function SendOtherPlayerData()
-
-    local mod_data = getPlayer():getModData().TOC
-    
-
-end
-
-function GetOtherPlayerData()
-    local surgeonFact, useBandage, bandageAlcool, usePainkiller, painkillerCount = self:findArgs();
-
-    if self.patient ~= self.surgeon and isClient() then
-        SendCutArm(self.patient, self.partName, surgeonFact, useBandage, bandageAlcool, usePainkiller, painkillerCount);
-    end
 end
