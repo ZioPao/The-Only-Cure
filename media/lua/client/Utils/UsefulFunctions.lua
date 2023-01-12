@@ -40,7 +40,21 @@ function getDisplayText_TOC(name)
     if name == "LeftArm"        then return getText("UI_ContextMenu_LeftArm") end
 end
 
+
+
+function TheOnlyCure.GetBodyPartTypeFromBodyPart(part_name)
+    if part_name == "RightHand"      then return BodyPartType.Hand_R end
+    if part_name == "RightForearm"   then return BodyPartType.ForeArm_R end
+    if part_name == "RightArm"       then return BodyPartType.UpperArm_R end
+    if part_name == "LeftHand"       then return BodyPartType.Hand_L end
+    if part_name == "LeftForearm"    then return BodyPartType.ForeArm_L end
+    if part_name == "LeftArm"        then return BodyPartType.UpperArm_L end
+end
+
+
+
 function TOC_getBodyPart(name)
+    --TODO Delete this
     if name == "RightHand"      then return BodyPartType.Hand_R end
     if name == "RightForearm"   then return BodyPartType.ForeArm_R end
     if name == "RightArm"       then return BodyPartType.UpperArm_R end

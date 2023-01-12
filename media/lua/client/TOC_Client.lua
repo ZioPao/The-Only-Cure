@@ -1,3 +1,7 @@
+
+
+
+
 local function OnTocServerCommand(module, command, args)
 -- TODO Change name of the func
 
@@ -28,6 +32,7 @@ local function OnTocServerCommand(module, command, args)
 
             -- ew a global var.... but dunno if there's a better way to do this
             MP_other_player_toc_data = args[2]
+
         end
     end
 end

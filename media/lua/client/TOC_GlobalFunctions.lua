@@ -1,4 +1,4 @@
-
+-- TODO OLD TO DELETE
 local function CheckIfStillInfected(toc_data)
     for k,v in pairs(GetBodyParts()) do
         if toc_data[v].is_infected == true then
@@ -12,7 +12,7 @@ local function CheckIfStillInfected(toc_data)
 
 end
 
-
+-- TODO OLD TO DELETE
 local function CureInfection(bodyDamage)
     bodyDamage:setInfected(false);
     bodyDamage:setInfectionMortalityDuration(-1);
@@ -23,9 +23,6 @@ local function CureInfection(bodyDamage)
         local bodyPart = bodyParts:get(i);
         bodyPart:SetInfected(false);
     end
-
-    getPlayer().Say("I'm gonna be fine")
-
 end
 
 -- TODO change it to CutLimb or CutBodyPart
@@ -133,7 +130,6 @@ function OperateArm(partName, surgeonFact, useOven)
     player:transmitModData();
 end
 
-
 function SetBodyPartsStatus(player, partName, useOven)
     -- TODO use GetBodyParts with depends_on
 
@@ -166,8 +162,12 @@ function SetBodyPartsStatus(player, partName, useOven)
     end
 
 
+
+
+
     for k,v in pairs(chosen_array) do 
-        local tmpBodyPart = player:getBodyDamage():getBodyPart(TOC_getBodyPart(v));
+        local tmpBodyPart = player:getBodyDamage():getBodyPart(TheOnlyCure.GetBodyPartTypeFromBodyPart(v))
+
         tmpBodyPart:setDeepWounded(false);      -- Basically like stictching
         tmpBodyPart:setDeepWoundTime(0);     
         if useOven then 

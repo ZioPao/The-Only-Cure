@@ -340,7 +340,7 @@ local function confirmPress(button, args)
     local player = getPlayer();
     if confirmUI.actionAct == "Cut" then
         if args.option == "yes" then
-            ISTimedActionQueue.add(IsCutArm:new(player, player, descUI.partNameAct));
+            ISTimedActionQueue.add(ISCutLimb:new(player, player, descUI.partNameAct));
         else
             getPlayer():Say("Never mind");
         end
@@ -366,7 +366,7 @@ local function confirmPressMP(button, args)
     if confirmUIMP.actionAct == "Cut" then
         if args.option == "yes" then
             getPlayer():Say("Hold on, I believe in you!");
-            ISTimedActionQueue.add(IsCutArm:new(confirmUIMP.patient, player, confirmUIMP.partNameAct));
+            ISTimedActionQueue.add(ISCutLimb:new(confirmUIMP.patient, player, confirmUIMP.partNameAct));
         else
             getPlayer():Say("Alright...");
         end

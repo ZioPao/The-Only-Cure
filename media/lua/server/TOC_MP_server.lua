@@ -3,10 +3,12 @@ if isClient() then return end
 
 
 
+
+
 ---Server side
 local Commands = {}
 
--- todo what is this?
+-- TODO what is this?
 Commands["SendServer"] = function(player, arg)
     local otherPlayer = getPlayerByOnlineID(arg["To"])
     print("The Only Cure Command: ", arg['command'])

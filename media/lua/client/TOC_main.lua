@@ -119,5 +119,103 @@ end
 
 
 
+
+
+-----------------------------------------------------------------------
+function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkiller_table)
+
+    -- TODO Check if this works in MP through MENU UI
+    local player = getPlayer()
+    local toc_data = player:getModDare().TOC
+    local body_part_type = player:getBodyDamage():getBodyPart(TheOnlyCure.GetBodyPartTypeFromBodyPart(part_name))
+    local stats = player:getStats();
+
+    -- Set damage, stress, and low endurance after amputation
+    body_part_type:AddDamage(100 - surgeon_factor)
+    body_part_type:setAdditionalPain(100 - surgeon_factor)
+    body_part_type:setBleeding(true)
+    body_part_type:setBleedingTime(100 - surgeon_factor)
+    body_part_type:setDeepWounded(true)
+    body_part_type:setDeepWoundTime(100 - surgeon_factor)
+    stats:setEndurance(surgeon_factor)
+    stats:setStress(100 - surgeon_factor)
+
+    -- If bandages are available, use them
+    body_part_type:setBandaged(bandage_table.use_bandage, 10, bandage_table.is_bandage_sterilized, bandage_table.bandage_type)
+
+
+
+    -- If painkillers are available, use them
+    -- ...
+
+    if toc_data[part_name].is_cut == false then
+        toc_data[part_name].is_cut = true
+        toc_data[part_name].is_amputation_shown = true
+        toc_data[part_name].cicatrization_time = toc_data[part_name].cicatrization_base_time - surgeon_factor * 50
+        
+        -- Heal the infection here
+        local body_damage = player:getBodyDamage()
+        if toc_data[part_name].is_infected and body_damage.getInfectionLevel() < 20 then
+            toc_data[part_name].is_infected = false
+            body_part_type:SetBitten(false)
+
+            -- Second check, let's see if there is any other infected limb.
+            if TheOnlyCure.CheckIfStillInfected(toc_data) == false then
+                TheOnlyCure.CureInfection(body_damage)
+                getPlayer():Say("I'm gonna be fine")
+            else
+                getPlayer():Say("I'm still gonna die...")
+            end
+        end
+
+        -- Cut the depended part
+        for _, depended_v in pairs(toc_data[part_name].depends_on) do
+            toc_data[depended_v].is_cut = true
+            toc_data[depended_v].is_amputation_shown = true
+            toc_data[depended_v].cicatrization_time = toc_data[part_name].cicatrization_base_time - surgeon_factor * 50
+        end
+
+        --Equip model for amputation
+        local cloth = player:getInventory():AddItem(find_clothName2_TOC(part_name))
+        player:setWornItem(cloth:getBodyLocation(), cloth)
+        player:transmitModData()
+
+    end
+
+
+
+
+end
+
+function TheOnlyCure.OperateLimb(part_name, surgeon_factor, use_oven)
+
+    local player = getPlayer()
+    local toc_data = player:getModData().TOC
+
+    if use_oven then
+        local stats = player:getStats()
+        stats:setEndurance(100)
+        stats:setStress(100)
+    end
+
+    if toc_data[part_name].is_operated == false and toc_data[part_name].is_cut == true then
+        toc_data[part_name].is_operated = true
+        toc_data[part_name].cicatrization_time = toc_data[part_name].cicatrization_time - (surgeon_factor * 200)
+        if use_oven then toc_data[part_name].is_cauterized = true end
+        for _, depended_v in pairs(toc_data[part_name].depends_on) do
+            toc_data[depended_v].is_operated = true
+            toc_data[depended_v].cicatrization_time = toc_data[depended_v].cicatrization_time - (surgeon_factor * 200)
+            if use_oven then toc_data[depended_v].is_cauterized = true end      -- TODO does this make sense?
+
+        end
+
+    end
+
+    TheOnlyCure.SetBodyPartsStatusAfterOperation(player, toc_data, part_name, use_oven)
+    player:transmitModData()
+end
+
+
+
 Events.OnCreatePlayer.Add(TheOnlyCure.InitTheOnlyCure)
 Events.OnGameBoot.Add(TheOnlyCure.DeclareTraits)

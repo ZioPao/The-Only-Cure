@@ -11,6 +11,19 @@ function SendCutArm(player, partName, surgeonFact, useBandage, bandageAlcool, us
     sendClientCommand("TOC", "SendServer", arg);
 end
 
+
+function TheOnlyCure.SendCutLimb(player, part_name, surgeon_factor, bandage_table, painkiller_table)
+    local arg = {}
+    arg["From"] = getPlayer():getOnlineID()
+    arg["To"] = player:getOnlineID()
+    arg["command"] = "CutLimb"
+    arg["toSend"] = {part_name, surgeon_factor, bandage_table, painkiller_table}
+    sendClientCommand("TOC", "SendServer", arg)
+end
+
+
+
+
 function SendOperateArm(player, partName, surgeonFact, useOven)
     local arg = {};
     arg["From"] = getPlayer():getOnlineID();
@@ -52,10 +65,19 @@ end
 
 
 -- Patient (receive)
+Commands["CutLimb"] = function(arg)
+    local arg = arg["toSend"]
+    TheOnlyCure.CutLimb(arg[1], arg[2], arg[3], arg[4])
+end
+
+
 Commands["CutArm"] = function(arg)
     local arg = arg["toSend"];
     CutArm(arg[1], arg[2], arg[3], arg[4], arg[5], arg[6]);
 end
+
+
+
 
 Commands["OperateArm"] = function(arg)
     local arg = arg["toSend"];
