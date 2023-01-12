@@ -158,7 +158,7 @@ function TheOnlyCure.HealSpecificPart(toc_data, part_name, player)
 
     -- Reapplies bandages after the whole ordeal
     -- TODO not sure if this still works
-    body_part_type:setBandaged(true, bandage_life, false, bandage_type)
+    --body_part_type:setBandaged(true, bandage_life, false, bandage_type)
 end
 
 --Helper function for UpdatePlayerHealth
