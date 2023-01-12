@@ -12,10 +12,10 @@ local function OnTocServerCommand(module, command, args)
 
             local toc_data = patient:getModData().TOC
 
-
+            -- todo maybe we cant send a table like this. Let's try something easier
             --local moneyAmount = playerTwo:getInventory():getCountTypeRecurse("Money")
-            patient:Say("Giving info")
-            sendClientCommand(patient, "TOC", "SendPlayerData", {surgeon_id, toc_data})
+            print("Giving info")
+            sendClientCommand(patient, "TOC", "SendPlayerData", {surgeon_id, 69})
 
         elseif command == 'SendTocData' then
             print("Sending TOC data")

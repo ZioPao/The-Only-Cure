@@ -1,4 +1,7 @@
 --- A rly big thx to Fenris_Wolf and Chuck to help me with that. Love you guy
+if isClient() then return end
+
+
 
 ---Server side
 local Commands = {}
@@ -27,7 +30,7 @@ local function OnTocClientCommand(module, command, player, args)
             local playerOneID = args[1]
             sendServerCommand(playerTwo, "TOC", "GivePlayerData", {playerOneID})
         elseif command == 'SendPlayerData' then
-            local playerOne = getPlayerByOnlineID(args[1]) 
+            local playerOne = getPlayerByOnlineID(args[1])
             local playerOneID = args[1]
             local toc_data = args[2]
             sendServerCommand(playerOne, "TOC", "SendTocData", {playerOneID, toc_data})
