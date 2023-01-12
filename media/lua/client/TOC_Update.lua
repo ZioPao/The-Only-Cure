@@ -1,8 +1,38 @@
+-- Makes the player drop an item if they don't have a limb or haven't equipped a prosthesis
+function TheOnlyCure.TryDropItem(player, toc_data)
+    if TheOnlyCure.CheckIfCanPickUpItem(toc_data, Right, Hand, Forearm) and player:getPrimaryHandItem() ~= nil then
+        if player:getPrimaryHandItem():getName() ~= "Bare Hands" then
+            player:dropHandItems()
+        end
+    end
+
+    if TheOnlyCure.CheckIfCanPickUpItem(toc_data, Left, Hand, Forearm) and player:getSecondaryHandItem() ~= nil then
+        if player:getSecondaryHandItem():getName() ~= "Bare Hands" then
+            player:dropHandItems()
+        end
+    end
+
+    
+end
+
+-- Helper for DropItem
+function TheOnlyCure.CheckIfCanPickUpItem(toc_data, side, limb, secondary_limb)
+    
+    local full_primary_limb = side .. limb
+    local full_secondary_limb = side .. secondary_limb
+
+
+    return toc_data[full_primary_limb].is_cut and not (toc_data[full_primary_limb].has_prosthesis_equipped or toc_data[full_secondary_limb]) or
+            (toc_data[full_secondary_limb].is_cut and not toc_data[full_secondary_limb].has_prosthesis_equipped)
+
+    
+end
+
 function TheOnlyCure.CheckIfPlayerIsInfected(player, toc_data)
 
     local body_damage = player:getBodyDamage()
 
-    for _, v in GetLimbsBodyPartTypes() do
+    for _, v in ipairs(GetLimbsBodyPartTypes()) do
 
         local toc_bodypart = TheOnlyCure.FindBodyPartFromBodyPartType(toc_data, v)
         if body_damage:getBodyPart(v):bitten() and not toc_data[toc_bodypart].is_cut then
@@ -11,7 +41,7 @@ function TheOnlyCure.CheckIfPlayerIsInfected(player, toc_data)
         end
     end
 
-    for _, v in GetOtherBodyPartTypes() do
+    for _, v in ipairs(GetOtherBodyPartTypes()) do
         if body_damage:getBodyPart(v):bitten() then 
             toc_data.is_other_bodypart_infected = true      -- Even one is enough, stop cycling if we find it
             player:transmitModData()
@@ -152,10 +182,15 @@ end
 function TheOnlyCure.UpdateEveryOneMinute()
 
     local player = getPlayer()
+    -- To prevent errors during loading
+    if player == nil then
+        return
+    end
+
     local toc_data = player:getModData().TOC
 
     if toc_data ~= nil then
-        TheOnlyCure.TryDropItem(player, toc_data)
+        --TheOnlyCure.TryDropItem(player, toc_data)       -- TODO this is kinda useless I think
         TheOnlyCure.CheckIfPlayerIsInfected(player, toc_data)
         TheOnlyCure.UpdatePlayerHealth(player, toc_data)
     end
@@ -165,6 +200,10 @@ end
 function TheOnlyCure.UpdateEveryTenMinutes()
 
     local player = getPlayer()
+
+    if player == nil then
+        return
+    end
     local toc_data = player:getModData().TOC
 
 
@@ -172,7 +211,7 @@ function TheOnlyCure.UpdateEveryTenMinutes()
     if toc_data.RightHand.has_prosthesis_equipped  or toc_data.RightForearm.has_prosthesis_equipped   then player:getXp():AddXP(Perks.RightHand, 4) end
     if toc_data.LeftHand.has_prosthesis_equipped   or toc_data.LeftForearm.has_prosthesis_equipped    then player:getXp():AddXP(Perks.LeftHand, 4) end
 
-    -- Updates the cicatrization time
+    -- Updates the cicatrization timesssss
     for _, part_name in pairs(GetBodyParts()) do
         if toc_data[part_name].is_cut and toc_data[part_name].is_cicatrized then
             toc_data[part_name].cicatrization_time = toc_data[part_name].cicatrization_time - 1     -- TODO Make it more "dynamic"
@@ -185,5 +224,5 @@ function TheOnlyCure.UpdateEveryTenMinutes()
 end
 
 
-Events.EveryTenMinutes(TheOnlyCure.UpdateEveryTenMinutes)
+Events.EveryTenMinutes.Add(TheOnlyCure.UpdateEveryTenMinutes)
 Events.EveryOneMinute.Add(TheOnlyCure.UpdateEveryOneMinute)
