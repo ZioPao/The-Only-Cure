@@ -33,6 +33,28 @@ local function OperateLocal(_, patient, surgeon, partName, useOven)
 end
 
 
+function TheOnlyCure.TryActionOnOtherPlayerLocal(_, part_name, action, surgeon, patient)
+
+    local ui = GetConfirmUIMP()
+    if not ui then
+        MakeConfirmUIMP()
+        ui = GetConfirmUIMP()
+    end
+
+    if action == "Cut" then
+        AskCanCutLimb(patient, part_name)
+        AskCanCutArm(patient, part_name);
+    elseif action == "Operate" then
+        AskCanOperateLimb(patient, part_name)
+        AskCanOperateArm(patient, part_name);
+    end
+    ui.actionAct = action;
+    ui.partNameAct = part_name;
+    ui.patient = patient;
+    SetConfirmUIMP("Wait server")
+end
+
+
 
 local function otherPlayerLocal(_, partName, action, surgeon, patient)
 
