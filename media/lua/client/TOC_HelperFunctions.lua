@@ -1,8 +1,11 @@
 -- CutLimb
 function TheOnlyCure.CheckIfStillInfected(toc_data)
-
+    if toc_data == nil then
+        return
+    end
     -- Check ALL body part types to check if the player is still gonna die
     local check = false
+
 
     for _, v in ipairs(GetBodyParts()) do
         if toc_data[v].is_infected then

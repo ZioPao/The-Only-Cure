@@ -25,83 +25,83 @@ local function CureInfection(bodyDamage)
     end
 end
 
--- TODO change it to CutLimb or CutBodyPart
-function CutArm(partName, surgeonFact, useBandage, bandageAlcool, usePainkiller, painkillerCount)
+-- -- TODO change it to CutLimb or CutBodyPart
+-- function CutArm(partName, surgeonFact, useBandage, bandageAlcool, usePainkiller, painkillerCount)
 
 
 
-    local player = getPlayer();
-    local toc_data = player:getModData().TOC;
-    local bodyPart = player:getBodyDamage():getBodyPart(TOC_getBodyPart(partName));     -- why the fuck do we we need this
+--     local player = getPlayer();
+--     local toc_data = player:getModData().TOC;
+--     local bodyPart = player:getBodyDamage():getBodyPart(TOC_getBodyPart(partName));     -- why the fuck do we we need this
 
-    --Set damage of body part & stress & endurance
-    local stats = player:getStats();
-    bodyPart:AddDamage(100 - surgeonFact);
-    bodyPart:setAdditionalPain(100 - surgeonFact);
-    bodyPart:setBleeding(true);
-    bodyPart:setBleedingTime(100 - surgeonFact);
-    bodyPart:setDeepWounded(true)
-    bodyPart:setDeepWoundTime(100 - surgeonFact);
-    stats:setEndurance(0 + surgeonFact);
-    stats:setStress(100 - surgeonFact);
+--     --Set damage of body part & stress & endurance
+--     local stats = player:getStats();
+--     bodyPart:AddDamage(100 - surgeonFact);
+--     bodyPart:setAdditionalPain(100 - surgeonFact);
+--     bodyPart:setBleeding(true);
+--     bodyPart:setBleedingTime(100 - surgeonFact);
+--     bodyPart:setDeepWounded(true)
+--     bodyPart:setDeepWoundTime(100 - surgeonFact);
+--     stats:setEndurance(0 + surgeonFact);
+--     stats:setStress(100 - surgeonFact);
 
-    -- Bandage
-    --if useBandage and bandageAlcool then
-    --    bodyPart:setBandaged(true, 10, true, bandage:getType());
-    --elseif useBandage and not bandageAlcool then
-    --    bodyPart:setBandaged(true, 10, false, bandage:getType());
-    --end
+--     -- Bandage
+--     --if useBandage and bandageAlcool then
+--     --    bodyPart:setBandaged(true, 10, true, bandage:getType());
+--     --elseif useBandage and not bandageAlcool then
+--     --    bodyPart:setBandaged(true, 10, false, bandage:getType());
+--     --end
 
-    -- Painkiller
-    --if usePainkiller then
-    --    for _ = 1,painkillerCount+1 do
-    --        player:getBodyDamage():JustTookPill(painkiller);
-    --    end
-    --    if painkillerCount < 10 then addSound(player, player:getX(), player:getY(), player:getZ(), 50-painkillerCount*5, 50-painkillerCount*5) end
-    --else
-    --    addSound(player, player:getX(), player:getY(), player:getZ(), 50, 50)
-    --end
+--     -- Painkiller
+--     --if usePainkiller then
+--     --    for _ = 1,painkillerCount+1 do
+--     --        player:getBodyDamage():JustTookPill(painkiller);
+--     --    end
+--     --    if painkillerCount < 10 then addSound(player, player:getX(), player:getY(), player:getZ(), 50-painkillerCount*5, 50-painkillerCount*5) end
+--     --else
+--     --    addSound(player, player:getX(), player:getY(), player:getZ(), 50, 50)
+--     --end
 
-    -- Change modData
+--     -- Change modData
 
-    local current_bodypart = bodyPart:getType()
-    local body_damage = player:getBodyDamage()
+--     local current_bodypart = bodyPart:getType()
+--     local body_damage = player:getBodyDamage()
 
-    for k,v in pairs(GetBodyParts()) do
+--     for k,v in pairs(GetBodyParts()) do
         
-        if v == partName then
-            toc_data[v].is_cut = true
-            toc_data[v].is_amputation_shown = true
-            toc_data[v].cicatrization_time = toc_data[v].cicatrization_base_time - surgeonFact * 50
+--         if v == partName then
+--             toc_data[v].is_cut = true
+--             toc_data[v].is_amputation_shown = true
+--             toc_data[v].cicatrization_time = toc_data[v].cicatrization_base_time - surgeonFact * 50
 
 
-            -- Heal the infection here
-            if toc_data[v].is_infected and body_damage.getInfectionLevel() < 20 then
-                toc_data[v].is_infected = false
-                current_bodypart:SetBitten(false)
+--             -- Heal the infection here
+--             if toc_data[v].is_infected and body_damage.getInfectionLevel() < 20 then
+--                 toc_data[v].is_infected = false
+--                 current_bodypart:SetBitten(false)
 
-                -- Second check, let's see if there is any other infected limb.
-                if CheckIfStillInfected(toc_data) == false then
-                    CureInfection(body_damage)
-                end
+--                 -- Second check, let's see if there is any other infected limb.
+--                 if CheckIfStillInfected(toc_data) == false then
+--                     CureInfection(body_damage)
+--                 end
 
-            end
+--             end
 
-            for depended_k, depended_v in pairs(toc_data[v].depends_on) do
-                toc_data[depended_v].is_cut = true
-                toc_data[depended_v].is_amputation_shown = true
-                toc_data[depended_v].cicatrization_time = toc_data[v].cicatrization_base_time - surgeonFact * 50
-            end
-        end
-    end
+--             for depended_k, depended_v in pairs(toc_data[v].depends_on) do
+--                 toc_data[depended_v].is_cut = true
+--                 toc_data[depended_v].is_amputation_shown = true
+--                 toc_data[depended_v].cicatrization_time = toc_data[v].cicatrization_base_time - surgeonFact * 50
+--             end
+--         end
+--     end
 
 
 
-    --Equip cloth
-    local cloth = player:getInventory():AddItem(find_clothName2_TOC(partName));
-    player:setWornItem(cloth:getBodyLocation(), cloth);
-    player:transmitModData();
-end
+--     --Equip cloth
+--     local cloth = player:getInventory():AddItem(find_clothName2_TOC(partName));
+--     player:setWornItem(cloth:getBodyLocation(), cloth);
+--     player:transmitModData();
+-- end
 
 function OperateArm(partName, surgeonFact, useOven)
     local player = getPlayer();

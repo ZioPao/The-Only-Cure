@@ -40,34 +40,35 @@ end
         return item;
     end
 
-    local function getImageName(partName, modData)
-        local partData = modData[partName];
-        local name = "";
-        if partData.is_cut and partData.is_cicatrized and partData.has_prosthesis_equipped then -- Cut and equip
-            if partName == "RightHand" or partName == "LeftHand" then
-                name = "media/ui/TOC/" .. partName .. "/Hook.png";
+    local function getImageName(part_name, toc_data)
+        local part_data = toc_data[part_name];
+        local name = ""
+
+        if part_data.is_cut and part_data.is_cicatrized and part_data.has_prosthesis_equipped then -- Cut and equip
+            if part_name == "RightHand" or part_name == "LeftHand" then
+                name = "media/ui/TOC/" .. part_name .. "/Hook.png"
             else
-                name = "media/ui/TOC/" .. partName .. "/Prothesis.png";
+                name = "media/ui/TOC/" .. part_name .. "/Prothesis.png"
             end
-        elseif partData.is_cut and partData.is_cicatrized and not partData.has_prosthesis_equipped and partData.is_amputation_shown then -- Cut and heal
-            name = "media/ui/TOC/" .. partName .. "/Cut.png";
-        elseif partData.is_cut and not partData.is_cicatrized and partData.is_amputation_shown and not partData.is_operated then -- Cut not heal
-            name = "media/ui/TOC/" .. partName .. "/Bleed.png";
-        elseif partData.is_cut and not partData.is_cicatrized and partData.is_amputation_shown and partData.is_operated then -- Cut not heal
-            name = "media/ui/TOC/" .. partName .. "/Operate.png";
-        elseif partData.is_cut and not partData.is_amputation_shown then -- Empty (like hand if forearm cut)
-            name = "media/ui/TOC/Empty.png";
-        elseif not partData.is_cut and getPlayer():getBodyDamage():getBodyPart(TOC_getBodyPart(partName)):bitten() then -- Not cut but bitten
-            name = "media/ui/TOC/" .. partName .. "/Bite.png";
+        elseif part_data.is_cut and part_data.is_cicatrized and not part_data.has_prosthesis_equipped and part_data.is_amputation_shown then -- Cut and heal
+            name = "media/ui/TOC/" .. part_name .. "/Cut.png"
+        elseif part_data.is_cut and not part_data.is_cicatrized and part_data.is_amputation_shown and not part_data.is_operated then -- Cut not heal
+            name = "media/ui/TOC/" .. part_name .. "/Bleed.png"
+        elseif part_data.is_cut and not part_data.is_cicatrized and part_data.is_amputation_shown and part_data.is_operated then -- Cut not heal
+            name = "media/ui/TOC/" .. part_name .. "/Operate.png"
+        elseif part_data.is_cut and not part_data.is_amputation_shown then -- Empty (like hand if forearm cut)
+            name = "media/ui/TOC/Empty.png"
+        elseif not part_data.is_cut and getPlayer():getBodyDamage():getBodyPart(TheOnlyCure.GetBodyPartTypeFromBodyPart(part_name)):bitten() then -- Not cut but bitten
+            name = "media/ui/TOC/" .. part_name .. "/Bite.png"
         else  -- Not cut
-            name = "media/ui/TOC/" .. partName .. "/Base.png";
+            name = "media/ui/TOC/" .. part_name .. "/Base.png"
         end
 
         -- If foreaerm equip, change hand
-        if partName == "RightHand" and modData["RightForearm"].has_prosthesis_equipped then
-            name = "media/ui/TOC/" .. partName .. "/Hook.png";
-        elseif partName == "LeftHand" and modData["LeftForearm"].has_prosthesis_equipped then
-            name = "media/ui/TOC/" .. partName .. "/Hook.png";
+        if part_name == "RightHand" and toc_data["RightForearm"].has_prosthesis_equipped then
+            name = "media/ui/TOC/" .. part_name .. "/Hook.png"
+        elseif part_name == "LeftHand" and toc_data["LeftForearm"].has_prosthesis_equipped then
+            name = "media/ui/TOC/" .. part_name .. "/Hook.png"
         end
         return name;
     end
@@ -130,7 +131,7 @@ end
 -- end Usefull
 
 -- Function to update text/button of UIs
-local function setDescUI(toc_data, partName)
+local function setDescUI(toc_data, part_name)
 
     --we can easily fix this crap from here for MP compat
     -- forces sync?
@@ -141,12 +142,12 @@ local function setDescUI(toc_data, partName)
     --local testModData = player:getModData()
 
 
-    local partData = toc_data[partName]
-    descUI["textTitle"]:setText(getDisplayText_TOC(partName))
-    descUI.partNameAct = partName
+    local part_data = toc_data[part_name]
+    descUI["textTitle"]:setText(getDisplayText_TOC(part_name))
+    descUI.partNameAct = part_name
 
     -- Cut and equip
-    if partData.is_cut and partData.is_cicatrized and partData.has_prosthesis_equipped then 
+    if part_data.is_cut and part_data.is_cicatrized and part_data.has_prosthesis_equipped then
         descUI["textEtat"]:setText("Cut and healed")
         descUI["textEtat"]:setColor(1, 0, 1, 0)
         descUI["b1"]:setText("Unequip")
@@ -154,10 +155,10 @@ local function setDescUI(toc_data, partName)
         descUI["b1"]:setVisible(true)
 
     -- Cut and healed
-    elseif partData.is_cut and partData.is_cicatrized and not partData.has_prosthesis_equipped and partData.is_amputation_shown then 
+    elseif part_data.is_cut and part_data.is_cicatrized and not part_data.has_prosthesis_equipped and part_data.is_amputation_shown then 
         descUI["textEtat"]:setText("Cut and healed");
         descUI["textEtat"]:setColor(1, 0, 1, 0);
-        if partName == "RightArm" or partName == "LeftArm" then
+        if part_name == "RightArm" or part_name == "LeftArm" then
             descUI["b1"]:setVisible(false);
         else
             descUI["b1"]:setText("Equip");
@@ -166,27 +167,27 @@ local function setDescUI(toc_data, partName)
         end
 
      -- Cut but not healed
-    elseif partData.is_cut and not partData.is_cicatrized and partData.is_amputation_shown then
-        if partData.is_operated then
-            if partData.cicatrization_time > 1000 then
+    elseif part_data.is_cut and not part_data.is_cicatrized and part_data.is_amputation_shown then
+        if part_data.is_operated then
+            if part_data.cicatrization_time > 1000 then
                 descUI["textEtat"]:setText("Still a long way to go")
                 descUI["textEtat"]:setColor(1, 0.8, 1, 0.2);
-            elseif partData.cicatrization_time > 500 then
+            elseif part_data.cicatrization_time > 500 then
                 descUI["textEtat"]:setText("Starting to get better")
                 descUI["textEtat"]:setColor(1, 0.8, 1, 0.2)
 
-            elseif partData.cicatrization_time > 100 then
+            elseif part_data.cicatrization_time > 100 then
                 descUI["textEtat"]:setText("Almost cicatrized");
                 descUI["textEtat"]:setColor(1, 0.8, 1, 0.2);
             end
         else
-            if partData.cicatrization_time > 1000 then
+            if part_data.cicatrization_time > 1000 then
                 descUI["textEtat"]:setText("It hurts so much...")
                 descUI["textEtat"]:setColor(1, 1, 0, 0)
-            elseif partData.cicatrization_time > 500 then
+            elseif part_data.cicatrization_time > 500 then
                 descUI["textEtat"]:setText("It still hurts a lot")
                 descUI["textEtat"]:setColor(1, 0.8, 1, 0.2)
-            elseif partData.cicatrization_time > 500 then
+            elseif part_data.cicatrization_time > 500 then
                 descUI["textEtat"]:setText("I think it's almost over...")
                 descUI["textEtat"]:setColor(1, 0.8, 1, 0.2)
             end
@@ -194,18 +195,18 @@ local function setDescUI(toc_data, partName)
 
 
         -- Set visibility
-        if partData.is_operated then
+        if part_data.is_operated then
             descUI["b1"]:setVisible(false);
         else
             descUI["b1"]:setText("Operate");
             descUI["b1"]:addArg("option", "Operate");
             descUI["b1"]:setVisible(true);
         end
-    elseif partData.is_cut and not partData.is_amputation_shown then -- Empty (hand if forearm cut)
+    elseif part_data.is_cut and not part_data.is_amputation_shown then -- Empty (hand if forearm cut)
         descUI["textEtat"]:setText("Nothing here...");
         descUI["textEtat"]:setColor(1, 1, 1, 1);
         descUI["b1"]:setVisible(false);
-    elseif not partData.is_cut and getPlayer():getBodyDamage():getBodyPart(TOC_getBodyPart(partName)):bitten() then     --TODO fix for MP
+    elseif not part_data.is_cut and getPlayer():getBodyDamage():getBodyPart(TOC_getBodyPart(part_name)):bitten() then     --TODO fix for MP
         descUI["textEtat"]:setText("Bitten...");
         descUI["textEtat"]:setColor(1, 1, 0, 0);
         if isPlayerHaveSaw() then
@@ -215,7 +216,7 @@ local function setDescUI(toc_data, partName)
         else
             descUI["b1"]:setVisible(false);
         end
-    elseif not partData.is_cut then -- Not cut
+    elseif not part_data.is_cut then -- Not cut
         descUI["textEtat"]:setText("Not cut");
         descUI["textEtat"]:setColor(1, 1, 1, 1);
         if isPlayerHaveSaw() then
@@ -229,7 +230,7 @@ local function setDescUI(toc_data, partName)
 
     -- Set text for level
     local player = getPlayer()
-    if string.find(partName, "Right") then
+    if string.find(part_name, "Right") then
         local lv = player:getPerkLevel(Perks.RightHand) + 1;
         descUI["textLV2"]:setText("Level:   " .. lv .. " / 10");
 
@@ -251,8 +252,8 @@ end
 local function setConfirmUI(action)
     confirmUI.actionAct = action;
     confirmUI:setInCenterOfScreen();
-    confirmUI:bringToTop();
-    confirmUI:open();
+    confirmUI:bringToTop()
+    confirmUI:open()
     if action == "Cut" then
         if isPlayerHaveBandage() and isPlayerHavePainkiller() then
             confirmUI["text2"]:setText("You have bandage and painkiller");
@@ -261,11 +262,15 @@ local function setConfirmUI(action)
             confirmUI["text2"]:setText("You miss bandage or painkiller");
             confirmUI["text2"]:setColor(1, 1, 0, 0);
         end
-        if isPlayerHaveSaw() and getPlayer():getBodyDamage():getBodyPart(TOC_getBodyPart(descUI.partNameAct)):bitten() then
-            confirmUI["text3"]:setText("You are well bitten and you have a saw... it's time");
+
+
+        local bitten_status =  getPlayer():getBodyDamage():getBodyPart(TheOnlyCure.GetBodyPartTypeFromBodyPart(descUI.partNameAct)):bitten()
+
+        if isPlayerHaveSaw() and bitten_status then
+            confirmUI["text3"]:setText("You are bitten and you have a saw... it's time");
             confirmUI["text3"]:setColor(1, 0, 1, 0);
-        elseif isPlayerHaveSaw() and not getPlayer():getBodyDamage():getBodyPart(TOC_getBodyPart(descUI.partNameAct)):bitten() then
-            confirmUI["text3"]:setText("What are you doing? You're okay !");
+        elseif isPlayerHaveSaw() and not bitten_status then
+            confirmUI["text3"]:setText("What are you doing? You're okay!");
             confirmUI["text3"]:setColor(1, 1, 0, 0);
         else
             confirmUI["text3"]:setText("You miss a saw");
@@ -340,7 +345,7 @@ local function confirmPress(button, args)
     local player = getPlayer();
     if confirmUI.actionAct == "Cut" then
         if args.option == "yes" then
-            ISTimedActionQueue.add(ISCutLimb:new(player, player, descUI.partNameAct));
+            ISTimedActionQueue.add(ISCutLimb:new(player, player, descUI.partNameAct))
         else
             getPlayer():Say("Never mind");
         end
@@ -376,7 +381,7 @@ local function confirmPressMP(button, args)
             local playerInv = player:getInventory();
             local item = playerInv:getItemFromType('TOC.Real_surgeon_kit') or playerInv:getItemFromType('TOC.Surgeon_kit') or playerInv:getItemFromType('TOC.Improvised_surgeon_kit');
             if item then
-                getPlayer():Say("Not moving ! Ok ?");
+                getPlayer():Say("Don't move! Ok?");
                 ISTimedActionQueue.add(ISOperateArm:new(confirmUIMP.patient, player, item, confirmUIMP.partNameAct, false));
             else
                 player:Say("I need a kit");
@@ -406,7 +411,7 @@ local function descPress(button, args)
         -- Do not cut if prothesis equip
         if (string.find(descUI.partNameAct, "Right") and (modData["RightHand"].has_prosthesis_equipped or modData["RightForearm"].has_prosthesis_equipped)) 
         or (string.find(descUI.partNameAct, "Left") and (modData["LeftHand"].has_prosthesis_equipped or modData["LeftForearm"].has_prosthesis_equipped)) then
-            player:Say("I need to remove my prothesis first");
+            player:Say("I need to remove my prosthesis first");
             mainUI:close();
             return false;
         end

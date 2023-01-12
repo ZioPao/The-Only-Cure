@@ -126,7 +126,7 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
 
     -- TODO Check if this works in MP through MENU UI
     local player = getPlayer()
-    local toc_data = player:getModDare().TOC
+    local toc_data = player:getModData().TOC
     local body_part_type = player:getBodyDamage():getBodyPart(TheOnlyCure.GetBodyPartTypeFromBodyPart(part_name))
     local stats = player:getStats();
 
@@ -171,7 +171,7 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
         -- Cut the depended part
         for _, depended_v in pairs(toc_data[part_name].depends_on) do
             toc_data[depended_v].is_cut = true
-            toc_data[depended_v].is_amputation_shown = true
+            toc_data[depended_v].is_amputation_shown = false        -- TODO why was it true before?
             toc_data[depended_v].cicatrization_time = toc_data[part_name].cicatrization_base_time - surgeon_factor * 50
         end
 

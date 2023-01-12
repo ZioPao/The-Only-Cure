@@ -80,8 +80,8 @@ end
 function ISCutLimb:perform()
     local surgeon_factor, bandage_table, painkiller_table = self:findArgs()
 
-    if self.patient ~= self.surgoen and isClient() then
-        SendCutLimb()
+    if self.patient ~= self.surgeon and isClient() then
+        SendCutLimb(self.patient, self.part_name, surgeon_factor, bandage_table, painkiller_table)
     else
         TheOnlyCure.CutLimb(self.part_name, surgeon_factor, bandage_table, painkiller_table)
     end
@@ -101,8 +101,8 @@ function ISCutLimb:new(patient, surgeon, part_name)
     local o = {}
     setmetatable(o, self)
     self.__index = self
-    o.partName = part_name
-    o.bodyPart = TheOnlyCure.GetBodyPartTypeFromBodyPart(part_name)
+    o.part_name = part_name
+    o.bodyPart = TheOnlyCure.GetBodyPartTypeFromBodyPart(part_name)     -- TODO I don't think I need this
     o.character = surgeon -- For anim
 
     o.surgeon = surgeon; -- Surgeon or player that make the operation

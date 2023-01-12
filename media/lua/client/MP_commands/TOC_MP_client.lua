@@ -12,7 +12,7 @@ function SendCutArm(player, partName, surgeonFact, useBandage, bandageAlcool, us
 end
 
 
-function TheOnlyCure.SendCutLimb(player, part_name, surgeon_factor, bandage_table, painkiller_table)
+function SendCutLimb(player, part_name, surgeon_factor, bandage_table, painkiller_table)
     local arg = {}
     arg["From"] = getPlayer():getOnlineID()
     arg["To"] = player:getOnlineID()
