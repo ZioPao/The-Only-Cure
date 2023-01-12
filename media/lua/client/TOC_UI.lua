@@ -434,23 +434,14 @@ end
 
 
 -- Make the UIS
-
 local function SetCorrectArgsMainUI(toc_data)
-
-
     -- TODO Make it less shitty
     mainUI["b11"]:addArg("toc_data", toc_data)
-
     mainUI["b12"]:addArg("toc_data", toc_data)
-
     mainUI["b21"]:addArg("toc_data", toc_data)
-
     mainUI["b22"]:addArg("toc_data", toc_data)
-
     mainUI["b31"]:addArg("toc_data", toc_data)
-   
     mainUI["b32"]:addArg("toc_data", toc_data)
-
 end
 
 

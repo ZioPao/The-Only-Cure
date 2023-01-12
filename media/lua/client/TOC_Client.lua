@@ -2,44 +2,6 @@
 
 local Commands = {}
 
-function SendCutLimb(player, part_name, surgeon_factor, bandage_table, painkiller_table)
-    local arg = {}
-    arg["From"] = getPlayer():getOnlineID()
-    arg["To"] = player:getOnlineID()
-    arg["command"] = "CutLimb"
-    arg["toSend"] = {part_name, surgeon_factor, bandage_table, painkiller_table}
-    sendClientCommand("TOC", "SendServer", arg)
-end
-
-function SendOperateLimb(player, part_name, surgeon_factor, use_oven)
-    local arg = {}
-    arg["From"] = getPlayer():getOnlineID()
-    arg["To"] = player:getOnlineID()
-    arg["command"] = "OperateLimb"
-    arg["toSend"] = {part_name, surgeon_factor, use_oven}
-    sendClientCommand("TOC", "SendServer", arg)
-end
-
-function AskCanCutLimb(player, part_name)
-    GetConfirmUIMP().responseReceive = false;
-    local arg = {};
-    arg["From"] = getPlayer():getOnlineID();
-    arg["To"] = player:getOnlineID();
-    arg["command"] = "CanCutLimb";
-    arg["toSend"] = part_name;
-    sendClientCommand("TOC", "SendServer", arg);
-end
-
-function AskCanOperateLimb(player, part_name)
-    GetConfirmUIMP().responseReceive = false;
-    local arg = {};
-    arg["From"] = getPlayer():getOnlineID();
-    arg["To"] = player:getOnlineID();
-    arg["command"] = "CanOperateArm";
-    arg["toSend"] = part_name;
-    sendClientCommand("TOC", "SendServer", arg);
-end
-
 Commands["ResponseCanAct"] = function(arg)
     local ui = GetConfirmUIMP()
     ui.responseReceive = true
@@ -71,8 +33,6 @@ Commands["CanCutLimb"] = function(arg)
     sendClientCommand("TOC", "SendServer", arg)
 end
 
-
-
 Commands["CanOperateLimb"] = function(arg)
     local part_name = arg["toSend"]
 
@@ -84,15 +44,8 @@ Commands["CanOperateLimb"] = function(arg)
 end
 
 
-
-
 local function OnTocServerCommand(module, command, args)
--- TODO Change name of the func
-
-
     if module == 'TOC' then
-        print(command)
-
         if command == 'GivePlayerData' then
             --local surgeon = getPlayerByOnlineID(args[1])
 
