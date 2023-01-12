@@ -25,10 +25,15 @@ local function OnTocClientCommand(module, command, player, args)
         print(command)
         if command == 'GetPlayerData' then
             
+            local surgeon_id = args[1]
+            local patient_id = args[2]
+         
+
+
             local playerOne = getPlayerByOnlineID(args[1])
             local playerTwo = getPlayerByOnlineID(args[2])
             local playerOneID = args[1]
-            sendServerCommand(playerTwo, "TOC", "GivePlayerData", {playerOneID})
+            sendServerCommand(playerTwo, "TOC", "GivePlayerData", {surgeon_id, patient_id})
         elseif command == 'SendPlayerData' then
             local playerOne = getPlayerByOnlineID(args[1])
             local playerOneID = args[1]

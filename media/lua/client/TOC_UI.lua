@@ -632,14 +632,14 @@ function ISNewHealthPanel.onClick_TOC(button)
     -- button.character is patient
     -- button.otherPlayer is surgeon 
 
-    sendClientCommand(button.otherPlayer, "TOC", "GetPlayerData",  {button.otherPlayer:getOnlineID(), button.character:getOnlineID()}) -- sends 0 & 4 as arguments
+    sendClientCommand(button.otherPlayer, "TOC", "GetPlayerData",  {button.otherPlayer:getOnlineID(), button.character:getOnlineID()})
 
-    if MP_other_player_toc_data then
-        print("It works")
-        print(MP_other_player_toc_data)
-    else
-        print("Nopepppp")
-    end
+    -- if MP_other_player_toc_data ~= nil then
+    --     print("It works")
+    --     print(MP_other_player_toc_data)
+    -- else
+    --     print("Nopepppp")
+    -- end
 
     if button.character ~= button.otherPlayer then
         
