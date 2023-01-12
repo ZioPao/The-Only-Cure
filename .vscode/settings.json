@@ -16,6 +16,7 @@
         "instanceof",
         "getPlayerInventory",
         "sendServerCommand",
-        "TraitFactory"
+        "TraitFactory",
+        "ISWorldObjectContextMenu"
     ]
 }

@@ -1,3 +1,87 @@
+-- Synchronization and MP related stuff
+
+local Commands = {}
+
+function SendCutLimb(player, part_name, surgeon_factor, bandage_table, painkiller_table)
+    local arg = {}
+    arg["From"] = getPlayer():getOnlineID()
+    arg["To"] = player:getOnlineID()
+    arg["command"] = "CutLimb"
+    arg["toSend"] = {part_name, surgeon_factor, bandage_table, painkiller_table}
+    sendClientCommand("TOC", "SendServer", arg)
+end
+
+function SendOperateLimb(player, part_name, surgeon_factor, use_oven)
+    local arg = {}
+    arg["From"] = getPlayer():getOnlineID()
+    arg["To"] = player:getOnlineID()
+    arg["command"] = "OperateLimb"
+    arg["toSend"] = {part_name, surgeon_factor, use_oven}
+    sendClientCommand("TOC", "SendServer", arg)
+end
+
+function AskCanCutLimb(player, part_name)
+    GetConfirmUIMP().responseReceive = false;
+    local arg = {};
+    arg["From"] = getPlayer():getOnlineID();
+    arg["To"] = player:getOnlineID();
+    arg["command"] = "CanCutLimb";
+    arg["toSend"] = part_name;
+    sendClientCommand("TOC", "SendServer", arg);
+end
+
+function AskCanOperateLimb(player, part_name)
+    GetConfirmUIMP().responseReceive = false;
+    local arg = {};
+    arg["From"] = getPlayer():getOnlineID();
+    arg["To"] = player:getOnlineID();
+    arg["command"] = "CanOperateArm";
+    arg["toSend"] = part_name;
+    sendClientCommand("TOC", "SendServer", arg);
+end
+
+Commands["ResponseCanAct"] = function(arg)
+    local ui = GetConfirmUIMP()
+    ui.responseReceive = true
+    ui.responseAction = arg["toSend"][2]
+    ui.responsePartName = arg["toSend"][1]
+    ui.responseCan = arg["toSend"][3]
+    ui.responseUserName = getPlayerByOnlineID(arg["From"]):getUsername()
+    ui.responseActionIsBitten = getPlayerByOnlineID(arg["From"]):getBodyDamage():getBodyPart(TOC_getBodyPart(ui.responsePartName)):bitten()
+end
+
+-- Patient (receive)
+Commands["CutLimb"] = function(arg)
+    local arg = arg["toSend"]
+    TheOnlyCure.CutLimb(arg[1], arg[2], arg[3], arg[4])
+end
+
+Commands["OperateLimb"] = function(arg)
+    local arg = arg["toSend"]
+    OperateLimb(arg[1], arg[2], arg[3])
+end
+
+Commands["CanCutLimb"] = function(arg)
+    local part_name = arg["toSend"]
+    
+    arg["To"] = arg["From"]
+    arg["From"] = getPlayer():getOnlineID()
+    arg["command"] = "ResponseCanAct"
+    arg["toSend"] = {part_name, "Cut", CanBeCut(part_name)}
+    sendClientCommand("TOC", "SendServer", arg)
+end
+
+
+
+Commands["CanOperateLimb"] = function(arg)
+    local part_name = arg["toSend"]
+
+    arg["To"] = arg["From"]
+    arg["From"] = getPlayer():getOnlineID()
+    arg["command"] = "ResponseCanAct"
+    arg["toSend"] = {part_name, "Operate", CanBeOperate(part_name)}
+    sendClientCommand("TOC", "SendServer", arg)
+end
 
 
 
@@ -32,6 +116,9 @@ local function OnTocServerCommand(module, command, args)
 
             -- ew a global var.... but dunno if there's a better way to do this
             MP_other_player_toc_data = args[2]
+        elseif Commands[command] then
+            args = args or {}
+            Commands[command](args)
 
         end
     end
