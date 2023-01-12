@@ -74,7 +74,7 @@ end
 
 
 
-function TheOnlyCure.FindBodyPartFromBodyPartType(toc_data, bodyPartType)
+function TheOnlyCure.FindTocDataPartNameFromBodyPartType(toc_data, bodyPartType)
     if bodyPartType == BodyPartType.Hand_R          then return toc_data.RightHand
     elseif bodyPartType == BodyPartType.ForeArm_R   then return toc_data.RightForearm
     elseif bodyPartType == BodyPartType.UpperArm_R  then return toc_data.RightArm
