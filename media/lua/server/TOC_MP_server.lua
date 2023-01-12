@@ -3,10 +3,37 @@
 ---Server side
 local Commands = {}
 
+-- todo what is this?
 Commands["SendServer"] = function(player, arg)
     local otherPlayer = getPlayerByOnlineID(arg["To"])
     print("The Only Cure Command: ", arg['command'])
     sendServerCommand(otherPlayer, "TOC", arg["command"], arg)
+end
+
+
+
+
+
+
+local function OnTocClientCommand(module, command, player, args)
+
+    if module == 'TOC' then
+        
+        print(command)
+        if command == 'GetPlayerData' then
+            
+            local playerOne = getPlayerByOnlineID(args[1])
+            local playerTwo = getPlayerByOnlineID(args[2])
+            local playerOneID = args[1]
+            sendServerCommand(playerTwo, "TOC", "GivePlayerData", {playerOneID})
+        elseif command == 'SendPlayerData' then
+            local playerOne = getPlayerByOnlineID(args[1]) 
+            local playerOneID = args[1]
+            local toc_data = args[2]
+            sendServerCommand(playerOne, "TOC", "SendTocData", {playerOneID, toc_data})
+        end
+    end
+
 end
 
 local onClientCommand = function(module, command, player, args)
@@ -15,4 +42,6 @@ local onClientCommand = function(module, command, player, args)
         Commands[command](_, args)
     end
 end
-Events.OnClientCommand.Add(onClientCommand)
+Events.OnClientCommand.Add(OnTocClientCommand)
+
+--Client 1 -> Server -> Client 1

@@ -130,23 +130,28 @@ end
 -- end Usefull
 
 -- Function to update text/button of UIs
-local function setDescUI(player, partName)
+local function setDescUI(toc_data, partName)
 
     --we can easily fix this crap from here for MP compat
-
+    -- forces sync?
+    --local player_obj = getSpecificPlayer(player)
     -- TODO set correct player
-    local modData = player:getModData().TOC;
-    local partData = modData[partName];
-    descUI["textTitle"]:setText(getDisplayText_TOC(partName));
-    descUI.partNameAct = partName;
+
+    
+    --local testModData = player:getModData()
+
+
+    local partData = toc_data[partName]
+    descUI["textTitle"]:setText(getDisplayText_TOC(partName))
+    descUI.partNameAct = partName
 
     -- Cut and equip
     if partData.is_cut and partData.is_cicatrized and partData.has_prothesis_equipped then 
-        descUI["textEtat"]:setText("Cut and healed");
-        descUI["textEtat"]:setColor(1, 0, 1, 0);
-        descUI["b1"]:setText("Unequip");
-        descUI["b1"]:addArg("option", "Unequip");
-        descUI["b1"]:setVisible(true);
+        descUI["textEtat"]:setText("Cut and healed")
+        descUI["textEtat"]:setColor(1, 0, 1, 0)
+        descUI["b1"]:setText("Unequip")
+        descUI["b1"]:addArg("option", "Unequip")
+        descUI["b1"]:setVisible(true)
 
     -- Cut and healed
     elseif partData.is_cut and partData.is_cicatrized and not partData.has_prothesis_equipped and partData.is_amputation_shown then 
@@ -200,7 +205,7 @@ local function setDescUI(player, partName)
         descUI["textEtat"]:setText("Nothing here...");
         descUI["textEtat"]:setColor(1, 1, 1, 1);
         descUI["b1"]:setVisible(false);
-    elseif not partData.is_cut and getPlayer():getBodyDamage():getBodyPart(TOC_getBodyPart(partName)):bitten() then
+    elseif not partData.is_cut and getPlayer():getBodyDamage():getBodyPart(TOC_getBodyPart(partName)):bitten() then     --TODO fix for MP
         descUI["textEtat"]:setText("Bitten...");
         descUI["textEtat"]:setColor(1, 1, 0, 0);
         if isPlayerHaveSaw() then
@@ -223,7 +228,7 @@ local function setDescUI(player, partName)
     end
 
     -- Set text for level
-    local player = getPlayer();
+    local player = getPlayer()
     if string.find(partName, "Right") then
         local lv = player:getPerkLevel(Perks.RightHand) + 1;
         descUI["textLV2"]:setText("Level:   " .. lv .. " / 10");
@@ -386,9 +391,9 @@ local function confirmPressMP(button, args)
 end
 
 local function mainPress(button, args)
-    descUI:open();
-    descUI:setPositionPixel(mainUI:getRight(), mainUI:getY());
-    setDescUI(args.player, args.part)
+    descUI:open()
+    descUI:setPositionPixel(mainUI:getRight(), mainUI:getY())
+    setDescUI(args.toc_data, args.part)
 end
 
 local function descPress(button, args)
@@ -425,42 +430,67 @@ end
 
 
 -- Make the UIS
-local function makeMainUI(character)
+
+local function SetCorrectArgsMainUI(toc_data)
+
+    --mainUI["b11"]:addArg("part", "RightArm")
+    mainUI["b11"]:addArg("toc_data", toc_data)
+
+    --mainUI["b12"]:addArg("part", "LeftArm");
+    mainUI["b12"]:addArg("toc_data", toc_data)
+
+    --mainUI["b21"]:addArg("part", "RightForearm")
+    mainUI["b21"]:addArg("toc_data", toc_data)
+
+    --mainUI["b22"]:addArg("part", "LeftForearm")
+    mainUI["b22"]:addArg("toc_data", toc_data)
+
+    --mainUI["b31"]:addArg("part", "RightHand")
+    mainUI["b31"]:addArg("toc_data", toc_data)
+   
+    --mainUI["b32"]:addArg("part", "LeftHand");
+    mainUI["b32"]:addArg("toc_data", toc_data)
+
+end
 
 
-    mainUI = NewUI();
+
+local function makeMainUI(regen)
+
+
+    mainUI = NewUI()
     mainUI:setTitle("The Only Cure Menu");
     mainUI:setWidthPercent(0.1);
 
     mainUI:addImageButton("b11", "", mainPress)
     mainUI["b11"]:addArg("part", "RightArm")
-    mainUI["b11"]:addArg("player", character)
+    --mainUI["b11"]:addArg("player", character)
 
 
     mainUI:addImageButton("b12", "", mainPress);
     mainUI["b12"]:addArg("part", "LeftArm");
-    mainUI["b12"]:addArg("player", character)
+    --mainUI["b12"]:addArg("player", character)
 
     mainUI:nextLine();
 
     mainUI:addImageButton("b21", "", mainPress);
     mainUI["b21"]:addArg("part", "RightForearm");
-    mainUI["b21"]:addArg("player", character)
+    --mainUI["b21"]:addArg("player", character)
 
 
     mainUI:addImageButton("b22", "", mainPress);
     mainUI["b22"]:addArg("part", "LeftForearm");
-    mainUI["b22"]:addArg("player", character)
+    --mainUI["b22"]:addArg("player", character)
 
     mainUI:nextLine();
 
     mainUI:addImageButton("b31", "", mainPress);
     mainUI["b31"]:addArg("part", "RightHand");
-    mainUI["b31"]:addArg("player", character)
+    --mainUI["b31"]:addArg("player", character)
 
     mainUI:addImageButton("b32", "", mainPress);
     mainUI["b32"]:addArg("part", "LeftHand");
-    mainUI["b32"]:addArg("player", character)
+    --mainUI["b32"]:addArg("player", character)
 
     mainUI:saveLayout();
 end
@@ -570,17 +600,14 @@ function MakeConfirmUIMP()
 end
 
 
-function ISHealthPanel:OnCreateTheOnlyCureUI()
+function OnCreateTheOnlyCureUI()
 
     -- how do we pass the correct player here?
     --print(self.character)
-    if ISHealthPanel.otherPlayer then
-        makeMainUI(ISHealthPanel.otherPlayer)
-    else
-        makeMainUI(getPlayer())
-    end
-    makeDescUI()
-    makeConfirmUI()
+
+    makeMainUI();
+	makeDescUI();
+    makeConfirmUI();
 
     if isClient() then MakeConfirmUIMP() end
     mainUI:close()
@@ -595,13 +622,38 @@ local function onCreateUI()
     mainUI:close();
 end
 
-Events.OnCreateUI.Add(ISHealthPanel.OnCreateTheOnlyCureUI)
+Events.OnCreateUI.Add(OnCreateTheOnlyCureUI)
 
 
 -- Add button to health panel
 function ISNewHealthPanel.onClick_TOC(button)
 
+
+    -- button.character is patient
+    -- button.otherPlayer is surgeon 
+
+    sendClientCommand(button.character, "TOC", "GetPlayerData",  {button.otherPlayer:getOnlineID(), button.character:getOnlineID()}) -- sends 0 & 4 as arguments
+
+    if MP_other_player_toc_data then
+        print("It works")
+    else
+        print("Nopepppp")
+    end
+
+    if button.character ~= button.otherPlayer then
+        
+
+        SetCorrectArgsMainUI(MP_other_player_toc_data)      --other player is the surgeon
+
+    else
+        SetCorrectArgsMainUI(getPlayer():getModData().TOC)      --myself?
+
+    end
+
+
     mainUI:toggle()
+
+
     mainUI:setInCenterOfScreen()
     setImageMainUI()
 end
@@ -634,5 +686,17 @@ function ISHealthPanel:render()
 end
 
 
+function SendOtherPlayerData()
 
+    local mod_data = getPlayer():getModData().TOC
+    
 
+end
+
+function GetOtherPlayerData()
+    local surgeonFact, useBandage, bandageAlcool, usePainkiller, painkillerCount = self:findArgs();
+
+    if self.patient ~= self.surgeon and isClient() then
+        SendCutArm(self.patient, self.partName, surgeonFact, useBandage, bandageAlcool, usePainkiller, painkillerCount);
+    end
+end

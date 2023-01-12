@@ -18,8 +18,11 @@ local function dropItem(player, modData)
 end
 
 local function everyOneMinute()
-    local player = getPlayer();
-    local modData = player:getModData();
+    local player = getPlayer()
+    local modData = player:getModData()
+
+    --player:transmitModData()
+
     if modData.TOC ~= nil then
         dropItem(player, modData);
         CheckIfInfect(player, modData);
