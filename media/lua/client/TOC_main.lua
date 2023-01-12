@@ -4,18 +4,71 @@ end
 
 
 
-local function dropItem(player, modData)
-    if (modData.TOC.RightHand.is_cut and not (modData.TOC.RightHand.has_prothesis_equipped or modData.TOC.RightForearm.has_prothesis_equipped)) or (modData.TOC.RightForearm.is_cut and not modData.TOC.RightForearm.has_prothesis_equipped) then
-        if player:getPrimaryHandItem() ~= nil then
-            if player:getPrimaryHandItem():getName() ~= "Bare Hands" then player:dropHandItems() end
+-- GLOBAL STRINGS
+Left = "Left"
+Right = "Right"
+
+Hand = "Hand"
+Forearm = "Forearm"
+Arm = "Arm"
+
+
+
+
+-- Makes the player drop an item if they don't have a limb or haven't equipped a prosthesis
+function TheOnlyCure.TryDropItem(player, toc_data)
+    if TheOnlyCure.CheckIfCanPickUpItem(toc_data, Right, Hand, Forearm) and player:getPrimaryHandItem() ~= nil then
+        if player:getPrimaryHandItem():getName() ~= "Bare Hands" then
+            player:dropHandItems()
         end
     end
-    if (modData.TOC.LeftHand.is_cut and not (modData.TOC.LeftHand.has_prothesis_equipped or modData.TOC.LeftForearm.has_prothesis_equipped)) or (modData.TOC.LeftForearm.is_cut and not modData.TOC.LeftForearm.has_prothesis_equipped) then
-        if player:getSecondaryHandItem() ~= nil then
-            if player:getSecondaryHandItem():getName() ~= "Bare Hands" then player:dropHandItems() end
+
+    if TheOnlyCure.CheckIfCanPickUpItem(toc_data, Left, Hand, Forearm) and player:getSecondaryHandItem() ~= nil then
+        if player:getSecondaryHandItem():getName() ~= "Bare Hands" then
+            player:dropHandItems()
         end
     end
+
+    
 end
+
+-- Helper for DropItem
+function TheOnlyCure.CheckIfCanPickUpItem(toc_data, side, limb, secondary_limb)
+    
+    local full_primary_limb = side .. limb
+    local full_secondary_limb = side .. secondary_limb
+
+
+    return toc_data[full_primary_limb].is_cut and not (toc_data[full_primary_limb].has_prosthesis_equipped or toc_data[full_secondary_limb]) or
+            (toc_data[full_secondary_limb].is_cut and not toc_data[full_secondary_limb].has_prosthesis_equipped)
+
+    
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------- 
+-- Updates 
+
+
+
+
+
+
+
+
+
 
 local function everyOneMinute()
     local player = getPlayer()
@@ -37,8 +90,8 @@ local function everyTenMinutes()
         local names = {"RightHand", "RightForearm", "RightArm", "LeftHand", "LeftForearm", "LeftArm"}
 
         --Augmente l'xp si equip
-        if modData.TOC.RightHand.has_prothesis_equipped  or modData.TOC.RightForearm.has_prothesis_equipped   then player:getXp():AddXP(Perks.RightHand, 4) end
-        if modData.TOC.LeftHand.has_prothesis_equipped   or modData.TOC.LeftForearm.has_prothesis_equipped    then player:getXp():AddXP(Perks.LeftHand, 4) end
+        if modData.TOC.RightHand.has_prosthesis_equipped  or modData.TOC.RightForearm.has_prosthesis_equipped   then player:getXp():AddXP(Perks.RightHand, 4) end
+        if modData.TOC.LeftHand.has_prosthesis_equipped   or modData.TOC.LeftForearm.has_prosthesis_equipped    then player:getXp():AddXP(Perks.LeftHand, 4) end
 
         --Reduit le temps de cicatri restant
         for i,name in pairs(names) do
@@ -89,7 +142,7 @@ local function initVariable(_, player)
             modData.TOC[v].cicatrization_time = 0
             
             
-            modData.TOC[v].has_prothesis_equipped = false
+            modData.TOC[v].has_prosthesis_equipped = false
             modData.TOC[v].prothesis_factor = 1.0       -- Every prothesis has the same... does this even make sense here?
             modData.TOC[v].prothesis_material_id = nil           
         end
@@ -112,6 +165,11 @@ local function initVariable(_, player)
         modData.TOC[leftForearm].cicatrization_base_time = 1800
         modData.TOC[rightArm].cicatrization_base_time = 2000
         modData.TOC[leftArm].cicatrization_base_time = 2000
+
+
+
+
+        modData.TOC.is_other_bodypart_infected = false
 
 
 
@@ -155,8 +213,5 @@ local function initTOCTraits()
     TraitFactory.setMutualExclusive("amputee2", "amputee3");
 end
 
-Events.EveryHours.Add(everyHours);
-Events.EveryTenMinutes.Add(everyTenMinutes);
-Events.EveryOneMinute.Add(everyOneMinute);
 Events.OnCreatePlayer.Add(initVariable);
 Events.OnGameBoot.Add(initTOCTraits);

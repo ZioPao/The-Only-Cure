@@ -43,13 +43,13 @@ end
     local function getImageName(partName, modData)
         local partData = modData[partName];
         local name = "";
-        if partData.is_cut and partData.is_cicatrized and partData.has_prothesis_equipped then -- Cut and equip
+        if partData.is_cut and partData.is_cicatrized and partData.has_prosthesis_equipped then -- Cut and equip
             if partName == "RightHand" or partName == "LeftHand" then
                 name = "media/ui/TOC/" .. partName .. "/Hook.png";
             else
                 name = "media/ui/TOC/" .. partName .. "/Prothesis.png";
             end
-        elseif partData.is_cut and partData.is_cicatrized and not partData.has_prothesis_equipped and partData.is_amputation_shown then -- Cut and heal
+        elseif partData.is_cut and partData.is_cicatrized and not partData.has_prosthesis_equipped and partData.is_amputation_shown then -- Cut and heal
             name = "media/ui/TOC/" .. partName .. "/Cut.png";
         elseif partData.is_cut and not partData.is_cicatrized and partData.is_amputation_shown and not partData.is_operated then -- Cut not heal
             name = "media/ui/TOC/" .. partName .. "/Bleed.png";
@@ -64,9 +64,9 @@ end
         end
 
         -- If foreaerm equip, change hand
-        if partName == "RightHand" and modData["RightForearm"].has_prothesis_equipped then
+        if partName == "RightHand" and modData["RightForearm"].has_prosthesis_equipped then
             name = "media/ui/TOC/" .. partName .. "/Hook.png";
-        elseif partName == "LeftHand" and modData["LeftForearm"].has_prothesis_equipped then
+        elseif partName == "LeftHand" and modData["LeftForearm"].has_prosthesis_equipped then
             name = "media/ui/TOC/" .. partName .. "/Hook.png";
         end
         return name;
@@ -146,7 +146,7 @@ local function setDescUI(toc_data, partName)
     descUI.partNameAct = partName
 
     -- Cut and equip
-    if partData.is_cut and partData.is_cicatrized and partData.has_prothesis_equipped then 
+    if partData.is_cut and partData.is_cicatrized and partData.has_prosthesis_equipped then 
         descUI["textEtat"]:setText("Cut and healed")
         descUI["textEtat"]:setColor(1, 0, 1, 0)
         descUI["b1"]:setText("Unequip")
@@ -154,7 +154,7 @@ local function setDescUI(toc_data, partName)
         descUI["b1"]:setVisible(true)
 
     -- Cut and healed
-    elseif partData.is_cut and partData.is_cicatrized and not partData.has_prothesis_equipped and partData.is_amputation_shown then 
+    elseif partData.is_cut and partData.is_cicatrized and not partData.has_prosthesis_equipped and partData.is_amputation_shown then 
         descUI["textEtat"]:setText("Cut and healed");
         descUI["textEtat"]:setColor(1, 0, 1, 0);
         if partName == "RightArm" or partName == "LeftArm" then
@@ -404,8 +404,8 @@ local function descPress(button, args)
         -- TODO Change to correct player
         local modData = player:getModData().TOC;
         -- Do not cut if prothesis equip
-        if (string.find(descUI.partNameAct, "Right") and (modData["RightHand"].has_prothesis_equipped or modData["RightForearm"].has_prothesis_equipped)) 
-        or (string.find(descUI.partNameAct, "Left") and (modData["LeftHand"].has_prothesis_equipped or modData["LeftForearm"].has_prothesis_equipped)) then
+        if (string.find(descUI.partNameAct, "Right") and (modData["RightHand"].has_prosthesis_equipped or modData["RightForearm"].has_prosthesis_equipped)) 
+        or (string.find(descUI.partNameAct, "Left") and (modData["LeftHand"].has_prosthesis_equipped or modData["LeftForearm"].has_prosthesis_equipped)) then
             player:Say("I need to remove my prothesis first");
             mainUI:close();
             return false;

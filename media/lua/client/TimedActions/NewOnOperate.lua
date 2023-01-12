@@ -62,6 +62,8 @@ function ISOperateArm:perform()
         OperateArm(self.partName, surgeonFact, useOven)
     end
     self.surgeon:getXp():AddXP(Perks.Doctor, 400)
+
+    -- FIXME Add a check for kit to prevent errors
     if self.kit then
         self.surgeon:getInventory():Remove(self.kit)
     end

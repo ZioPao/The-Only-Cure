@@ -1,0 +1,6 @@
+{
+    "todo-tree.tree.scanMode": "workspace",
+    "Lua.diagnostics.globals": [
+        "ZombRand"
+    ]
+}

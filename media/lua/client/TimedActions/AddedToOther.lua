@@ -27,7 +27,7 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
 
         for i,name in ipairs(protPartNames) do
             if modData.TOC[name].is_cut then
-                if modData.TOC[name].has_prothesis_equipped then
+                if modData.TOC[name].has_prosthesis_equipped then
                     maxTime = maxTime * modData.TOC[name].EquipFact     --todo this is dumb
                 else
                     maxTime = maxTime * 2;
@@ -119,12 +119,12 @@ function ISEquipWeaponAction:perform()
     if not self.item:isRequiresEquippedBothHands() then
         if modData.TOC.RightHand.is_cut then
             if modData.TOC.RightForearm.is_cut then
-                if not modData.TOC.RightForearm.has_prothesis_equipped then
+                if not modData.TOC.RightForearm.has_prosthesis_equipped then
                     self.character:setPrimaryHandItem(nil);
                     self.character:setSecondaryHandItem(self.item);
                 end
             else
-                if not modData.TOC.RightHand.has_prothesis_equipped then
+                if not modData.TOC.RightHand.has_prosthesis_equipped then
                     self.character:setPrimaryHandItem(nil);
                     self.character:setSecondaryHandItem(self.item);
                 end
@@ -132,23 +132,23 @@ function ISEquipWeaponAction:perform()
         end
         if modData.TOC.LeftHand.is_cut then
             if modData.TOC.LeftForearm.is_cut then
-                if not modData.TOC.LeftForearm.has_prothesis_equipped then
+                if not modData.TOC.LeftForearm.has_prosthesis_equipped then
                     self.character:setPrimaryHandItem(self.item);
                     self.character:setSecondaryHandItem(nil);
                 end
             else
-                if not modData.TOC.LeftHand.has_prothesis_equipped then
+                if not modData.TOC.LeftHand.has_prosthesis_equipped then
                     self.character:setPrimaryHandItem(self.item);
                     self.character:setSecondaryHandItem(nil);
                 end
             end
         end
-        if (modData.TOC.RightHand.is_cut and not (modData.TOC.RightHand.has_prothesis_equipped or modData.TOC.RightForearm.has_prothesis_equipped)) and (modData.TOC.LeftHand.is_cut and not (modData.TOC.LeftHand.has_prothesis_equipped or modData.TOC.LeftForearm.has_prothesis_equipped)) then
+        if (modData.TOC.RightHand.is_cut and not (modData.TOC.RightHand.has_prosthesis_equipped or modData.TOC.RightForearm.has_prosthesis_equipped)) and (modData.TOC.LeftHand.is_cut and not (modData.TOC.LeftHand.has_prosthesis_equipped or modData.TOC.LeftForearm.has_prosthesis_equipped)) then
             self.character:dropHandItems();
         end
     end
 
-    if self.item:isRequiresEquippedBothHands() and ((modData.TOC.RightHand.is_cut and not modData.TOC.RightHand.has_prothesis_equipped) or (modData.TOC.RightForearm.is_cut and not modData.TOC.RightForearm.has_prothesis_equipped) or (modData.TOC.LeftHand.is_cut and not modData.TOC.LeftHand.has_prothesis_equipped) or (modData.TOC.LeftForearm.is_cut and not modData.TOC.LeftForearm.has_prothesis_equipped)) then
+    if self.item:isRequiresEquippedBothHands() and ((modData.TOC.RightHand.is_cut and not modData.TOC.RightHand.has_prosthesis_equipped) or (modData.TOC.RightForearm.is_cut and not modData.TOC.RightForearm.has_prosthesis_equipped) or (modData.TOC.LeftHand.is_cut and not modData.TOC.LeftHand.has_prosthesis_equipped) or (modData.TOC.LeftForearm.is_cut and not modData.TOC.LeftForearm.has_prosthesis_equipped)) then
         self.character:dropHandItems();
     end
 

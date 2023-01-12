@@ -13,11 +13,6 @@ Commands["SendServer"] = function(player, arg)
     sendServerCommand(otherPlayer, "TOC", arg["command"], arg)
 end
 
-
-
-
-
-
 local function OnTocClientCommand(module, command, player, args)
 
     if module == 'TOC' then

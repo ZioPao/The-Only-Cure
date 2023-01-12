@@ -88,43 +88,10 @@ end
 
 --------------------------------------------------------------------
 
-function AskGetOtherPlayerData(player)
-    local arg = {}
-
-    arg["From"] = getPlayer():getOnlineID()     --surgoen
-    arg["To"] = player:getOnlineID()            --patient
-
-
-    arg["command"] = "SendOtherPlayerData";
-    arg["toSend"] = {player:getModData().TOC}       -- will it work?
-    sendClientCommand("TOC", "SendServer", arg);
-
-end
-
-
-
-
-
-function SendGetOtherPlayerData(player)
-    local arg = {}
-
-    arg["From"] = getPlayer():getOnlineID()     --surgoen
-    arg["To"] = player:getOnlineID()            --patient
-
-
-    arg["command"] = "GetOtherPlayerData";
-    arg["toSend"] = {player:getModData().TOC}       -- will it work?
-    sendClientCommand("TOC", "SendServer", arg);
-end
-
-
-
 -- todo why is this here? this doesnt make any sense
-
-
 -- Event
 local onServerCommand = function(module, command, args)
-    -- TODO change this name
+    -- TODO this doesn't belong here. 
     if module == "TOC" and Commands[command] then
         args = args or {}
         Commands[command](args)
