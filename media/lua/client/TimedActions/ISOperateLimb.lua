@@ -29,7 +29,7 @@ function ISOperateLimb:start()
 end
 
 function ISOperateLimb:findArgs()
-    local surgeon_factor = self.surgeon:getPerkLevel(Perks.Doctor);
+    local surgeon_factor = self.surgeon:getPerkLevel(Perks.Doctor)
 
     if self.use_oven then
         surgeon_factor = surgeon_factor + 100
@@ -60,12 +60,12 @@ function ISOperateLimb:perform()
         SendOperateLimb(self.patient, self.part_name, surgeon_factor, use_oven)
         --SendOperateArm(self.patient, self.part_name, surgeon_factor, use_oven)
     else
-        OperateArm(self.part_name, surgeon_factor, use_oven)
+        TheOnlyCure.OperateLimb(self.part_name, surgeon_factor, use_oven)
     end
     self.surgeon:getXp():AddXP(Perks.Doctor, 400)
 
     -- FIXME Add a check for kit to prevent errors
-    if self.kit then
+    if self.kit and not use_oven then
         self.surgeon:getInventory():Remove(self.kit)
     end
 

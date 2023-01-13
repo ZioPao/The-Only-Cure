@@ -41,19 +41,33 @@ function ISUninstallProsthesis:perform()
         end
     end
 
-    local modData = self.character:getModData()
+    local toc_data = self.character:getModData().TOC
+    local body_part_type = self.bodyPart:getType()
+    local accepting_body_parts = GetAcceptingProsthesisBodyParts()
+
+    if accepting_body_parts == nil then
+        return      -- should never happen
+    end
+
+    --if accepting_body_parts[body_part_type] then
+    --    toc_data[TOC_getBodyPart(body_part_type)]
+    --end
+
+
+
+
     if self.bodyPart:getType() == BodyPartType.Hand_R then
-        modData.TOC.RightHand.is_prosthesis_equipped = false
-        modData.TOC.RightHand.prothesis_factor = 1
+        toc_data.RightHand.is_prosthesis_equipped = false
+        toc_data.RightHand.prothesis_factor = 1
     elseif self.bodyPart:getType() == BodyPartType.ForeArm_R then
-        modData.TOC.RightForearm.is_prosthesis_equipped = false
-        modData.TOC.RightForearm.prothesis_factor = 1
+        toc_data.RightForearm.is_prosthesis_equipped = false
+        toc_data.RightForearm.prothesis_factor = 1
     elseif self.bodyPart:getType() == BodyPartType.Hand_L then
-        modData.TOC.LeftHand.is_prosthesis_equipped = false
-        modData.TOC.LeftHand.prothesis_factor = 1
+        toc_data.LeftHand.is_prosthesis_equipped = false
+        toc_data.LeftHand.prothesis_factor = 1
     elseif self.bodyPart:getType() == BodyPartType.ForeArm_L then
-        modData.TOC.LeftForearm.is_prosthesis_equipped = false
-        modData.TOC.LeftForearm.prothesis_factor = 1
+        toc_data.LeftForearm.is_prosthesis_equipped = false
+        toc_data.LeftForearm.prothesis_factor = 1
     end
 
     local weight = math.floor(self.item:getWeight() * 10 + 0.5)

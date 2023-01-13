@@ -123,7 +123,7 @@ TocContextMenus.CreateMenus = function(player, context, worldObjects, test)
 
 
                                 -- admin stuff
-                                if clickedPlayer:getAccessLevel() == "Admin" then
+                                if player_obj:getAccessLevel() == "Admin" then
                                     local cheat_option = rootMenu:addOption("Cheat")
                                     local cheat_menu = context:getNew(context)
                                     context:addSubMenu(cheat_option, cheat_menu)
@@ -144,7 +144,7 @@ TocContextMenus.CreateMenus = function(player, context, worldObjects, test)
                                 -- todo add checks so that we don't show these menus if a player has already beeen operated or amputated
 
 
-
+                                local player_toc_data = getPlayer():getModData().TOC
 
                                 for k_part, v_part in ipairs(GetBodyParts()) do
 
@@ -152,9 +152,9 @@ TocContextMenus.CreateMenus = function(player, context, worldObjects, test)
                                     if clickedPlayer == player_obj then
                                         
 
-                                        if getPlayer():getModData().TOC[v_part].is_cut == false then
+                                        if player_toc_data[v_part].is_cut == false then
                                             cutMenu:addOption(getText('UI_ContextMenu_' .. v_part), worldObjects, CutLocal, player_obj, player_obj, v_part)
-                                        elseif getPlayer():getModData().TOC[v_part].is_operated == false then
+                                        elseif player_toc_data[v_part].is_operated == false and player_toc_data[v_part].is_amputation_shown then
                                             operateMenu:addOption(getText('UI_ContextMenu_' .. v_part), worldObjects, OperateLocal,  player_obj, player_obj, v_part)
 
                                         end
@@ -187,7 +187,12 @@ end
 TocContextMenus.CreateOperateWithOvenMenu = function(player, context, worldObjects, test)
     local player_obj = getSpecificPlayer(player)
     --local clickedPlayer
-    local modData = player_obj:getModData()
+
+
+    -- TODO Add a way to move the player towards the oven
+
+    
+    local toc_data = player_obj:getModData().TOC
 
     local is_main_menu_already_created = false
 
@@ -201,7 +206,7 @@ TocContextMenus.CreateOperateWithOvenMenu = function(player, context, worldObjec
             if v_stove:getCurrentTemperature() > 250 then
                 
                 for k_bodypart, v_bodypart in ipairs(GetBodyParts()) do
-                    if modData.TOC[v_bodypart].is_cut and not modData.TOC[v_bodypart].is_operated then
+                    if toc_data[v_bodypart].is_cut and toc_data[v_bodypart].is_amputation_shown and not toc_data[v_bodypart].is_operated  then
                         local subMenu = context:getNew(context);
 
                         if is_main_menu_already_created == false then

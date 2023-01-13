@@ -19,6 +19,17 @@ function GetOtherBodyPartTypes()
 end
 
 
+function GetAcceptingProsthesisBodyParts()
+
+    function GetLimbsBodyPartTypes()
+
+        return {BodyPartType.Hand_R, BodyPartType.ForeArm_R,
+                BodyPartType.Hand_L, BodyPartType.ForeArm_L}
+    
+    end
+end
+
+
 
 function find_clothName_TOC(bodyPart)
     if bodyPart:getType()       == BodyPartType.Hand_R      then return "TOC.ArmRight_noHand"
@@ -93,9 +104,11 @@ function find_protheseFact_TOC(item)
 end
 
 function CanBeCut(partName)
-    return not getPlayer():getModData().TOC[partName].IsCut
+    return not getPlayer():getModData().TOC[partName].is_cut
 end
 
 function CanBeOperate(partName)
-    return getPlayer():getModData().TOC[partName].IsCut and not getPlayer():getModData().TOC[partName].IsOperated and not getPlayer():getModData().TOC[partName].IsCicatrized
+    return getPlayer():getModData().TOC[partName].is_cut 
+    and not getPlayer():getModData().TOC[partName].is_operated
+     and not getPlayer():getModData().TOC[partName].is_cicatrized
 end

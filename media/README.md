@@ -14,3 +14,27 @@ There are 3 prosthesis models, wooden hook, metal hook and metal hand. Equipped 
 
 # Context
 This is the beta of my first mod, it means that the main features are there, but I'm still adding features and fixing bugs. I also learn how to use git with this mod. I envy an act 2 to my mod for the legs once it is finished. If you want to redo the model, texture and icon, you are welcome! Contact me on the official game discord. @MrBounty. If you encounter a bug, try to detail as much as possible the conditions for the appearance of the bug. Like the exact action that created this bug and the previous few actions, or whatever you think is relevant.
+
+
+
+
+[h1]The Only Cure but better[\h1]
+A working version for SP and MP.
+I'm not gonna bother "adding" stuff, for now.
+If Mr Bounty returns, I'm probably not gonna continue this.
+
+
+[h1]FIXED[/h1]
+- The Only Cure UI not showing in MP
+- Operating with oven completely broken
+- Invisible prosthesis on female models (still WIP, forearms especially)
+
+[h1]ADDED[/h1]
+- Debug cheats (MP Compatible) to reset amputations
+- More stuff
+
+Workshop ID: 2915572347
+Mod ID: Amputation2
+
+Workshop ID: 2915572347
+Mod ID: Amputation2

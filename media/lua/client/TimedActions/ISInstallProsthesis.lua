@@ -39,7 +39,6 @@ function ISInstallProsthesis:perform()
 
 
     local prosthesis_table = {
-
         WoodenHook = {
             material_id = 1
         },
@@ -49,24 +48,28 @@ function ISInstallProsthesis:perform()
         MetalHand = {
             material_id = 3
         }
-
     }
 
 
-    print(self.item)
+    -- print(self.item)
 
 
+    -- TODO there is something wrong with how I'm managing prosthesis. they don't apply
+    -- TODO cheatMenu are fucked up, admin access is wrong
 
     -- TODO make a parser or something I dont care
     -- Check Item before doing any of this shit maybe
     -- Assemble the correct name for the object
-    local prosthesis_name = self.item:getname() .. "_" .. Right .. "_" .. Forearm
+    --local prosthesis_name = self.item:getname() .. "_" .. Right .. "_" .. Forearm
     -- for _, v in ipairs(GetLimbsBodyPartTypes()) do
     --     if v ~= BodyPartType.UpperArm_L or v ~= BodyPartType.UpperArm_R then
-            
+        
     --         if self.bodyPart:getType() == v then
     --             --local item_name = "TOC."
-    --             --local weight = math.floor(self.item:getWeight() * 10 + 0.5) / 10        -- TODO why do we need this?
+    --             --local weight = math.floor(self.item:getWeight() * 10 + 0.5) / 10        
+    
+    
+    -- TODO why do we need this?
 
     --         end
 
@@ -136,21 +139,17 @@ function ISInstallProsthesis:perform()
 
     if self.cloth ~= nil then
         if self.bodyPart:getType() == BodyPartType.Hand_R then
-            modData.TOC.RightHand.IsEquiped = true;
-            modData.TOC.RightHand.Equip_mat_id = mat_id;
-            modData.TOC.RightHand.EquipFact = find_protheseFact_TOC(self.cloth);
+            modData.TOC.RightHand.is_prosthesis_equipped = true;
+            modData.TOC.RightHand.prothesis_factor = find_protheseFact_TOC(self.cloth);
         elseif self.bodyPart:getType() == BodyPartType.ForeArm_R then
-            modData.TOC.RightForearm.IsEquiped = true;
-            modData.TOC.RightForearm.Equip_mat_id = mat_id;
-            modData.TOC.RightForearm.EquipFact = find_protheseFact_TOC(self.cloth);
+            modData.TOC.RightForearm.is_prosthesis_equipped = true;
+            modData.TOC.RightForearm.prothesis_factor = find_protheseFact_TOC(self.cloth);
         elseif self.bodyPart:getType() == BodyPartType.Hand_L then
-            modData.TOC.LeftHand.IsEquiped = true;
-            modData.TOC.LeftHand.Equip_mat_id = mat_id;
-            modData.TOC.LeftHand.EquipFact = find_protheseFact_TOC(self.cloth);
+            modData.TOC.LeftHand.is_prosthesis_equipped = true;
+            modData.TOC.LeftHand.prothesis_factor = find_protheseFact_TOC(self.cloth);
         elseif self.bodyPart:getType() == BodyPartType.ForeArm_L then
-            modData.TOC.LeftForearm.IsEquiped = true;
-            modData.TOC.LeftForearm.Equip_mat_id = mat_id;
-            modData.TOC.LeftForearm.EquipFact = find_protheseFact_TOC(self.cloth);
+            modData.TOC.LeftForearm.is_prosthesis_equipped = true;
+            modData.TOC.LeftForearm.prothesis_factor = find_protheseFact_TOC(self.cloth);
         end
 
         self.character:getInventory():Remove(self.item);
