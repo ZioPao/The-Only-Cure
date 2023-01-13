@@ -22,6 +22,14 @@ local function OperateLocal(_, patient, surgeon, part_name, use_oven)
 end
 
 
+function TryToToResetEverythingOtherPlayer(_, patient, surgeon)
+
+    sendClientCommand(surgeon, "TOC", "AskToResetEverything", {patient:getOnlineID()})
+
+
+
+end
+
 --TODO Make the name more unique
 function TryActionOnOtherPlayerLocal(_, part_name, action, surgeon, patient)
 
@@ -35,8 +43,6 @@ function TryActionOnOtherPlayerLocal(_, part_name, action, surgeon, patient)
         AskCanCutLimb(patient, part_name)
     elseif action == "Operate" then
         AskCanOperateLimb(patient, part_name)
-    elseif action == "ResetEverything" then
-        AskCanResetEverything(patient)
     end
     ui.actionAct = action
     ui.partNameAct = part_name
@@ -100,10 +106,10 @@ function ISWorldObjectContextMenu.OnFillTOCMenu(player, context, worldObjects, t
 
 
                                     if clickedPlayer == player_obj then
-                                        cheat_menu:addOption("Reset TOC for me", worldObjects, ResetEverything, clickedPlayer)
+                                        cheat_menu:addOption("Reset TOC for me", worldObjects, ResetEverything)
 
                                     else
-                                        cheat_menu:addOption("Reset TOC for " .. clickedPlayer:getUsername(), worldObjects, TryActionOnOtherPlayerLocal, _, "ResetEverything", player_obj, clickedPlayer)
+                                        cheat_menu:addOption("Reset TOC for " .. clickedPlayer:getUsername(), worldObjects, TryToToResetEverythingOtherPlayer, clickedPlayer, player_obj)
 
                                     end
                                 end

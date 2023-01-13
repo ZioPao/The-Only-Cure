@@ -52,16 +52,6 @@ function AskCanOperateLimb(player, part_name)
 end
 
 
-function AskCanResetEverything(other_player)
-    GetConfirmUIMP().responseReceive = false;
-    local arg = {}
-    arg["From"] = getPlayer():getOnlineID()
-    arg["To"] = other_player:getOnlineID()
-    arg["command"] = "CanResetEverything"
-    arg["toSend"] = {}
-    sendClientCommand("TOC", "SendServer", arg)
-end
-
 -- Patient (receive)
 Commands["CutLimb"] = function(arg)
     local arg = arg["toSend"]
@@ -109,32 +99,41 @@ Commands["ResetEverything"] = function(arg)
     ResetEverything()
 end
 
+-- Cheating stuff 
+Commands["AcceptResetEverything"] = function(arg)
+
+    local clicked_player = getPlayerByOnlineID(arg[1])      -- TODO delete this
+    ResetEverything()
+end
+
+
+-- Base stuff
+Commands["GivePlayerData"] = function(arg)
+    local surgeon_id = arg[1]
+    local patient =  getPlayerByOnlineID(arg[2])
+    local toc_data = patient:getModData().TOC
+    sendClientCommand(patient, "TOC", "SendPlayerData", {surgeon_id, toc_data})
+end
+
+Commands["SendTocData"] = function(arg)
+    print("Sending TOC data")
+    local patient = getPlayerByOnlineID(arg[1])
+
+    MP_other_player_toc_data = arg[2]
+
+end
+
+
+
+
+
+
+
+
 local function OnTocServerCommand(module, command, args)
     if module == 'TOC' then
-        if command == 'GivePlayerData' then
-            --local surgeon = getPlayerByOnlineID(args[1])
-
-            local surgeon_id = args[1]
-            
-            local patient =  getPlayerByOnlineID(args[2])
-            local toc_data = patient:getModData().TOC
-
-            -- todo maybe we cant send a table like this. Let's try something easier
-            --local moneyAmount = playerTwo:getInventory():getCountTypeRecurse("Money")
-            print("Giving info")
-
-            -- not fast enough, wont get toc_data in time. FInd a better way to send and get data
-            
-            sendClientCommand(patient, "TOC", "SendPlayerData", {surgeon_id, toc_data})
-
-        elseif command == 'SendTocData' then
-            print("Sending TOC data")
-            local patient = getPlayerByOnlineID(args[1])        --todo cant we delete this>?
-
-
-            -- ew a global var.... but dunno if there's a better way to do this
-            MP_other_player_toc_data = args[2]
-        elseif Commands[command] then
+        print("OnTocServerCommand " .. command)
+        if Commands[command] then
             args = args or {}
             Commands[command](args)
 

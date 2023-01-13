@@ -616,7 +616,15 @@ function ISNewHealthPanel.onClick_TOC(button)
     if button.otherPlayer then  
         if button.character ~= button.otherPlayer then
             sendClientCommand(button.otherPlayer, "TOC", "GetPlayerData",  {button.otherPlayer:getOnlineID(), button.character:getOnlineID()})
-            SetCorrectArgsMainUI(MP_other_player_toc_data)      --other player is the surgeon
+
+            if MP_other_player_toc_data == nil then
+                print("MP_other_player_toc_data is still nil")
+            else
+                SetCorrectArgsMainUI(MP_other_player_toc_data)      --other player is the surgeon
+
+            end
+          
+
         else
             SetCorrectArgsMainUI(getPlayer():getModData().TOC)      --myself?
 
