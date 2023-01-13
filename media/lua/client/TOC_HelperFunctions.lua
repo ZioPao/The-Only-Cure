@@ -67,4 +67,3 @@ function FixSingleBodyPartType(body_part_type, use_oven)
         --body_part_type:setBleedingTime(ZombRand(1, 5))   -- Reset the bleeding, maybe make it random
     end
 end
-

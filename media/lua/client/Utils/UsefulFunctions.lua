@@ -72,33 +72,6 @@ function find_clothName2_TOC(name)
     if name == "LeftArm"        then return "TOC.ArmLeft_noArm" end
 end
 
-
-
-function TheOnlyCure.FindTocDataPartNameFromBodyPartType(toc_data, bodyPartType)
-    if bodyPartType == BodyPartType.Hand_R          then return toc_data.RightHand
-    elseif bodyPartType == BodyPartType.ForeArm_R   then return toc_data.RightForearm
-    elseif bodyPartType == BodyPartType.UpperArm_R  then return toc_data.RightArm
-    elseif bodyPartType == BodyPartType.Hand_L      then return toc_data.LeftHand
-    elseif bodyPartType  == BodyPartType.ForeArm_L  then return toc_data.LeftForearm
-    elseif bodyPartType  == BodyPartType.UpperArm_L then return toc_data.LeftArm
-    else return nil
-    end
-end
-
-
-
-function find_bodyPart_TOC(modData, bodyPart)
-    if modData.RightHand == nil then modData = modData.TOC end
-    if bodyPart:getType()       == BodyPartType.Hand_R      then return modData.RightHand
-    elseif bodyPart:getType()   == BodyPartType.ForeArm_R   then return modData.RightForearm
-    elseif bodyPart:getType()   == BodyPartType.UpperArm_R  then return modData.RightArm
-    elseif bodyPart:getType()   == BodyPartType.Hand_L      then return modData.LeftHand
-    elseif bodyPart:getType()   == BodyPartType.ForeArm_L   then return modData.LeftForearm
-    elseif bodyPart:getType()   == BodyPartType.UpperArm_L  then return modData.LeftArm
-    else return nil
-    end
-end
-
 function find_protheseID_TOC(item)
     local itemType = item:getType()
     if     string.find(itemType, "WoodenHook")  then return 1
