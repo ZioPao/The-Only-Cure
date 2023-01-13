@@ -11,9 +11,11 @@ function ResetEverything()
         local cloth = player:getInventory():FindAndReturn(find_clothName2_TOC(v))
 
         if cloth ~= nil then
+            print("Resetting " .. cloth:getName())
             player:removeWornItem(cloth)
-            player:getInventory():Remove(cloth:getName())
+            player:getInventory():Remove(cloth)
         end
+        cloth = nil -- reset it
 
     end
 

@@ -1,3 +1,6 @@
+
+-- TODO rewrite this mess
+
 local function CutLocal(_, patient, surgeon, part_name)
     if IsSawInInventory(surgeon) ~= nil then
         ISTimedActionQueue.add(ISCutLimb:new(patient, surgeon, part_name));
@@ -23,11 +26,7 @@ end
 
 
 function TryToToResetEverythingOtherPlayer(_, patient, surgeon)
-
     sendClientCommand(surgeon, "TOC", "AskToResetEverything", {patient:getOnlineID()})
-
-
-
 end
 
 --TODO Make the name more unique
@@ -65,11 +64,36 @@ local function CheckIfCanBeOperated(modData)
 
 end
 
+local function CloseAllMenus(player_index)
+    local contextMenu = getPlayerContextMenu(player_index)
+    if contextMenu:isVisible() then
+
+        contextMenu:closeAll()
+
+    end
+end
 
 
+-- Declare context menus here so we can access them later
 function ISWorldObjectContextMenu.OnFillTOCMenu(player, context, worldObjects, test)
 
 
+   
+end
+
+
+function ISWorldObjectContextMenu.OnFillOperateWithOven(player, context, worldObjects, test)
+  
+end
+
+
+
+----------------------------------------------------------------------------------------------------------
+
+TocContextMenus = {}
+
+
+TocContextMenus.CreateMenus = function(player, context, worldObjects, test)
     local clickedPlayersTable = {}      --todo awful workaround
     local clickedPlayer = nil
 
@@ -126,11 +150,21 @@ function ISWorldObjectContextMenu.OnFillTOCMenu(player, context, worldObjects, t
 
                                     --todo right now it doesnt check for a saw.
                                     if clickedPlayer == player_obj then
-                                        cutMenu:addOption(getText('UI_ContextMenu_' .. v_part), worldObjects, CutLocal, player_obj, player_obj, v_part)
-                                        operateMenu:addOption(getText('UI_ContextMenu_' .. v_part), worldObjects, OperateLocal,  player_obj, player_obj, v_part)
+                                        
+
+                                        if getPlayer():getModData().TOC[v_part].is_cut == false then
+                                            cutMenu:addOption(getText('UI_ContextMenu_' .. v_part), worldObjects, CutLocal, player_obj, player_obj, v_part)
+                                        elseif getPlayer():getModData().TOC[v_part].is_operated == false then
+                                            operateMenu:addOption(getText('UI_ContextMenu_' .. v_part), worldObjects, OperateLocal,  player_obj, player_obj, v_part)
+
+                                        end
                                     else
+                                        --TODO Make it so cut limbs do not appear in the Cut Menu
+                                        --if clickedPlayer.getModData().TOC[v_part].is_cut == false then
                                         cutMenu:addOption(getText('UI_ContextMenu_' .. v_part), worldObjects, TryActionOnOtherPlayerLocal, v_part, "Cut", player_obj, clickedPlayer)
+                                        --elseif clickedPlayer.getModData().TOC[v_part].is_operated == false then
                                         operateMenu:addOption(getText('UI_ContextMenu_' .. v_part), worldObjects, TryActionOnOtherPlayerLocal, v_part, "Operate", player_obj, clickedPlayer);
+                                        --end
     
                                     end
 
@@ -150,7 +184,7 @@ function ISWorldObjectContextMenu.OnFillTOCMenu(player, context, worldObjects, t
 end
 
 
-function ISWorldObjectContextMenu.OnFillOperateWithOven(player, context, worldObjects, test)
+TocContextMenus.CreateOperateWithOvenMenu = function(player, context, worldObjects, test)
     local player_obj = getSpecificPlayer(player)
     --local clickedPlayer
     local modData = player_obj:getModData()
@@ -188,14 +222,17 @@ function ISWorldObjectContextMenu.OnFillOperateWithOven(player, context, worldOb
 end
 
 
+TocContextMenus.DoCut = function(_, patient, surgeon, part_name)
+
+    if IsSawInInventory(surgeon) then
+        ISTimedActionQueue.add(ISCutLimb:new(patient, surgeon, part_name));
+    else
+        surgeon:Say("I don't have a saw on me")
+    end
+end
 
 
 
 
-
-
-
-
-
-Events.OnFillWorldObjectContextMenu.Add(ISWorldObjectContextMenu.OnFillOperateWithOven)       -- this is probably too much 
-Events.OnFillWorldObjectContextMenu.Add(ISWorldObjectContextMenu.OnFillTOCMenu)
+Events.OnFillWorldObjectContextMenu.Add(TocContextMenus.CreateOperateWithOvenMenu)       -- this is probably too much 
+Events.OnFillWorldObjectContextMenu.Add(TocContextMenus.CreateMenus)
