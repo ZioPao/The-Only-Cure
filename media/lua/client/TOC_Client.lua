@@ -52,7 +52,7 @@ function AskCanOperateLimb(player, part_name)
 end
 
 
-function AskCanResetEverything(_, other_player)
+function AskCanResetEverything(other_player)
     GetConfirmUIMP().responseReceive = false;
     local arg = {}
     arg["From"] = getPlayer():getOnlineID()
@@ -94,12 +94,12 @@ Commands["CanOperateLimb"] = function(arg)
 end
 
 Commands["CanResetEverything"] = function(arg)
-    local arg = arg["toSend"]       --useless
+    local part_name = "RightHand"      --useless
     
     arg["To"] = arg["From"]
     arg["From"] = getPlayer():getOnlineID()
     arg["command"] = "ResponseCanAct"
-    arg["toSend"] = {}
+    arg["toSend"] = {part_name, "Cut", true}
     sendClientCommand("TOC", "SendServer", arg)
     --ResetEverything()
 end
