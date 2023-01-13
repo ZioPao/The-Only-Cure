@@ -51,7 +51,7 @@ function TheOnlyCure.InitTheOnlyCure(_, player)
             mod_data.TOC[v].cicatrization_time = 0
             
             
-            mod_data.TOC[v].has_prosthesis_equipped = false
+            mod_data.TOC[v].is_prosthesis_equipped = false
             mod_data.TOC[v].prothesis_factor = 1.0       -- TODO Every prosthesis has the same... does this even make sense here?
             mod_data.TOC[v].prothesis_material_id = nil
         end
@@ -147,6 +147,10 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
 
     -- If painkillers are available, use them
     -- ...
+
+
+    -- Remove object in hand
+    -- TODO do this
 
     if toc_data[part_name].is_cut == false then
         toc_data[part_name].is_cut = true

@@ -23,11 +23,12 @@ end
 
 function ISCutLimb:start()
     if self.patient == self.surgeon then
-        self:setActionAnim("WearClothing")      -- TODO Change it to a better animation
-        self:setAnimVariable("WearClothingLocation", "Jacket")
+        self:setActionAnim("SawLog")      -- TODO Change it to a better animation
+        --self:setAnimVariable("WearClothingLocation", "Jacket")
     else
-        self:setActionAnim("Loot")
-        self.patient:SetVariable("LootPosition", "Mid")
+        self:setActionAnim("SawLog")
+        -- TODO Point at patient 
+        --self.patient:SetVariable("LootPosition", "Mid")
     end
 end
 

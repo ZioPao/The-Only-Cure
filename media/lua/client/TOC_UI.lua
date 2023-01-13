@@ -44,13 +44,13 @@ end
         local part_data = toc_data[part_name];
         local name = ""
 
-        if part_data.is_cut and part_data.is_cicatrized and part_data.has_prosthesis_equipped then -- Cut and equip
+        if part_data.is_cut and part_data.is_cicatrized and part_data.is_prosthesis_equipped then -- Cut and equip
             if part_name == "RightHand" or part_name == "LeftHand" then
                 name = "media/ui/TOC/" .. part_name .. "/Hook.png"
             else
                 name = "media/ui/TOC/" .. part_name .. "/Prothesis.png"
             end
-        elseif part_data.is_cut and part_data.is_cicatrized and not part_data.has_prosthesis_equipped and part_data.is_amputation_shown then -- Cut and heal
+        elseif part_data.is_cut and part_data.is_cicatrized and not part_data.is_prosthesis_equipped and part_data.is_amputation_shown then -- Cut and heal
             name = "media/ui/TOC/" .. part_name .. "/Cut.png"
         elseif part_data.is_cut and not part_data.is_cicatrized and part_data.is_amputation_shown and not part_data.is_operated then -- Cut not heal
             name = "media/ui/TOC/" .. part_name .. "/Bleed.png"
@@ -65,9 +65,9 @@ end
         end
 
         -- If foreaerm equip, change hand
-        if part_name == "RightHand" and toc_data["RightForearm"].has_prosthesis_equipped then
+        if part_name == "RightHand" and toc_data["RightForearm"].is_prosthesis_equipped then
             name = "media/ui/TOC/" .. part_name .. "/Hook.png"
-        elseif part_name == "LeftHand" and toc_data["LeftForearm"].has_prosthesis_equipped then
+        elseif part_name == "LeftHand" and toc_data["LeftForearm"].is_prosthesis_equipped then
             name = "media/ui/TOC/" .. part_name .. "/Hook.png"
         end
         return name;
@@ -147,7 +147,7 @@ local function setDescUI(toc_data, part_name)
     descUI.partNameAct = part_name
 
     -- Cut and equip
-    if part_data.is_cut and part_data.is_cicatrized and part_data.has_prosthesis_equipped then
+    if part_data.is_cut and part_data.is_cicatrized and part_data.is_prosthesis_equipped then
         descUI["textEtat"]:setText("Cut and healed")
         descUI["textEtat"]:setColor(1, 0, 1, 0)
         descUI["b1"]:setText("Unequip")
@@ -155,7 +155,7 @@ local function setDescUI(toc_data, part_name)
         descUI["b1"]:setVisible(true)
 
     -- Cut and healed
-    elseif part_data.is_cut and part_data.is_cicatrized and not part_data.has_prosthesis_equipped and part_data.is_amputation_shown then 
+    elseif part_data.is_cut and part_data.is_cicatrized and not part_data.is_prosthesis_equipped and part_data.is_amputation_shown then 
         descUI["textEtat"]:setText("Cut and healed");
         descUI["textEtat"]:setColor(1, 0, 1, 0);
         if part_name == "RightArm" or part_name == "LeftArm" then
@@ -409,8 +409,8 @@ local function descPress(button, args)
         -- TODO Change to correct player
         local modData = player:getModData().TOC;
         -- Do not cut if prothesis equip
-        if (string.find(descUI.partNameAct, "Right") and (modData["RightHand"].has_prosthesis_equipped or modData["RightForearm"].has_prosthesis_equipped)) 
-        or (string.find(descUI.partNameAct, "Left") and (modData["LeftHand"].has_prosthesis_equipped or modData["LeftForearm"].has_prosthesis_equipped)) then
+        if (string.find(descUI.partNameAct, "Right") and (modData["RightHand"].is_prosthesis_equipped or modData["RightForearm"].is_prosthesis_equipped)) 
+        or (string.find(descUI.partNameAct, "Left") and (modData["LeftHand"].is_prosthesis_equipped or modData["LeftForearm"].is_prosthesis_equipped)) then
             player:Say("I need to remove my prosthesis first");
             mainUI:close();
             return false;
@@ -419,9 +419,10 @@ local function descPress(button, args)
     elseif args.option == "Operate" then
         setConfirmUI("Operate");
     elseif args.option == "Equip" then
+        -- TODO this is really janky
         local item = playerInv:getItemFromType('TOC.MetalHand') or playerInv:getItemFromType('TOC.MetalHook') or playerInv:getItemFromType('TOC.WoodenHook');
         if item then
-            ISTimedActionQueue.add(ISInstallProthesis:new(player, item, player:getBodyDamage():getBodyPart(TOC_getBodyPart(descUI.partNameAct))))
+            ISTimedActionQueue.add(ISInstallProsthesis:new(player, item, player:getBodyDamage():getBodyPart(TOC_getBodyPart(descUI.partNameAct))))
         else
             player:Say("I need a prosthesis");
         end

@@ -22,8 +22,8 @@ function TheOnlyCure.CheckIfCanPickUpItem(toc_data, side, limb, secondary_limb)
     local full_secondary_limb = side .. secondary_limb
 
 
-    return toc_data[full_primary_limb].is_cut and not (toc_data[full_primary_limb].has_prosthesis_equipped or toc_data[full_secondary_limb]) or
-            (toc_data[full_secondary_limb].is_cut and not toc_data[full_secondary_limb].has_prosthesis_equipped)
+    return toc_data[full_primary_limb].is_cut and not (toc_data[full_primary_limb].is_prosthesis_equipped or toc_data[full_secondary_limb]) or
+            (toc_data[full_secondary_limb].is_cut and not toc_data[full_secondary_limb].is_prosthesis_equipped)
 
     
 end
@@ -210,8 +210,8 @@ function TheOnlyCure.UpdateEveryTenMinutes()
 
 
     --Experience for prosthesis
-    if toc_data.RightHand.has_prosthesis_equipped  or toc_data.RightForearm.has_prosthesis_equipped   then player:getXp():AddXP(Perks.RightHand, 4) end
-    if toc_data.LeftHand.has_prosthesis_equipped   or toc_data.LeftForearm.has_prosthesis_equipped    then player:getXp():AddXP(Perks.LeftHand, 4) end
+    if toc_data.RightHand.is_prosthesis_equipped  or toc_data.RightForearm.is_prosthesis_equipped   then player:getXp():AddXP(Perks.RightHand, 4) end
+    if toc_data.LeftHand.is_prosthesis_equipped   or toc_data.LeftForearm.is_prosthesis_equipped    then player:getXp():AddXP(Perks.LeftHand, 4) end
 
     -- Updates the cicatrization timesssss
     for _, part_name in pairs(GetBodyParts()) do
