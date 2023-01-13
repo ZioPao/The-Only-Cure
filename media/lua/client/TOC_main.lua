@@ -160,8 +160,8 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
             body_part_type:SetBitten(false)
 
             -- Second check, let's see if there is any other infected limb.
-            if TheOnlyCure.CheckIfStillInfected(toc_data) == false then
-                TheOnlyCure.CureInfection(body_damage)
+            if CheckIfStillInfected(toc_data) == false then
+                CureInfection(body_damage)
                 getPlayer():Say("I'm gonna be fine")
             else
                 getPlayer():Say("I'm still gonna die...")
@@ -211,7 +211,7 @@ function TheOnlyCure.OperateLimb(part_name, surgeon_factor, use_oven)
 
     end
 
-    TheOnlyCure.SetBodyPartsStatusAfterOperation(player, toc_data, part_name, use_oven)
+    SetBodyPartsStatusAfterOperation(player, toc_data, part_name, use_oven)
     player:transmitModData()
 end
 

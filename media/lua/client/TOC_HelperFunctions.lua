@@ -1,5 +1,6 @@
 -- CutLimb
-function TheOnlyCure.CheckIfStillInfected(toc_data)
+-- TODO if TheONlyCure. triggers an errors
+function CheckIfStillInfected(toc_data)
     if toc_data == nil then
         return
     end
@@ -21,7 +22,8 @@ function TheOnlyCure.CheckIfStillInfected(toc_data)
 end
 
 
-function TheOnlyCure.CureInfection(body_damage)
+-- TODO this triggers an error
+function CureInfection(body_damage)
     body_damage:setInfected(false)
     body_damage:setInfectionMortalityDuration(-1)
     body_damage:setInfectionTime(-1)
@@ -38,7 +40,7 @@ end
 
 
 -- OperateLimb
-function TheOnlyCure.SetBodyPartsStatusAfterOperation(player, toc_data, part_name, use_oven)
+function SetBodyPartsStatusAfterOperation(player, toc_data, part_name, use_oven)
     --for _, v in ipairs(GetBodyParts()) do
 
 

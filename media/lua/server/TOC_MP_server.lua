@@ -1,5 +1,5 @@
 --- A rly big thx to Fenris_Wolf and Chuck to help me with that. Love you guy
-if isClient() then return end
+--if isClient() then return end
 
 ---Server side
 local Commands = {}
@@ -7,44 +7,6 @@ Commands["SendServer"] = function(player, arg)
     local otherPlayer = getPlayerByOnlineID(arg["To"])
     print("The Only Cure Command: ", arg['command'])
     sendServerCommand(otherPlayer, "TOC", arg["command"], arg)
-end
-
-function SendCutLimb(player, part_name, surgeon_factor, bandage_table, painkiller_table)
-    local arg = {}
-    arg["From"] = getPlayer():getOnlineID()
-    arg["To"] = player:getOnlineID()
-    arg["command"] = "CutLimb"
-    arg["toSend"] = {part_name, surgeon_factor, bandage_table, painkiller_table}
-    sendClientCommand("TOC", "SendServer", arg)
-end
-
-function SendOperateLimb(player, part_name, surgeon_factor, use_oven)
-    local arg = {}
-    arg["From"] = getPlayer():getOnlineID()
-    arg["To"] = player:getOnlineID()
-    arg["command"] = "OperateLimb"
-    arg["toSend"] = {part_name, surgeon_factor, use_oven}
-    sendClientCommand("TOC", "SendServer", arg)
-end
-
-function AskCanCutLimb(player, part_name)
-    GetConfirmUIMP().responseReceive = false;
-    local arg = {};
-    arg["From"] = getPlayer():getOnlineID();
-    arg["To"] = player:getOnlineID();
-    arg["command"] = "CanCutLimb";
-    arg["toSend"] = part_name;
-    sendClientCommand("TOC", "SendServer", arg);
-end
-
-function AskCanOperateLimb(player, part_name)
-    GetConfirmUIMP().responseReceive = false;
-    local arg = {};
-    arg["From"] = getPlayer():getOnlineID();
-    arg["To"] = player:getOnlineID();
-    arg["command"] = "CanOperateArm";
-    arg["toSend"] = part_name;
-    sendClientCommand("TOC", "SendServer", arg);
 end
 
 local function OnTocClientCommand(module, command, player, args)
@@ -62,7 +24,7 @@ local function OnTocClientCommand(module, command, player, args)
             local surgeon_id = args[1]
             local toc_data = args[2]
             sendServerCommand(surgeon, "TOC", "SendTocData", {surgeon_id, toc_data})
-        elseif command == Commands[command] then
+        elseif Commands[command] then
             args = args or {}
             Commands[command](_, args)
         end

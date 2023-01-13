@@ -21,8 +21,8 @@ local function OperateLocal(_, patient, surgeon, part_name, use_oven)
     end
 end
 
-
-function TheOnlyCure.TryActionOnOtherPlayerLocal(_, part_name, action, surgeon, patient)
+--TODO Make the name more unique
+function TryActionOnOtherPlayerLocal(_, part_name, action, surgeon, patient)
 
     local ui = GetConfirmUIMP()
     if not ui then
@@ -32,14 +32,12 @@ function TheOnlyCure.TryActionOnOtherPlayerLocal(_, part_name, action, surgeon, 
 
     if action == "Cut" then
         AskCanCutLimb(patient, part_name)
-        --AskCanCutArm(patient, part_name);
     elseif action == "Operate" then
         AskCanOperateLimb(patient, part_name)
-        --AskCanOperateArm(patient, part_name);
     end
-    ui.actionAct = action;
-    ui.partNameAct = part_name;
-    ui.patient = patient;
+    ui.actionAct = action
+    ui.partNameAct = part_name
+    ui.patient = patient
     SetConfirmUIMP("Wait server")
 end
 
@@ -90,6 +88,23 @@ function ISWorldObjectContextMenu.OnFillTOCMenu(player, context, worldObjects, t
                                 local cutMenu = context:getNew(context);
                                 local operateMenu = context:getNew(context);
 
+
+                                -- admin stuff
+                                if clickedPlayer:getAccessLevel() == "Admin" then
+                                    local cheat_option = rootMenu:addOption("Cheat")
+                                    local cheat_menu = context:getNew(context)
+                                    context:addSubMenu(cheat_option, cheat_menu)
+
+
+                                    if clickedPlayer == player_obj then
+                                        cheat_menu:addOption("Reset TOC for me", worldObjects, ResetEverything, clickedPlayer)
+
+                                    else
+                                        cheat_menu:addOption("Reset TOC for " .. clickedPlayer:getUsername(), worldObjects, AskCanResetEverything, clickedPlayer)
+
+                                    end
+                                end
+
                                 context:addSubMenu(rootOption, rootMenu);
                                 context:addSubMenu(cutOption, cutMenu);
                                 context:addSubMenu(operateOption, operateMenu);
@@ -105,8 +120,8 @@ function ISWorldObjectContextMenu.OnFillTOCMenu(player, context, worldObjects, t
                                         cutMenu:addOption(getText('UI_ContextMenu_' .. v_part), worldObjects, CutLocal, player_obj, player_obj, v_part)
                                         operateMenu:addOption(getText('UI_ContextMenu_' .. v_part), worldObjects, OperateLocal,  player_obj, player_obj, v_part)
                                     else
-                                        cutMenu:addOption(getText('UI_ContextMenu_' .. v_part), worldObjects, TheOnlyCure.TryActionOnOtherPlayerLocal, v_part, "Cut", player_obj, clickedPlayer)
-                                        operateMenu:addOption(getText('UI_ContextMenu_' .. v_part), worldObjects, TheOnlyCure.TryActionOnOtherPlayerLocal, v_part, "Operate", player_obj, clickedPlayer);
+                                        cutMenu:addOption(getText('UI_ContextMenu_' .. v_part), worldObjects, TryActionOnOtherPlayerLocal, v_part, "Cut", player_obj, clickedPlayer)
+                                        operateMenu:addOption(getText('UI_ContextMenu_' .. v_part), worldObjects, TryActionOnOtherPlayerLocal, v_part, "Operate", player_obj, clickedPlayer);
     
                                     end
 

@@ -12,6 +12,56 @@ Commands["ResponseCanAct"] = function(arg)
     ui.responseActionIsBitten = getPlayerByOnlineID(arg["From"]):getBodyDamage():getBodyPart(TOC_getBodyPart(ui.responsePartName)):bitten()
 end
 
+
+function SendCutLimb(player, part_name, surgeon_factor, bandage_table, painkiller_table)
+    local arg = {}
+    arg["From"] = getPlayer():getOnlineID()
+    arg["To"] = player:getOnlineID()
+    arg["command"] = "CutLimb"
+    arg["toSend"] = {part_name, surgeon_factor, bandage_table, painkiller_table}
+    sendClientCommand("TOC", "SendServer", arg)
+end
+
+function SendOperateLimb(player, part_name, surgeon_factor, use_oven)
+    local arg = {}
+    arg["From"] = getPlayer():getOnlineID()
+    arg["To"] = player:getOnlineID()
+    arg["command"] = "OperateLimb"
+    arg["toSend"] = {part_name, surgeon_factor, use_oven}
+    sendClientCommand("TOC", "SendServer", arg)
+end
+
+function AskCanCutLimb(player, part_name)
+    GetConfirmUIMP().responseReceive = false;
+    local arg = {};
+    arg["From"] = getPlayer():getOnlineID();
+    arg["To"] = player:getOnlineID();
+    arg["command"] = "CanCutLimb";
+    arg["toSend"] = part_name;
+    sendClientCommand("TOC", "SendServer", arg);
+end
+
+function AskCanOperateLimb(player, part_name)
+    GetConfirmUIMP().responseReceive = false;
+    local arg = {};
+    arg["From"] = getPlayer():getOnlineID();
+    arg["To"] = player:getOnlineID();
+    arg["command"] = "CanOperateLimb";
+    arg["toSend"] = part_name;
+    sendClientCommand("TOC", "SendServer", arg);
+end
+
+
+function AskCanResetEverything(_, other_player)
+    GetConfirmUIMP().responseReceive = false;
+    local arg = {}
+    arg["From"] = getPlayer():getOnlineID()
+    arg["To"] = other_player:getOnlineID()
+    arg["command"] = "CanResetEverything"
+    arg["toSend"] = {}
+    sendClientCommand("TOC", "SendServer", arg)
+end
+
 -- Patient (receive)
 Commands["CutLimb"] = function(arg)
     local arg = arg["toSend"]
@@ -20,7 +70,7 @@ end
 
 Commands["OperateLimb"] = function(arg)
     local arg = arg["toSend"]
-    OperateLimb(arg[1], arg[2], arg[3])
+    TheOnlyCure.OperateLimb(arg[1], arg[2], arg[3])
 end
 
 Commands["CanCutLimb"] = function(arg)
@@ -43,6 +93,21 @@ Commands["CanOperateLimb"] = function(arg)
     sendClientCommand("TOC", "SendServer", arg)
 end
 
+Commands["CanResetEverything"] = function(arg)
+    local arg = arg["toSend"]       --useless
+    
+    arg["To"] = arg["From"]
+    arg["From"] = getPlayer():getOnlineID()
+    arg["command"] = "ResponseCanAct"
+    arg["toSend"] = {}
+    sendClientCommand("TOC", "SendServer", arg)
+    --ResetEverything()
+end
+
+Commands["ResetEverything"] = function(arg)
+    local arg = arg["toSend"]
+    ResetEverything()
+end
 
 local function OnTocServerCommand(module, command, args)
     if module == 'TOC' then
