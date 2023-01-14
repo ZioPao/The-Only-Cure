@@ -51,6 +51,20 @@ function TryTheOnlyCureActionOnAnotherPlayer(_, part_name, action, surgeon, pati
 end
 
 
+
+function TryTocActionOnAnotherPlayer(_, part_name, action, surgeon, patient)
+
+
+    if action == "Cut" then
+        AskCanCutLimb(patient, part_name)
+
+    elseif action == "Operate" then
+        AskCanOperateLimb(patient, part_name)
+
+    end
+
+end
+
 local function CheckIfCanBeOperated(modData)
     if modData.TOC.RightHand.is_cut and not modData.TOC.RightHand.is_operated
     or modData.TOC.RightForearm.is_cut and not modData.TOC.RightForearm.is_operated
@@ -73,21 +87,6 @@ local function CloseAllMenus(player_index)
 
     end
 end
-
-
--- Declare context menus here so we can access them later
-function ISWorldObjectContextMenu.OnFillTOCMenu(player, context, worldObjects, test)
-
-
-   
-end
-
-
-function ISWorldObjectContextMenu.OnFillOperateWithOven(player, context, worldObjects, test)
-  
-end
-
-
 
 ----------------------------------------------------------------------------------------------------------
 
