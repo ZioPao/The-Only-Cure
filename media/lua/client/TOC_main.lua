@@ -116,7 +116,7 @@ function TheOnlyCure.DeclareTraits()
     TraitFactory.setMutualExclusive("amputee2", "amputee3")
 end
 
-
+-- ModOptions implement it you cuck
 
 
 
