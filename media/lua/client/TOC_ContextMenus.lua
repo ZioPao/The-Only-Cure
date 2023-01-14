@@ -1,7 +1,7 @@
 
 -- TODO rewrite this mess
 
-local function CutLocal(_, patient, surgeon, part_name)
+function TocCutLocal(_, patient, surgeon, part_name)
     if GetSawInInventory(surgeon) ~= nil then
         ISTimedActionQueue.add(ISCutLimb:new(patient, surgeon, part_name));
     else
@@ -9,7 +9,7 @@ local function CutLocal(_, patient, surgeon, part_name)
     end
 end
 
-local function OperateLocal(_, patient, surgeon, part_name, use_oven)
+function TocOperateLocal(_, patient, surgeon, part_name, use_oven)
     --local player = getPlayer();
     -- todo add a check if the player has already been amputated or somethin
     if use_oven then
@@ -47,7 +47,7 @@ function TryTheOnlyCureActionOnAnotherPlayer(_, part_name, action, surgeon, pati
     ui.actionAct = action
     ui.partNameAct = part_name
     ui.patient = patient
-    SetActionConfirmUIMP("Wait server")
+    SendCommandToConfirmUIMP("Wait server")
 end
 
 
@@ -213,9 +213,9 @@ TocContextMenus.FillCutAndOperateMenus = function(local_player, clicked_player, 
 
         if local_player == clicked_player then        -- Local player
             if TheOnlyCure.CheckIfCanBeCut(local_toc_data, v) then
-                cut_menu:addOption(getText('UI_ContextMenu_' .. v), _, CutLocal, local_player, local_player, v)
+                cut_menu:addOption(getText('UI_ContextMenu_' .. v), _, TocCutLocal, local_player, local_player, v)
             elseif TheOnlyCure.CheckIfCanBeOperated(local_toc_data, v) then
-                operate_menu:addOption(getText('UI_ContextMenu_' .. v), _, OperateLocal,  local_player, local_player, v)
+                operate_menu:addOption(getText('UI_ContextMenu_' .. v), _, TocOperateLocal,  local_player, local_player, v)
             end
             
         else    -- Another player
