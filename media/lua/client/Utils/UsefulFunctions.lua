@@ -30,7 +30,7 @@ function GetAcceptingProsthesisBodyParts()
 end
 
 
-
+-- TODO ew
 function find_clothName_TOC(bodyPart)
     if bodyPart:getType()       == BodyPartType.Hand_R      then return "TOC.ArmRight_noHand"
     elseif bodyPart:getType()   == BodyPartType.ForeArm_R   then return "TOC.ArmRight_noForearm"

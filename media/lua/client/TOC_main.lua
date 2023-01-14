@@ -2,7 +2,16 @@ if not TheOnlyCure then
     TheOnlyCure = {}
 end
 
+
+-- TODO this is gonna break a lot of stuff, don't do this you ass
 -- GLOBAL STRINGS
+
+
+
+
+-- TODO Unify Context Menus check with TOC Menu UI 
+
+
 Left = "Left"
 Right = "Right"
 
@@ -115,10 +124,6 @@ function TheOnlyCure.DeclareTraits()
     TraitFactory.setMutualExclusive("amputee1", "amputee3")
     TraitFactory.setMutualExclusive("amputee2", "amputee3")
 end
-
--- ModOptions implement it you cuck
-
-
 
 
 -----------------------------------------------------------------------

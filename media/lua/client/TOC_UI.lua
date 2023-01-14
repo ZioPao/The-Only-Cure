@@ -82,6 +82,7 @@ end
         if name == "LeftArm"        then return "ArmLeft_Prot" end
     end
 
+    -- TODO ew
     function find_itemWorn_TOC(partName)
         local wornItems = getPlayer():getWornItems();
         for i=1,wornItems:size()-1 do -- Maybe wornItems:size()-1
@@ -256,10 +257,10 @@ local function setConfirmUI(action)
     confirmUI:open()
     if action == "Cut" then
         if isPlayerHaveBandage() and isPlayerHavePainkiller() then
-            confirmUI["text2"]:setText("You have bandage and painkiller");
+            confirmUI["text2"]:setText("You have a bandage and some painkillers");
             confirmUI["text2"]:setColor(1, 0, 1, 0);
         else
-            confirmUI["text2"]:setText("You miss bandage or painkiller");
+            confirmUI["text2"]:setText("You do not have a bandage or painkillers");
             confirmUI["text2"]:setColor(1, 1, 0, 0);
         end
 
@@ -329,25 +330,65 @@ function SetConfirmUIMP(action, isBitten, userName, partName)
 end
 
 local function setImageMainUI(toc_data)
-    mainUI["b11"]:setPath(getImageName("RightArm", toc_data));
-    mainUI["b12"]:setPath(getImageName("LeftArm", toc_data));
 
-    mainUI["b21"]:setPath(getImageName("RightForearm", toc_data));
-    mainUI["b22"]:setPath(getImageName("LeftForearm", toc_data));
+    if toc_data then
+        mainUI["b11"]:setPath(getImageName("RightArm", toc_data))
+        mainUI["b12"]:setPath(getImageName("LeftArm", toc_data))
+    
+        mainUI["b21"]:setPath(getImageName("RightForearm", toc_data))
+        mainUI["b22"]:setPath(getImageName("LeftForearm", toc_data))
+    
+        mainUI["b31"]:setPath(getImageName("RightHand", toc_data))
+        mainUI["b32"]:setPath(getImageName("LeftHand", toc_data))
+    end
 
-    mainUI["b31"]:setPath(getImageName("RightHand", toc_data));
-    mainUI["b32"]:setPath(getImageName("LeftHand", toc_data));
 end
+
+
+
+
+local function ConfirmPress(button, args)
+    -- For both SP and MP
+
+    local surgeon, patient
+
+    if confirmUI.actionAct == "Cut" then
+        if args.option == "yes" then
+            ISTimedActionQueue.add(ISCutLimb:new(patient, surgeon, descUI.partNameAct))
+
+        else
+            surgeon:Say("Nevermind")
+        end
+    end
+
+
+    if confirmUI.actionAct == "Operate" then
+        
+        
+    end
+
+end
+
+
 
 
 -- Functions for button of UIs
 local function confirmPress(button, args)
-    local player = getPlayer();
+    local player = getPlayer()
     if confirmUI.actionAct == "Cut" then
         if args.option == "yes" then
-            ISTimedActionQueue.add(ISCutLimb:new(player, player, descUI.partNameAct))
+            -- TODO this is wrong! 
+
+            if args.patient ~= args.surgeon then
+                TryTheOnlyCureActionOnAnotherPlayer(_, descUI.partNameAct, "Cut", args.surgeon, args.patient)
+            else
+                ISTimedActionQueue.add(ISCutLimb:new(args.patient, args.surgeon, descUI.partNameAct))
+
+            end
+
+
         else
-            getPlayer():Say("Never mind");
+            getPlayer():Say("Nevermind");
         end
     end
     if confirmUI.actionAct == "Operate" then
@@ -355,7 +396,7 @@ local function confirmPress(button, args)
             local playerInv = player:getInventory();
             local item = playerInv:getItemFromType('TOC.Real_surgeon_kit') or playerInv:getItemFromType('TOC.Surgeon_kit') or playerInv:getItemFromType('TOC.Improvised_surgeon_kit');
             if item then
-                ISTimedActionQueue.add(ISOperateArm:new(player, player, item, descUI.partNameAct, false));
+                ISTimedActionQueue.add(ISOperateLimb:new(patient, surgeon, item, descUI.partNameAct, false));
             else
                 player:Say("I need a kit");
             end
@@ -382,7 +423,7 @@ local function confirmPressMP(button, args)
             local item = playerInv:getItemFromType('TOC.Real_surgeon_kit') or playerInv:getItemFromType('TOC.Surgeon_kit') or playerInv:getItemFromType('TOC.Improvised_surgeon_kit');
             if item then
                 getPlayer():Say("Don't move! Ok?");
-                ISTimedActionQueue.add(ISOperateArm:new(confirmUIMP.patient, player, item, confirmUIMP.partNameAct, false));
+                ISTimedActionQueue.add(ISOperateLimb:new(confirmUIMP.patient, player, item, confirmUIMP.partNameAct, false));
             else
                 player:Say("I need a kit");
             end
@@ -428,21 +469,45 @@ local function descPress(button, args)
         end
         mainUI:close();
     elseif args.option == "Unequip" then
-        ISTimedActionQueue.add(ISUninstallProthesis:new(player, find_itemWorn_TOC(descUI.partNameAct), player:getBodyDamage():getBodyPart(TOC_getBodyPart(descUI.partNameAct))));
+        ISTimedActionQueue.add(ISUninstallProsthesis:new(player, find_itemWorn_TOC(descUI.partNameAct), player:getBodyDamage():getBodyPart(TOC_getBodyPart(descUI.partNameAct))));
         mainUI:close();
     end
 end
 
 
 -- Make the UIS
-local function SetCorrectArgsMainUI(toc_data)
+local function SetCorrectArgsMainUI(surgeon, patient, toc_data)
     -- TODO Make it less shitty
-    mainUI["b11"]:addArg("toc_data", toc_data)
-    mainUI["b12"]:addArg("toc_data", toc_data)
-    mainUI["b21"]:addArg("toc_data", toc_data)
-    mainUI["b22"]:addArg("toc_data", toc_data)
-    mainUI["b31"]:addArg("toc_data", toc_data)
-    mainUI["b32"]:addArg("toc_data", toc_data)
+    if toc_data then
+        mainUI["b11"]:addArg("surgeon", surgeon)
+        mainUI["b11"]:addArg("patient", patient)
+        mainUI["b11"]:addArg("toc_data", toc_data)
+
+
+
+        mainUI["b12"]:addArg("toc_data", toc_data)
+        mainUI["b12"]:addArg("patient", patient)
+        mainUI["b12"]:addArg("surgeon", surgeon)
+
+        mainUI["b21"]:addArg("toc_data", toc_data)
+        mainUI["b21"]:addArg("patient", patient)
+        mainUI["b21"]:addArg("surgeon", surgeon)
+
+        mainUI["b22"]:addArg("toc_data", toc_data)
+        mainUI["b22"]:addArg("patient", patient)
+        mainUI["b22"]:addArg("surgeon", surgeon)
+
+        mainUI["b31"]:addArg("toc_data", toc_data)
+        mainUI["b31"]:addArg("patient", patient)
+        mainUI["b31"]:addArg("surgeon", surgeon)
+
+        mainUI["b32"]:addArg("toc_data", toc_data)
+        mainUI["b32"]:addArg("patient", patient)
+        mainUI["b32"]:addArg("surgeon", surgeon)
+
+    end
+
+
 end
 
 
@@ -525,9 +590,9 @@ local function makeDescUI()
     descUI:saveLayout();
 end
 
-local function makeConfirmUI()
+local function makeConfirmUI(surgeon, patient)
     confirmUI = NewUI();
-    confirmUI:isSubUIOf(descUI);
+    confirmUI:isSubUIOf(descUI)
 
     confirmUI:addText("text1", "Are you sure ?", "Title", "Center");
     confirmUI:setLineHeightPixel(getTextManager():getFontHeight(confirmUI.text1.font) + 10)
@@ -545,6 +610,8 @@ local function makeConfirmUI()
     confirmUI:addEmpty();
     confirmUI:addButton("b1", "Yes", confirmPress);
     confirmUI.b1:addArg("option", "yes");
+
+
     confirmUI:addEmpty();
     confirmUI:addButton("b2", "No", confirmPress);
     confirmUI:addEmpty();
@@ -597,9 +664,9 @@ function OnCreateTheOnlyCureUI()
     -- how do we pass the correct player here?
     --print(self.character)
 
-    makeMainUI();
-	makeDescUI();
-    makeConfirmUI();
+    makeMainUI()
+	makeDescUI()
+    makeConfirmUI()
 
     if isClient() then MakeConfirmUIMP() end
     mainUI:close()
@@ -612,52 +679,45 @@ Events.OnCreateUI.Add(OnCreateTheOnlyCureUI)
 function ISNewHealthPanel.onClick_TOC(button)
 
 
+    -- TODO only visuals work, right now you're gonna cut your own limbs 
     -- button.character is patient
     -- button.otherPlayer is surgeon 
-    if button.otherPlayer then  
+    if button.otherPlayer then
         if button.character ~= button.otherPlayer then
             sendClientCommand(button.otherPlayer, "TOC", "GetPlayerData",  {button.otherPlayer:getOnlineID(), button.character:getOnlineID()})
-
-            if MP_other_player_toc_data == nil then
-                print("MP_other_player_toc_data is still nil")
-            else
-                SetCorrectArgsMainUI(MP_other_player_toc_data)      --other player is the surgeon
-
-            end
-          
+            
+            SetCorrectArgsMainUI(button.otherPlayer, button.character, MP_other_player_toc_data)      --other player is the surgeon
+            setImageMainUI(MP_other_player_toc_data)
+            SetCorrectConfirmUI(button.otherPlayer, button.character)
 
         else
-            SetCorrectArgsMainUI(getPlayer():getModData().TOC)      --myself?
+            SetCorrectArgsMainUI(getPlayer():getModData().TOC)      --myself
+            setImageMainUI(getPlayer():getModData().TOC)
 
+            -- TODO this is wrong, we're still checking for the other player... probably?
         end
     else
-        SetCorrectArgsMainUI(getPlayer():getModData().TOC)      --myself?
+        SetCorrectArgsMainUI(getPlayer():getModData().TOC)      --myself
+        setImageMainUI(getPlayer():getModData().TOC)
+        SetCorrectConfirmUI(getPlayer(), getPlayer())       -- TODO just for test
+
 
     end
 
 
     mainUI:toggle()
-
-
     mainUI:setInCenterOfScreen()
 
+end
 
-    if button.otherPlayer then
 
-        if button.character ~= button.otherPlayer then
-            sendClientCommand(button.otherPlayer, "TOC", "GetPlayerData",  {button.otherPlayer:getOnlineID(), button.character:getOnlineID()})
-            setImageMainUI(MP_other_player_toc_data)
-    
-        else
-            setImageMainUI(getPlayer():getModData().TOC)
-    
-        end
-    else
-        setImageMainUI(getPlayer():getModData().TOC)
-
-    end
+function SetCorrectConfirmUI(surgeon, patient)
+    confirmUI.b1:addArg("surgeon", surgeon)
+    confirmUI.b1:addArg("patient", patient)
 
 end
+
+
 
 local ISHealthPanel_createChildren = ISHealthPanel.createChildren
 

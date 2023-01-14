@@ -17,6 +17,19 @@
         "getPlayerInventory",
         "sendServerCommand",
         "TraitFactory",
-        "ISWorldObjectContextMenu"
+        "ISWorldObjectContextMenu",
+        "getCell",
+        "getSpecificPlayer",
+        "_",
+        "NewUI",
+        "getTextManager",
+        "isClient",
+        "ISHealthPanel",
+        "ModOptions",
+        "ISNewHealthPanel",
+        "ISButton",
+        "getCore",
+        "ProfessionFactory",
+        "BaseGameCharacterDetails"
     ]
 }

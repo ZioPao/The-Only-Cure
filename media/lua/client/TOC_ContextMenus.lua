@@ -29,9 +29,10 @@ function TryToToResetEverythingOtherPlayer(_, patient, surgeon)
     sendClientCommand(surgeon, "TOC", "AskToResetEverything", {patient:getOnlineID()})
 end
 
---TODO Make the name more unique
-function TryActionOnOtherPlayerLocal(_, part_name, action, surgeon, patient)
 
+function TryTheOnlyCureActionOnAnotherPlayer(_, part_name, action, surgeon, patient)
+    -- TODO add checks so that we don't show these menus if a player has already beeen operated or amputated
+    -- TODO at this point surgeon doesnt do anything. We'll fix this later
     local ui = GetConfirmUIMP()
     if not ui then
         MakeConfirmUIMP()
@@ -94,83 +95,38 @@ TocContextMenus = {}
 
 
 TocContextMenus.CreateMenus = function(player, context, worldObjects, test)
-    local clickedPlayersTable = {}      --todo awful workaround
-    local clickedPlayer = nil
+    local clicked_players_table = {}
+    local clicked_player = nil
 
-    local player_obj = getSpecificPlayer(player)
+    local local_player = getSpecificPlayer(player)
     --local players = getOnlinePlayers()     
 
     for k,v in ipairs(worldObjects) do
-            -- help detecting a player by checking nearby squares
+        -- help detecting a player by checking nearby squares
         for x=v:getSquare():getX()-1,v:getSquare():getX()+1 do
             for y=v:getSquare():getY()-1,v:getSquare():getY()+1 do
-                local sq = getCell():getGridSquare(x,y,v:getSquare():getZ());
+                local sq = getCell():getGridSquare(x,y,v:getSquare():getZ())
                 if sq then
                     for i=0,sq:getMovingObjects():size()-1 do
                         local o = sq:getMovingObjects():get(i)
                         if instanceof(o, "IsoPlayer") then
-                            clickedPlayer = o
+                            clicked_player = o
 
-                            if clickedPlayersTable[clickedPlayer:getUsername()] == nil then
-                                clickedPlayersTable[clickedPlayer:getUsername()] = true
+                            if clicked_players_table[clicked_player:getUsername()] == nil then
+
+                                -- FIXME this is to prevent context menu spamming. Find a better way
+                                clicked_players_table[clicked_player:getUsername()] = true
                                 
-                                local rootOption = context:addOption("The Only Cure on " .. clickedPlayer:getUsername())
-                                local rootMenu = context:getNew(context)
-                                local cutOption = rootMenu:addOption("Cut");
-                                local operateOption = rootMenu:addOption("Operate");
-                                local cutMenu = context:getNew(context);
-                                local operateMenu = context:getNew(context);
+                                local root_option = context:addOption("The Only Cure on " .. clicked_player:getUsername())
+                                local root_menu = context:getNew(context)
 
+                                local cut_menu = TocContextMenus.CreateNewMenu("Cut", context, root_menu)
+                                local operate_menu = TocContextMenus.CreateNewMenu("Operate", context, root_menu)
+                                local cheat_menu = TocContextMenus.CreateCheatMenu(context, root_menu, local_player, clicked_player)
+                                context:addSubMenu(root_option, root_menu)
 
-                                -- admin stuff
-                                if player_obj:getAccessLevel() == "Admin" then
-                                    local cheat_option = rootMenu:addOption("Cheat")
-                                    local cheat_menu = context:getNew(context)
-                                    context:addSubMenu(cheat_option, cheat_menu)
-
-
-                                    if clickedPlayer == player_obj then
-                                        cheat_menu:addOption("Reset TOC for me", worldObjects, ResetEverything)
-
-                                    else
-                                        cheat_menu:addOption("Reset TOC for " .. clickedPlayer:getUsername(), worldObjects, TryToToResetEverythingOtherPlayer, clickedPlayer, player_obj)
-
-                                    end
-                                end
-
-                                context:addSubMenu(rootOption, rootMenu);
-                                context:addSubMenu(cutOption, cutMenu);
-                                context:addSubMenu(operateOption, operateMenu);
-                                -- todo add checks so that we don't show these menus if a player has already beeen operated or amputated
-
-
-                                local player_toc_data = getPlayer():getModData().TOC
-
-                                for k_part, v_part in ipairs(GetBodyParts()) do
-
-                                    --todo right now it doesnt check for a saw.
-                                    if clickedPlayer == player_obj then
-                                        
-
-                                        if player_toc_data[v_part].is_cut == false then
-                                            cutMenu:addOption(getText('UI_ContextMenu_' .. v_part), worldObjects, CutLocal, player_obj, player_obj, v_part)
-                                        elseif player_toc_data[v_part].is_operated == false and player_toc_data[v_part].is_amputation_shown then
-                                            operateMenu:addOption(getText('UI_ContextMenu_' .. v_part), worldObjects, OperateLocal,  player_obj, player_obj, v_part)
-
-                                        end
-                                    else
-                                        --TODO Make it so cut limbs do not appear in the Cut Menu
-                                        --if clickedPlayer.getModData().TOC[v_part].is_cut == false then
-                                        cutMenu:addOption(getText('UI_ContextMenu_' .. v_part), worldObjects, TryActionOnOtherPlayerLocal, v_part, "Cut", player_obj, clickedPlayer)
-                                        --elseif clickedPlayer.getModData().TOC[v_part].is_operated == false then
-                                        operateMenu:addOption(getText('UI_ContextMenu_' .. v_part), worldObjects, TryActionOnOtherPlayerLocal, v_part, "Operate", player_obj, clickedPlayer);
-                                        --end
-    
-                                    end
-
-                                   
-                                end
-
+                                TocContextMenus.FillCutAndOperateMenus(local_player, clicked_player, worldObjects, cut_menu, operate_menu)
+                                --TocContextMenus.FillCheatMenu(context, cheat_menu)
 
                                 break
                             end
@@ -237,6 +193,70 @@ TocContextMenus.DoCut = function(_, patient, surgeon, part_name)
 end
 
 
+
+TocContextMenus.CreateNewMenu = function(name, context, root_menu)
+
+    local new_option = root_menu:addOption(name)
+    local new_menu = context:getNew(context)
+    context:addSubMenu(new_option, new_menu)
+
+    return new_menu
+end
+
+
+
+TocContextMenus.FillCutAndOperateMenus = function(local_player, clicked_player, world_objects, cut_menu, operate_menu)
+
+    local local_toc_data = local_player:getModData().TOC
+
+    for _, v in ipairs(GetBodyParts()) do
+
+
+        if local_player == clicked_player then        -- Local player
+            if TheOnlyCure.CheckIfCanBeCut(local_toc_data, v) then
+                cut_menu:addOption(getText('UI_ContextMenu_' .. v), _, CutLocal, local_player, local_player, v)
+            elseif TheOnlyCure.CheckIfCanBeOperated(local_toc_data, v) then
+                operate_menu:addOption(getText('UI_ContextMenu_' .. v), _, OperateLocal,  local_player, local_player, v)
+            end
+            
+        else    -- Another player
+            cut_menu:addOption(getText('UI_ContextMenu_' .. v), world_objects, TryTheOnlyCureActionOnAnotherPlayer, v, "Cut", local_player, clicked_player)
+            operate_menu:addOption(getText('UI_ContextMenu_' .. v), world_objects, TryTheOnlyCureActionOnAnotherPlayer, v, "Operate", local_player, clicked_player)
+
+        end
+
+    end
+
+end
+
+
+
+
+TocContextMenus.CreateCheatMenu = function(context, root_menu, local_player, clicked_player)
+    if local_player:getAccessLevel() == "Admin" then
+
+        local cheat_menu = TocContextMenus.CreateNewMenu("Cheat", context, root_menu)
+
+        if clicked_player == local_player then
+            cheat_menu:addOption("Reset TOC for me", _, ResetEverything)
+
+        else
+            cheat_menu:addOption("Reset TOC for " .. clicked_player:getUsername(), _, TryToToResetEverythingOtherPlayer, clicked_player, local_player)
+
+        end
+
+        return cheat_menu
+    end
+end
+
+
+TocContextMenus.FillCheatMenus = function(context, cheat_menu)
+
+    if cheat_menu then
+        local cheat_cut_and_fix_menu = TocContextMenus.CreateNewMenu("Cut and Fix", context, cheat_menu)
+
+    end
+end
 
 
 Events.OnFillWorldObjectContextMenu.Add(TocContextMenus.CreateOperateWithOvenMenu)       -- this is probably too much 
