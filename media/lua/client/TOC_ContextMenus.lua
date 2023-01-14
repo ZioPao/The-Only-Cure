@@ -47,23 +47,23 @@ function TryTheOnlyCureActionOnAnotherPlayer(_, part_name, action, surgeon, pati
     ui.actionAct = action
     ui.partNameAct = part_name
     ui.patient = patient
-    SetConfirmUIMP("Wait server")
+    SetActionConfirmUIMP("Wait server")
 end
 
 
 
-function TryTocActionOnAnotherPlayer(_, part_name, action, surgeon, patient)
+-- function TryTocActionOnAnotherPlayer(_, part_name, action, surgeon, patient)
 
 
-    if action == "Cut" then
-        AskCanCutLimb(patient, part_name)
+--     if action == "Cut" then
+--         AskCanCutLimb(patient, part_name)
 
-    elseif action == "Operate" then
-        AskCanOperateLimb(patient, part_name)
+--     elseif action == "Operate" then
+--         AskCanOperateLimb(patient, part_name)
 
-    end
+--     end
 
-end
+-- end
 
 local function CheckIfCanBeOperated(modData)
     if modData.TOC.RightHand.is_cut and not modData.TOC.RightHand.is_operated
@@ -219,6 +219,7 @@ TocContextMenus.FillCutAndOperateMenus = function(local_player, clicked_player, 
             end
             
         else    -- Another player
+            -- TODO add way to prevent cutting already cut parts
             cut_menu:addOption(getText('UI_ContextMenu_' .. v), world_objects, TryTheOnlyCureActionOnAnotherPlayer, v, "Cut", local_player, clicked_player)
             operate_menu:addOption(getText('UI_ContextMenu_' .. v), world_objects, TryTheOnlyCureActionOnAnotherPlayer, v, "Operate", local_player, clicked_player)
 
