@@ -119,7 +119,7 @@ imports
 
 /************************ Prothese cloth ************************/
 
-/* TODO make these not clothing so we cant equip them but only install them via the menu or context menu
+/* TODO make these not clothing so we cant equip them but only install them via the menu or context menu*/
     item WoodenHook_right_noHand
         {
             Weight = 1,

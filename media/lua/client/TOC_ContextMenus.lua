@@ -2,7 +2,7 @@
 -- TODO rewrite this mess
 
 local function CutLocal(_, patient, surgeon, part_name)
-    if IsSawInInventory(surgeon) ~= nil then
+    if GetSawInInventory(surgeon) ~= nil then
         ISTimedActionQueue.add(ISCutLimb:new(patient, surgeon, part_name));
     else
         surgeon:Say("I don't have a saw on me")
@@ -229,7 +229,7 @@ end
 
 TocContextMenus.DoCut = function(_, patient, surgeon, part_name)
 
-    if IsSawInInventory(surgeon) then
+    if GetSawInInventory(surgeon) then
         ISTimedActionQueue.add(ISCutLimb:new(patient, surgeon, part_name));
     else
         surgeon:Say("I don't have a saw on me")

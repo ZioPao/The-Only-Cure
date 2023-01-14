@@ -7,8 +7,10 @@ function GetKitInInventory(surgeon)
 
 end
 
-function IsSawInInventory(surgeon)
-    local playerInv = surgeon:getInventory()
-    local item = playerInv:getItemFromType('Saw') or playerInv:getItemFromType('GardenSaw') or playerInv:getItemFromType('Chainsaw')
+
+function GetSawInInventory(surgeon)
+
+    local player_inv = surgeon:getInventory()
+    local item = player_inv:getItemFromType("Saw") or player_inv:getItemFromType("GardenSaw") or player_inv:getItemFromType("Chainsaw")
     return item
 end

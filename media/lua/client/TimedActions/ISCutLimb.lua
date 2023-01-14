@@ -22,14 +22,23 @@ function ISCutLimb:update()
 end
 
 function ISCutLimb:start()
-    if self.patient == self.surgeon then
-        self:setActionAnim("SawLog")      -- TODO Change it to a better animation
-        --self:setAnimVariable("WearClothingLocation", "Jacket")
-    else
-        self:setActionAnim("SawLog")
-        -- TODO Point at patient 
-        --self.patient:SetVariable("LootPosition", "Mid")
+
+    self:setActionAnim("SawLog")    
+    local saw_item = GetSawInInventory(self.surgeon)
+
+    if saw_item then
+        self:setOverrideHandModels(saw_item:getStaticModel(), nil)
+
     end
+
+
+    local body_part_type = TheOnlyCure.GetBodyPartTypeFromBodyPart(self.part_name)
+    local body_damage = self.patient:getBodyDamage()
+    local body_damage_part = body_damage:getBodyPart(body_part_type)
+
+    body_damage_part:setBleeding(true)
+    body_damage_part:setBleedingTime(ZombRand(10,20))
+
 end
 
 
@@ -92,9 +101,12 @@ function ISCutLimb:perform()
     else
         TheOnlyCure.CutLimb(self.part_name, surgeon_factor, bandage_table, painkiller_table)
     end
+
+
     self.surgeon:getXp():AddXP(Perks.Doctor, 400);
 
     ISBaseTimedAction.perform(self);
+
 end
 
 
@@ -103,7 +115,6 @@ function ISCutLimb:new(patient, surgeon, part_name)
     setmetatable(o, self)
     self.__index = self
     o.part_name = part_name
-    o.bodyPart = TheOnlyCure.GetBodyPartTypeFromBodyPart(part_name)     -- TODO I don't think I need this
     o.character = surgeon -- For anim
 
     o.surgeon = surgeon; -- Surgeon or player that make the operation

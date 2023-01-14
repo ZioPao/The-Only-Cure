@@ -18,20 +18,27 @@ This is the beta of my first mod, it means that the main features are there, but
 
 
 
-[h1]The Only Cure but better[\h1]
+[h1]The Only Cure but better[/h1]
 A working version for SP and MP.
 I'm not gonna bother "adding" stuff, for now.
 If Mr Bounty returns, I'm probably not gonna continue this.
 
+[b][u]DO NOT LOAD THIS WITH THE ONLY CURE BETA!!! CHOOSE ONE![/u][/b]
+
+
 
 [h1]FIXED[/h1]
-- The Only Cure UI not showing in MP
-- Operating with oven completely broken
-- Invisible prosthesis on female models (still WIP, forearms especially)
-
+[list]
+[*]The Only Cure UI in the Medical Check menu not working when checking other players
+[*]The Only Cure context menu on right click
+[*]Operating with oven completely broken
+[*]Invisible prosthesis on female models (still WIP, forearms especially)
+[*]More stuff
+[/list]
 [h1]ADDED[/h1]
-- Debug cheats (MP Compatible) to reset amputations
-- More stuff
+[list]
+[*]Debug cheats (MP Compatible) to reset amputations
+[/list]
 
 Workshop ID: 2915572347
 Mod ID: Amputation2
