@@ -169,7 +169,7 @@ TocContextMenus.CreateOperateWithOvenMenu = function(player, context, worldObjec
                             context:addSubMenu(rootMenu, subMenu)
                             is_main_menu_already_created = true
                         end
-                        subMenu:addOption(getText('UI_ContextMenu_' .. v_bodypart), worldObjects, OperateLocal, getSpecificPlayer(player), getSpecificPlayer(player), v_bodypart, true)
+                        subMenu:addOption(getText('UI_ContextMenu_' .. v_bodypart), worldObjects, TocOperateLocal, getSpecificPlayer(player), getSpecificPlayer(player), v_bodypart, true)
                     end
                 end
             end
