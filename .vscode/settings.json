@@ -30,6 +30,11 @@
         "ISButton",
         "getCore",
         "ProfessionFactory",
-        "BaseGameCharacterDetails"
+        "BaseGameCharacterDetails",
+        "MoodleType",
+        "ISEquipWeaponAction",
+        "triggerEvent",
+        "forceDropHeavyItems",
+        "getPlayerHotbar"
     ]
 }

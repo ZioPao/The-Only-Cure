@@ -212,49 +212,6 @@ local function OnClickTocDescUI(button, args)
 end
 
 
-local function OnClickTocConfirmUI(button, args)
-
-    local surgeon = args.surgeon
-    local patient = args.patient
-
-
-    if confirm_ui.actionAct == "Cut" then
-        if args.option == "yes" then
-            if args.patient ~= args.surgeon then
-                TryTheOnlyCureActionOnAnotherPlayer(_, desc_ui.part_name, "Cut", surgeon, patient)
-            else
-                ISTimedActionQueue.add(ISCutLimb:new(patient, surgeon, desc_ui.part_name))
-            end
-        -- else
-        --     --args.surgeon:Say("Nevermind")
-        -- end
-        end
-
-    elseif confirm_ui.action == "Operate" then
-        if args.option == "yes" then
-            local surgeon_inventory = args.surgeon:getInventory()
-            local item = surgeon_inventory:getItemFromType('TOC.Real_surgeon_kit') or surgeon_inventory:getItemFromType('TOC.Surgeon_kit') or surgeon_inventory:getItemFromType('TOC.Improvised_surgeon_kit')
-            if item then
-
-                if args.patient ~= args.surgeon then
-                    TryTheOnlyCureActionOnAnotherPlayer(_, desc_ui.part_name, "Operate", args.surgeon, args.patient)
-                else
-                    ISTimedActionQueue.add(ISOperateLimb:new(args.patient, args.surgeon, item, desc_ui.part_name, false))
-                end
-            else
-                args.surgeon:Say("I need a kit")
-            end
-        else
-            args.surgeon:Say("Never mind")
-        end
-    end
-
-    main_ui:close()
-end
-
-
-
-
 function OnClickTocConfirmUIMP(button, args)
     local player = getPlayer();
     if confirm_ui_mp.actionAct == "Cut" then
@@ -367,44 +324,6 @@ function CreateTocDescUI()
     desc_ui:saveLayout()
 end
 
-function CreateTocConfirmUI()
-
-    confirm_ui = NewUI()
-    confirm_ui:isSubUIOf(desc_ui)
-
-    --confirm_ui.responseReceive = false
-
-    confirm_ui:addText("text1", "Are you sure?", "Title", "Center");
-    confirm_ui:setLineHeightPixel(getTextManager():getFontHeight(confirm_ui.text1.font) + 10)
-    confirm_ui:nextLine();
-
-    confirm_ui:addText("text4", "", "Medium", "Center");
-    confirm_ui:setLineHeightPixel(getTextManager():getFontHeight(confirm_ui.text4.font) + 10)
-    confirm_ui:nextLine();
-
-    confirm_ui:addText("text2", "", _, "Center");
-    confirm_ui:nextLine();
-
-    confirm_ui:addText("text3", "", _, "Center");
-    confirm_ui:nextLine();
-
-    confirm_ui:addEmpty();
-    confirm_ui:nextLine();
-
-    confirm_ui:addEmpty();
-    confirm_ui:addButton("b1", "Yes", OnClickTocConfirmUI);
-    confirm_ui.b1:addArg("option", "yes");
-    confirm_ui:addEmpty();
-    confirm_ui:addButton("b2", "No", OnClickTocConfirmUI);
-    confirm_ui:addEmpty();
-    
-    confirm_ui:nextLine();
-    confirm_ui:addEmpty();
-
-    confirm_ui:saveLayout();
-    --confirm_ui:addPrerenderFunction(PrerenderFuncMP) -- TODO try to understand what this does before readding it
-    confirm_ui:close();
-end
 
 function CreateTocConfirmUIMP()
     confirm_ui_mp = NewUI()
@@ -606,27 +525,7 @@ function SetupTocConfirmUI(surgeon, patient)
 end
 
 --------------------------------------------
--- Additional confirm 
-
--- function SendCommandToConfirmUI(action)
-
---     confirm_ui.actionAct = action
-
---     confirm_ui:setInCenterOfScreen()
---     confirm_ui:bringToTop()
---     confirm_ui:open()
---     if action == "Cut" then
---         confirm_ui["text2"]:setText("You're gonna amputate a limb")
---         confirm_ui["text2"]:setColor(1, 0, 1, 0)
-
---     elseif action == "Operate" then
---         confirm_ui["text2"]:setText("");
---         confirm_ui["text3"]:setText("You are going to operate " .. getDisplayText_TOC(desc_ui.part_name))
---         confirm_ui["text3"]:setColor(1, 1, 1, 1)
---     end
-
--- end
-
+-- MP Confirm (I should add it to client too but hey)
 
 
 function SendCommandToConfirmUIMP(action, isBitten, userName, partName)
