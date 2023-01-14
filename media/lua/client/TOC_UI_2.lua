@@ -16,34 +16,13 @@ local function PrerenderFuncMP()
                 confirm_ui_mp:close()
             return false;
         end
-        SetActionConfirmUIMP(confirm_ui_mp.responseAction, confirm_ui_mp.responseIsBitten, confirm_ui_mp.responseUserName, confirm_ui_mp.responsePartName);
+
+        -- Prerender basically hooks onto SendCommandToConfirmUI, dunno how but it does
+        SendCommandToConfirmUIMP(confirm_ui_mp.responseAction, confirm_ui_mp.responseIsBitten, confirm_ui_mp.responseUserName, confirm_ui_mp.responsePartName);
     end
 end
 
-function SetActionConfirmUIMP(action, isBitten, userName, partName)
-    confirm_ui_mp:setInCenterOfScreen()
-    confirm_ui_mp:bringToTop()
-    confirm_ui_mp:open()
-    if action == "Cut" then
-        confirm_ui_mp["text4"]:setText("You're gonna " .. action .. " the " .. getDisplayText_TOC(partName) .. " of " .. userName)
-        confirm_ui_mp["text3"]:setText("You are well bitten and you have a saw... it's time");
-        confirm_ui_mp["text3"]:setColor(1, 0, 1, 0);
-        confirm_ui_mp["b1"]:setVisible(true);
-        confirm_ui_mp["b2"]:setVisible(true);
-    elseif action == "Operate" then
-        confirm_ui_mp["text4"]:setText("You gonna " .. action .. " the " .. getDisplayText_TOC(partName) .. " of " .. userName)
-        confirm_ui_mp["text2"]:setText("")
-        confirm_ui_mp["text3"]:setText("")
-        confirm_ui_mp["b1"]:setVisible(true)
-        confirm_ui_mp["b2"]:setVisible(true)
-    elseif action == "Wait server" then
-        confirm_ui_mp["text4"]:setText(action)
-        confirm_ui_mp["text3"]:setText("")
-        confirm_ui_mp["text2"]:setText("")
-        confirm_ui_mp["b1"]:setVisible(false)
-        confirm_ui_mp["b2"]:setVisible(false)
-    end
-end
+
 
 -----------------------
 -- Getters
@@ -199,10 +178,22 @@ local function OnClickTocDescUI(button, args)
 
 
     if args.option == "Cut" then
-        SendCommandToConfirmUI("Cut")
+
+        if patient == surgeon then
+            TocCutLocal(_, patient, surgeon, desc_ui.part_name)
+        else
+            TryTheOnlyCureActionOnAnotherPlayer(_, desc_ui.part_name, "Cut", surgeon, patient)
+        end
 
     elseif args.option == "Operate" then
-        SendCommandToConfirmUI("Operate")
+
+        if patient == surgeon then
+            TocOperateLocal(_, patient, surgeon, desc_ui.part_name, false)
+        else
+
+            TryTheOnlyCureActionOnAnotherPlayer(_, desc_ui.part, "Operate", surgeon, patient)
+        end
+
     elseif args.option == "Equip" then
         -- TODO probably completely broken for MP 
         -- TODO this is really janky
@@ -617,44 +608,49 @@ end
 --------------------------------------------
 -- Additional confirm 
 
-function SendCommandToConfirmUI(action)
+-- function SendCommandToConfirmUI(action)
 
-    confirm_ui.actionAct = action
+--     confirm_ui.actionAct = action
 
-    confirm_ui:setInCenterOfScreen()
-    confirm_ui:bringToTop()
-    confirm_ui:open()
+--     confirm_ui:setInCenterOfScreen()
+--     confirm_ui:bringToTop()
+--     confirm_ui:open()
+--     if action == "Cut" then
+--         confirm_ui["text2"]:setText("You're gonna amputate a limb")
+--         confirm_ui["text2"]:setColor(1, 0, 1, 0)
+
+--     elseif action == "Operate" then
+--         confirm_ui["text2"]:setText("");
+--         confirm_ui["text3"]:setText("You are going to operate " .. getDisplayText_TOC(desc_ui.part_name))
+--         confirm_ui["text3"]:setColor(1, 1, 1, 1)
+--     end
+
+-- end
+
+
+
+function SendCommandToConfirmUIMP(action, isBitten, userName, partName)
+    confirm_ui_mp:setInCenterOfScreen()
+    confirm_ui_mp:bringToTop()
+    confirm_ui_mp:open()
     if action == "Cut" then
-        confirm_ui["text2"]:setText("You're gonna amputate a limb")
-        confirm_ui["text2"]:setColor(1, 0, 1, 0)
-
+        confirm_ui_mp["text4"]:setText("You're gonna " .. action .. " the " .. getDisplayText_TOC(partName) .. " of " .. userName)
+        confirm_ui_mp["text3"]:setText("You are well bitten and you have a saw... it's time");
+        confirm_ui_mp["text3"]:setColor(1, 0, 1, 0);
+        confirm_ui_mp["b1"]:setVisible(true);
+        confirm_ui_mp["b2"]:setVisible(true);
     elseif action == "Operate" then
-        confirm_ui["text2"]:setText("");
-        confirm_ui["text3"]:setText("You are going to operate " .. getDisplayText_TOC(desc_ui.part_name))
-        confirm_ui["text3"]:setColor(1, 1, 1, 1)
-    elseif action == "Wait Server" then
-        confirm_ui["text3"]:setText("Wait")
-        confirm_ui["text3"]:setColor(1, 1, 1, 1)
-
-    end
-
-end
-
-function SendCommandToConfirmUIMP(action)
-    confirm_ui_mp:setInCenterOfScreen();
-    confirm_ui_mp:bringToTop();
-    confirm_ui_mp:open();
-    if action == "Cut" then
-        confirm_ui_mp["text4"]:setText("You're gonna amputate limb of another player")
-     
-    elseif action == "Operate" then
-        print("not yet")
+        confirm_ui_mp["text4"]:setText("You gonna " .. action .. " the " .. getDisplayText_TOC(partName) .. " of " .. userName)
+        confirm_ui_mp["text2"]:setText("")
+        confirm_ui_mp["text3"]:setText("")
+        confirm_ui_mp["b1"]:setVisible(true)
+        confirm_ui_mp["b2"]:setVisible(true)
     elseif action == "Wait server" then
-        confirm_ui_mp["text4"]:setText(action);
-        confirm_ui_mp["text3"]:setText("");
-        confirm_ui_mp["text2"]:setText("");
-        confirm_ui_mp["b1"]:setVisible(false);
-        confirm_ui_mp["b2"]:setVisible(false);
+        confirm_ui_mp["text4"]:setText(action)
+        confirm_ui_mp["text3"]:setText("")
+        confirm_ui_mp["text2"]:setText("")
+        confirm_ui_mp["b1"]:setVisible(false)
+        confirm_ui_mp["b2"]:setVisible(false)
     end
 end
 --------------------------------------------
