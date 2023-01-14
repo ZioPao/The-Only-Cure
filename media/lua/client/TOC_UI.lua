@@ -26,10 +26,6 @@ end
 
 -----------------------
 -- Getters
-function GetConfirmUI()
-    return confirm_ui
-
-end
 function GetConfirmUIMP()
     return confirm_ui_mp;
 end
@@ -168,31 +164,23 @@ end
 local function OnClickTocDescUI(button, args)
     -- Gets every arg from main 
 
-    local local_player = getPlayer()
-    local local_player_inventory = local_player:getInventory()
-
     local patient = args.patient
     local surgeon = args.surgeon
 
     local surgeon_inventory = surgeon:getInventory()
 
-
+    -- Validate action
     if args.option == "Cut" then
-
-        if patient == surgeon then
-            TocCutLocal(_, patient, surgeon, desc_ui.part_name)
-        else
-            TryTheOnlyCureActionOnAnotherPlayer(_, desc_ui.part_name, "Cut", surgeon, patient)
-        end
-
+        TryTocAction(_, desc_ui.part_name, "Cut", surgeon, patient)
     elseif args.option == "Operate" then
 
-        if patient == surgeon then
-            TocOperateLocal(_, patient, surgeon, desc_ui.part_name, false)
-        else
+        TryTocAction(_, patient, surgeon, desc_ui.part_name, false)
+        -- if patient == surgeon then
+        --     TocOperateLocal(_, patient, surgeon, desc_ui.part_name, false)
+        -- else
 
-            TryTheOnlyCureActionOnAnotherPlayer(_, desc_ui.part, "Operate", surgeon, patient)
-        end
+        --     TryTocAction(_, desc_ui.part, "Operate", surgeon, patient)
+        -- end
 
     elseif args.option == "Equip" then
         -- TODO probably completely broken for MP 
@@ -243,12 +231,7 @@ end
 
 
 
-
-
-
-
-
-
+-----------------------------------------------
 
 -- CREATE UI SECTION
 function CreateTocMainUI()
@@ -329,7 +312,7 @@ function CreateTocConfirmUIMP()
     confirm_ui_mp = NewUI()
     confirm_ui_mp.responseReceive = false
 
-    confirm_ui_mp:addText("text1", "Are you sure ?", "Title", "Center");
+    confirm_ui_mp:addText("text1", "Are you sure?", "Title", "Center");
     confirm_ui_mp:setLineHeightPixel(getTextManager():getFontHeight(confirm_ui_mp.text1.font) + 10)
     confirm_ui_mp:nextLine();
 
@@ -366,11 +349,7 @@ end
 function OnCreateTheOnlyCureUI()
     CreateTocMainUI()
     CreateTocDescUI()
-    CreateTocConfirmUI()
-
-
-    
-
+    CreateTocConfirmUIMP()
 
     if isClient() then CreateTocConfirmUIMP() end
     main_ui:close()
@@ -517,33 +496,21 @@ function SetupTocDescUI(surgeon, patient, toc_data, part_name)
 
 end
 
-function SetupTocConfirmUI(surgeon, patient)
-
-    -- Add args to button 1, ergo "yes"
-    confirm_ui.b1:addArg("surgeon", surgeon)
-    confirm_ui.b1:addArg("patient", patient)
-end
-
 --------------------------------------------
--- MP Confirm (I should add it to client too but hey)
-
+-- MP Confirm (I should add it to client too but hey not sure how it works tbh)
 
 function SendCommandToConfirmUIMP(action, isBitten, userName, partName)
     confirm_ui_mp:setInCenterOfScreen()
     confirm_ui_mp:bringToTop()
     confirm_ui_mp:open()
-    if action == "Cut" then
+
+    if action == "Cut" or action == "Operate" then
         confirm_ui_mp["text4"]:setText("You're gonna " .. action .. " the " .. getDisplayText_TOC(partName) .. " of " .. userName)
-        confirm_ui_mp["text3"]:setText("You are well bitten and you have a saw... it's time");
-        confirm_ui_mp["text3"]:setColor(1, 0, 1, 0);
+        confirm_ui_mp["text2"]:setText("Are you sure?")
+        confirm_ui_mp["text2"]:setColor(1, 0, 0, 0)
         confirm_ui_mp["b1"]:setVisible(true);
         confirm_ui_mp["b2"]:setVisible(true);
-    elseif action == "Operate" then
-        confirm_ui_mp["text4"]:setText("You gonna " .. action .. " the " .. getDisplayText_TOC(partName) .. " of " .. userName)
-        confirm_ui_mp["text2"]:setText("")
-        confirm_ui_mp["text3"]:setText("")
-        confirm_ui_mp["b1"]:setVisible(true)
-        confirm_ui_mp["b2"]:setVisible(true)
+
     elseif action == "Wait server" then
         confirm_ui_mp["text4"]:setText(action)
         confirm_ui_mp["text3"]:setText("")
@@ -551,6 +518,8 @@ function SendCommandToConfirmUIMP(action, isBitten, userName, partName)
         confirm_ui_mp["b1"]:setVisible(false)
         confirm_ui_mp["b2"]:setVisible(false)
     end
+
+
 end
 --------------------------------------------
 -- Add TOC element to Health Panel
@@ -567,17 +536,17 @@ function ISNewHealthPanel.onClick_TOC(button)
     if surgeon then
         if surgeon == patient then
             SetupTocMainUI(surgeon, surgeon, surgeon:getModData().TOC)
-            SetupTocConfirmUI(surgeon, surgeon)
+            --SetupTocConfirmUI(surgeon, surgeon)
         else
             -- MP stuff, try to get the other player data and display it on the surgeon display
             sendClientCommand(surgeon, "TOC", "GetPlayerData",  {surgeon:getOnlineID(), patient:getOnlineID()})
             SetupTocMainUI(surgeon, patient, MP_other_player_toc_data)
-            SetupTocConfirmUI(surgeon, patient)
+            --SetupTocConfirmUI(surgeon, patient)
         end
     else
         -- This is when surgeon doesnt exist for some reason.
         SetupTocMainUI(patient, patient, patient:getModData().TOC)
-        SetupTocConfirmUI(patient, patient)
+       -- SetupTocConfirmUI(patient, patient)
     end
 
     main_ui:toggle()

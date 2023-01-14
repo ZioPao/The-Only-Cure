@@ -30,12 +30,14 @@ function TryToToResetEverythingOtherPlayer(_, patient, surgeon)
 end
 
 
-function TryTheOnlyCureActionOnAnotherPlayer(_, part_name, action, surgeon, patient)
+-- TODO Rename this
+
+function TryTocAction(_, part_name, action, surgeon, patient)
     -- TODO add checks so that we don't show these menus if a player has already beeen operated or amputated
     -- TODO at this point surgeon doesnt do anything. We'll fix this later
     local ui = GetConfirmUIMP()
     if not ui then
-        MakeConfirmUIMP()
+        CreateTocConfirmUIMP()
         ui = GetConfirmUIMP()
     end
 
@@ -213,15 +215,17 @@ TocContextMenus.FillCutAndOperateMenus = function(local_player, clicked_player, 
 
         if local_player == clicked_player then        -- Local player
             if TheOnlyCure.CheckIfCanBeCut(local_toc_data, v) then
-                cut_menu:addOption(getText('UI_ContextMenu_' .. v), _, TocCutLocal, local_player, local_player, v)
+                cut_menu:addOption(getText('UI_ContextMenu_' .. v), _, TryTocAction, v, "Cut", local_player, local_player)
+
+                --cut_menu:addOption(getText('UI_ContextMenu_' .. v), _, TocCutLocal, local_player, local_player, v)
             elseif TheOnlyCure.CheckIfCanBeOperated(local_toc_data, v) then
-                operate_menu:addOption(getText('UI_ContextMenu_' .. v), _, TocOperateLocal,  local_player, local_player, v)
+                operate_menu:addOption(getText('UI_ContextMenu_' .. v), _, TryTocAction, v, "Operate", local_player, local_player)
             end
             
         else    -- Another player
             -- TODO add way to prevent cutting already cut parts
-            cut_menu:addOption(getText('UI_ContextMenu_' .. v), world_objects, TryTheOnlyCureActionOnAnotherPlayer, v, "Cut", local_player, clicked_player)
-            operate_menu:addOption(getText('UI_ContextMenu_' .. v), world_objects, TryTheOnlyCureActionOnAnotherPlayer, v, "Operate", local_player, clicked_player)
+            cut_menu:addOption(getText('UI_ContextMenu_' .. v), world_objects, TryTocAction, v, "Cut", local_player, clicked_player)
+            operate_menu:addOption(getText('UI_ContextMenu_' .. v), world_objects, TryTocAction, v, "Operate", local_player, clicked_player)
 
         end
 
