@@ -29,3 +29,15 @@ function FindTocDataPartNameFromBodyPartType(toc_data, bodyPartType)
     end
 end
 
+
+function FindTocBodyPartNameFromBodyPartType(bodyPartType)
+    if bodyPartType == BodyPartType.Hand_R          then return "RightHand"
+    elseif bodyPartType == BodyPartType.ForeArm_R   then return "RightForearm"
+    elseif bodyPartType == BodyPartType.UpperArm_R  then return "RightArm"
+    elseif bodyPartType == BodyPartType.Hand_L      then return "LeftHand"
+    elseif bodyPartType  == BodyPartType.ForeArm_L  then return "LeftForearm"
+    elseif bodyPartType  == BodyPartType.UpperArm_L then return "LeftArm"
+    else return nil
+    end
+end
+
