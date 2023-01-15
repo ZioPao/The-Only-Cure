@@ -99,15 +99,7 @@ local function IsPartBitten(part_data, part_name)
     return not part_data.is_cut and getPlayer():getBodyDamage():getBodyPart(TocGetBodyPartTypeFromBodyPart(part_name)):bitten()
 end
 
-local function CanLimbBeAmputated(toc_data, part_name)
 
-    local r = "Right"
-    local l = "Left"
-
-    return (string.find(part_name, r) and not (toc_data[r .. "Hand"].is_prosthesis_equipped or toc_data[r .. "Forearm"].is_prosthesis_equipped)) or
-            (string.find(part_name, l) and not (toc_data[l .. "Hand"].is_prosthesis_equipped or toc_data[l .. "Forearm"].is_prosthesis_equipped))
-
-end
 
 
 local function FindMinMax(lv)
@@ -444,16 +436,16 @@ function SetupTocDescUI(surgeon, patient, toc_data, part_name)
         desc_ui["status"]:setText("Nothing here")
         desc_ui["status"]:setColor(1, 1, 1, 1)
         desc_ui["b1"]:setVisible(false)
-    else
+    elseif CheckIfCanBeCut(part_name) then
         -- Everything else
         -- TODO add check for cuts and scratches
         desc_ui["status"]:setText("Not cut")
         desc_ui["status"]:setColor(1, 1, 1, 1)
-        if GetSawInInventory(surgeon) and CanLimbBeAmputated(toc_data, part_name) then
+        if GetSawInInventory(surgeon) and CheckIfProsthesisAlreadyInstalled(toc_data, part_name) then
             desc_ui["b1"]:setVisible(true)
             desc_ui["b1"]:setText("Cut")
             desc_ui["b1"]:addArg("option", "Cut")
-        elseif GetSawInInventory(surgeon) and not CanLimbBeAmputated(toc_data, part_name) then
+        elseif GetSawInInventory(surgeon) and not CheckIfProsthesisAlreadyInstalled(toc_data, part_name) then
             desc_ui["b1"]:setVisible(true)
             desc_ui["b1"]:setText("Remove prosthesis before")
             desc_ui["b1"]:addArg("option", "Nothing")
