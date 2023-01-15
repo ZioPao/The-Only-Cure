@@ -182,6 +182,8 @@ local function OnClickTocDescUI(button, args)
     elseif args.option == "Unequip" then
         TryTocAction(_, desc_ui.part_name, "Unequip", surgeon, patient)
 
+    elseif args.option == "Nothing" then
+        print("Just do nothing")        -- TODO workaround
     end
     main_ui:close()
 
@@ -201,11 +203,11 @@ function OnClickTocConfirmUIMP(button, args)
             player:Say("I need a kit")
         end
 
-    elseif confirm_ui.actionAct == "Equip" and args.option == "yes" then
+    elseif confirm_ui_mp.actionAct == "Equip" and args.option == "yes" then
         print("Equip mp comp")
 
     
-    elseif confirm_ui.actionAct == "Unequip" and args.option == "yes" then
+    elseif confirm_ui_mp.actionAct == "Unequip" and args.option == "yes" then
         print("Unequip mp comp")
 
     end
@@ -453,8 +455,9 @@ function SetupTocDescUI(surgeon, patient, toc_data, part_name)
             desc_ui["b1"]:addArg("option", "Cut")
         elseif GetSawInInventory(surgeon) and not CanLimbBeAmputated(toc_data, part_name) then
             desc_ui["b1"]:setVisible(true)
-            desc_ui["b1"]:setText("Cut")
-            desc_ui["b1"]:addArg("option", "Unequip")
+            desc_ui["b1"]:setText("Remove prosthesis before")
+            desc_ui["b1"]:addArg("option", "Nothing")
+
         else
             desc_ui["b1"]:setVisible(false)
         end

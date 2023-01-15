@@ -23,7 +23,7 @@ end
 
 function ISCutLimb:start()
 
-    self:setActionAnim("SawLog")    
+    self:setActionAnim("SawLog")
     local saw_item = GetSawInInventory(self.surgeon)
 
     if saw_item then
@@ -33,7 +33,7 @@ function ISCutLimb:start()
 
 
 
-    -- TODO this doesn't work when doing it online
+    -- TODO this doesn't work when doing it on another player
     local body_part_type = TocGetBodyPartTypeFromBodyPart(self.part_name)
     local body_damage = self.patient:getBodyDamage()
     local body_damage_part = body_damage:getBodyPart(body_part_type)
