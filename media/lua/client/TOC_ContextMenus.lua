@@ -140,7 +140,7 @@ TocContextMenus.FillCutAndOperateMenus = function(local_player, clicked_player, 
             end
             
         else    -- Another player
-            -- TODO add way to prevent cutting already cut parts
+            -- TODO add way to prevent cutting already cut parts of another player
             cut_menu:addOption(getText('UI_ContextMenu_' .. v), world_objects, TryTocAction, v, "Cut", local_player, clicked_player)
             operate_menu:addOption(getText('UI_ContextMenu_' .. v), world_objects, TryTocAction, v, "Operate", local_player, clicked_player)
 
