@@ -38,7 +38,9 @@ function ISCutLimb:start()
     local body_damage = self.patient:getBodyDamage()
     local body_damage_part = body_damage:getBodyPart(body_part_type)
 
+
     body_damage_part:setBleeding(true)
+    body_damage_part:setCut(true)
     body_damage_part:setBleedingTime(ZombRand(10,20))
 
 end

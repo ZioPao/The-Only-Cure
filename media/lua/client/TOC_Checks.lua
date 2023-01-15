@@ -15,8 +15,16 @@ function CheckIfProsthesisAlreadyInstalled(toc_data, part_name)
     local r = "Right"
     local l = "Left"
 
-    return (string.find(part_name, r) and not (toc_data[r .. "Hand"].is_prosthesis_equipped or toc_data[r .. "Forearm"].is_prosthesis_equipped)) or
-            (string.find(part_name, l) and not (toc_data[l .. "Hand"].is_prosthesis_equipped or toc_data[l .. "Forearm"].is_prosthesis_equipped))
+
+    if string.find(part_name, r) then
+        return (toc_data[r .. "Hand"].is_prosthesis_equipped or toc_data[r .. "Forearm"].is_prosthesis_equipped)
+        
+    elseif string.find(part_name, l) then
+        return (toc_data[l .. "Hand"].is_prosthesis_equipped or toc_data[l .. "Forearm"].is_prosthesis_equipped)
+    end
+
+
+            
 
 end
 
