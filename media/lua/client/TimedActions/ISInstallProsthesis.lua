@@ -23,110 +23,38 @@ function ISInstallProsthesis:stop()
 end
 
 function ISInstallProsthesis:perform()
+
+
+
+    local prosthesis_base_name = self.item:getType()
+
+
+
     self.item:setJobDelta(0.0)
+    local toc_data = self.character:getModData().TOC
+    local part_name = TocGetPartNameFromBodyPartType(self.bodyPart:getType())
 
-    local modData = self.character:getModData() 
-    --local toc_data = self.character:getModData().TOC
-    local lor = 0       -- LEFT OR RIGHT
-    local foh = 0       -- FOREARM OR HAND
-
-    
     -- Check if can be performed. This shouldn't be necessary, but just to be sure
     if self.bodyPart:getType() == BodyPartType.UpperArm_L or self.bodyPart:getType() == BodyPartType.UpperArm_R then
         print("Can't equip prosthesis")
         return
     end
 
-
-    local prosthesis_table = {
-        WoodenHook = {
-            material_id = 1
-        },
-        MetalHook = {
-            material_id = 2
-        },
-        MetalHand = {
-            material_id = 3
-        }
-    }
-
-
-    if     self.bodyPart:getType() == BodyPartType.Hand_R then lor = 1; foh = 1
-    elseif self.bodyPart:getType() == BodyPartType.ForeArm_R then lor = 1; foh = 2
-    elseif self.bodyPart:getType() == BodyPartType.Hand_L then lor = 0; foh = 1
-    elseif self.bodyPart:getType() == BodyPartType.ForeArm_L then lor = 0; foh = 2
-    end
-
-    local mat_id = 0
-    local weight = math.floor(self.item:getWeight() * 10 + 0.5) / 10
-
-    if weight == 1 and foh == 1 then
-        if lor == 1 then
-            self.cloth = self.character:getInventory():AddItem("TOC.WoodenHook_right_noHand");
-            mat_id = 1;
-        else
-            self.cloth = self.character:getInventory():AddItem("TOC.WoodenHook_left_noHand");
-            mat_id = 1;
-        end
-    elseif weight == 0.5 and foh == 1 then
-        if lor == 1 then
-            self.cloth = self.character:getInventory():AddItem("TOC.MetalHook_right_noHand");
-            mat_id = 2;
-        else
-            self.cloth = self.character:getInventory():AddItem("TOC.MetalHook_left_noHand");
-            mat_id = 2;
-        end
-    elseif weight == 0.3 and foh == 1 then
-        if lor == 1 then
-            self.cloth = self.character:getInventory():AddItem("TOC.MetalHand_right_noHand");
-            mat_id = 3;
-        else
-            self.cloth = self.character:getInventory():AddItem("TOC.MetalHand_left_noHand");
-            mat_id = 3;
-        end
-    elseif weight == 1 and foh == 2 then
-        if lor == 1 then
-            self.cloth = self.character:getInventory():AddItem("TOC.WoodenHook_right_noForearm");
-            mat_id = 1;
-        else
-            self.cloth = self.character:getInventory():AddItem("TOC.WoodenHook_left_noForearm");
-            mat_id = 1;
-        end
-    elseif weight == 0.5 and foh == 2  then
-        if lor == 1 then
-            self.cloth = self.character:getInventory():AddItem("TOC.MetalHook_right_noForearm");
-            mat_id = 2;
-        else
-            self.cloth = self.character:getInventory():AddItem("TOC.MetalHook_left_noForearm");
-            mat_id = 2;
-        end
-    elseif weight == 0.3 and foh == 2 then
-        if lor == 1 then
-            self.cloth = self.character:getInventory():AddItem("TOC.MetalHand_right_noForearm");
-            mat_id = 3;
-        else
-            self.cloth = self.character:getInventory():AddItem("TOC.MetalHand_left_noForearm");
-            mat_id = 3;
-        end
-    end
+    local prosthesis_name =TocFindCorrectClothingProsthesis(self.item:getType(), part_name)
+    self.cloth = self.character:getInventory():AddItem(prosthesis_name)
 
     if self.cloth ~= nil then
-        if self.bodyPart:getType() == BodyPartType.Hand_R then
-            modData.TOC.RightHand.is_prosthesis_equipped = true;
-            modData.TOC.RightHand.prosthesis_factor = find_protheseFact_TOC(self.cloth);
-        elseif self.bodyPart:getType() == BodyPartType.ForeArm_R then
-            modData.TOC.RightForearm.is_prosthesis_equipped = true;
-            modData.TOC.RightForearm.prosthesis_factor = find_protheseFact_TOC(self.cloth);
-        elseif self.bodyPart:getType() == BodyPartType.Hand_L then
-            modData.TOC.LeftHand.is_prosthesis_equipped = true;
-            modData.TOC.LeftHand.prosthesis_factor = find_protheseFact_TOC(self.cloth);
-        elseif self.bodyPart:getType() == BodyPartType.ForeArm_L then
-            modData.TOC.LeftForearm.is_prosthesis_equipped = true;
-            modData.TOC.LeftForearm.prosthesis_factor = find_protheseFact_TOC(self.cloth);
+
+
+        if part_name then
+            toc_data[part_name].is_prosthesis_equipped = true
+            toc_data[part_name].prosthesis_factor = TocFindProsthesisFactorFromItem(self.cloth)
+
+            self.character:getInventory():Remove(self.item)
+            self.character:setWornItem(self.cloth:getBodyLocation(), self.cloth)
         end
 
-        self.character:getInventory():Remove(self.item);
-        self.character:setWornItem(self.cloth:getBodyLocation(), self.cloth);
+
     end
 
     self.character:transmitModData()

@@ -1,5 +1,7 @@
 
 
+
+
 function GetKitInInventory(surgeon)
     local playerInv = surgeon:getInventory();
     local item = playerInv:getItemFromType('TOC.Real_surgeon_kit') or playerInv:getItemFromType('TOC.Surgeon_kit') or playerInv:getItemFromType('TOC.Improvised_surgeon_kit')

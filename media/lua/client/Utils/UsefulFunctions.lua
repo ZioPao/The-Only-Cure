@@ -3,6 +3,11 @@ function GetBodyParts()
     return bodyparts
 end
 
+function GetProsthesisList()
+    return {"TOC.WoodenHook", "TOC.MetalHook", "TOC.MetalHand"}
+
+end
+
 function GetLimbsBodyPartTypes()
 
     return {BodyPartType.Hand_R, BodyPartType.ForeArm_R, BodyPartType.UpperArm_R,
@@ -54,7 +59,18 @@ function FindTocItemWorn(part_name, patient)
 end
 
 
+function TocGetPartNameFromBodyPartType(body_part)
 
+    if body_part      == BodyPartType.Hand_R      then return "RightHand"
+    elseif body_part      == BodyPartType.ForeArm_R      then return "RightForearm"
+    elseif body_part   == BodyPartType.UpperArm_R  then return "RightArm"
+    elseif body_part   == BodyPartType.Hand_L      then return "LeftHand"
+    elseif body_part   == BodyPartType.ForeArm_L   then return "LeftForearm"
+    elseif body_part   == BodyPartType.UpperArm_L  then return "LeftArm"
+    else return nil
+    end
+
+end
 
 
 
@@ -106,17 +122,8 @@ function TocFindAmputatedClothingFromPartName(part_name)
 
 end
 
+function TocFindProsthesisFactorFromItem(item)
 
-function find_protheseID_TOC(item)
-    local itemType = item:getType()
-    if     string.find(itemType, "WoodenHook")  then return 1
-    elseif string.find(itemType, "MetalHook")   then return 2
-    elseif string.find(itemType, "MetalHand")   then return 3
-    else return 0
-    end
-end
-
-function find_protheseFact_TOC(item)
     local itemType = item:getType()
     if     string.find(itemType, "WoodenHook") and string.find(itemType, "noHand")    then return 1.5
     elseif string.find(itemType, "WoodenHook") and string.find(itemType, "noForearm") then return 1.65
@@ -125,4 +132,37 @@ function find_protheseFact_TOC(item)
     elseif string.find(itemType, "MetalHand")  and string.find(itemType, "noHand")    then return 1.1
     elseif string.find(itemType, "MetalHand")  and string.find(itemType, "noForearm") then return 1.25
     end
+end
+
+
+function TocFindCorrectClothingProsthesis(item_name, part_name)
+
+
+    -- for _, v in ipairs(GetProsthesisList()) do 
+    --     if string.find(item, v)
+
+    -- end
+
+    local lowered_part_name = string.lower(part_name)
+    local side = string.match(lowered_part_name, "left")
+
+    if side == nil then
+        side = "right"
+    end
+
+    local limb = string.match(part_name, "Hand")
+    if limb == nil then
+        limb = "Forearm"
+    end
+
+
+    -- Just to accomodate this horrendous naming scheme, let's have Hand or Forearm again... Jesus dude
+    -- if limb then
+    --     limb = limb:gsub("^%l", string.upper)
+    -- end
+
+    local correct_name = "TOC." .. item_name .. "_" .. side .. "_no" .. limb
+
+    return correct_name
+
 end

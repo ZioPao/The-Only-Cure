@@ -57,11 +57,10 @@ function ISUninstallProsthesis:perform()
                 toc_data[part_name].is_prosthesis_equipped = false
                 toc_data[part_name].prosthesis_factor = 1
     
-                local side = string.gsub(part_name, "Hand" or "Forearm", "")
+                --local side = string.gsub(part_name, "Hand" or "Forearm", "")
                 
-                local prosthesis_list = {"TOC.WoodenHook", "TOC.MetalHook", "TOC.MetalHand"}
 
-                for _, prost_v in ipairs(prosthesis_list) do
+                for _, prost_v in ipairs(GetProsthesisList()) do
                     local prosthesis_name = string.match(self.item:getName(), prost_v)
 
                     if prosthesis_name then
