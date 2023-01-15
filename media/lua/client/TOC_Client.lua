@@ -9,7 +9,7 @@ Commands["ResponseCanAct"] = function(arg)
     ui.responsePartName = arg["toSend"][1]
     ui.responseCan = arg["toSend"][3]
     ui.responseUserName = getPlayerByOnlineID(arg["From"]):getUsername()
-    ui.responseActionIsBitten = getPlayerByOnlineID(arg["From"]):getBodyDamage():getBodyPart(TOC_getBodyPart(ui.responsePartName)):bitten()
+    ui.responseActionIsBitten = getPlayerByOnlineID(arg["From"]):getBodyDamage():getBodyPart(TocGetBodyPartTypeFromBodyPart(ui.responsePartName)):bitten()
 end
 
 
@@ -32,23 +32,33 @@ function SendOperateLimb(player, part_name, surgeon_factor, use_oven)
 end
 
 function AskCanCutLimb(player, part_name)
-    GetConfirmUIMP().responseReceive = false;
-    local arg = {};
-    arg["From"] = getPlayer():getOnlineID();
-    arg["To"] = player:getOnlineID();
-    arg["command"] = "CanCutLimb";
-    arg["toSend"] = part_name;
-    sendClientCommand("TOC", "SendServer", arg);
+    GetConfirmUIMP().responseReceive = false
+    local arg = {}
+    arg["From"] = getPlayer():getOnlineID()
+    arg["To"] = player:getOnlineID()
+    arg["command"] = "CanCutLimb"
+    arg["toSend"] = part_name
+    sendClientCommand("TOC", "SendServer", arg)
 end
 
 function AskCanOperateLimb(player, part_name)
-    GetConfirmUIMP().responseReceive = false;
-    local arg = {};
-    arg["From"] = getPlayer():getOnlineID();
-    arg["To"] = player:getOnlineID();
-    arg["command"] = "CanOperateLimb";
-    arg["toSend"] = part_name;
-    sendClientCommand("TOC", "SendServer", arg);
+    GetConfirmUIMP().responseReceive = false
+    local arg = {}
+    arg["From"] = getPlayer():getOnlineID()
+    arg["To"] = player:getOnlineID()
+    arg["command"] = "CanOperateLimb"
+    arg["toSend"] = part_name
+    sendClientCommand("TOC", "SendServer", arg)
+end
+
+function AskCanEquipProsthesis(player, part_name)
+    GetConfirmUIMP().responseReceive = false
+    local arg = {}
+    arg["From"] = getPlayer():getOnlineID()
+    arg["To"] = player:getOnlineID()
+    arg["command"] = "CanEquipProsthesis"
+    arg["toSend"] = part_name
+    sendClientCommand("TOC", "SendServer", arg)
 end
 
 
@@ -69,7 +79,7 @@ Commands["CanCutLimb"] = function(arg)
     arg["To"] = arg["From"]
     arg["From"] = getPlayer():getOnlineID()
     arg["command"] = "ResponseCanAct"
-    arg["toSend"] = {part_name, "Cut", CanBeCut(part_name)}
+    arg["toSend"] = {part_name, "Cut", CheckIfCanBeCut(part_name)}
     sendClientCommand("TOC", "SendServer", arg)
 end
 
@@ -79,9 +89,20 @@ Commands["CanOperateLimb"] = function(arg)
     arg["To"] = arg["From"]
     arg["From"] = getPlayer():getOnlineID()
     arg["command"] = "ResponseCanAct"
-    arg["toSend"] = {part_name, "Operate", CanBeOperate(part_name)}
+    arg["toSend"] = {part_name, "Operate", CheckIfCanBeOperated(part_name)}
     sendClientCommand("TOC", "SendServer", arg)
 end
+
+Commands["CanEquipProsthesis"] = function(arg)
+    local part_name = arg["toSend"]
+
+    arg["To"] = arg["From"]
+    arg["From"] = getPlayer():getOnlineID()
+    arg["command"] = "ResponseCanAct"
+    arg["toSend"] = {part_name, "Equip", CheckIfProsthesisCanBeEquipped(part_name)}
+
+end
+
 
 Commands["CanResetEverything"] = function(arg)
     local part_name = "RightHand"      --useless

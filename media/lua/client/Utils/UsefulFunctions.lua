@@ -30,6 +30,40 @@ function GetAcceptingProsthesisBodyParts()
 end
 
 
+
+local function PartNameToBodyLocation(name)
+    if name == "RightHand"      then return "ArmRight_Prot" end
+    if name == "RightForearm"   then return "ArmRight_Prot" end
+    if name == "RightArm"       then return "ArmRight_Prot" end
+    if name == "LeftHand"       then return "ArmLeft_Prot" end
+    if name == "LeftForearm"    then return "ArmLeft_Prot" end
+    if name == "LeftArm"        then return "ArmLeft_Prot" end
+end
+
+
+-- TODO find a better name, this doesnt check for amputation only for prosthetics
+function FindTocItemWorn(part_name, patient)
+    local worn_items = patient:getWornItems()
+
+    for _, v in ipairs(worn_items) do
+        local item = v.getItem()
+        if item:getBodyLocation() == PartNameToBodyLocation(part_name) then
+            return item
+        end
+    end
+end
+
+
+
+
+
+
+
+
+
+
+
+
 -- TODO ew
 function find_clothName_TOC(bodyPart)
     if bodyPart:getType()       == BodyPartType.Hand_R      then return "TOC.ArmRight_noHand"
@@ -42,18 +76,17 @@ function find_clothName_TOC(bodyPart)
     end
 end
 
-function getDisplayText_TOC(name)
-    if name == "RightHand"      then return getText("UI_ContextMenu_RightHand") end
-    if name == "RightForearm"   then return getText("UI_ContextMenu_RightForearm") end
-    if name == "RightArm"       then return getText("UI_ContextMenu_RightArm") end
-    if name == "LeftHand"       then return getText("UI_ContextMenu_LeftHand") end
-    if name == "LeftForearm"    then return getText("UI_ContextMenu_LeftForearm") end
-    if name == "LeftArm"        then return getText("UI_ContextMenu_LeftArm") end
+function TocGetDisplayText(part_name)
+    if part_name == "RightHand"      then return getText("UI_ContextMenu_RightHand") end
+    if part_name == "RightForearm"   then return getText("UI_ContextMenu_RightForearm") end
+    if part_name == "RightArm"       then return getText("UI_ContextMenu_RightArm") end
+    if part_name == "LeftHand"       then return getText("UI_ContextMenu_LeftHand") end
+    if part_name == "LeftForearm"    then return getText("UI_ContextMenu_LeftForearm") end
+    if part_name == "LeftArm"        then return getText("UI_ContextMenu_LeftArm") end
 end
 
 
-
-function TheOnlyCure.GetBodyPartTypeFromBodyPart(part_name)
+function TocGetBodyPartTypeFromBodyPart(part_name)
     if part_name == "RightHand"      then return BodyPartType.Hand_R end
     if part_name == "RightForearm"   then return BodyPartType.ForeArm_R end
     if part_name == "RightArm"       then return BodyPartType.UpperArm_R end
@@ -62,17 +95,6 @@ function TheOnlyCure.GetBodyPartTypeFromBodyPart(part_name)
     if part_name == "LeftArm"        then return BodyPartType.UpperArm_L end
 end
 
-
-
-function TOC_getBodyPart(name)
-    --TODO Delete this
-    if name == "RightHand"      then return BodyPartType.Hand_R end
-    if name == "RightForearm"   then return BodyPartType.ForeArm_R end
-    if name == "RightArm"       then return BodyPartType.UpperArm_R end
-    if name == "LeftHand"       then return BodyPartType.Hand_L end
-    if name == "LeftForearm"    then return BodyPartType.ForeArm_L end
-    if name == "LeftArm"        then return BodyPartType.UpperArm_L end
-end
 
 function find_clothName2_TOC(name)
     if name == "RightHand"      then return "TOC.ArmRight_noHand" end
@@ -101,14 +123,4 @@ function find_protheseFact_TOC(item)
     elseif string.find(itemType, "MetalHand")  and string.find(itemType, "noHand")    then return 1.1
     elseif string.find(itemType, "MetalHand")  and string.find(itemType, "noForearm") then return 1.25
     end
-end
-
-function CanBeCut(partName)
-    return not getPlayer():getModData().TOC[partName].is_cut
-end
-
-function CanBeOperate(partName)
-    return getPlayer():getModData().TOC[partName].is_cut 
-    and not getPlayer():getModData().TOC[partName].is_operated
-     and not getPlayer():getModData().TOC[partName].is_cicatrized
 end

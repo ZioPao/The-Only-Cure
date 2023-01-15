@@ -106,3 +106,5 @@ function ISUninstallProsthesis:new(character, item, bodyPart)
     if o.character:isTimedActionInstant() then o.maxTime = 1; end
     return o;
 end
+
+

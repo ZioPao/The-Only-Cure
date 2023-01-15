@@ -1,55 +1,56 @@
 
--- TODO rewrite this mess
-
-function TocCutLocal(_, patient, surgeon, part_name)
-    if GetSawInInventory(surgeon) ~= nil then
-        ISTimedActionQueue.add(ISCutLimb:new(patient, surgeon, part_name));
-    else
-        surgeon:Say("I don't have a saw on me")
-    end
-end
-
-function TocOperateLocal(_, patient, surgeon, part_name, use_oven)
-    --local player = getPlayer();
-    -- todo add a check if the player has already been amputated or somethin
-    if use_oven then
-        ISTimedActionQueue.add(ISOperateLimb:new(patient, surgeon, _, part_name, use_oven));
-    else
-        local kit = GetKitInInventory(surgeon)
-        if kit ~= nil then
-            ISTimedActionQueue.add(ISOperateLimb:new(patient, surgeon, kit, part_name, false))
-        else
-            surgeon:Say("I don't have a kit on me")
-        end
-    end
-end
-
-
 function TryToToResetEverythingOtherPlayer(_, patient, surgeon)
     sendClientCommand(surgeon, "TOC", "AskToResetEverything", {patient:getOnlineID()})
 end
 
 
--- TODO Rename this
+
 
 function TryTocAction(_, part_name, action, surgeon, patient)
     -- TODO add checks so that we don't show these menus if a player has already beeen operated or amputated
     -- TODO at this point surgeon doesnt do anything. We'll fix this later
-    local ui = GetConfirmUIMP()
-    if not ui then
-        CreateTocConfirmUIMP()
-        ui = GetConfirmUIMP()
-    end
 
-    if action == "Cut" then
-        AskCanCutLimb(patient, part_name)
-    elseif action == "Operate" then
-        AskCanOperateLimb(patient, part_name)
+    -- Check if SinglePlayer
+    if not isServer() and not isClient() then
+        
+        if action == "Cut" then
+            TocCutLocal(_, patient, patient, part_name)
+        elseif action == "Operate" then
+            TocOperateLocal(_, patient, patient, part_name, false)
+        elseif action == "Equip" then
+            -- TODO finish this
+            local item
+            TocEquipProsthesisLocal(_, patient, surgeon, part_name)
+        elseif action == "Unequip" then
+            -- TODO finish this
+            local item
+            TocUnequipProsthesisLocal(_, patient, part_name)
+        end
+    else
+
+        local ui = GetConfirmUIMP()
+        if not ui then
+            CreateTocConfirmUIMP()
+            ui = GetConfirmUIMP()
+        end
+
+        if action == "Cut" then
+            AskCanCutLimb(patient, part_name)
+        elseif action == "Operate" then
+            AskCanOperateLimb(patient, part_name)
+        elseif action == "Equip" then
+            --AskCanEquipProsthesis(patient, part_name, item)
+
+        elseif action == "Unequip" then
+            --AskCanUnequipProsthesis(patient, part_name)
+
+        end
+        ui.actionAct = action
+        ui.partNameAct = part_name
+        ui.patient = patient
+
+        SendCommandToConfirmUIMP("Wait server")
     end
-    ui.actionAct = action
-    ui.partNameAct = part_name
-    ui.patient = patient
-    SendCommandToConfirmUIMP("Wait server")
 end
 
 
@@ -214,11 +215,11 @@ TocContextMenus.FillCutAndOperateMenus = function(local_player, clicked_player, 
 
 
         if local_player == clicked_player then        -- Local player
-            if TheOnlyCure.CheckIfCanBeCut(local_toc_data, v) then
+            if CheckIfCanBeCut(v) then
                 cut_menu:addOption(getText('UI_ContextMenu_' .. v), _, TryTocAction, v, "Cut", local_player, local_player)
 
                 --cut_menu:addOption(getText('UI_ContextMenu_' .. v), _, TocCutLocal, local_player, local_player, v)
-            elseif TheOnlyCure.CheckIfCanBeOperated(local_toc_data, v) then
+            elseif CheckIfCanBeOperated(v) then
                 operate_menu:addOption(getText('UI_ContextMenu_' .. v), _, TryTocAction, v, "Operate", local_player, local_player)
             end
             

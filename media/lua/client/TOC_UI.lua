@@ -53,7 +53,7 @@ local function GetImageName(part_name, toc_data)
         name = "media/ui/TOC/" .. part_name .. "/Operate.png"
     elseif part_data.is_cut and not part_data.is_amputation_shown then -- Empty (like hand if forearm cut)
         name = "media/ui/TOC/Empty.png"
-    elseif not part_data.is_cut and getPlayer():getBodyDamage():getBodyPart(TheOnlyCure.GetBodyPartTypeFromBodyPart(part_name)):bitten() then -- Not cut but bitten
+    elseif not part_data.is_cut and getPlayer():getBodyDamage():getBodyPart(TocGetBodyPartTypeFromBodyPart(part_name)):bitten() then -- Not cut but bitten
         name = "media/ui/TOC/" .. part_name .. "/Bite.png"
     else  -- Not cut
         name = "media/ui/TOC/" .. part_name .. "/Base.png"
@@ -96,7 +96,7 @@ end
 
 
 local function IsPartBitten(part_data, part_name)
-    return not part_data.is_cut and getPlayer():getBodyDamage():getBodyPart(TOC_getBodyPart(part_name)):bitten()
+    return not part_data.is_cut and getPlayer():getBodyDamage():getBodyPart(TocGetBodyPartTypeFromBodyPart(part_name)):bitten()
 end
 
 local function CanLimbBeAmputated(toc_data, part_name)
@@ -167,33 +167,30 @@ local function OnClickTocDescUI(button, args)
     local patient = args.patient
     local surgeon = args.surgeon
 
-    local surgeon_inventory = surgeon:getInventory()
 
     -- Validate action
     if args.option == "Cut" then
         TryTocAction(_, desc_ui.part_name, "Cut", surgeon, patient)
     elseif args.option == "Operate" then
+        TryTocAction(_, desc_ui.part_name, "Operate", surgeon, patient)
 
-        TryTocAction(_, patient, surgeon, desc_ui.part_name, false)
-        -- if patient == surgeon then
-        --     TocOperateLocal(_, patient, surgeon, desc_ui.part_name, false)
-        -- else
-
-        --     TryTocAction(_, desc_ui.part, "Operate", surgeon, patient)
-        -- end
 
     elseif args.option == "Equip" then
         -- TODO probably completely broken for MP 
         -- TODO this is really janky
-        local item = surgeon_inventory:getItemFromType('TOC.MetalHand') or surgeon_inventory:getItemFromType('TOC.MetalHook') or surgeon_inventory:getItemFromType('TOC.WoodenHook')
-        if item then
-            ISTimedActionQueue.add(ISInstallProsthesis:new(patient, item, patient:getBodyDamage():getBodyPart(TOC_getBodyPart(desc_ui.part_name))))
+        local surgeon_inventory = surgeon:getInventory()
+        local prosthesis_to_equip = surgeon_inventory:getItemFromType('TOC.MetalHand') or 
+                    surgeon_inventory:getItemFromType('TOC.MetalHook') or 
+                    surgeon_inventory:getItemFromType('TOC.WoodenHook')
+        if prosthesis_to_equip then
+            ISTimedActionQueue.add(ISInstallProsthesis:new(patient, prosthesis_to_equip, patient:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromBodyPart(desc_ui.part_name))))
         else
             surgeon:Say("I need a prosthesis")
         end
         main_ui:close()
     elseif args.option == "Unequip" then
-        ISTimedActionQueue.add(ISUninstallProsthesis:new(patient, find_itemWorn_TOC(desc_ui.part_name), patient:getBodyDamage():getBodyPart(TOC_getBodyPart(desc_ui.part_name))));
+        local equipped_prosthesis = FindTocItemWorn(desc_ui.part_name, patient)
+        ISTimedActionQueue.add(ISUninstallProsthesis:new(patient, equipped_prosthesis, patient:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromBodyPart(desc_ui.part_name))))
         main_ui:close()
     end
 
@@ -201,29 +198,28 @@ end
 
 
 function OnClickTocConfirmUIMP(button, args)
-    local player = getPlayer();
-    if confirm_ui_mp.actionAct == "Cut" then
-        if args.option == "yes" then
-            getPlayer():Say("Hold on, I believe in you!");
-            ISTimedActionQueue.add(ISCutLimb:new(confirm_ui_mp.patient, player, confirm_ui_mp.partNameAct));
+    local player = getPlayer()
+    if confirm_ui_mp.actionAct == "Cut" and args.option == "yes" then
+        ISTimedActionQueue.add(ISCutLimb:new(confirm_ui_mp.patient, player, confirm_ui_mp.partNameAct))
+    elseif confirm_ui_mp.actionAct == "Operate" and args.option == "yes" then
+        local playerInv = player:getInventory();
+        local item = playerInv:getItemFromType('TOC.Real_surgeon_kit') or playerInv:getItemFromType('TOC.Surgeon_kit') or playerInv:getItemFromType('TOC.Improvised_surgeon_kit')
+        if item then
+            ISTimedActionQueue.add(ISOperateLimb:new(confirm_ui_mp.patient, player, item, confirm_ui_mp.partNameAct, false))
         else
-            getPlayer():Say("Alright...");
+            player:Say("I need a kit")
         end
+
+    elseif confirm_ui.actionAct == "Equip" and args.option == "yes" then
+        print("Equip mp comp")
+
+    
+    elseif confirm_ui.actionAct == "Unequip" and args.option == "yes" then
+        print("Unequip mp comp")
+
     end
-    if confirm_ui_mp.actionAct == "Operate" then
-        if args.option == "yes" then
-            local playerInv = player:getInventory();
-            local item = playerInv:getItemFromType('TOC.Real_surgeon_kit') or playerInv:getItemFromType('TOC.Surgeon_kit') or playerInv:getItemFromType('TOC.Improvised_surgeon_kit');
-            if item then
-                getPlayer():Say("Don't move! Ok?");
-                ISTimedActionQueue.add(ISOperateLimb:new(confirm_ui_mp.patient, player, item, confirm_ui_mp.partNameAct, false));
-            else
-                player:Say("I need a kit");
-            end
-        else
-            getPlayer():Say("Never mind");
-        end
-    end
+
+
     confirm_ui_mp:close()
     confirm_ui_mp.responseReceive = false
 
@@ -388,7 +384,7 @@ end
 
 function SetupTocDescUI(surgeon, patient, toc_data, part_name)
     local part_data = toc_data[part_name]
-    desc_ui["textTitle"]:setText(getDisplayText_TOC(part_name))
+    desc_ui["textTitle"]:setText(TocGetDisplayText(part_name))
     desc_ui.part_name = part_name
 
     if IsProsthesisInstalled(part_data) then
@@ -505,7 +501,7 @@ function SendCommandToConfirmUIMP(action, isBitten, userName, partName)
     confirm_ui_mp:open()
 
     if action == "Cut" or action == "Operate" then
-        confirm_ui_mp["text4"]:setText("You're gonna " .. action .. " the " .. getDisplayText_TOC(partName) .. " of " .. userName)
+        confirm_ui_mp["text4"]:setText("You're gonna " .. action .. " the " .. TocGetDisplayText(partName) .. " of " .. userName)
         confirm_ui_mp["text2"]:setText("Are you sure?")
         confirm_ui_mp["text2"]:setColor(1, 0, 0, 0)
         confirm_ui_mp["b1"]:setVisible(true);

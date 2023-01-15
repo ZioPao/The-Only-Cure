@@ -35,6 +35,8 @@
         "ISEquipWeaponAction",
         "triggerEvent",
         "forceDropHeavyItems",
-        "getPlayerHotbar"
+        "getPlayerHotbar",
+        "isServer",
+        "BodyLocations"
     ]
 }

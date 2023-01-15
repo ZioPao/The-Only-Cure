@@ -34,7 +34,7 @@ function ISCutLimb:start()
 
 
     -- TODO this doesn't work when doing it online
-    local body_part_type = TheOnlyCure.GetBodyPartTypeFromBodyPart(self.part_name)
+    local body_part_type = TocGetBodyPartTypeFromBodyPart(self.part_name)
     local body_damage = self.patient:getBodyDamage()
     local body_damage_part = body_damage:getBodyPart(body_part_type)
 

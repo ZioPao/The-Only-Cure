@@ -3,15 +3,7 @@ if not TheOnlyCure then
 end
 
 
--- TODO this is gonna break a lot of stuff, don't do this you ass
--- GLOBAL STRINGS
-
-
-
-
--- TODO Unify Context Menus check with TOC Menu UI 
-
-
+-- TODO remove this crap
 Left = "Left"
 Right = "Right"
 
@@ -132,7 +124,7 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
     -- TODO Check if this works in MP through MENU UI
     local player = getPlayer()
     local toc_data = player:getModData().TOC
-    local body_part_type = player:getBodyDamage():getBodyPart(TheOnlyCure.GetBodyPartTypeFromBodyPart(part_name))
+    local body_part_type = player:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromBodyPart(part_name))
     local stats = player:getStats();
 
     -- Set damage, stress, and low endurance after amputation
