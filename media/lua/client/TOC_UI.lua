@@ -167,7 +167,9 @@ local function OnClickTocDescUI(button, args)
     local patient = args.patient
     local surgeon = args.surgeon
 
-
+    if patient == nil then
+        patient = surgeon
+    end
     -- Validate action
     if args.option == "Cut" then
         TryTocAction(_, desc_ui.part_name, "Cut", surgeon, patient)

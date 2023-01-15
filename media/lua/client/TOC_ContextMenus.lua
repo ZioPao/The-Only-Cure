@@ -14,17 +14,17 @@ function TryTocAction(_, part_name, action, surgeon, patient)
     if not isServer() and not isClient() then
         
         if action == "Cut" then
-            TocCutLocal(_, patient, patient, part_name)
+            TocCutLocal(_, surgeon, surgeon, part_name)
         elseif action == "Operate" then
-            TocOperateLocal(_, patient, patient, part_name, false)
+            TocOperateLocal(_, surgeon, surgeon, part_name, false)
         elseif action == "Equip" then
             -- TODO finish this
             local item
-            TocEquipProsthesisLocal(_, patient, surgeon, part_name)
+            TocEquipProsthesisLocal(_, surgeon, surgeon, part_name)
         elseif action == "Unequip" then
             -- TODO finish this
             local item
-            TocUnequipProsthesisLocal(_, patient, part_name)
+            TocUnequipProsthesisLocal(_, surgeon, part_name)
         end
     else
 
@@ -39,6 +39,10 @@ function TryTocAction(_, part_name, action, surgeon, patient)
         elseif action == "Operate" then
             AskCanOperateLimb(patient, part_name)
         elseif action == "Equip" then
+
+
+
+
             --AskCanEquipProsthesis(patient, part_name, item)
 
         elseif action == "Unequip" then
@@ -68,19 +72,19 @@ end
 
 -- end
 
-local function CheckIfCanBeOperated(modData)
-    if modData.TOC.RightHand.is_cut and not modData.TOC.RightHand.is_operated
-    or modData.TOC.RightForearm.is_cut and not modData.TOC.RightForearm.is_operated
-    or modData.TOC.RightArm.is_cut and not modData.TOC.RightArm.is_operated
-    or modData.TOC.LeftHand.is_cut and not modData.TOC.LeftHand.is_operated
-    or modData.TOC.LeftForearm.is_cut and not modData.TOC.LeftForearm.is_operated
-    or modData.TOC.LeftArm.is_cut and not modData.TOC.LeftArm.is_operated then
-        return true
-    else
-        return false
-    end
+-- local function CheckIfCanBeOperated(modData)
+--     if modData.TOC.RightHand.is_cut and not modData.TOC.RightHand.is_operated
+--     or modData.TOC.RightForearm.is_cut and not modData.TOC.RightForearm.is_operated
+--     or modData.TOC.RightArm.is_cut and not modData.TOC.RightArm.is_operated
+--     or modData.TOC.LeftHand.is_cut and not modData.TOC.LeftHand.is_operated
+--     or modData.TOC.LeftForearm.is_cut and not modData.TOC.LeftForearm.is_operated
+--     or modData.TOC.LeftArm.is_cut and not modData.TOC.LeftArm.is_operated then
+--         return true
+--     else
+--         return false
+--     end
 
-end
+-- end
 
 local function CloseAllMenus(player_index)
     local contextMenu = getPlayerContextMenu(player_index)
