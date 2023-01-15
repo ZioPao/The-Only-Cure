@@ -49,12 +49,6 @@ function ISUninstallProsthesis:perform()
         return      -- should never happen
     end
 
-    --if accepting_body_parts[body_part_type] then
-    --    toc_data[TOC_getBodyPart(body_part_type)]
-    --end
-
-
-
     for _, v in ipairs(GetAcceptingProsthesisBodyParts()) do
         if self.bodyPart:getType() == v then
             local part_name = FindTocBodyPartNameFromBodyPartType(v)
@@ -95,6 +89,8 @@ function ISUninstallProsthesis:perform()
 
         end
     end
+
+    -- TODO Make the object currently on the hand return to the inventory
 
 end
 

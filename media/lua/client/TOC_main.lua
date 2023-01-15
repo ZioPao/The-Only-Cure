@@ -29,6 +29,9 @@ function TheOnlyCure.InitTheOnlyCure(_, player)
         local leftForearm = "LeftForearm"
         local leftArm = "LeftArm"
 
+
+        local prothesis_list = {"WoodenHook", "MetalHook", "MetalHand"}
+
         mod_data.TOC  = {
             RightHand = {},
             RightForearm = {},
@@ -75,6 +78,20 @@ function TheOnlyCure.InitTheOnlyCure(_, player)
         mod_data.TOC[leftForearm].cicatrization_base_time = 1800
         mod_data.TOC[rightArm].cicatrization_base_time = 2000
         mod_data.TOC[leftArm].cicatrization_base_time = 2000
+
+
+
+        -- Setup a table with all the acceptable prosthesis
+        mod_data.TOC.prosthesis_table = {}
+
+        for _, v in ipairs(prothesis_list) do
+            mod_data.TOC.prosthesis_table[v] = {
+                material_id = 1,
+                something = "Something"
+            }
+
+        end
+
 
 
         -- Traits setup
@@ -177,7 +194,7 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
         end
 
         --Equip model for amputation
-        local cloth = player:getInventory():AddItem(find_clothName2_TOC(part_name))
+        local cloth = player:getInventory():AddItem(TocFindAmputatedClothingFromPartName(part_name))
         player:setWornItem(cloth:getBodyLocation(), cloth)
         player:transmitModData()
 
@@ -216,6 +233,73 @@ function TheOnlyCure.OperateLimb(part_name, surgeon_factor, use_oven)
     player:transmitModData()
 end
 
+function TryTocAction(_, part_name, action, surgeon, patient)
+    -- TODO add checks so that we don't show these menus if a player has already beeen operated or amputated
+    -- TODO at this point surgeon doesnt do anything. We'll fix this later
+
+    -- Check if SinglePlayer
+    if not isServer() and not isClient() then
+        
+        if action == "Cut" then
+            TocCutLocal(_, surgeon, surgeon, part_name)
+        elseif action == "Operate" then
+            TocOperateLocal(_, surgeon, surgeon, part_name, false)
+        elseif action == "Equip" then
+            -- TODO finish this
+            local item
+            TocEquipProsthesisLocal(_, surgeon, surgeon, part_name)
+        elseif action == "Unequip" then
+            -- TODO finish this
+            local item
+            TocUnequipProsthesisLocal(_, surgeon, part_name)
+        end
+    else
+
+        local ui = GetConfirmUIMP()
+        if not ui then
+            CreateTocConfirmUIMP()
+            ui = GetConfirmUIMP()
+        end
+
+
+        if patient == nil then
+            patient = surgeon
+        end
+
+        if action == "Cut" then
+            AskCanCutLimb(patient, part_name)
+        elseif action == "Operate" then
+            AskCanOperateLimb(patient, part_name)
+        elseif action == "Equip" then
+            local surgeon_inventory = surgeon:getInventory()
+            local prosthesis_to_equip = surgeon_inventory:getItemFromType('TOC.MetalHand') or 
+                        surgeon_inventory:getItemFromType('TOC.MetalHook') or 
+                        surgeon_inventory:getItemFromType('TOC.WoodenHook')
+            if prosthesis_to_equip then
+                ISTimedActionQueue.add(ISInstallProsthesis:new(patient, prosthesis_to_equip, patient:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromBodyPart(part_name))))
+            else
+                surgeon:Say("I need a prosthesis")
+            end
+
+
+
+            --AskCanEquipProsthesis(patient, part_name, item)
+
+        elseif action == "Unequip" then
+            --AskCanUnequipProsthesis(patient, part_name)
+            local equipped_prosthesis = FindTocItemWorn(part_name, patient)
+            ISTimedActionQueue.add(ISUninstallProsthesis:new(patient, equipped_prosthesis, patient:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromBodyPart(part_name))))
+        end
+        ui.actionAct = action
+        ui.partNameAct = part_name
+        ui.patient = patient
+
+        --TODO just a workaround for now
+        if action ~= "Equip" and action ~= "Unequip" then
+            SendCommandToConfirmUIMP("Wait server")
+        end
+    end
+end
 
 
 Events.OnCreatePlayer.Add(TheOnlyCure.InitTheOnlyCure)

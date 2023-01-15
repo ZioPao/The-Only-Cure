@@ -8,7 +8,7 @@ function ResetEverything()
     -- Destroy the amputation model
 
     for _,v in ipairs(GetBodyParts()) do
-        local cloth = player:getInventory():FindAndReturn(find_clothName2_TOC(v))
+        local cloth = player:getInventory():FindAndReturn(TocFindAmputatedClothingFromPartName(v))
 
         if cloth ~= nil then
             print("Resetting " .. cloth:getName())

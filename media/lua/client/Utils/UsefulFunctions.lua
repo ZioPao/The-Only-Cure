@@ -96,14 +96,16 @@ function TocGetBodyPartTypeFromBodyPart(part_name)
 end
 
 
-function find_clothName2_TOC(name)
-    if name == "RightHand"      then return "TOC.ArmRight_noHand" end
-    if name == "RightForearm"   then return "TOC.ArmRight_noForearm" end
-    if name == "RightArm"       then return "TOC.ArmRight_noArm" end
-    if name == "LeftHand"       then return "TOC.ArmLeft_noHand" end
-    if name == "LeftForearm"    then return "TOC.ArmLeft_noForearm" end
-    if name == "LeftArm"        then return "TOC.ArmLeft_noArm" end
+function TocFindAmputatedClothingFromPartName(part_name)
+    if part_name == "RightHand"      then return "TOC.ArmRight_noHand" end
+    if part_name == "RightForearm"   then return "TOC.ArmRight_noForearm" end
+    if part_name == "RightArm"       then return "TOC.ArmRight_noArm" end
+    if part_name == "LeftHand"       then return "TOC.ArmLeft_noHand" end
+    if part_name == "LeftForearm"    then return "TOC.ArmLeft_noForearm" end
+    if part_name == "LeftArm"        then return "TOC.ArmLeft_noArm" end
+
 end
+
 
 function find_protheseID_TOC(item)
     local itemType = item:getType()

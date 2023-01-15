@@ -2,6 +2,7 @@ require "TimedActions/ISBaseTimedAction"
 
 ISCutLimb = ISBaseTimedAction:derive("ISCutLimb")
 
+-- TODO Add a check so you can't cut your arm if you don't have hands or if you only have one arm and want to cut that same arm.
 
 function ISCutLimb:isValid()
     return self.patientX == self.patient:getX() and self.patientY == self.patient:getY()
@@ -42,6 +43,9 @@ function ISCutLimb:start()
     body_damage_part:setBleeding(true)
     body_damage_part:setCut(true)
     body_damage_part:setBleedingTime(ZombRand(10,20))
+
+
+    -- TODO Make the object currently on the hand return to the inventory
 
 end
 
