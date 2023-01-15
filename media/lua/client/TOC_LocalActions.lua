@@ -22,8 +22,8 @@ function TocOperateLocal(_, patient, surgeon, part_name, use_oven)
 end
 
 function TocEquipProsthesisLocal(_, patient, surgeon, part_name)
- -- TODO probably completely broken for MP 
-        -- TODO this is really janky
+    -- TODO probably completely broken for MP 
+    -- TODO this is really janky
     local surgeon_inventory = surgeon:getInventory()
     local prosthesis_to_equip = surgeon_inventory:getItemFromType('TOC.MetalHand') or 
                             surgeon_inventory:getItemFromType('TOC.MetalHook') or 

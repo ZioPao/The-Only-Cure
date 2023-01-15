@@ -87,6 +87,7 @@ function TheOnlyCure.HealSpecificPart(toc_data, part_name, player)
     local bandage_life = 0
     local bandage_type = ""
 
+    -- TODO Bandages should have some disadvantage when not operated... Like getting drenched or something
     if body_part_type:bandaged() then
         is_bandaged = true      -- this is useless 
         bandage_life = body_part_type:getBandageLife()
@@ -143,6 +144,10 @@ function TheOnlyCure.HealSpecificPart(toc_data, part_name, player)
 
             -- TODO make this random if the player gets it or not
             --FIXME they're gonna stack!!!!
+
+            -- if player does not have brave then add it 
+            -- if player does not have insensitve then add it 
+
             player:getTraits():add("Brave")
             player:getTraits():add("Insensitive")
             body_part_type:setBleeding(false);
@@ -193,7 +198,7 @@ function TheOnlyCure.UpdateEveryOneMinute()
     local toc_data = player:getModData().TOC
 
     if toc_data ~= nil then
-        --TheOnlyCure.TryDropItem(player, toc_data)       -- TODO this is kinda useless I think
+        --TheOnlyCure.TryDropItem(player, toc_data)       -- TODO this must be set only in the cut\equipping function, not here
         TheOnlyCure.CheckIfPlayerIsInfected(player, toc_data)
         TheOnlyCure.UpdatePlayerHealth(player, toc_data)
     end
@@ -223,7 +228,7 @@ function TheOnlyCure.UpdateEveryTenMinutes()
         end
     end
     
-    player:transmitModData()        -- TODO if we do this every minutes, do we need to re do it here?
+    player:transmitModData()
 end
 
 
