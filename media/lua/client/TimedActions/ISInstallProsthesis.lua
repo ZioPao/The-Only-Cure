@@ -140,16 +140,16 @@ function ISInstallProsthesis:perform()
     if self.cloth ~= nil then
         if self.bodyPart:getType() == BodyPartType.Hand_R then
             modData.TOC.RightHand.is_prosthesis_equipped = true;
-            modData.TOC.RightHand.prothesis_factor = find_protheseFact_TOC(self.cloth);
+            modData.TOC.RightHand.prosthesis_factor = find_protheseFact_TOC(self.cloth);
         elseif self.bodyPart:getType() == BodyPartType.ForeArm_R then
             modData.TOC.RightForearm.is_prosthesis_equipped = true;
-            modData.TOC.RightForearm.prothesis_factor = find_protheseFact_TOC(self.cloth);
+            modData.TOC.RightForearm.prosthesis_factor = find_protheseFact_TOC(self.cloth);
         elseif self.bodyPart:getType() == BodyPartType.Hand_L then
             modData.TOC.LeftHand.is_prosthesis_equipped = true;
-            modData.TOC.LeftHand.prothesis_factor = find_protheseFact_TOC(self.cloth);
+            modData.TOC.LeftHand.prosthesis_factor = find_protheseFact_TOC(self.cloth);
         elseif self.bodyPart:getType() == BodyPartType.ForeArm_L then
             modData.TOC.LeftForearm.is_prosthesis_equipped = true;
-            modData.TOC.LeftForearm.prothesis_factor = find_protheseFact_TOC(self.cloth);
+            modData.TOC.LeftForearm.prosthesis_factor = find_protheseFact_TOC(self.cloth);
         end
 
         self.character:getInventory():Remove(self.item);

@@ -28,7 +28,7 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
         for i,name in ipairs(protPartNames) do
             if modData.TOC[name].is_cut then
                 if modData.TOC[name].is_prosthesis_equipped then
-                    maxTime = maxTime * modData.TOC[name].prothesis_factor     --TODO  this is dumb
+                    maxTime = maxTime * modData.TOC[name].prosthesis_factor     --TODO  this is dumb
                 else
                     maxTime = maxTime * 2;
                 end

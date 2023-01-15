@@ -55,42 +55,47 @@ function ISUninstallProsthesis:perform()
 
 
 
+    for _, v in ipairs(GetAcceptingProsthesisBodyParts()) do
+        if self.bodyPart:getType() == v then
+            local part_name = FindTocBodyPartNameFromBodyPartType(v)
 
-    if self.bodyPart:getType() == BodyPartType.Hand_R then
-        toc_data.RightHand.is_prosthesis_equipped = false
-        toc_data.RightHand.prothesis_factor = 1
-    elseif self.bodyPart:getType() == BodyPartType.ForeArm_R then
-        toc_data.RightForearm.is_prosthesis_equipped = false
-        toc_data.RightForearm.prothesis_factor = 1
-    elseif self.bodyPart:getType() == BodyPartType.Hand_L then
-        toc_data.LeftHand.is_prosthesis_equipped = false
-        toc_data.LeftHand.prothesis_factor = 1
-    elseif self.bodyPart:getType() == BodyPartType.ForeArm_L then
-        toc_data.LeftForearm.is_prosthesis_equipped = false
-        toc_data.LeftForearm.prothesis_factor = 1
+            if part_name then 
+                toc_data[part_name].is_prosthesis_equipped = false
+                toc_data[part_name].prosthesis_factor = 1
+    
+                local side = string.gsub(part_name, "Hand" or "Forearm", "")
+                
+                local prosthesis_list = {"TOC.WoodenHook", "TOC.MetalHook", "TOC.MetalHand"}
+
+                for _, prost_v in ipairs(prosthesis_list) do
+                    local prosthesis_name = string.match(self.item:getName(), prost_v)
+
+                    if prosthesis_name then
+                        self.character:getInventory():AddItem(prosthesis_name)
+
+                        self.character:setWornItem(self.item:getBodyLocation(), nil)
+                        self.character:getInventory():Remove(self.item)
+                        self.character:transmitModData()
+                    
+                        -- needed to remove from queue / start next.
+                        ISBaseTimedAction.perform(self)
+                        
+                    end
+                end
+
+            end
+
+
+
+
+
+
+
+
+
+        end
     end
 
-    local weight = math.floor(self.item:getWeight() * 10 + 0.5)
-    if weight == 10 then
-        self.character:getInventory():AddItem("TOC.WoodenHook")
-    elseif weight == 5 then
-        self.character:getInventory():AddItem("TOC.MetalHook")
-    elseif weight == 3 then
-        self.character:getInventory():AddItem("TOC.MetalHand")
-    elseif weight == 20 then
-        self.character:getInventory():AddItem("TOC.WoodenHook")
-    elseif weight == 15 then
-        self.character:getInventory():AddItem("TOC.MetalHook")
-    elseif weight == 12 then
-        self.character:getInventory():AddItem("TOC.MetalHand")
-    end
-
-    self.character:setWornItem(self.item:getBodyLocation(), nil)
-    self.character:getInventory():Remove(self.item)
-    self.character:transmitModData()
-
-    -- needed to remove from queue / start next.
-    ISBaseTimedAction.perform(self);
 end
 
 function ISUninstallProsthesis:new(character, item, bodyPart)

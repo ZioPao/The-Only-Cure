@@ -53,7 +53,7 @@ function TheOnlyCure.InitTheOnlyCure(_, player)
             
             
             mod_data.TOC[v].is_prosthesis_equipped = false
-            mod_data.TOC[v].prothesis_factor = 1.0       -- TODO Every prosthesis has the same... does this even make sense here?
+            mod_data.TOC[v].prosthesis_factor = 1.0       -- TODO Every prosthesis has the same... does this even make sense here?
             mod_data.TOC[v].prothesis_material_id = nil
         end
 
