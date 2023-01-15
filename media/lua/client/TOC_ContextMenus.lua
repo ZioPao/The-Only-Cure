@@ -34,12 +34,25 @@ function TryTocAction(_, part_name, action, surgeon, patient)
             ui = GetConfirmUIMP()
         end
 
+
+        if patient == nil then
+            patient = surgeon
+        end
+
         if action == "Cut" then
             AskCanCutLimb(patient, part_name)
         elseif action == "Operate" then
             AskCanOperateLimb(patient, part_name)
         elseif action == "Equip" then
-
+            local surgeon_inventory = surgeon:getInventory()
+            local prosthesis_to_equip = surgeon_inventory:getItemFromType('TOC.MetalHand') or 
+                        surgeon_inventory:getItemFromType('TOC.MetalHook') or 
+                        surgeon_inventory:getItemFromType('TOC.WoodenHook')
+            if prosthesis_to_equip then
+                ISTimedActionQueue.add(ISInstallProsthesis:new(patient, prosthesis_to_equip, patient:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromBodyPart(part_name))))
+            else
+                surgeon:Say("I need a prosthesis")
+            end
 
 
 
@@ -47,13 +60,17 @@ function TryTocAction(_, part_name, action, surgeon, patient)
 
         elseif action == "Unequip" then
             --AskCanUnequipProsthesis(patient, part_name)
-
+            local equipped_prosthesis = FindTocItemWorn(part_name, patient)
+            ISTimedActionQueue.add(ISUninstallProsthesis:new(patient, equipped_prosthesis, patient:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromBodyPart(part_name))))
         end
         ui.actionAct = action
         ui.partNameAct = part_name
         ui.patient = patient
 
-        SendCommandToConfirmUIMP("Wait server")
+        --TODO just a workaround for now
+        if action ~= "Equip" and action ~= "Unequip" then
+            SendCommandToConfirmUIMP("Wait server")
+        end
     end
 end
 

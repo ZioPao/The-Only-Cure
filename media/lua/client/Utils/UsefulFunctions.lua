@@ -21,12 +21,11 @@ end
 
 function GetAcceptingProsthesisBodyParts()
 
-    function GetLimbsBodyPartTypes()
 
-        return {BodyPartType.Hand_R, BodyPartType.ForeArm_R,
-                BodyPartType.Hand_L, BodyPartType.ForeArm_L}
-    
-    end
+    return {BodyPartType.Hand_R, BodyPartType.ForeArm_R,
+            BodyPartType.Hand_L, BodyPartType.ForeArm_L}
+
+
 end
 
 
@@ -45,12 +44,13 @@ end
 function FindTocItemWorn(part_name, patient)
     local worn_items = patient:getWornItems()
 
-    for _, v in ipairs(worn_items) do
-        local item = v.getItem()
+    for i=1,worn_items:size()-1 do -- Maybe wornItems:size()-1
+        local item = worn_items:get(i):getItem();
         if item:getBodyLocation() == PartNameToBodyLocation(part_name) then
-            return item
+            return item;
         end
     end
+
 end
 
 

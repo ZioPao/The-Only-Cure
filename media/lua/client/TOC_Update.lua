@@ -142,6 +142,7 @@ function TheOnlyCure.HealSpecificPart(toc_data, part_name, player)
             toc_data[part_name].is_cicatrized = true
 
             -- TODO make this random if the player gets it or not
+            --FIXME they're gonna stack!!!!
             player:getTraits():add("Brave")
             player:getTraits():add("Insensitive")
             body_part_type:setBleeding(false);

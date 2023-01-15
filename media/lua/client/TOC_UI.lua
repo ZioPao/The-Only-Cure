@@ -164,37 +164,26 @@ end
 local function OnClickTocDescUI(button, args)
     -- Gets every arg from main 
 
-    local patient = args.patient
-    local surgeon = args.surgeon
+    local patient = desc_ui.patient
+    local surgeon = desc_ui.surgeon
 
-    if patient == nil then
-        patient = surgeon
-    end
+
     -- Validate action
     if args.option == "Cut" then
         TryTocAction(_, desc_ui.part_name, "Cut", surgeon, patient)
     elseif args.option == "Operate" then
         TryTocAction(_, desc_ui.part_name, "Operate", surgeon, patient)
 
-
     elseif args.option == "Equip" then
+        TryTocAction(_, desc_ui.part_name, "Equip", surgeon, patient)
         -- TODO probably completely broken for MP 
         -- TODO this is really janky
-        local surgeon_inventory = surgeon:getInventory()
-        local prosthesis_to_equip = surgeon_inventory:getItemFromType('TOC.MetalHand') or 
-                    surgeon_inventory:getItemFromType('TOC.MetalHook') or 
-                    surgeon_inventory:getItemFromType('TOC.WoodenHook')
-        if prosthesis_to_equip then
-            ISTimedActionQueue.add(ISInstallProsthesis:new(patient, prosthesis_to_equip, patient:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromBodyPart(desc_ui.part_name))))
-        else
-            surgeon:Say("I need a prosthesis")
-        end
-        main_ui:close()
+
     elseif args.option == "Unequip" then
-        local equipped_prosthesis = FindTocItemWorn(desc_ui.part_name, patient)
-        ISTimedActionQueue.add(ISUninstallProsthesis:new(patient, equipped_prosthesis, patient:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromBodyPart(desc_ui.part_name))))
-        main_ui:close()
+        TryTocAction(_, desc_ui.part_name, "Unequip", surgeon, patient)
+
     end
+    main_ui:close()
 
 end
 
@@ -388,6 +377,8 @@ function SetupTocDescUI(surgeon, patient, toc_data, part_name)
     local part_data = toc_data[part_name]
     desc_ui["textTitle"]:setText(TocGetDisplayText(part_name))
     desc_ui.part_name = part_name
+    desc_ui.surgeon = surgeon
+    desc_ui.patient = patient
 
     if IsProsthesisInstalled(part_data) then
         -- Limb cut with prosthesis
@@ -431,7 +422,6 @@ function SetupTocDescUI(surgeon, patient, toc_data, part_name)
             -- Set the operate button
             desc_ui["b1"]:setText("Operate")
             desc_ui["b1"]:addArg("option", "Operate")
-            desc_ui["b1"]:addArg("surgeon", surgeon)
             desc_ui["b1"]:setVisible(true)
 
             if part_data.cicatrization_time > 1000 then
@@ -461,8 +451,6 @@ function SetupTocDescUI(surgeon, patient, toc_data, part_name)
             desc_ui["b1"]:setVisible(true)
             desc_ui["b1"]:setText("Cut")
             desc_ui["b1"]:addArg("option", "Cut")
-            desc_ui["b1"]:addArg("surgeon", surgeon)
-            desc_ui["b1"]:addArg("patient", patient)
         elseif GetSawInInventory(surgeon) and not CanLimbBeAmputated(toc_data, part_name) then
             desc_ui["b1"]:setVisible(true)
             desc_ui["b1"]:setText("Cut")
