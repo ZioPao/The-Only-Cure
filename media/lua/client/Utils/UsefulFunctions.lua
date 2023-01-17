@@ -3,6 +3,17 @@ function GetBodyParts()
     return bodyparts
 end
 
+
+-- TODO Find a better name
+function GetProsthesisLisHumanReadable()
+    return {"WoodenHook", "MetalHook", "MetalHand"}
+
+end
+
+
+
+
+
 function GetProsthesisList()
     return {"TOC.WoodenHook", "TOC.MetalHook", "TOC.MetalHand"}
 

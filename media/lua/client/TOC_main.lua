@@ -19,7 +19,7 @@ function TheOnlyCure.InitTheOnlyCure(_, player)
     if mod_data.TOC == nil then
 
         mod_data.TOC = {}
-        print("CREATING NEW TOC STUFF SINCE YOU JUST DIED")
+        print("CREATING NEW TOC STUF")
          
         local rightHand = "RightHand"
         local rightForearm = "RightForearm"
@@ -56,8 +56,8 @@ function TheOnlyCure.InitTheOnlyCure(_, player)
             
             
             mod_data.TOC[v].is_prosthesis_equipped = false
-            mod_data.TOC[v].prosthesis_factor = 1.0       -- TODO Every prosthesis has the same... does this even make sense here?
-            mod_data.TOC[v].prothesis_material_id = nil
+            mod_data.TOC[v].prosthesis_factor = 1.0       
+            mod_data.TOC[v].prosthesis_material_id = nil
         end
 
 
