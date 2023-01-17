@@ -23,4 +23,7 @@ Tooltip_EN = {
     Tooltip_ProthesisMag1 = "Learn how to make a wooden hook!"
     Tooltip_ProthesisMag2 = "Learn how to make a metal hook!"
     Tooltip_ProthesisMag3 = "Learn how to make a metal hand!"
+
+
+
 }

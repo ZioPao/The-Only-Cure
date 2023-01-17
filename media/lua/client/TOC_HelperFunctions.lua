@@ -69,3 +69,34 @@ function FixSingleBodyPartType(body_part_type, use_oven)
         --body_part_type:setBleedingTime(ZombRand(1, 5))   -- Reset the bleeding, maybe make it random
     end
 end
+
+
+-------------------------------------
+-- Override helper
+
+function CheckIfItemIsAmputatedLimb(item)
+
+    local item_full_type = item:getFullType()
+
+    local sides = {"Left", "Right"}
+    local limbs_to_check = {"Hand", "Forearm", "Arm"}
+
+    local is_amputated_limb = false
+
+    for _, part_name in ipairs(limbs_to_check) do
+        for _, side in ipairs(sides) do
+            local check_name = "TOC.Arm" .. side .. "_no" .. part_name
+            print(check_name)
+            if item_full_type == check_name then
+                is_amputated_limb = true
+                break
+            end
+
+        end
+
+    end
+
+
+    return is_amputated_limb
+
+end

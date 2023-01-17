@@ -1,9 +1,11 @@
 require "TimedActions/ISBaseTimedAction"
 require "TimedActions/ISEquipWeaponAction"
+require "TimedActions/ISUnequipAction"
+require "TimedActions/ISDropItemAction"
 
+local og_ISEquipTimedActionAdjustMaxTime = ISBaseTimedAction.adjustMaxTime
 
-local og_ISEquipTimedActionAdjustMaxTime = ISBaseTimedAction.adjustMaxTime 
-
+-- FIXME something is seriously broken here, it stacks up 
 function ISBaseTimedAction:adjustMaxTime(maxTime)
 
     local original_max_time = og_ISEquipTimedActionAdjustMaxTime(self, maxTime)       -- TODO will it work?
@@ -42,6 +44,11 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
     end
 
     if modified_max_time > 10 * original_max_time then modified_max_time = 10 * original_max_time end
+
+
+    print("MODIFIED MAX TIME: " .. modified_max_time)
+
+
     return modified_max_time
 
 end
@@ -92,3 +99,91 @@ function ISEquipWeaponAction:perform()
 
 
 end
+
+
+
+
+-- local og_ISInventoryPaneContextMenuDoWearClothingMenu = ISInventoryPaneContextMenu.doWearClothingMenu
+
+-- function ISInventoryPaneContextMenu.doWearClothingMenu(player, clothing, items, context)
+
+--     og_ISInventoryPaneContextMenuDoWearClothingMenu(self, player, clothing, items, context)
+
+
+-- end
+
+
+local og_ISUnequipActionPerform = ISUnequipAction.perform
+
+function ISUnequipAction:perform()
+--     -- check if the "clothing" is actually an amputation
+
+
+--     -- for _, v in ipairs(GetBodyParts()) do
+--     --     local amputation =  TocFindAmputatedClothingFromPartName(v) 
+--     --     if amputation then
+            
+--     --     end
+--     -- end
+
+    
+
+    if not CheckIfItemIsAmputatedLimb(self.item) then
+        og_ISUnequipActionPerform(self)
+    end
+
+
+end
+
+
+local og_ISDropItemActionPerform = ISDropItemAction.perform
+
+function ISDropItemAction:perform()
+
+    if not CheckIfItemIsAmputatedLimb(self.item) then
+        og_ISDropItemActionPerform(self)
+    end
+
+
+end
+-- TODO Add "Clean Wound" to make the cicatrization faster
+
+
+
+-- local og_ISInventoryPaneContextMenuCreateMenu = ISInventoryPaneContextMenu.createMenu
+
+-- function ISInventoryPaneContextMenu.createMenu(player, isInPlayerInventory, items, x, y, origin)
+
+--     og_ISInventoryPaneContextMenuCreateMenu(player, isInPlayerInventory, items, x, y, origin)
+
+--     local items_to_delete = GetAmputatedLimbFullTypes()
+--     local item_try_again
+--     local test_item = nil
+--     local item_to_test = nil
+--     --local seccontext = ISContextMenu.get(player, x, y);
+
+
+
+
+--     for index, v in ipairs(items) do
+--          test_item = v
+
+--          if not instanceof(v, "InventoryItem") then
+--              item_to_test = v.items[1]
+--              for _, item_to_delete in ipairs(items_to_delete) do
+--                  local item_type = item_to_test:getFullType()
+--                  print("ITEM IN INV " ..item_type)
+--                  print("CHECKING STRING " .. item_to_delete)
+--                  if item_type == item_to_delete then
+--                     --seccontext:removeOptionByName(getText("ContextMenu_Unequip"))     -- IT IS ALREADY DEFINED!!!
+--                  end
+--              end
+--          end
+--      end
+    
+
+
+
+
+
+-- end

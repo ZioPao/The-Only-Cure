@@ -28,4 +28,16 @@ DisplayName_EN = {
     ItemName_TOC.ProthesisMag1 = "Prothesis magazine for dummies",
     ItemName_TOC.ProthesisMag2 = "Prothesis magazine for experienced",
     ItemName_TOC.ProthesisMag3 = "Prothesis magazine for experts",
+
+
+    ItemName_TOC.ArmLeft_noHand = "Amputated left hand",
+    ItemName_TOC.ArmLeft_noForearm = "Amputated left forearm",
+    ItemName_TOC.ArmLeft_noArm = "Amputated entire left arm",
+
+    ItemName_TOC.ArmRight_noHand = "Amputated left hand",
+    ItemName_TOC.ArmRight_noForearm = "Amputated left forearm",
+    ItemName_TOC.ArmRight_noArm = "Amputated entire left arm",
+
+
+
 }

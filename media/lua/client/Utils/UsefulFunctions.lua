@@ -40,6 +40,14 @@ end
 function GetNonAcceptingProsthesisBodyParts()
     return {"RightArm", "LeftArm"}
 end
+
+function GetAmputatedLimbFullTypes()
+
+    return {"TOC.ArmRight_noHand", "TOC.ArmRight_noForearm", "TOC.ArmRight_noArm",
+             "TOC.ArmLeft_noHand", "TOC.ArmLeft_noForearm", "TOC.ArmLeft_noArm"}
+end
+
+
 local function PartNameToBodyLocation(name)
     if name == "RightHand"      then return "ArmRight_Prot" end
     if name == "RightForearm"   then return "ArmRight_Prot" end
@@ -126,6 +134,21 @@ function TocFindAmputatedClothingFromPartName(part_name)
     if part_name == "LeftArm"        then return "TOC.ArmLeft_noArm" end
 
 end
+
+-- TODO finish this
+-- function TocFindIfClothingItemIsAmputatedLimb(item_name)
+
+
+
+--     if item_name == "ArmRight_noHand"
+--     local check =
+
+-- end
+
+
+
+
+
 
 function TocFindProsthesisFactorFromItem(item)
 

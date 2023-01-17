@@ -8,79 +8,104 @@ imports
     item ArmRight_noHand
         {
             Type = Clothing,
+            DisplayName	= Amputated right hand,
+
             ClothingItem = ArmRight_noHand,
             BodyLocation = ArmRight,
 
             Weight = 0,
             CombatSpeedModifier = 0.9,
+            /*BloodLocation = UpperArms;LowerArms,*/
+
             Insulation = 1.0,
             WindResistance = 1.0,
             WaterResistance = 1.0,
+            Icon = genericAmputation,
         }
 
     item ArmRight_noForearm
         {
             Type = Clothing,
+            DisplayName	= Amputated right forearm,
+
             ClothingItem = ArmRight_noForeArm,
             BodyLocation = ArmRight,
 
             Weight = 0,
             CombatSpeedModifier = 0.8,
+            BloodLocation = UpperArms;LowerArms,
             Insulation = 1.0,
             WindResistance = 1.0,
             WaterResistance = 1.0,
+            Icon = genericAmputation,
         }
 
     item ArmRight_noArm
         {
             Type = Clothing,
+            DisplayName	= Amputated entire right arm,
+
             ClothingItem = ArmRight_noArm,
             BodyLocation = ArmRight,
-
+            /*BloodLocation = UpperArms,*/
             Weight = 0,
             CombatSpeedModifier = 0.7,
             Insulation = 1.0,
             WindResistance = 1.0,
             WaterResistance = 1.0,
+            Icon = genericAmputation,
         }
 
     item ArmLeft_noHand
         {
             Type = Clothing,
+            DisplayName	= Amputated left hand,
+
             ClothingItem = ArmLeft_noHand,
             BodyLocation = ArmLeft,
 
             Weight = 0,
             CombatSpeedModifier = 0.9,
+            /*BloodLocation = UpperArms;LowerArms,*/
             Insulation = 1.0,
+            
             WindResistance = 1.0,
             WaterResistance = 1.0,
+            Icon = genericAmputation,
         }
 
     item ArmLeft_noForearm
         {
             Type = Clothing,
+            DisplayCategory = Amputation,
+            DisplayName	= Amputated left forearm,
             ClothingItem = ArmLeft_noForeArm,
             BodyLocation = ArmLeft,
 
             Weight = 0,
             CombatSpeedModifier = 0.8,
+            BloodLocation = UpperArms;LowerArms,
             Insulation = 1.0,
             WindResistance = 1.0,
             WaterResistance = 1.0,
+            Icon = genericAmputation,
+
         }
 
     item ArmLeft_noArm
         {
             Type = Clothing,
+            DisplayName	= Amputated entire left arm,
             ClothingItem = ArmLeft_noArm,
             BodyLocation = ArmLeft,
 
             Weight = 0,
             CombatSpeedModifier = 0.7,
+            /*BloodLocation = UpperArms,*/
             Insulation = 1.0,
             WindResistance = 1.0,
             WaterResistance = 1.0,
+            Icon = genericAmputation,
         }
 
 /************************ Other items ************************/

@@ -37,6 +37,9 @@
         "forceDropHeavyItems",
         "getPlayerHotbar",
         "isServer",
-        "BodyLocations"
+        "BodyLocations",
+        "ISUnequipAction",
+        "ISInventoryPaneContextMenu",
+        "ISDropItemAction"
     ]
 }
