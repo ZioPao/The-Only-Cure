@@ -8,6 +8,37 @@ function GetProsthesisList()
 
 end
 
+function GetInstallableProsthesisList()
+
+
+    -- To make it future proff since i'm gonna add stuff, let's cycle through already known prosthesis 
+    local prosthesis_list = GetProsthesisList()
+
+    local sides = {"right", "left"}
+    local body_parts = {"Hand", "Forearm", "Arm"}
+    local installed_prosthesis_list = {}
+
+    for _, side in pairs(sides) do
+        for _, prost in pairs(prosthesis_list) do
+            for _, body_part in pairs(body_parts) do
+                local installable_prost =  prost .. "_" .. side .. "_no" .. body_part
+                table.insert(installed_prosthesis_list, installable_prost)
+            end
+
+
+
+        end
+        
+
+
+    end
+
+    return installed_prosthesis_list
+
+    
+
+end
+
 function GetLimbsBodyPartTypes()
 
     return {BodyPartType.Hand_R, BodyPartType.ForeArm_R, BodyPartType.UpperArm_R,

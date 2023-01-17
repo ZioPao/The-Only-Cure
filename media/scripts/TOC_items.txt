@@ -149,10 +149,11 @@ imports
         {
             Weight = 1,
             Type = Clothing,
-            /*DisplayCategory = Prosthesis,
-            DisplayName	= DisplayName_woodenHook,*/
+            DisplayCategory = Prosthesis,
+            DisplayName	= DisplayName_woodenHook,
             ClothingItem = ArmRight_WoodenHook,
             BodyLocation = ArmRight_Prot,
+            BloodLocation = Hands,
             Icon = woodenHook,
             Tooltip = Tooltip_equip_prothesis_hand,
             WaterResistance = 15,
@@ -162,10 +163,11 @@ imports
         {
             Weight = 1,
             Type = Clothing,
-            /*DisplayCategory = Prosthesis,
-            DisplayName	= DisplayName_woodenHook,*/
+            DisplayCategory = Prosthesis,
+            DisplayName	= DisplayName_woodenHook,
             ClothingItem = ArmLeft_WoodenHook,
             BodyLocation = ArmLeft_Prot,
+            BloodLocation = Hands,
             Icon = woodenHook,
             Tooltip = Tooltip_equip_prothesis_hand,
             WaterResistance = 15,
@@ -175,10 +177,11 @@ imports
         {
             Weight = 0.5,
             Type = Clothing,
-            /*DisplayCategory = Prosthesis,
-            DisplayName	= DisplayName_metalHook,*/
+            DisplayCategory = Prosthesis,
+            DisplayName	= DisplayName_metalHook,
             ClothingItem = ArmRight_MetalHook,
             BodyLocation = ArmRight_Prot,
+            BloodLocation = Hands,
             Icon = metalHook,
             Tooltip = Tooltip_equip_prothesis_hand,
             WaterResistance = 13,
@@ -188,10 +191,11 @@ imports
         {
             Weight = 0.5,
             Type = Clothing,
-            /*DisplayCategory = Prosthesis,
-            DisplayName	= DisplayName_metalHook,*/
+            DisplayCategory = Prosthesis,
+            DisplayName	= DisplayName_metalHook,
             ClothingItem = ArmLeft_MetalHook,
             BodyLocation = ArmLeft_Prot,
+            BloodLocation = Hands,
             Icon = metalHook,
             Tooltip = Tooltip_equip_prothesis_hand,
             WaterResistance = 13,
@@ -201,10 +205,11 @@ imports
         {
             Weight = 0.3,
             Type = Clothing,
-            /*DisplayCategory = Prosthesis,
-            DisplayName	= DisplayName_metalHand,*/
+            DisplayCategory = Prosthesis,
+            DisplayName	= DisplayName_metalHand,
             ClothingItem = ArmRight_MetalHamd,
             BodyLocation = ArmRight_Prot,
+            BloodLocation = Hands,
             Icon = metalHand,
             Tooltip = Tooltip_equip_prothesis_hand,
             WaterResistance = 11,
@@ -214,10 +219,11 @@ imports
         {
             Weight = 0.3,
             Type = Clothing,
-            /*DisplayCategory = Prosthesis,
-            DisplayName	= DisplayName_metalHand,*/
+            DisplayCategory = Prosthesis,
+            DisplayName	= DisplayName_metalHand,
             ClothingItem = ArmLeft_MetalHand,
             BodyLocation = ArmLeft_Prot,
+            BloodLocation = Hands,
             Icon = metalHand,
             Tooltip = Tooltip_equip_prothesis_hand",
             WaterResistance = 11,
@@ -227,10 +233,11 @@ imports
         {
             Weight = 2,
             Type = Clothing,
-            /*DisplayCategory = Prosthesis,
-            DisplayName	= DisplayName_woodenHook,*/
+            DisplayCategory = Prosthesis,
+            DisplayName	= DisplayName_woodenHook,
             ClothingItem = ArmRight_WoodenHook_fore,
             BodyLocation = ArmRight_Prot,
+            BloodLocation = LowerArms;Hands,
             Icon = woodenHook,
             Tooltip = Tooltip_equip_prothesis_fore,
             WaterResistance = 16,
@@ -240,10 +247,12 @@ imports
         {
             Weight = 2,
             Type = Clothing,
-            /*DisplayCategory = Prosthesis,
-            DisplayName	= DisplayName_woodenHook,*/
+            DisplayCategory = Prosthesis,
+            DisplayName	= DisplayName_woodenHook,
             ClothingItem = ArmLeft_WoodenHook_fore,
             BodyLocation = ArmLeft_Prot,
+            BloodLocation = LowerArms;Hands,
+
             Icon = woodenHook,
             Tooltip = Tooltip_equip_prothesis_fore,
             WaterResistance = 16,
@@ -253,10 +262,11 @@ imports
         {
             Weight = 1.5,
             Type = Clothing,
-            /*DisplayCategory = Prosthesis,
-            DisplayName	= DisplayName_metalHook,*/
+            DisplayCategory = Prosthesis,
+            DisplayName	= DisplayName_metalHook,
             ClothingItem = ArmRight_MetalHook_fore,
             BodyLocation = ArmRight_Prot,
+            BloodLocation = LowerArms;Hands,
             Icon = metalHook,
             Tooltip = Tooltip_equip_prothesis_fore,
             WaterResistance = 14,
@@ -266,10 +276,12 @@ imports
         {
             Weight = 1.5,
             Type = Clothing,
-            /*DisplayCategory = Prosthesis,
-            DisplayName	= DisplayName_metalHook,*/
+            DisplayCategory = Prosthesis,
+            DisplayName	= DisplayName_metalHook,
             ClothingItem = ArmLeft_MetalHook_fore,
             BodyLocation = ArmLeft_Prot,
+            BloodLocation = LowerArms;Hands,
+
             Icon = metalHook,
             Tooltip = Tooltip_equip_prothesis_fore,
             WaterResistance = 14,
@@ -279,10 +291,11 @@ imports
         {
             Weight = 1.2,
             Type = Clothing,
-            /*DisplayCategory = Prosthesis,
-            DisplayName	= DisplayName_metalHand,*/
+            DisplayCategory = Prosthesis,
+            DisplayName	= DisplayName_metalHand,
             ClothingItem = ArmRight_MetalHand_fore,
             BodyLocation = ArmRight_Prot,
+            BloodLocation = LowerArms;Hands,
             Icon = metalHand,
             Tooltip = Tooltip_equip_prothesis_fore,
             WaterResistance = 12,
@@ -292,10 +305,11 @@ imports
         {
             Weight = 1.2,
             Type = Clothing,
-            /*DisplayCategory = Prosthesis,
-            DisplayName	= DisplayName_metalHand,*/
+            DisplayCategory = Prosthesis,
+            DisplayName	= DisplayName_metalHand,
             ClothingItem = ArmLeft_MetalHand_fore,
             BodyLocation = ArmLeft_Prot,
+            BloodLocation = LowerArms;Hands,
             Icon = metalHand,
             Tooltip = Tooltip_equip_prothesis_fore,
             WaterResistance = 12,
@@ -303,6 +317,7 @@ imports
 
 /************************ Prothese items ************************/
 
+/* TODO make it clothing same as amputations */
 item WoodenHook
         {
             Weight = 1,

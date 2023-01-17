@@ -113,6 +113,11 @@ end
 -- end
 
 
+-- TODO override equip action
+
+
+
+
 local og_ISUnequipActionPerform = ISUnequipAction.perform
 
 function ISUnequipAction:perform()
@@ -126,12 +131,17 @@ function ISUnequipAction:perform()
 --     --     end
 --     -- end
 
-    
-
-    if not CheckIfItemIsAmputatedLimb(self.item) then
+    if CheckIfItemIsAmputatedLimb(self.item) == false and CheckIfItemIsInstalledProsthesis(self.item) == false then
         og_ISUnequipActionPerform(self)
     end
 
+    -- if not CheckIfItemIsAmputatedLimb(self.item) then
+    --     og_ISUnequipActionPerform(self)
+    -- end
+
+    -- if CheckIfItemIsInstalledProsthesis(self.item) then
+    --     og_ISUnequipActionPerform(self)
+    -- end
 
 end
 
@@ -140,9 +150,12 @@ local og_ISDropItemActionPerform = ISDropItemAction.perform
 
 function ISDropItemAction:perform()
 
-    if not CheckIfItemIsAmputatedLimb(self.item) then
+    if not CheckIfItemIsAmputatedLimb(self.item)then
         og_ISDropItemActionPerform(self)
     end
+
+
+
 
 
 end

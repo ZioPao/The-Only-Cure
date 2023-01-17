@@ -100,3 +100,20 @@ function CheckIfItemIsAmputatedLimb(item)
     return is_amputated_limb
 
 end
+
+function CheckIfItemIsProsthesis(item)
+    local item_full_type = item:getFullType()
+    local prosthesis_list = GetProsthesisList()
+    --return (item_full_type == "TOC.WoodenHook" or item_full_type == "TOC.MetalHook" or item_full_type == "TOC.MetalHand")
+    local check = prosthesis_list[item_full_type]
+    return check
+
+end
+
+function CheckIfItemIsInstalledProsthesis(item)
+    local item_full_type = item:getFullType()
+    local installable_prosthesis_list = GetInstallableProsthesisList()
+    local check = installable_prosthesis_list[item_full_type]
+    return check
+
+end
