@@ -47,7 +47,7 @@ function ISInstallProsthesis:perform()
 
 
         if part_name then
-            toc_data[part_name].is_prosthesis_equipped = true
+            toc_data[part_name].is_prosthesis_equipped = true       -- TODO should we show that the hand has a prost too if it's installed in the forearm?
             toc_data[part_name].prosthesis_factor = TocFindProsthesisFactorFromItem(self.cloth)
 
             self.character:getInventory():Remove(self.item)

@@ -24,7 +24,7 @@ function GetOtherBodyPartTypes()
 end
 
 
-function GetAcceptingProsthesisBodyParts()
+function GetAcceptingProsthesisBodyPartTypes()
 
 
     return {BodyPartType.Hand_R, BodyPartType.ForeArm_R,
@@ -33,8 +33,13 @@ function GetAcceptingProsthesisBodyParts()
 
 end
 
+function GetAcceptingProsthesisBodyParts()
+    return {"RightHand", "RightForearm", "LeftHand", "LeftForearm"}
+end
 
-
+function GetNonAcceptingProsthesisBodyParts()
+    return {"RightArm", "LeftArm"}
+end
 local function PartNameToBodyLocation(name)
     if name == "RightHand"      then return "ArmRight_Prot" end
     if name == "RightForearm"   then return "ArmRight_Prot" end

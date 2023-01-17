@@ -43,13 +43,13 @@ function ISUninstallProsthesis:perform()
 
     local toc_data = self.character:getModData().TOC
     local body_part_type = self.bodyPart:getType()
-    local accepting_body_parts = GetAcceptingProsthesisBodyParts()
+    local accepting_body_parts = GetAcceptingProsthesisBodyPartTypes()
 
     if accepting_body_parts == nil then
         return      -- should never happen
     end
 
-    for _, v in ipairs(GetAcceptingProsthesisBodyParts()) do
+    for _, v in ipairs(GetAcceptingProsthesisBodyPartTypes()) do
         if self.bodyPart:getType() == v then
             local part_name = FindTocBodyPartNameFromBodyPartType(v)
 
