@@ -11,7 +11,7 @@ end
 function GetInstallableProsthesisList()
 
 
-    -- To make it future proff since i'm gonna add stuff, let's cycle through already known prosthesis 
+    -- To make it future proof since i'm gonna add stuff, let's cycle through already known prosthesis 
     local prosthesis_list = GetProsthesisList()
 
     local sides = {"right", "left"}
@@ -22,15 +22,10 @@ function GetInstallableProsthesisList()
         for _, prost in pairs(prosthesis_list) do
             for _, body_part in pairs(body_parts) do
                 local installable_prost =  prost .. "_" .. side .. "_no" .. body_part
+                print(installable_prost)
                 table.insert(installed_prosthesis_list, installable_prost)
             end
-
-
-
         end
-        
-
-
     end
 
     return installed_prosthesis_list

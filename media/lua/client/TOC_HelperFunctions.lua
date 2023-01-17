@@ -104,16 +104,29 @@ end
 function CheckIfItemIsProsthesis(item)
     local item_full_type = item:getFullType()
     local prosthesis_list = GetProsthesisList()
-    --return (item_full_type == "TOC.WoodenHook" or item_full_type == "TOC.MetalHook" or item_full_type == "TOC.MetalHand")
-    local check = prosthesis_list[item_full_type]
-    return check
+
+    for _, v in pairs(prosthesis_list) do
+        if v == item_full_type then
+            return true
+        end
+    end
+
+    return false
 
 end
 
 function CheckIfItemIsInstalledProsthesis(item)
     local item_full_type = item:getFullType()
     local installable_prosthesis_list = GetInstallableProsthesisList()
-    local check = installable_prosthesis_list[item_full_type]
-    return check
 
+    print("Checking for " .. item_full_type)
+
+    for _, v in pairs(installable_prosthesis_list)do
+        print(v)
+        if (v == item_full_type) then
+            return true
+        end
+    end
+
+    return false
 end
