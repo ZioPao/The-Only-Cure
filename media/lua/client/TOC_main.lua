@@ -16,14 +16,26 @@ function TheOnlyCure.InitTheOnlyCure(_, player)
     local mod_data = player:getModData()
 
     if mod_data.TOC == nil then
-        mod_data.TOC = {}
+
+        print("TOC: Creating mod_data.TOC")
     
         mod_data.TOC  = {
     
             Limbs = {
+                Right_Hand = {},
+                Right_LowerArm = {},
+                Right_UpperArm = {},
+
+                Left_Hand = {},
+                Left_LowerArm = {},
+                Left_UpperArm = {},
                 is_other_bodypart_infected = false
             },
-            Prosthesis = {},
+            Prosthesis = {
+                WoodenHook = {},
+                MetalHook = {},
+                MetalHand = {}
+            },
             Generic = {},
         }
         --------

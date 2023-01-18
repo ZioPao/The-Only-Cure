@@ -6,7 +6,7 @@ end
 
 function CheckIfCanBeCut(part_name)
     -- This is just for MP handling... Not enough to check everything
-    return not getPlayer():getModData().TOC[part_name].is_cut
+    return not getPlayer():getModData().TOC.Limbs[part_name].is_cut
 
 end
 

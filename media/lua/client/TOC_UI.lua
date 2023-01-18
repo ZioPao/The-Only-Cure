@@ -441,11 +441,11 @@ function SetupTocDescUI(surgeon, patient, toc_data, part_name)
         -- TODO add check for cuts and scratches
         desc_ui["status"]:setText("Not cut")
         desc_ui["status"]:setColor(1, 1, 1, 1)
-        if GetSawInInventory(surgeon) and not CheckIfProsthesisAlreadyInstalled(toc_data, part_name) then
+        if GetSawInInventory(surgeon) and not CheckIfProsthesisAlreadyInstalled(toc_data.Limbs, part_name) then
             desc_ui["b1"]:setVisible(true)
             desc_ui["b1"]:setText("Cut")
             desc_ui["b1"]:addArg("option", "Cut")
-        elseif GetSawInInventory(surgeon) and CheckIfProsthesisAlreadyInstalled(toc_data, part_name) then
+        elseif GetSawInInventory(surgeon) and CheckIfProsthesisAlreadyInstalled(toc_data.Limbs, part_name) then
             desc_ui["b1"]:setVisible(true)
             desc_ui["b1"]:setText("Remove prosthesis before")
             desc_ui["b1"]:addArg("option", "Nothing")
