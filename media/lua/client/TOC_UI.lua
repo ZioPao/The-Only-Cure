@@ -36,11 +36,11 @@ end
 ------------------------------
 -- UI Visible stuff functions
 local function GetImageName(part_name, toc_data)
-    local part_data = toc_data[part_name];
+    local part_data = toc_data.Limbs[part_name]
     local name = ""
 
     if part_data.is_cut and part_data.is_cicatrized and part_data.is_prosthesis_equipped then -- Cut and equip
-        if part_name == "RightHand" or part_name == "LeftHand" then
+        if part_name == "Right_Hand" or part_name == "Left_Hand" then
             name = "media/ui/TOC/" .. part_name .. "/Hook.png"
         else
             name = "media/ui/TOC/" .. part_name .. "/Prothesis.png"
@@ -60,12 +60,12 @@ local function GetImageName(part_name, toc_data)
     end
 
     -- If foreaerm equip, change hand
-    if part_name == "RightHand" and toc_data["RightForearm"].is_prosthesis_equipped then
+    if part_name == "Right_Hand" and toc_data["Right_LowerArm"].is_prosthesis_equipped then
         name = "media/ui/TOC/" .. part_name .. "/Hook.png"
-    elseif part_name == "LeftHand" and toc_data["LeftForearm"].is_prosthesis_equipped then
+    elseif part_name == "Left_Hand" and toc_data["Left_LowerArm"].is_prosthesis_equipped then
         name = "media/ui/TOC/" .. part_name .. "/Hook.png"
     end
-    return name;
+    return name
 end
 
 
@@ -221,28 +221,28 @@ function CreateTocMainUI()
     main_ui:setWidthPercent(0.1)
 
     main_ui:addImageButton("b11", "", OnClickTocMainUI)
-    main_ui["b11"]:addArg("part_name", "RightArm")
+    main_ui["b11"]:addArg("part_name", "Right_UpperArm")
 
 
     main_ui:addImageButton("b12", "", OnClickTocMainUI)
-    main_ui["b12"]:addArg("part_name", "LeftArm")
+    main_ui["b12"]:addArg("part_name", "Left_UpperArm")
 
     main_ui:nextLine()
 
     main_ui:addImageButton("b21", "", OnClickTocMainUI)
-    main_ui["b21"]:addArg("part_name", "RightForearm")
+    main_ui["b21"]:addArg("part_name", "Right_LowerArm")
 
 
     main_ui:addImageButton("b22", "", OnClickTocMainUI)
-    main_ui["b22"]:addArg("part_name", "LeftForearm")
+    main_ui["b22"]:addArg("part_name", "Left_LowerArm")
 
     main_ui:nextLine()
 
     main_ui:addImageButton("b31", "", OnClickTocMainUI)
-    main_ui["b31"]:addArg("part_name", "RightHand")
+    main_ui["b31"]:addArg("part_name", "Right_Hand")
 
     main_ui:addImageButton("b32", "", OnClickTocMainUI)
-    main_ui["b32"]:addArg("part_name", "LeftHand")
+    main_ui["b32"]:addArg("part_name", "Left_Hand")
 
     main_ui:saveLayout()
 
@@ -353,14 +353,14 @@ function SetupTocMainUI(surgeon, patient, toc_data)
         main_ui["b31"]:addArg("toc_data", toc_data)
         main_ui["b32"]:addArg("toc_data", toc_data)
 
-        main_ui["b11"]:setPath(GetImageName("RightArm", toc_data))
-        main_ui["b12"]:setPath(GetImageName("LeftArm", toc_data))
+        main_ui["b11"]:setPath(GetImageName("Right_UpperArm", toc_data))
+        main_ui["b12"]:setPath(GetImageName("Left_UpperArm", toc_data))
     
-        main_ui["b21"]:setPath(GetImageName("RightForearm", toc_data))
-        main_ui["b22"]:setPath(GetImageName("LeftForearm", toc_data))
+        main_ui["b21"]:setPath(GetImageName("Right_LowerArm", toc_data))
+        main_ui["b22"]:setPath(GetImageName("Left_LowerArm", toc_data))
     
-        main_ui["b31"]:setPath(GetImageName("RightHand", toc_data))
-        main_ui["b32"]:setPath(GetImageName("LeftHand", toc_data))
+        main_ui["b31"]:setPath(GetImageName("Right_Hand", toc_data))
+        main_ui["b32"]:setPath(GetImageName("Left_Hand", toc_data))
 
     end
 
@@ -368,7 +368,7 @@ function SetupTocMainUI(surgeon, patient, toc_data)
 end
 
 function SetupTocDescUI(surgeon, patient, toc_data, part_name)
-    local part_data = toc_data[part_name]
+    local part_data = toc_data.Limbs[part_name]
     desc_ui["textTitle"]:setText(TocGetDisplayText(part_name))
     desc_ui.part_name = part_name
     desc_ui.surgeon = surgeon
@@ -387,7 +387,7 @@ function SetupTocDescUI(surgeon, patient, toc_data, part_name)
         desc_ui["status"]:setColor(1, 0, 1, 0)
 
         -- Another check for UpperArm
-        if part_name == "RightArm" or part_name == "LeftArm" then
+        if part_name == "Right_UpperArm" or part_name == "Left_UpperArm" then
             desc_ui["b1"]:setVisible(false)
         else
             desc_ui["b1"]:setText("Equip")
@@ -458,18 +458,18 @@ function SetupTocDescUI(surgeon, patient, toc_data, part_name)
 
     -- Prosthesis Level
     if string.find(part_name, "Right") then
-        local lv = patient:getPerkLevel(Perks.RightHand) + 1
+        local lv = patient:getPerkLevel(Perks.Right_Hand) + 1
         desc_ui["textLV2"]:setText("Level:   " .. lv .. " / 10")
 
-        local xp = patient:getXp():getXP(Perks.RightHand)
+        local xp = patient:getXp():getXP(Perks.Right_Hand)
         local min, max = FindMinMax(lv)
         desc_ui["pbarNLV"]:setMinMax(min, max)
         desc_ui["pbarNLV"]:setValue(xp)
     else
-        local lv = patient:getPerkLevel(Perks.LeftHand) + 1
+        local lv = patient:getPerkLevel(Perks.Left_Hand) + 1
         desc_ui["textLV2"]:setText("Level:   " .. lv .. " / 10")
 
-        local xp = patient:getXp():getXP(Perks.LeftHand)
+        local xp = patient:getXp():getXP(Perks.Left_Hand)
         local min, max = FindMinMax(lv)
         desc_ui["pbarNLV"]:setMinMax(min, max)
         desc_ui["pbarNLV"]:setValue(xp)

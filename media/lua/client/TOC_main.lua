@@ -14,124 +14,142 @@ Arm = "Arm"
 function TheOnlyCure.InitTheOnlyCure(_, player)
 
     local mod_data = player:getModData()
-    --local toc_data = player:getModData().TOC
 
     if mod_data.TOC == nil then
-
         mod_data.TOC = {}
-        print("CREATING NEW TOC STUF")
-         
-        local rightHand = "RightHand"
-        local rightForearm = "RightForearm"
-        local rightArm = "RightArm"
-
-        local leftHand = "LeftHand"
-        local leftForearm = "LeftForearm"
-        local leftArm = "LeftArm"
-
-
-        local prothesis_list = {"WoodenHook", "MetalHook", "MetalHand"}
-
+    
         mod_data.TOC  = {
-            RightHand = {},
-            RightForearm = {},
-            RightArm = {},
-
-            LeftHand = {},
-            LeftForearm = {},
-            LeftArm = {},
-
-            is_other_bodypart_infected = false
+    
+            Limbs = {},
+            Prosthesis = {},
+            Generic = {},
         }
-
-        for _ ,v in pairs(GetBodyParts()) do
-            mod_data.TOC[v].is_cut = false
-            mod_data.TOC[v].is_infected = false
-            mod_data.TOC[v].is_operated = false
-            mod_data.TOC[v].is_cicatrized = false
-            mod_data.TOC[v].is_cauterized = false
-            mod_data.TOC[v].is_amputation_shown = false
-
-            mod_data.TOC[v].cicatrization_time = 0
-            
-            
-            mod_data.TOC[v].is_prosthesis_equipped = false
-            mod_data.TOC[v].prosthesis_factor = 1.0       
-            mod_data.TOC[v].prosthesis_material_id = nil
-        end
-
-
-        -- Manual stuff, just a temporary fix since this is kinda awful
-        mod_data.TOC[rightHand].depends_on = {}
-        mod_data.TOC[rightForearm].depends_on = {rightHand}
-        mod_data.TOC[rightArm].depends_on = { rightHand, rightForearm }
+        --------
+        -- NEW NAMING SCHEME
+    
+        ---- Amputations
+    
+        -- Amputation_Left_Hand
+        -- Amputation_Right_UpperArm
+    
+    
+        ---- Prosthesis to equip
+        -- Prost_Left_Hand_MetalHook
+        -- Prost_Right_Forearm_WoodenHook
+    
+        --- Objects
+        -- Prost_Object_WoddenHook
+    
+    
+        local sides = {"Left", "Right"}
+        local limbs = {"Hand", "LowerArm", "UpperArm"}          -- Let's follow their naming
+    
+    
+        local prosthesis_list = {"WoodenHook", "MetalHook", "MetalHand"}
+    
+    
+    
+        local accepted_prosthesis_hand = {"WoodenHook", "MetalHook", "MetalHand"}
+        local accepted_prosthesis_lowerarm = {"WoodenHook", "MetalHook", "MetalHand"}
+        local accepted_prosthesis_upperarm = {}     -- For future stuff
+    
+    
+    
+    
+    
+        for _, side in ipairs(sides) do
+            for _, limb in ipairs(limbs) do
+    
+                local part_name = side .. "_" .. limb
+    
+                mod_data.TOC.Limbs[part_name].is_cut = false
+                mod_data.TOC.Limbs[part_name].is_infected = false
+                mod_data.TOC.Limbs[part_name].is_operated = false
+                mod_data.TOC.Limbs[part_name].is_cicatrized = false
+                mod_data.TOC.Limbs[part_name].is_cauterized = false
+                mod_data.TOC.Limbs[part_name].is_amputation_shown = false
         
-        mod_data.TOC[leftHand].depends_on = {}
-        mod_data.TOC[leftForearm].depends_on = { leftHand }
-        mod_data.TOC[leftArm].depends_on = { leftHand, leftForearm }
+                mod_data.TOC.Limbs[part_name].cicatrization_time = 0
+                
+                
+                mod_data.TOC.Limbs[part_name].is_prosthesis_equipped = false
+                mod_data.TOC.Limbs[part_name].equipped_prosthesis = {}
 
-        
-        -- Setup cicatrization times
-        mod_data.TOC[rightHand].cicatrization_base_time = 1700
-        mod_data.TOC[leftHand].cicatrization_base_time = 1700
-        mod_data.TOC[rightForearm].cicatrization_base_time = 1800
-        mod_data.TOC[leftForearm].cicatrization_base_time = 1800
-        mod_data.TOC[rightArm].cicatrization_base_time = 2000
-        mod_data.TOC[leftArm].cicatrization_base_time = 2000
+                -- Even if there are some duplicates, this is just easier in the end since we're gonna get fairly easily part_name
+    
+    
+                if limb == "Hand" then
+                    mod_data.TOC.Limbs[part_name].cicatrization_base_time = 1700
+                    mod_data.TOC.Limbs[part_name].depends_on = {}
 
 
-
-        -- Setup a table with all the acceptable prosthesis
-        mod_data.TOC.prosthesis_table = {}
-
-        for _, v in ipairs(prothesis_list) do
-            mod_data.TOC.prosthesis_table[v] = {
-                material_id = 1,
-                something = "Something"
-            }
-
+                    mod_data.TOC.Prosthesis.AcceptedProsthesis[part_name] = accepted_prosthesis_hand
+                    mod_data.TOC.Prosthesis["WoodenHook"][part_name].prosthesis_factor = 1.5
+                    mod_data.TOC.Prosthesis["MetalHook"][part_name].prosthesis_factor = 1.3
+                    mod_data.TOC.Prosthesis["MetalHand"][part_name].prosthesis_factor = 1.1
+    
+    
+                elseif limb == "LowerArm" then
+                    mod_data.TOC.Limbs[part_name].cicatrization_base_time = 1800
+                    mod_data.TOC.Limbs[part_name].depends_on = {side .. "_Hand",}
+                    mod_data.TOC.Prosthesis.AcceptedProsthesis[part_name] = accepted_prosthesis_lowerarm
+    
+                    mod_data.TOC.Prosthesis["WoodenHook"][part_name].prosthesis_factor = 1.65
+                    mod_data.TOC.Prosthesis["MetalHook"][part_name].prosthesis_factor = 1.45
+                    mod_data.TOC.Prosthesis["MetalHand"][part_name].prosthesis_factor = 1.25
+                elseif limb == "UpperArm" then
+                    mod_data.TOC.Limbs[part_name].cicatrization_base_time = 2000
+                    mod_data.TOC.Limbs[part_name].depends_on = {side .. "_Hand", side .. "_LowerArm",}
+                    mod_data.TOC.Prosthesis.AcceptedProsthesis[part_name] = accepted_prosthesis_upperarm
+                end
+      
+            end
+        end
+    
+        -- Setup traits
+        if player:HasTrait("Amputee_Hand") then
+    
+            -- TODO override AddItem so we can change the texture dynamically based on skin color
+            local amputation_clothing = player:getInventory():AddItem("TOC.Amputation_Left_Hand")
+            player:setWornItem(amputation_clothing:getBodyLocation(), amputation_clothing)
+            mod_data.TOC.Left_Hand.is_cut = true
+            mod_data.TOC.Left_Hand.is_operated = true
+            mod_data.TOC.Left_Hand.is_amputation_shown = true
+            mod_data.TOC.Left_Hand.is_cicatrized = true
+        elseif player:HasTrait("Amputee_LowerArm") then
+            local amputation_clothing = player:getInventory():AddItem("TOC.Amputation_Left_LowerArm")
+            player:setWornItem(amputation_clothing:getBodyLocation(), amputation_clothing)
+            mod_data.TOC.Left_LowerArm.is_cut = true
+            mod_data.TOC.Left_LowerArm.is_operated = true
+            mod_data.TOC.Left_LowerArm.is_amputation_shown = true
+            mod_data.TOC.Left_LowerArm.is_cicatrized = true
+        elseif player:HasTrait("Amputee_UpperArm") then
+            local amputation_clothing = player:getInventory():AddItem("TOC.Amputation_Left_UpperArm")
+            player:setWornItem(amputation_clothing:getBodyLocation(), amputation_clothing)
+            mod_data.TOC.Left_UpperArm.is_cut = true
+            mod_data.TOC.Left_UpperArm.is_operated = true
+            mod_data.TOC.Left_UpperArm.is_amputation_shown = true
+            mod_data.TOC.Left_UpperArm.is_cicatrized = true
         end
 
-
-
-        -- Traits setup
-        if player:HasTrait("amputee1") then
-            local cloth = player:getInventory():AddItem("TOC.ArmLeft_noHand")
-            player:setWornItem(cloth:getBodyLocation(), cloth)
-            mod_data.TOC.LeftHand.is_cut=true; mod_data.TOC.LeftHand.is_operated=true; mod_data.TOC.LeftHand.is_amputation_shown=true; mod_data.TOC.LeftHand.is_cicatrized=true
-            player:getInventory():AddItem("TOC.MetalHook")
-        end
-        if player:HasTrait("amputee2") then
-            local cloth = player:getInventory():AddItem("TOC.ArmLeft_noForearm")
-            player:setWornItem(cloth:getBodyLocation(), cloth)
-            mod_data.TOC.LeftHand.is_cut=true; mod_data.TOC.LeftHand.is_operated=true
-            mod_data.TOC.LeftForearm.is_cut=true; mod_data.TOC.LeftForearm.is_operated=true; mod_data.TOC.LeftForearm.is_amputation_shown=true; mod_data.TOC.LeftForearm.is_cicatrized=true
-            player:getInventory():AddItem("TOC.MetalHook")
-        end
-        if player:HasTrait("amputee3") then
-            local cloth = player:getInventory():AddItem("TOC.ArmLeft_noArm")
-            player:setWornItem(cloth:getBodyLocation(), cloth)
-            mod_data.TOC.LeftHand.is_cut=true; mod_data.TOC.LeftHand.is_operated=true
-            mod_data.TOC.LeftForearm.is_cut=true; mod_data.TOC.LeftForearm.is_operated=true
-            mod_data.TOC.LeftArm.is_cut=true; mod_data.TOC.LeftArm.is_operated=true; mod_data.TOC.LeftArm.is_amputation_shown=true; mod_data.TOC.LeftArm.is_cicatrized=true
-            player:getInventory():AddItem("TOC.MetalHook")
-        end
-
-        player:transmitModData()
     end
+
 end
 
 function TheOnlyCure.DeclareTraits()
-    local amp1 = TraitFactory.addTrait("amputee1", getText("UI_trait_Amputee1"), -8, getText("UI_trait_Amputee1desc"), false, false)
-    amp1:addXPBoost(Perks.LeftHand, 4)
-    local amp2 = TraitFactory.addTrait("amputee2", getText("UI_trait_Amputee2"), -10, getText("UI_trait_Amputee2desc"), false, false)
-    amp2:addXPBoost(Perks.LeftHand, 4)
-    local amp3 = TraitFactory.addTrait("amputee3", getText("UI_trait_Amputee3"), -20, getText("UI_trait_Amputee3desc"), false, false)
-    amp3:addXPBoost(Perks.LeftHand, 4)
+    local amp1 = TraitFactory.addTrait("Amputee_Hand", getText("UI_trait_Amputee_Hand"), -8, getText("UI_trait_Amputee_Hand_desc"), false, false)
+    amp1:addXPBoost(Perks.Left_Hand, 4)
+
+    local amp2 = TraitFactory.addTrait("Amputee_LowerArm", getText("UI_trait_Amputee_LowerArm"), -10, getText("UI_trait_Amputee_LowerArm_desc"), false, false)
+    amp2:addXPBoost(Perks.Left_Hand, 4)
+
+    local amp3 = TraitFactory.addTrait("Amputee_UpperArm", getText("UI_trait_Amputee_UpperArm"), -20, getText("UI_trait_Amputee_UpperArm_desc"), false, false)
+    amp3:addXPBoost(Perks.Left_Hand, 4)
+
     TraitFactory.addTrait("Insensitive", getText("UI_trait_Insensitive"), 6, getText("UI_trait_Insensitivedesc"), false, false)
-    TraitFactory.setMutualExclusive("amputee1", "amputee2")
-    TraitFactory.setMutualExclusive("amputee1", "amputee3")
-    TraitFactory.setMutualExclusive("amputee2", "amputee3")
+    TraitFactory.setMutualExclusive("Amputee_Hand", "Amputee_LowerArm")
+    TraitFactory.setMutualExclusive("Amputee_Hand", "Amputee_UpperArm")
+    TraitFactory.setMutualExclusive("Amputee_LowerArm", "Amputee_UpperArm")
 end
 
 

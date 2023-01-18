@@ -22,21 +22,22 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
     for _, part_name in ipairs(all_body_parts) do
 
 
-        if toc_data[part_name].is_cut then
+        if toc_data.Limbs[part_name].is_cut then
             
-            if toc_data[part_name].is_prosthesis_equipped then
-                modified_max_time = modified_max_time * toc_data[part_name].prosthesis_factor
+            if toc_data.Limbs[part_name].is_prosthesis_equipped then
+                modified_max_time = modified_max_time *  toc_data.Limbs[part_name].equipped_prosthesis.prosthesis_factor
+
 
             else
                 modified_max_time = modified_max_time * 2
             end
-            if toc_data[part_name].is_cauterized then
+            if toc_data.Limbs[part_name].is_cauterized then
                 modified_max_time = modified_max_time * burn_factor
             end
 
 
             -- Perk scaling
-            if part_name == "RightHand" or part_name == "LeftHand" then
+            if part_name == "Right_Hand" or part_name == "Left_Hand" then
                 modified_max_time = modified_max_time * (1 + (9 - self.character:getPerkLevel(Perks[part_name])) / 20 )
             end
 

@@ -12,7 +12,7 @@ IGUI_EN = {
 
     IGUI_char_Hand_multi = "Time multi due to amp/tot",
 
-    IGUI_perks_RightHand = "Right hand",
-    IGUI_perks_LeftHand = "Left hand",
-    IGUI_perks_Protheses = "Protheses skills",
+    IGUI_perks_Right_Hand = "Right hand",
+    IGUI_perks_Left_Hand = "Left hand",
+    IGUI_perks_Prosthesis_Skill_desc = "Prosthesis skills",
 }

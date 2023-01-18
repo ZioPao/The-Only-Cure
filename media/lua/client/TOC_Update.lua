@@ -33,7 +33,7 @@ function TheOnlyCure.CheckIfPlayerIsInfected(player, toc_data)
     local body_damage = player:getBodyDamage()
 
     for _, v in ipairs(GetLimbsBodyPartTypes()) do
-        local toc_bodypart = FindTocDataPartNameFromBodyPartType(toc_data, v)
+        local toc_bodypart = FindTocDataPartNameFromBodyPartType(toc_data.Limbs, v)
         if body_damage:getBodyPart(v):bitten() and toc_bodypart ~= nil then
             if toc_bodypart.is_cut == false then
                 toc_bodypart.is_infected = true
@@ -212,17 +212,21 @@ function TheOnlyCure.UpdateEveryTenMinutes()
     if player == nil then
         return
     end
-    local toc_data = player:getModData().TOC
+    local part_data = player:getModData().TOC.Limbs
 
 
-    --Experience for prosthesis
-    if toc_data.RightHand.is_prosthesis_equipped  or toc_data.RightForearm.is_prosthesis_equipped   then player:getXp():AddXP(Perks.RightHand, 4) end
-    if toc_data.LeftHand.is_prosthesis_equipped   or toc_data.LeftForearm.is_prosthesis_equipped    then player:getXp():AddXP(Perks.LeftHand, 4) end
+    --Experience for prosthesis user
+    for _, side in ipairs({"Left", "Right"}) do
+        if part_data[side .. "_Hand"].is_prosthesis_equipped or part_data[side .. "_LowerArm"].is_prosthesis_equipped then
+            player:getXp():AddXP(Perks[side .. "_Hand"], 4)
+        end
 
-    -- Updates the cicatrization timesssss
+    end
+
+    -- Updates the cicatrization time
     for _, part_name in pairs(GetBodyParts()) do
-        if toc_data[part_name].is_cut and not toc_data[part_name].is_cicatrized then
-            toc_data[part_name].cicatrization_time = toc_data[part_name].cicatrization_time - 1     -- TODO Make it more "dynamic"
+        if part_data[part_name].is_cut and not part_data[part_name].is_cicatrized then
+            part_data[part_name].cicatrization_time = part_data[part_name].cicatrization_time - 1     -- TODO Make it more "dynamic"
 
             
         end

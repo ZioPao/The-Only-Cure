@@ -17,12 +17,12 @@ UI_EN = {
     UI_trait_Insensitive = "Insensitive to pain",
     UI_trait_Insensitivedesc = "Reduces maximum pain.",
 
-    UI_ContextMenu_RightHand = "Right hand",
-    UI_ContextMenu_RightForearm = "Right forearm",
-    UI_ContextMenu_RightArm = "Right arm",
-    UI_ContextMenu_LeftHand = "Left hand",
-    UI_ContextMenu_LeftForearm = "Left forearm",
-    UI_ContextMenu_LeftArm = "Left arm",
+    UI_ContextMenu_Right_Hand = "Right hand",
+    UI_ContextMenu_Right_LowerArm = "Right forearm",
+    UI_ContextMenu_Right_UpperArm = "Right arm",
+    UI_ContextMenu_Left_Hand = "Left hand",
+    UI_ContextMenu_Left_LowerArm = "Left forearm",
+    UI_ContextMenu_Left_UpperArm = "Left arm",
 
     UI_ContextMenu_My = "My ",
     UI_ContextMenu_Now_cut = " is now healed!",

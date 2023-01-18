@@ -40,16 +40,16 @@ function ISInstallProsthesis:perform()
         return
     end
 
-    local prosthesis_name =TocFindCorrectClothingProsthesis(self.item:getType(), part_name)
+    local prosthesis_name =TocFindCorrectClothingProsthesis(prosthesis_base_name, part_name)
     self.cloth = self.character:getInventory():AddItem(prosthesis_name)
 
     if self.cloth ~= nil then
 
 
         if part_name then
-            toc_data[part_name].is_prosthesis_equipped = true       -- TODO should we show that the hand has a prost too if it's installed in the forearm?
-            toc_data[part_name].prosthesis_factor = TocFindProsthesisFactorFromItem(self.cloth)
-
+            toc_data.Limbs[part_name].is_prosthesis_equipped = true       -- TODO should we show that the hand has a prost too if it's installed in the forearm?
+            toc_data.Limbs[part_name].equipped_prosthesis = toc_data.Prosthesis[prosthesis_base_name][part_name]
+            
             self.character:getInventory():Remove(self.item)
             self.character:setWornItem(self.cloth:getBodyLocation(), self.cloth)
         end

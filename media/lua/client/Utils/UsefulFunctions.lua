@@ -1,9 +1,3 @@
-function GetBodyParts()
-    local bodyparts = { "RightHand", "RightForearm", "RightArm", "LeftHand", "LeftForearm", "LeftArm"}
-    return bodyparts
-end
-
-
 -- TODO Find a better name
 function GetProsthesisLisHumanReadable()
     return {"WoodenHook", "MetalHook", "MetalHand"}
@@ -20,6 +14,8 @@ function GetProsthesisList()
 end
 
 function GetInstallableProsthesisList()
+
+    -- TODO Delete this and re do it
 
 
     -- To make it future proof since i'm gonna add stuff, let's cycle through already known prosthesis 
@@ -45,53 +41,17 @@ function GetInstallableProsthesisList()
 
 end
 
-function GetLimbsBodyPartTypes()
-
-    return {BodyPartType.Hand_R, BodyPartType.ForeArm_R, BodyPartType.UpperArm_R,
-            BodyPartType.Hand_L, BodyPartType.ForeArm_L, BodyPartType.UpperArm_L}
-
-end
-
-function GetOtherBodyPartTypes()
-
-    return {BodyPartType.Torso_Upper, BodyPartType.Torso_Lower, BodyPartType.Head, BodyPartType.Neck, 
-            BodyPartType.Groin, BodyPartType.UpperLeg_L, BodyPartType.UpperLeg_R, BodyPartType.LowerLeg_L, 
-            BodyPartType.LowerLeg_R, BodyPartType.Foot_L, BodyPartType.Foot_R, BodyPartType.Back}
-
-end
 
 
-function GetAcceptingProsthesisBodyPartTypes()
-
-
-    return {BodyPartType.Hand_R, BodyPartType.ForeArm_R,
-            BodyPartType.Hand_L, BodyPartType.ForeArm_L}
-
-
-end
-
-function GetAcceptingProsthesisBodyParts()
-    return {"RightHand", "RightForearm", "LeftHand", "LeftForearm"}
-end
-
-function GetNonAcceptingProsthesisBodyParts()
-    return {"RightArm", "LeftArm"}
-end
-
-function GetAmputatedLimbFullTypes()
-
-    return {"TOC.ArmRight_noHand", "TOC.ArmRight_noForearm", "TOC.ArmRight_noArm",
-             "TOC.ArmLeft_noHand", "TOC.ArmLeft_noForearm", "TOC.ArmLeft_noArm"}
-end
 
 
 local function PartNameToBodyLocation(name)
-    if name == "RightHand"      then return "ArmRight_Prot" end
-    if name == "RightForearm"   then return "ArmRight_Prot" end
-    if name == "RightArm"       then return "ArmRight_Prot" end
-    if name == "LeftHand"       then return "ArmLeft_Prot" end
-    if name == "LeftForearm"    then return "ArmLeft_Prot" end
-    if name == "LeftArm"        then return "ArmLeft_Prot" end
+    if name == "Right_Hand"      then return "ArmRight_Prot" end
+    if name == "Right_LowerArm"   then return "ArmRight_Prot" end
+    if name == "Right_UpperArm"       then return "ArmRight_Prot" end
+    if name == "Left_Hand"       then return "ArmLeft_Prot" end
+    if name == "Left_LowerArm"    then return "ArmLeft_Prot" end
+    if name == "Left_UpperArm"        then return "ArmLeft_Prot" end
 end
 
 
@@ -111,12 +71,12 @@ end
 
 function TocGetPartNameFromBodyPartType(body_part)
 
-    if body_part      == BodyPartType.Hand_R      then return "RightHand"
-    elseif body_part      == BodyPartType.ForeArm_R      then return "RightForearm"
-    elseif body_part   == BodyPartType.UpperArm_R  then return "RightArm"
-    elseif body_part   == BodyPartType.Hand_L      then return "LeftHand"
-    elseif body_part   == BodyPartType.ForeArm_L   then return "LeftForearm"
-    elseif body_part   == BodyPartType.UpperArm_L  then return "LeftArm"
+    if body_part      == BodyPartType.Hand_R      then return "Right_Hand"
+    elseif body_part      == BodyPartType.ForeArm_R      then return "Right_LowerArm"
+    elseif body_part   == BodyPartType.UpperArm_R  then return "Right_UpperArm"
+    elseif body_part   == BodyPartType.Hand_L      then return "Left_Hand"
+    elseif body_part   == BodyPartType.ForeArm_L   then return "Left_LowerArm"
+    elseif body_part   == BodyPartType.UpperArm_L  then return "Left_UpperArm"
     else return nil
     end
 
@@ -143,33 +103,23 @@ function find_clothName_TOC(bodyPart)
 end
 
 function TocGetDisplayText(part_name)
-    if part_name == "RightHand"      then return getText("UI_ContextMenu_RightHand") end
-    if part_name == "RightForearm"   then return getText("UI_ContextMenu_RightForearm") end
-    if part_name == "RightArm"       then return getText("UI_ContextMenu_RightArm") end
-    if part_name == "LeftHand"       then return getText("UI_ContextMenu_LeftHand") end
-    if part_name == "LeftForearm"    then return getText("UI_ContextMenu_LeftForearm") end
-    if part_name == "LeftArm"        then return getText("UI_ContextMenu_LeftArm") end
+    return getText("UI_ContextMenu_" .. part_name)
+
 end
 
 
 function TocGetBodyPartTypeFromBodyPart(part_name)
-    if part_name == "RightHand"      then return BodyPartType.Hand_R end
-    if part_name == "RightForearm"   then return BodyPartType.ForeArm_R end
-    if part_name == "RightArm"       then return BodyPartType.UpperArm_R end
-    if part_name == "LeftHand"       then return BodyPartType.Hand_L end
-    if part_name == "LeftForearm"    then return BodyPartType.ForeArm_L end
-    if part_name == "LeftArm"        then return BodyPartType.UpperArm_L end
+    if part_name == "Right_Hand"      then return BodyPartType.Hand_R end
+    if part_name == "Right_LowerArm"   then return BodyPartType.ForeArm_R end
+    if part_name == "Right_UpperArm"       then return BodyPartType.UpperArm_R end
+    if part_name == "Left_Hand"       then return BodyPartType.Hand_L end
+    if part_name == "Left_LowerArm"    then return BodyPartType.ForeArm_L end
+    if part_name == "Left_UpperArm"        then return BodyPartType.UpperArm_L end
 end
 
 
 function TocFindAmputatedClothingFromPartName(part_name)
-    if part_name == "RightHand"      then return "TOC.ArmRight_noHand" end
-    if part_name == "RightForearm"   then return "TOC.ArmRight_noForearm" end
-    if part_name == "RightArm"       then return "TOC.ArmRight_noArm" end
-    if part_name == "LeftHand"       then return "TOC.ArmLeft_noHand" end
-    if part_name == "LeftForearm"    then return "TOC.ArmLeft_noForearm" end
-    if part_name == "LeftArm"        then return "TOC.ArmLeft_noArm" end
-
+    return "TOC.Amputation_" .. part_name
 end
 
 -- TODO finish this
@@ -190,6 +140,10 @@ end
 function TocFindProsthesisFactorFromItem(item)
 
     local itemType = item:getType()
+
+    -- TODO change this
+
+
     if     string.find(itemType, "WoodenHook") and string.find(itemType, "noHand")    then return 1.5
     elseif string.find(itemType, "WoodenHook") and string.find(itemType, "noForearm") then return 1.65
     elseif string.find(itemType, "MetalHook")  and string.find(itemType, "noHand")    then return 1.3
@@ -202,32 +156,7 @@ end
 
 function TocFindCorrectClothingProsthesis(item_name, part_name)
 
-
-    -- for _, v in ipairs(GetProsthesisList()) do 
-    --     if string.find(item, v)
-
-    -- end
-
-    local lowered_part_name = string.lower(part_name)
-    local side = string.match(lowered_part_name, "left")
-
-    if side == nil then
-        side = "right"
-    end
-
-    local limb = string.match(part_name, "Hand")
-    if limb == nil then
-        limb = "Forearm"
-    end
-
-
-    -- Just to accomodate this horrendous naming scheme, let's have Hand or Forearm again... Jesus dude
-    -- if limb then
-    --     limb = limb:gsub("^%l", string.upper)
-    -- end
-
-    local correct_name = "TOC." .. item_name .. "_" .. side .. "_no" .. limb
-
+    local correct_name = "TOC." .. item_name .. "_" .. part_name
     return correct_name
 
 end

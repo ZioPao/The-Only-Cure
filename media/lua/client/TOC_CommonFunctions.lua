@@ -1,5 +1,6 @@
 function GetBodyParts()
-    local bodyparts = { "RightHand", "RightForearm", "RightArm", "LeftHand", "LeftForearm", "LeftArm"}
+    local bodyparts = { "Right_Hand", "Right_LowerArm", "Right_UpperArm",
+                         "Left_Hand", "Left_LowerArm", "Left_UpperArm"}
     return bodyparts
 end
 
@@ -18,25 +19,35 @@ function GetOtherBodyPartTypes()
 
 end
 
-function FindTocDataPartNameFromBodyPartType(toc_data, bodyPartType)
-    if bodyPartType == BodyPartType.Hand_R          then return toc_data.RightHand
-    elseif bodyPartType == BodyPartType.ForeArm_R   then return toc_data.RightForearm
-    elseif bodyPartType == BodyPartType.UpperArm_R  then return toc_data.RightArm
-    elseif bodyPartType == BodyPartType.Hand_L      then return toc_data.LeftHand
-    elseif bodyPartType  == BodyPartType.ForeArm_L  then return toc_data.LeftForearm
-    elseif bodyPartType  == BodyPartType.UpperArm_L then return toc_data.LeftArm
+function GetAcceptingProsthesisBodyPartTypes()
+
+
+    return {BodyPartType.Hand_R, BodyPartType.ForeArm_R,
+            BodyPartType.Hand_L, BodyPartType.ForeArm_L}
+
+
+end
+
+-- TODO Change name
+function FindTocDataPartNameFromBodyPartType(toc_limbs_data, bodyPartType)
+    if bodyPartType == BodyPartType.Hand_R          then return toc_limbs_data.Right_Hand
+    elseif bodyPartType == BodyPartType.ForeArm_R   then return toc_limbs_data.Right_LowerArm
+    elseif bodyPartType == BodyPartType.UpperArm_R  then return toc_limbs_data.Right_UpperArm
+    elseif bodyPartType == BodyPartType.Hand_L      then return toc_limbs_data.Left_Hand
+    elseif bodyPartType  == BodyPartType.ForeArm_L  then return toc_limbs_data.Left_LowerArm
+    elseif bodyPartType  == BodyPartType.UpperArm_L then return toc_limbs_data.Left_UpperArm
     else return nil
     end
 end
 
 
 function FindTocBodyPartNameFromBodyPartType(bodyPartType)
-    if bodyPartType == BodyPartType.Hand_R          then return "RightHand"
-    elseif bodyPartType == BodyPartType.ForeArm_R   then return "RightForearm"
-    elseif bodyPartType == BodyPartType.UpperArm_R  then return "RightArm"
-    elseif bodyPartType == BodyPartType.Hand_L      then return "LeftHand"
-    elseif bodyPartType  == BodyPartType.ForeArm_L  then return "LeftForearm"
-    elseif bodyPartType  == BodyPartType.UpperArm_L then return "LeftArm"
+    if bodyPartType == BodyPartType.Hand_R          then return "Right_Hand"
+    elseif bodyPartType == BodyPartType.ForeArm_R   then return "Right_LowerArm"
+    elseif bodyPartType == BodyPartType.UpperArm_R  then return "Right_UpperArm"
+    elseif bodyPartType == BodyPartType.Hand_L      then return "Left_Hand"
+    elseif bodyPartType  == BodyPartType.ForeArm_L  then return "Left_LowerArm"
+    elseif bodyPartType  == BodyPartType.UpperArm_L then return "Left_UpperArm"
     else return nil
     end
 end

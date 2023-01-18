@@ -17,7 +17,7 @@ perk Protheses
 	xp10 = 0,
 }
 
-perk LeftHand
+perk Left_Hand
 {
 	parent = Protheses,
 	name = LeftHand,
@@ -35,7 +35,7 @@ perk LeftHand
 	xp10 = 9000,
 }
 
-perk RightHand
+perk Right_Hand
 {
 	parent = Protheses,
 	name = RightHand,

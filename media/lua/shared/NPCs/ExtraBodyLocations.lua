@@ -7,6 +7,7 @@
 local group = BodyLocations.getGroup("Human")
 
 
+-- TODO Change these names too, jesus they suck so bad
 group:getOrCreateLocation("ArmRight")
 group:getOrCreateLocation("ArmLeft")
 group:getOrCreateLocation("LegRight")
