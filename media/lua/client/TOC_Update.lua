@@ -223,8 +223,8 @@ function TheOnlyCure.UpdateEveryTenMinutes()
     if player == nil then
         return
     end
-    local part_data = player:getModData().TOC.Limbs
-
+    local toc_data = player:getModData().TOC
+    local part_data = toc_data.Limbs
 
     --Experience for prosthesis user
     for _, side in ipairs({"Left", "Right"}) do

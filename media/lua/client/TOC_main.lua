@@ -14,8 +14,6 @@ Arm = "Arm"
 function TheOnlyCure.InitTheOnlyCure(_, player)
 
     local mod_data = player:getModData()
-
-    -- TODO
     if mod_data.TOC == nil then
         TocSetInitData(mod_data, player)
     else
@@ -263,8 +261,9 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
         end
 
         --Equip model for amputation
-        local cloth = player:getInventory():AddItem(TocFindAmputatedClothingFromPartName(part_name))
-        player:setWornItem(cloth:getBodyLocation(), cloth)
+        local amputation_clothing_item = player:getInventory():AddItem(TocFindAmputatedClothingFromPartName(part_name))
+        TocSetCorrectTextureForAmputation(amputation_clothing_item, player)
+        player:setWornItem(amputation_clothing_item:getBodyLocation(), amputation_clothing_item)
         player:transmitModData()
 
     end
