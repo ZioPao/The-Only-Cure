@@ -71,13 +71,16 @@ function TestStuffToc()
             
             -- Even if there are some duplicates, this is just easier in the end since we're gonna get fairly easily part_name
             if limb == "Hand" then
+                mod_data.TOC.Limbs[part_name].cicatrization_base_time = 1700
+                mod_data.TOC.Limbs[part_name].depends_on = {}
                 mod_data.TOC.Prosthesis.AcceptedProsthesis[part_name] = accepted_prosthesis_hand
-
-
-
             elseif limb == "LowerArm" then
+                mod_data.TOC.Limbs[part_name].cicatrization_base_time = 1800
+                mod_data.TOC.Limbs[part_name].depends_on = {side .. "_Hand",}
                 mod_data.TOC.Prosthesis.AcceptedProsthesis[part_name] = accepted_prosthesis_lowerarm
             elseif limb == "UpperArm" then
+                mod_data.TOC.Limbs[part_name].cicatrization_base_time = 2000
+                mod_data.TOC.Limbs[part_name].depends_on = {side .. "_Hand", side .. "_LowerArm",}
                 mod_data.TOC.Prosthesis.AcceptedProsthesis[part_name] = accepted_prosthesis_upperarm
             end
   
@@ -93,7 +96,56 @@ function TestStuffToc()
 
     end
 
+    -- Setup traits
+    if player:HasTrait("Amputee_Hand") then
+        local amputation_clothing = player:getInventory():AddItem("TOC.Amputation_Left_Hand")
+        player:setWornItem(amputation_clothing:getBodyLocation(), amputation_clothing)
+        mod_data.TOC.Left_Hand.is_cut = true
+        mod_data.TOC.Left_Hand.is_operated = true
+        mod_data.TOC.Left_Hand.is_amputation_shown = true
+        mod_data.TOC.Left_Hand.is_cicatrized = true
+    elseif player:HasTrait("Amputee_LowerArm") then
+        local amputation_clothing = player:getInventory():AddItem("TOC.Amputation_Left_LowerArm")
+        player:setWornItem(amputation_clothing:getBodyLocation(), amputation_clothing)
+        mod_data.TOC.Left_LowerArm.is_cut = true
+        mod_data.TOC.Left_LowerArm.is_operated = true
+        mod_data.TOC.Left_LowerArm.is_amputation_shown = true
+        mod_data.TOC.Left_LowerArm.is_cicatrized = true
+    elseif player:HasTrait("Amputee_UpperArm") then
+        local amputation_clothing = player:getInventory():AddItem("TOC.Amputation_Left_UpperArm")
+        player:setWornItem(amputation_clothing:getBodyLocation(), amputation_clothing)
+        mod_data.TOC.Left_UpperArm.is_cut = true
+        mod_data.TOC.Left_UpperArm.is_operated = true
+        mod_data.TOC.Left_UpperArm.is_amputation_shown = true
+        mod_data.TOC.Left_UpperArm.is_cicatrized = true
+    end
+
 end
+
+
+function TheOnlyCure.DeclareTraits2()
+    local amp1 = TraitFactory.addTrait("Amputee_Hand", getText("UI_trait_Amputee_Hand"), -8, getText("UI_trait_Amputee_Hand_desc"), false, false)
+    amp1:addXPBoost(Perks.LeftHand, 4)
+
+    local amp2 = TraitFactory.addTrait("Amputee_LowerArm", getText("UI_trait_Amputee_LowerArm"), -10, getText("UI_trait_Amputee_LowerArm_desc"), false, false)
+    amp2:addXPBoost(Perks.LeftHand, 4)
+
+    local amp3 = TraitFactory.addTrait("Amputee_UpperArm", getText("UI_trait_Amputee_UpperArm"), -20, getText("UI_trait_Amputee_UpperArm_desc"), false, false)
+    amp3:addXPBoost(Perks.LeftHand, 4)
+
+    TraitFactory.addTrait("Insensitive", getText("UI_trait_Insensitive"), 6, getText("UI_trait_Insensitivedesc"), false, false)
+    TraitFactory.setMutualExclusive("Amputee_Hand", "Amputee_LowerArm")
+    TraitFactory.setMutualExclusive("Amputee_Hand", "Amputee_UpperArm")
+    TraitFactory.setMutualExclusive("Amputee_LowerArm", "Amputee_UpperArm")
+end
+
+
+
+
+
+
+
+
 
 
 function Test2Toc(part_name, prosthetic_name)

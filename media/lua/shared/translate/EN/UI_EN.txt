@@ -8,12 +8,12 @@ UI_EN = {
     UI_prof_surgeon = "Surgeon",
     UI_profdesc_surgeon = "You are a surgeon! Start with all recipe of the mod the only cure.<br>You are also better to cut and operate.",
 
-    UI_trait_Amputee1 = "Amputee hand",
-    UI_trait_Amputee1desc = "Begin the game without a hand but also a metal hook.",
-    UI_trait_Amputee2 = "Amputee forearm",
-    UI_trait_Amputee2desc = "Begin the game without a forearm but also a metal hook.",
-    UI_trait_Amputee3 = "Amputee arm",
-    UI_trait_Amputee3desc = "Begin the game without an arm, good luck.",
+    UI_trait_Amputee_Hand = "Amputee hand",
+    UI_trait_Amputee_Hand_desc = "Begin the game without a hand but also a metal hook.",
+    UI_trait_Amputee_LowerArm = "Amputee forearm",
+    UI_trait_Amputee_LowerArm_desc = "Begin the game without a forearm but also a metal hook.",
+    UI_trait_Amputee_UpperArm = "Amputee arm",
+    UI_trait_Amputee_UpperArm_desc = "Begin the game without an arm, good luck.",
     UI_trait_Insensitive = "Insensitive to pain",
     UI_trait_Insensitivedesc = "Reduces maximum pain.",
 

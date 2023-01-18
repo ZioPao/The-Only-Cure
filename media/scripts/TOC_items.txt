@@ -4,13 +4,13 @@ imports
 	{
 		Base
 	}
-/****************** Cloth that look like a cut arm ******************/
-    item ArmRight_noHand
+/****************** Clothing that look like a cut arm ******************/
+    item Amputation_Right_Hand
         {
             Type = Clothing,
             DisplayName	= Amputated right hand,
 
-            ClothingItem = ArmRight_noHand,
+            ClothingItem = Amputation_Right_Hand,
             BodyLocation = ArmRight,
 
             Weight = 0,
@@ -23,12 +23,12 @@ imports
             Icon = genericAmputation,
         }
 
-    item ArmRight_noForearm
+    item Amputation_Right_LowerArm
         {
             Type = Clothing,
             DisplayName	= Amputated right forearm,
 
-            ClothingItem = ArmRight_noForeArm,
+            ClothingItem = Amputation_Right_LowerArm,
             BodyLocation = ArmRight,
 
             Weight = 0,
@@ -40,12 +40,12 @@ imports
             Icon = genericAmputation,
         }
 
-    item ArmRight_noArm
+    item Amputation_Right_UpperArm
         {
             Type = Clothing,
             DisplayName	= Amputated entire right arm,
 
-            ClothingItem = ArmRight_noArm,
+            ClothingItem = Amputation_Right_UpperArm,
             BodyLocation = ArmRight,
             /*BloodLocation = UpperArms,*/
             Weight = 0,
@@ -56,12 +56,12 @@ imports
             Icon = genericAmputation,
         }
 
-    item ArmLeft_noHand
+    item Amputation_Left_Hand
         {
             Type = Clothing,
             DisplayName	= Amputated left hand,
 
-            ClothingItem = ArmLeft_noHand,
+            ClothingItem = Amputation_Left_Hand,
             BodyLocation = ArmLeft,
 
             Weight = 0,
@@ -74,12 +74,12 @@ imports
             Icon = genericAmputation,
         }
 
-    item ArmLeft_noForearm
+    item Amputation_Left_LowerArm
         {
             Type = Clothing,
             DisplayCategory = Amputation,
             DisplayName	= Amputated left forearm,
-            ClothingItem = ArmLeft_noForeArm,
+            ClothingItem = Amputation_Left_LowerArm,
             BodyLocation = ArmLeft,
 
             Weight = 0,
@@ -92,11 +92,11 @@ imports
 
         }
 
-    item ArmLeft_noArm
+    item Amputation_Left_UpperArm
         {
             Type = Clothing,
             DisplayName	= Amputated entire left arm,
-            ClothingItem = ArmLeft_noArm,
+            ClothingItem = Amputation_Left_UpperArm,
             BodyLocation = ArmLeft,
 
             Weight = 0,
@@ -145,13 +145,13 @@ imports
 /************************ Prothese cloth ************************/
 
 /* TODO make these not clothing so we cant equip them but only install them via the menu or context menu*/
-    item WoodenHook_right_noHand
+    item Prost_Right_Hand_WoodenHook
         {
             Weight = 1,
             Type = Clothing,
             DisplayCategory = Prosthesis,
             DisplayName	= DisplayName_woodenHook,
-            ClothingItem = ArmRight_WoodenHook,
+            ClothingItem = Prost_Right_Hand_WoodenHook,
             BodyLocation = ArmRight_Prot,
             BloodLocation = Hands,
             Icon = woodenHook,
@@ -159,13 +159,13 @@ imports
             WaterResistance = 15,
         }
 
-    item WoodenHook_left_noHand
+    item Prost_Left_Hand_WoodenHook
         {
             Weight = 1,
             Type = Clothing,
             DisplayCategory = Prosthesis,
             DisplayName	= DisplayName_woodenHook,
-            ClothingItem = ArmLeft_WoodenHook,
+            ClothingItem = Prost_Left_Hand_WoodenHook,
             BodyLocation = ArmLeft_Prot,
             BloodLocation = Hands,
             Icon = woodenHook,
@@ -173,13 +173,13 @@ imports
             WaterResistance = 15,
         }
 
-    item MetalHook_right_noHand
+    item Prost_Right_Hand_MetalHook
         {
             Weight = 0.5,
             Type = Clothing,
             DisplayCategory = Prosthesis,
             DisplayName	= DisplayName_metalHook,
-            ClothingItem = ArmRight_MetalHook,
+            ClothingItem = Prost_Right_Hand_MetalHook,
             BodyLocation = ArmRight_Prot,
             BloodLocation = Hands,
             Icon = metalHook,
@@ -187,13 +187,13 @@ imports
             WaterResistance = 13,
         }
 
-    item MetalHook_left_noHand
+    item Prost_Left_Hand_MetalHook
         {
             Weight = 0.5,
             Type = Clothing,
             DisplayCategory = Prosthesis,
             DisplayName	= DisplayName_metalHook,
-            ClothingItem = ArmLeft_MetalHook,
+            ClothingItem = Prost_Left_Hand_MetalHook,
             BodyLocation = ArmLeft_Prot,
             BloodLocation = Hands,
             Icon = metalHook,
@@ -201,13 +201,13 @@ imports
             WaterResistance = 13,
         }
 
-    item MetalHand_right_noHand
+    item Prost_Right_Hand_MetalHand
         {
             Weight = 0.3,
             Type = Clothing,
             DisplayCategory = Prosthesis,
             DisplayName	= DisplayName_metalHand,
-            ClothingItem = ArmRight_MetalHamd,
+            ClothingItem = Prost_Right_Hand_MetalHand,
             BodyLocation = ArmRight_Prot,
             BloodLocation = Hands,
             Icon = metalHand,
@@ -215,13 +215,13 @@ imports
             WaterResistance = 11,
         }
 
-    item MetalHand_left_noHand
+    item Prost_Left_Hand_MetalHand
         {
             Weight = 0.3,
             Type = Clothing,
             DisplayCategory = Prosthesis,
             DisplayName	= DisplayName_metalHand,
-            ClothingItem = ArmLeft_MetalHand,
+            ClothingItem = Prost_Left_Hand_MetalHand,
             BodyLocation = ArmLeft_Prot,
             BloodLocation = Hands,
             Icon = metalHand,
@@ -229,13 +229,13 @@ imports
             WaterResistance = 11,
         }
 
-    item WoodenHook_right_noForearm
+    item Prost_Right_LowerArm_WoodenHook
         {
             Weight = 2,
             Type = Clothing,
             DisplayCategory = Prosthesis,
             DisplayName	= DisplayName_woodenHook,
-            ClothingItem = ArmRight_WoodenHook_fore,
+            ClothingItem = Prost_Right_LowerArm_WoodenHook,
             BodyLocation = ArmRight_Prot,
             BloodLocation = LowerArms;Hands,
             Icon = woodenHook,
@@ -243,13 +243,13 @@ imports
             WaterResistance = 16,
         }
 
-    item WoodenHook_left_noForearm
+    item Prost_Left_LowerArm_WoodenHook
         {
             Weight = 2,
             Type = Clothing,
             DisplayCategory = Prosthesis,
             DisplayName	= DisplayName_woodenHook,
-            ClothingItem = ArmLeft_WoodenHook_fore,
+            ClothingItem = Prost_Left_LowerArm_WoodenHook,
             BodyLocation = ArmLeft_Prot,
             BloodLocation = LowerArms;Hands,
 
@@ -258,13 +258,13 @@ imports
             WaterResistance = 16,
         }
 
-    item MetalHook_right_noForearm
+    item Prost_Right_LowerArm_MetalHook
         {
             Weight = 1.5,
             Type = Clothing,
             DisplayCategory = Prosthesis,
             DisplayName	= DisplayName_metalHook,
-            ClothingItem = ArmRight_MetalHook_fore,
+            ClothingItem = Prost_Right_LowerArm_MetalHook,
             BodyLocation = ArmRight_Prot,
             BloodLocation = LowerArms;Hands,
             Icon = metalHook,
@@ -272,13 +272,13 @@ imports
             WaterResistance = 14,
         }
 
-    item MetalHook_left_noForearm
+    item Prost_Left_LowerArm_MetalHook
         {
             Weight = 1.5,
             Type = Clothing,
             DisplayCategory = Prosthesis,
             DisplayName	= DisplayName_metalHook,
-            ClothingItem = ArmLeft_MetalHook_fore,
+            ClothingItem = Prost_Left_LowerArm_MetalHook,
             BodyLocation = ArmLeft_Prot,
             BloodLocation = LowerArms;Hands,
 
@@ -287,13 +287,13 @@ imports
             WaterResistance = 14,
         }
 
-    item MetalHand_right_noForearm
+    item Prost_Right_LowerArm_MetalHand 
         {
             Weight = 1.2,
             Type = Clothing,
             DisplayCategory = Prosthesis,
             DisplayName	= DisplayName_metalHand,
-            ClothingItem = ArmRight_MetalHand_fore,
+            ClothingItem = Prost_Right_LowerArm_MetalHand,
             BodyLocation = ArmRight_Prot,
             BloodLocation = LowerArms;Hands,
             Icon = metalHand,
@@ -301,13 +301,13 @@ imports
             WaterResistance = 12,
         }
 
-    item MetalHand_left_noForearm
+    item Prost_Left_LowerArm_MetalHand
         {
             Weight = 1.2,
             Type = Clothing,
             DisplayCategory = Prosthesis,
             DisplayName	= DisplayName_metalHand,
-            ClothingItem = ArmLeft_MetalHand_fore,
+            ClothingItem = Prost_Left_LowerArm_MetalHand,
             BodyLocation = ArmLeft_Prot,
             BloodLocation = LowerArms;Hands,
             Icon = metalHand,
