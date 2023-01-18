@@ -112,19 +112,19 @@ Commands["CanResetEverything"] = function(arg)
     arg["command"] = "ResponseCanAct"
     arg["toSend"] = {part_name, "Cut", true}
     sendClientCommand("TOC", "SendServer", arg)
-    --ResetEverything()
+    --TocResetEverything()
 end
 
 Commands["ResetEverything"] = function(arg)
     local arg = arg["toSend"]
-    ResetEverything()
+    TocResetEverything()
 end
 
 -- Cheating stuff 
 Commands["AcceptResetEverything"] = function(arg)
 
     local clicked_player = getPlayerByOnlineID(arg[1])      -- TODO delete this
-    ResetEverything()
+    TocResetEverything()
 end
 
 

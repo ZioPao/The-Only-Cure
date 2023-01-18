@@ -1,4 +1,4 @@
-function ResetEverything()
+function TocResetEverything()
 
     local player = getPlayer()
     local mod_data = player:getModData()

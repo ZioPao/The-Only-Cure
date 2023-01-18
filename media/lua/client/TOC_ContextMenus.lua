@@ -158,7 +158,7 @@ TocContextMenus.CreateCheatMenu = function(context, root_menu, local_player, cli
         local cheat_menu = TocContextMenus.CreateNewMenu("Cheat", context, root_menu)
 
         if clicked_player == local_player then
-            cheat_menu:addOption("Reset TOC for me", _, ResetEverything)
+            cheat_menu:addOption("Reset TOC for me", _, TocResetEverything)
 
         else
             cheat_menu:addOption("Reset TOC for " .. clicked_player:getUsername(), _, TryToToResetEverythingOtherPlayer, clicked_player, local_player)
