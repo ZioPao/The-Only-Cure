@@ -8,9 +8,9 @@
     <m_AllowRandomTint>false</m_AllowRandomTint>
     <m_Masks>3</m_Masks>
     <m_Masks>4</m_Masks>
-    <textureChoices>Clothes\skin01b</textureChoices>
-    <textureChoices>Clothes\skin02b</textureChoices>
-    <textureChoices>Clothes\skin03b</textureChoices>
-    <textureChoices>Clothes\skin04b</textureChoices>
-    <textureChoices>Clothes\skin05b</textureChoices>
+    <textureChoices>Amputations\skin01b</textureChoices>
+    <textureChoices>Amputations\skin02b</textureChoices>
+    <textureChoices>Amputations\skin03b</textureChoices>
+    <textureChoices>Amputations\skin04b</textureChoices>
+    <textureChoices>Amputations\skin05b</textureChoices>
 </clothingItem>
