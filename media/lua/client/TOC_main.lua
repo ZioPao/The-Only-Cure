@@ -217,21 +217,22 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
     local player = getPlayer()
     local toc_data = player:getModData().TOC
     local part_data = toc_data.Limbs
-    local body_part_type = player:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromBodyPart(part_name))
+
+    local body_part = player:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromBodyPart(part_name))
     local stats = player:getStats()
 
     -- Set damage, stress, and low endurance after amputation
-    body_part_type:AddDamage(100 - surgeon_factor)
-    body_part_type:setAdditionalPain(100 - surgeon_factor)
-    body_part_type:setBleeding(true)
-    body_part_type:setBleedingTime(100 - surgeon_factor)
-    body_part_type:setDeepWounded(true)
-    body_part_type:setDeepWoundTime(100 - surgeon_factor)
+    body_part:AddDamage(100 - surgeon_factor)
+    body_part:setAdditionalPain(100 - surgeon_factor)
+    body_part:setBleeding(true)
+    body_part:setBleedingTime(100 - surgeon_factor)
+    body_part:setDeepWounded(true)
+    body_part:setDeepWoundTime(100 - surgeon_factor)
     stats:setEndurance(surgeon_factor)
     stats:setStress(100 - surgeon_factor)
 
     -- If bandages are available, use them
-    body_part_type:setBandaged(bandage_table.use_bandage, 10, bandage_table.is_bandage_sterilized, bandage_table.bandage_type)
+    body_part:setBandaged(bandage_table.use_bandage, 10, bandage_table.is_bandage_sterilized, bandage_table.bandage_type)
 
 
 
@@ -251,7 +252,7 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
         local body_damage = player:getBodyDamage()
         if part_data[part_name].is_infected and body_damage.getInfectionLevel() < 20 then
             part_data[part_name].is_infected = false
-            body_part_type:SetBitten(false)
+            body_part:SetBitten(false)
 
             -- Second check, let's see if there is any other infected limb.
             if CheckIfStillInfected(part_data) == false then
@@ -279,6 +280,10 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
         local amputation_clothing_item = player:getInventory():AddItem(TocFindAmputatedClothingFromPartName(part_name))
         TocSetCorrectTextureForAmputation(amputation_clothing_item, player)
         player:setWornItem(amputation_clothing_item:getBodyLocation(), amputation_clothing_item)
+
+
+        -- Set blood on the amputated limb
+        TocSetBloodOnAmputation(getPlayer(), body_part)
 
         player:transmitModData()
 

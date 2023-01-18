@@ -40,6 +40,7 @@
         "BodyLocations",
         "ISUnequipAction",
         "ISInventoryPaneContextMenu",
-        "ISDropItemAction"
+        "ISDropItemAction",
+        "BloodBodyPartType"
     ]
 }

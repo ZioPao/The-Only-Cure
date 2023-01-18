@@ -5,6 +5,10 @@ require "ISUI/ISInventoryPaneContextMenu"
 
 local og_ISEquipTimedActionAdjustMaxTime = ISBaseTimedAction.adjustMaxTime
 
+
+-- TODO On death hide the amputation so that other players cant pick it up
+
+
 -- FIXME something is seriously broken here, it stacks up 
 function ISBaseTimedAction:adjustMaxTime(maxTime)
 
