@@ -8,15 +8,25 @@ local og_ISEquipTimedActionAdjustMaxTime = ISBaseTimedAction.adjustMaxTime
 
 -- TODO On death hide the amputation so that other players cant pick it up
 
-
--- FIXME something is seriously broken here, it stacks up 
 function ISBaseTimedAction:adjustMaxTime(maxTime)
 
-    local original_max_time = og_ISEquipTimedActionAdjustMaxTime(self, maxTime)       -- TODO will it work?
+    print("TOC: Input max time " .. tostring(maxTime))
+    local original_max_time = og_ISEquipTimedActionAdjustMaxTime(self, maxTime)      
+    
+    print("TOC: Return original max time: " .. tostring(original_max_time))
+
+    if original_max_time ~= -1 then
+        
+
     local modified_max_time = original_max_time
 
     local part_data = getPlayer():getModData().TOC.Limbs
     local burn_factor = 1.3
+
+
+
+    -- if it's -1, it should be instant.
+
 
     -- To make it faster, let's have everything already written in another func
     local all_body_parts = GetBodyParts()
@@ -50,10 +60,13 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
     if modified_max_time > 10 * original_max_time then modified_max_time = 10 * original_max_time end
 
 
-    print("MODIFIED MAX TIME: " .. modified_max_time)
-
+    print("TOC: Modified Max Time " .. modified_max_time)
 
     return modified_max_time
+    else
+        return original_max_time
+    end
+
 
 end
 
