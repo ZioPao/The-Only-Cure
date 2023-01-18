@@ -40,7 +40,7 @@ function ISInstallProsthesis:perform()
         return
     end
 
-    local prosthesis_name =TocFindCorrectClothingProsthesis(prosthesis_base_name, part_name)
+    local prosthesis_name = TocFindCorrectClothingProsthesis(prosthesis_base_name, part_name)
     self.cloth = self.character:getInventory():AddItem(prosthesis_name)
 
     if self.cloth ~= nil then

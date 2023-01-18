@@ -15,7 +15,9 @@ function TheOnlyCure.InitTheOnlyCure(_, player)
 
     local mod_data = player:getModData()
 
+    -- TODO
     if mod_data.TOC == nil then
+
 
         print("TOC: Creating mod_data.TOC")
     
@@ -32,9 +34,35 @@ function TheOnlyCure.InitTheOnlyCure(_, player)
                 is_other_bodypart_infected = false
             },
             Prosthesis = {
-                WoodenHook = {},
-                MetalHook = {},
-                MetalHand = {}
+                WoodenHook = {               
+                    Right_Hand = {},
+                    Right_LowerArm = {},
+                    Right_UpperArm = {},
+
+                    Left_Hand = {},
+                    Left_LowerArm = {},
+                    Left_UpperArm = {},
+                },
+                MetalHook = {
+                    Right_Hand = {},
+                    Right_LowerArm = {},
+                    Right_UpperArm = {},
+    
+                    Left_Hand = {},
+                    Left_LowerArm = {},
+                    Left_UpperArm = {},
+                },
+                MetalHand = {
+                    Right_Hand = {},
+                    Right_LowerArm = {},
+                    Right_UpperArm = {},
+    
+                    Left_Hand = {},
+                    Left_LowerArm = {},
+                    Left_UpperArm = {},
+                },
+                Accepted_Prosthesis = {}
+
             },
             Generic = {},
         }
@@ -97,7 +125,7 @@ function TheOnlyCure.InitTheOnlyCure(_, player)
                     mod_data.TOC.Limbs[part_name].depends_on = {}
 
 
-                    mod_data.TOC.Prosthesis.AcceptedProsthesis[part_name] = accepted_prosthesis_hand
+                    mod_data.TOC.Prosthesis.Accepted_Prosthesis[part_name] = accepted_prosthesis_hand
                     mod_data.TOC.Prosthesis["WoodenHook"][part_name].prosthesis_factor = 1.5
                     mod_data.TOC.Prosthesis["MetalHook"][part_name].prosthesis_factor = 1.3
                     mod_data.TOC.Prosthesis["MetalHand"][part_name].prosthesis_factor = 1.1
@@ -106,7 +134,7 @@ function TheOnlyCure.InitTheOnlyCure(_, player)
                 elseif limb == "LowerArm" then
                     mod_data.TOC.Limbs[part_name].cicatrization_base_time = 1800
                     mod_data.TOC.Limbs[part_name].depends_on = {side .. "_Hand",}
-                    mod_data.TOC.Prosthesis.AcceptedProsthesis[part_name] = accepted_prosthesis_lowerarm
+                    mod_data.TOC.Prosthesis.Accepted_Prosthesis[part_name] = accepted_prosthesis_lowerarm
     
                     mod_data.TOC.Prosthesis["WoodenHook"][part_name].prosthesis_factor = 1.65
                     mod_data.TOC.Prosthesis["MetalHook"][part_name].prosthesis_factor = 1.45
@@ -114,7 +142,7 @@ function TheOnlyCure.InitTheOnlyCure(_, player)
                 elseif limb == "UpperArm" then
                     mod_data.TOC.Limbs[part_name].cicatrization_base_time = 2000
                     mod_data.TOC.Limbs[part_name].depends_on = {side .. "_Hand", side .. "_LowerArm",}
-                    mod_data.TOC.Prosthesis.AcceptedProsthesis[part_name] = accepted_prosthesis_upperarm
+                    mod_data.TOC.Prosthesis.Accepted_Prosthesis[part_name] = accepted_prosthesis_upperarm
                 end
       
             end
@@ -146,6 +174,9 @@ function TheOnlyCure.InitTheOnlyCure(_, player)
             mod_data.TOC.Left_UpperArm.is_cicatrized = true
         end
 
+    else
+        TheOnlyCure.CheckCompatibilityWithOlderVersions(mod_data)
+
     end
 
 end
@@ -166,7 +197,21 @@ function TheOnlyCure.DeclareTraits()
     TraitFactory.setMutualExclusive("Amputee_LowerArm", "Amputee_UpperArm")
 end
 
+function TheOnlyCure.CheckCompatibilityWithOlderVersions(mod_data)
+    -- Gets the old status and turns it into the new.
 
+    if mod_data.TOC.Limbs == nil then
+        print("TOC: Limbs is nil, resetting mod_data")
+        ResetEverything()
+
+    elseif mod_data.TOC.Limbs.Right_Hand.is_cut == nil then
+        print("TOC: Couldn't recreate all, some stuff is still nil")
+        ResetEverything()
+    else
+        print("TOC: Found compatible data")
+    end
+
+end
 -----------------------------------------------------------------------
 function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkiller_table)
 

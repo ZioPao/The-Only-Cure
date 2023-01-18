@@ -156,7 +156,7 @@ end
 
 function TocFindCorrectClothingProsthesis(item_name, part_name)
 
-    local correct_name = "TOC." .. item_name .. "_" .. part_name
+    local correct_name = "TOC.Prost_" .. part_name .. "_" .. item_name
     return correct_name
 
 end

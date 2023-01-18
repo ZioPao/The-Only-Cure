@@ -1,7 +1,7 @@
 function ResetEverything()
 
     local player = getPlayer()
-    local mod_data = player:getModData()       
+    local mod_data = player:getModData()
     mod_data.TOC = nil
     TheOnlyCure.InitTheOnlyCure(_, player)
 
