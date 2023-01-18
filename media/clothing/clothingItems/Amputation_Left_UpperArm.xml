@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <clothingItem>
-    <m_MaleModel>ArmLeft_noForeArm</m_MaleModel>
-    <m_FemaleModel>ArmLeft_noForeArm</m_FemaleModel>
-    <m_GUID>d3816fe0-48e1-4cf5-a8e4-48c72595edb4</m_GUID>
+    <m_MaleModel>Amputation_Left_UpperArm_Male</m_MaleModel>
+    <m_FemaleModel>Amputation_Left_UpperArm_Female</m_FemaleModel>
+    <m_GUID>646cafa5-3fa1-41af-9ca0-aa57cca3b36d</m_GUID>
     <m_Static>false</m_Static>
     <m_AllowRandomHue>false</m_AllowRandomHue>
     <m_AllowRandomTint>false</m_AllowRandomTint>

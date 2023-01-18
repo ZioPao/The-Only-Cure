@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <clothingItem>
-    <m_MaleModel>ArmLeft_Hook_fore</m_MaleModel>
-    <m_FemaleModel>ArmLeft_Hook_fore</m_FemaleModel>
-    <m_GUID>129ee688-d4bb-4297-8eb2-f88974001217</m_GUID>
+    <m_MaleModel>Prost_Right_LowerArm_MetalHand_Male</m_MaleModel>
+    <m_FemaleModel>Prost_Right_LowerArm_MetalHand_Female</m_FemaleModel>
+    <m_GUID>1eb56768-d7ef-46e4-ac07-91d0e43d15fb</m_GUID>
     <m_Static>false</m_Static>
     <m_AllowRandomHue>false</m_AllowRandomHue>
     <m_AllowRandomTint>false</m_AllowRandomTint>

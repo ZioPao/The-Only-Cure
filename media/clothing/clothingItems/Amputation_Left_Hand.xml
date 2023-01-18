@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <clothingItem>
-    <m_MaleModel>ArmLeft_noArm</m_MaleModel>
-    <m_FemaleModel>ArmLeft_noArm</m_FemaleModel>
-    <m_GUID>646cafa5-3fa1-41af-9ca0-aa57cca3b36d</m_GUID>
+    <m_MaleModel>Amputation_Left_Hand_Male</m_MaleModel>
+    <m_FemaleModel>Amputation_Left_Hand_Female</m_FemaleModel>
+    <m_GUID>2de93af2-b7a8-4c04-84d1-28d92cce8a0f</m_GUID>
     <m_Static>false</m_Static>
     <m_AllowRandomHue>false</m_AllowRandomHue>
     <m_AllowRandomTint>false</m_AllowRandomTint>
-    <m_Masks>3</m_Masks>
     <m_Masks>4</m_Masks>
     <textureChoices>Clothes\prototype</textureChoices>
 </clothingItem>
