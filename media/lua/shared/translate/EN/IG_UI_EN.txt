@@ -14,5 +14,5 @@ IGUI_EN = {
 
     IGUI_perks_Right_Hand = "Right hand",
     IGUI_perks_Left_Hand = "Left hand",
-    IGUI_perks_Prosthesis_Skill_desc = "Prosthesis skills",
+    IGUI_perks_Prosthesis = "Prosthesis skills",
 }

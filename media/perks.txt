@@ -1,9 +1,9 @@
 VERSION = 1,
 
-perk Protheses
+perk Prosthesis
 {
 	parent = None,
-	translation = Protheses,
+	translation = Prosthesis,
 	passive = false,
 	xp1 = 0,
 	xp2 = 0,
@@ -19,9 +19,9 @@ perk Protheses
 
 perk Left_Hand
 {
-	parent = Protheses,
-	name = LeftHand,
-	translation = LeftHand,
+	parent = Prosthesis,
+	name = Left_Hand,
+	translation = Left_Hand,
 	passive = false,
 	xp1 = 50,
 	xp2 = 100,
@@ -37,9 +37,9 @@ perk Left_Hand
 
 perk Right_Hand
 {
-	parent = Protheses,
-	name = RightHand,
-	translation = RightHand,
+	parent = Prosthesis,
+	name = Right_Hand,
+	translation = Right_Hand,
 	passive = false,
 	xp1 = 50,
 	xp2 = 100,

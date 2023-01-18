@@ -454,6 +454,13 @@ function SetupTocDescUI(surgeon, patient, toc_data, part_name)
             desc_ui["b1"]:setVisible(false)
         end
 
+    else
+        desc_ui["status"]:setText("Not cut")
+        desc_ui["status"]:setColor(1, 1, 1, 1)
+        desc_ui["b1"]:setVisible(true)
+        desc_ui["b1"]:setText("Remove prosthesis before")
+        desc_ui["b1"]:addArg("option", "Nothing")
+
     end
 
     -- Prosthesis Level

@@ -4,11 +4,36 @@ if TheOnlyCure == nil then
     TheOnlyCure = {}
 end
 
+-----------------------------------------
+-- MP HANDLING CHECKS
 function CheckIfCanBeCut(part_name)
     -- This is just for MP handling... Not enough to check everything
-    return not getPlayer():getModData().TOC.Limbs[part_name].is_cut
+
+    local toc_data = getPlayer():getModData().TOC
+    local check = (not toc_data.Limbs[part_name].is_cut) and (not CheckIfProsthesisAlreadyInstalled(toc_data.Limbs, part_name))
+
+    return check
 
 end
+
+
+
+function CheckIfCanBeOperated(part_name)
+
+    local part_data = getPlayer():getModData().TOC.Limbs
+
+    return part_data[part_name].is_operated == false and part_data[part_name].is_amputation_shown
+
+end
+
+function CheckIfProsthesisCanBeEquipped(part_name)
+
+end
+
+-------------------------------
+
+
+
 
 function CheckIfProsthesisAlreadyInstalled(part_data, part_name)
 
@@ -28,14 +53,5 @@ function CheckIfProsthesisAlreadyInstalled(part_data, part_name)
 
 end
 
-function CheckIfCanBeOperated(part_name)
 
-    local part_data = getPlayer():getModData().TOC.Limbs
 
-    return part_data[part_name].is_operated == false and part_data[part_name].is_amputation_shown
-
-end
-
-function CheckIfProsthesisCanBeEquipped(part_name)
-
-end

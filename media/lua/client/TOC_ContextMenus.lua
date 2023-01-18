@@ -131,7 +131,7 @@ TocContextMenus.FillCutAndOperateMenus = function(local_player, clicked_player, 
 
 
         if local_player == clicked_player then        -- Local player
-            if CheckIfCanBeCut(v) and not CheckIfProsthesisAlreadyInstalled(local_part_data, v) then
+            if CheckIfCanBeCut(v) then
                 cut_menu:addOption(getText('UI_ContextMenu_' .. v), _, TryTocAction, v, "Cut", local_player, local_player)
 
             elseif CheckIfCanBeOperated(v) then
