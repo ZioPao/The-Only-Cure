@@ -31,14 +31,7 @@ function TocMapOldDataToNew(mod_data)
 
 
 
-    -- for k, v in pairs(map_names) do
-    --     print("TOC: Looping old names...")
-    --     print(k)
-    --     print(v)
-    --     print(backup_old_data[v].is_cut)
-    --     print("__________________")
-    -- end
-
+ 
 
 
     -- for _, v in ipairs(map_names) do
@@ -53,8 +46,42 @@ function TocMapOldDataToNew(mod_data)
 
 
     TocResetEverything()
-        -- For some reasons pairs does not work here... 
+    -- For some reasons pairs does not work here... 
     -- TODO ask why
+
+
+    -- for k, v in pairs(map_names) do
+    --     print("TOC: Looping...")
+
+    --     print(k)
+    --     print(v)
+    --     print(backup_old_data[v].is_cut)
+    --     print("__________________")
+
+
+
+    --     local old_name = k
+    --     local new_name = v
+
+    --     mod_data.TOC.Limbs[new_name].is_cut = backup_old_data[old_name].is_cut
+
+    --     if mod_data.TOC.Limbs[new_name].is_cut then
+    --         local cloth = getPlayer():getInventory():AddItem(TocFindAmputatedClothingFromPartName(new_name))
+    --         getPlayer():setWornItem(cloth:getBodyLocation(), cloth)
+    --     end
+
+
+    --     mod_data.TOC.Limbs[new_name].is_infected = backup_old_data[old_name].is_infected
+    --     mod_data.TOC.Limbs[new_name].is_operated = backup_old_data[old_name].is_operated
+    --     mod_data.TOC.Limbs[new_name].is_cicatrized = backup_old_data[old_name].is_cicatrized
+    --     mod_data.TOC.Limbs[new_name].is_cauterized = backup_old_data[old_name].is_cauterized
+    --     mod_data.TOC.Limbs[new_name].is_amputation_shown = backup_old_data[old_name].is_amputation_shown
+
+    --     mod_data.TOC.Limbs[new_name].cicatrization_time =  backup_old_data[old_name].cicatrization_time
+        
+
+    -- end
+
     for i=1, #new_names_table do
         print("TOC: Looping " .. i)
         print(backup_old_data[old_names_table[i]].is_cut)
