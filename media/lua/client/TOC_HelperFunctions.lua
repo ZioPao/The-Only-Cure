@@ -90,6 +90,7 @@ end
 -- Override helper
 
 function CheckIfItemIsAmputatedLimb(item)
+    
 
     local item_full_type = item:getFullType()
 

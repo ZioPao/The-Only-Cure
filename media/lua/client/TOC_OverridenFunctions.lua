@@ -132,6 +132,10 @@ end
 
 local og_ISInventoryPaneContextMenuUnequipItem = ISInventoryPaneContextMenu.unequipItem
 function ISInventoryPaneContextMenu.unequipItem(item, player)
+
+    if item == nil then
+        return
+    end
     if CheckIfItemIsAmputatedLimb(item) == false and CheckIfItemIsInstalledProsthesis(item) == false then
         og_ISInventoryPaneContextMenuUnequipItem(item, player)
     end
