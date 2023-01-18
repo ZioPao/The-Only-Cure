@@ -2,6 +2,8 @@ if not TheOnlyCure then
     TheOnlyCure = {}
 end
 
+TOC_sides = {"Left", "Right"}
+TOC_limbs = {"Hand", "LowerArm", "UpperArm"}
 
 -- TODO remove this crap
 Left = "Left"
@@ -155,23 +157,28 @@ function TocSetInitData(mod_data, player)
     -- Setup traits
     if player:HasTrait("Amputee_Hand") then
 
-        -- TODO override AddItem so we can change the texture dynamically based on skin color
-        local amputation_clothing = player:getInventory():AddItem("TOC.Amputation_Left_Hand")
-        player:setWornItem(amputation_clothing:getBodyLocation(), amputation_clothing)
+        local amputation_clothing_item = player:getInventory():AddItem("TOC.Amputation_Left_Hand")
+        TocSetCorrectTextureForAmputation(amputation_clothing_item, player)
+
+        player:setWornItem(amputation_clothing_item:getBodyLocation(), amputation_clothing_item)
         mod_data.TOC.Left_Hand.is_cut = true
         mod_data.TOC.Left_Hand.is_operated = true
         mod_data.TOC.Left_Hand.is_amputation_shown = true
         mod_data.TOC.Left_Hand.is_cicatrized = true
     elseif player:HasTrait("Amputee_LowerArm") then
-        local amputation_clothing = player:getInventory():AddItem("TOC.Amputation_Left_LowerArm")
-        player:setWornItem(amputation_clothing:getBodyLocation(), amputation_clothing)
+        local amputation_clothing_item = player:getInventory():AddItem("TOC.Amputation_Left_LowerArm")
+        TocSetCorrectTextureForAmputation(amputation_clothing_item, player)
+
+        player:setWornItem(amputation_clothing_item:getBodyLocation(), amputation_clothing_item)
         mod_data.TOC.Left_LowerArm.is_cut = true
         mod_data.TOC.Left_LowerArm.is_operated = true
         mod_data.TOC.Left_LowerArm.is_amputation_shown = true
         mod_data.TOC.Left_LowerArm.is_cicatrized = true
     elseif player:HasTrait("Amputee_UpperArm") then
-        local amputation_clothing = player:getInventory():AddItem("TOC.Amputation_Left_UpperArm")
-        player:setWornItem(amputation_clothing:getBodyLocation(), amputation_clothing)
+        local amputation_clothing_item = player:getInventory():AddItem("TOC.Amputation_Left_UpperArm")
+        TocSetCorrectTextureForAmputation(amputation_clothing_item, player)
+
+        player:setWornItem(amputation_clothing_item:getBodyLocation(), amputation_clothing_item)
         mod_data.TOC.Left_UpperArm.is_cut = true
         mod_data.TOC.Left_UpperArm.is_operated = true
         mod_data.TOC.Left_UpperArm.is_amputation_shown = true
@@ -204,12 +211,14 @@ end
 -----------------------------------------------------------------------
 function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkiller_table)
 
+    -- TODO Separate Cut Limb in side and limb instead of single part_name
+
     -- TODO Check if this works in MP through MENU UI
     local player = getPlayer()
     local toc_data = player:getModData().TOC
     local part_data = toc_data.Limbs
     local body_part_type = player:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromBodyPart(part_name))
-    local stats = player:getStats();
+    local stats = player:getStats()
 
     -- Set damage, stress, and low endurance after amputation
     body_part_type:AddDamage(100 - surgeon_factor)
@@ -260,10 +269,17 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
             part_data[depended_v].cicatrization_time = part_data[part_name].cicatrization_base_time - surgeon_factor * 50
         end
 
-        --Equip model for amputation
+        -- Check for older amputation models and deletes them from player's inventory
+
+        local side = string.match(part_name, '(%w+)_')
+
+        TocDeleteOtherAmputatedLimbs(side)
+
+        --Equip new model for amputation
         local amputation_clothing_item = player:getInventory():AddItem(TocFindAmputatedClothingFromPartName(part_name))
         TocSetCorrectTextureForAmputation(amputation_clothing_item, player)
         player:setWornItem(amputation_clothing_item:getBodyLocation(), amputation_clothing_item)
+
         player:transmitModData()
 
     end

@@ -38,6 +38,21 @@ function CureInfection(body_damage)
 
 end
 
+function TocDeleteOtherAmputatedLimbs(side)
+
+    -- if left hand is cut and we cut left lowerarm, then delete hand
+
+
+    for _, limb in pairs(TOC_limbs) do
+        local part_name = "TOC.Amputation_" .. side .. "_" .. limb
+        local amputated_limb = getPlayer():getInventory():FindAndReturn(part_name)
+        if amputated_limb then
+            getPlayer():getInventory():Remove(amputated_limb)
+        end
+        
+    end
+
+end
 
 -- OperateLimb
 function SetBodyPartsStatusAfterOperation(player, part_data, part_name, use_oven)
