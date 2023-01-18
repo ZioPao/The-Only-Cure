@@ -1,7 +1,7 @@
 -- CutLimb
 -- TODO if TheONlyCure. triggers an errors
-function CheckIfStillInfected(toc_data)
-    if toc_data == nil then
+function CheckIfStillInfected(part_data)
+    if part_data == nil then
         return
     end
     -- Check ALL body part types to check if the player is still gonna die
@@ -9,12 +9,12 @@ function CheckIfStillInfected(toc_data)
 
 
     for _, v in ipairs(GetBodyParts()) do
-        if toc_data[v].is_infected then
+        if part_data[v].is_infected then
             check = true
         end
     end
 
-    if toc_data.is_other_bodypart_infected then
+    if part_data.is_other_bodypart_infected then
         check = true
     end
 
@@ -40,14 +40,14 @@ end
 
 
 -- OperateLimb
-function SetBodyPartsStatusAfterOperation(player, toc_data, part_name, use_oven)
+function SetBodyPartsStatusAfterOperation(player, part_data, part_name, use_oven)
     --for _, v in ipairs(GetBodyParts()) do
 
 
     local body_part_type = player:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromBodyPart(part_name))
     FixSingleBodyPartType(body_part_type, use_oven)
 
-    for _, v in ipairs(toc_data[part_name].depends_on) do
+    for _, v in ipairs(part_data[part_name].depends_on) do
         local depended_body_part_type = player:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromBodyPart(v))
         FixSingleBodyPartType(depended_body_part_type, use_oven)
 

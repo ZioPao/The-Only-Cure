@@ -66,21 +66,21 @@ TocContextMenus.CreateOperateWithOvenMenu = function(player, context, worldObjec
     -- TODO Add a way to move the player towards the oven
 
     
-    local toc_data = player_obj:getModData().TOC
+    local part_data = player_obj:getModData().TOC.Limbs
 
     local is_main_menu_already_created = false
 
 
     --local props = v:getSprite() and v:getSprite():getProperties() or nil
 
-    for k_stove, v_stove in pairs(worldObjects) do
+    for _, v_stove in pairs(worldObjects) do
         if instanceof(v_stove, "IsoStove") and (player_obj:HasTrait("Brave") or player_obj:getPerkLevel(Perks.Strength) >= 6) then
 
             -- Check temperature
             if v_stove:getCurrentTemperature() > 250 then
                 
-                for k_bodypart, v_bodypart in ipairs(GetBodyParts()) do
-                    if toc_data[v_bodypart].is_cut and toc_data[v_bodypart].is_amputation_shown and not toc_data[v_bodypart].is_operated  then
+                for _, v_bodypart in ipairs(GetBodyParts()) do
+                    if part_data[v_bodypart].is_cut and part_data[v_bodypart].is_amputation_shown and not part_data[v_bodypart].is_operated  then
                         local subMenu = context:getNew(context);
 
                         if is_main_menu_already_created == false then
@@ -125,16 +125,15 @@ end
 
 TocContextMenus.FillCutAndOperateMenus = function(local_player, clicked_player, world_objects, cut_menu, operate_menu)
 
-    local local_toc_data = local_player:getModData().TOC
+    local local_part_data = local_player:getModData().TOC.Limbs
 
     for _, v in ipairs(GetBodyParts()) do
 
 
         if local_player == clicked_player then        -- Local player
-            if CheckIfCanBeCut(v) and not CheckIfProsthesisAlreadyInstalled(local_toc_data, v) then
+            if CheckIfCanBeCut(v) and not CheckIfProsthesisAlreadyInstalled(local_part_data, v) then
                 cut_menu:addOption(getText('UI_ContextMenu_' .. v), _, TryTocAction, v, "Cut", local_player, local_player)
 
-                --cut_menu:addOption(getText('UI_ContextMenu_' .. v), _, TocCutLocal, local_player, local_player, v)
             elseif CheckIfCanBeOperated(v) then
                 operate_menu:addOption(getText('UI_ContextMenu_' .. v), _, TryTocAction, v, "Operate", local_player, local_player)
             end

@@ -1,5 +1,7 @@
 -- Makes the player drop an item if they don't have a limb or haven't equipped a prosthesis
 function TheOnlyCure.TryDropItem(player, toc_data)
+
+    -- TODO this is old, was used in the update thing
     if TheOnlyCure.CheckIfCanPickUpItem(toc_data, Right, Hand, Forearm) and player:getPrimaryHandItem() ~= nil then
         if player:getPrimaryHandItem():getName() ~= "Bare Hands" then
             player:dropHandItems()
@@ -18,6 +20,8 @@ end
 -- Helper for DropItem
 function TheOnlyCure.CheckIfCanPickUpItem(toc_data, side, limb, secondary_limb)
     
+
+    -- TODO we can use this when uninstall prost or when cutting
     local full_primary_limb = side .. limb
     local full_secondary_limb = side .. secondary_limb
 
@@ -33,10 +37,13 @@ function TheOnlyCure.CheckIfPlayerIsInfected(player, toc_data)
     local body_damage = player:getBodyDamage()
 
     for _, v in ipairs(GetLimbsBodyPartTypes()) do
-        local toc_bodypart = FindTocDataPartNameFromBodyPartType(toc_data.Limbs, v)
-        if body_damage:getBodyPart(v):bitten() and toc_bodypart ~= nil then
-            if toc_bodypart.is_cut == false then
-                toc_bodypart.is_infected = true
+        local part_name = FindTocBodyPartNameFromBodyPartType(v)
+        local part_data = toc_data.Limbs[part_name]
+
+
+        if body_damage:getBodyPart(v):bitten() and part_data ~= nil then
+            if part_data.is_cut == false then
+                part_data.is_infected = true
                 player:transmitModData()
             end
  
@@ -45,14 +52,14 @@ function TheOnlyCure.CheckIfPlayerIsInfected(player, toc_data)
 
     for _, v in ipairs(GetOtherBodyPartTypes()) do
         if body_damage:getBodyPart(v):bitten() then 
-            toc_data.is_other_bodypart_infected = true      -- Even one is enough, stop cycling if we find it
+            toc_data.Limbs.is_other_bodypart_infected = true      -- Even one is enough, stop cycling if we find it
             player:transmitModData()
             break
         end
     end
 end
 
-function TheOnlyCure.UpdatePlayerHealth(player, toc_data)
+function TheOnlyCure.UpdatePlayerHealth(player, part_data)
     local body_damage = player:getBodyDamage()
 
 
@@ -60,8 +67,8 @@ function TheOnlyCure.UpdatePlayerHealth(player, toc_data)
     if player:HasTrait("Insensitive") then body_damage:setPainReduction(49) end
 
     for i, part_name in pairs(GetBodyParts()) do
-        if toc_data[part_name].is_cut then
-            TheOnlyCure.HealSpecificPart(toc_data, part_name, player)
+        if part_data[part_name].is_cut then
+            TheOnlyCure.HealSpecificPart(part_data, part_name, player)
                 
         end
     end
@@ -72,7 +79,7 @@ function TheOnlyCure.UpdatePlayerHealth(player, toc_data)
 end
 
 --Helper function for UpdatePlayerHealth
-function TheOnlyCure.HealSpecificPart(toc_data, part_name, player)
+function TheOnlyCure.HealSpecificPart(part_data, part_name, player)
 
 
     local body_damage = player:getBodyDamage()
@@ -98,7 +105,7 @@ function TheOnlyCure.HealSpecificPart(toc_data, part_name, player)
 
 
     -- Set max health
-    if toc_data[part_name].is_cicatrized and body_part_type:getHealth() > 80 then
+    if part_data[part_name].is_cicatrized and body_part_type:getHealth() > 80 then
         body_part_type:SetHealth(80)
     elseif body_part_type:getHealth() > 40 then
         body_part_type:SetHealth(40)
@@ -114,7 +121,11 @@ function TheOnlyCure.HealSpecificPart(toc_data, part_name, player)
     -- Check if we can heal the infection
     if body_part_type:bitten() then
         body_part_type:SetBitten(false)
-        if not toc_data[part_name].is_other_bodypart_infected and not TheOnlyCure.CheckIfOtherLimbsAreInfected(toc_data, part_name) then
+
+
+        local is_other_bodypart_infected = player:getModData().TOC.Limbs.is_other_bodypart_infected
+
+        if not is_other_bodypart_infected and not TheOnlyCure.CheckIfOtherLimbsAreInfected(part_data, part_name) then
             body_part_type:setInfected(false)
             body_part_type:setInfectionMortalityDuration(-1)
             body_part_type:setInfectionTime(-1)
@@ -138,9 +149,9 @@ function TheOnlyCure.HealSpecificPart(toc_data, part_name, player)
     if body_part_type:getFractureTime()>0 then body_part_type:setFractureTime(0)         end
 
     -- Cicatrization check
-    if toc_data[part_name].is_cut and not toc_data[part_name].is_cicatrized then
-        if toc_data[part_name].cicatrization_time < 0 then
-            toc_data[part_name].is_cicatrized = true
+    if part_data[part_name].is_cut and not part_data[part_name].is_cicatrized then
+        if part_data[part_name].cicatrization_time < 0 then
+            part_data[part_name].is_cicatrized = true
 
             -- TODO make this random if the player gets it or not
             --FIXME they're gonna stack!!!!
@@ -158,9 +169,9 @@ function TheOnlyCure.HealSpecificPart(toc_data, part_name, player)
     end
 
     -- Phantom Pain
-    if toc_data[part_name].is_amputation_shown and ZombRand(1, 100) < 10 then
+    if part_data[part_name].is_amputation_shown and ZombRand(1, 100) < 10 then
         local added_pain
-        if toc_data[part_name].is_cauterized then added_pain = 60 else added_pain = 30 end
+        if part_data[part_name].is_cauterized then added_pain = 60 else added_pain = 30 end
         body_part_type:setAdditionalPain(ZombRand(1, added_pain))
     end
 
@@ -170,14 +181,14 @@ function TheOnlyCure.HealSpecificPart(toc_data, part_name, player)
 end
 
 --Helper function for UpdatePlayerHealth
-function TheOnlyCure.CheckIfOtherLimbsAreInfected(toc_data, part_name)
+function TheOnlyCure.CheckIfOtherLimbsAreInfected(part_data, part_name)
 
 
     local body_parts = GetBodyParts()
     body_parts[part_name] = nil
 
     for _,v in pairs(body_parts) do
-        if toc_data[v].is_infected then
+        if part_data[v].is_infected then
             return true
         end
     end
@@ -200,7 +211,7 @@ function TheOnlyCure.UpdateEveryOneMinute()
     if toc_data ~= nil then
         --TheOnlyCure.TryDropItem(player, toc_data)       -- TODO this must be set only in the cut\equipping function, not here
         TheOnlyCure.CheckIfPlayerIsInfected(player, toc_data)
-        TheOnlyCure.UpdatePlayerHealth(player, toc_data)
+        TheOnlyCure.UpdatePlayerHealth(player, toc_data.Limbs)
     end
 
 end

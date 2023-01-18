@@ -28,7 +28,7 @@ function GetAcceptingProsthesisBodyPartTypes()
 
 end
 
--- TODO Change name
+-- TODO This is just convoluted. Do not use this
 function FindTocDataPartNameFromBodyPartType(toc_limbs_data, bodyPartType)
     if bodyPartType == BodyPartType.Hand_R          then return toc_limbs_data.Right_Hand
     elseif bodyPartType == BodyPartType.ForeArm_R   then return toc_limbs_data.Right_LowerArm

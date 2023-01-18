@@ -20,7 +20,9 @@ function TheOnlyCure.InitTheOnlyCure(_, player)
     
         mod_data.TOC  = {
     
-            Limbs = {},
+            Limbs = {
+                is_other_bodypart_infected = false
+            },
             Prosthesis = {},
             Generic = {},
         }
@@ -159,6 +161,7 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
     -- TODO Check if this works in MP through MENU UI
     local player = getPlayer()
     local toc_data = player:getModData().TOC
+    local part_data = toc_data.Limbs
     local body_part_type = player:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromBodyPart(part_name))
     local stats = player:getStats();
 
@@ -184,19 +187,19 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
     -- Remove object in hand
     -- TODO do this
 
-    if toc_data[part_name].is_cut == false then
-        toc_data[part_name].is_cut = true
-        toc_data[part_name].is_amputation_shown = true
-        toc_data[part_name].cicatrization_time = toc_data[part_name].cicatrization_base_time - surgeon_factor * 50
+    if part_data[part_name].is_cut == false then
+        part_data[part_name].is_cut = true
+        part_data[part_name].is_amputation_shown = true
+        part_data[part_name].cicatrization_time = part_data[part_name].cicatrization_base_time - surgeon_factor * 50
         
         -- Heal the infection here
         local body_damage = player:getBodyDamage()
-        if toc_data[part_name].is_infected and body_damage.getInfectionLevel() < 20 then
-            toc_data[part_name].is_infected = false
+        if part_data[part_name].is_infected and body_damage.getInfectionLevel() < 20 then
+            part_data[part_name].is_infected = false
             body_part_type:SetBitten(false)
 
             -- Second check, let's see if there is any other infected limb.
-            if CheckIfStillInfected(toc_data) == false then
+            if CheckIfStillInfected(part_data) == false then
                 CureInfection(body_damage)
                 getPlayer():Say("I'm gonna be fine")
             else
@@ -205,10 +208,10 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
         end
 
         -- Cut the depended part
-        for _, depended_v in pairs(toc_data[part_name].depends_on) do
-            toc_data[depended_v].is_cut = true
-            toc_data[depended_v].is_amputation_shown = false        -- TODO why was it true before?
-            toc_data[depended_v].cicatrization_time = toc_data[part_name].cicatrization_base_time - surgeon_factor * 50
+        for _, depended_v in pairs(part_data[part_name].depends_on) do
+            part_data[depended_v].is_cut = true
+            part_data[depended_v].is_amputation_shown = false        -- TODO why was it true before?
+            part_data[depended_v].cicatrization_time = part_data[part_name].cicatrization_base_time - surgeon_factor * 50
         end
 
         --Equip model for amputation
@@ -226,7 +229,7 @@ end
 function TheOnlyCure.OperateLimb(part_name, surgeon_factor, use_oven)
 
     local player = getPlayer()
-    local toc_data = player:getModData().TOC
+    local part_data = player:getModData().TOC.Limbs
 
     if use_oven then
         local stats = player:getStats()
@@ -234,20 +237,20 @@ function TheOnlyCure.OperateLimb(part_name, surgeon_factor, use_oven)
         stats:setStress(100)
     end
 
-    if toc_data[part_name].is_operated == false and toc_data[part_name].is_cut == true then
-        toc_data[part_name].is_operated = true
-        toc_data[part_name].cicatrization_time = toc_data[part_name].cicatrization_time - (surgeon_factor * 200)
-        if use_oven then toc_data[part_name].is_cauterized = true end
-        for _, depended_v in pairs(toc_data[part_name].depends_on) do
-            toc_data[depended_v].is_operated = true
-            toc_data[depended_v].cicatrization_time = toc_data[depended_v].cicatrization_time - (surgeon_factor * 200)
-            if use_oven then toc_data[depended_v].is_cauterized = true end      -- TODO does this make sense?
+    if part_data[part_name].is_operated == false and part_data[part_name].is_cut == true then
+        part_data[part_name].is_operated = true
+        part_data[part_name].cicatrization_time = part_data[part_name].cicatrization_time - (surgeon_factor * 200)
+        if use_oven then part_data[part_name].is_cauterized = true end
+        for _, depended_v in pairs(part_data[part_name].depends_on) do
+            part_data[depended_v].is_operated = true
+            part_data[depended_v].cicatrization_time = part_data[depended_v].cicatrization_time - (surgeon_factor * 200)
+            if use_oven then part_data[depended_v].is_cauterized = true end      -- TODO does this make sense?
 
         end
 
     end
 
-    SetBodyPartsStatusAfterOperation(player, toc_data, part_name, use_oven)
+    SetBodyPartsStatusAfterOperation(player, part_data, part_name, use_oven)
     player:transmitModData()
 end
 

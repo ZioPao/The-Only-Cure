@@ -10,17 +10,17 @@ function CheckIfCanBeCut(part_name)
 
 end
 
-function CheckIfProsthesisAlreadyInstalled(toc_data, part_name)
+function CheckIfProsthesisAlreadyInstalled(part_data, part_name)
 
     local r = "Right"
     local l = "Left"
 
 
     if string.find(part_name, r) then
-        return (toc_data[r .. "Hand"].is_prosthesis_equipped or toc_data[r .. "Forearm"].is_prosthesis_equipped)
+        return (part_data[r .. "_Hand"].is_prosthesis_equipped or part_data[r .. "_LowerArm"].is_prosthesis_equipped)
         
     elseif string.find(part_name, l) then
-        return (toc_data[l .. "Hand"].is_prosthesis_equipped or toc_data[l .. "Forearm"].is_prosthesis_equipped)
+        return (part_data[l .. "_Hand"].is_prosthesis_equipped or part_data[l .. "_LowerArm"].is_prosthesis_equipped)
     end
 
 
@@ -30,9 +30,9 @@ end
 
 function CheckIfCanBeOperated(part_name)
 
-    local toc_data = getPlayer():getModData().TOC
+    local part_data = getPlayer():getModData().TOC.Limbs
 
-    return toc_data[part_name].is_operated == false and toc_data[part_name].is_amputation_shown
+    return part_data[part_name].is_operated == false and part_data[part_name].is_amputation_shown
 
 end
 

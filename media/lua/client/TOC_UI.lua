@@ -60,9 +60,9 @@ local function GetImageName(part_name, toc_data)
     end
 
     -- If foreaerm equip, change hand
-    if part_name == "Right_Hand" and toc_data["Right_LowerArm"].is_prosthesis_equipped then
+    if part_name == "Right_Hand" and toc_data.Limbs["Right_LowerArm"].is_prosthesis_equipped then
         name = "media/ui/TOC/" .. part_name .. "/Hook.png"
-    elseif part_name == "Left_Hand" and toc_data["Left_LowerArm"].is_prosthesis_equipped then
+    elseif part_name == "Left_Hand" and toc_data.Limbs["Left_LowerArm"].is_prosthesis_equipped then
         name = "media/ui/TOC/" .. part_name .. "/Hook.png"
     end
     return name

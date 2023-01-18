@@ -11,7 +11,7 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
     local original_max_time = og_ISEquipTimedActionAdjustMaxTime(self, maxTime)       -- TODO will it work?
     local modified_max_time = original_max_time
 
-    local toc_data = getPlayer():getModData().TOC
+    local part_data = getPlayer():getModData().TOC.Limbs
     local burn_factor = 1.3
 
     -- To make it faster, let's have everything already written in another func
@@ -21,17 +21,16 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
     -- TODO this gets awfully slow really quick, doesn't even make much sense. 
     for _, part_name in ipairs(all_body_parts) do
 
-
-        if toc_data.Limbs[part_name].is_cut then
+        if part_data[part_name].is_cut then
             
-            if toc_data.Limbs[part_name].is_prosthesis_equipped then
-                modified_max_time = modified_max_time *  toc_data.Limbs[part_name].equipped_prosthesis.prosthesis_factor
+            if part_data[part_name].is_prosthesis_equipped then
+                modified_max_time = modified_max_time *  part_data[part_name].equipped_prosthesis.prosthesis_factor
 
 
             else
                 modified_max_time = modified_max_time * 2
             end
-            if toc_data.Limbs[part_name].is_cauterized then
+            if part_data[part_name].is_cauterized then
                 modified_max_time = modified_max_time * burn_factor
             end
 
@@ -61,18 +60,18 @@ local og_ISEquipWeaponActionPerform = ISEquipWeaponAction.perform
 
 function ISEquipWeaponAction:perform()
     og_ISEquipWeaponActionPerform(self)
-    local toc_data = self.character:getModData().TOC
+    local part_data = self.character:getModData().TOC.Limbs
     local can_be_held = {}
 
     for _, side in ipairs ({"Left", "Right"}) do
         can_be_held[side] = true
 
-        if toc_data[side .. "Hand"].is_cut then
-            if toc_data[side .. "Forearm"].is_cut then
-                if not toc_data[side .. "Forearm"].is_prosthesis_equipped then
+        if part_data[side .. "_Hand"].is_cut then
+            if part_data[side .. "_LowerArm"].is_cut then
+                if not part_data[side .. "_LowerArm"].is_prosthesis_equipped then
                     can_be_held[side] = false
                 end
-            elseif not toc_data[side .. "Hand"].is_prosthesis_equipped then
+            elseif not part_data[side .. "_Hand"].is_prosthesis_equipped then
                 can_be_held[side] = false
             end
         end

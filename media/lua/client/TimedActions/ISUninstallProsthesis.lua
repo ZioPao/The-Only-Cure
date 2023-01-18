@@ -56,9 +56,6 @@ function ISUninstallProsthesis:perform()
             print("Found prost in " .. part_name)
             if part_name then 
                 toc_data.Limbs[part_name].is_prosthesis_equipped = false
-                --toc_data.Limbs[part_name].prosthesis_factor = 1         -- TODO This is wrong
-    
-                --local side = string.gsub(part_name, "Hand" or "Forearm", "")
                 local item_full_type = self.item:getFullType()
                 print("Searching for " .. item_full_type)
                 for _, prost_v in ipairs(GetProsthesisList()) do
