@@ -90,35 +90,49 @@ end
 -- Override helper
 
 function CheckIfItemIsAmputatedLimb(item)
-    
-
+    -- TODO Benchmark if this is faster
     local item_full_type = item:getFullType()
 
-    local sides = {"Left", "Right"}
-    local limbs_to_check = {"Hand", "LowerArm", "UpperArm"}
 
-    local is_amputated_limb = false
-
-    for _, part in ipairs(limbs_to_check) do
-        for _, side in ipairs(sides) do
-
-            local part_name = side .. "_" .. part
-
-            local check_name = "TOC.Amputation_" .. part_name
-            print(check_name)
-            if item_full_type == check_name then
-                is_amputated_limb = true
-                break
-            end
-
-        end
-
+    if string.find(item_full_type, "TOC.Amputation_") then
+        return true
+    else
+        return false
     end
 
 
-    return is_amputated_limb
-
 end
+
+-- function CheckIfItemIsAmputatedLimb(item)
+    
+
+--     local item_full_type = item:getFullType()
+
+--     local sides = {"Left", "Right"}
+--     local limbs_to_check = {"Hand", "LowerArm", "UpperArm"}
+
+--     local is_amputated_limb = false
+
+--     for _, part in ipairs(limbs_to_check) do
+--         for _, side in ipairs(sides) do
+
+--             local part_name = side .. "_" .. part
+
+--             local check_name = "TOC.Amputation_" .. part_name
+--             print(check_name)
+--             if item_full_type == check_name then
+--                 is_amputated_limb = true
+--                 break
+--             end
+
+--         end
+
+--     end
+
+
+--     return is_amputated_limb
+
+-- end
 
 function CheckIfItemIsProsthesis(item)
     local item_full_type = item:getFullType()

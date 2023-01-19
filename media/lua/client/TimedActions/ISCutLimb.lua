@@ -27,6 +27,15 @@ function ISCutLimb:start()
     self:setActionAnim("SawLog")
     local saw_item = GetSawInInventory(self.surgeon)
 
+
+    -- Return whatever object we've got in the inventory
+    if self.surgeon:getPrimaryHandItem() then
+        ISTimedActionQueue.add(ISUnequipAction:new(self.surgeon, self.surgeon:getPrimaryHandItem(), 2));
+    end
+    if self.surgeon:getSecondaryHandItem() and self.surgeon:getSecondaryHandItem() ~= self.surgeon:getPrimaryHandItem() then
+        ISTimedActionQueue.add(ISUnequipAction:new(self.surgeon, self.surgeon:getSecondaryHandItem(), 2));
+    end
+
     if saw_item then
         self:setOverrideHandModels(saw_item:getStaticModel(), nil)
 
@@ -45,7 +54,6 @@ function ISCutLimb:start()
     body_damage_part:setBleedingTime(ZombRand(10,20))
 
 
-    -- TODO Make the object currently on the hand return to the inventory
 
 end
 

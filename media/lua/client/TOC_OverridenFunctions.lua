@@ -6,8 +6,6 @@ require "ISUI/ISInventoryPaneContextMenu"
 local og_ISEquipTimedActionAdjustMaxTime = ISBaseTimedAction.adjustMaxTime
 
 
--- TODO On death hide the amputation so that other players cant pick it up
-
 function ISBaseTimedAction:adjustMaxTime(maxTime)
 
     print("TOC: Input max time " .. tostring(maxTime))
@@ -73,9 +71,61 @@ end
 
 
 
-local og_ISEquipWeaponActionPerform = ISEquipWeaponAction.perform
+-------------------------------------------------
+-- Block access to drag, picking, inspecting, etc to amputated limbs
+local og_ISInventoryPaneOnMouseDoubleClick = ISInventoryPane.onMouseDoubleClick
+function ISInventoryPane:onMouseDoubleClick(x, y)
 
+    local item_to_check = self.items[self.mouseOverOption]
+    local player_inventory = getPlayerInventory(self.player).inventory
+    if instanceof(item_to_check, "InventoryItem") then
+        og_ISInventoryPaneOnMouseDoubleClick(self, x,y)
+    elseif CheckIfItemIsAmputatedLimb(item_to_check.items[1]) or CheckIfItemIsProsthesis(item_to_check.items[1])  then
+        print("TOC: Can't double click this item")
+    else
+        og_ISInventoryPaneOnMouseDoubleClick(self, x,y)
+
+    end
+
+
+
+end
+
+
+local og_ISInventoryPaneGetActualItems = ISInventoryPane.getActualItems
+function ISInventoryPane.getActualItems(items)
+
+    local ret = og_ISInventoryPaneGetActualItems(items)
+
+    -- This is gonna be slower than just overriding the function but hey it's more compatible
+
+    for i=1, #ret do
+        local item_full_type = ret[i]:getFullType()
+        if string.find(item_full_type, "Amputation_") or string.find(item_full_type, "Prost_") then
+            table.remove(ret, i)
+        end
+    end
+    return ret
+end
+
+
+local og_ISInventoryPaneContextMenuOnInspectClothing  = ISInventoryPaneContextMenu.onInspectClothing 
+ISInventoryPaneContextMenu.onInspectClothing = function(playerObj, clothing)
+
+    -- Inspect menu bypasses getActualItems, so we need to add that workaround here too
+    local clothing_full_type = clothing:getFullType()
+    if not string.find(clothing_full_type, "Amputation_") then
+        
+        og_ISInventoryPaneContextMenuOnInspectClothing(playerObj, clothing)
+    end
+    
+end
+
+
+local og_ISEquipWeaponActionPerform = ISEquipWeaponAction.perform
 function ISEquipWeaponAction:perform()
+
+    -- TODO in the inventory menu there is something broken, even though this works
     og_ISEquipWeaponActionPerform(self)
     local part_data = self.character:getModData().TOC.Limbs
     local can_be_held = {}
@@ -100,7 +150,7 @@ function ISEquipWeaponAction:perform()
             self.character:setSecondaryHandItem(nil)
         elseif not can_be_held["Right"] and can_be_held["Left"] then
             self.character:setPrimaryHandItem(nil)
-            self.character:setSecondaryHandItem(nil)
+            self.character:setSecondaryHandItem(self.item)
         elseif not can_be_held["Left"] and not can_be_held["Right"] then
             self.character:dropHandItems()
         end
@@ -118,18 +168,6 @@ function ISEquipWeaponAction:perform()
 end
 
 
--- local og_ISUnequipActionPerform = ISUnequipAction.perform
--- function ISUnequipAction:perform()
--- --     -- check if the "clothing" is actually an amputation or an equipped prosthesis
-
---     -- TODO Find a way to disable the green advancement UI thing
---     if CheckIfItemIsAmputatedLimb(self.item) == false and CheckIfItemIsInstalledProsthesis(self.item) == false then
---         og_ISUnequipActionPerform(self)
---     end
--- end
-
-
-
 local og_ISInventoryPaneContextMenuUnequipItem = ISInventoryPaneContextMenu.unequipItem
 function ISInventoryPaneContextMenu.unequipItem(item, player)
 
@@ -142,7 +180,6 @@ function ISInventoryPaneContextMenu.unequipItem(item, player)
 end
 
 local og_ISInventoryPaneContextMenuDropItem = ISInventoryPaneContextMenu.dropItem
-
 function ISInventoryPaneContextMenu.dropItem(item, player)
 
     if CheckIfItemIsAmputatedLimb(item) == false and CheckIfItemIsInstalledProsthesis(item) == false then
