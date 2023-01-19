@@ -161,28 +161,28 @@ function TocSetInitData(mod_data, player)
         TocSetCorrectTextureForAmputation(amputation_clothing_item, player)
 
         player:setWornItem(amputation_clothing_item:getBodyLocation(), amputation_clothing_item)
-        mod_data.TOC.Left_Hand.is_cut = true
-        mod_data.TOC.Left_Hand.is_operated = true
-        mod_data.TOC.Left_Hand.is_amputation_shown = true
-        mod_data.TOC.Left_Hand.is_cicatrized = true
+        mod_data.TOC.Limbs.Left_Hand.is_cut = true
+        mod_data.TOC.Limbs.Left_Hand.is_operated = true
+        mod_data.TOC.Limbs.Left_Hand.is_amputation_shown = true
+        mod_data.TOC.Limbs.Left_Hand.is_cicatrized = true
     elseif player:HasTrait("Amputee_LowerArm") then
         local amputation_clothing_item = player:getInventory():AddItem("TOC.Amputation_Left_LowerArm")
         TocSetCorrectTextureForAmputation(amputation_clothing_item, player)
 
         player:setWornItem(amputation_clothing_item:getBodyLocation(), amputation_clothing_item)
-        mod_data.TOC.Left_LowerArm.is_cut = true
-        mod_data.TOC.Left_LowerArm.is_operated = true
-        mod_data.TOC.Left_LowerArm.is_amputation_shown = true
-        mod_data.TOC.Left_LowerArm.is_cicatrized = true
+        mod_data.TOC.Limbs.Left_LowerArm.is_cut = true
+        mod_data.TOC.Limbs.Left_LowerArm.is_operated = true
+        mod_data.TOC.Limbs.Left_LowerArm.is_amputation_shown = true
+        mod_data.TOC.Limbs.Left_LowerArm.is_cicatrized = true
     elseif player:HasTrait("Amputee_UpperArm") then
         local amputation_clothing_item = player:getInventory():AddItem("TOC.Amputation_Left_UpperArm")
         TocSetCorrectTextureForAmputation(amputation_clothing_item, player)
 
         player:setWornItem(amputation_clothing_item:getBodyLocation(), amputation_clothing_item)
-        mod_data.TOC.Left_UpperArm.is_cut = true
-        mod_data.TOC.Left_UpperArm.is_operated = true
-        mod_data.TOC.Left_UpperArm.is_amputation_shown = true
-        mod_data.TOC.Left_UpperArm.is_cicatrized = true
+        mod_data.TOC.Limbs.Left_UpperArm.is_cut = true
+        mod_data.TOC.Limbs.Left_UpperArm.is_operated = true
+        mod_data.TOC.Limbs.Left_UpperArm.is_amputation_shown = true
+        mod_data.TOC.Limbs.Left_UpperArm.is_cicatrized = true
     end
 
 
