@@ -213,7 +213,11 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
 
     -- TODO Separate Cut Limb in side and limb instead of single part_name
 
-    -- TODO Check if this works in MP through MENU UI
+    -- Items get unequipped in ISCutLimb.Start
+
+
+
+
     local player = getPlayer()
     local toc_data = player:getModData().TOC
     local part_data = toc_data.Limbs
@@ -238,10 +242,6 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
 
     -- If painkillers are available, use them
     -- ...
-
-
-    -- Remove object in hand
-    -- TODO do this
 
     if part_data[part_name].is_cut == false then
         part_data[part_name].is_cut = true
