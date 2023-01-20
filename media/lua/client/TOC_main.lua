@@ -253,10 +253,11 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
         if part_data[part_name].is_infected and body_damage:getInfectionLevel() < 20 then
             part_data[part_name].is_infected = false
             body_part:SetBitten(false)
+            body_part:setBiteTime(0)
 
             -- Second check, let's see if there is any other infected limb.
             if CheckIfStillInfected(part_data) == false then
-                CureInfection(body_damage)
+                TocCureInfection(body_damage, part_data, part_name)
                 getPlayer():Say("I'm gonna be fine")
             else
                 getPlayer():Say("I'm still gonna die...")
@@ -270,8 +271,9 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
             part_data[depended_v].cicatrization_time = part_data[part_name].cicatrization_base_time - surgeon_factor * 50
         end
 
-        -- Check for older amputation models and deletes them from player's inventory
 
+
+        -- Check for older amputation models and deletes them from player's inventory
         local side = string.match(part_name, '(%w+)_')
 
         TocDeleteOtherAmputatedLimbs(side)

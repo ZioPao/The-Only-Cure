@@ -22,8 +22,55 @@ function CheckIfStillInfected(part_data)
 end
 
 
+
+function TocCureInfection(body_damage, part_data, part_name)
+
+    local body_part_type = body_damage:getBodyPart(TocGetBodyPartTypeFromPartName(part_name))
+
+    -- Check if we can heal the infection
+    local is_other_bodypart_infected = getPlayer():getModData().TOC.Limbs.is_other_bodypart_infected
+
+    if not is_other_bodypart_infected and not TheOnlyCure.CheckIfOtherLimbsAreInfected(part_data, part_name) then
+        body_damage:setInfected(false)
+        body_part_type:SetInfected(false)
+        body_damage:setInfectionMortalityDuration(-1)
+        body_damage:setInfectionTime(-1)
+        body_damage:setInfectionLevel(0)
+        local body_part_types = body_damage:getBodyParts()
+
+        -- TODO I think this is enough... we should just cycle if with everything instead of that crap up there
+        for i=body_part_types:size()-1, 0, -1  do
+            local bodyPart = body_part_types:get(i);
+            bodyPart:SetInfected(false);
+        end
+    end
+
+
+    if body_part_type:scratched()         then body_part_type:setScratched(false, false) end
+    if body_part_type:haveGlass()         then body_part_type:setHaveGlass(false)        end
+    if body_part_type:haveBullet()        then body_part_type:setHaveBullet(false, 0)    end
+    if body_part_type:isInfectedWound()   then body_part_type:setInfectedWound(false)    end
+    if body_part_type:isBurnt()           then body_part_type:setBurnTime(0)             end
+    if body_part_type:isCut()             then body_part_type:setCut(false, false)       end        --Lacerations
+    if body_part_type:getFractureTime()>0 then body_part_type:setFractureTime(0)         end
+
+
+
+
+
+end
+
+
+
 -- TODO this triggers an error
 function CureInfection(body_damage)
+
+
+
+
+
+
+    
     body_damage:setInfected(false)
     body_damage:setInfectionMortalityDuration(-1)
     body_damage:setInfectionTime(-1)
