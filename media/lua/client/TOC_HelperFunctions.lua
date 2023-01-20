@@ -61,29 +61,6 @@ function TocCureInfection(body_damage, part_data, part_name)
 end
 
 
-
--- TODO this triggers an error
-function CureInfection(body_damage)
-
-
-
-
-
-
-    
-    body_damage:setInfected(false)
-    body_damage:setInfectionMortalityDuration(-1)
-    body_damage:setInfectionTime(-1)
-    body_damage:setInfectionLevel(0)
-    local body_part_types = body_damage:getBodyParts()
-    for i=body_part_types:size()-1, 0, -1  do
-        local bodyPart = body_part_types:get(i)
-        bodyPart:SetInfected(false)
-    end
-
-
-end
-
 function TocDeleteOtherAmputatedLimbs(side)
 
     -- if left hand is cut and we cut left lowerarm, then delete hand

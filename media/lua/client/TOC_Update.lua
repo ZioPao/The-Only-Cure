@@ -68,7 +68,7 @@ function TheOnlyCure.UpdatePlayerHealth(player, part_data)
 
     for i, part_name in pairs(GetBodyParts()) do
         if part_data[part_name].is_cut then
-            TheOnlyCure.HealSpecificPart(part_data, part_name, player)
+            TheOnlyCure.SetHealthStatusForBodyPart(part_data, part_name, player)
                 
         end
     end
@@ -79,7 +79,7 @@ function TheOnlyCure.UpdatePlayerHealth(player, part_data)
 end
 
 --Helper function for UpdatePlayerHealth
-function TheOnlyCure.HealSpecificPart(part_data, part_name, player)
+function TheOnlyCure.SetHealthStatusForBodyPart(part_data, part_name, player)
 
     -- TODO this can be moved away from updates
 
@@ -103,51 +103,12 @@ function TheOnlyCure.HealSpecificPart(part_data, part_name, player)
 
     end
 
-
-
-    -- Set max health
+    -- Set max health for body part
     if part_data[part_name].is_cicatrized and body_part_type:getHealth() > 80 then
         body_part_type:SetHealth(80)
     elseif body_part_type:getHealth() > 40 then
         body_part_type:SetHealth(40)
     end
-
-    -- This is useless here. We don't need to do this every single time, only after operation
---   if modData_part.is_cicatrized then
---         if bodyPart:deepWounded()   then bodyPart:setDeepWounded(false) end
---         if bodyPart:bleeding()      then bodyPart:setBleeding(false) end
---     end
-
-
-    -- Check if we can heal the infection
-    -- if body_part_type:bitten() then
-    --     body_part_type:SetBitten(false)
-
-
-    --     local is_other_bodypart_infected = player:getModData().TOC.Limbs.is_other_bodypart_infected
-
-    --     if not is_other_bodypart_infected and not TheOnlyCure.CheckIfOtherLimbsAreInfected(part_data, part_name) then
-    --         body_part_type:SetInfected(false)
-    --         body_damage:setInfectionMortalityDuration(-1)
-    --         body_damage:setInfectionTime(-1)
-    --         body_damage:setInfectionLevel(0)
-    --         local body_part_types = body_damage:getBodyParts()
-
-    --         -- TODO I think this is enough... we should just cycle if with everything instead of that crap up there
-    --         for i=body_part_types:size()-1, 0, -1  do
-    --             local bodyPart = body_part_types:get(i);
-    --             bodyPart:SetInfected(false);
-    --         end
-    --     end
-    -- end
-
-    -- if body_part_type:scratched()         then body_part_type:setScratched(false, false) end
-    -- if body_part_type:haveGlass()         then body_part_type:setHaveGlass(false)        end
-    -- if body_part_type:haveBullet()        then body_part_type:setHaveBullet(false, 0)    end
-    -- if body_part_type:isInfectedWound()   then body_part_type:setInfectedWound(false)    end
-    -- if body_part_type:isBurnt()           then body_part_type:setBurnTime(0)             end
-    -- if body_part_type:isCut()             then body_part_type:setCut(false, false)       end        --Lacerations
-    -- if body_part_type:getFractureTime()>0 then body_part_type:setFractureTime(0)         end
 
     -- Cicatrization check
     if part_data[part_name].is_cut and not part_data[part_name].is_cicatrized then
