@@ -1,22 +1,7 @@
--- TODO Find a better name
-function GetProsthesisLisHumanReadable()
-    return {"WoodenHook", "MetalHook", "MetalHand"}
-
-end
-
-
-
-
-
-function GetProsthesisList()
-    return {"TOC.WoodenHook", "TOC.MetalHook", "TOC.MetalHand"}
-
-end
 
 function GetInstallableProsthesisList()
 
     -- TODO Delete this and re do it
-
 
     -- To make it future proof since i'm gonna add stuff, let's cycle through already known prosthesis 
     local prosthesis_list = GetProsthesisList()
@@ -106,31 +91,6 @@ function TocGetDisplayText(part_name)
     return getText("UI_ContextMenu_" .. part_name)
 
 end
-
-
-function TocGetBodyPartTypeFromBodyPart(part_name)
-    if part_name == "Right_Hand"      then return BodyPartType.Hand_R end
-    if part_name == "Right_LowerArm"   then return BodyPartType.ForeArm_R end
-    if part_name == "Right_UpperArm"       then return BodyPartType.UpperArm_R end
-    if part_name == "Left_Hand"       then return BodyPartType.Hand_L end
-    if part_name == "Left_LowerArm"    then return BodyPartType.ForeArm_L end
-    if part_name == "Left_UpperArm"        then return BodyPartType.UpperArm_L end
-end
-
-
-function TocFindAmputatedClothingFromPartName(part_name)
-    return "TOC.Amputation_" .. part_name
-end
-
--- TODO finish this
--- function TocFindIfClothingItemIsAmputatedLimb(item_name)
-
-
-
---     if item_name == "ArmRight_noHand"
---     local check =
-
--- end
 
 
 
