@@ -1,22 +1,3 @@
--- Makes the player drop an item if they don't have a limb or haven't equipped a prosthesis
-function TheOnlyCure.TryDropItem(player, toc_data)
-
-    -- TODO this is old, was used in the update thing
-    if TheOnlyCure.CheckIfCanPickUpItem(toc_data, Right, Hand, Forearm) and player:getPrimaryHandItem() ~= nil then
-        if player:getPrimaryHandItem():getName() ~= "Bare Hands" then
-            player:dropHandItems()
-        end
-    end
-
-    if TheOnlyCure.CheckIfCanPickUpItem(toc_data, Left, Hand, Forearm) and player:getSecondaryHandItem() ~= nil then
-        if player:getSecondaryHandItem():getName() ~= "Bare Hands" then
-            player:dropHandItems()
-        end
-    end
-
-    
-end
-
 -- Helper for DropItem
 function TheOnlyCure.CheckIfCanPickUpItem(toc_data, side, limb, secondary_limb)
     
@@ -174,7 +155,6 @@ function TheOnlyCure.UpdateEveryOneMinute()
     local toc_data = player:getModData().TOC
 
     if toc_data ~= nil then
-        --TheOnlyCure.TryDropItem(player, toc_data)       -- TODO this must be set only in the cut\equipping function, not here
         TheOnlyCure.CheckIfPlayerIsInfected(player, toc_data)
         TheOnlyCure.UpdatePlayerHealth(player, toc_data.Limbs)
     end
@@ -192,7 +172,7 @@ function TheOnlyCure.UpdateEveryTenMinutes()
     local part_data = toc_data.Limbs
 
     --Experience for prosthesis user
-    for _, side in ipairs({"Left", "Right"}) do
+    for _, side in ipairs(TOC_sides) do
         if part_data[side .. "_Hand"].is_prosthesis_equipped or part_data[side .. "_LowerArm"].is_prosthesis_equipped then
             player:getXp():AddXP(Perks[side .. "_Hand"], 4)
         end

@@ -134,7 +134,7 @@ function ISEquipWeaponAction:perform()
     local part_data = self.character:getModData().TOC.Limbs
     local can_be_held = {}
 
-    for _, side in ipairs ({"Left", "Right"}) do
+    for _, side in ipairs (TOC_sides) do
         can_be_held[side] = true
 
         if part_data[side .. "_Hand"].is_cut then
