@@ -95,6 +95,8 @@ end
 local og_ISInventoryPaneGetActualItems = ISInventoryPane.getActualItems
 function ISInventoryPane.getActualItems(items)
 
+    -- TODO add an exception for installed prosthesis, make them unequippable automatically from here and get the correct obj
+    
     local ret = og_ISInventoryPaneGetActualItems(items)
 
     -- This is gonna be slower than just overriding the function but hey it's more compatible

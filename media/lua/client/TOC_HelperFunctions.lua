@@ -135,6 +135,8 @@ end
 -- end
 
 function CheckIfItemIsProsthesis(item)
+
+    -- TODO find a cleaner way
     local item_full_type = item:getFullType()
     local prosthesis_list = GetProsthesisList()
 
@@ -150,16 +152,10 @@ end
 
 function CheckIfItemIsInstalledProsthesis(item)
     local item_full_type = item:getFullType()
-    local installable_prosthesis_list = GetInstallableProsthesisList()
-
-    print("Checking for " .. item_full_type)
-
-    for _, v in pairs(installable_prosthesis_list)do
-        print(v)
-        if (v == item_full_type) then
-            return true
-        end
+    if string.find(item_full_type, "TOC.Prost_") then
+        return true
+    else
+        return false
     end
 
-    return false
 end
