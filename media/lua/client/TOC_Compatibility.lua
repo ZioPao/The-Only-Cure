@@ -30,10 +30,6 @@ function TocMapOldDataToNew(mod_data)
     local backup_old_data = mod_data.TOC
 
 
-
- 
-
-
     -- for _, v in ipairs(map_names) do
     --     print("TOC: Looping old names...")
     --     print(k)

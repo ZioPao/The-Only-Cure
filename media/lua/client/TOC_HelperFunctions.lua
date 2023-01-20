@@ -59,11 +59,11 @@ function SetBodyPartsStatusAfterOperation(player, part_data, part_name, use_oven
     --for _, v in ipairs(GetBodyParts()) do
 
 
-    local body_part_type = player:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromBodyPart(part_name))
+    local body_part_type = player:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(part_name))
     FixSingleBodyPartType(body_part_type, use_oven)
 
     for _, v in ipairs(part_data[part_name].depends_on) do
-        local depended_body_part_type = player:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromBodyPart(v))
+        local depended_body_part_type = player:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(v))
         FixSingleBodyPartType(depended_body_part_type, use_oven)
 
     end

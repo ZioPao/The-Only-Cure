@@ -83,7 +83,7 @@ function TheOnlyCure.HealSpecificPart(part_data, part_name, player)
 
 
     local body_damage = player:getBodyDamage()
-    local body_part_type = body_damage:getBodyPart(TocGetBodyPartTypeFromBodyPart(part_name))
+    local body_part_type = body_damage:getBodyPart(TocGetBodyPartTypeFromPartName(part_name))
     if not body_part_type then
         print("TOC ERROR : Can't update health of " .. part_name);
         return false

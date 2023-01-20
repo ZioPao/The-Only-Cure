@@ -29,7 +29,7 @@ function TocEquipProsthesisLocal(_, patient, surgeon, part_name)
                             surgeon_inventory:getItemFromType('TOC.MetalHook') or 
                             surgeon_inventory:getItemFromType('TOC.WoodenHook')
     if prosthesis_to_equip then
-        ISTimedActionQueue.add(ISInstallProsthesis:new(patient, prosthesis_to_equip, patient:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromBodyPart(part_name))))
+        ISTimedActionQueue.add(ISInstallProsthesis:new(patient, prosthesis_to_equip, patient:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(part_name))))
     else
         surgeon:Say("I need a prosthesis")
     end
@@ -37,5 +37,5 @@ end
 
 function TocUnequipProsthesisLocal(_, patient, part_name)
     local equipped_prosthesis = FindTocItemWorn(part_name, patient)
-    ISTimedActionQueue.add(ISUninstallProsthesis:new(patient, equipped_prosthesis, patient:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromBodyPart(part_name))))
+    ISTimedActionQueue.add(ISUninstallProsthesis:new(patient, equipped_prosthesis, patient:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(part_name))))
 end

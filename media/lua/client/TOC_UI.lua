@@ -53,7 +53,7 @@ local function GetImageName(part_name, toc_data)
         name = "media/ui/TOC/" .. part_name .. "/Operate.png"
     elseif part_data.is_cut and not part_data.is_amputation_shown then -- Empty (like hand if forearm cut)
         name = "media/ui/TOC/Empty.png"
-    elseif not part_data.is_cut and getPlayer():getBodyDamage():getBodyPart(TocGetBodyPartTypeFromBodyPart(part_name)):bitten() then -- Not cut but bitten
+    elseif not part_data.is_cut and getPlayer():getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(part_name)):bitten() then -- Not cut but bitten
         name = "media/ui/TOC/" .. part_name .. "/Bite.png"
     else  -- Not cut
         name = "media/ui/TOC/" .. part_name .. "/Base.png"
@@ -96,7 +96,7 @@ end
 
 
 local function IsPartBitten(part_data, part_name)
-    return not part_data.is_cut and getPlayer():getBodyDamage():getBodyPart(TocGetBodyPartTypeFromBodyPart(part_name)):bitten()
+    return not part_data.is_cut and getPlayer():getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(part_name)):bitten()
 end
 
 

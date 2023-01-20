@@ -4,6 +4,16 @@ function GetBodyParts()
     return bodyparts
 end
 
+function GetProsthesisList()
+    return {"TOC.WoodenHook", "TOC.MetalHook", "TOC.MetalHand"}
+
+end
+
+function TocFindAmputatedClothingFromPartName(part_name)
+    return "TOC.Amputation_" .. part_name
+end
+
+
 function GetLimbsBodyPartTypes()
 
     return {BodyPartType.Hand_R, BodyPartType.ForeArm_R, BodyPartType.UpperArm_R,
@@ -51,4 +61,15 @@ function FindTocBodyPartNameFromBodyPartType(bodyPartType)
     else return nil
     end
 end
+
+function TocGetBodyPartTypeFromPartName(part_name)
+    if part_name == "Right_Hand"      then return BodyPartType.Hand_R end
+    if part_name == "Right_LowerArm"   then return BodyPartType.ForeArm_R end
+    if part_name == "Right_UpperArm"       then return BodyPartType.UpperArm_R end
+    if part_name == "Left_Hand"       then return BodyPartType.Hand_L end
+    if part_name == "Left_LowerArm"    then return BodyPartType.ForeArm_L end
+    if part_name == "Left_UpperArm"        then return BodyPartType.UpperArm_L end
+end
+
+
 

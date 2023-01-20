@@ -9,7 +9,7 @@ Commands["ResponseCanAct"] = function(arg)
     ui.responsePartName = arg["toSend"][1]
     ui.responseCan = arg["toSend"][3]
     ui.responseUserName = getPlayerByOnlineID(arg["From"]):getUsername()
-    ui.responseActionIsBitten = getPlayerByOnlineID(arg["From"]):getBodyDamage():getBodyPart(TocGetBodyPartTypeFromBodyPart(ui.responsePartName)):bitten()
+    ui.responseActionIsBitten = getPlayerByOnlineID(arg["From"]):getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(ui.responsePartName)):bitten()
 end
 
 

@@ -218,7 +218,7 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
     local toc_data = player:getModData().TOC
     local part_data = toc_data.Limbs
 
-    local body_part = player:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromBodyPart(part_name))
+    local body_part = player:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(part_name))
     local stats = player:getStats()
 
     -- Set damage, stress, and low endurance after amputation
@@ -365,7 +365,7 @@ function TryTocAction(_, part_name, action, surgeon, patient)
                         surgeon_inventory:getItemFromType('TOC.MetalHook') or 
                         surgeon_inventory:getItemFromType('TOC.WoodenHook')
             if prosthesis_to_equip then
-                ISTimedActionQueue.add(ISInstallProsthesis:new(patient, prosthesis_to_equip, patient:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromBodyPart(part_name))))
+                ISTimedActionQueue.add(ISInstallProsthesis:new(patient, prosthesis_to_equip, patient:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(part_name))))
             else
                 surgeon:Say("I need a prosthesis")
             end
@@ -377,7 +377,7 @@ function TryTocAction(_, part_name, action, surgeon, patient)
         elseif action == "Unequip" then
             --AskCanUnequipProsthesis(patient, part_name)
             local equipped_prosthesis = FindTocItemWorn(part_name, patient)
-            ISTimedActionQueue.add(ISUninstallProsthesis:new(patient, equipped_prosthesis, patient:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromBodyPart(part_name))))
+            ISTimedActionQueue.add(ISUninstallProsthesis:new(patient, equipped_prosthesis, patient:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(part_name))))
         end
         ui.actionAct = action
         ui.partNameAct = part_name

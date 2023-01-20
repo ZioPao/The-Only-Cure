@@ -7,7 +7,6 @@ end
 -----------------------------------------
 -- MP HANDLING CHECKS
 function CheckIfCanBeCut(part_name)
-    -- This is just for MP handling... Not enough to check everything
 
     local toc_data = getPlayer():getModData().TOC
     local check = (not toc_data.Limbs[part_name].is_cut) and (not CheckIfProsthesisAlreadyInstalled(toc_data.Limbs, part_name))
