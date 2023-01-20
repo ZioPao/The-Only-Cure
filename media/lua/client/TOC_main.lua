@@ -250,7 +250,7 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
         
         -- Heal the infection here
         local body_damage = player:getBodyDamage()
-        if part_data[part_name].is_infected and body_damage.getInfectionLevel() < 20 then
+        if part_data[part_name].is_infected and body_damage:getInfectionLevel() < 20 then
             part_data[part_name].is_infected = false
             body_part:SetBitten(false)
 

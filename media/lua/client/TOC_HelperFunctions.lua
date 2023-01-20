@@ -34,7 +34,6 @@ function CureInfection(body_damage)
         bodyPart:SetInfected(false)
     end
 
-    getPlayer().Say("I'm gonna be fine")
 
 end
 
