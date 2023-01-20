@@ -5,13 +5,6 @@ end
 TOC_sides = {"Left", "Right"}
 TOC_limbs = {"Hand", "LowerArm", "UpperArm"}
 
--- TODO remove this crap
-Left = "Left"
-Right = "Right"
-
-Hand = "Hand"
-Forearm = "Forearm"
-Arm = "Arm"
 
 function TheOnlyCure.InitTheOnlyCure(_, player)
 
@@ -20,6 +13,7 @@ function TheOnlyCure.InitTheOnlyCure(_, player)
         TocSetInitData(mod_data, player)
     else
         TocCheckCompatibilityWithOlderVersions(mod_data)
+        TocUpdateBaseData(mod_data)      -- Since it's gonna be common to update stuff
     end
 
 end
@@ -90,24 +84,11 @@ function TocSetInitData(mod_data, player)
     -- Prost_Object_WoddenHook
 
 
-    local sides = {"Left", "Right"}
-    local limbs = {"Hand", "LowerArm", "UpperArm"}          -- Let's follow their naming
-
-
-    local prosthesis_list = {"WoodenHook", "MetalHook", "MetalHand"}
 
 
 
-    local accepted_prosthesis_hand = {"WoodenHook", "MetalHook", "MetalHand"}
-    local accepted_prosthesis_lowerarm = {"WoodenHook", "MetalHook", "MetalHand"}
-    local accepted_prosthesis_upperarm = {}     -- For future stuff
-
-
-
-
-
-    for _, side in ipairs(sides) do
-        for _, limb in ipairs(limbs) do
+    for _, side in ipairs(TOC_sides) do
+        for _, limb in ipairs(TOC_limbs) do
 
             local part_name = side .. "_" .. limb
 
@@ -127,32 +108,12 @@ function TocSetInitData(mod_data, player)
             -- Even if there are some duplicates, this is just easier in the end since we're gonna get fairly easily part_name
 
 
-            if limb == "Hand" then
-                mod_data.TOC.Limbs[part_name].cicatrization_base_time = 1700
-                mod_data.TOC.Limbs[part_name].depends_on = {}
 
-
-                mod_data.TOC.Prosthesis.Accepted_Prosthesis[part_name] = accepted_prosthesis_hand
-                mod_data.TOC.Prosthesis["WoodenHook"][part_name].prosthesis_factor = 1.5
-                mod_data.TOC.Prosthesis["MetalHook"][part_name].prosthesis_factor = 1.3
-                mod_data.TOC.Prosthesis["MetalHand"][part_name].prosthesis_factor = 1.1
-
-
-            elseif limb == "LowerArm" then
-                mod_data.TOC.Limbs[part_name].cicatrization_base_time = 1800
-                mod_data.TOC.Limbs[part_name].depends_on = {side .. "_Hand",}
-                mod_data.TOC.Prosthesis.Accepted_Prosthesis[part_name] = accepted_prosthesis_lowerarm
-
-                mod_data.TOC.Prosthesis["WoodenHook"][part_name].prosthesis_factor = 1.65
-                mod_data.TOC.Prosthesis["MetalHook"][part_name].prosthesis_factor = 1.45
-                mod_data.TOC.Prosthesis["MetalHand"][part_name].prosthesis_factor = 1.25
-            elseif limb == "UpperArm" then
-                mod_data.TOC.Limbs[part_name].cicatrization_base_time = 2000
-                mod_data.TOC.Limbs[part_name].depends_on = {side .. "_Hand", side .. "_LowerArm",}
-                mod_data.TOC.Prosthesis.Accepted_Prosthesis[part_name] = accepted_prosthesis_upperarm
-            end
         end
     end
+
+    -- Set data like prosthesis lists, cicatrization time etc
+    TocUpdateBaseData(mod_data)
 
     -- Setup traits
     if player:HasTrait("Amputee_Hand") then
@@ -190,7 +151,53 @@ function TocSetInitData(mod_data, player)
 
 end
 
+function TocUpdateBaseData(mod_data)
 
+    local prosthesis_list = {"WoodenHook", "MetalHook", "MetalHand"}
+
+
+
+    local accepted_prosthesis_hand = {"WoodenHook", "MetalHook", "MetalHand"}
+    local accepted_prosthesis_lowerarm = {"WoodenHook", "MetalHook", "MetalHand"}
+    local accepted_prosthesis_upperarm = {}     -- For future stuff
+
+    for _, side in ipairs(TOC_sides) do
+        for _, limb in ipairs(TOC_limbs) do
+
+            local part_name = side .. "_" .. limb
+
+            if limb == "Hand" then
+                mod_data.TOC.Limbs[part_name].cicatrization_base_time = 1700
+                mod_data.TOC.Limbs[part_name].depends_on = {}
+        
+        
+                mod_data.TOC.Prosthesis.Accepted_Prosthesis[part_name] = accepted_prosthesis_hand
+                mod_data.TOC.Prosthesis["WoodenHook"][part_name].prosthesis_factor = 1.5
+                mod_data.TOC.Prosthesis["MetalHook"][part_name].prosthesis_factor = 1.3
+                mod_data.TOC.Prosthesis["MetalHand"][part_name].prosthesis_factor = 1.1
+        
+        
+            elseif limb == "LowerArm" then
+                mod_data.TOC.Limbs[part_name].cicatrization_base_time = 1800
+                mod_data.TOC.Limbs[part_name].depends_on = {side .. "_Hand",}
+                mod_data.TOC.Prosthesis.Accepted_Prosthesis[part_name] = accepted_prosthesis_lowerarm
+        
+                mod_data.TOC.Prosthesis["WoodenHook"][part_name].prosthesis_factor = 1.65
+                mod_data.TOC.Prosthesis["MetalHook"][part_name].prosthesis_factor = 1.45
+                mod_data.TOC.Prosthesis["MetalHand"][part_name].prosthesis_factor = 1.25
+            elseif limb == "UpperArm" then
+                mod_data.TOC.Limbs[part_name].cicatrization_base_time = 2000
+                mod_data.TOC.Limbs[part_name].depends_on = {side .. "_Hand", side .. "_LowerArm",}
+                mod_data.TOC.Prosthesis.Accepted_Prosthesis[part_name] = accepted_prosthesis_upperarm
+            end
+
+        end
+    end
+
+  
+
+
+end
 
 function TheOnlyCure.DeclareTraits()
     local amp1 = TraitFactory.addTrait("Amputee_Hand", getText("UI_trait_Amputee_Hand"), -8, getText("UI_trait_Amputee_Hand_desc"), false, false)

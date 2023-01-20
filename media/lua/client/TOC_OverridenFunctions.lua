@@ -8,6 +8,8 @@ local og_ISEquipTimedActionAdjustMaxTime = ISBaseTimedAction.adjustMaxTime
 
 function ISBaseTimedAction:adjustMaxTime(maxTime)
 
+    -- TODO Make the malus for time a little less awful and add some other malus, like fitness and stuff
+
     print("TOC: Input max time " .. tostring(maxTime))
     local original_max_time = og_ISEquipTimedActionAdjustMaxTime(self, maxTime)      
     
@@ -40,7 +42,7 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
 
 
             else
-                modified_max_time = modified_max_time * 2
+                modified_max_time = modified_max_time * 2           -- TODO make this lower
             end
             if part_data[part_name].is_cauterized then
                 modified_max_time = modified_max_time * burn_factor
