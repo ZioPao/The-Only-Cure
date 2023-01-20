@@ -116,13 +116,16 @@ function TheOnlyCure.SetHealthStatusForBodyPart(part_data, part_name, player)
             part_data[part_name].is_cicatrized = true
 
             -- TODO make this random if the player gets it or not
-            --FIXME they're gonna stack!!!!
 
-            -- if player does not have brave then add it 
-            -- if player does not have insensitve then add it 
+            if (not player:HasTrait("Brave")) and ZombRand(1, 11) > 5 then
+                player:getTraits():add("Brave")
 
-            player:getTraits():add("Brave")
-            player:getTraits():add("Insensitive")
+            end
+
+            if (not player:HasTrait("Insensitive")) and ZombRand(1, 11) > 5 then
+                player:getTraits():add("Insensitive")
+            end
+
             body_part_type:setBleeding(false);
             body_part_type:setDeepWounded(false)
             body_part_type:setBleedingTime(0)
