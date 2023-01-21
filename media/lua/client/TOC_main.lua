@@ -172,8 +172,8 @@ function TocUpdateBaseData(mod_data)
         
         
                 mod_data.TOC.Prosthesis.Accepted_Prosthesis[part_name] = accepted_prosthesis_hand
-                mod_data.TOC.Prosthesis["WoodenHook"][part_name].prosthesis_factor = 1.5
-                mod_data.TOC.Prosthesis["MetalHook"][part_name].prosthesis_factor = 1.3
+                mod_data.TOC.Prosthesis["WoodenHook"][part_name].prosthesis_factor = 1.3
+                mod_data.TOC.Prosthesis["MetalHook"][part_name].prosthesis_factor = 1.2
                 mod_data.TOC.Prosthesis["MetalHand"][part_name].prosthesis_factor = 1.1
         
         
@@ -182,9 +182,9 @@ function TocUpdateBaseData(mod_data)
                 mod_data.TOC.Limbs[part_name].depends_on = {side .. "_Hand",}
                 mod_data.TOC.Prosthesis.Accepted_Prosthesis[part_name] = accepted_prosthesis_lowerarm
         
-                mod_data.TOC.Prosthesis["WoodenHook"][part_name].prosthesis_factor = 1.65
-                mod_data.TOC.Prosthesis["MetalHook"][part_name].prosthesis_factor = 1.45
-                mod_data.TOC.Prosthesis["MetalHand"][part_name].prosthesis_factor = 1.25
+                mod_data.TOC.Prosthesis["WoodenHook"][part_name].prosthesis_factor = 1.35
+                mod_data.TOC.Prosthesis["MetalHook"][part_name].prosthesis_factor = 1.25
+                mod_data.TOC.Prosthesis["MetalHand"][part_name].prosthesis_factor = 1.15
             elseif limb == "UpperArm" then
                 mod_data.TOC.Limbs[part_name].cicatrization_base_time = 2000
                 mod_data.TOC.Limbs[part_name].depends_on = {side .. "_Hand", side .. "_LowerArm",}
@@ -222,9 +222,6 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
 
     -- Items get unequipped in ISCutLimb.Start
 
-
-
-
     local player = getPlayer()
     local toc_data = player:getModData().TOC
     local part_data = toc_data.Limbs
@@ -242,13 +239,23 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
     stats:setEndurance(surgeon_factor)
     stats:setStress(100 - surgeon_factor)
 
+
+    -- Set malus for strength and fitness
+    player:LoseLevel(Perks.Fitness)
+    player:LoseLevel(Perks.Strength)
+
+
+
     -- If bandages are available, use them
     body_part:setBandaged(bandage_table.use_bandage, 10, bandage_table.is_bandage_sterilized, bandage_table.bandage_type)
 
 
 
     -- If painkillers are available, use them
-    -- ...
+    -- TODO add painkiller support
+
+    -- Use a tourniquet if available
+    -- TODO add tourniquet
 
     if part_data[part_name].is_cut == false then
         part_data[part_name].is_cut = true
@@ -265,7 +272,7 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
             -- Second check, let's see if there is any other infected limb.
             if CheckIfStillInfected(part_data) == false then
                 TocCureInfection(body_damage, part_data, part_name)
-                getPlayer():Say("I'm gonna be fine")
+                getPlayer():Say("I'm gonna be fine...")
             else
                 getPlayer():Say("I'm still gonna die...")
             end
@@ -274,7 +281,7 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
         -- Cut the depended part
         for _, depended_v in pairs(part_data[part_name].depends_on) do
             part_data[depended_v].is_cut = true
-            part_data[depended_v].is_amputation_shown = false        -- TODO why was it true before?
+            part_data[depended_v].is_amputation_shown = false
             part_data[depended_v].cicatrization_time = part_data[part_name].cicatrization_base_time - surgeon_factor * 50
         end
 
@@ -282,7 +289,6 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
 
         -- Check for older amputation models and deletes them from player's inventory
         local side = string.match(part_name, '(%w+)_')
-
         TocDeleteOtherAmputatedLimbs(side)
 
         --Equip new model for amputation

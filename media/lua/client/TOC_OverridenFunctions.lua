@@ -38,11 +38,11 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
         if part_data[part_name].is_cut then
             
             if part_data[part_name].is_prosthesis_equipped then
-                modified_max_time = modified_max_time *  part_data[part_name].equipped_prosthesis.prosthesis_factor
+                modified_max_time = modified_max_time * part_data[part_name].equipped_prosthesis.prosthesis_factor
 
 
             else
-                modified_max_time = modified_max_time * 2           -- TODO make this lower
+                modified_max_time = modified_max_time * 1.5          -- TODO make this lower
             end
             if part_data[part_name].is_cauterized then
                 modified_max_time = modified_max_time * burn_factor
