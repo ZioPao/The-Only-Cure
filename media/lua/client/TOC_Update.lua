@@ -188,7 +188,6 @@ function TheOnlyCure.UpdateEveryTenMinutes()
         end
     end
 
-    player:transmitModData()
 end
 
 Events.EveryTenMinutes.Add(TheOnlyCure.UpdateEveryTenMinutes)
