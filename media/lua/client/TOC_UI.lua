@@ -190,18 +190,19 @@ function OnClickTocConfirmUIMP(button, args)
         local prosthesis_to_equip = surgeon_inventory:getItemFromType('TOC.MetalHand') or
             surgeon_inventory:getItemFromType('TOC.MetalHook') or
             surgeon_inventory:getItemFromType('TOC.WoodenHook')
-    
+
         if prosthesis_to_equip then
-            ISTimedActionQueue.add(ISInstallProsthesis:new(player, confirm_ui_mp.patient, prosthesis_to_equip, confirm_ui_mp.partNameAct))
+            ISTimedActionQueue.add(ISInstallProsthesis:new(player, confirm_ui_mp.patient, prosthesis_to_equip,
+                confirm_ui_mp.partNameAct))
         else
             player:Say("I don't have a prosthesis right now")
         end
-    
+
     elseif confirm_ui_mp.actionAct == "Unequip" and args.option == "yes" then
 
         -- We can't check if the player has a prosthesis right now, we need to do it later
 
-        -- TODO should check if player has a prosthesis equipped before doing it 
+        -- TODO should check if player has a prosthesis equipped before doing it
 
         -- TODO Player is surgeon, but we don't have a confirm_ui_mp.surgeon... awful awful awful
 
@@ -214,7 +215,7 @@ function OnClickTocConfirmUIMP(button, args)
 
         end
 
-   
+
 
     end
 
@@ -351,6 +352,8 @@ end
 -- Setup stuff with variables and shit
 
 function SetupTocMainUI(surgeon, patient, toc_data)
+
+    -- TODO add a ontick to update it regularly
 
     main_ui.surgeon = surgeon -- we shouldn't need an arg for this
     main_ui.patient = patient
@@ -505,7 +508,7 @@ function SendCommandToConfirmUIMP(action, isBitten, userName, partName)
 
     if action ~= "Wait server" then
         confirm_ui_mp["text4"]:setText("You're gonna " ..
-        action .. " the " .. getText("UI_ContextMenu_" .. partName) .. " of " .. userName)
+            action .. " the " .. getText("UI_ContextMenu_" .. partName) .. " of " .. userName)
 
         confirm_ui_mp["text2"]:setText("Are you sure?")
         confirm_ui_mp["text2"]:setColor(1, 0, 0, 0)
@@ -565,7 +568,6 @@ function ISNewHealthPanel.onClick_TOC(button)
 
 end
 
-
 function TocWaitForOnlinePlayerData(numberTicks)
     if MP_other_player_toc_data ~= nil then
         SetupTocMainUI(TocTempTable.TempSurgeon, TocTempTable.TempPatient, MP_other_player_toc_data)
@@ -581,7 +583,6 @@ function TocWaitForOnlinePlayerData(numberTicks)
 
 
 end
-
 
 function ISHealthPanel:createChildren()
     ISHealthPanel_createChildren(self)

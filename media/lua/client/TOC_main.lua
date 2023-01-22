@@ -341,21 +341,20 @@ function TheOnlyCure.OperateLimb(part_name, surgeon_factor, use_oven)
     player:transmitModData()
 end
 
-
 function TheOnlyCure.EquipProsthesis(part_name, prosthesis_base_name)
     local player = getPlayer()
-    
+
     local toc_data = player:getModData().TOC
 
     local prosthesis_name = TocFindCorrectClothingProsthesis(prosthesis_base_name, part_name)
     local added_prosthesis = player:getInventory():AddItem(prosthesis_name)
 
     if part_name ~= nil then
-        
+
         if added_prosthesis ~= nil then
-            toc_data.Limbs[part_name].is_prosthesis_equipped = true -- TODO should we show that the hand has a prost too if it's installed in the forearm?
+            toc_data.Limbs[part_name].is_prosthesis_equipped = true
             toc_data.Limbs[part_name].equipped_prosthesis = toc_data.Prosthesis[prosthesis_base_name][part_name]
-        
+
             player:setWornItem(added_prosthesis:getBodyLocation(), added_prosthesis)
 
 
@@ -368,19 +367,15 @@ function TheOnlyCure.EquipProsthesis(part_name, prosthesis_base_name)
 
 end
 
-
 function TheOnlyCure.UnequipProsthesis(part_name, equipped_prosthesis)
     local player = getPlayer()
-    
-    local toc_data = player:getModData().TOC
 
+    local toc_data = player:getModData().TOC
 
 
     -- we've got equipped_prosthesis, so we should be able to get it directly
     toc_data.Limbs[part_name].is_prosthesis_equipped = false
     local equipped_prosthesis_full_type = equipped_prosthesis:getFullType()
-
-
 
 
     for _, prost_v in ipairs(GetProsthesisList()) do
@@ -392,16 +387,12 @@ function TheOnlyCure.UnequipProsthesis(part_name, equipped_prosthesis)
             player:getInventory():Remove(equipped_prosthesis)
             player:transmitModData()
 
-            -- needed to remove from queue / start next.
         end
 
     end
 
 
 end
-
-
-
 
 function TryTocAction(_, part_name, action, surgeon, patient)
     -- TODO add checks so that we don't show these menus if a player has already beeen operated or amputated
@@ -415,12 +406,8 @@ function TryTocAction(_, part_name, action, surgeon, patient)
         elseif action == "Operate" then
             TocOperateLocal(_, surgeon, surgeon, part_name, false)
         elseif action == "Equip" then
-            -- TODO finish this
-            local item
             TocEquipProsthesisLocal(_, surgeon, surgeon, part_name)
         elseif action == "Unequip" then
-            -- TODO finish this
-            local item
             TocUnequipProsthesisLocal(_, surgeon, part_name)
         end
     else
@@ -441,37 +428,9 @@ function TryTocAction(_, part_name, action, surgeon, patient)
         elseif action == "Operate" then
             AskCanOperateLimb(patient, part_name)
         elseif action == "Equip" then
-
-            --local surgeon_inventory = surgeon:getInventory()
-
-            --local prosthesis_to_equip = surgeon_inventory:getItemFromType('TOC.MetalHook')
-            --local prosthesis_to_equip = surgeon_inventory:getItemFromType('TOC.MetalHand') or
-            --    surgeon_inventory:getItemFromType('TOC.MetalHook') or
-            --    surgeon_inventory:getItemFromType('TOC.WoodenHook')
-
-
-
             AskCanEquipProsthesis(patient, part_name)
-
-
-
-
-            -- if prosthesis_to_equip then
-            --     ISTimedActionQueue.add(ISInstallProsthesis:new(patient, prosthesis_to_equip,
-            --         patient:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(part_name))))
-            -- else
-            --     surgeon:Say("I need a prosthesis")
-            -- end
-
-
-
-            --AskCanEquipProsthesis(patient, part_name, item)
-
         elseif action == "Unequip" then
             AskCanUnequipProsthesis(patient, part_name)
-            -- local equipped_prosthesis = TocFindItemInProstBodyLocation(part_name, patient)
-            -- ISTimedActionQueue.add(ISUninstallProsthesis:new(patient, equipped_prosthesis,
-            --     patient:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(part_name))))
         end
         ui.actionAct = action
         ui.partNameAct = part_name
@@ -479,7 +438,7 @@ function TryTocAction(_, part_name, action, surgeon, patient)
 
 
         SendCommandToConfirmUIMP("Wait server")
-        
+
     end
 end
 

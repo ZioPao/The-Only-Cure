@@ -1,3 +1,6 @@
+-- TODO patient and surgeon will always be the same if we're local... dumb cock
+
+
 function TocCutLocal(_, patient, surgeon, part_name)
     if TocGetSawInInventory(surgeon) ~= nil then
         ISTimedActionQueue.add(ISCutLimb:new(patient, surgeon, part_name));
@@ -22,8 +25,6 @@ function TocOperateLocal(_, patient, surgeon, part_name, use_oven)
 end
 
 function TocEquipProsthesisLocal(_, patient, surgeon, part_name)
-    -- TODO probably completely broken for MP
-    -- TODO this is really janky
     local surgeon_inventory = surgeon:getInventory()
     local prosthesis_to_equip = surgeon_inventory:getItemFromType('TOC.MetalHand') or
         surgeon_inventory:getItemFromType('TOC.MetalHook') or
@@ -36,7 +37,10 @@ function TocEquipProsthesisLocal(_, patient, surgeon, part_name)
 end
 
 function TocUnequipProsthesisLocal(_, patient, part_name)
-    local equipped_prosthesis = TocFindItemInProstBodyLocation(part_name, patient)
-    ISTimedActionQueue.add(ISUninstallProsthesis:new(patient, equipped_prosthesis,
-        patient:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(part_name))))
+    --local equipped_prosthesis = TocFindItemInProstBodyLocation(part_name, patient)
+
+    ISTimedActionQueue.add(ISUninstallProsthesis:new(patient, patient, part_name))
+
+    --ISTimedActionQueue.add(ISUninstallProsthesis:new(patient, equipped_prosthesis,
+    --    patient:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(part_name))))
 end
