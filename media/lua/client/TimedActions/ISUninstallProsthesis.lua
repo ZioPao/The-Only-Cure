@@ -3,7 +3,16 @@ require "TimedActions/ISBaseTimedAction"
 ISUninstallProsthesis = ISBaseTimedAction:derive("ISUninstallProsthesis");
 
 function ISUninstallProsthesis:isValid()
-    return true;
+
+    if self.item ~= nil then
+        return true
+    else
+        return false
+    end
+
+
+
+
 end
 
 function ISUninstallProsthesis:update()
@@ -41,61 +50,80 @@ function ISUninstallProsthesis:perform()
         end
     end
 
-    local toc_data = self.character:getModData().TOC
-    local body_part_type = self.bodyPart:getType()
-    local accepting_body_parts = GetAcceptingProsthesisBodyPartTypes()
 
-    if accepting_body_parts == nil then
-        return -- should never happen
+    if self.patient ~= self.surgeon and isClient() then
+
+        SendUnequipProsthesis(self.patient, self.part_name, self.item)
+    else
+        TheOnlyCure.UnequipProsthesis(self.part_name, self.item)
     end
+    self.character:transmitModData()
 
-    for _, v in ipairs(GetAcceptingProsthesisBodyPartTypes()) do
-        if self.bodyPart:getType() == v then
-            local part_name = TocGetPartNameFromBodyPartType(v)
 
-            print("Found prost in " .. part_name)
-            if part_name then
-                toc_data.Limbs[part_name].is_prosthesis_equipped = false
-                local item_full_type = self.item:getFullType()
-                print("Searching for " .. item_full_type)
-                for _, prost_v in ipairs(GetProsthesisList()) do
-                    local prosthesis_name = string.match(item_full_type, prost_v)
+    ISBaseTimedAction.perform(self)
 
-                    if prosthesis_name then
-                        self.character:getInventory():AddItem(prosthesis_name)
-
-                        self.character:setWornItem(self.item:getBodyLocation(), nil)
-                        self.character:getInventory():Remove(self.item)
-                        self.character:transmitModData()
-
-                        -- needed to remove from queue / start next.
-                        ISBaseTimedAction.perform(self)
-
-                    end
-                end
-
-            end
+   
 
 
 
 
 
+    -- for _, v in ipairs(GetAcceptingProsthesisBodyPartTypes()) do
+    --     if self.bodyPart:getType() == v then
+    --         local part_name = TocGetPartNameFromBodyPartType(v)
+
+    --         print("Found prost in " .. part_name)
+    --         if part_name then
+    --             toc_data.Limbs[part_name].is_prosthesis_equipped = false
+    --             local item_full_type = self.item:getFullType()
+    --             print("Searching for " .. item_full_type)
+    --             for _, prost_v in ipairs(GetProsthesisList()) do
+    --                 local prosthesis_name = string.match(item_full_type, prost_v)
+
+    --                 if prosthesis_name then
+    --                     self.character:getInventory():AddItem(prosthesis_name)
+
+    --                     self.character:setWornItem(self.item:getBodyLocation(), nil)
+    --                     self.character:getInventory():Remove(self.item)
+    --                     self.character:transmitModData()
+
+    --                     -- needed to remove from queue / start next.
+    --                     ISBaseTimedAction.perform(self)
+
+    --                 end
+    --             end
+
+    --         end
 
 
 
 
-        end
-    end
+
+
+
+
+
+    --     end
+    -- end
 
     -- TODO Make the object currently on the hand return to the inventory
 
 end
 
-function ISUninstallProsthesis:new(character, item, bodyPart)
-    local o = ISBaseTimedAction.new(self, character);
-    o.item = item;
-    o.character = character;
-    o.bodyPart = bodyPart;
+function ISUninstallProsthesis:new(surgeon, patient, part_name)
+    local o = ISBaseTimedAction.new(self, surgeon)
+
+    o.item = TocFindItemInProstBodyLocation(part_name, patient)
+    o.character = surgeon         -- For animation purposes
+
+    o.patient = patient
+    o.surgeon = surgeon
+
+    o.part_name = part_name
+
+
+
+
     o.maxTime = 100;
     o.stopOnWalk = true;
     o.stopOnRun = true;

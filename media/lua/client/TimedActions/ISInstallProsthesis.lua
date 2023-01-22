@@ -13,8 +13,14 @@ end
 function ISInstallProsthesis:start()
     self.item:setJobType("Install prosthesis")
     self.item:setJobDelta(0.0)
+
+
     self:setActionAnim("WearClothing")
     self:setAnimVariable("WearClothingLocation", "Jacket")
+
+
+
+
 end
 
 function ISInstallProsthesis:stop()
@@ -31,42 +37,46 @@ function ISInstallProsthesis:perform()
 
 
     self.item:setJobDelta(0.0)
-    local toc_data = self.character:getModData().TOC
-    local part_name = TocGetPartNameFromBodyPartType(self.bodyPart:getType())
+    -- local toc_data = self.character:getModData().TOC
+    --local part_name = TocGetPartNameFromBodyPartType(self.bodyPart:getType())
+
+    local body_part_type = TocGetBodyPartTypeFromPartName(self.part_name)
 
     -- Check if can be performed. This shouldn't be necessary, but just to be sure
-    if self.bodyPart:getType() == BodyPartType.UpperArm_L or self.bodyPart:getType() == BodyPartType.UpperArm_R then
+    if body_part_type == BodyPartType.UpperArm_L or body_part_type == BodyPartType.UpperArm_R then
         print("Can't equip prosthesis")
         return
     end
 
-    local prosthesis_name = TocFindCorrectClothingProsthesis(prosthesis_base_name, part_name)
-    self.cloth = self.character:getInventory():AddItem(prosthesis_name)
-
-    if self.cloth ~= nil then
+    self.surgeon:getInventory():Remove(prosthesis_base_name)         -- Removes the base item and substitute it with the part one
 
 
-        if part_name then
-            toc_data.Limbs[part_name].is_prosthesis_equipped = true -- TODO should we show that the hand has a prost too if it's installed in the forearm?
-            toc_data.Limbs[part_name].equipped_prosthesis = toc_data.Prosthesis[prosthesis_base_name][part_name]
+    if self.patient ~= self.surgeon and isClient() then
 
-            self.character:getInventory():Remove(self.item)
-            self.character:setWornItem(self.cloth:getBodyLocation(), self.cloth)
-        end
-
+        SendEquipProsthesis(self.patient, self.part_name, prosthesis_base_name)
+    else
+        TheOnlyCure.EquipProsthesis(self.part_name, prosthesis_base_name)
 
     end
-
     self.character:transmitModData()
 
     -- needed to remove from queue / start next.
     ISBaseTimedAction.perform(self)
 end
 
-function ISInstallProsthesis:new(character, item, bodyPart)
-    local o = ISBaseTimedAction.new(self, character)
+function ISInstallProsthesis:new(surgeon, patient, item, part_name)
+
+    local o = ISBaseTimedAction.new(self, patient)
+
+    o.character = surgeon -- For animation, since self.startAnim or whatever relies on this
+    o.surgeon = surgeon
+    o.patient = patient
+
     o.item = item
-    o.bodyPart = bodyPart
+
+    o.part_name = part_name
+
+    --o.bodyPart = bodyPart
     o.maxTime = 100
     o.stopOnWalk = true
     o.stopOnRun = true

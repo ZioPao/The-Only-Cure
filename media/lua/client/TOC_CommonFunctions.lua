@@ -7,7 +7,7 @@ function GetBodyParts()
 end
 
 function GetProsthesisList()
-    return {"TOC.WoodenHook", "TOC.MetalHook", "TOC.MetalHand"}
+    return {"WoodenHook", "MetalHook", "MetalHand"}
 
 end
 
@@ -100,26 +100,4 @@ function TocFindCorrectClothingProsthesis(item_name, part_name)
 
 end
 
-local function PartNameToBodyLocation(name)
-    -- This is still correct but naming sucks
-    if name == "Right_Hand" then return "ArmRight_Prot" end
-    if name == "Right_LowerArm" then return "ArmRight_Prot" end
-    if name == "Right_UpperArm" then return "ArmRight_Prot" end
-    if name == "Left_Hand" then return "ArmLeft_Prot" end
-    if name == "Left_LowerArm" then return "ArmLeft_Prot" end
-    if name == "Left_UpperArm" then return "ArmLeft_Prot" end
-end
 
-function TocFindItemInProstBodyLocation(part_name, patient)
-    -- FIXME this can return even amputated limbs, and we're using it only for prosthetics. This is gonna break sooner or later
-
-    local worn_items = patient:getWornItems()
-
-    for i = 1, worn_items:size() - 1 do -- Maybe wornItems:size()-1
-        local item = worn_items:get(i):getItem()
-        if item:getBodyLocation() == PartNameToBodyLocation(part_name) then
-            return item
-        end
-    end
-
-end

@@ -174,7 +174,7 @@ function OnClickTocConfirmUIMP(button, args)
     if confirm_ui_mp.actionAct == "Cut" and args.option == "yes" then
         ISTimedActionQueue.add(ISCutLimb:new(confirm_ui_mp.patient, player, confirm_ui_mp.partNameAct))
     elseif confirm_ui_mp.actionAct == "Operate" and args.option == "yes" then
-        local playerInv = player:getInventory();
+        local playerInv = player:getInventory()
         local item = playerInv:getItemFromType('TOC.Real_surgeon_kit') or playerInv:getItemFromType('TOC.Surgeon_kit') or
             playerInv:getItemFromType('TOC.Improvised_surgeon_kit')
         if item then
@@ -185,11 +185,36 @@ function OnClickTocConfirmUIMP(button, args)
         end
 
     elseif confirm_ui_mp.actionAct == "Equip" and args.option == "yes" then
-        print("Equip mp comp")
+        local surgeon_inventory = player:getInventory()
 
-
+        local prosthesis_to_equip = surgeon_inventory:getItemFromType('TOC.MetalHand') or
+            surgeon_inventory:getItemFromType('TOC.MetalHook') or
+            surgeon_inventory:getItemFromType('TOC.WoodenHook')
+    
+        if prosthesis_to_equip then
+            ISTimedActionQueue.add(ISInstallProsthesis:new(player, confirm_ui_mp.patient, prosthesis_to_equip, confirm_ui_mp.partNameAct))
+        else
+            player:Say("I don't have a prosthesis right now")
+        end
+    
     elseif confirm_ui_mp.actionAct == "Unequip" and args.option == "yes" then
-        print("Unequip mp comp")
+
+        -- We can't check if the player has a prosthesis right now, we need to do it later
+
+        -- TODO should check if player has a prosthesis equipped before doing it 
+
+        -- TODO Player is surgeon, but we don't have a confirm_ui_mp.surgeon... awful awful awful
+
+        -- TODO Workaround for now, we'd need to send data from patient before doing it since we can't access his inventory from the surgeon
+        if confirm_ui_mp.patient == player then
+            ISTimedActionQueue.add(ISUninstallProsthesis:new(player, confirm_ui_mp.patient, confirm_ui_mp.partNameAct))
+
+        else
+            player:Say("I can't do that, they need to do it themselves")
+
+        end
+
+   
 
     end
 
@@ -477,22 +502,23 @@ function SendCommandToConfirmUIMP(action, isBitten, userName, partName)
     confirm_ui_mp:bringToTop()
     confirm_ui_mp:open()
 
-    if action == "Cut" or action == "Operate" then
+
+    if action ~= "Wait server" then
         confirm_ui_mp["text4"]:setText("You're gonna " ..
-            action .. " the " .. getText("UI_ContextMenu_" .. partName) .. " of " .. userName)
+        action .. " the " .. getText("UI_ContextMenu_" .. partName) .. " of " .. userName)
+
         confirm_ui_mp["text2"]:setText("Are you sure?")
         confirm_ui_mp["text2"]:setColor(1, 0, 0, 0)
-        confirm_ui_mp["b1"]:setVisible(true);
-        confirm_ui_mp["b2"]:setVisible(true);
+        confirm_ui_mp["b1"]:setVisible(true)
+        confirm_ui_mp["b2"]:setVisible(true)
+    else
 
-    elseif action == "Wait server" then
         confirm_ui_mp["text4"]:setText(action)
         confirm_ui_mp["text3"]:setText("")
         confirm_ui_mp["text2"]:setText("")
         confirm_ui_mp["b1"]:setVisible(false)
         confirm_ui_mp["b2"]:setVisible(false)
     end
-
 
 end
 
@@ -503,6 +529,14 @@ local ISHealthPanel_render = ISHealthPanel.render
 -- Add button to health panel
 
 
+TocTempTable = {
+    TempPatient = nil,
+    TempSurgeon = nil
+}
+
+
+
+
 function ISNewHealthPanel.onClick_TOC(button)
 
     local surgeon = button.otherPlayer
@@ -511,23 +545,43 @@ function ISNewHealthPanel.onClick_TOC(button)
     if surgeon then
         if surgeon == patient then
             SetupTocMainUI(surgeon, surgeon, surgeon:getModData().TOC)
-            --SetupTocConfirmUI(surgeon, surgeon)
         else
             -- MP stuff, try to get the other player data and display it on the surgeon display
             sendClientCommand(surgeon, "TOC", "GetPlayerData", { surgeon:getOnlineID(), patient:getOnlineID() })
-            SetupTocMainUI(surgeon, patient, MP_other_player_toc_data)
-            --SetupTocConfirmUI(surgeon, patient)
+
+            TocTempTable.TempPatient = patient
+            TocTempTable.TempSurgeon = surgeon
+
+            -- Wait for ack
+            Events.OnTick.Add(TocWaitForOnlinePlayerData)
         end
     else
         -- This is when surgeon doesnt exist for some reason.
         SetupTocMainUI(patient, patient, patient:getModData().TOC)
-        -- SetupTocConfirmUI(patient, patient)
     end
 
     main_ui:toggle()
     main_ui:setInCenterOfScreen()
 
 end
+
+
+function TocWaitForOnlinePlayerData(numberTicks)
+    if MP_other_player_toc_data ~= nil then
+        SetupTocMainUI(TocTempTable.TempSurgeon, TocTempTable.TempPatient, MP_other_player_toc_data)
+
+
+        TocTempTable.TempSurgeon = nil
+        TocTempTable.TempPatient = nil
+        MP_other_player_toc_data = nil
+        Events.OnTick.Remove(TocWaitForOnlinePlayerData)
+
+
+    end
+
+
+end
+
 
 function ISHealthPanel:createChildren()
     ISHealthPanel_createChildren(self)

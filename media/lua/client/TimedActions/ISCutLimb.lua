@@ -125,8 +125,12 @@ function ISCutLimb:perform()
 end
 
 function ISCutLimb:new(patient, surgeon, part_name)
+
+    -- TODO align surgeon, patient not patient, surgeon
+
+
     local o = {}
-    setmetatable(o, self)
+    setmetatable(o, self)           -- TODO what's this crap?
     self.__index = self
     o.part_name = part_name
     o.character = surgeon -- For anim

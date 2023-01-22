@@ -29,8 +29,7 @@ function TocEquipProsthesisLocal(_, patient, surgeon, part_name)
         surgeon_inventory:getItemFromType('TOC.MetalHook') or
         surgeon_inventory:getItemFromType('TOC.WoodenHook')
     if prosthesis_to_equip then
-        ISTimedActionQueue.add(ISInstallProsthesis:new(patient, prosthesis_to_equip,
-            patient:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(part_name))))
+        ISTimedActionQueue.add(ISInstallProsthesis:new(surgeon, patient, prosthesis_to_equip, part_name))
     else
         surgeon:Say("I need a prosthesis")
     end
