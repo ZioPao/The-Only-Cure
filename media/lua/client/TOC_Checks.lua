@@ -6,27 +6,27 @@ end
 
 -----------------------------------------
 -- MP HANDLING CHECKS
-function CheckIfCanBeCut(part_name, part_data)
+function CheckIfCanBeCut(part_name, limbs_data)
 
-    if part_data == nil then
-        part_data = getPlayer():getModData().TOC.Limbs
+    if limbs_data == nil then
+        limbs_data = getPlayer():getModData().TOC.Limbs
   
     end
-    local check = (not part_data[part_name].is_cut) and
-        (not CheckIfProsthesisAlreadyInstalled(part_data, part_name))
+    local check = (not limbs_data[part_name].is_cut) and
+        (not CheckIfProsthesisAlreadyInstalled(limbs_data, part_name))
 
     return check
 
 end
 
-function CheckIfCanBeOperated(part_name, part_data)
+function CheckIfCanBeOperated(part_name, limbs_data)
 
-    if part_data == nil then
-        part_data = getPlayer():getModData().TOC.Limbs
+    if limbs_data == nil then
+        limbs_data = getPlayer():getModData().TOC.Limbs
     end
 
 
-    return part_data[part_name].is_operated == false and part_data[part_name].is_amputation_shown
+    return limbs_data[part_name].is_operated == false and limbs_data[part_name].is_amputation_shown
 
 end
 
@@ -54,17 +54,17 @@ end
 
 
 
-function CheckIfProsthesisAlreadyInstalled(part_data, part_name)
+function CheckIfProsthesisAlreadyInstalled(limbs_data, part_name)
 
     local r = "Right"
     local l = "Left"
 
 
     if string.find(part_name, r) then
-        return (part_data[r .. "_Hand"].is_prosthesis_equipped or part_data[r .. "_LowerArm"].is_prosthesis_equipped)
+        return (limbs_data[r .. "_Hand"].is_prosthesis_equipped or limbs_data[r .. "_LowerArm"].is_prosthesis_equipped)
 
     elseif string.find(part_name, l) then
-        return (part_data[l .. "_Hand"].is_prosthesis_equipped or part_data[l .. "_LowerArm"].is_prosthesis_equipped)
+        return (limbs_data[l .. "_Hand"].is_prosthesis_equipped or limbs_data[l .. "_LowerArm"].is_prosthesis_equipped)
     end
 
 

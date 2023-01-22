@@ -118,10 +118,8 @@ end
 TocContextMenus.FillCutAndOperateMenus = function(local_player, clicked_player, world_objects, cut_menu, operate_menu)
 
     local local_part_data = local_player:getModData().TOC.Limbs
-
+    
     for _, v in ipairs(GetBodyParts()) do
-
-
         if local_player == clicked_player then -- Local player
             if CheckIfCanBeCut(v) and TocGetSawInInventory(local_player) ~= nil then
                 
@@ -145,21 +143,9 @@ TocContextMenus.FillCutAndOperateMenus = function(local_player, clicked_player, 
                     operate_menu:addOption(getText('UI_ContextMenu_' .. v), world_objects, TryTocAction, v, "Operate",
                     local_player, clicked_player)
                 end
-
-
-
-
-
-
-
             end
-
-
-
         end
-
     end
-
 end
 
 

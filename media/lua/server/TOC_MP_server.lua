@@ -2,11 +2,11 @@
 --if isClient() then return end
 
 ---Server side
-local Commands = {}
+local TOC_Commands = {}
 
 
 --TODO how does this work
-Commands["SendServer"] = function(player, arg)
+TOC_Commands["SendServer"] = function(player, arg)
     local otherPlayer = getPlayerByOnlineID(arg["To"])
     print("The Only Cure Command: ", arg['command'])
     sendServerCommand(otherPlayer, "TOC", arg["command"], arg)
@@ -14,14 +14,14 @@ end
 
 
 -- To make the UI Work
-Commands["GetPlayerData"] = function(_, arg)
+TOC_Commands["GetPlayerData"] = function(_, arg)
     local surgeon_id = arg[1]
     local patient_id = arg[2]
     local patient = getPlayerByOnlineID(arg[2])
     sendServerCommand(patient, "TOC", "GivePlayerData", { surgeon_id, patient_id })
 end
 
-Commands["SendPlayerData"] = function(_, arg)
+TOC_Commands["SendPlayerData"] = function(_, arg)
     local surgeon = getPlayerByOnlineID(arg[1])
     local surgeon_id = arg[1]
     local toc_data = arg[2]
@@ -31,7 +31,7 @@ end
 
 
 -- CHEATING STUFF
-Commands["AskToResetEverything"] = function(_, arg)
+TOC_Commands["AskToResetEverything"] = function(_, arg)
     local clicked_player = getPlayerByOnlineID(arg[1])
     local clicked_player_id = arg[1]
 
@@ -55,7 +55,7 @@ end
 
 -------------------------------- TEST ------------------------
 
-TOC_Commands = {}
+
 
 function TOC_OnInitGlobalModData()
     ModData.getOrCreate("TOC_PLAYER_DATA")

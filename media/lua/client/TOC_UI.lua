@@ -31,8 +31,10 @@ end
 
 ------------------------------
 -- UI Visible stuff functions
-local function GetImageName(part_name, part_data)
+local function GetImageName(part_name, limbs_data)
     local name = ""
+
+    local part_data = limbs_data[part_name]
 
     if part_data.is_cut and part_data.is_cicatrized and part_data.is_prosthesis_equipped then -- Cut and equip
         if part_name == "Right_Hand" or part_name == "Left_Hand" then
@@ -58,9 +60,9 @@ local function GetImageName(part_name, part_data)
     end
 
     -- If foreaerm equip, change hand
-    if part_name == "Right_Hand" and part_data["Right_LowerArm"].is_prosthesis_equipped then
+    if part_name == "Right_Hand" and limbs_data["Right_LowerArm"].is_prosthesis_equipped then
         name = "media/ui/TOC/" .. part_name .. "/Hook.png"
-    elseif part_name == "Left_Hand" and part_data["Left_LowerArm"].is_prosthesis_equipped then
+    elseif part_name == "Left_Hand" and limbs_data["Left_LowerArm"].is_prosthesis_equipped then
         name = "media/ui/TOC/" .. part_name .. "/Hook.png"
     end
     return name
@@ -136,7 +138,7 @@ local function OnClickTocMainUI(button, args)
 
     desc_ui:open()
     desc_ui:setPositionPixel(main_ui:getRight(), main_ui:getY())
-    SetupTocDescUI(main_ui.surgeon, main_ui.patient, args.part_data, args.part_name) -- surgeon is generic.
+    SetupTocDescUI(main_ui.surgeon, main_ui.patient, args.limbs_data, args.part_name) -- surgeon is generic.
 
 end
 
@@ -350,40 +352,42 @@ end
 -----------------------------------------
 -- Setup stuff with variables and shit
 
-function SetupTocMainUI(surgeon, patient, part_data)
+function SetupTocMainUI(surgeon, patient, limbs_data)
 
     -- TODO add a ontick to update it regularly
 
     main_ui.surgeon = surgeon -- we shouldn't need an arg for this
     main_ui.patient = patient
 
-    if part_data then
-        main_ui["b11"]:addArg("part_data", part_data)
-        main_ui["b12"]:addArg("part_data", part_data)
-        main_ui["b21"]:addArg("part_data", part_data)
-        main_ui["b22"]:addArg("part_data", part_data)
-        main_ui["b31"]:addArg("part_data", part_data)
-        main_ui["b32"]:addArg("part_data", part_data)
+    if limbs_data then
+        main_ui["b11"]:addArg("limbs_data", limbs_data)
+        main_ui["b12"]:addArg("limbs_data", limbs_data)
+        main_ui["b21"]:addArg("limbs_data", limbs_data)
+        main_ui["b22"]:addArg("limbs_data", limbs_data)
+        main_ui["b31"]:addArg("limbs_data", limbs_data)
+        main_ui["b32"]:addArg("limbs_data", limbs_data)
 
-        main_ui["b11"]:setPath(GetImageName("Right_UpperArm", part_data))
-        main_ui["b12"]:setPath(GetImageName("Left_UpperArm", part_data))
+        main_ui["b11"]:setPath(GetImageName("Right_UpperArm", limbs_data))
+        main_ui["b12"]:setPath(GetImageName("Left_UpperArm", limbs_data))
 
-        main_ui["b21"]:setPath(GetImageName("Right_LowerArm", part_data))
-        main_ui["b22"]:setPath(GetImageName("Left_LowerArm", part_data))
+        main_ui["b21"]:setPath(GetImageName("Right_LowerArm", limbs_data))
+        main_ui["b22"]:setPath(GetImageName("Left_LowerArm", limbs_data))
 
-        main_ui["b31"]:setPath(GetImageName("Right_Hand", part_data))
-        main_ui["b32"]:setPath(GetImageName("Left_Hand", part_data))
+        main_ui["b31"]:setPath(GetImageName("Right_Hand", limbs_data))
+        main_ui["b32"]:setPath(GetImageName("Left_Hand", limbs_data))
 
     end
 
 
 end
 
-function SetupTocDescUI(surgeon, patient, part_data, part_name)
+function SetupTocDescUI(surgeon, patient, limbs_data, part_name)
     desc_ui["textTitle"]:setText(getText("UI_ContextMenu_" .. part_name))
     desc_ui.part_name = part_name
     desc_ui.surgeon = surgeon
     desc_ui.patient = patient
+
+    local part_data = limbs_data[part_name]
 
     if IsProsthesisInstalled(part_data) then
         -- Limb cut with prosthesis
@@ -447,16 +451,16 @@ function SetupTocDescUI(surgeon, patient, part_data, part_name)
         desc_ui["status"]:setText("Nothing here")
         desc_ui["status"]:setColor(1, 1, 1, 1)
         desc_ui["b1"]:setVisible(false)
-    elseif CheckIfCanBeCut(part_name) then
+    elseif CheckIfCanBeCut(part_name, limbs_data) then
         -- Everything else
         -- TODO add check for cuts and scratches
         desc_ui["status"]:setText("Not cut")
         desc_ui["status"]:setColor(1, 1, 1, 1)
-        if TocGetSawInInventory(surgeon) and not CheckIfProsthesisAlreadyInstalled(part_data, part_name) then
+        if TocGetSawInInventory(surgeon) and not CheckIfProsthesisAlreadyInstalled(limbs_data, part_name) then
             desc_ui["b1"]:setVisible(true)
             desc_ui["b1"]:setText("Cut")
             desc_ui["b1"]:addArg("option", "Cut")
-        elseif TocGetSawInInventory(surgeon) and CheckIfProsthesisAlreadyInstalled(part_data, part_name) then
+        elseif TocGetSawInInventory(surgeon) and CheckIfProsthesisAlreadyInstalled(limbs_data, part_name) then
             desc_ui["b1"]:setVisible(true)
             desc_ui["b1"]:setText("Remove prosthesis before")
             desc_ui["b1"]:addArg("option", "Nothing")
@@ -548,6 +552,7 @@ function ISNewHealthPanel.onClick_TOC(button)
             SetupTocMainUI(surgeon, surgeon, surgeon:getModData().TOC.Limbs)
         else
             -- MP stuff, try to get the other player data and display it on the surgeon display
+            print("TOC: Checking part_data for " .. patient:getUsername())
             if ModData.get("TOC_PLAYER_DATA")[patient:getUsername()] ~= nil then
                 local other_player_part_data = ModData.get("TOC_PLAYER_DATA")[patient:getUsername()]
 
