@@ -1,20 +1,19 @@
 Tooltip_EN = {
-	Tooltip_Real_surgeon_kit = "Real surgeon kit. To use on a cut limb.<br>Big heal dor the severed limb, reduce time to cicatrize.",
-    Tooltip_Surgeon_kit = "Surgeon kit. To use on a cut limb.<br>Heal for the severed limb, reduce time to cicatrize.",
-    Tooltip_Improvised_surgeon_kit = "Improvised surgeon kit. To use on a cut limb.<br>Small heal for the severed limb, reduce time to cicatrize.",
+	Tooltip_Real_surgeon_kit = "Real surgeon kit. To be used on an amputated limb<br>Helps healing the severed limb, reducing a lot of the time necessary to cicatrize.",
+    Tooltip_Surgeon_kit = "Surgeon kit. To be used on an amputated limb<br>Helps healing the severed limb, reducing some of the time necessary to cicatrize.",
+    Tooltip_Improvised_surgeon_kit = "Improvised surgeon kit. To be used on an amputated limb<br>Helps healing the severed limb, reducing a little the time necessary to cicatrize.",
 
     Tooltip_equip_prothesis_hand = "Water Resistance is the time multiplier for actions<br>Without prosthesis, the multiplier is 2"
     Tooltip_equip_prothesis_fore = "Water Resistance is the time multiplier for actions<br>Without prosthesis, the multiplier is 2.5"
-    Tooltip_prothesis_hand = "Prosthesis for hand. You need to cicatrize to use.<br> It's done by having a bandage (alcohol is better) when cut, use a surgeon kit and wait."
-    Tooltip_prothesis_fore = "Prosthesis for forearm. You need to cicatrize to use.<br> It's done by having a bandage (alcohol is better) when cut, use a surgeon kit and wait."
+    Tooltip_prosthesic_limb = "A prosthetic limb. You'll have to wait until your limb is cicatrized before installing it.<br> It's done by having a bandage (alcohol is better) when cut, use a surgeon kit and wait."
 
-    Recipe_Tooltip_Wooden_hook = "Make a prothesis wooden hook.<br>To use on a cut hand or fore arm.<br>Cut arm cannot be equip."
-    Recipe_Tooltip_Metal_hook = "Make a prothesis metal hook.<br>To use on a cut hand or fore arm.<br>Cut arm cannot be equip."
-    Recipe_Tooltip_Metal_hand = "Make a prothesis metal hand.<br>To use on a cut hand or fore arm.<br>Cut arm cannot be equip."
+    Recipe_Tooltip_Wooden_hook = "Make a prosthesic wooden hook.<br>Can be used on an amputated hand or forearm.<br>Can't be equipped if the upper arm is amputated."
+    Recipe_Tooltip_Metal_hook = "Make a prosthesic metal hook.<br>Can be used on an amputated hand or forearm.<br>Can't be equipped if the upper arm is amputated."
+    Recipe_Tooltip_Metal_hand = "Make a prosthesic metal hand.<br>Can be used on an amputated hand or forearm.<br>Can't be equipped if the upper arm is amputated."
 
-    Recipe_Tooltip_Real_surgeon_kit = "Make a real surgeon kit.<br>Big heal dor the severed limb, reduce time to cicatrize."
-    Recipe_Tooltip_Surgeon_kit = "Make a surgeon kit.<br>Heal for the severed limb, reduce time to cicatrize."
-    Recipe_Tooltip_Improvised_surgeon_kit = "Make an improvised surgeon kit.<br>Small heal for the severed limb, reduce time to cicatrize."
+    Recipe_Tooltip_Real_surgeon_kit = "Make a real surgeon kit.<br>Helps healing the severed limb, reducing a lot of the time necessary to cicatrize."
+    Recipe_Tooltip_Surgeon_kit = "Make a surgeon kit.<br>Helps healing the severed limb, reducing some of the time necessary to cicatrize."
+    Recipe_Tooltip_Improvised_surgeon_kit = "Make an improvised surgeon kit.<br>Helps healing the severed limb, reducing a little the time necessary to cicatrize."
 
     Tooltip_SurgeonMag1 = "Learn how to make an improvised surgeon kit!"
     Tooltip_SurgeonMag2 = "Learn how to make a surgeon kit!"

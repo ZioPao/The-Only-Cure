@@ -325,7 +325,7 @@ item WoodenHook
             DisplayCategory = Prosthesis,
             DisplayName	= DisplayName_woodenHook,
             Icon = woodenHook,
-            Tooltip = Tooltip_prothesis_hand,
+            Tooltip = Tooltip_prosthesic_limb,
         }
 
 item MetalHook
@@ -335,7 +335,7 @@ item MetalHook
             DisplayCategory = Prosthesis,
             DisplayName	= DisplayName_metalHook,
             Icon = metalHook,
-            Tooltip = Tooltip_prothesis_hand,
+            Tooltip = Tooltip_prosthesic_limb,
         }
 
 item MetalHand
@@ -345,7 +345,7 @@ item MetalHand
             DisplayCategory = Prosthesis,
             DisplayName	= DisplayName_metalHand,
             Icon = metalHand,
-            Tooltip = Tooltip_prothesis_hand,
+            Tooltip = Tooltip_prosthesic_limb,
         }
 
 /**************************** Mags ****************************/
