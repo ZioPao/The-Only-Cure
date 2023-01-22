@@ -369,7 +369,7 @@ end
 
 function SetupTocDescUI(surgeon, patient, toc_data, part_name)
     local part_data = toc_data.Limbs[part_name]
-    desc_ui["textTitle"]:setText(TocGetDisplayText(part_name))
+    desc_ui["textTitle"]:setText(getText("UI_ContextMenu_" .. part_name))
     desc_ui.part_name = part_name
     desc_ui.surgeon = surgeon
     desc_ui.patient = patient
@@ -441,11 +441,11 @@ function SetupTocDescUI(surgeon, patient, toc_data, part_name)
         -- TODO add check for cuts and scratches
         desc_ui["status"]:setText("Not cut")
         desc_ui["status"]:setColor(1, 1, 1, 1)
-        if GetSawInInventory(surgeon) and not CheckIfProsthesisAlreadyInstalled(toc_data.Limbs, part_name) then
+        if TocGetSawInInventory(surgeon) and not CheckIfProsthesisAlreadyInstalled(toc_data.Limbs, part_name) then
             desc_ui["b1"]:setVisible(true)
             desc_ui["b1"]:setText("Cut")
             desc_ui["b1"]:addArg("option", "Cut")
-        elseif GetSawInInventory(surgeon) and CheckIfProsthesisAlreadyInstalled(toc_data.Limbs, part_name) then
+        elseif TocGetSawInInventory(surgeon) and CheckIfProsthesisAlreadyInstalled(toc_data.Limbs, part_name) then
             desc_ui["b1"]:setVisible(true)
             desc_ui["b1"]:setText("Remove prosthesis before")
             desc_ui["b1"]:addArg("option", "Nothing")
@@ -493,7 +493,7 @@ function SendCommandToConfirmUIMP(action, isBitten, userName, partName)
     confirm_ui_mp:open()
 
     if action == "Cut" or action == "Operate" then
-        confirm_ui_mp["text4"]:setText("You're gonna " .. action .. " the " .. TocGetDisplayText(partName) .. " of " .. userName)
+        confirm_ui_mp["text4"]:setText("You're gonna " .. action .. " the " .. getText("UI_ContextMenu_" .. partName) .. " of " .. userName)
         confirm_ui_mp["text2"]:setText("Are you sure?")
         confirm_ui_mp["text2"]:setColor(1, 0, 0, 0)
         confirm_ui_mp["b1"]:setVisible(true);

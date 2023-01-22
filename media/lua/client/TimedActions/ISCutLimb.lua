@@ -25,7 +25,7 @@ end
 function ISCutLimb:start()
 
     self:setActionAnim("SawLog")
-    local saw_item = GetSawInInventory(self.surgeon)
+    local saw_item = TocGetSawInInventory(self.surgeon)
 
 
     -- Return whatever object we've got in the inventory

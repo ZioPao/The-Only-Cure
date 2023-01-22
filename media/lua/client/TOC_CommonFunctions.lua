@@ -51,16 +51,21 @@ function FindTocDataPartNameFromBodyPartType(toc_limbs_data, bodyPartType)
 end
 
 
-function FindTocBodyPartNameFromBodyPartType(bodyPartType)
-    if bodyPartType == BodyPartType.Hand_R          then return "Right_Hand"
-    elseif bodyPartType == BodyPartType.ForeArm_R   then return "Right_LowerArm"
-    elseif bodyPartType == BodyPartType.UpperArm_R  then return "Right_UpperArm"
-    elseif bodyPartType == BodyPartType.Hand_L      then return "Left_Hand"
-    elseif bodyPartType  == BodyPartType.ForeArm_L  then return "Left_LowerArm"
-    elseif bodyPartType  == BodyPartType.UpperArm_L then return "Left_UpperArm"
+
+function TocGetPartNameFromBodyPartType(body_part)
+
+    if body_part      == BodyPartType.Hand_R      then return "Right_Hand"
+    elseif body_part      == BodyPartType.ForeArm_R      then return "Right_LowerArm"
+    elseif body_part   == BodyPartType.UpperArm_R  then return "Right_UpperArm"
+    elseif body_part   == BodyPartType.Hand_L      then return "Left_Hand"
+    elseif body_part   == BodyPartType.ForeArm_L   then return "Left_LowerArm"
+    elseif body_part   == BodyPartType.UpperArm_L  then return "Left_UpperArm"
     else return nil
     end
+
 end
+
+
 
 function TocGetBodyPartTypeFromPartName(part_name)
     if part_name == "Right_Hand"      then return BodyPartType.Hand_R end
@@ -72,4 +77,36 @@ function TocGetBodyPartTypeFromPartName(part_name)
 end
 
 
+function TocFindCorrectClothingProsthesis(item_name, part_name)
 
+    local correct_name = "TOC.Prost_" .. part_name .. "_" .. item_name
+    return correct_name
+
+end
+
+local function PartNameToBodyLocation(name)
+    -- This is still correct but naming sucks
+    if name == "Right_Hand"      then return "ArmRight_Prot" end
+    if name == "Right_LowerArm"   then return "ArmRight_Prot" end
+    if name == "Right_UpperArm"       then return "ArmRight_Prot" end
+    if name == "Left_Hand"       then return "ArmLeft_Prot" end
+    if name == "Left_LowerArm"    then return "ArmLeft_Prot" end
+    if name == "Left_UpperArm"        then return "ArmLeft_Prot" end
+end
+
+
+function TocFindItemInProstBodyLocation(part_name, patient)
+    -- FIXME this can return even amputated limbs, and we're using it only for prosthetics. This is gonna break sooner or later
+
+
+
+    local worn_items = patient:getWornItems()
+
+    for i=1,worn_items:size()-1 do -- Maybe wornItems:size()-1
+        local item = worn_items:get(i):getItem()
+        if item:getBodyLocation() == PartNameToBodyLocation(part_name) then
+            return item
+        end
+    end
+
+end

@@ -1,5 +1,5 @@
 function TocCutLocal(_, patient, surgeon, part_name)
-    if GetSawInInventory(surgeon) ~= nil then
+    if TocGetSawInInventory(surgeon) ~= nil then
         ISTimedActionQueue.add(ISCutLimb:new(patient, surgeon, part_name));
     else
         surgeon:Say("I don't have a saw on me")
@@ -12,7 +12,7 @@ function TocOperateLocal(_, patient, surgeon, part_name, use_oven)
     if use_oven then
         ISTimedActionQueue.add(ISOperateLimb:new(patient, surgeon, _, part_name, use_oven));
     else
-        local kit = GetKitInInventory(surgeon)
+        local kit = TocGetKitInInventory(surgeon)
         if kit ~= nil then
             ISTimedActionQueue.add(ISOperateLimb:new(patient, surgeon, kit, part_name, false))
         else
@@ -36,6 +36,6 @@ function TocEquipProsthesisLocal(_, patient, surgeon, part_name)
 end
 
 function TocUnequipProsthesisLocal(_, patient, part_name)
-    local equipped_prosthesis = FindTocItemWorn(part_name, patient)
+    local equipped_prosthesis = TocFindItemInProstBodyLocation(part_name, patient)
     ISTimedActionQueue.add(ISUninstallProsthesis:new(patient, equipped_prosthesis, patient:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(part_name))))
 end

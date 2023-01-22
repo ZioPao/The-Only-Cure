@@ -18,7 +18,7 @@ function TheOnlyCure.CheckIfPlayerIsInfected(player, toc_data)
     local body_damage = player:getBodyDamage()
 
     for _, v in ipairs(GetLimbsBodyPartTypes()) do
-        local part_name = FindTocBodyPartNameFromBodyPartType(v)
+        local part_name = TocGetPartNameFromBodyPartType(v)
         local part_data = toc_data.Limbs[part_name]
 
 

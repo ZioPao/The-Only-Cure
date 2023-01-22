@@ -270,7 +270,7 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
             body_part:setBiteTime(0)
 
             -- Second check, let's see if there is any other infected limb.
-            if CheckIfStillInfected(part_data) == false then
+            if TocCheckIfStillInfected(part_data) == false then
                 TocCureInfection(body_damage, part_data, part_name)
                 getPlayer():Say("I'm gonna be fine...")
             else
@@ -391,7 +391,7 @@ function TryTocAction(_, part_name, action, surgeon, patient)
 
         elseif action == "Unequip" then
             --AskCanUnequipProsthesis(patient, part_name)
-            local equipped_prosthesis = FindTocItemWorn(part_name, patient)
+            local equipped_prosthesis = TocFindItemInProstBodyLocation(part_name, patient)
             ISTimedActionQueue.add(ISUninstallProsthesis:new(patient, equipped_prosthesis, patient:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(part_name))))
         end
         ui.actionAct = action

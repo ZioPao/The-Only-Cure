@@ -103,7 +103,7 @@ end
 
 TocContextMenus.DoCut = function(_, patient, surgeon, part_name)
 
-    if GetSawInInventory(surgeon) then
+    if TocGetSawInInventory(surgeon) then
         ISTimedActionQueue.add(ISCutLimb:new(patient, surgeon, part_name));
     else
         surgeon:Say("I don't have a saw on me")

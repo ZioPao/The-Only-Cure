@@ -1,6 +1,10 @@
+
+
+
+
 -- CutLimb
 -- TODO if TheONlyCure. triggers an errors
-function CheckIfStillInfected(part_data)
+function TocCheckIfStillInfected(part_data)
     if part_data == nil then
         return
     end
@@ -75,6 +79,21 @@ function TocDeleteOtherAmputatedLimbs(side)
         
     end
 
+end
+
+function TocGetKitInInventory(surgeon)
+    local playerInv = surgeon:getInventory();
+    local item = playerInv:getItemFromType('TOC.Real_surgeon_kit') or playerInv:getItemFromType('TOC.Surgeon_kit') or playerInv:getItemFromType('TOC.Improvised_surgeon_kit')
+    return item
+
+end
+
+
+function TocGetSawInInventory(surgeon)
+
+    local player_inv = surgeon:getInventory()
+    local item = player_inv:getItemFromType("Saw") or player_inv:getItemFromType("GardenSaw") or player_inv:getItemFromType("Chainsaw")
+    return item
 end
 
 -- OperateLimb

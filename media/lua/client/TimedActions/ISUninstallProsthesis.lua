@@ -51,7 +51,7 @@ function ISUninstallProsthesis:perform()
 
     for _, v in ipairs(GetAcceptingProsthesisBodyPartTypes()) do
         if self.bodyPart:getType() == v then
-            local part_name = FindTocBodyPartNameFromBodyPartType(v)
+            local part_name = TocGetPartNameFromBodyPartType(v)
 
             print("Found prost in " .. part_name)
             if part_name then 
