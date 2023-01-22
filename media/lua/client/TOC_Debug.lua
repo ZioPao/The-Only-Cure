@@ -6,7 +6,7 @@ function TocResetEverything()
     TheOnlyCure.InitTheOnlyCure(_, player)
 
     -- Destroy the amputation model
-    for _,v in ipairs(GetBodyParts()) do
+    for _, v in ipairs(GetBodyParts()) do
         local cloth = player:getInventory():FindAndReturn(TocFindAmputatedClothingFromPartName(v))
 
         if cloth ~= nil then

@@ -18,25 +18,25 @@ Commands["GetPlayerData"] = function(_, arg)
     local surgeon_id = arg[1]
     local patient_id = arg[2]
     local patient = getPlayerByOnlineID(arg[2])
-    sendServerCommand(patient, "TOC", "GivePlayerData", {surgeon_id, patient_id})
+    sendServerCommand(patient, "TOC", "GivePlayerData", { surgeon_id, patient_id })
 end
 
 Commands["SendPlayerData"] = function(_, arg)
     local surgeon = getPlayerByOnlineID(arg[1])
     local surgeon_id = arg[1]
     local toc_data = arg[2]
-    sendServerCommand(surgeon, "TOC", "SendTocData", {surgeon_id, toc_data})
+    sendServerCommand(surgeon, "TOC", "SendTocData", { surgeon_id, toc_data })
 end
 
 
 
 -- CHEATING STUFF
-Commands["AskToResetEverything"] = function (_, arg)
+Commands["AskToResetEverything"] = function(_, arg)
     local clicked_player = getPlayerByOnlineID(arg[1])
     local clicked_player_id = arg[1]
 
 
-    sendServerCommand(clicked_player, "TOC", "AcceptResetEverything", {clicked_player_id})
+    sendServerCommand(clicked_player, "TOC", "AcceptResetEverything", { clicked_player_id })
 
 end
 
@@ -52,4 +52,3 @@ local function OnTocClientCommand(module, command, player, args)
 end
 
 Events.OnClientCommand.Add(OnTocClientCommand)
-

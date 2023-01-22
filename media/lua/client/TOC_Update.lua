@@ -1,16 +1,17 @@
 -- Helper for DropItem
 function TheOnlyCure.CheckIfCanPickUpItem(toc_data, side, limb, secondary_limb)
-    
+
 
     -- TODO we can use this when uninstall prost or when cutting
     local full_primary_limb = side .. limb
     local full_secondary_limb = side .. secondary_limb
 
 
-    return toc_data[full_primary_limb].is_cut and not (toc_data[full_primary_limb].is_prosthesis_equipped or toc_data[full_secondary_limb]) or
-            (toc_data[full_secondary_limb].is_cut and not toc_data[full_secondary_limb].is_prosthesis_equipped)
+    return toc_data[full_primary_limb].is_cut and
+        not (toc_data[full_primary_limb].is_prosthesis_equipped or toc_data[full_secondary_limb]) or
+        (toc_data[full_secondary_limb].is_cut and not toc_data[full_secondary_limb].is_prosthesis_equipped)
 
-    
+
 end
 
 function TheOnlyCure.CheckIfPlayerIsInfected(player, toc_data)
@@ -27,13 +28,13 @@ function TheOnlyCure.CheckIfPlayerIsInfected(player, toc_data)
                 part_data.is_infected = true
                 player:transmitModData()
             end
- 
+
         end
     end
 
     for _, v in ipairs(GetOtherBodyPartTypes()) do
-        if body_damage:getBodyPart(v):bitten() then 
-            toc_data.Limbs.is_other_bodypart_infected = true      -- Even one is enough, stop cycling if we find it
+        if body_damage:getBodyPart(v):bitten() then
+            toc_data.Limbs.is_other_bodypart_infected = true -- Even one is enough, stop cycling if we find it
             player:transmitModData()
             break
         end
@@ -50,7 +51,7 @@ function TheOnlyCure.UpdatePlayerHealth(player, part_data)
     for i, part_name in pairs(GetBodyParts()) do
         if part_data[part_name].is_cut then
             TheOnlyCure.SetHealthStatusForBodyPart(part_data, part_name, player)
-                
+
         end
     end
 
@@ -78,7 +79,7 @@ function TheOnlyCure.SetHealthStatusForBodyPart(part_data, part_name, player)
 
     -- TODO Bandages should have some disadvantage when not operated... Like getting drenched or something
     if body_part_type:bandaged() then
-        is_bandaged = true      -- this is useless 
+        is_bandaged = true -- this is useless
         bandage_life = body_part_type:getBandageLife()
         bandage_type = body_part_type:getBandageType()
 
@@ -133,14 +134,13 @@ function TheOnlyCure.CheckIfOtherLimbsAreInfected(part_data, part_name)
     local body_parts = GetBodyParts()
     body_parts[part_name] = nil
 
-    for _,v in pairs(body_parts) do
+    for _, v in pairs(body_parts) do
         if part_data[v].is_infected then
             return true
         end
     end
     return false
 end
-
 
 -- MAIN UPDATE FUNCTIONS
 
@@ -182,15 +182,14 @@ function TheOnlyCure.UpdateEveryTenMinutes()
     -- Updates the cicatrization time
     for _, part_name in pairs(GetBodyParts()) do
         if part_data[part_name].is_cut and not part_data[part_name].is_cicatrized then
-            part_data[part_name].cicatrization_time = part_data[part_name].cicatrization_time - 1     -- TODO Make it more "dynamic"
+            part_data[part_name].cicatrization_time = part_data[part_name].cicatrization_time - 1 -- TODO Make it more "dynamic"
 
-            
+
         end
     end
-    
+
     player:transmitModData()
 end
-
 
 Events.EveryTenMinutes.Add(TheOnlyCure.UpdateEveryTenMinutes)
 Events.EveryOneMinute.Add(TheOnlyCure.UpdateEveryOneMinute)

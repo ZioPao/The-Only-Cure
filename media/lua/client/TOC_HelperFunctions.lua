@@ -1,7 +1,3 @@
-
-
-
-
 -- CutLimb
 -- TODO if TheONlyCure. triggers an errors
 function TocCheckIfStillInfected(part_data)
@@ -25,8 +21,6 @@ function TocCheckIfStillInfected(part_data)
     return check
 end
 
-
-
 function TocCureInfection(body_damage, part_data, part_name)
 
     local body_part_type = body_damage:getBodyPart(TocGetBodyPartTypeFromPartName(part_name))
@@ -43,27 +37,26 @@ function TocCureInfection(body_damage, part_data, part_name)
         local body_part_types = body_damage:getBodyParts()
 
         -- TODO I think this is enough... we should just cycle if with everything instead of that crap up there
-        for i=body_part_types:size()-1, 0, -1  do
+        for i = body_part_types:size() - 1, 0, -1 do
             local bodyPart = body_part_types:get(i);
             bodyPart:SetInfected(false);
         end
     end
 
 
-    if body_part_type:scratched()         then body_part_type:setScratched(false, false) end
-    if body_part_type:haveGlass()         then body_part_type:setHaveGlass(false)        end
-    if body_part_type:haveBullet()        then body_part_type:setHaveBullet(false, 0)    end
-    if body_part_type:isInfectedWound()   then body_part_type:setInfectedWound(false)    end
-    if body_part_type:isBurnt()           then body_part_type:setBurnTime(0)             end
-    if body_part_type:isCut()             then body_part_type:setCut(false, false)       end        --Lacerations
-    if body_part_type:getFractureTime()>0 then body_part_type:setFractureTime(0)         end
+    if body_part_type:scratched() then body_part_type:setScratched(false, false) end
+    if body_part_type:haveGlass() then body_part_type:setHaveGlass(false) end
+    if body_part_type:haveBullet() then body_part_type:setHaveBullet(false, 0) end
+    if body_part_type:isInfectedWound() then body_part_type:setInfectedWound(false) end
+    if body_part_type:isBurnt() then body_part_type:setBurnTime(0) end
+    if body_part_type:isCut() then body_part_type:setCut(false, false) end --Lacerations
+    if body_part_type:getFractureTime() > 0 then body_part_type:setFractureTime(0) end
 
 
 
 
 
 end
-
 
 function TocDeleteOtherAmputatedLimbs(side)
 
@@ -76,23 +69,24 @@ function TocDeleteOtherAmputatedLimbs(side)
         if amputated_limb then
             getPlayer():getInventory():Remove(amputated_limb)
         end
-        
+
     end
 
 end
 
 function TocGetKitInInventory(surgeon)
     local playerInv = surgeon:getInventory();
-    local item = playerInv:getItemFromType('TOC.Real_surgeon_kit') or playerInv:getItemFromType('TOC.Surgeon_kit') or playerInv:getItemFromType('TOC.Improvised_surgeon_kit')
+    local item = playerInv:getItemFromType('TOC.Real_surgeon_kit') or playerInv:getItemFromType('TOC.Surgeon_kit') or
+        playerInv:getItemFromType('TOC.Improvised_surgeon_kit')
     return item
 
 end
 
-
 function TocGetSawInInventory(surgeon)
 
     local player_inv = surgeon:getInventory()
-    local item = player_inv:getItemFromType("Saw") or player_inv:getItemFromType("GardenSaw") or player_inv:getItemFromType("Chainsaw")
+    local item = player_inv:getItemFromType("Saw") or player_inv:getItemFromType("GardenSaw") or
+        player_inv:getItemFromType("Chainsaw")
     return item
 end
 
@@ -112,21 +106,20 @@ function SetBodyPartsStatusAfterOperation(player, part_data, part_name, use_oven
 end
 
 function FixSingleBodyPartType(body_part_type, use_oven)
-    body_part_type:setDeepWounded(false)        --Basically like stitching
+    body_part_type:setDeepWounded(false) --Basically like stitching
     body_part_type:setDeepWoundTime(0)
-    if use_oven then 
+    if use_oven then
         body_part_type:AddDamage(100)
         body_part_type:setAdditionalPain(100);
         body_part_type:setBleeding(false)
-        body_part_type:setBleedingTime(0)      -- no bleeding since it's been cauterized
+        body_part_type:setBleedingTime(0) -- no bleeding since it's been cauterized
     else
         -- TODO Think a little better about this, do we want to trigger bleeding or not?
         body_part_type:setBleeding(false)
-        
+
         --body_part_type:setBleedingTime(ZombRand(1, 5))   -- Reset the bleeding, maybe make it random
     end
 end
-
 
 -------------------------------------
 -- Override helper
@@ -146,7 +139,7 @@ function CheckIfItemIsAmputatedLimb(item)
 end
 
 -- function CheckIfItemIsAmputatedLimb(item)
-    
+
 
 --     local item_full_type = item:getFullType()
 

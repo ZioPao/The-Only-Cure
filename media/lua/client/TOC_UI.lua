@@ -12,26 +12,22 @@ local function PrerenderFuncMP()
     if confirm_ui_mp.responseReceive then
         if not confirm_ui_mp.responseCan then
             getPlayer():Say("I can't do that !")
-                confirm_ui_mp.responseReceive = false
-                confirm_ui_mp:close()
+            confirm_ui_mp.responseReceive = false
+            confirm_ui_mp:close()
             return false;
         end
 
         -- Prerender basically hooks onto SendCommandToConfirmUI, dunno how but it does
-        SendCommandToConfirmUIMP(confirm_ui_mp.responseAction, confirm_ui_mp.responseIsBitten, confirm_ui_mp.responseUserName, confirm_ui_mp.responsePartName);
+        SendCommandToConfirmUIMP(confirm_ui_mp.responseAction, confirm_ui_mp.responseIsBitten,
+            confirm_ui_mp.responseUserName, confirm_ui_mp.responsePartName);
     end
 end
-
-
 
 -----------------------
 -- Getters
 function GetConfirmUIMP()
     return confirm_ui_mp;
 end
-
-
-
 
 ------------------------------
 -- UI Visible stuff functions
@@ -45,17 +41,20 @@ local function GetImageName(part_name, toc_data)
         else
             name = "media/ui/TOC/" .. part_name .. "/Prothesis.png"
         end
-    elseif part_data.is_cut and part_data.is_cicatrized and not part_data.is_prosthesis_equipped and part_data.is_amputation_shown then -- Cut and heal
+    elseif part_data.is_cut and part_data.is_cicatrized and not part_data.is_prosthesis_equipped and
+        part_data.is_amputation_shown then -- Cut and heal
         name = "media/ui/TOC/" .. part_name .. "/Cut.png"
-    elseif part_data.is_cut and not part_data.is_cicatrized and part_data.is_amputation_shown and not part_data.is_operated then -- Cut not heal
+    elseif part_data.is_cut and not part_data.is_cicatrized and part_data.is_amputation_shown and
+        not part_data.is_operated then -- Cut not heal
         name = "media/ui/TOC/" .. part_name .. "/Bleed.png"
     elseif part_data.is_cut and not part_data.is_cicatrized and part_data.is_amputation_shown and part_data.is_operated then -- Cut not heal
         name = "media/ui/TOC/" .. part_name .. "/Operate.png"
     elseif part_data.is_cut and not part_data.is_amputation_shown then -- Empty (like hand if forearm cut)
         name = "media/ui/TOC/Empty.png"
-    elseif not part_data.is_cut and getPlayer():getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(part_name)):bitten() then -- Not cut but bitten
+    elseif not part_data.is_cut and
+        getPlayer():getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(part_name)):bitten() then -- Not cut but bitten
         name = "media/ui/TOC/" .. part_name .. "/Bite.png"
-    else  -- Not cut
+    else -- Not cut
         name = "media/ui/TOC/" .. part_name .. "/Base.png"
     end
 
@@ -68,10 +67,6 @@ local function GetImageName(part_name, toc_data)
     return name
 end
 
-
-
-
-
 ------------------------------------------
 -- Check functions
 
@@ -81,26 +76,24 @@ end
 
 local function CanProsthesisBeEquipped(part_data)
 
-    return part_data.is_cut and part_data.is_cicatrized and not part_data.is_prosthesis_equipped and part_data.is_amputation_shown
+    return part_data.is_cut and part_data.is_cicatrized and not part_data.is_prosthesis_equipped and
+        part_data.is_amputation_shown
 
 end
 
 local function IsAmputatedLimbHealed(part_data)
-    return  part_data.is_cut and not part_data.is_cicatrized and part_data.is_amputation_shown
+    return part_data.is_cut and not part_data.is_cicatrized and part_data.is_amputation_shown
 
 end
 
 local function IsAmputatedLimbToBeVisible(part_data)
     return part_data.is_cut and not part_data.is_amputation_shown
-end    
-
-
-local function IsPartBitten(part_data, part_name)
-    return not part_data.is_cut and getPlayer():getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(part_name)):bitten()
 end
 
-
-
+local function IsPartBitten(part_data, part_name)
+    return not part_data.is_cut and
+        getPlayer():getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(part_name)):bitten()
+end
 
 local function FindMinMax(lv)
     local min, max
@@ -138,23 +131,18 @@ local function FindMinMax(lv)
     return min, max;
 end
 
-
-
-
-
-
 ------------------------------------------------
 -- On Click Functions
 local function OnClickTocMainUI(button, args)
 
     desc_ui:open()
     desc_ui:setPositionPixel(main_ui:getRight(), main_ui:getY())
-    SetupTocDescUI(main_ui.surgeon, main_ui.patient, args.toc_data, args.part_name)      -- surgeon is generic.
-    
+    SetupTocDescUI(main_ui.surgeon, main_ui.patient, args.toc_data, args.part_name) -- surgeon is generic.
+
 end
 
 local function OnClickTocDescUI(button, args)
-    -- Gets every arg from main 
+    -- Gets every arg from main
 
     local patient = desc_ui.patient
     local surgeon = desc_ui.surgeon
@@ -168,19 +156,18 @@ local function OnClickTocDescUI(button, args)
 
     elseif args.option == "Equip" then
         TryTocAction(_, desc_ui.part_name, "Equip", surgeon, patient)
-        -- TODO probably completely broken for MP 
+        -- TODO probably completely broken for MP
         -- TODO this is really janky
 
     elseif args.option == "Unequip" then
         TryTocAction(_, desc_ui.part_name, "Unequip", surgeon, patient)
 
     elseif args.option == "Nothing" then
-        print("Just do nothing")        -- TODO workaround
+        print("Just do nothing") -- TODO workaround
     end
     main_ui:close()
 
 end
-
 
 function OnClickTocConfirmUIMP(button, args)
     local player = getPlayer()
@@ -188,9 +175,11 @@ function OnClickTocConfirmUIMP(button, args)
         ISTimedActionQueue.add(ISCutLimb:new(confirm_ui_mp.patient, player, confirm_ui_mp.partNameAct))
     elseif confirm_ui_mp.actionAct == "Operate" and args.option == "yes" then
         local playerInv = player:getInventory();
-        local item = playerInv:getItemFromType('TOC.Real_surgeon_kit') or playerInv:getItemFromType('TOC.Surgeon_kit') or playerInv:getItemFromType('TOC.Improvised_surgeon_kit')
+        local item = playerInv:getItemFromType('TOC.Real_surgeon_kit') or playerInv:getItemFromType('TOC.Surgeon_kit') or
+            playerInv:getItemFromType('TOC.Improvised_surgeon_kit')
         if item then
-            ISTimedActionQueue.add(ISOperateLimb:new(confirm_ui_mp.patient, player, item, confirm_ui_mp.partNameAct, false))
+            ISTimedActionQueue.add(ISOperateLimb:new(confirm_ui_mp.patient, player, item, confirm_ui_mp.partNameAct,
+                false))
         else
             player:Say("I need a kit")
         end
@@ -198,7 +187,7 @@ function OnClickTocConfirmUIMP(button, args)
     elseif confirm_ui_mp.actionAct == "Equip" and args.option == "yes" then
         print("Equip mp comp")
 
-    
+
     elseif confirm_ui_mp.actionAct == "Unequip" and args.option == "yes" then
         print("Unequip mp comp")
 
@@ -209,8 +198,6 @@ function OnClickTocConfirmUIMP(button, args)
     confirm_ui_mp.responseReceive = false
 
 end
-
-
 
 -----------------------------------------------
 
@@ -260,7 +247,7 @@ function CreateTocDescUI()
     desc_ui:addText("textTitle", "Right arm", "Large", "Center")
     desc_ui:nextLine()
 
-    desc_ui:addText("textLV2", "Level 3/10", _, "Center")               
+    desc_ui:addText("textLV2", "Level 3/10", _, "Center")
     desc_ui:nextLine()
 
     desc_ui:addText("textLV", "Next LV:", _, "Right")
@@ -283,11 +270,10 @@ function CreateTocDescUI()
     desc_ui:addEmpty()
     desc_ui:nextLine()
 
-    desc_ui:addButton("b1", "Operate", OnClickTocDescUI)            -- TODO this is just temporary
+    desc_ui:addButton("b1", "Operate", OnClickTocDescUI) -- TODO this is just temporary
 
     desc_ui:saveLayout()
 end
-
 
 function CreateTocConfirmUIMP()
     confirm_ui_mp = NewUI()
@@ -316,7 +302,7 @@ function CreateTocConfirmUIMP()
     confirm_ui_mp:addEmpty();
     confirm_ui_mp:addButton("b2", "No", OnClickTocConfirmUIMP);
     confirm_ui_mp:addEmpty();
-    
+
     confirm_ui_mp:nextLine();
     confirm_ui_mp:addEmpty();
 
@@ -336,16 +322,15 @@ function OnCreateTheOnlyCureUI()
     main_ui:close()
 end
 
-
 -----------------------------------------
--- Setup stuff with variables and shit 
+-- Setup stuff with variables and shit
 
 function SetupTocMainUI(surgeon, patient, toc_data)
 
-    main_ui.surgeon = surgeon       -- we shouldn't need an arg for this
+    main_ui.surgeon = surgeon -- we shouldn't need an arg for this
     main_ui.patient = patient
 
-    if toc_data then   
+    if toc_data then
         main_ui["b11"]:addArg("toc_data", toc_data)
         main_ui["b12"]:addArg("toc_data", toc_data)
         main_ui["b21"]:addArg("toc_data", toc_data)
@@ -355,10 +340,10 @@ function SetupTocMainUI(surgeon, patient, toc_data)
 
         main_ui["b11"]:setPath(GetImageName("Right_UpperArm", toc_data))
         main_ui["b12"]:setPath(GetImageName("Left_UpperArm", toc_data))
-    
+
         main_ui["b21"]:setPath(GetImageName("Right_LowerArm", toc_data))
         main_ui["b22"]:setPath(GetImageName("Left_LowerArm", toc_data))
-    
+
         main_ui["b31"]:setPath(GetImageName("Right_Hand", toc_data))
         main_ui["b32"]:setPath(GetImageName("Left_Hand", toc_data))
 
@@ -394,12 +379,12 @@ function SetupTocDescUI(surgeon, patient, toc_data, part_name)
             desc_ui["b1"]:addArg("option", "Equip")
             desc_ui["b1"]:setVisible(true)
         end
-    -- Limb cut but still healing
+        -- Limb cut but still healing
     elseif IsAmputatedLimbHealed(part_data) then
         -- Limb cut and healed, no prosthesis equipped
         if part_data.is_operated then
 
-            desc_ui["b1"]:setVisible(false)     -- no operate prompt
+            desc_ui["b1"]:setVisible(false) -- no operate prompt
 
             if part_data.cicatrization_time > 1000 then
                 desc_ui["status"]:setText("Still a long way to go")
@@ -430,7 +415,7 @@ function SetupTocDescUI(surgeon, patient, toc_data, part_name)
             end
         end
 
-    
+
     elseif IsAmputatedLimbToBeVisible(part_data) then
         -- Limb cut and not visible (ex: hand after having amputated forearm)
         desc_ui["status"]:setText("Nothing here")
@@ -493,7 +478,8 @@ function SendCommandToConfirmUIMP(action, isBitten, userName, partName)
     confirm_ui_mp:open()
 
     if action == "Cut" or action == "Operate" then
-        confirm_ui_mp["text4"]:setText("You're gonna " .. action .. " the " .. getText("UI_ContextMenu_" .. partName) .. " of " .. userName)
+        confirm_ui_mp["text4"]:setText("You're gonna " ..
+            action .. " the " .. getText("UI_ContextMenu_" .. partName) .. " of " .. userName)
         confirm_ui_mp["text2"]:setText("Are you sure?")
         confirm_ui_mp["text2"]:setColor(1, 0, 0, 0)
         confirm_ui_mp["b1"]:setVisible(true);
@@ -509,6 +495,7 @@ function SendCommandToConfirmUIMP(action, isBitten, userName, partName)
 
 
 end
+
 --------------------------------------------
 -- Add TOC element to Health Panel
 local ISHealthPanel_createChildren = ISHealthPanel.createChildren
@@ -527,14 +514,14 @@ function ISNewHealthPanel.onClick_TOC(button)
             --SetupTocConfirmUI(surgeon, surgeon)
         else
             -- MP stuff, try to get the other player data and display it on the surgeon display
-            sendClientCommand(surgeon, "TOC", "GetPlayerData",  {surgeon:getOnlineID(), patient:getOnlineID()})
+            sendClientCommand(surgeon, "TOC", "GetPlayerData", { surgeon:getOnlineID(), patient:getOnlineID() })
             SetupTocMainUI(surgeon, patient, MP_other_player_toc_data)
             --SetupTocConfirmUI(surgeon, patient)
         end
     else
         -- This is when surgeon doesnt exist for some reason.
         SetupTocMainUI(patient, patient, patient:getModData().TOC)
-       -- SetupTocConfirmUI(patient, patient)
+        -- SetupTocConfirmUI(patient, patient)
     end
 
     main_ui:toggle()
@@ -542,14 +529,14 @@ function ISNewHealthPanel.onClick_TOC(button)
 
 end
 
-
 function ISHealthPanel:createChildren()
     ISHealthPanel_createChildren(self)
 
-    self.fitness:setWidth(self.fitness:getWidth()/1.5)
+    self.fitness:setWidth(self.fitness:getWidth() / 1.5)
 
     --TODO make it bigger
-    self.TOCButton = ISButton:new(self.fitness:getRight(), self.healthPanel.y, 20, 20, "", self, ISNewHealthPanel.onClick_TOC)
+    self.TOCButton = ISButton:new(self.fitness:getRight(), self.healthPanel.y, 20, 20, "", self,
+        ISNewHealthPanel.onClick_TOC)
     self.TOCButton:setImage(getTexture("media/ui/TOC/iconForMenu.png"))
     self.TOCButton.anchorTop = false
     self.TOCButton.anchorBottom = true
@@ -565,9 +552,6 @@ function ISHealthPanel:render()
     ISHealthPanel_render(self);
     self.TOCButton:setY(self.fitness:getY());
 end
-
-
-
 
 -- EVENTS
 Events.OnCreateUI.Add(OnCreateTheOnlyCureUI)

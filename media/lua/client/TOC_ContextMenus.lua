@@ -1,11 +1,6 @@
-
 function TryToToResetEverythingOtherPlayer(_, patient, surgeon)
-    sendClientCommand(surgeon, "TOC", "AskToResetEverything", {patient:getOnlineID()})
+    sendClientCommand(surgeon, "TOC", "AskToResetEverything", { patient:getOnlineID() })
 end
-
-
-
-
 
 ----------------------------------------------------------------------------------------------------------
 
@@ -17,15 +12,15 @@ TocContextMenus.CreateMenus = function(player, context, worldObjects, test)
     local clicked_player = nil
 
     local local_player = getSpecificPlayer(player)
-    --local players = getOnlinePlayers()     
+    --local players = getOnlinePlayers()
 
-    for k,v in ipairs(worldObjects) do
+    for k, v in ipairs(worldObjects) do
         -- help detecting a player by checking nearby squares
-        for x=v:getSquare():getX()-1,v:getSquare():getX()+1 do
-            for y=v:getSquare():getY()-1,v:getSquare():getY()+1 do
-                local sq = getCell():getGridSquare(x,y,v:getSquare():getZ())
+        for x = v:getSquare():getX() - 1, v:getSquare():getX() + 1 do
+            for y = v:getSquare():getY() - 1, v:getSquare():getY() + 1 do
+                local sq = getCell():getGridSquare(x, y, v:getSquare():getZ())
                 if sq then
-                    for i=0,sq:getMovingObjects():size()-1 do
+                    for i = 0, sq:getMovingObjects():size() - 1 do
                         local o = sq:getMovingObjects():get(i)
                         if instanceof(o, "IsoPlayer") then
                             clicked_player = o
@@ -34,16 +29,18 @@ TocContextMenus.CreateMenus = function(player, context, worldObjects, test)
 
                                 -- FIXME this is to prevent context menu spamming. Find a better way
                                 clicked_players_table[clicked_player:getUsername()] = true
-                                
+
                                 local root_option = context:addOption("The Only Cure on " .. clicked_player:getUsername())
                                 local root_menu = context:getNew(context)
 
                                 local cut_menu = TocContextMenus.CreateNewMenu("Cut", context, root_menu)
                                 local operate_menu = TocContextMenus.CreateNewMenu("Operate", context, root_menu)
-                                local cheat_menu = TocContextMenus.CreateCheatMenu(context, root_menu, local_player, clicked_player)
+                                local cheat_menu = TocContextMenus.CreateCheatMenu(context, root_menu, local_player,
+                                    clicked_player)
                                 context:addSubMenu(root_option, root_menu)
 
-                                TocContextMenus.FillCutAndOperateMenus(local_player, clicked_player, worldObjects, cut_menu, operate_menu)
+                                TocContextMenus.FillCutAndOperateMenus(local_player, clicked_player, worldObjects,
+                                    cut_menu, operate_menu)
                                 --TocContextMenus.FillCheatMenu(context, cheat_menu)
 
                                 break
@@ -65,7 +62,7 @@ TocContextMenus.CreateOperateWithOvenMenu = function(player, context, worldObjec
 
     -- TODO Add a way to move the player towards the oven
 
-    
+
     local part_data = player_obj:getModData().TOC.Limbs
 
     local is_main_menu_already_created = false
@@ -74,13 +71,15 @@ TocContextMenus.CreateOperateWithOvenMenu = function(player, context, worldObjec
     --local props = v:getSprite() and v:getSprite():getProperties() or nil
 
     for _, v_stove in pairs(worldObjects) do
-        if instanceof(v_stove, "IsoStove") and (player_obj:HasTrait("Brave") or player_obj:getPerkLevel(Perks.Strength) >= 6) then
+        if instanceof(v_stove, "IsoStove") and
+            (player_obj:HasTrait("Brave") or player_obj:getPerkLevel(Perks.Strength) >= 6) then
 
             -- Check temperature
             if v_stove:getCurrentTemperature() > 250 then
-                
+
                 for _, v_bodypart in ipairs(GetBodyParts()) do
-                    if part_data[v_bodypart].is_cut and part_data[v_bodypart].is_amputation_shown and not part_data[v_bodypart].is_operated  then
+                    if part_data[v_bodypart].is_cut and part_data[v_bodypart].is_amputation_shown and
+                        not part_data[v_bodypart].is_operated then
                         local subMenu = context:getNew(context);
 
                         if is_main_menu_already_created == false then
@@ -88,12 +87,13 @@ TocContextMenus.CreateOperateWithOvenMenu = function(player, context, worldObjec
                             context:addSubMenu(rootMenu, subMenu)
                             is_main_menu_already_created = true
                         end
-                        subMenu:addOption(getText('UI_ContextMenu_' .. v_bodypart), worldObjects, TocOperateLocal, getSpecificPlayer(player), getSpecificPlayer(player), v_bodypart, true)
+                        subMenu:addOption(getText('UI_ContextMenu_' .. v_bodypart), worldObjects, TocOperateLocal,
+                            getSpecificPlayer(player), getSpecificPlayer(player), v_bodypart, true)
                     end
                 end
             end
 
-            break   -- stop searching for stoves
+            break -- stop searching for stoves
 
         end
 
@@ -130,18 +130,21 @@ TocContextMenus.FillCutAndOperateMenus = function(local_player, clicked_player, 
     for _, v in ipairs(GetBodyParts()) do
 
 
-        if local_player == clicked_player then        -- Local player
+        if local_player == clicked_player then -- Local player
             if CheckIfCanBeCut(v) then
                 cut_menu:addOption(getText('UI_ContextMenu_' .. v), _, TryTocAction, v, "Cut", local_player, local_player)
 
             elseif CheckIfCanBeOperated(v) then
-                operate_menu:addOption(getText('UI_ContextMenu_' .. v), _, TryTocAction, v, "Operate", local_player, local_player)
+                operate_menu:addOption(getText('UI_ContextMenu_' .. v), _, TryTocAction, v, "Operate", local_player,
+                    local_player)
             end
-            
-        else    -- Another player
+
+        else -- Another player
             -- TODO add way to prevent cutting already cut parts of another player
-            cut_menu:addOption(getText('UI_ContextMenu_' .. v), world_objects, TryTocAction, v, "Cut", local_player, clicked_player)
-            operate_menu:addOption(getText('UI_ContextMenu_' .. v), world_objects, TryTocAction, v, "Operate", local_player, clicked_player)
+            cut_menu:addOption(getText('UI_ContextMenu_' .. v), world_objects, TryTocAction, v, "Cut", local_player,
+                clicked_player)
+            operate_menu:addOption(getText('UI_ContextMenu_' .. v), world_objects, TryTocAction, v, "Operate",
+                local_player, clicked_player)
 
         end
 
@@ -161,7 +164,8 @@ TocContextMenus.CreateCheatMenu = function(context, root_menu, local_player, cli
             cheat_menu:addOption("Reset TOC for me", _, TocResetEverything)
 
         else
-            cheat_menu:addOption("Reset TOC for " .. clicked_player:getUsername(), _, TryToToResetEverythingOtherPlayer, clicked_player, local_player)
+            cheat_menu:addOption("Reset TOC for " .. clicked_player:getUsername(), _, TryToToResetEverythingOtherPlayer,
+                clicked_player, local_player)
 
         end
 
@@ -179,5 +183,5 @@ TocContextMenus.FillCheatMenus = function(context, cheat_menu)
 end
 
 
-Events.OnFillWorldObjectContextMenu.Add(TocContextMenus.CreateOperateWithOvenMenu)       -- this is probably too much 
+Events.OnFillWorldObjectContextMenu.Add(TocContextMenus.CreateOperateWithOvenMenu) -- this is probably too much
 Events.OnFillWorldObjectContextMenu.Add(TocContextMenus.CreateMenus)

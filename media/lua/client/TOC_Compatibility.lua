@@ -10,8 +10,6 @@ function TocCheckCompatibilityWithOlderVersions(mod_data)
 
 end
 
-
-
 function TocMapOldDataToNew(mod_data)
 
     local map_names = {
@@ -24,8 +22,9 @@ function TocMapOldDataToNew(mod_data)
         Left_UpperArm = "LeftArm"
     }
 
-    local old_names_table = {"RightHand", "RightForearm", "RightArm", "LeftHand", "LeftForearm", "LeftArm"}
-    local new_names_table = {"Right_Hand", "Right_LowerArm", "Right_UpperArm", "Left_Hand", "Left_LowerArm", "Left_UpperArm"}
+    local old_names_table = { "RightHand", "RightForearm", "RightArm", "LeftHand", "LeftForearm", "LeftArm" }
+    local new_names_table = { "Right_Hand", "Right_LowerArm", "Right_UpperArm", "Left_Hand", "Left_LowerArm",
+        "Left_UpperArm" }
     print("TOC: Trying to backup old data")
     local backup_old_data = mod_data.TOC
 
@@ -42,7 +41,7 @@ function TocMapOldDataToNew(mod_data)
 
 
     TocResetEverything()
-    -- For some reasons pairs does not work here... 
+    -- For some reasons pairs does not work here...
     -- TODO ask why
 
 
@@ -74,11 +73,11 @@ function TocMapOldDataToNew(mod_data)
     --     mod_data.TOC.Limbs[new_name].is_amputation_shown = backup_old_data[old_name].is_amputation_shown
 
     --     mod_data.TOC.Limbs[new_name].cicatrization_time =  backup_old_data[old_name].cicatrization_time
-        
+
 
     -- end
 
-    for i=1, #new_names_table do
+    for i = 1, #new_names_table do
         print("TOC: Looping " .. i)
         print(backup_old_data[old_names_table[i]].is_cut)
 
@@ -99,8 +98,8 @@ function TocMapOldDataToNew(mod_data)
         mod_data.TOC.Limbs[new_name].is_cauterized = backup_old_data[old_name].is_cauterized
         mod_data.TOC.Limbs[new_name].is_amputation_shown = backup_old_data[old_name].is_amputation_shown
 
-        mod_data.TOC.Limbs[new_name].cicatrization_time =  backup_old_data[old_name].cicatrization_time
-        
+        mod_data.TOC.Limbs[new_name].cicatrization_time = backup_old_data[old_name].cicatrization_time
+
 
     end
     getPlayer():transmitModData()

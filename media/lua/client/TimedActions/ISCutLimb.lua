@@ -51,12 +51,11 @@ function ISCutLimb:start()
 
     body_damage_part:setBleeding(true)
     body_damage_part:setCut(true)
-    body_damage_part:setBleedingTime(ZombRand(10,20))
+    body_damage_part:setBleedingTime(ZombRand(10, 20))
 
 
 
 end
-
 
 function ISCutLimb:findArgs()
     local surgeon_factor = self.surgeon:getPerkLevel(Perks.Doctor)
@@ -67,10 +66,11 @@ function ISCutLimb:findArgs()
     local bandage_table = {
         use_bandage = false,
         bandage_type = nil,
-        is_bandage_sterilized = nil}
+        is_bandage_sterilized = nil
+    }
     local painkiller_table = {}
 
-    
+
     local bandage = self.surgeon:getInventory():FindAndReturn('Bandage')
     local sterilized_bandage = self.surgeon:getInventory():FindAndReturn('AlcoholBandage')
 
@@ -102,7 +102,6 @@ function ISCutLimb:findArgs()
     return surgeon_factor, bandage_table, painkiller_table
 end
 
-
 function ISCutLimb:perform()
     local surgeon_factor, bandage_table, painkiller_table = self:findArgs()
 
@@ -124,7 +123,6 @@ function ISCutLimb:perform()
     ISBaseTimedAction.perform(self);
 
 end
-
 
 function ISCutLimb:new(patient, surgeon, part_name)
     local o = {}

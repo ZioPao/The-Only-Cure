@@ -44,7 +44,7 @@ function ISOperateLimb:findArgs()
                 surgeon_factor = surgeon_factor + 6
             end
         end
-    
+
         if self.surgeon:getDescriptor():getProfession() == "surgeon" then surgeon_factor = surgeon_factor + 10 end
         if self.surgeon:getDescriptor():getProfession() == "doctor" then surgeon_factor = surgeon_factor + 5 end
         if self.surgeon:getDescriptor():getProfession() == "nurse" then surgeon_factor = surgeon_factor + 2 end
@@ -88,16 +88,16 @@ function ISOperateLimb:new(patient, surgeon, kit, part_name, use_oven)
     --o.use_oven = use_oven;
     if use_oven then
         o.maxTime = 30
-    else 
+    else
         o.maxTime = 200 - (surgeon:getPerkLevel(Perks.Doctor) * 10)
     end
     o.stopOnWalk = true
     o.stopOnRun = true
     o.ignoreHandsWounds = false
     o.fromHotbar = true
-    if o.patient:isTimedActionInstant()then
-         o.maxTime = 1
+    if o.patient:isTimedActionInstant() then
+        o.maxTime = 1
     end
-    
+
     return o
 end

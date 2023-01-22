@@ -9,13 +9,12 @@ end
 function CheckIfCanBeCut(part_name)
 
     local toc_data = getPlayer():getModData().TOC
-    local check = (not toc_data.Limbs[part_name].is_cut) and (not CheckIfProsthesisAlreadyInstalled(toc_data.Limbs, part_name))
+    local check = (not toc_data.Limbs[part_name].is_cut) and
+        (not CheckIfProsthesisAlreadyInstalled(toc_data.Limbs, part_name))
 
     return check
 
 end
-
-
 
 function CheckIfCanBeOperated(part_name)
 
@@ -42,15 +41,12 @@ function CheckIfProsthesisAlreadyInstalled(part_data, part_name)
 
     if string.find(part_name, r) then
         return (part_data[r .. "_Hand"].is_prosthesis_equipped or part_data[r .. "_LowerArm"].is_prosthesis_equipped)
-        
+
     elseif string.find(part_name, l) then
         return (part_data[l .. "_Hand"].is_prosthesis_equipped or part_data[l .. "_LowerArm"].is_prosthesis_equipped)
     end
 
 
-            
+
 
 end
-
-
-

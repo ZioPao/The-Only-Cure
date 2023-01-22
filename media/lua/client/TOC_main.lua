@@ -2,8 +2,8 @@ if not TheOnlyCure then
     TheOnlyCure = {}
 end
 
-TOC_sides = {"Left", "Right"}
-TOC_limbs = {"Hand", "LowerArm", "UpperArm"}
+TOC_sides = { "Left", "Right" }
+TOC_limbs = { "Hand", "LowerArm", "UpperArm" }
 
 
 function TheOnlyCure.InitTheOnlyCure(_, player)
@@ -13,7 +13,7 @@ function TheOnlyCure.InitTheOnlyCure(_, player)
         TocSetInitData(mod_data, player)
     else
         TocCheckCompatibilityWithOlderVersions(mod_data)
-        TocUpdateBaseData(mod_data)      -- Since it's gonna be common to update stuff
+        TocUpdateBaseData(mod_data) -- Since it's gonna be common to update stuff
     end
 
 end
@@ -22,7 +22,7 @@ function TocSetInitData(mod_data, player)
 
     print("TOC: Creating mod_data.TOC")
 
-    mod_data.TOC  = {
+    mod_data.TOC = {
 
         Limbs = {
             Right_Hand = {},
@@ -35,7 +35,7 @@ function TocSetInitData(mod_data, player)
             is_other_bodypart_infected = false
         },
         Prosthesis = {
-            WoodenHook = {               
+            WoodenHook = {
                 Right_Hand = {},
                 Right_LowerArm = {},
                 Right_UpperArm = {},
@@ -98,10 +98,10 @@ function TocSetInitData(mod_data, player)
             mod_data.TOC.Limbs[part_name].is_cicatrized = false
             mod_data.TOC.Limbs[part_name].is_cauterized = false
             mod_data.TOC.Limbs[part_name].is_amputation_shown = false
-    
+
             mod_data.TOC.Limbs[part_name].cicatrization_time = 0
-            
-            
+
+
             mod_data.TOC.Limbs[part_name].is_prosthesis_equipped = false
             mod_data.TOC.Limbs[part_name].equipped_prosthesis = {}
 
@@ -153,13 +153,13 @@ end
 
 function TocUpdateBaseData(mod_data)
 
-    local prosthesis_list = {"WoodenHook", "MetalHook", "MetalHand"}
+    local prosthesis_list = { "WoodenHook", "MetalHook", "MetalHand" }
 
 
 
-    local accepted_prosthesis_hand = {"WoodenHook", "MetalHook", "MetalHand"}
-    local accepted_prosthesis_lowerarm = {"WoodenHook", "MetalHook", "MetalHand"}
-    local accepted_prosthesis_upperarm = {}     -- For future stuff
+    local accepted_prosthesis_hand = { "WoodenHook", "MetalHook", "MetalHand" }
+    local accepted_prosthesis_lowerarm = { "WoodenHook", "MetalHook", "MetalHand" }
+    local accepted_prosthesis_upperarm = {} -- For future stuff
 
     for _, side in ipairs(TOC_sides) do
         for _, limb in ipairs(TOC_limbs) do
@@ -169,47 +169,51 @@ function TocUpdateBaseData(mod_data)
             if limb == "Hand" then
                 mod_data.TOC.Limbs[part_name].cicatrization_base_time = 1700
                 mod_data.TOC.Limbs[part_name].depends_on = {}
-        
-        
+
+
                 mod_data.TOC.Prosthesis.Accepted_Prosthesis[part_name] = accepted_prosthesis_hand
                 mod_data.TOC.Prosthesis["WoodenHook"][part_name].prosthesis_factor = 1.3
                 mod_data.TOC.Prosthesis["MetalHook"][part_name].prosthesis_factor = 1.2
                 mod_data.TOC.Prosthesis["MetalHand"][part_name].prosthesis_factor = 1.1
-        
-        
+
+
             elseif limb == "LowerArm" then
                 mod_data.TOC.Limbs[part_name].cicatrization_base_time = 1800
-                mod_data.TOC.Limbs[part_name].depends_on = {side .. "_Hand",}
+                mod_data.TOC.Limbs[part_name].depends_on = { side .. "_Hand", }
                 mod_data.TOC.Prosthesis.Accepted_Prosthesis[part_name] = accepted_prosthesis_lowerarm
-        
+
                 mod_data.TOC.Prosthesis["WoodenHook"][part_name].prosthesis_factor = 1.35
                 mod_data.TOC.Prosthesis["MetalHook"][part_name].prosthesis_factor = 1.25
                 mod_data.TOC.Prosthesis["MetalHand"][part_name].prosthesis_factor = 1.15
             elseif limb == "UpperArm" then
                 mod_data.TOC.Limbs[part_name].cicatrization_base_time = 2000
-                mod_data.TOC.Limbs[part_name].depends_on = {side .. "_Hand", side .. "_LowerArm",}
+                mod_data.TOC.Limbs[part_name].depends_on = { side .. "_Hand", side .. "_LowerArm", }
                 mod_data.TOC.Prosthesis.Accepted_Prosthesis[part_name] = accepted_prosthesis_upperarm
             end
 
         end
     end
 
-  
+
 
 
 end
 
 function TheOnlyCure.DeclareTraits()
-    local amp1 = TraitFactory.addTrait("Amputee_Hand", getText("UI_trait_Amputee_Hand"), -8, getText("UI_trait_Amputee_Hand_desc"), false, false)
+    local amp1 = TraitFactory.addTrait("Amputee_Hand", getText("UI_trait_Amputee_Hand"), -8,
+        getText("UI_trait_Amputee_Hand_desc"), false, false)
     amp1:addXPBoost(Perks.Left_Hand, 4)
 
-    local amp2 = TraitFactory.addTrait("Amputee_LowerArm", getText("UI_trait_Amputee_LowerArm"), -10, getText("UI_trait_Amputee_LowerArm_desc"), false, false)
+    local amp2 = TraitFactory.addTrait("Amputee_LowerArm", getText("UI_trait_Amputee_LowerArm"), -10,
+        getText("UI_trait_Amputee_LowerArm_desc"), false, false)
     amp2:addXPBoost(Perks.Left_Hand, 4)
 
-    local amp3 = TraitFactory.addTrait("Amputee_UpperArm", getText("UI_trait_Amputee_UpperArm"), -20, getText("UI_trait_Amputee_UpperArm_desc"), false, false)
+    local amp3 = TraitFactory.addTrait("Amputee_UpperArm", getText("UI_trait_Amputee_UpperArm"), -20,
+        getText("UI_trait_Amputee_UpperArm_desc"), false, false)
     amp3:addXPBoost(Perks.Left_Hand, 4)
 
-    TraitFactory.addTrait("Insensitive", getText("UI_trait_Insensitive"), 6, getText("UI_trait_Insensitivedesc"), false, false)
+    TraitFactory.addTrait("Insensitive", getText("UI_trait_Insensitive"), 6, getText("UI_trait_Insensitivedesc"), false,
+        false)
     TraitFactory.setMutualExclusive("Amputee_Hand", "Amputee_LowerArm")
     TraitFactory.setMutualExclusive("Amputee_Hand", "Amputee_UpperArm")
     TraitFactory.setMutualExclusive("Amputee_LowerArm", "Amputee_UpperArm")
@@ -261,7 +265,7 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
         part_data[part_name].is_cut = true
         part_data[part_name].is_amputation_shown = true
         part_data[part_name].cicatrization_time = part_data[part_name].cicatrization_base_time - surgeon_factor * 50
-        
+
         -- Heal the infection here
         local body_damage = player:getBodyDamage()
         if part_data[part_name].is_infected and body_damage:getInfectionLevel() < 20 then
@@ -327,7 +331,7 @@ function TheOnlyCure.OperateLimb(part_name, surgeon_factor, use_oven)
         for _, depended_v in pairs(part_data[part_name].depends_on) do
             part_data[depended_v].is_operated = true
             part_data[depended_v].cicatrization_time = part_data[depended_v].cicatrization_time - (surgeon_factor * 200)
-            if use_oven then part_data[depended_v].is_cauterized = true end      -- TODO does this make sense?
+            if use_oven then part_data[depended_v].is_cauterized = true end -- TODO does this make sense?
 
         end
 
@@ -343,7 +347,7 @@ function TryTocAction(_, part_name, action, surgeon, patient)
 
     -- Check if SinglePlayer
     if not isServer() and not isClient() then
-        
+
         if action == "Cut" then
             TocCutLocal(_, surgeon, surgeon, part_name)
         elseif action == "Operate" then
@@ -376,11 +380,12 @@ function TryTocAction(_, part_name, action, surgeon, patient)
             AskCanOperateLimb(patient, part_name)
         elseif action == "Equip" then
             local surgeon_inventory = surgeon:getInventory()
-            local prosthesis_to_equip = surgeon_inventory:getItemFromType('TOC.MetalHand') or 
-                        surgeon_inventory:getItemFromType('TOC.MetalHook') or 
-                        surgeon_inventory:getItemFromType('TOC.WoodenHook')
+            local prosthesis_to_equip = surgeon_inventory:getItemFromType('TOC.MetalHand') or
+                surgeon_inventory:getItemFromType('TOC.MetalHook') or
+                surgeon_inventory:getItemFromType('TOC.WoodenHook')
             if prosthesis_to_equip then
-                ISTimedActionQueue.add(ISInstallProsthesis:new(patient, prosthesis_to_equip, patient:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(part_name))))
+                ISTimedActionQueue.add(ISInstallProsthesis:new(patient, prosthesis_to_equip,
+                    patient:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(part_name))))
             else
                 surgeon:Say("I need a prosthesis")
             end
@@ -392,7 +397,8 @@ function TryTocAction(_, part_name, action, surgeon, patient)
         elseif action == "Unequip" then
             --AskCanUnequipProsthesis(patient, part_name)
             local equipped_prosthesis = TocFindItemInProstBodyLocation(part_name, patient)
-            ISTimedActionQueue.add(ISUninstallProsthesis:new(patient, equipped_prosthesis, patient:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(part_name))))
+            ISTimedActionQueue.add(ISUninstallProsthesis:new(patient, equipped_prosthesis,
+                patient:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(part_name))))
         end
         ui.actionAct = action
         ui.partNameAct = part_name
@@ -404,7 +410,6 @@ function TryTocAction(_, part_name, action, surgeon, patient)
         end
     end
 end
-
 
 Events.OnCreatePlayer.Add(TheOnlyCure.InitTheOnlyCure)
 Events.OnGameBoot.Add(TheOnlyCure.DeclareTraits)

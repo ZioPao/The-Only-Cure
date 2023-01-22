@@ -46,7 +46,7 @@ function ISUninstallProsthesis:perform()
     local accepting_body_parts = GetAcceptingProsthesisBodyPartTypes()
 
     if accepting_body_parts == nil then
-        return      -- should never happen
+        return -- should never happen
     end
 
     for _, v in ipairs(GetAcceptingProsthesisBodyPartTypes()) do
@@ -54,7 +54,7 @@ function ISUninstallProsthesis:perform()
             local part_name = TocGetPartNameFromBodyPartType(v)
 
             print("Found prost in " .. part_name)
-            if part_name then 
+            if part_name then
                 toc_data.Limbs[part_name].is_prosthesis_equipped = false
                 local item_full_type = self.item:getFullType()
                 print("Searching for " .. item_full_type)
@@ -67,10 +67,10 @@ function ISUninstallProsthesis:perform()
                         self.character:setWornItem(self.item:getBodyLocation(), nil)
                         self.character:getInventory():Remove(self.item)
                         self.character:transmitModData()
-                    
+
                         -- needed to remove from queue / start next.
                         ISBaseTimedAction.perform(self)
-                        
+
                     end
                 end
 
@@ -104,5 +104,3 @@ function ISUninstallProsthesis:new(character, item, bodyPart)
     if o.character:isTimedActionInstant() then o.maxTime = 1; end
     return o;
 end
-
-

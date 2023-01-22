@@ -11,67 +11,65 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
     -- TODO Make the malus for time a little less awful and add some other malus, like fitness and stuff
 
     print("TOC: Input max time " .. tostring(maxTime))
-    local original_max_time = og_ISEquipTimedActionAdjustMaxTime(self, maxTime)      
-    
+    local original_max_time = og_ISEquipTimedActionAdjustMaxTime(self, maxTime)
+
     print("TOC: Return original max time: " .. tostring(original_max_time))
 
     if original_max_time ~= -1 then
-        
-
-    local modified_max_time = original_max_time
-
-    local part_data = getPlayer():getModData().TOC.Limbs
-    local burn_factor = 1.3
 
 
+        local modified_max_time = original_max_time
 
-    -- if it's -1, it should be instant.
-
-
-    -- To make it faster, let's have everything already written in another func
-    local all_body_parts = GetBodyParts()
+        local part_data = getPlayer():getModData().TOC.Limbs
+        local burn_factor = 1.3
 
 
-    -- TODO this gets awfully slow really quick, doesn't even make much sense. 
-    for _, part_name in ipairs(all_body_parts) do
 
-        if part_data[part_name].is_cut then
-            
-            if part_data[part_name].is_prosthesis_equipped then
-                modified_max_time = modified_max_time * part_data[part_name].equipped_prosthesis.prosthesis_factor
+        -- if it's -1, it should be instant.
 
 
-            else
-                modified_max_time = modified_max_time * 1.5          -- TODO make this lower
+        -- To make it faster, let's have everything already written in another func
+        local all_body_parts = GetBodyParts()
+
+
+        -- TODO this gets awfully slow really quick, doesn't even make much sense.
+        for _, part_name in ipairs(all_body_parts) do
+
+            if part_data[part_name].is_cut then
+
+                if part_data[part_name].is_prosthesis_equipped then
+                    modified_max_time = modified_max_time * part_data[part_name].equipped_prosthesis.prosthesis_factor
+
+
+                else
+                    modified_max_time = modified_max_time * 1.5 -- TODO make this lower
+                end
+                if part_data[part_name].is_cauterized then
+                    modified_max_time = modified_max_time * burn_factor
+                end
+
+
+                -- Perk scaling
+                if part_name == "Right_Hand" or part_name == "Left_Hand" then
+                    modified_max_time = modified_max_time *
+                        (1 + (9 - self.character:getPerkLevel(Perks[part_name])) / 20)
+                end
+
             end
-            if part_data[part_name].is_cauterized then
-                modified_max_time = modified_max_time * burn_factor
-            end
-
-
-            -- Perk scaling
-            if part_name == "Right_Hand" or part_name == "Left_Hand" then
-                modified_max_time = modified_max_time * (1 + (9 - self.character:getPerkLevel(Perks[part_name])) / 20 )
-            end
-
         end
-    end
 
-    if modified_max_time > 10 * original_max_time then modified_max_time = 10 * original_max_time end
+        if modified_max_time > 10 * original_max_time then modified_max_time = 10 * original_max_time end
 
 
-    print("TOC: Modified Max Time " .. modified_max_time)
+        print("TOC: Modified Max Time " .. modified_max_time)
 
-    return modified_max_time
+        return modified_max_time
     else
         return original_max_time
     end
 
 
 end
-
-
-
 
 -------------------------------------------------
 -- Block access to drag, picking, inspecting, etc to amputated limbs
@@ -81,11 +79,11 @@ function ISInventoryPane:onMouseDoubleClick(x, y)
     local item_to_check = self.items[self.mouseOverOption]
     local player_inventory = getPlayerInventory(self.player).inventory
     if instanceof(item_to_check, "InventoryItem") then
-        og_ISInventoryPaneOnMouseDoubleClick(self, x,y)
-    elseif CheckIfItemIsAmputatedLimb(item_to_check.items[1]) or CheckIfItemIsProsthesis(item_to_check.items[1])  then
+        og_ISInventoryPaneOnMouseDoubleClick(self, x, y)
+    elseif CheckIfItemIsAmputatedLimb(item_to_check.items[1]) or CheckIfItemIsProsthesis(item_to_check.items[1]) then
         print("TOC: Can't double click this item")
     else
-        og_ISInventoryPaneOnMouseDoubleClick(self, x,y)
+        og_ISInventoryPaneOnMouseDoubleClick(self, x, y)
 
     end
 
@@ -93,17 +91,16 @@ function ISInventoryPane:onMouseDoubleClick(x, y)
 
 end
 
-
 local og_ISInventoryPaneGetActualItems = ISInventoryPane.getActualItems
 function ISInventoryPane.getActualItems(items)
 
     -- TODO add an exception for installed prosthesis, make them unequippable automatically from here and get the correct obj
-    
+
     local ret = og_ISInventoryPaneGetActualItems(items)
 
     -- This is gonna be slower than just overriding the function but hey it's more compatible
 
-    for i=1, #ret do
+    for i = 1, #ret do
         local item_full_type = ret[i]:getFullType()
         if string.find(item_full_type, "Amputation_") or string.find(item_full_type, "Prost_") then
             table.remove(ret, i)
@@ -112,17 +109,16 @@ function ISInventoryPane.getActualItems(items)
     return ret
 end
 
-
-local og_ISInventoryPaneContextMenuOnInspectClothing  = ISInventoryPaneContextMenu.onInspectClothing 
-ISInventoryPaneContextMenu.onInspectClothing = function(playerObj, clothing)
+local og_ISInventoryPaneContextMenuOnInspectClothing = ISInventoryPaneContextMenu.onInspectClothing
+ISInventoryPaneContextMenu.onInspectClothing         = function(playerObj, clothing)
 
     -- Inspect menu bypasses getActualItems, so we need to add that workaround here too
     local clothing_full_type = clothing:getFullType()
     if not string.find(clothing_full_type, "Amputation_") then
-        
+
         og_ISInventoryPaneContextMenuOnInspectClothing(playerObj, clothing)
     end
-    
+
 end
 
 
@@ -134,7 +130,7 @@ function ISEquipWeaponAction:perform()
     local part_data = self.character:getModData().TOC.Limbs
     local can_be_held = {}
 
-    for _, side in ipairs (TOC_sides) do
+    for _, side in ipairs(TOC_sides) do
         can_be_held[side] = true
 
         if part_data[side .. "_Hand"].is_cut then
@@ -160,8 +156,8 @@ function ISEquipWeaponAction:perform()
         end
     else
         if (can_be_held["Right"] and not can_be_held["Left"]) or
-                (not can_be_held["Right"] and can_be_held["Left"]) or
-                (not can_be_held["Left"] and not can_be_held["Right"]) then
+            (not can_be_held["Right"] and can_be_held["Left"]) or
+            (not can_be_held["Left"] and not can_be_held["Right"]) then
             self.character:dropHandItems()
 
         end
@@ -170,7 +166,6 @@ function ISEquipWeaponAction:perform()
 
 
 end
-
 
 local og_ISInventoryPaneContextMenuUnequipItem = ISInventoryPaneContextMenu.unequipItem
 function ISInventoryPaneContextMenu.unequipItem(item, player)
@@ -191,4 +186,3 @@ function ISInventoryPaneContextMenu.dropItem(item, player)
     end
 
 end
-
