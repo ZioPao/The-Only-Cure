@@ -423,6 +423,8 @@ function TryTocAction(_, part_name, action, surgeon, patient)
             patient = surgeon
         end
 
+
+
         if action == "Cut" then
             AskCanCutLimb(patient, part_name)
         elseif action == "Operate" then

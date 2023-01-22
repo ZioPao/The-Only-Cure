@@ -6,19 +6,25 @@ end
 
 -----------------------------------------
 -- MP HANDLING CHECKS
-function CheckIfCanBeCut(part_name)
+function CheckIfCanBeCut(part_name, part_data)
 
-    local toc_data = getPlayer():getModData().TOC
-    local check = (not toc_data.Limbs[part_name].is_cut) and
-        (not CheckIfProsthesisAlreadyInstalled(toc_data.Limbs, part_name))
+    if part_data == nil then
+        part_data = getPlayer():getModData().TOC.Limbs
+  
+    end
+    local check = (not part_data[part_name].is_cut) and
+        (not CheckIfProsthesisAlreadyInstalled(part_data, part_name))
 
     return check
 
 end
 
-function CheckIfCanBeOperated(part_name)
+function CheckIfCanBeOperated(part_name, part_data)
 
-    local part_data = getPlayer():getModData().TOC.Limbs
+    if part_data == nil then
+        part_data = getPlayer():getModData().TOC.Limbs
+    end
+
 
     return part_data[part_name].is_operated == false and part_data[part_name].is_amputation_shown
 

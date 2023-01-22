@@ -40,15 +40,40 @@ Commands["AskToResetEverything"] = function(_, arg)
 
 end
 
-local function OnTocClientCommand(module, command, player, args)
-    if module == 'TOC' then
-        print("OnTocClientCommand " .. command)
-        if Commands[command] then
-            args = args or {}
-            Commands[command](_, args)
-        end
-    end
+-- local function OnTocClientCommand(module, command, player, args)
+--     if module == 'TOC' then
+--         print("OnTocClientCommand " .. command)
+--         if Commands[command] then
+--             args = args or {}
+--             Commands[command](_, args)
+--         end
+--     end
 
+-- end
+
+--Events.OnClientCommand.Add(OnTocClientCommand)
+
+-------------------------------- TEST ------------------------
+
+TOC_Commands = {}
+
+function TOC_OnInitGlobalModData()
+    ModData.getOrCreate("TOC_PLAYER_DATA")
 end
 
-Events.OnClientCommand.Add(OnTocClientCommand)
+Events.OnInitGlobalModData.Add(TOC_OnInitGlobalModData)
+
+TOC_Commands.OnClientCommand = function(module, command, playerObj, args)
+    if module == 'TOC' and TOC_Commands[command] then
+        TOC_Commands[command](playerObj, args)
+    end
+end
+
+
+Events.OnClientCommand.Add(TOC_Commands.OnClientCommand)
+
+
+TOC_Commands.ChangePlayerState = function(playerObj, args)
+    ModData.get("TOC_PLAYER_DATA")[playerObj:getUsername()] = args
+    ModData.transmit("TOC_PLAYER_DATA")
+end

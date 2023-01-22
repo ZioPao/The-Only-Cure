@@ -26,7 +26,6 @@ function TheOnlyCure.CheckIfPlayerIsInfected(player, toc_data)
         if body_damage:getBodyPart(v):bitten() and part_data ~= nil then
             if part_data.is_cut == false then
                 part_data.is_infected = true
-                player:transmitModData()
             end
 
         end
@@ -35,7 +34,6 @@ function TheOnlyCure.CheckIfPlayerIsInfected(player, toc_data)
     for _, v in ipairs(GetOtherBodyPartTypes()) do
         if body_damage:getBodyPart(v):bitten() then
             toc_data.Limbs.is_other_bodypart_infected = true -- Even one is enough, stop cycling if we find it
-            player:transmitModData()
             break
         end
     end
@@ -55,7 +53,6 @@ function TheOnlyCure.UpdatePlayerHealth(player, part_data)
         end
     end
 
-    player:transmitModData()
 
 
 end
@@ -159,6 +156,16 @@ function TheOnlyCure.UpdateEveryOneMinute()
         TheOnlyCure.UpdatePlayerHealth(player, toc_data.Limbs)
     end
 
+
+
+    if toc_data ~= nil then
+        sendClientCommand(player, 'TOC', 'ChangePlayerState', { toc_data.Limbs } )
+    end
+
+
+
+
+
 end
 
 function TheOnlyCure.UpdateEveryTenMinutes()
@@ -183,12 +190,9 @@ function TheOnlyCure.UpdateEveryTenMinutes()
     for _, part_name in pairs(GetBodyParts()) do
         if part_data[part_name].is_cut and not part_data[part_name].is_cicatrized then
             part_data[part_name].cicatrization_time = part_data[part_name].cicatrization_time - 1 -- TODO Make it more "dynamic"
-
-
         end
     end
 
-    player:transmitModData()
 end
 
 Events.EveryTenMinutes.Add(TheOnlyCure.UpdateEveryTenMinutes)
