@@ -402,11 +402,11 @@ function TryTocAction(_, part_name, action, surgeon, patient)
     if not isServer() and not isClient() then
 
         if action == "Cut" then
-            TocCutLocal(_, surgeon, surgeon, part_name)
+            TocCutLocal(_, surgeon, part_name)
         elseif action == "Operate" then
-            TocOperateLocal(_, surgeon, surgeon, part_name, false)
+            TocOperateLocal(_, surgeon, part_name, false)
         elseif action == "Equip" then
-            TocEquipProsthesisLocal(_, surgeon, surgeon, part_name)
+            TocEquipProsthesisLocal(_, surgeon, part_name)
         elseif action == "Unequip" then
             TocUnequipProsthesisLocal(_, surgeon, part_name)
         end
