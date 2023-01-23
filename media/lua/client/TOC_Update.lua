@@ -125,14 +125,14 @@ function TheOnlyCure.SetHealthStatusForBodyPart(part_data, part_name, player)
 end
 
 --Helper function for UpdatePlayerHealth
-function TheOnlyCure.CheckIfOtherLimbsAreInfected(part_data, part_name)
+function TheOnlyCure.CheckIfOtherLimbsAreInfected(limbs_data, part_name)
 
 
     local body_parts = GetBodyParts()
     body_parts[part_name] = nil
 
     for _, v in pairs(body_parts) do
-        if part_data[v].is_infected then
+        if limbs_data[v].is_infected then
             return true
         end
     end
