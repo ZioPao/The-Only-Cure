@@ -102,7 +102,4 @@ function TocMapOldDataToNew(mod_data)
 
 
     end
-    getPlayer():transmitModData()
-
-
 end

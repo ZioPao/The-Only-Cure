@@ -17,7 +17,4 @@ function TocResetEverything()
         cloth = nil -- reset it
 
     end
-
-    player:transmitModData()
-
 end

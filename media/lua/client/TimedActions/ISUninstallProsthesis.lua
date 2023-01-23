@@ -57,7 +57,6 @@ function ISUninstallProsthesis:perform()
     else
         TheOnlyCure.UnequipProsthesis(self.part_name, self.item)
     end
-    self.character:transmitModData()
 
 
     ISBaseTimedAction.perform(self)

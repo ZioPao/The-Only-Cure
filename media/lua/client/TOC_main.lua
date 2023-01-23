@@ -286,10 +286,9 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
         for _, depended_v in pairs(limbs_data[part_name].depends_on) do
             limbs_data[depended_v].is_cut = true
             limbs_data[depended_v].is_amputation_shown = false
-            limbs_data[depended_v].cicatrization_time = limbs_data[part_name].cicatrization_base_time - surgeon_factor * 50
+            limbs_data[depended_v].cicatrization_time = limbs_data[part_name].cicatrization_base_time -
+                surgeon_factor * 50
         end
-
-
 
         -- Check for older amputation models and deletes them from player's inventory
         local side = string.match(part_name, '(%w+)_')
@@ -327,7 +326,8 @@ function TheOnlyCure.OperateLimb(part_name, surgeon_factor, use_oven)
         if use_oven then limbs_data[part_name].is_cauterized = true end
         for _, depended_v in pairs(limbs_data[part_name].depends_on) do
             limbs_data[depended_v].is_operated = true
-            limbs_data[depended_v].cicatrization_time = limbs_data[depended_v].cicatrization_time - (surgeon_factor * 200)
+            limbs_data[depended_v].cicatrization_time = limbs_data[depended_v].cicatrization_time -
+                (surgeon_factor * 200)
             if use_oven then limbs_data[depended_v].is_cauterized = true end -- TODO does this make sense?
 
         end
@@ -335,7 +335,6 @@ function TheOnlyCure.OperateLimb(part_name, surgeon_factor, use_oven)
     end
 
     SetBodyPartsStatusAfterOperation(player, limbs_data, part_name, use_oven)
-    player:transmitModData()
 end
 
 function TheOnlyCure.EquipProsthesis(part_name, prosthesis_base_name)
@@ -379,11 +378,8 @@ function TheOnlyCure.UnequipProsthesis(part_name, equipped_prosthesis)
         local prosthesis_name = string.match(equipped_prosthesis_full_type, prost_v)
         if prosthesis_name then
             player:getInventory():AddItem("TOC." .. prosthesis_name)
-
             player:setWornItem(equipped_prosthesis:getBodyLocation(), nil)
             player:getInventory():Remove(equipped_prosthesis)
-            player:transmitModData()
-
         end
 
     end
@@ -408,18 +404,15 @@ function TryTocAction(_, part_name, action, surgeon, patient)
             TocUnequipProsthesisLocal(_, surgeon, part_name)
         end
     else
-
         local ui = GetConfirmUIMP()
         if not ui then
             CreateTocConfirmUIMP()
             ui = GetConfirmUIMP()
         end
 
-
         if patient == nil then
             patient = surgeon
         end
-
 
 
         if action == "Cut" then
@@ -431,10 +424,10 @@ function TryTocAction(_, part_name, action, surgeon, patient)
         elseif action == "Unequip" then
             AskCanUnequipProsthesis(patient, part_name)
         end
+
         ui.actionAct = action
         ui.partNameAct = part_name
         ui.patient = patient
-
 
         SendCommandToConfirmUIMP("Wait server")
 

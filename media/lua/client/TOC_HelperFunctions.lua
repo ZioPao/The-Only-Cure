@@ -1,5 +1,4 @@
 -- CutLimb
--- TODO if TheONlyCure. triggers an errors
 function TocCheckIfStillInfected(limbs_data)
     if limbs_data == nil then
         return

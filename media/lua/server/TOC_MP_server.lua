@@ -1,5 +1,5 @@
 --- A rly big thx to Fenris_Wolf and Chuck to help me with that. Love you guy
---if isClient() then return end
+
 
 ---Server side
 local TOC_Commands = {}
@@ -40,22 +40,7 @@ TOC_Commands["AskToResetEverything"] = function(_, arg)
 
 end
 
--- local function OnTocClientCommand(module, command, player, args)
---     if module == 'TOC' then
---         print("OnTocClientCommand " .. command)
---         if Commands[command] then
---             args = args or {}
---             Commands[command](_, args)
---         end
---     end
-
--- end
-
---Events.OnClientCommand.Add(OnTocClientCommand)
-
--------------------------------- TEST ------------------------
-
-
+------ Global Mod Data -----------
 
 function TOC_OnInitGlobalModData()
     ModData.getOrCreate("TOC_PLAYER_DATA")
