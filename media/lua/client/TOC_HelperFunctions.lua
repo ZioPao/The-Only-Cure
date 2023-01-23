@@ -89,6 +89,19 @@ function TocGetSawInInventory(surgeon)
     return item
 end
 
+
+
+function TocDamagePlayerDuringAmputation(patient, part_name)
+    local body_part_type = TocGetBodyPartTypeFromPartName(part_name)
+    local body_damage = patient:getBodyDamage()
+    local body_damage_part = body_damage:getBodyPart(body_part_type)
+
+
+    body_damage_part:setBleeding(true)
+    body_damage_part:setCut(true)
+    body_damage_part:setBleedingTime(ZombRand(10, 20))
+end
+
 -- OperateLimb
 function SetBodyPartsStatusAfterOperation(player, limbs_data, part_name, use_oven)
     --for _, v in ipairs(GetBodyParts()) do

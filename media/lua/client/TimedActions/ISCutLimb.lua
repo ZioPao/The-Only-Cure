@@ -41,17 +41,13 @@ function ISCutLimb:start()
 
     end
 
+    if self.patient == self.surgeon then
+        TocDamagePlayerDuringAmputation(self.patient, self.part_name)
+    else
+        sendClientCommand(self.surgeon, "TOC", "AskDamageOtherPlayer", {self.patient:getOnlineID(), self.part_name})
+    end
 
 
-    -- TODO this doesn't work when doing it on another player
-    local body_part_type = TocGetBodyPartTypeFromPartName(self.part_name)
-    local body_damage = self.patient:getBodyDamage()
-    local body_damage_part = body_damage:getBodyPart(body_part_type)
-
-
-    body_damage_part:setBleeding(true)
-    body_damage_part:setCut(true)
-    body_damage_part:setBleedingTime(ZombRand(10, 20))
 
 
 

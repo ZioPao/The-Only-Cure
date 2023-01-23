@@ -161,6 +161,7 @@ function TheOnlyCure.UpdateEveryOneMinute()
     -- Updates toc data in a global way, basically player:transmitModData but it works
     -- Sends only Limbs since the other stuff is mostly static
     if toc_data ~= nil then
+        -- TODO make it so that we dont send it constantly
         sendClientCommand(player, 'TOC', 'ChangePlayerState', { toc_data.Limbs } )
     end
 

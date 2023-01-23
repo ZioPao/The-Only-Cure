@@ -43,6 +43,7 @@
         "ISDropItemAction",
         "BloodBodyPartType",
         "ISInventoryPane",
-        "ModData"
+        "ModData",
+        "isDebugEnabled"
     ]
 }

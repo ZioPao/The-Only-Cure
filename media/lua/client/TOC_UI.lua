@@ -138,7 +138,7 @@ local function OnClickTocMainUI(button, args)
 
     desc_ui:open()
     desc_ui:setPositionPixel(main_ui:getRight(), main_ui:getY())
-    SetupTocDescUI(main_ui.surgeon, main_ui.patient, args.limbs_data, args.part_name) -- surgeon is generic.
+    SetupTocDescUI(main_ui.surgeon, main_ui.patient, main_ui.limbs_data, args.part_name) -- surgeon is generic.
 
 end
 
@@ -360,12 +360,8 @@ function SetupTocMainUI(surgeon, patient, limbs_data)
     main_ui.patient = patient
 
     if limbs_data then
-        main_ui["b11"]:addArg("limbs_data", limbs_data)
-        main_ui["b12"]:addArg("limbs_data", limbs_data)
-        main_ui["b21"]:addArg("limbs_data", limbs_data)
-        main_ui["b22"]:addArg("limbs_data", limbs_data)
-        main_ui["b31"]:addArg("limbs_data", limbs_data)
-        main_ui["b32"]:addArg("limbs_data", limbs_data)
+        
+        main_ui.limbs_data = limbs_data
 
         main_ui["b11"]:setPath(GetImageName("Right_UpperArm", limbs_data))
         main_ui["b12"]:setPath(GetImageName("Left_UpperArm", limbs_data))
@@ -534,45 +530,28 @@ local ISHealthPanel_render = ISHealthPanel.render
 -- Add button to health panel
 
 
-TocTempTable = {
-    TempPatient = nil,
-    TempSurgeon = nil
-}
-
-
-
 
 function ISNewHealthPanel.onClick_TOC(button)
 
     local surgeon = button.otherPlayer
     local patient = button.character
 
+    TocTempTable.patient = patient
+    TocTempTable.surgeon = surgeon
+
+    -- MP Handling
     if surgeon then
+
+
         if surgeon == patient then
-            SetupTocMainUI(surgeon, surgeon, surgeon:getModData().TOC.Limbs)
+            Events.OnTick.Add(TocRefreshPlayerMenu)
+
         else
-            -- MP stuff, try to get the other player data and display it on the surgeon display
-            print("TOC: Checking part_data for " .. patient:getUsername())
-            if ModData.get("TOC_PLAYER_DATA")[patient:getUsername()] ~= nil then
-                local other_player_part_data = ModData.get("TOC_PLAYER_DATA")[patient:getUsername()]
-
-                SetupTocMainUI(surgeon, patient, other_player_part_data[1])
-
-            end
-
-
-            
-            --sendClientCommand(surgeon, "TOC", "GetPlayerData", { surgeon:getOnlineID(), patient:getOnlineID() })
-
-            --TocTempTable.TempPatient = patient
-            --TocTempTable.TempSurgeon = surgeon
-
-            -- Wait for ack
-            --Events.OnTick.Add(TocWaitForOnlinePlayerData)
+            Events.OnTick.Add(TocRefreshOtherPlayerMenu)            -- MP stuff, try to get the other player data and display it on the surgeon display
         end
     else
-        -- This is when surgeon doesnt exist for some reason.
-        SetupTocMainUI(patient, patient, patient:getModData().TOC.Limbs)
+        -- SP Handling
+        Events.OnTick.Add(TocRefreshPlayerMenu)
     end
 
     main_ui:toggle()
@@ -580,28 +559,54 @@ function ISNewHealthPanel.onClick_TOC(button)
 
 end
 
-function TocWaitForOnlinePlayerData(numberTicks)
-    if MP_other_player_toc_data ~= nil then
-        SetupTocMainUI(TocTempTable.TempSurgeon, TocTempTable.TempPatient, MP_other_player_toc_data)
 
 
-        TocTempTable.TempSurgeon = nil
-        TocTempTable.TempPatient = nil
-        MP_other_player_toc_data = nil
-        Events.OnTick.Remove(TocWaitForOnlinePlayerData)
 
+TocTempTable = {patient = nil, surgeon = nil}
 
+function TocRefreshPlayerMenu(_)
+    if main_ui:getIsVisible() == false then
+        Events.OnTick.Remove(TocRefreshPlayerMenu)
+        TocTempTable.patient = nil
+        TocTempTable.surgeon = nil
+
+    else
+
+        local limbs_data = TocTempTable.patient:getModData().TOC.Limbs
+        SetupTocMainUI(TocTempTable.patient, TocTempTable.patient, limbs_data)
     end
 
-
 end
+
+
+function TocRefreshOtherPlayerMenu(_)
+
+    if main_ui:getIsVisible() == false then
+
+        Events.OnTick.Remove(TocRefreshOtherPlayerMenu)
+        TocTempTable.patient = nil
+        TocTempTable.surgeon = nil
+
+        else
+        if ModData.get("TOC_PLAYER_DATA")[TocTempTable.patient:getUsername()] ~= nil then
+            local other_player_part_data = ModData.get("TOC_PLAYER_DATA")[TocTempTable.patient:getUsername()]
+
+            SetupTocMainUI(TocTempTable.surgeon, TocTempTable.patient, other_player_part_data[1])
+
+
+        end
+    end
+end
+
+
+
 
 function ISHealthPanel:createChildren()
     ISHealthPanel_createChildren(self)
 
-    --self.fitness:setWidth(self.fitness:getWidth() / 1.5)
+    self.fitness:setWidth(self.fitness:getWidth() / 1.2)
 
-    self.TOCButton = ISButton:new(self.fitness:getRight() + 25, self.healthPanel.y, 70, 20, "The Only Cure", self,
+    self.TOCButton = ISButton:new(self.fitness:getRight() + 10, self.healthPanel.y, 70, 20, "The Only Cure", self,
         ISNewHealthPanel.onClick_TOC)
     --self.TOCButton:setImage(getTexture("media/ui/TOC/iconForMenu.png"))
     self.TOCButton.anchorTop = false

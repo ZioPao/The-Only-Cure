@@ -5,28 +5,26 @@
 local TOC_Commands = {}
 
 
---TODO how does this work
 TOC_Commands["SendServer"] = function(player, arg)
     local otherPlayer = getPlayerByOnlineID(arg["To"])
-    print("The Only Cure Command: ", arg['command'])
     sendServerCommand(otherPlayer, "TOC", arg["command"], arg)
 end
 
 
--- To make the UI Work
-TOC_Commands["GetPlayerData"] = function(_, arg)
-    local surgeon_id = arg[1]
-    local patient_id = arg[2]
-    local patient = getPlayerByOnlineID(arg[2])
-    sendServerCommand(patient, "TOC", "GivePlayerData", { surgeon_id, patient_id })
+
+-- Cut Limb stuff
+TOC_Commands["AskDamageOtherPlayer"] = function(_, arg)
+
+    local patient = getPlayerByOnlineID(arg[1])
+    local patient_id = arg[1]
+    local part_name = arg[2]
+
+    sendServerCommand(patient, "TOC", "AcceptDamageOtherPlayer", {patient_id, part_name})
+
 end
 
-TOC_Commands["SendPlayerData"] = function(_, arg)
-    local surgeon = getPlayerByOnlineID(arg[1])
-    local surgeon_id = arg[1]
-    local toc_data = arg[2]
-    sendServerCommand(surgeon, "TOC", "SendTocData", { surgeon_id, toc_data })
-end
+
+
 
 
 
@@ -40,6 +38,9 @@ TOC_Commands["AskToResetEverything"] = function(_, arg)
 
 end
 
+
+
+
 ------ Global Mod Data -----------
 
 function TOC_OnInitGlobalModData()
@@ -49,6 +50,7 @@ end
 Events.OnInitGlobalModData.Add(TOC_OnInitGlobalModData)
 
 TOC_Commands.OnClientCommand = function(module, command, playerObj, args)
+
     if module == 'TOC' and TOC_Commands[command] then
         TOC_Commands[command](playerObj, args)
     end

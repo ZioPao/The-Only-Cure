@@ -193,32 +193,24 @@ Commands["AcceptResetEverything"] = function(arg)
 end
 
 
--- Base stuff
-Commands["GivePlayerData"] = function(arg)
-    local surgeon_id = arg[1]
-    local patient = getPlayerByOnlineID(arg[2])
-    local toc_data = patient:getModData().TOC
-    sendClientCommand(patient, "TOC", "SendPlayerData", { surgeon_id, toc_data })
-end
 
-Commands["SendTocData"] = function(arg)
-    print("Sending TOC data")
+
+-- Cut Limb stuff
+Commands["AcceptDamageOtherPlayer"] = function(arg)
+
+    local patient_id = arg[1]
     local patient = getPlayerByOnlineID(arg[1])
-
-    MP_other_player_toc_data = arg[2]
-
+    local part_name = arg[2]
+    TocDamagePlayerDuringAmputation(patient, part_name)
 end
 
 
 
 
-
-
-
-
+-- Base stuff
 local function OnTocServerCommand(module, command, args)
     if module == 'TOC' then
-        print("OnTocServerCommand " .. command)
+        print("TOC: On Toc Server Command " .. command)
         if Commands[command] then
             print("Found command, executing it now")
             args = args or {}
