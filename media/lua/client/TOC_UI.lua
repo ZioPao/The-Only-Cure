@@ -599,12 +599,11 @@ end
 function ISHealthPanel:createChildren()
     ISHealthPanel_createChildren(self)
 
-    self.fitness:setWidth(self.fitness:getWidth() / 1.5)
+    --self.fitness:setWidth(self.fitness:getWidth() / 1.5)
 
-    --TODO make it bigger
-    self.TOCButton = ISButton:new(self.fitness:getRight(), self.healthPanel.y, 20, 20, "", self,
+    self.TOCButton = ISButton:new(self.fitness:getRight() + 25, self.healthPanel.y, 70, 20, "The Only Cure", self,
         ISNewHealthPanel.onClick_TOC)
-    self.TOCButton:setImage(getTexture("media/ui/TOC/iconForMenu.png"))
+    --self.TOCButton:setImage(getTexture("media/ui/TOC/iconForMenu.png"))
     self.TOCButton.anchorTop = false
     self.TOCButton.anchorBottom = true
     self.TOCButton:initialise()
