@@ -58,7 +58,6 @@ function ISInstallProsthesis:perform()
         TheOnlyCure.EquipProsthesis(self.part_name, prosthesis_base_name)
 
     end
-    self.character:transmitModData()
 
     -- needed to remove from queue / start next.
     ISBaseTimedAction.perform(self)

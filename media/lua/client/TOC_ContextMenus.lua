@@ -101,14 +101,6 @@ TocContextMenus.CreateOperateWithOvenMenu = function(player, context, worldObjec
 end
 
 
-TocContextMenus.DoCut = function(_, patient, surgeon, part_name)
-
-    if TocGetSawInInventory(surgeon) then
-        ISTimedActionQueue.add(ISCutLimb:new(patient, surgeon, part_name));
-    else
-        surgeon:Say("I don't have a saw on me")
-    end
-end
 
 
 
@@ -123,40 +115,39 @@ end
 
 
 
-TocContextMenus.FillCutAndOperateMenus = function(local_player, clicked_player, world_objects, cut_menu, operate_menu)
-
-    local local_part_data = local_player:getModData().TOC.Limbs
-
+TocContextMenus.FillCutAndOperateMenus = function(local_player, clicked_player, world_objects, cut_menu, operate_menu)    
     for _, v in ipairs(GetBodyParts()) do
-
-
         if local_player == clicked_player then -- Local player
-            if CheckIfCanBeCut(v) then
+            if CheckIfCanBeCut(v) and TocGetSawInInventory(local_player) ~= nil then
+                
                 cut_menu:addOption(getText('UI_ContextMenu_' .. v), _, TryTocAction, v, "Cut", local_player, local_player)
 
-            elseif CheckIfCanBeOperated(v) then
+            elseif CheckIfCanBeOperated(v) and TocGetKitInInventory(local_player) ~= nil then
                 operate_menu:addOption(getText('UI_ContextMenu_' .. v), _, TryTocAction, v, "Operate", local_player,
                     local_player)
             end
 
         else -- Another player
             -- TODO add way to prevent cutting already cut parts of another player
-            cut_menu:addOption(getText('UI_ContextMenu_' .. v), world_objects, TryTocAction, v, "Cut", local_player,
-                clicked_player)
-            operate_menu:addOption(getText('UI_ContextMenu_' .. v), world_objects, TryTocAction, v, "Operate",
-                local_player, clicked_player)
 
+            if ModData.get("TOC_PLAYER_DATA")[clicked_player:getUsername()] ~= nil then
+                local anotherPlayerData = ModData.get("TOC_PLAYER_DATA")[clicked_player:getUsername()]
+    
+                if CheckIfCanBeCut(v, anotherPlayerData[1]) and TocGetSawInInventory(local_player) then
+                    cut_menu:addOption(getText('UI_ContextMenu_' .. v), world_objects, TryTocAction, v, "Cut", local_player,
+                    clicked_player)
+                elseif CheckIfCanBeOperated(v, anotherPlayerData[1]) and TocGetKitInInventory(local_player) ~= nil then
+                    operate_menu:addOption(getText('UI_ContextMenu_' .. v), world_objects, TryTocAction, v, "Operate",
+                    local_player, clicked_player)
+                end
+            end
         end
-
     end
-
 end
 
 
-
-
 TocContextMenus.CreateCheatMenu = function(context, root_menu, local_player, clicked_player)
-    if local_player:getAccessLevel() == "Admin" then
+    if local_player:getAccessLevel() == "Admin" or isDebugEnabled() then
 
         local cheat_menu = TocContextMenus.CreateNewMenu("Cheat", context, root_menu)
 

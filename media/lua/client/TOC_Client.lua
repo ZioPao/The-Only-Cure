@@ -229,3 +229,30 @@ local function OnTocServerCommand(module, command, args)
 end
 
 Events.OnServerCommand.Add(OnTocServerCommand)
+
+
+
+
+
+
+
+---------------------------------- TEST -----------------------------
+
+
+function TOC_OnReceiveGlobalModData(key, modData)
+    if modData then
+        ModData.remove(key)
+        ModData.add(key, modData)
+    end
+end
+
+
+Events.OnReceiveGlobalModData.Add(TOC_OnReceiveGlobalModData)
+
+function TOC_OnConnected()
+    ModData.request("TOC_PLAYER_DATA")
+end
+
+
+Events.OnConnected.Add(TOC_OnConnected)
+

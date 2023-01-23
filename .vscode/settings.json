@@ -42,6 +42,7 @@
         "ISInventoryPaneContextMenu",
         "ISDropItemAction",
         "BloodBodyPartType",
-        "ISInventoryPane"
+        "ISInventoryPane",
+        "ModData"
     ]
 }

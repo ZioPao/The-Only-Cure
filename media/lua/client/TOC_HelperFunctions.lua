@@ -1,7 +1,6 @@
 -- CutLimb
--- TODO if TheONlyCure. triggers an errors
-function TocCheckIfStillInfected(part_data)
-    if part_data == nil then
+function TocCheckIfStillInfected(limbs_data)
+    if limbs_data == nil then
         return
     end
     -- Check ALL body part types to check if the player is still gonna die
@@ -9,26 +8,26 @@ function TocCheckIfStillInfected(part_data)
 
 
     for _, v in ipairs(GetBodyParts()) do
-        if part_data[v].is_infected then
+        if limbs_data[v].is_infected then
             check = true
         end
     end
 
-    if part_data.is_other_bodypart_infected then
+    if limbs_data.is_other_bodypart_infected then
         check = true
     end
 
     return check
 end
 
-function TocCureInfection(body_damage, part_data, part_name)
+function TocCureInfection(body_damage, limbs_data, part_name)
 
     local body_part_type = body_damage:getBodyPart(TocGetBodyPartTypeFromPartName(part_name))
 
     -- Check if we can heal the infection
     local is_other_bodypart_infected = getPlayer():getModData().TOC.Limbs.is_other_bodypart_infected
 
-    if not is_other_bodypart_infected and not TheOnlyCure.CheckIfOtherLimbsAreInfected(part_data, part_name) then
+    if not is_other_bodypart_infected and not TheOnlyCure.CheckIfOtherLimbsAreInfected(limbs_data, part_name) then
         body_damage:setInfected(false)
         body_part_type:SetInfected(false)
         body_damage:setInfectionMortalityDuration(-1)
@@ -91,14 +90,14 @@ function TocGetSawInInventory(surgeon)
 end
 
 -- OperateLimb
-function SetBodyPartsStatusAfterOperation(player, part_data, part_name, use_oven)
+function SetBodyPartsStatusAfterOperation(player, limbs_data, part_name, use_oven)
     --for _, v in ipairs(GetBodyParts()) do
 
 
     local body_part_type = player:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(part_name))
     FixSingleBodyPartType(body_part_type, use_oven)
 
-    for _, v in ipairs(part_data[part_name].depends_on) do
+    for _, v in ipairs(limbs_data[part_name].depends_on) do
         local depended_body_part_type = player:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(v))
         FixSingleBodyPartType(depended_body_part_type, use_oven)
 
@@ -125,7 +124,7 @@ end
 
 -- Unequip Prosthesis
 
-local function PartNameToBodyLocation(name)
+local function PartNameToBodyLocationProsthesis(name)
     -- This is still correct but naming sucks
     if name == "Right_Hand" then return "ArmRight_Prot" end
     if name == "Right_LowerArm" then return "ArmRight_Prot" end
@@ -135,15 +134,25 @@ local function PartNameToBodyLocation(name)
     if name == "Left_UpperArm" then return "ArmLeft_Prot" end
 end
 
-function TocFindItemInProstBodyLocation(part_name, patient)
-    -- FIXME this can return even amputated limbs, and we're using it only for prosthetics. This is gonna break sooner or later
 
+
+local function PartNameToBodyLocationAmputation(name)
+    -- This is still correct but naming sucks
+    if name == "Right_Hand" then return "ArmRight" end
+    if name == "Right_LowerArm" then return "ArmRight" end
+    if name == "Right_UpperArm" then return "ArmRight" end
+    if name == "Left_Hand" then return "ArmLeft" end
+    if name == "Left_LowerArm" then return "ArmLeft" end
+    if name == "Left_UpperArm" then return "ArmLeft" end
+end
+
+function TocFindItemInProstBodyLocation(part_name, patient)
     -- Can't be used for online purposes, since we can't get the online inventory of another player
     local worn_items = patient:getWornItems()
 
     for i = 1, worn_items:size() - 1 do -- Maybe wornItems:size()-1
         local item = worn_items:get(i):getItem()
-        if item:getBodyLocation() == PartNameToBodyLocation(part_name) then
+        if item:getBodyLocation() == PartNameToBodyLocationProsthesis(part_name) then
             return item
         end
     end
@@ -151,6 +160,34 @@ function TocFindItemInProstBodyLocation(part_name, patient)
 end
 
 
+-- Debug cheat
+function TocFindAmputationOrProsthesisName(part_name, player, choice)
+    local worn_items = player:getWornItems()
+    for i = 1, worn_items:size() - 1 do 
+        local item = worn_items:get(i):getItem()
+
+        if choice == "Amputation" then
+            
+            if item:getBodyLocation() == PartNameToBodyLocationAmputation(part_name) then
+                return item:getFullType()
+
+            end
+
+
+        elseif choice == "Prosthesis" then
+
+            if item:getBodyLocation() == PartNameToBodyLocationProsthesis(part_name) then
+                return item:getFullType()
+
+            end
+        end
+
+    end
+
+
+
+
+end
 
 -------------------------------------
 -- Override helper
@@ -168,37 +205,6 @@ function CheckIfItemIsAmputatedLimb(item)
 
 
 end
-
--- function CheckIfItemIsAmputatedLimb(item)
-
-
---     local item_full_type = item:getFullType()
-
---     local sides = {"Left", "Right"}
---     local limbs_to_check = {"Hand", "LowerArm", "UpperArm"}
-
---     local is_amputated_limb = false
-
---     for _, part in ipairs(limbs_to_check) do
---         for _, side in ipairs(sides) do
-
---             local part_name = side .. "_" .. part
-
---             local check_name = "TOC.Amputation_" .. part_name
---             print(check_name)
---             if item_full_type == check_name then
---                 is_amputated_limb = true
---                 break
---             end
-
---         end
-
---     end
-
-
---     return is_amputated_limb
-
--- end
 
 function CheckIfItemIsProsthesis(item)
 
