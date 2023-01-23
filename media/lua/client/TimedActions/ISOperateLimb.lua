@@ -59,7 +59,7 @@ function ISOperateLimb:perform()
     if self.patient ~= self.surgeon and isClient() then
         SendOperateLimb(self.patient, self.part_name, surgeon_factor, use_oven)
     else
-        TheOnlyCure.OperateLimb(self.part_name, surgeon_factor, use_oven)
+        TocOperateLimb(self.part_name, surgeon_factor, use_oven)
     end
     self.surgeon:getXp():AddXP(Perks.Doctor, 400)
 

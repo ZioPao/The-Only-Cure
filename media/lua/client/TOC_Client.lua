@@ -105,7 +105,7 @@ end
 
 Commands["OperateLimb"] = function(arg)
     local arg = arg["toSend"]
-    TheOnlyCure.OperateLimb(arg[1], arg[2], arg[3])
+    TocOperateLimb(arg[1], arg[2], arg[3])
 end
 
 

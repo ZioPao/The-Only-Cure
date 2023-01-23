@@ -309,7 +309,7 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
 
 end
 
-function TheOnlyCure.OperateLimb(part_name, surgeon_factor, use_oven)
+function TocOperateLimb(part_name, surgeon_factor, use_oven)
 
     local player = getPlayer()
     local limbs_data = player:getModData().TOC.Limbs
