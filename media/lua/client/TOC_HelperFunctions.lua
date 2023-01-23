@@ -124,7 +124,7 @@ end
 
 -- Unequip Prosthesis
 
-local function PartNameToBodyLocation(name)
+local function PartNameToBodyLocationProsthesis(name)
     -- This is still correct but naming sucks
     if name == "Right_Hand" then return "ArmRight_Prot" end
     if name == "Right_LowerArm" then return "ArmRight_Prot" end
@@ -134,15 +134,25 @@ local function PartNameToBodyLocation(name)
     if name == "Left_UpperArm" then return "ArmLeft_Prot" end
 end
 
-function TocFindItemInProstBodyLocation(part_name, patient)
-    -- FIXME this can return even amputated limbs, and we're using it only for prosthetics. This is gonna break sooner or later
 
+
+local function PartNameToBodyLocationAmputation(name)
+    -- This is still correct but naming sucks
+    if name == "Right_Hand" then return "ArmRight" end
+    if name == "Right_LowerArm" then return "ArmRight" end
+    if name == "Right_UpperArm" then return "ArmRight" end
+    if name == "Left_Hand" then return "ArmLeft" end
+    if name == "Left_LowerArm" then return "ArmLeft" end
+    if name == "Left_UpperArm" then return "ArmLeft" end
+end
+
+function TocFindItemInProstBodyLocation(part_name, patient)
     -- Can't be used for online purposes, since we can't get the online inventory of another player
     local worn_items = patient:getWornItems()
 
     for i = 1, worn_items:size() - 1 do -- Maybe wornItems:size()-1
         local item = worn_items:get(i):getItem()
-        if item:getBodyLocation() == PartNameToBodyLocation(part_name) then
+        if item:getBodyLocation() == PartNameToBodyLocationProsthesis(part_name) then
             return item
         end
     end
@@ -150,6 +160,34 @@ function TocFindItemInProstBodyLocation(part_name, patient)
 end
 
 
+-- Debug cheat
+function TocFindAmputationOrProsthesisName(part_name, player, choice)
+    local worn_items = player:getWornItems()
+    for i = 1, worn_items:size() - 1 do 
+        local item = worn_items:get(i):getItem()
+
+        if choice == "Amputation" then
+            
+            if item:getBodyLocation() == PartNameToBodyLocationAmputation(part_name) then
+                return item:getFullType()
+
+            end
+
+
+        elseif choice == "Prosthesis" then
+
+            if item:getBodyLocation() == PartNameToBodyLocationProsthesis(part_name) then
+                return item:getFullType()
+
+            end
+        end
+
+    end
+
+
+
+
+end
 
 -------------------------------------
 -- Override helper

@@ -147,7 +147,7 @@ end
 
 
 TocContextMenus.CreateCheatMenu = function(context, root_menu, local_player, clicked_player)
-    if local_player:getAccessLevel() == "Admin" then
+    if local_player:getAccessLevel() == "Admin" or isDebugEnabled() then
 
         local cheat_menu = TocContextMenus.CreateNewMenu("Cheat", context, root_menu)
 
