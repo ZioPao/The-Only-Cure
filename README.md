@@ -1,4 +1,8 @@
 # The Only Cure but better
+```
+Workshop ID: 2915572347
+Mod ID: Amputation2
+```
 A working version for SP and MP.
 I'm not gonna bother "adding" stuff, for now.
 If Mr Bounty returns, I'm probably not gonna continue this.
@@ -33,7 +37,3 @@ I basically rewrote most of the code, and some things with older character could
 - TOC Menu refreshes automatically, no need to close it and reopen it again
 ### KNOWN PROBLEMS
 - Some models won't show
-
-Workshop ID: 2915572347
-
-Mod ID: Amputation2
