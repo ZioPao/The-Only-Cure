@@ -15,15 +15,15 @@ If you've been bitten, there's only one thing you can do: cut your losses and cu
 ## IMPORTANT
 I basically rewrote most of the code, and some things with older character could break. I tried to make it as seamless as possible, but equipped prosthesis on character made with the older versions will disappear and you'll have to craft them again.
 
-
-## FIXED
+## STATUS
+### FIXED
 - The Only Cure UI in the Medical Check menu not working when checking other players
 - The Only Cure context menu on right click
 - Operating with oven completely broken
 - Invisible prosthesis on female models (still WIP, forearms especially)
 - Prosthetics handling being prone to breaking
 - A lot of other stuff under the hood
-# ADDED
+### ADDED
 - Debug cheats (MP Compatible) to reset amputations
 - You can amputate\operate other players via Medical Check
 - Better animations for amputating limbs
@@ -31,7 +31,7 @@ I basically rewrote most of the code, and some things with older character could
 - Amputated limbs and prosthesis can get bloody
 - Dynamic skin color for amputated limbs
 - TOC Menu refreshes automatically, no need to close it and reopen it again
-# KNOWN PROBLEMS
+### KNOWN PROBLEMS
 - Some models won't show
 
 Workshop ID: 2915572347
