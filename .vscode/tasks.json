@@ -16,8 +16,11 @@
         },
         {
             "label": "Run two instances of Zomboid Debug No Steam",
-            "dependsOn": ["Run Zomboid Debug No Steam", "Run Zomboid Debug No Steam"],
-
+            "dependsOn": [
+                "Run Zomboid Debug No Steam",
+                "Run Zomboid Debug No Steam"
+            ],
+            "problemMatcher": []
         },
         {
             "label": "Run Zomboid Test Server",
@@ -27,8 +30,5 @@
                 "$eslint-stylish"
             ]
         }
-
-
-
     ]
 }
