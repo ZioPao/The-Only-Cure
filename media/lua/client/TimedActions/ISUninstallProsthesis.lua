@@ -28,6 +28,9 @@ function ISUninstallProsthesis:start()
     elseif self.item:IsInventoryContainer() and self.item:canBeEquipped() ~= "" then
         self:setAnimVariable("WearClothingLocation", "Jacket")
     end
+
+    self.character:setPrimaryHandItem(nil)
+    self.character:setSecondaryHandItem(self.item)
 end
 
 function ISUninstallProsthesis:stop()

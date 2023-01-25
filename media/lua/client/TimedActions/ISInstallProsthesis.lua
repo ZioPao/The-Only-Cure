@@ -15,6 +15,7 @@ function ISInstallProsthesis:start()
     self.item:setJobDelta(0.0)
 
 
+
     self:setActionAnim("WearClothing")
     self:setAnimVariable("WearClothingLocation", "Jacket")
 

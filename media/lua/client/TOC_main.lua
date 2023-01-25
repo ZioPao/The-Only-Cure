@@ -354,6 +354,7 @@ function TheOnlyCure.EquipProsthesis(part_name, prosthesis_base_name)
             player:setWornItem(added_prosthesis:getBodyLocation(), added_prosthesis)
 
 
+
         end
     end
 

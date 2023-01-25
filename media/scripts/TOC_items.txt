@@ -317,7 +317,6 @@ imports
 
 /************************ Prothese items ************************/
 
-/* TODO make it clothing same as amputations */
 item WoodenHook
         {
             Weight = 1,
@@ -326,6 +325,7 @@ item WoodenHook
             DisplayName	= DisplayName_woodenHook,
             Icon = woodenHook,
             Tooltip = Tooltip_prosthesic_limb,
+		    WorldStaticModel = TOC.WoodenHook,
         }
 
 item MetalHook
@@ -336,6 +336,8 @@ item MetalHook
             DisplayName	= DisplayName_metalHook,
             Icon = metalHook,
             Tooltip = Tooltip_prosthesic_limb,
+		    WorldStaticModel = TOC.MetalHook,
+
         }
 
 item MetalHand
