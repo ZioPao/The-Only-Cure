@@ -30,22 +30,17 @@ function CheckIfCanBeOperated(part_name, limbs_data)
 
 end
 
-function CheckIfProsthesisCanBeEquipped(part_name, item)
-    local part_data = getPlayer():getModData().TOC.Limbs
-
-
-    if item ~= nil then
-        if part_data[part_name].is_operated then
-            return true
-        end
-    else
-
-        return false
-    end
-
+function CheckIfProsthesisCanBeEquipped(part_name)
+    local limbs_data = getPlayer():getModData().TOC.Limbs
+    return limbs_data[part_name].is_cauterized or limbs_data[part_name].is_cicatrized
     -- check if prosthesis is in the surgeon inventory... we need to get it before
+end
 
 
+function CheckIfProsthesisCanBeUnequipped(part_name)
+
+    -- TODO we should get item here to be sure that we can do this action instead of relying on some later checks
+    return true
 
 end
 

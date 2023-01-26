@@ -79,7 +79,7 @@ function AskCanEquipProsthesis(player, part_name)
     arg["From"] = getPlayer():getOnlineID()
     arg["To"] = player:getOnlineID()
     arg["command"] = "CanEquipProsthesis"
-    arg["toSend"] = part_name
+    arg["toSend"] = part_name               -- TODO to be more precise there should be prosthesis item here too to check
 
     sendClientCommand("TOC", "SendServer", arg)
 end
@@ -152,10 +152,12 @@ end
 
 Commands["CanEquipProsthesis"] = function(arg)
     local part_name = arg["toSend"]
+    --local item = arg["toSend"][2]     -- TODO Add item prosth here
+
     arg["To"] = arg["From"]
     arg["From"] = getPlayer():getOnlineID()
     arg["command"] = "ResponseCanAct"
-    arg["toSend"] = { part_name, "Equip", true }        -- FIXME true just for test
+    arg["toSend"] = {part_name, "Equip", CheckIfProsthesisCanBeEquipped(part_name) }
     sendClientCommand("TOC", "SendServer", arg)
 
 end
@@ -165,7 +167,7 @@ Commands["CanUnequipProsthesis"] = function(arg)
     arg["To"] = arg["From"]
     arg["From"] = getPlayer():getOnlineID()
     arg["command"] = "ResponseCanAct"
-    arg["toSend"] = { part_name, "Unequip", true }        -- FIXME true just for test
+    arg["toSend"] = { part_name, "Unequip", CheckIfProsthesisCanBeUnequipped(part_name)}
     sendClientCommand("TOC", "SendServer", arg)
 
 end
