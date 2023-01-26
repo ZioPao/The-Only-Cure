@@ -18,19 +18,28 @@ function TheOnlyCure.CheckIfPlayerIsInfected(player, toc_data)
 
     local body_damage = player:getBodyDamage()
 
+    -- Check for amputable limbs
     for _, v in ipairs(GetLimbsBodyPartTypes()) do
         local part_name = TocGetPartNameFromBodyPartType(v)
         local part_data = toc_data.Limbs[part_name]
+        local body_part = body_damage:getBodyPart(v)
 
 
-        if body_damage:getBodyPart(v):bitten() and part_data ~= nil then
+        if body_part:bitten() and part_data ~= nil then
             if part_data.is_cut == false then
                 part_data.is_infected = true
+            else
+                -- if the player gets bit to a cut area we have to reset it here since it doesn't make any sense
+                body_part:SetBitten(false)
+                body_part:setBiteTime(0)
+
+                part_data.is_infected = false
             end
 
         end
     end
 
+    -- Check for everything else
     for _, v in ipairs(GetOtherBodyPartTypes()) do
         if body_damage:getBodyPart(v):bitten() then
             toc_data.Limbs.is_other_bodypart_infected = true -- Even one is enough, stop cycling if we find it
