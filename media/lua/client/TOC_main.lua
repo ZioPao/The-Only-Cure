@@ -275,7 +275,7 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
 
             -- Second check, let's see if there is any other infected limb.
             if TocCheckIfStillInfected(limbs_data) == false then
-                TocCureInfection(body_damage, limbs_data, part_name)
+                TocCureInfection(body_damage, part_name)
                 getPlayer():Say("I'm gonna be fine...")
             else
                 getPlayer():Say("I'm still gonna die...")

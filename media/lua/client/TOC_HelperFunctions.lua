@@ -20,29 +20,23 @@ function TocCheckIfStillInfected(limbs_data)
     return check
 end
 
-function TocCureInfection(body_damage, limbs_data, part_name)
+function TocCureInfection(body_damage, part_name)
 
     local body_part_type = body_damage:getBodyPart(TocGetBodyPartTypeFromPartName(part_name))
 
-    -- Check if we can heal the infection
-    local is_other_bodypart_infected = getPlayer():getModData().TOC.Limbs.is_other_bodypart_infected
+    body_damage:setInfected(false)
+    body_part_type:SetInfected(false)
+    body_damage:setInfectionMortalityDuration(-1)
+    body_damage:setInfectionTime(-1)
+    body_damage:setInfectionLevel(0)
+    local body_part_types = body_damage:getBodyParts()
 
-    if not is_other_bodypart_infected and not TheOnlyCure.CheckIfOtherLimbsAreInfected(limbs_data, part_name) then
-        body_damage:setInfected(false)
-        body_part_type:SetInfected(false)
-        body_damage:setInfectionMortalityDuration(-1)
-        body_damage:setInfectionTime(-1)
-        body_damage:setInfectionLevel(0)
-        local body_part_types = body_damage:getBodyParts()
-
-        -- TODO I think this is enough... we should just cycle if with everything instead of that crap up there
-        for i = body_part_types:size() - 1, 0, -1 do
-            local bodyPart = body_part_types:get(i);
-            bodyPart:SetInfected(false);
-        end
+    -- TODO I think this is enough... we should just cycle if with everything instead of that crap up there
+    for i = body_part_types:size() - 1, 0, -1 do
+        local bodyPart = body_part_types:get(i);
+        bodyPart:SetInfected(false);
     end
-
-
+    
     if body_part_type:scratched() then body_part_type:setScratched(false, false) end
     if body_part_type:haveGlass() then body_part_type:setHaveGlass(false) end
     if body_part_type:haveBullet() then body_part_type:setHaveBullet(false, 0) end
@@ -50,11 +44,6 @@ function TocCureInfection(body_damage, limbs_data, part_name)
     if body_part_type:isBurnt() then body_part_type:setBurnTime(0) end
     if body_part_type:isCut() then body_part_type:setCut(false, false) end --Lacerations
     if body_part_type:getFractureTime() > 0 then body_part_type:setFractureTime(0) end
-
-
-
-
-
 end
 
 function TocDeleteOtherAmputatedLimbs(side)
@@ -89,8 +78,6 @@ function TocGetSawInInventory(surgeon)
     return item
 end
 
-
-
 function TocDamagePlayerDuringAmputation(patient, part_name)
     local body_part_type = TocGetBodyPartTypeFromPartName(part_name)
     local body_damage = patient:getBodyDamage()
@@ -103,21 +90,7 @@ function TocDamagePlayerDuringAmputation(patient, part_name)
 end
 
 -- OperateLimb
-function SetBodyPartsStatusAfterOperation(player, limbs_data, part_name, use_oven)
-    --for _, v in ipairs(GetBodyParts()) do
-
-
-    local body_part_type = player:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(part_name))
-    FixSingleBodyPartType(body_part_type, use_oven)
-
-    for _, v in ipairs(limbs_data[part_name].depends_on) do
-        local depended_body_part_type = player:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(v))
-        FixSingleBodyPartType(depended_body_part_type, use_oven)
-
-    end
-end
-
-function FixSingleBodyPartType(body_part_type, use_oven)
+local function FixSingleBodyPartType(body_part_type, use_oven)
     body_part_type:setDeepWounded(false) --Basically like stitching
     body_part_type:setDeepWoundTime(0)
     if use_oven then
@@ -133,6 +106,21 @@ function FixSingleBodyPartType(body_part_type, use_oven)
     end
 end
 
+function SetBodyPartsStatusAfterOperation(player, limbs_data, part_name, use_oven)
+    --for _, v in ipairs(GetBodyParts()) do
+
+
+    local body_part_type = player:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(part_name))
+    FixSingleBodyPartType(body_part_type, use_oven)
+
+    for _, v in ipairs(limbs_data[part_name].depends_on) do
+        local depended_body_part_type = player:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(v))
+        FixSingleBodyPartType(depended_body_part_type, use_oven)
+
+    end
+end
+
+
 
 
 -- Unequip Prosthesis
@@ -146,8 +134,6 @@ local function PartNameToBodyLocationProsthesis(name)
     if name == "Left_LowerArm" then return "ArmLeft_Prot" end
     if name == "Left_UpperArm" then return "ArmLeft_Prot" end
 end
-
-
 
 local function PartNameToBodyLocationAmputation(name)
     -- This is still correct but naming sucks

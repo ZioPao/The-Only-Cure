@@ -1,20 +1,4 @@
--- Helper for DropItem
-function TheOnlyCure.CheckIfCanPickUpItem(toc_data, side, limb, secondary_limb)
-
-
-    -- TODO we can use this when uninstall prost or when cutting
-    local full_primary_limb = side .. limb
-    local full_secondary_limb = side .. secondary_limb
-
-
-    return toc_data[full_primary_limb].is_cut and
-        not (toc_data[full_primary_limb].is_prosthesis_equipped or toc_data[full_secondary_limb]) or
-        (toc_data[full_secondary_limb].is_cut and not toc_data[full_secondary_limb].is_prosthesis_equipped)
-
-
-end
-
-function TheOnlyCure.CheckIfPlayerIsInfected(player, toc_data)
+local function CheckIfPlayerIsInfected(player, toc_data)
 
     local body_damage = player:getBodyDamage()
 
@@ -48,26 +32,11 @@ function TheOnlyCure.CheckIfPlayerIsInfected(player, toc_data)
     end
 end
 
-function TheOnlyCure.UpdatePlayerHealth(player, part_data)
-    local body_damage = player:getBodyDamage()
 
 
-
-    if player:HasTrait("Insensitive") then body_damage:setPainReduction(49) end
-
-    for i, part_name in pairs(GetBodyParts()) do
-        if part_data[part_name].is_cut then
-            TheOnlyCure.SetHealthStatusForBodyPart(part_data, part_name, player)
-
-        end
-    end
-
-
-
-end
 
 --Helper function for UpdatePlayerHealth
-function TheOnlyCure.SetHealthStatusForBodyPart(part_data, part_name, player)
+local function SetHealthStatusForBodyPart(part_data, part_name, player)
 
     -- TODO this can be moved away from updates
 
@@ -133,24 +102,25 @@ function TheOnlyCure.SetHealthStatusForBodyPart(part_data, part_name, player)
     --body_part_type:setBandaged(true, bandage_life, false, bandage_type)
 end
 
---Helper function for UpdatePlayerHealth
-function TheOnlyCure.CheckIfOtherLimbsAreInfected(limbs_data, part_name)
+
+local function UpdatePlayerHealth(player, part_data)
+    local body_damage = player:getBodyDamage()
 
 
-    local body_parts = GetBodyParts()
-    body_parts[part_name] = nil
 
-    for _, v in pairs(body_parts) do
-        if limbs_data[v].is_infected then
-            return true
+    if player:HasTrait("Insensitive") then body_damage:setPainReduction(49) end
+
+    for _, part_name in pairs(GetBodyParts()) do
+        if part_data[part_name].is_cut then
+            SetHealthStatusForBodyPart(part_data, part_name, player)
+
         end
     end
-    return false
 end
 
 -- MAIN UPDATE FUNCTIONS
 
-function TheOnlyCure.UpdateEveryOneMinute()
+local function TocUpdateEveryOneMinute()
 
     local player = getPlayer()
     -- To prevent errors during loading
@@ -161,8 +131,8 @@ function TheOnlyCure.UpdateEveryOneMinute()
     local toc_data = player:getModData().TOC
 
     if toc_data ~= nil then
-        TheOnlyCure.CheckIfPlayerIsInfected(player, toc_data)
-        TheOnlyCure.UpdatePlayerHealth(player, toc_data.Limbs)
+        CheckIfPlayerIsInfected(player, toc_data)
+        UpdatePlayerHealth(player, toc_data.Limbs)
     end
 
 
@@ -177,7 +147,7 @@ function TheOnlyCure.UpdateEveryOneMinute()
 
 end
 
-function TheOnlyCure.UpdateEveryTenMinutes()
+local function TocUpdateEveryTenMinutes()
 
     local player = getPlayer()
 
@@ -204,5 +174,5 @@ function TheOnlyCure.UpdateEveryTenMinutes()
 
 end
 
-Events.EveryTenMinutes.Add(TheOnlyCure.UpdateEveryTenMinutes)
-Events.EveryOneMinute.Add(TheOnlyCure.UpdateEveryOneMinute)
+Events.EveryTenMinutes.Add(TocUpdateEveryTenMinutes)
+Events.EveryOneMinute.Add(TocUpdateEveryOneMinute)
