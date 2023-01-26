@@ -87,6 +87,7 @@ function TocSetInitData(mod_data, player)
 
 
 
+
     for _, side in ipairs(TOC_sides) do
         for _, limb in ipairs(TOC_limbs) do
 
@@ -230,16 +231,40 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
     local toc_data = player:getModData().TOC
     local limbs_data = toc_data.Limbs
 
-    local body_part = player:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(part_name))
+
+
+    -- TODO Stop for a bit,
+
+    -- Cut Hand -> Damage in forearm
+    -- Cut Forearm -> Damage in Upperarm
+    -- Cut UpperArm -> Damage to torso
+
+    local body_damage = player:getBodyDamage()
+    local body_part = body_damage:getBodyPart(TocGetBodyPartFromPartName(part_name))
+    local adiacent_body_part = player:getBodyDamage():getBodyPart(TocGetAdiacentBodyPartFromPartName(part_name))
+
     local stats = player:getStats()
 
+
+
+    -- Reset the status of the first body part, since we just cut it off it shouldn't be bleeding anymore
+    -- The bit will be checked later since we're not sure if the player is not infected from another wound
+    body_part:setBleeding(false)
+    body_part:setBleedingTime(0)
+    body_part:setDeepWounded(false)
+    body_part:setDeepWoundTime(0)
+    body_part:setScratched(false, false)        -- why the fuck are there 2 booleans TIS?
+    body_part:setScratchTime(0)
+    body_part:setCut(false)
+    body_part:setCutTime(0)
+
     -- Set damage, stress, and low endurance after amputation
-    body_part:AddDamage(100 - surgeon_factor)
-    body_part:setAdditionalPain(100 - surgeon_factor)
-    body_part:setBleeding(true)
-    body_part:setBleedingTime(100 - surgeon_factor)
-    body_part:setDeepWounded(true)
-    body_part:setDeepWoundTime(100 - surgeon_factor)
+    adiacent_body_part:AddDamage(100 - surgeon_factor)
+    adiacent_body_part:setAdditionalPain(100 - surgeon_factor)
+    adiacent_body_part:setBleeding(true)
+    adiacent_body_part:setBleedingTime(100 - surgeon_factor)
+    adiacent_body_part:setDeepWounded(true)
+    adiacent_body_part:setDeepWoundTime(100 - surgeon_factor)
     stats:setEndurance(surgeon_factor)
     stats:setStress(100 - surgeon_factor)
 
@@ -251,7 +276,7 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
 
 
     -- If bandages are available, use them
-    body_part:setBandaged(bandage_table.use_bandage, 10, bandage_table.is_bandage_sterilized, bandage_table.bandage_type)
+    adiacent_body_part:setBandaged(bandage_table.use_bandage, 10, bandage_table.is_bandage_sterilized, bandage_table.bandage_type)
 
 
 
@@ -270,6 +295,8 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
         local body_damage = player:getBodyDamage()
         if limbs_data[part_name].is_infected and body_damage:getInfectionLevel() < 20 then
             limbs_data[part_name].is_infected = false
+
+            -- NOT THE ADIACENT ONE!!!
             body_part:SetBitten(false)
             body_part:setBiteTime(0)
 
@@ -301,7 +328,7 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
 
 
         -- Set blood on the amputated limb
-        TocSetBloodOnAmputation(getPlayer(), body_part)
+        TocSetBloodOnAmputation(getPlayer(), adiacent_body_part)
     end
 
 

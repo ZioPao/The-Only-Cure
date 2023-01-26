@@ -12,12 +12,7 @@ local function CheckIfPlayerIsInfected(player, toc_data)
         if body_part:bitten() and part_data ~= nil then
             if part_data.is_cut == false then
                 part_data.is_infected = true
-            else
-                -- if the player gets bit to a cut area we have to reset it here since it doesn't make any sense
-                body_part:SetBitten(false)
-                body_part:setBiteTime(0)
 
-                part_data.is_infected = false
             end
 
         end
@@ -38,11 +33,14 @@ end
 --Helper function for UpdatePlayerHealth
 local function SetHealthStatusForBodyPart(part_data, part_name, player)
 
-    -- TODO this can be moved away from updates
+
+    -- In case the player gets bit in a cut area, we have to heal him...
+
+
 
     local body_damage = player:getBodyDamage()
-    local body_part_type = body_damage:getBodyPart(TocGetBodyPartTypeFromPartName(part_name))
-    if not body_part_type then
+    local body_part = body_damage:getBodyPart(TocGetBodyPartFromPartName(part_name))
+    if not body_part then
         print("TOC ERROR : Can't update health of " .. part_name);
         return false
     end
@@ -53,18 +51,18 @@ local function SetHealthStatusForBodyPart(part_data, part_name, player)
     local bandage_type = ""
 
     -- TODO Bandages should have some disadvantage when not operated... Like getting drenched or something
-    if body_part_type:bandaged() then
+    if body_part:bandaged() then
         is_bandaged = true -- this is useless
-        bandage_life = body_part_type:getBandageLife()
-        bandage_type = body_part_type:getBandageType()
+        bandage_life = body_part:getBandageLife()
+        bandage_type = body_part:getBandageType()
 
     end
 
     -- Set max health for body part
-    if part_data[part_name].is_cicatrized and body_part_type:getHealth() > 80 then
-        body_part_type:SetHealth(80)
-    elseif body_part_type:getHealth() > 40 then
-        body_part_type:SetHealth(40)
+    if part_data[part_name].is_cicatrized and body_part:getHealth() > 80 then
+        body_part:SetHealth(80)
+    elseif body_part:getHealth() > 40 then
+        body_part:SetHealth(40)
     end
 
     -- Cicatrization check
@@ -83,10 +81,16 @@ local function SetHealthStatusForBodyPart(part_data, part_name, player)
                 player:getTraits():add("Insensitive")
             end
 
-            body_part_type:setBleeding(false);
-            body_part_type:setDeepWounded(false)
-            body_part_type:setBleedingTime(0)
-            body_part_type:setDeepWoundTime(0)
+            -- if the player gets attacked and damaged in a cut area we have to reset it here since it doesn't make any sense
+            body_part:setBleeding(false);
+            body_part:setDeepWounded(false)
+            body_part:setBleedingTime(0)
+            body_part:setDeepWoundTime(0)
+            body_part:SetBitten(false)
+            body_part:setBiteTime(0)
+            part_data.is_infected = false
+
+
         end
     end
 
@@ -94,7 +98,7 @@ local function SetHealthStatusForBodyPart(part_data, part_name, player)
     if part_data[part_name].is_amputation_shown and ZombRand(1, 100) < 10 then
         local added_pain
         if part_data[part_name].is_cauterized then added_pain = 60 else added_pain = 30 end
-        body_part_type:setAdditionalPain(ZombRand(1, added_pain))
+        body_part:setAdditionalPain(ZombRand(1, added_pain))
     end
 
     -- Reapplies bandages after the whole ordeal

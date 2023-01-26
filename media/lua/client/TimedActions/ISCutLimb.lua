@@ -69,6 +69,7 @@ function ISCutLimb:findArgs()
 
     local bandage = self.surgeon:getInventory():FindAndReturn('Bandage')
     local sterilized_bandage = self.surgeon:getInventory():FindAndReturn('AlcoholBandage')
+    --local ripped_sheets = self.surgeon:getInventory():FindAndReturn("...")
 
     if sterilized_bandage then
         bandage_table.bandage_type = sterilized_bandage:getType()
@@ -79,6 +80,7 @@ function ISCutLimb:findArgs()
     elseif bandage then
         bandage_table.bandage_type = bandage:getType()
         bandage_table.is_bandage_sterilized = false
+        bandage_table.use_bandage = true
         self.surgeon:getInventory():Remove(bandage)
         surgeon_factor = surgeon_factor + 2
     else
@@ -107,16 +109,9 @@ function ISCutLimb:perform()
         TheOnlyCure.CutLimb(self.part_name, surgeon_factor, bandage_table, painkiller_table)
     end
 
-    if self.patient ~= self.surgeon and isClient() then
-        SendCutLimb(self.patient, self.part_name, surgeon_factor, bandage_table, painkiller_table)
-    else
-        TheOnlyCure.CutLimb(self.part_name, surgeon_factor, bandage_table, painkiller_table)
-    end
 
-
-    self.surgeon:getXp():AddXP(Perks.Doctor, 400);
-
-    ISBaseTimedAction.perform(self);
+    self.surgeon:getXp():AddXP(Perks.Doctor, 400)
+    ISBaseTimedAction.perform(self)
 
 end
 

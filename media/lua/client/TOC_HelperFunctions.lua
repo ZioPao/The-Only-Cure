@@ -22,7 +22,7 @@ end
 
 function TocCureInfection(body_damage, part_name)
 
-    local body_part_type = body_damage:getBodyPart(TocGetBodyPartTypeFromPartName(part_name))
+    local body_part_type = body_damage:getBodyPart(TocGetBodyPartFromPartName(part_name))
 
     body_damage:setInfected(false)
     body_part_type:SetInfected(false)
@@ -79,7 +79,10 @@ function TocGetSawInInventory(surgeon)
 end
 
 function TocDamagePlayerDuringAmputation(patient, part_name)
-    local body_part_type = TocGetBodyPartTypeFromPartName(part_name)
+
+    -- Since we're cutting that specific part, it only makes sense that the bleeding starts from there. 
+    -- Then, we just delete the bleeding somewhere else before applying the other damage to to upper part of the limb
+    local body_part_type = TocGetBodyPartFromPartName(part_name)
     local body_damage = patient:getBodyDamage()
     local body_damage_part = body_damage:getBodyPart(body_part_type)
 
@@ -110,11 +113,11 @@ function SetBodyPartsStatusAfterOperation(player, limbs_data, part_name, use_ove
     --for _, v in ipairs(GetBodyParts()) do
 
 
-    local body_part_type = player:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(part_name))
+    local body_part_type = player:getBodyDamage():getBodyPart(TocGetAdiacentBodyPartFromPartName(part_name))
     FixSingleBodyPartType(body_part_type, use_oven)
 
     for _, v in ipairs(limbs_data[part_name].depends_on) do
-        local depended_body_part_type = player:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(v))
+        local depended_body_part_type = player:getBodyDamage():getBodyPart(TocGetAdiacentBodyPartFromPartName(v))
         FixSingleBodyPartType(depended_body_part_type, use_oven)
 
     end

@@ -41,7 +41,7 @@ function ISInstallProsthesis:perform()
     -- local toc_data = self.character:getModData().TOC
     --local part_name = TocGetPartNameFromBodyPartType(self.bodyPart:getType())
 
-    local body_part_type = TocGetBodyPartTypeFromPartName(self.part_name)
+    local body_part_type = TocGetBodyPartFromPartName(self.part_name)
 
     -- Check if can be performed. This shouldn't be necessary, but just to be sure
     if body_part_type == BodyPartType.UpperArm_L or body_part_type == BodyPartType.UpperArm_R then
