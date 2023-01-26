@@ -92,6 +92,24 @@ function TocDamagePlayerDuringAmputation(patient, part_name)
     body_damage_part:setBleedingTime(ZombRand(10, 20))
 end
 
+---@param body_part BodyPartType
+---@param heal_bite boolean
+function TocSetParametersForMissingLimb(body_part, heal_bite)
+    body_part:setBleeding(false)
+    body_part:setBleedingTime(0)
+    body_part:setDeepWounded(false)
+    body_part:setDeepWoundTime(0)
+    body_part:setScratched(false, false)        -- why the fuck are there 2 booleans TIS?
+    body_part:setScratchTime(0)
+    body_part:setCut(false)
+    body_part:setCutTime(0)
+
+    if heal_bite then
+        body_part:SetBitten(false)
+        body_part:setBiteTime(0)
+    end
+
+end
 -- OperateLimb
 local function FixSingleBodyPartType(body_part_type, use_oven)
     body_part_type:setDeepWounded(false) --Basically like stitching

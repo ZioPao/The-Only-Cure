@@ -102,7 +102,7 @@ function TocGetAdiacentBodyPartFromPartName(part_name)
     if part_name == "Right_LowerArm" then return BodyPartType.UpperArm_R end
     if part_name == "Right_UpperArm" then return BodyPartType.Torso_Upper end
     if part_name == "Left_Hand" then return BodyPartType.ForeArm_L end
-    if part_name == "Left_LowerArm" then return BodyPartType.UpperArm_R end
+    if part_name == "Left_LowerArm" then return BodyPartType.UpperArm_L end
     if part_name == "Left_UpperArm" then return BodyPartType.Torso_Upper end
 end
 

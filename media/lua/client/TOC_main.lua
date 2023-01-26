@@ -249,14 +249,7 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
 
     -- Reset the status of the first body part, since we just cut it off it shouldn't be bleeding anymore
     -- The bit will be checked later since we're not sure if the player is not infected from another wound
-    body_part:setBleeding(false)
-    body_part:setBleedingTime(0)
-    body_part:setDeepWounded(false)
-    body_part:setDeepWoundTime(0)
-    body_part:setScratched(false, false)        -- why the fuck are there 2 booleans TIS?
-    body_part:setScratchTime(0)
-    body_part:setCut(false)
-    body_part:setCutTime(0)
+    TocSetParametersForMissingLimb(body_part, false)
 
     -- Set damage, stress, and low endurance after amputation
     adiacent_body_part:AddDamage(100 - surgeon_factor)
@@ -300,6 +293,20 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
             body_part:SetBitten(false)
             body_part:setBiteTime(0)
 
+            -- Check the status of the depended parts and heal them in case of a bite
+            for _, depended_v in pairs(limbs_data[part_name].depends_on) do
+                limbs_data[depended_v].is_cut = true
+                limbs_data[depended_v].is_amputation_shown = false
+                limbs_data[depended_v].cicatrization_time = limbs_data[part_name].cicatrization_base_time -
+                    surgeon_factor * 50
+
+                if limbs_data[depended_v].is_infected and body_damage:getInfectionLevel() < 20 then
+                    limbs_data[depended_v].is_infected = false
+                    local depended_body_part = body_damage:getBodyPart(TocGetBodyPartFromPartName(depended_v))
+                    TocSetParametersForMissingLimb(depended_body_part, true)
+                end
+             end
+
             -- Second check, let's see if there is any other infected limb.
             if TocCheckIfStillInfected(limbs_data) == false then
                 TocCureInfection(body_damage, part_name)
@@ -309,13 +316,7 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
             end
         end
 
-        -- Cut the depended part
-        for _, depended_v in pairs(limbs_data[part_name].depends_on) do
-            limbs_data[depended_v].is_cut = true
-            limbs_data[depended_v].is_amputation_shown = false
-            limbs_data[depended_v].cicatrization_time = limbs_data[part_name].cicatrization_base_time -
-                surgeon_factor * 50
-        end
+
 
         -- Check for older amputation models and deletes them from player's inventory
         local side = string.match(part_name, '(%w+)_')
