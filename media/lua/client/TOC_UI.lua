@@ -53,6 +53,7 @@ local function GetImageName(part_name, limbs_data)
     elseif part_data.is_cut and not part_data.is_amputation_shown then -- Empty (like hand if forearm cut)
         name = "media/ui/TOC/Empty.png"
     elseif not part_data.is_cut and
+        -- TODO This doesn't work in MP on another player since we're trying to retrieve bodyDamage from another player
         getPlayer():getBodyDamage():getBodyPart(TocGetBodyPartFromPartName(part_name)):bitten() then -- Not cut but bitten
         name = "media/ui/TOC/" .. part_name .. "/Bite.png"
     else -- Not cut

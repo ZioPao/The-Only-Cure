@@ -101,9 +101,9 @@ local function SetHealthStatusForBodyPart(part_data, part_name, player)
         body_part:setAdditionalPain(ZombRand(1, added_pain))
     end
 
-    -- Reapplies bandages after the whole ordeal
-    -- TODO not sure if this still works
-    --body_part_type:setBandaged(true, bandage_life, false, bandage_type)
+    -- TODO Add phantom pain to depended parts
+
+ 
 end
 
 
