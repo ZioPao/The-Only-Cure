@@ -10,10 +10,10 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
 
     -- TODO Make the malus for time a little less awful and add some other malus, like fitness and stuff
 
-    print("TOC: Input max time " .. tostring(maxTime))
+    --print("TOC: Input max time " .. tostring(maxTime))
     local original_max_time = og_ISEquipTimedActionAdjustMaxTime(self, maxTime)
 
-    print("TOC: Return original max time: " .. tostring(original_max_time))
+    --print("TOC: Return original max time: " .. tostring(original_max_time))
 
     if original_max_time ~= -1 then
 
@@ -61,7 +61,7 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
         if modified_max_time > 10 * original_max_time then modified_max_time = 10 * original_max_time end
 
 
-        print("TOC: Modified Max Time " .. modified_max_time)
+        --print("TOC: Modified Max Time " .. modified_max_time)
 
         return modified_max_time
     else
@@ -124,24 +124,13 @@ end
 local og_ISEquipWeaponActionPerform = ISEquipWeaponAction.perform
 function ISEquipWeaponAction:perform()
 
+    -- TODO this is only for weapons, not items. Won't work for everything I think
+    --TODO Block it before even performing
     -- TODO in the inventory menu there is something broken, even though this works
     og_ISEquipWeaponActionPerform(self)
-    local part_data = self.character:getModData().TOC.Limbs
+    local limbs_data = self.character:getModData().TOC.Limbs
     local can_be_held = {}
-
-    for _, side in ipairs(TOC_sides) do
-        can_be_held[side] = true
-
-        if part_data[side .. "_Hand"].is_cut then
-            if part_data[side .. "_LowerArm"].is_cut then
-                if not part_data[side .. "_LowerArm"].is_prosthesis_equipped then
-                    can_be_held[side] = false
-                end
-            elseif not part_data[side .. "_Hand"].is_prosthesis_equipped then
-                can_be_held[side] = false
-            end
-        end
-    end
+    TocPopulateCanBeHeldTable(can_be_held, limbs_data)
 
     if not self.item:isRequiresEquippedBothHands() then
         if can_be_held["Right"] and not can_be_held["Left"] then

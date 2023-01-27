@@ -92,7 +92,6 @@ function TocDamagePlayerDuringAmputation(patient, part_name)
     body_damage_part:setBleedingTime(ZombRand(10, 20))
 end
 
----@param body_part BodyPartType
 ---@param heal_bite boolean
 function TocSetParametersForMissingLimb(body_part, heal_bite)
     body_part:setBleeding(false)
@@ -249,5 +248,25 @@ function CheckIfItemIsInstalledProsthesis(item)
     else
         return false
     end
+
+end
+
+function TocPopulateCanBeHeldTable(can_be_held, limbs_data)
+
+    for _, side in ipairs(TOC_sides) do
+        can_be_held[side] = true
+
+        if limbs_data[side .. "_Hand"].is_cut then
+            if limbs_data[side .. "_LowerArm"].is_cut then
+                if not limbs_data[side .. "_LowerArm"].is_prosthesis_equipped then
+                    can_be_held[side] = false
+                end
+            elseif not limbs_data[side .. "_Hand"].is_prosthesis_equipped then
+                can_be_held[side] = false
+            end
+        end
+    end
+
+    return 
 
 end

@@ -44,6 +44,12 @@
         "BloodBodyPartType",
         "ISInventoryPane",
         "ModData",
-        "isDebugEnabled"
+        "isDebugEnabled",
+        "getActivatedMods",
+        "ISHotbar",
+        "isForceDropHeavyItem",
+        "isFHModKeyDown",
+        "getPlayerData",
+        "FHSwapHandsAction"
     ]
 }
