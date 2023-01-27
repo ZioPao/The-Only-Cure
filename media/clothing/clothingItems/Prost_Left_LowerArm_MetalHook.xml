@@ -7,5 +7,7 @@
     <m_AllowRandomHue>false</m_AllowRandomHue>
     <m_AllowRandomTint>false</m_AllowRandomTint>
     <m_Masks>4</m_Masks>
-    <textureChoices>Clothes\metal</textureChoices>
+    <textureChoices>Clothes\metal_male</textureChoices>
+    <textureChoices>Clothes\metal_female</textureChoices>
+
 </clothingItem>

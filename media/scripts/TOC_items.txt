@@ -21,6 +21,7 @@ imports
             WindResistance = 1.0,
             WaterResistance = 1.0,
             Icon = genericAmputation,
+            CanHaveHoles = false,
         }
 
     item Amputation_Right_LowerArm
@@ -38,6 +39,7 @@ imports
             WindResistance = 1.0,
             WaterResistance = 1.0,
             Icon = genericAmputation,
+            CanHaveHoles = false,
         }
 
     item Amputation_Right_UpperArm
@@ -54,6 +56,7 @@ imports
             WindResistance = 1.0,
             WaterResistance = 1.0,
             Icon = genericAmputation,
+            CanHaveHoles = false,
         }
 
     item Amputation_Left_Hand
@@ -72,6 +75,7 @@ imports
             WindResistance = 1.0,
             WaterResistance = 1.0,
             Icon = genericAmputation,
+            CanHaveHoles = false,
         }
 
     item Amputation_Left_LowerArm
@@ -89,6 +93,7 @@ imports
             WindResistance = 1.0,
             WaterResistance = 1.0,
             Icon = genericAmputation,
+            CanHaveHoles = false,
 
         }
 
@@ -106,6 +111,7 @@ imports
             WindResistance = 1.0,
             WaterResistance = 1.0,
             Icon = genericAmputation,
+            CanHaveHoles = false,
         }
 
 /************************ Other items ************************/
@@ -157,6 +163,8 @@ imports
             Icon = woodenHook,
             Tooltip = Tooltip_equip_prothesis_hand,
             WaterResistance = 15,
+            CanHaveHoles = false,
+
         }
 
     item Prost_Left_Hand_WoodenHook
@@ -171,6 +179,8 @@ imports
             Icon = woodenHook,
             Tooltip = Tooltip_equip_prothesis_hand,
             WaterResistance = 15,
+            CanHaveHoles = false,
+
         }
 
     item Prost_Right_Hand_MetalHook
@@ -185,6 +195,7 @@ imports
             Icon = metalHook,
             Tooltip = Tooltip_equip_prothesis_hand,
             WaterResistance = 13,
+            CanHaveHoles = false,
         }
 
     item Prost_Left_Hand_MetalHook
@@ -199,6 +210,7 @@ imports
             Icon = metalHook,
             Tooltip = Tooltip_equip_prothesis_hand,
             WaterResistance = 13,
+            CanHaveHoles = false,
         }
 
     item Prost_Right_Hand_MetalHand
@@ -213,6 +225,7 @@ imports
             Icon = metalHand,
             Tooltip = Tooltip_equip_prothesis_hand,
             WaterResistance = 11,
+            CanHaveHoles = false,
         }
 
     item Prost_Left_Hand_MetalHand
@@ -227,6 +240,7 @@ imports
             Icon = metalHand,
             Tooltip = Tooltip_equip_prothesis_hand",
             WaterResistance = 11,
+            CanHaveHoles = false,
         }
 
     item Prost_Right_LowerArm_WoodenHook
@@ -241,6 +255,7 @@ imports
             Icon = woodenHook,
             Tooltip = Tooltip_equip_prothesis_fore,
             WaterResistance = 16,
+            CanHaveHoles = false,
         }
 
     item Prost_Left_LowerArm_WoodenHook
@@ -256,6 +271,7 @@ imports
             Icon = woodenHook,
             Tooltip = Tooltip_equip_prothesis_fore,
             WaterResistance = 16,
+            CanHaveHoles = false,
         }
 
     item Prost_Right_LowerArm_MetalHook
@@ -270,6 +286,7 @@ imports
             Icon = metalHook,
             Tooltip = Tooltip_equip_prothesis_fore,
             WaterResistance = 14,
+            CanHaveHoles = false,
         }
 
     item Prost_Left_LowerArm_MetalHook
@@ -285,6 +302,7 @@ imports
             Icon = metalHook,
             Tooltip = Tooltip_equip_prothesis_fore,
             WaterResistance = 14,
+            CanHaveHoles = false,
         }
 
     item Prost_Right_LowerArm_MetalHand 
@@ -299,6 +317,7 @@ imports
             Icon = metalHand,
             Tooltip = Tooltip_equip_prothesis_fore,
             WaterResistance = 12,
+            CanHaveHoles = false,
         }
 
     item Prost_Left_LowerArm_MetalHand
@@ -313,6 +332,7 @@ imports
             Icon = metalHand,
             Tooltip = Tooltip_equip_prothesis_fore,
             WaterResistance = 12,
+            CanHaveHoles = false,
         }
 
 /************************ Prothese items ************************/

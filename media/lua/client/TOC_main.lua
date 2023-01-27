@@ -385,6 +385,11 @@ function TheOnlyCure.EquipProsthesis(part_name, prosthesis_base_name)
             toc_data.Limbs[part_name].is_prosthesis_equipped = true
             toc_data.Limbs[part_name].equipped_prosthesis = toc_data.Prosthesis[prosthesis_base_name][part_name]
 
+            if player:isFemale() then
+                added_prosthesis:getVisual():setTextureChoice(1)
+            else
+                added_prosthesis:getVisual():setTextureChoice(0)
+            end
             player:setWornItem(added_prosthesis:getBodyLocation(), added_prosthesis)
 
 

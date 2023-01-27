@@ -20,7 +20,9 @@ if ModOptions and ModOptions.getInstance then
   ModOptions:loadFile()
 
   local roll_up_sleeves = settings:getData("roll_up_sleeves_on_amputated_limbs")
-
+  
+  -- Run it now since we're in the menu, presumably
+  TocSetSleeves(options.roll_up_sleeves_on_amputated_limbs)
 
 
 
