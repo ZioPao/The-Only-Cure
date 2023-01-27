@@ -284,6 +284,26 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
         limbs_data[part_name].is_amputation_shown = true
         limbs_data[part_name].cicatrization_time = limbs_data[part_name].cicatrization_base_time - surgeon_factor * 50
 
+        for _, depended_v in pairs(limbs_data[part_name].depends_on) do
+            if limbs_data[depended_v].is_cut == false then
+                limbs_data[depended_v].is_cut = true
+                limbs_data[depended_v].is_amputation_shown = false
+                limbs_data[depended_v].cicatrization_time = limbs_data[part_name].cicatrization_base_time -
+                    surgeon_factor * 50
+
+                local should_depended_v_be_healed_of_bite = limbs_data[depended_v].is_infected and body_damage:getInfectionLevel() < 20
+                local depended_body_part = body_damage:getBodyPart(TocGetBodyPartFromPartName(depended_v))
+                TocSetParametersForMissingLimb(depended_body_part, should_depended_v_be_healed_of_bite)
+
+                if should_depended_v_be_healed_of_bite then
+                    limbs_data[depended_v].is_infected = false
+                end
+
+
+            end
+         end
+
+
         -- Heal the infection here
         local body_damage = player:getBodyDamage()
         if limbs_data[part_name].is_infected and body_damage:getInfectionLevel() < 20 then
@@ -292,20 +312,6 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
             -- NOT THE ADIACENT ONE!!!
             body_part:SetBitten(false)
             body_part:setBiteTime(0)
-
-            -- Check the status of the depended parts and heal them in case of a bite
-            for _, depended_v in pairs(limbs_data[part_name].depends_on) do
-                limbs_data[depended_v].is_cut = true
-                limbs_data[depended_v].is_amputation_shown = false
-                limbs_data[depended_v].cicatrization_time = limbs_data[part_name].cicatrization_base_time -
-                    surgeon_factor * 50
-
-                if limbs_data[depended_v].is_infected and body_damage:getInfectionLevel() < 20 then
-                    limbs_data[depended_v].is_infected = false
-                    local depended_body_part = body_damage:getBodyPart(TocGetBodyPartFromPartName(depended_v))
-                    TocSetParametersForMissingLimb(depended_body_part, true)
-                end
-             end
 
             -- Second check, let's see if there is any other infected limb.
             if TocCheckIfStillInfected(limbs_data) == false then
