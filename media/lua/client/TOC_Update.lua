@@ -172,7 +172,7 @@ local function TocUpdateEveryTenMinutes()
     -- Updates the cicatrization time
     for _, part_name in pairs(GetBodyParts()) do
         if part_data[part_name].is_cut and not part_data[part_name].is_cicatrized then
-            part_data[part_name].cicatrization_time = part_data[part_name].cicatrization_time - 1 -- TODO Make it more "dynamic"
+            part_data[part_name].cicatrization_time = part_data[part_name].cicatrization_time - SandboxVars.TOC.CicatrizationSpeedMultiplier
         end
     end
 
