@@ -38,6 +38,7 @@ local function addBodyLocationBefore(newLocation, movetoLocation)
 
 
 function TocSetSleeves(check)
+    -- TODO this is stuck to true for now, it's just too broken to change it mid game
     local group = BodyLocations.getGroup("Human")
     if check then
         print("TOC: Rolling up sleeves")
@@ -56,3 +57,4 @@ function TocSetSleeves(check)
     end
 end
 
+TocSetSleeves(true)
