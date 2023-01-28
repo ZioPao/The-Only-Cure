@@ -22,11 +22,22 @@ function ISCutLimb:update()
     end
 end
 
+function ISCutLimb:stop()
+
+    self.character:getEmitter():stopSoundByName("Amputation_Sound")
+
+
+end
+
+
+
+
 function ISCutLimb:start()
 
     self:setActionAnim("SawLog")
     local saw_item = TocGetSawInInventory(self.surgeon)
 
+    self.sound = self.character:getEmitter():playSound("Amputation_Sound")
 
     -- Return whatever object we've got in the inventory
     if self.surgeon:getPrimaryHandItem() then

@@ -21,10 +21,10 @@ function ISOperateLimb:update()
 end
 
 function ISOperateLimb:start()
-    self:setActionAnim("MedicalCheck");
+    self:setActionAnim("MedicalCheck")
     if self.use_oven then
-        self.sound = self.patient:getEmitter():playSound("Burn_sound")
-        self:forceComplete();
+        self.sound = self.patient:getEmitter():playSound("Burn_sound")      -- TODO currently broken, but maybe that's good
+        self:forceComplete()
     end
 end
 

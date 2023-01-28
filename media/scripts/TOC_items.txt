@@ -4,7 +4,7 @@ imports
 	{
 		Base
 	}
-/****************** Clothing that look like a cut arm ******************/
+/****************** Clothing that look like a cut limb ******************/
     item Amputation_Right_Hand
         {
             Type = Clothing,
@@ -114,7 +114,7 @@ imports
             CanHaveHoles = false,
         }
 
-/************************ Other items ************************/
+/************************ Operation items ************************/
 	item Improvised_surgeon_kit
         {
             Type = Normal,
@@ -148,7 +148,7 @@ imports
             Icon = surgeonKit,
         }
 
-/************************ Prothese cloth ************************/
+/************************ Prosthesis clothing item ************************/
 
     item Prost_Right_Hand_WoodenHook
         {
@@ -334,7 +334,7 @@ imports
             CanHaveHoles = false,
         }
 
-/************************ Prothese items ************************/
+/************************ Prosthesis base items ************************/
 
 item WoodenHook
         {

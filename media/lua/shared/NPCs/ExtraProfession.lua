@@ -23,4 +23,4 @@ local function AddProfession()
     end
 end
 
-Events.OnGameBoot.Add(AddProfession);
+Events.OnGameBoot.Add(AddProfession)

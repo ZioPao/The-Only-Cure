@@ -1,9 +1,9 @@
 module base {
 
-    sound Cut_sound {
-        category = TOC, 
+    sound Amputation_Sound {
+        category = Player, 
         loop = true,
-        is3D = true,
+       is3D = true,
         clip { 
           file = media/sound/Cut_sound.ogg, 
           distanceMax = 3,
@@ -12,7 +12,7 @@ module base {
     }
 
     sound Operate_sound {
-        category = TOC, 
+        category = Player, 
         loop = true,
         is3D = true,
         clip { 
@@ -23,7 +23,7 @@ module base {
     }
 
     sound Burn_sound {
-        category = TOC,
+        category = Player,
         loop = false,
         is3D = true,
         clip {
