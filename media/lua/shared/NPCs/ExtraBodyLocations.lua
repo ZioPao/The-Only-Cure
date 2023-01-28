@@ -41,16 +41,18 @@ function TocSetSleeves(check)
     local group = BodyLocations.getGroup("Human")
     if check then
         print("TOC: Rolling up sleeves")
-        group:getOrCreateLocation("ArmRight")
-        group:getOrCreateLocation("ArmLeft")
         group:getOrCreateLocation("ArmRight_Prot")
         group:getOrCreateLocation("ArmLeft_Prot")
+        group:getOrCreateLocation("ArmRight")
+        group:getOrCreateLocation("ArmLeft")
+
     else
         print("TOC: Won't roll up sleeve")
-        addBodyLocationBefore("ArmRight", "Jacket")
-        addBodyLocationBefore("ArmLeft", "Jacket")
-        addBodyLocationBefore("ArmRight_Prot", "Shoes")
-        addBodyLocationBefore("ArmLeft_Prot", "Shoes")
+        addBodyLocationBefore("ArmRight_Prot", "Jacket")
+        addBodyLocationBefore("ArmLeft_Prot", "Jacket")
+        addBodyLocationBefore("ArmRight", "ArmLeft_Prot")
+        addBodyLocationBefore("ArmLeft", "ArmRight")
+
     end
 end
 

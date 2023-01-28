@@ -3,14 +3,14 @@ module TOC
 	model MetalHook
     {
         mesh = WorldItems/hook,
-        texture = Clothes/metal,
+        texture = WorldItems/metal,
         scale = 0.15,
     }
 
     model WoodenHook
     {
         mesh = WorldItems/hook,
-        texture = Clothes/wood,
+        texture = WorldItems/wood,
         scale = 0.15,
     }
 }

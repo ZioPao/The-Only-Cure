@@ -6,6 +6,7 @@
     <m_AllowRandomHue>false</m_AllowRandomHue>
     <m_AllowRandomTint>false</m_AllowRandomTint>
     <m_Masks>6</m_Masks>
+    <m_MasksFolder>none</m_MasksFolder>
     <textureChoices>Amputations\skin01b</textureChoices>
     <textureChoices>Amputations\skin02b</textureChoices>
     <textureChoices>Amputations\skin03b</textureChoices>
