@@ -27,9 +27,15 @@
 -- None         20
 
 local function addBodyLocationBefore(newLocation, movetoLocation)
+
+    -- TODO pretty sure this function is borked
+
+
     local group = BodyLocations.getGroup("Human")
     local list = getClassFieldVal(group, getClassField(group, 1))
     group:getOrCreateLocation(newLocation)
+
+
     local newItem = list:get(list:size()-1)
     list:remove(list:size()-1)
     local i = group:indexOf(movetoLocation)
@@ -37,24 +43,43 @@ local function addBodyLocationBefore(newLocation, movetoLocation)
   end
 
 
-function TocSetSleeves(check)
-    -- TODO this is stuck to true for now, it's just too broken to change it mid game
+local function TocSetSleeves(check)
+
+    -- FIXME This can't work, we need to fix masks before changing the order. There is nothing I can do for now with only this
+
+
+
+
     local group = BodyLocations.getGroup("Human")
-    if check then
-        print("TOC: Rolling up sleeves")
-        group:getOrCreateLocation("ArmRight_Prot")
-        group:getOrCreateLocation("ArmLeft_Prot")
-        group:getOrCreateLocation("ArmRight")
-        group:getOrCreateLocation("ArmLeft")
+    group:getOrCreateLocation("ArmRight_Prot")
+    group:getOrCreateLocation("ArmLeft_Prot")
+    group:getOrCreateLocation("ArmRight")
+    group:getOrCreateLocation("ArmLeft")
 
-    else
-        print("TOC: Won't roll up sleeve")
-        addBodyLocationBefore("ArmRight_Prot", "Jacket")
-        addBodyLocationBefore("ArmLeft_Prot", "Jacket")
-        addBodyLocationBefore("ArmRight", "ArmLeft_Prot")
-        addBodyLocationBefore("ArmLeft", "ArmRight")
+    -- -- Check if we already set stuff before
+    -- -- Readd them
+    -- print("TOC: Running TocSetSleeves")
 
-    end
+    -- if group:getLocation("RightArm") or group:getLocation("LeftArm") then
+    --     BodyLocations:Reset()       -- maybe it's too much
+    -- end
+
+    -- if check then
+    --     print("TOC: Rolling up sleeves")
+    --     group:getOrCreateLocation("ArmRight_Prot")
+    --     group:getOrCreateLocation("ArmLeft_Prot")
+    --     group:getOrCreateLocation("ArmRight")
+    --     group:getOrCreateLocation("ArmLeft")
+    -- else
+    --     print("TOC: Won't roll up sleeve")
+    --     addBodyLocationBefore("ArmRight_Prot", "TorsoExtra")
+    --     addBodyLocationBefore("ArmLeft_Prot", "TorsoExtra")
+    --     addBodyLocationBefore("ArmRight", "Jacket")
+    --     addBodyLocationBefore("ArmLeft", "Jacket")
+
+    -- end
+
+
 end
 
 TocSetSleeves(true)

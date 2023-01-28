@@ -1,0 +1,8 @@
+Sandbox_EN = {
+    Sandbox_TOC = "The Only Cure but better",
+
+    Sandbox_TOC_RollUpSleeves = "Roll up sleeves",
+    Sandbox_TOC_RollUpSleeves_tooltip = "Currently broken, will not do anything",
+
+    
+}

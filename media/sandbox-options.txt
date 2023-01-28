@@ -1,0 +1,12 @@
+VERSION = 1,
+
+
+option TOC.RollUpSleeves
+{
+	type = boolean,
+	default = true,
+
+	page = TOC,
+	translation = TOC_RollUpSleeves,
+
+}
