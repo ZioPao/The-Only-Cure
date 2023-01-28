@@ -11,16 +11,22 @@ local options = {
 if ModOptions and ModOptions.getInstance then
   print("TOC: Found ModOptions, loading it")
   local settings = ModOptions:getInstance(options, "Amputation2", "The Only Cure but better")
-  
+  ModOptions:loadFile()
+
   settings.names = {
     roll_up_sleeves_on_amputated_limbs = "Roll up jacket sleeves for amputated limbs",
   }
   
   
-  ModOptions:loadFile()
 
   local roll_up_sleeves = settings:getData("roll_up_sleeves_on_amputated_limbs")
   
+  if roll_up_sleeves == nil then 
+    print("TOC: SOmething is very wrong with mod options")
+    
+  end
+
+
   -- Run it now since we're in the menu, presumably
   TocSetSleeves(options.roll_up_sleeves_on_amputated_limbs)
 
