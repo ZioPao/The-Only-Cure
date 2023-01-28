@@ -49,7 +49,7 @@ imports
 
             ClothingItem = Amputation_Right_UpperArm,
             BodyLocation = ArmRight,
-            BloodLocation = UpperArms,
+            BloodLocation = UpperArms;UpperBody,
             Weight = 0,
             CombatSpeedModifier = 0.7,
             Insulation = 1.0,
@@ -106,7 +106,7 @@ imports
 
             Weight = 0,
             CombatSpeedModifier = 0.7,
-            BloodLocation = UpperArms,
+            BloodLocation = UpperArms;UpperBody,
             Insulation = 1.0,
             WindResistance = 1.0,
             WaterResistance = 1.0,

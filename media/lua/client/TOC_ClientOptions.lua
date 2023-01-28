@@ -21,19 +21,10 @@ if ModOptions and ModOptions.getInstance then
 
   local roll_up_sleeves = settings:getData("roll_up_sleeves_on_amputated_limbs")
   
-  if roll_up_sleeves == nil then 
-    print("TOC: SOmething is very wrong with mod options")
-    
-  end
-
+  print("TOC: Rolling up sleeves => " .. tostring(options.roll_up_sleeves_on_amputated_limbs))
 
   -- Run it now since we're in the menu, presumably
   TocSetSleeves(options.roll_up_sleeves_on_amputated_limbs)
-
-
-
-
-
 
   function roll_up_sleeves:OnApply(val)
     self:resetLua()
