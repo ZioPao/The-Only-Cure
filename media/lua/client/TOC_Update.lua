@@ -58,6 +58,13 @@ local function SetHealthStatusForBodyPart(part_data, part_name, player)
 
     end
 
+
+    -- Check for stitching
+    local is_stitched = false
+
+    -- TODO Implement this
+
+
     -- Set max health for body part
     if part_data[part_name].is_cicatrized and body_part:getHealth() > 80 then
         body_part:SetHealth(80)
@@ -158,8 +165,8 @@ local function TocUpdateEveryTenMinutes()
     if player == nil then
         return
     end
-    local toc_data = player:getModData().TOC
-    local part_data = toc_data.Limbs
+
+    local part_data = player:getModData().TOC.Limbs
 
     --Experience for prosthesis user
     for _, side in ipairs(TOC_sides) do

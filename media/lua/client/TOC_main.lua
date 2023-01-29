@@ -22,6 +22,15 @@ function TocSetInitData(mod_data, player)
 
     print("TOC: Creating mod_data.TOC")
 
+
+    -- TODO this is gonna become a mess really fast, i fucked up.
+    -- TODO Move prosthesis to something more easily accessible
+    -- TODO Acceptable prosthesis need to be moved to something more accessible
+
+
+
+
+
     mod_data.TOC = {
 
         Limbs = {
@@ -104,7 +113,7 @@ function TocSetInitData(mod_data, player)
 
 
             mod_data.TOC.Limbs[part_name].is_prosthesis_equipped = false
-            mod_data.TOC.Limbs[part_name].equipped_prosthesis = {}
+            mod_data.TOC.Limbs[part_name].equipped_prosthesis = {}      -- TODO i'm still not usign this, I should though
 
             -- Even if there are some duplicates, this is just easier in the end since we're gonna get fairly easily part_name
 
@@ -154,12 +163,13 @@ end
 
 function TocUpdateBaseData(mod_data)
 
-    local prosthesis_list = { "WoodenHook", "MetalHook", "MetalHand" }
+    -- TODO The prosthetic knife needs to be a weapon first and foremost, so other than a
+    -- clothing item it needs to be a weapon too (an invisible one maybe?)
 
+    --local prosthesis_list = { "WoodenHook", "MetalHook", "MetalHand", "ProstheticKnife" }
 
-
-    local accepted_prosthesis_hand = { "WoodenHook", "MetalHook", "MetalHand" }
-    local accepted_prosthesis_lowerarm = { "WoodenHook", "MetalHook", "MetalHand" }
+    local accepted_prosthesis_hand = { "WoodenHook", "MetalHook", "MetalHand", "ProstheticKnife" }
+    local accepted_prosthesis_lowerarm = { "WoodenHook", "MetalHook", "MetalHand", "ProstheticKnife" }
     local accepted_prosthesis_upperarm = {} -- For future stuff
 
     for _, side in ipairs(TOC_sides) do
@@ -176,6 +186,7 @@ function TocUpdateBaseData(mod_data)
                 mod_data.TOC.Prosthesis["WoodenHook"][part_name].prosthesis_factor = 1.3
                 mod_data.TOC.Prosthesis["MetalHook"][part_name].prosthesis_factor = 1.2
                 mod_data.TOC.Prosthesis["MetalHand"][part_name].prosthesis_factor = 1.1
+                mod_data.TOC.Prosthesis["ProstheticKnife"][part_name].prosthesis_factor = 1.5
 
 
             elseif limb == "LowerArm" then
@@ -186,6 +197,8 @@ function TocUpdateBaseData(mod_data)
                 mod_data.TOC.Prosthesis["WoodenHook"][part_name].prosthesis_factor = 1.35
                 mod_data.TOC.Prosthesis["MetalHook"][part_name].prosthesis_factor = 1.25
                 mod_data.TOC.Prosthesis["MetalHand"][part_name].prosthesis_factor = 1.15
+                mod_data.TOC.Prosthesis["ProstheticKnife"][part_name].prosthesis_factor = 1.6
+
             elseif limb == "UpperArm" then
                 mod_data.TOC.Limbs[part_name].cicatrization_base_time = 2000
                 mod_data.TOC.Limbs[part_name].depends_on = { side .. "_Hand", side .. "_LowerArm", }

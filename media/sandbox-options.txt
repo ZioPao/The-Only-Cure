@@ -1,7 +1,7 @@
 VERSION = 1,
 
 
-option TOC.RollUpSleeves
+/* option TOC.RollUpSleeves
 {
 	type = boolean,
 	default = true,
@@ -9,7 +9,7 @@ option TOC.RollUpSleeves
 	page = TOC,
 	translation = TOC_RollUpSleeves,
 
-}
+} */
 
 option TOC.CicatrizationSpeedMultiplier
 {
@@ -18,6 +18,6 @@ option TOC.CicatrizationSpeedMultiplier
     max = 10,
     default = 1,
     page = TOC,
-    translation = TOC_CicatrizationSpeedMultiplier
+    translation = TOC_CicatrizationSpeedMultiplier,
 
 }

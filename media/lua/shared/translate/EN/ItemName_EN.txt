@@ -27,6 +27,7 @@ DisplayName_EN = {
     ItemName_TOC.WoodenHook = "Wooden Hook",
     ItemName_TOC.MetalHook = "Metal Hook",
     ItemName_TOC.MetalHand = "Metal Hand",
+    ItemName_TOC.ProstheticKnife = "Prosthetic Knife",
 
     ItemName_TOC.SurgeonMag1 = "Surgeon magazine for dummies",
     ItemName_TOC.SurgeonMag2 = "Surgeon magazine for students",

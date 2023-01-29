@@ -7,6 +7,12 @@ Tooltip_EN = {
     Tooltip_equip_prothesis_fore = "Water Resistance is the time multiplier for actions<br>Without prosthesis, the multiplier is 2.5"
     Tooltip_prosthesic_limb = "A prosthetic limb. You'll have to wait until your limb is cicatrized before installing it.<br> It's done by having a bandage (alcohol is better) when cut, use a surgeon kit and wait."
 
+
+    Tooltip_ProstheticKnife = "Prost Knife test",
+
+
+
+
     Recipe_Tooltip_Wooden_hook = "Make a prosthesic wooden hook.<br>Can be used on an amputated hand or forearm.<br>Can't be equipped if the upper arm is amputated."
     Recipe_Tooltip_Metal_hook = "Make a prosthesic metal hook.<br>Can be used on an amputated hand or forearm.<br>Can't be equipped if the upper arm is amputated."
     Recipe_Tooltip_Metal_hand = "Make a prosthesic metal hand.<br>Can be used on an amputated hand or forearm.<br>Can't be equipped if the upper arm is amputated."

@@ -337,37 +337,48 @@ imports
 /************************ Prosthesis base items ************************/
 
 item WoodenHook
-        {
-            Weight = 1,
-            Type = Normal,
-            DisplayCategory = Prosthesis,
-            DisplayName	= DisplayName_woodenHook,
-            Icon = woodenHook,
-            Tooltip = Tooltip_prosthesic_limb,
-		    WorldStaticModel = TOC.WoodenHook,
-        }
+    {
+        Weight = 1,
+        Type = Normal,
+        DisplayCategory = Prosthesis,
+        DisplayName	= DisplayName_WoodenHook,
+        Icon = woodenHook,
+        Tooltip = Tooltip_prosthesic_limb,
+        WorldStaticModel = TOC.WoodenHook,
+    }
 
 item MetalHook
-        {
-            Weight = 0.5,
-            Type = Normal,
-            DisplayCategory = Prosthesis,
-            DisplayName	= DisplayName_metalHook,
-            Icon = metalHook,
-            Tooltip = Tooltip_prosthesic_limb,
-		    WorldStaticModel = TOC.MetalHook,
+    {
+        Weight = 0.5,
+        Type = Normal,
+        DisplayCategory = Prosthesis,
+        DisplayName	= DisplayName_MetalHook,
+        Icon = metalHook,
+        Tooltip = Tooltip_prosthesic_limb,
+        WorldStaticModel = TOC.MetalHook,
 
-        }
+    }
 
 item MetalHand
-        {
-            Weight = 0.3,
-            Type = Normal,
-            DisplayCategory = Prosthesis,
-            DisplayName	= DisplayName_metalHand,
-            Icon = metalHand,
-            Tooltip = Tooltip_prosthesic_limb,
-        }
+    {
+        Weight = 0.3,
+        Type = Normal,
+        DisplayCategory = Prosthesis,
+        DisplayName	= DisplayName_MetalHand,
+        Icon = metalHand,
+        Tooltip = Tooltip_prosthesic_limb,
+    }
+item ProstheticKnife
+{
+    Weight = 0.5,
+    Type = Normal,
+    DisplayCategory = Prosthesis,
+    DisplayName = DisplayName_ProstheticKnife,
+    Icon = metalHand,
+    Tooltip = Tooltip_ProstheticKnife,
+}
+
+
 
 /**************************** Mags ****************************/
 item SurgeonMag1
