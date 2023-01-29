@@ -35,3 +35,20 @@ function TocResetEverything()
 
     end
 end
+
+-----------------------------------------------------------------------
+
+
+function TocTestBodyLocations()
+
+    local group = BodyLocations.getGroup("Human")
+    local list = getClassFieldVal(group, getClassField(group, 1))
+
+    for i=1, list:size() do
+ 
+            print(list:get(i -1):getId())
+
+    end
+
+
+end

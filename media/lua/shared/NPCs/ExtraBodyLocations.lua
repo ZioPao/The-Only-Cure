@@ -1,46 +1,29 @@
---***********************************************************
---**                    THE INDIE STONE                    **
---***********************************************************
-
--- Locations must be declared in render-order.
--- Location IDs must match BodyLocation= and CanBeEquipped= values in items.txt.
-
--- FullBody     1
--- BodyCostume  2
--- FullHat      3
--- Hat          4    
--- MakeUp       5
--- Mask         6
--- JacketHat    7
--- Jacket       8
--- Shirt        9
--- Sweater      10
--- TankTop      11
--- TorsoExtra   12
--- Hands        13
--- Neck         14
--- Scarf        15
--- Pants        16
--- Shorts       17
--- Underwear    18
--- Shoes        19
--- None         20
-
 local function addBodyLocationBefore(newLocation, movetoLocation)
 
-    -- TODO pretty sure this function is borked
+  -- TODO this is still broken!
+  local group = BodyLocations.getGroup("Human")
 
 
-    local group = BodyLocations.getGroup("Human")
-    local list = getClassFieldVal(group, getClassField(group, 1))
-    group:getOrCreateLocation(newLocation)
+
+  local list = getClassFieldVal(group, getClassField(group, 1))
 
 
-    local newItem = list:get(list:size()-1)
-    list:remove(list:size()-1)
-    local i = group:indexOf(movetoLocation)
-    list:add(i, newItem)
-  end
+
+  group:getOrCreateLocation(newLocation)
+
+
+  local newItem = list:get(list:size()-1)
+  print("TOC: Created new body location" .. newItem:getId())
+
+
+
+
+  list:remove(list:size()-1)
+  local i = group:indexOf(movetoLocation)
+  list:add(i, newItem)
+end
+
+
 
 
 local function TocSetSleeves(check)
@@ -50,11 +33,7 @@ local function TocSetSleeves(check)
 
 
 
-    local group = BodyLocations.getGroup("Human")
-    group:getOrCreateLocation("ArmRight_Prot")
-    group:getOrCreateLocation("ArmLeft_Prot")
-    group:getOrCreateLocation("ArmRight")
-    group:getOrCreateLocation("ArmLeft")
+
 
     -- -- Check if we already set stuff before
     -- -- Readd them
@@ -82,4 +61,21 @@ local function TocSetSleeves(check)
 
 end
 
-TocSetSleeves(true)
+-- FIXME this still breaks
+
+local group = BodyLocations.getGroup("Human")
+
+
+
+
+addBodyLocationBefore("ArmRight", "Shoes")
+addBodyLocationBefore("ArmLeft", "Shoes")
+addBodyLocationBefore("ArmRight_Prot", "Shoes")
+addBodyLocationBefore("ArmLeft_Prot", "Shoes")
+
+
+
+-- group:getOrCreateLocation("ArmRight")
+-- group:getOrCreateLocation("ArmLeft")
+-- group:getOrCreateLocation("ArmRight_Prot")
+-- group:getOrCreateLocation("ArmLeft_Prot")
