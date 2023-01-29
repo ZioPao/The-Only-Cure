@@ -71,6 +71,9 @@ function TocSetInitData(mod_data, player)
                 Left_LowerArm = {},
                 Left_UpperArm = {},
             },
+        
+
+
             Accepted_Prosthesis = {}
 
         },
@@ -186,7 +189,7 @@ function TocUpdateBaseData(mod_data)
                 mod_data.TOC.Prosthesis["WoodenHook"][part_name].prosthesis_factor = 1.3
                 mod_data.TOC.Prosthesis["MetalHook"][part_name].prosthesis_factor = 1.2
                 mod_data.TOC.Prosthesis["MetalHand"][part_name].prosthesis_factor = 1.1
-                mod_data.TOC.Prosthesis["ProstheticKnife"][part_name].prosthesis_factor = 1.5
+                --mod_data.TOC.Prosthesis["ProstheticKnife"][part_name].prosthesis_factor = 1.5
 
 
             elseif limb == "LowerArm" then
@@ -197,7 +200,7 @@ function TocUpdateBaseData(mod_data)
                 mod_data.TOC.Prosthesis["WoodenHook"][part_name].prosthesis_factor = 1.35
                 mod_data.TOC.Prosthesis["MetalHook"][part_name].prosthesis_factor = 1.25
                 mod_data.TOC.Prosthesis["MetalHand"][part_name].prosthesis_factor = 1.15
-                mod_data.TOC.Prosthesis["ProstheticKnife"][part_name].prosthesis_factor = 1.6
+                --mod_data.TOC.Prosthesis["ProstheticKnife"][part_name].prosthesis_factor = 1.6
 
             elseif limb == "UpperArm" then
                 mod_data.TOC.Limbs[part_name].cicatrization_base_time = 2000

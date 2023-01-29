@@ -2,13 +2,45 @@ function TocCheckCompatibilityWithOlderVersions(mod_data)
     -- Gets the old status and turns it into the new.
 
     if mod_data.TOC.Limbs == nil then
-        print("TOC: Limbs is nil, resetting mod_data")
+        print("TOC: Limbs is nil, setting new mod_data")
         TocMapOldDataToNew(mod_data)
-    elseif mod_data.TOC.Limbs.Right_Hand.is_cut == nil then
+    end
+
+    if mod_data.TOC.Limbs.Right_Hand.is_cut == nil then
         print("TOC: Something was wrongly initiliazed before. Resetting parameters")
         TocResetEverything()
     else
-        print("TOC: Found compatible data")
+        print("TOC: Found compatible data, correcting models in case of errors")
+
+        -- TODO check if models are correctly applied
+        local player = getPlayer()
+        local player_inv = player:getInventory()
+
+        for _, side in ipairs(TOC_sides) do
+            for _, limb in ipairs(TOC_limbs) do
+                local part_name = side .. "_" .. limb
+
+                if mod_data.TOC.Limbs[part_name].is_cut and mod_data.TOC.Limbs[part_name].is_amputation_shown then
+                    local amputated_clothing_name = "TOC.Amputation_" .. part_name
+                    if player_inv:FindAndReturn(amputated_clothing_name) == nil then
+                        local amputation_clothing_item = player:getInventory():AddItem(TocFindAmputatedClothingFromPartName(part_name))
+                        TocSetCorrectTextureForAmputation(amputation_clothing_item, player)
+                        player:setWornItem(amputation_clothing_item:getBodyLocation(), amputation_clothing_item)
+
+
+                    end
+
+                end
+
+
+
+
+            end
+        end
+
+
+
+
     end
 
 end
@@ -76,6 +108,7 @@ local function TocSetModDataParams(mod_data, backup_old_data, new_names_table, o
         mod_data.TOC.Limbs[new_name].is_cut = backup_old_data[old_name][is_cut_old_key]
 
         if mod_data.TOC.Limbs[new_name].is_cut then
+            print("TOC: Found old cut limb, reapplying model")
             local cloth = getPlayer():getInventory():AddItem(TocFindAmputatedClothingFromPartName(new_name))
             getPlayer():setWornItem(cloth:getBodyLocation(), cloth)
         end
@@ -87,9 +120,6 @@ local function TocSetModDataParams(mod_data, backup_old_data, new_names_table, o
         mod_data.TOC.Limbs[new_name].is_cauterized = backup_old_data[old_name][is_cauterized_old_key]
         mod_data.TOC.Limbs[new_name].is_amputation_shown = backup_old_data[old_name][is_amputation_shown_old_key]
         mod_data.TOC.Limbs[new_name].cicatrization_time = backup_old_data[old_name][cicatrization_time_old_key]
-
-
-
     end
 
 end
