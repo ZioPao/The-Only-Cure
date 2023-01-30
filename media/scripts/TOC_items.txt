@@ -161,7 +161,6 @@ imports
             BloodLocation = Hands,
             Icon = woodenHook,
             Tooltip = Tooltip_equip_prothesis_hand,
-            WaterResistance = 15,
             CanHaveHoles = false,
 
         }
@@ -208,7 +207,6 @@ imports
             BloodLocation = Hands,
             Icon = metalHook,
             Tooltip = Tooltip_equip_prothesis_hand,
-            WaterResistance = 13,
             CanHaveHoles = false,
         }
 
@@ -223,7 +221,6 @@ imports
             BloodLocation = Hands,
             Icon = metalHand,
             Tooltip = Tooltip_equip_prothesis_hand,
-            WaterResistance = 11,
             CanHaveHoles = false,
         }
 
@@ -238,7 +235,6 @@ imports
             BloodLocation = Hands,
             Icon = metalHand,
             Tooltip = Tooltip_equip_prothesis_hand",
-            WaterResistance = 11,
             CanHaveHoles = false,
         }
 
@@ -253,7 +249,6 @@ imports
             BloodLocation = LowerArms;Hands,
             Icon = woodenHook,
             Tooltip = Tooltip_equip_prothesis_fore,
-            WaterResistance = 16,
             CanHaveHoles = false,
         }
 
@@ -266,10 +261,8 @@ imports
             ClothingItem = Prost_Left_LowerArm_WoodenHook,
             BodyLocation = TOC_ArmLeftProsthesis,
             BloodLocation = LowerArms;Hands,
-
             Icon = woodenHook,
             Tooltip = Tooltip_equip_prothesis_fore,
-            WaterResistance = 16,
             CanHaveHoles = false,
         }
 
@@ -284,7 +277,6 @@ imports
             BloodLocation = LowerArms;Hands,
             Icon = metalHook,
             Tooltip = Tooltip_equip_prothesis_fore,
-            WaterResistance = 14,
             CanHaveHoles = false,
         }
 
@@ -300,7 +292,6 @@ imports
 
             Icon = metalHook,
             Tooltip = Tooltip_equip_prothesis_fore,
-            WaterResistance = 14,
             CanHaveHoles = false,
         }
 
@@ -315,7 +306,6 @@ imports
             BloodLocation = LowerArms;Hands,
             Icon = metalHand,
             Tooltip = Tooltip_equip_prothesis_fore,
-            WaterResistance = 12,
             CanHaveHoles = false,
         }
 
@@ -330,7 +320,6 @@ imports
             BloodLocation = LowerArms;Hands,
             Icon = metalHand,
             Tooltip = Tooltip_equip_prothesis_fore,
-            WaterResistance = 12,
             CanHaveHoles = false,
         }
 

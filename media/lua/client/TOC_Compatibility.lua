@@ -27,10 +27,12 @@ function TocCheckCompatibilityWithOlderVersions(mod_data)
                         TocSetCorrectTextureForAmputation(amputation_clothing_item, player)
                         player:setWornItem(amputation_clothing_item:getBodyLocation(), amputation_clothing_item)
 
-
                     end
-
                 end
+
+
+                TocResetClothingItemBodyLocation(player, side, limb)
+
 
 
 
@@ -38,7 +40,6 @@ function TocCheckCompatibilityWithOlderVersions(mod_data)
             end
         end
 
-        TocReapplyBodyLocation()
 
 
 
@@ -153,91 +154,6 @@ function TocMapOldDataToNew(mod_data)
     TocSetModDataParams(mod_data, backup_old_data, new_names_table, old_names_table, og_mod_check)
 
 
-
-
-end
-
-
-------------------------------------------------------------------------------------------
-
--- Modified functions for compat reason, used only in one instance
---------------------
-local function TocPartNameToOldBodyLocationProsthesis(name)
-    if name == "Right_Hand" then return "ArmRight_Prot" end
-    if name == "Right_LowerArm" then return "ArmRight_Prot" end
-    if name == "Right_UpperArm" then return "ArmRight_Prot" end
-    if name == "Left_Hand" then return "ArmLeft_Prot" end
-    if name == "Left_LowerArm" then return "ArmLeft_Prot" end
-    if name == "Left_UpperArm" then return "ArmLeft_Prot" end
-end
-
-local function TocPartNameToOldBodyLocationAmputation(name)
-    if name == "Right_Hand" then return "ArmRight" end
-    if name == "Right_LowerArm" then return "ArmRight" end
-    if name == "Right_UpperArm" then return "ArmRight" end
-    if name == "Left_Hand" then return "ArmLeft" end
-    if name == "Left_LowerArm" then return "ArmLeft" end
-    if name == "Left_UpperArm" then return "ArmLeft" end
-end
-
-
-
-function TocFindAmputationInInventory(player, side, limb)
-    local player_inventory = player:getInventory()
-    local item_name = "TOC.Amputation_" .. side .. "_" .. limb
-    local found_item = player_inventory:FindAndReturn(item_name)
-    if found_item then
-        return found_item:getFullType()
-
-    end
-
-end
-
-function TocFindEquippedProsthesisInInventory(player, side, limb)
-    local player_inventory = player:getInventory()
-    for _, prost in ipairs(GetProsthesisList()) do
-        local item_name = "TOC.Prost_" .. side .. "_" .. limb .. "_" .. prost
-        local found_item = player_inventory:FindAndReturn(item_name)
-
-        if found_item then
-            return found_item:getFullType()
-
-        end
-
-    end
-
-end
-
-
-function TocOldFindAmputationOrProsthesisName(part_name, player, choice)
-
-    local player_inventory = player:getInventory()
-    
-    for _, side in ipairs(TOC_sides) do
-        for _, limb in ipairs(TOC_limbs) do
-            local item_name
-            local found_item
-            if choice == "Amputation" then
-                item_name = "TOC.Amputation_" .. side .. "_" .. limb
-            end
-
-            if choice == "Prosthesis" then
-                item_name = "TOC.Prost" .. side .. "_" .. limb .. "_MetalHook"      -- TODO finish this
-
-                
-            end
-            
-
-            found_item = player_inventory:FindAndReturn(item_name)
-
-            if found_item then
-                return found_item:getFullType()
-
-            end
- 
-
-        end
-    end
 
 
 end

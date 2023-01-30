@@ -30,11 +30,22 @@ TocContextMenus.CreateMenus = function(player, context, worldObjects, test)
                                 -- FIXME this is to prevent context menu spamming. Find a better way
                                 clicked_players_table[clicked_player:getUsername()] = true
 
-                                local root_option = context:addOption("The Only Cure on " .. clicked_player:getUsername())
-                                local root_menu = context:getNew(context)
-                                local cheat_menu = TocContextMenus.CreateCheatMenu(context, root_menu, local_player,
-                                    clicked_player)
-                                context:addSubMenu(root_option, root_menu)
+                                if local_player:getAccessLevel() == "Admin" or isDebugEnabled() then
+                                    local root_option = context:addOption("The Only Cure Cheats on " .. clicked_player:getUsername())
+                                    local root_menu = context:getNew(context)
+
+                                    if clicked_player == local_player then
+                                        root_menu:addOption("Reset TOC for me", _, TocResetEverything)
+                            
+                                    else
+                                        root_menu:addOption("Reset TOC for " .. clicked_player:getUsername(), _, TryToToResetEverythingOtherPlayer,
+                                            clicked_player, local_player)
+                            
+                                    end
+                                    context:addSubMenu(root_option, root_menu)
+                                end
+
+
 
                                 -- TocContextMenus.FillCutAndOperateMenus(local_player, clicked_player, worldObjects,
                                 --     cut_menu, operate_menu)

@@ -80,7 +80,7 @@ function ISInventoryPane:onMouseDoubleClick(x, y)
     local player_inventory = getPlayerInventory(self.player).inventory
     if instanceof(item_to_check, "InventoryItem") then
         og_ISInventoryPaneOnMouseDoubleClick(self, x, y)
-    elseif CheckIfItemIsAmputatedLimb(item_to_check.items[1]) or CheckIfItemIsProsthesis(item_to_check.items[1]) then
+    elseif CheckIfItemIsAmputatedLimb(item_to_check.items[1]) or CheckIfItemIsInstalledProsthesis(item_to_check.items[1]) then
         print("TOC: Can't double click this item")
     else
         og_ISInventoryPaneOnMouseDoubleClick(self, x, y)
@@ -113,9 +113,11 @@ ISInventoryPaneContextMenu.onInspectClothing         = function(playerObj, cloth
 
     -- Inspect menu bypasses getActualItems, so we need to add that workaround here too
     local clothing_full_type = clothing:getFullType()
-    if not string.find(clothing_full_type, "Amputation_") then
-
+    if CheckIfItemIsAmputatedLimb(clothing) or CheckIfItemIsInstalledProsthesis(clothing) then
+        print("TOC: Can't inspect this!")
+    else
         og_ISInventoryPaneContextMenuOnInspectClothing(playerObj, clothing)
+
     end
 
 end

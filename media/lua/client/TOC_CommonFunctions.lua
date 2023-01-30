@@ -45,25 +45,6 @@ function GetAcceptingProsthesisBodyPartTypes()
 
 end
 
--- TODO This is just convoluted. Do not use this
-function FindTocDataPartNameFromBodyPartType(toc_limbs_data, bodyPartType)
-    if bodyPartType == BodyPartType.Hand_R then
-        return toc_limbs_data.Right_Hand
-    elseif bodyPartType == BodyPartType.ForeArm_R then
-        return toc_limbs_data.Right_LowerArm
-    elseif bodyPartType == BodyPartType.UpperArm_R then
-        return toc_limbs_data.Right_UpperArm
-    elseif bodyPartType == BodyPartType.Hand_L then
-        return toc_limbs_data.Left_Hand
-    elseif bodyPartType == BodyPartType.ForeArm_L then
-        return toc_limbs_data.Left_LowerArm
-    elseif bodyPartType == BodyPartType.UpperArm_L then
-        return toc_limbs_data.Left_UpperArm
-    else
-        return nil
-    end
-end
-
 function TocGetPartNameFromBodyPartType(body_part)
 
     if body_part == BodyPartType.Hand_R then
@@ -114,3 +95,28 @@ function TocFindCorrectClothingProsthesis(item_name, part_name)
 end
 
 
+function TocFindAmputationInInventory(player, side, limb)
+    local player_inventory = player:getInventory()
+    local item_name = "TOC.Amputation_" .. side .. "_" .. limb
+    local found_item = player_inventory:FindAndReturn(item_name)
+    if found_item then
+        return found_item:getFullType()
+
+    end
+
+end
+
+function TocFindEquippedProsthesisInInventory(player, side, limb)
+    local player_inventory = player:getInventory()
+    for _, prost in ipairs(GetProsthesisList()) do
+        local item_name = TocFindCorrectClothingProsthesis(prost, side .."_" .. limb)
+        local found_item = player_inventory:FindAndReturn(item_name)
+
+        if found_item then
+            return found_item:getFullType()
+
+        end
+
+    end
+
+end
