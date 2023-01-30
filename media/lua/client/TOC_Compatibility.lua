@@ -30,19 +30,9 @@ function TocCheckCompatibilityWithOlderVersions(mod_data)
                     end
                 end
 
-
                 TocResetClothingItemBodyLocation(player, side, limb)
-
-
-
-
-
             end
         end
-
-
-
-
     end
 
 end

@@ -1,5 +1,3 @@
--- 6 skin tones or 5?
-
 function TocSetCorrectTextureForAmputation(item, player)
     local human_visual = player:getHumanVisual()
     local texture_string = human_visual:getSkinTexture()

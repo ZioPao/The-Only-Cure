@@ -36,14 +36,12 @@ function CheckIfProsthesisCanBeEquipped(part_name)
     -- check if prosthesis is in the surgeon inventory... we need to get it before
 end
 
-
 function CheckIfProsthesisCanBeUnequipped(part_name)
 
     -- TODO we should get item here to be sure that we can do this action instead of relying on some later checks
     return true
 
 end
-
 -------------------------------
 
 
@@ -51,18 +49,10 @@ end
 
 function CheckIfProsthesisAlreadyInstalled(limbs_data, part_name)
 
-    local r = "Right"
-    local l = "Left"
-
-
-    if string.find(part_name, r) then
-        return (limbs_data[r .. "_Hand"].is_prosthesis_equipped or limbs_data[r .. "_LowerArm"].is_prosthesis_equipped)
-
-    elseif string.find(part_name, l) then
-        return (limbs_data[l .. "_Hand"].is_prosthesis_equipped or limbs_data[l .. "_LowerArm"].is_prosthesis_equipped)
+    for _, side in ipairs(TOC_sides) do
+        if string.find(part_name, side) then
+            return (limbs_data[side .. "_Hand"].is_prosthesis_equipped or limbs_data[side .. "_LowerArm"].is_prosthesis_equipped)
+        end
     end
-
-
-
 
 end

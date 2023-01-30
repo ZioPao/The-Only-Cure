@@ -94,6 +94,4 @@ function TocTestBodyLocations()
             print(list:get(i -1):getId())
 
     end
-
-
 end

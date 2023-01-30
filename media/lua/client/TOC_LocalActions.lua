@@ -34,10 +34,6 @@ function TocEquipProsthesisLocal(_, player, part_name)
 end
 
 function TocUnequipProsthesisLocal(_, player, part_name)
-    --local equipped_prosthesis = TocFindItemInProstBodyLocation(part_name, patient)
-
     ISTimedActionQueue.add(ISUninstallProsthesis:new(player, player, part_name))
 
-    --ISTimedActionQueue.add(ISUninstallProsthesis:new(patient, equipped_prosthesis,
-    --    patient:getBodyDamage():getBodyPart(TocGetBodyPartTypeFromPartName(part_name))))
 end

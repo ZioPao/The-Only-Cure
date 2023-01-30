@@ -50,6 +50,9 @@
         "isForceDropHeavyItem",
         "isFHModKeyDown",
         "getPlayerData",
-        "FHSwapHandsAction"
+        "FHSwapHandsAction",
+        "getClassFieldVal",
+        "SandboxVars",
+        "getClassField"
     ]
 }

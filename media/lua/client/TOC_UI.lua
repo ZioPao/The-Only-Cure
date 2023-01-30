@@ -144,28 +144,13 @@ local function OnClickTocMainUI(button, args)
 end
 
 local function OnClickTocDescUI(button, args)
+    
     -- Gets every arg from main
-
     local patient = desc_ui.patient
     local surgeon = desc_ui.surgeon
 
-
-    -- Validate action
-    if args.option == "Cut" then
-        TryTocAction(_, desc_ui.part_name, "Cut", surgeon, patient)
-    elseif args.option == "Operate" then
-        TryTocAction(_, desc_ui.part_name, "Operate", surgeon, patient)
-
-    elseif args.option == "Equip" then
-        TryTocAction(_, desc_ui.part_name, "Equip", surgeon, patient)
-        -- TODO probably completely broken for MP
-        -- TODO this is really janky
-
-    elseif args.option == "Unequip" then
-        TryTocAction(_, desc_ui.part_name, "Unequip", surgeon, patient)
-
-    elseif args.option == "Nothing" then
-        print("Just do nothing") -- TODO workaround
+    if args.option ~= "Nothing" then
+        TryTocAction(_, desc_ui.part_name, args.option, surgeon, patient)
     end
     main_ui:close()
 
@@ -354,9 +339,6 @@ end
 -- Setup stuff with variables and shit
 
 function SetupTocMainUI(surgeon, patient, limbs_data)
-
-    -- TODO add a ontick to update it regularly
-
     main_ui.surgeon = surgeon -- we shouldn't need an arg for this
     main_ui.patient = patient
 

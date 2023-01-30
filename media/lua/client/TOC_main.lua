@@ -71,7 +71,7 @@ function TocSetInitData(mod_data, player)
                 Left_LowerArm = {},
                 Left_UpperArm = {},
             },
-        
+
 
 
             Accepted_Prosthesis = {}
@@ -116,7 +116,7 @@ function TocSetInitData(mod_data, player)
 
 
             mod_data.TOC.Limbs[part_name].is_prosthesis_equipped = false
-            mod_data.TOC.Limbs[part_name].equipped_prosthesis = {}      -- TODO i'm still not usign this, I should though
+            mod_data.TOC.Limbs[part_name].equipped_prosthesis = {} -- TODO i'm still not usign this, I should though
 
             -- Even if there are some duplicates, this is just easier in the end since we're gonna get fairly easily part_name
 
@@ -299,7 +299,8 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
 
 
     -- If bandages are available, use them
-    adiacent_body_part:setBandaged(bandage_table.use_bandage, 10, bandage_table.is_bandage_sterilized, bandage_table.bandage_type)
+    adiacent_body_part:setBandaged(bandage_table.use_bandage, 10, bandage_table.is_bandage_sterilized,
+        bandage_table.bandage_type)
 
 
 
@@ -321,7 +322,8 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
                 limbs_data[depended_v].cicatrization_time = limbs_data[part_name].cicatrization_base_time -
                     surgeon_factor * 50
 
-                local should_depended_v_be_healed_of_bite = limbs_data[depended_v].is_infected and body_damage:getInfectionLevel() < 20
+                local should_depended_v_be_healed_of_bite = limbs_data[depended_v].is_infected and
+                    body_damage:getInfectionLevel() < 20
                 local depended_body_part = body_damage:getBodyPart(TocGetBodyPartFromPartName(depended_v))
                 TocSetParametersForMissingLimb(depended_body_part, should_depended_v_be_healed_of_bite)
 
@@ -331,7 +333,7 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
 
 
             end
-         end
+        end
 
 
         -- Heal the infection here

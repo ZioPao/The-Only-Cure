@@ -26,7 +26,7 @@ local function OverrideFancyHandwork()
         end
         --ISInventoryPaneContextMenu.transferIfNeeded(self.chr, item)
 
-            -- If we already have the item equipped
+        -- If we already have the item equipped
         if (primary and primary == item) or (secondary and secondary == item) then
             ISTimedActionQueue.add(ISUnequipAction:new(self.chr, item, 20))
             equip = false
@@ -38,7 +38,7 @@ local function OverrideFancyHandwork()
             if primary and isForceDropHeavyItem(primary) then
                 ISTimedActionQueue.add(ISUnequipAction:new(self.chr, primary, 50))
                 ----- treat "equip" as if we have something equipped from here down
-                equip = false  
+                equip = false
             end
             if mod then
                 -- If we still have something equipped in secondary, unequip
@@ -71,8 +71,6 @@ local function OverrideFancyHandwork()
         getPlayerData(self.chr:getPlayerNum()).playerInventory:refreshBackpacks()
     end
 
-
-
     local og_FHSwapHandsAction = FHSwapHandsAction.start
 
     function FHSwapHandsAction:start()
@@ -104,6 +102,5 @@ local function OverrideFancyHandwork()
     end
 
 end
-
 
 Events.OnGameStart.Add(OverrideFancyHandwork)
