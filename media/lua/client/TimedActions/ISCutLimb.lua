@@ -119,7 +119,7 @@ function ISCutLimb:perform()
         TheOnlyCure.CutLimb(self.part_name, surgeon_factor, bandage_table, painkiller_table)
     end
 
-
+    self.character:getEmitter():stopSoundByName("Amputation_Sound")
     self.surgeon:getXp():AddXP(Perks.Doctor, 400)
     ISBaseTimedAction.perform(self)
 
