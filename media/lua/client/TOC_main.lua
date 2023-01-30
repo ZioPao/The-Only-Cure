@@ -148,6 +148,13 @@ function TocSetInitData(mod_data, player)
         mod_data.TOC.Limbs.Left_LowerArm.is_operated = true
         mod_data.TOC.Limbs.Left_LowerArm.is_amputation_shown = true
         mod_data.TOC.Limbs.Left_LowerArm.is_cicatrized = true
+
+        for _, v in pairs(mod_data.TOC.Limbs.Left_LowerArm.depends_on) do
+            mod_data.TOC.Limbs[v].is_cut = true
+            mod_data.TOC.Limbs[v].is_operated = true
+            mod_data.TOC.Limbs[v].is_amputation_shown = false
+            mod_data.TOC.Limbs[v].is_cicatrized = true
+        end
     elseif player:HasTrait("Amputee_UpperArm") then
         local amputation_clothing_item = player:getInventory():AddItem("TOC.Amputation_Left_UpperArm")
         TocSetCorrectTextureForAmputation(amputation_clothing_item, player)
@@ -157,6 +164,13 @@ function TocSetInitData(mod_data, player)
         mod_data.TOC.Limbs.Left_UpperArm.is_operated = true
         mod_data.TOC.Limbs.Left_UpperArm.is_amputation_shown = true
         mod_data.TOC.Limbs.Left_UpperArm.is_cicatrized = true
+
+        for _, v in pairs(mod_data.TOC.Limbs.Left_UpperArm.depends_on) do
+            mod_data.TOC.Limbs[v].is_cut = true
+            mod_data.TOC.Limbs[v].is_operated = true
+            mod_data.TOC.Limbs[v].is_amputation_shown = false
+            mod_data.TOC.Limbs[v].is_cicatrized = true
+        end
     end
 
 

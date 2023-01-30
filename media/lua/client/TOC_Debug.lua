@@ -4,6 +4,14 @@ function TocResetEverything()
     local player_inventory = player:getInventory()
     local mod_data = player:getModData()
     mod_data.TOC = nil
+
+    -- Removes traits just to be sure
+    local toc_traits = player:getTraits()
+    toc_traits:remove("Amputee_Hand")
+    toc_traits:remove("Amputee_LowerArm")
+    toc_traits:remove("Amputee_UpperArm")
+
+
     TheOnlyCure.InitTheOnlyCure(_, player)
 
     -- Destroy the amputation or prosthesis item
