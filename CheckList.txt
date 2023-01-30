@@ -1,0 +1,19 @@
+
+1) Can cut every limb in SP
+2) Does cutting a limb cure infection 
+3) If I get bit in the hand, will cutting the forearm cure the infection?
+4) Both forearm bit, cut everyone, infection cured?
+5) Can I operate myself?
+6) Can I equip a prost?
+7) Can i unequip a prost?
+
+
+
+MP TEST
+1) Everything up there but in mp env
+
+
+
+
+--------------------------
+- traits are kinda broken, cant reset them 

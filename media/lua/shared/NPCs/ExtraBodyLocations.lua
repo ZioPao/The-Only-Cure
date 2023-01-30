@@ -68,14 +68,14 @@ local group = BodyLocations.getGroup("Human")
 
 
 
-addBodyLocationBefore("ArmRight", "Shoes")
-addBodyLocationBefore("ArmLeft", "Shoes")
-addBodyLocationBefore("ArmRight_Prot", "Shoes")
-addBodyLocationBefore("ArmLeft_Prot", "Shoes")
+addBodyLocationBefore("TOC_ArmRight", "Shoes")
+addBodyLocationBefore("TOC_ArmLeft", "Shoes")
+addBodyLocationBefore("TOC_ArmRightProsthesis", "Shoes")
+addBodyLocationBefore("TOC_ArmLeftProsthesis", "Shoes")
 
 
 
--- group:getOrCreateLocation("ArmRight")
+-- group:getOrCreateLocation("TOC_ArmRight")
 -- group:getOrCreateLocation("ArmLeft")
 -- group:getOrCreateLocation("ArmRight_Prot")
 -- group:getOrCreateLocation("ArmLeft_Prot")

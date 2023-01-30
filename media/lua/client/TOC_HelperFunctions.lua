@@ -146,23 +146,21 @@ end
 -- Unequip Prosthesis
 
 local function PartNameToBodyLocationProsthesis(name)
-    -- This is still correct but naming sucks
-    if name == "Right_Hand" then return "ArmRight_Prot" end
-    if name == "Right_LowerArm" then return "ArmRight_Prot" end
-    if name == "Right_UpperArm" then return "ArmRight_Prot" end
-    if name == "Left_Hand" then return "ArmLeft_Prot" end
-    if name == "Left_LowerArm" then return "ArmLeft_Prot" end
-    if name == "Left_UpperArm" then return "ArmLeft_Prot" end
+    if name == "Right_Hand" then return "TOC_ArmRightProsthesis" end
+    if name == "Right_LowerArm" then return "TOC_ArmRightProsthesis" end
+    if name == "Right_UpperArm" then return "TOC_ArmRightProsthesis" end
+    if name == "Left_Hand" then return "TOC_ArmLeftProsthesis" end
+    if name == "Left_LowerArm" then return "TOC_ArmLeftProsthesis" end
+    if name == "Left_UpperArm" then return "TOC_ArmLeftProsthesis" end
 end
 
 local function PartNameToBodyLocationAmputation(name)
-    -- This is still correct but naming sucks
-    if name == "Right_Hand" then return "ArmRight" end
-    if name == "Right_LowerArm" then return "ArmRight" end
-    if name == "Right_UpperArm" then return "ArmRight" end
-    if name == "Left_Hand" then return "ArmLeft" end
-    if name == "Left_LowerArm" then return "ArmLeft" end
-    if name == "Left_UpperArm" then return "ArmLeft" end
+    if name == "Right_Hand" then return "TOC_ArmRight" end
+    if name == "Right_LowerArm" then return "TOC_ArmRight" end
+    if name == "Right_UpperArm" then return "TOC_ArmRight" end
+    if name == "Left_Hand" then return "TOC_ArmLeft" end
+    if name == "Left_LowerArm" then return "TOC_ArmLeft" end
+    if name == "Left_UpperArm" then return "TOC_ArmLeft" end
 end
 
 function TocFindItemInProstBodyLocation(part_name, patient)
@@ -189,10 +187,7 @@ function TocFindAmputationOrProsthesisName(part_name, player, choice)
             
             if item:getBodyLocation() == PartNameToBodyLocationAmputation(part_name) then
                 return item:getFullType()
-
             end
-
-
         elseif choice == "Prosthesis" then
 
             if item:getBodyLocation() == PartNameToBodyLocationProsthesis(part_name) then
@@ -202,9 +197,6 @@ function TocFindAmputationOrProsthesisName(part_name, player, choice)
         end
 
     end
-
-
-
 
 end
 
