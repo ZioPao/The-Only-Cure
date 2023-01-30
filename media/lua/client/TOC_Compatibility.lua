@@ -1,3 +1,28 @@
+local function TocReapplyAmputationClothingItem(mod_data)
+    local player = getPlayer()
+    local player_inv = player:getInventory()
+
+    for _, side in ipairs(TOC_sides) do
+        for _, limb in ipairs(TOC_limbs) do
+            local part_name = side .. "_" .. limb
+
+            if mod_data.TOC.Limbs[part_name].is_cut and mod_data.TOC.Limbs[part_name].is_amputation_shown then
+                local amputated_clothing_name = "TOC.Amputation_" .. part_name
+                if player_inv:FindAndReturn(amputated_clothing_name) == nil then
+                    local amputation_clothing_item = player:getInventory():AddItem(TocFindAmputatedClothingFromPartName(part_name))
+                    TocSetCorrectTextureForAmputation(amputation_clothing_item, player)
+                    player:setWornItem(amputation_clothing_item:getBodyLocation(), amputation_clothing_item)
+
+                end
+            end
+
+            TocResetClothingItemBodyLocation(player, side, limb)
+        end
+    end
+
+end
+
+
 function TocCheckCompatibilityWithOlderVersions(mod_data)
     -- Gets the old status and turns it into the new.
 
@@ -11,28 +36,7 @@ function TocCheckCompatibilityWithOlderVersions(mod_data)
         TocResetEverything()
     else
         print("TOC: Found compatible data, correcting models in case of errors")
-
-        -- TODO check if models are correctly applied
-        local player = getPlayer()
-        local player_inv = player:getInventory()
-
-        for _, side in ipairs(TOC_sides) do
-            for _, limb in ipairs(TOC_limbs) do
-                local part_name = side .. "_" .. limb
-
-                if mod_data.TOC.Limbs[part_name].is_cut and mod_data.TOC.Limbs[part_name].is_amputation_shown then
-                    local amputated_clothing_name = "TOC.Amputation_" .. part_name
-                    if player_inv:FindAndReturn(amputated_clothing_name) == nil then
-                        local amputation_clothing_item = player:getInventory():AddItem(TocFindAmputatedClothingFromPartName(part_name))
-                        TocSetCorrectTextureForAmputation(amputation_clothing_item, player)
-                        player:setWornItem(amputation_clothing_item:getBodyLocation(), amputation_clothing_item)
-
-                    end
-                end
-
-                TocResetClothingItemBodyLocation(player, side, limb)
-            end
-        end
+        TocReapplyAmputationClothingItem(mod_data)
     end
 
 end
