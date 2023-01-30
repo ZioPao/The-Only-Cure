@@ -6,6 +6,6 @@
     <m_Static>false</m_Static>
     <m_AllowRandomHue>false</m_AllowRandomHue>
     <m_AllowRandomTint>false</m_AllowRandomTint>
-    <textureChoices>Clothes\metal_male</textureChoices>
-    <textureChoices>Clothes\metal_female</textureChoices>
+    <textureChoices>Prosthesis\metal_hook_male</textureChoices>
+    <textureChoices>Prosthesis\metal_hook_female</textureChoices>
 </clothingItem>

@@ -64,53 +64,65 @@ local function SetHealthStatusForBodyPart(part_data, part_name, player)
 
     -- TODO Implement this
 
-
-    -- Set max health for body part
-    if part_data[part_name].is_cicatrized and body_part:getHealth() > 80 then
-        body_part:SetHealth(80)
-    elseif body_part:getHealth() > 40 then
-        body_part:SetHealth(40)
-    end
-
-    -- Cicatrization check
-    if part_data[part_name].is_cut and not part_data[part_name].is_cicatrized then
-        if part_data[part_name].cicatrization_time < 0 then
-            part_data[part_name].is_cicatrized = true
-
-            -- TODO make this random if the player gets it or not
-
-            if (not player:HasTrait("Brave")) and ZombRand(1, 11) > 5 then
-                player:getTraits():add("Brave")
-
-            end
-
-            if (not player:HasTrait("Insensitive")) and ZombRand(1, 11) > 5 then
-                player:getTraits():add("Insensitive")
-            end
-
-            -- if the player gets attacked and damaged in a cut area we have to reset it here since it doesn't make any sense
-            body_part:setBleeding(false);
-            body_part:setDeepWounded(false)
-            body_part:setBleedingTime(0)
-            body_part:setDeepWoundTime(0)
-            body_part:SetBitten(false)
-            body_part:setBiteTime(0)
-            part_data.is_infected = false
+    if part_data[part_name].is_cut then
+        
+        -- if the player gets attacked and damaged in a cut area we have to reset it here since it doesn't make any sense
+        -- this is using map 1:1, so it doesn't affect the wound caused by the amputation
+        body_part:setBleeding(false);
+        body_part:setDeepWounded(false)
+        body_part:setBleedingTime(0)
+        body_part:setDeepWoundTime(0)
+        body_part:SetBitten(false)
+        body_part:setBiteTime(0)
+        part_data.is_infected = false
 
 
+        -- Set max health for body part
+        if part_data[part_name].is_cicatrized and body_part:getHealth() > 80 then
+            body_part:SetHealth(80)
+        elseif body_part:getHealth() > 40 then
+            body_part:SetHealth(40)
         end
+
+
+        -- Cicatrization check
+        if not part_data[part_name].is_cicatrized then
+            if part_data[part_name].cicatrization_time < 0 then
+                part_data[part_name].is_cicatrized = true
+
+                -- TODO make this random if the player gets it or not
+
+                if (not player:HasTrait("Brave")) and ZombRand(1, 11) > 5 then
+                    player:getTraits():add("Brave")
+
+                end
+
+                if (not player:HasTrait("Insensitive")) and ZombRand(1, 11) > 5 then
+                    player:getTraits():add("Insensitive")
+                end
+
+                -- if the player gets attacked and damaged in a cut area we have to reset it here since it doesn't make any sense
+                body_part:setBleeding(false);
+                body_part:setDeepWounded(false)
+                body_part:setBleedingTime(0)
+                body_part:setDeepWoundTime(0)
+                body_part:SetBitten(false)
+                body_part:setBiteTime(0)
+                part_data.is_infected = false
+
+
+            end
+        end
+
+        -- Phantom Pain
+        if part_data[part_name].is_amputation_shown and ZombRand(1, 100) < 10 then
+            local added_pain
+            if part_data[part_name].is_cauterized then added_pain = 60 else added_pain = 30 end
+            body_part:setAdditionalPain(ZombRand(1, added_pain))
+        end
+
+        -- TODO Add phantom pain to depended parts
     end
-
-    -- Phantom Pain
-    if part_data[part_name].is_amputation_shown and ZombRand(1, 100) < 10 then
-        local added_pain
-        if part_data[part_name].is_cauterized then added_pain = 60 else added_pain = 30 end
-        body_part:setAdditionalPain(ZombRand(1, added_pain))
-    end
-
-    -- TODO Add phantom pain to depended parts
-
- 
 end
 
 
