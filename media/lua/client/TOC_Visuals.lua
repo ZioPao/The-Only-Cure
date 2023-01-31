@@ -2,13 +2,19 @@ function TocSetCorrectTextureForAmputation(item, player, cicatrized)
     local human_visual = player:getHumanVisual()
     local texture_string = human_visual:getSkinTexture()
 
+    local is_hairy = string.find(texture_string, "a$")
     -- Hairy bodies
-    if string.find(texture_string, "a$") then
+    if  is_hairy then
         texture_string = texture_string:sub(1, -2)      -- Removes b at the end to make it compatible
     end
 
 
     local matched_index = string.match(texture_string, "%d$")
+
+    if is_hairy then
+        matched_index = matched_index + 5
+    end
+
 
     if cicatrized then
         matched_index = matched_index + 5           -- to use the cicatrized texture
