@@ -27,7 +27,32 @@ local function CheckIfPlayerIsInfected(player, toc_data)
     end
 end
 
+local function TocManagePhantomPain(player, toc_data)
+    -- Phantom Pain
+    local part_data = toc_data.Limbs
+    local body_damage = player:getBodyDamage()
 
+    for _, part_name in pairs(GetBodyParts()) do
+
+        if part_data[part_name].is_cut and part_data[part_name].is_amputation_shown and ZombRand(1, 100) < 10 then
+            local body_part = body_damage:getBodyPart(TocGetBodyPartFromPartName(part_name))
+            local added_pain
+            if part_data[part_name].is_cauterized then added_pain = 60 else added_pain = 30 end
+            body_part:setAdditionalPain(ZombRand(1, added_pain))
+            for _, depended_v in pairs(part_data[part_name].depends_on) do
+                local depended_body_part = body_damage:getBodyPart(TocGetBodyPartFromPartName(depended_v))
+                if part_data[depended_v].is_cauterized then added_pain = 60 else added_pain = 30 end
+                body_part:setAdditionalPain(ZombRand(1, added_pain))
+            end
+
+
+        end
+    end
+
+    -- TODO Add phantom pain to depended parts
+
+
+end
 
 
 --Helper function for UpdatePlayerHealth
@@ -65,14 +90,21 @@ local function SetHealthStatusForBodyPart(part_data, part_name, player)
     -- TODO Implement this
 
     if part_data[part_name].is_cut then
-        
+        --print("TOC: Check update for " .. part_name)
         -- if the player gets attacked and damaged in a cut area we have to reset it here since it doesn't make any sense
         -- this is using map 1:1, so it doesn't affect the wound caused by the amputation
-        body_part:setBleeding(false);
+
+        -- TODO if the players gets damaged in a cut part and it has a prosthesis, damage the prosthesis
+ 
+        body_part:setBleeding(false)
         body_part:setDeepWounded(false)
         body_part:setBleedingTime(0)
         body_part:setDeepWoundTime(0)
         body_part:SetBitten(false)
+        body_part:setScratched(false, false)        -- ffs it always fucks me 
+        body_part:setCut(false)
+        body_part:SetInfected(false)
+
         body_part:setBiteTime(0)
         part_data.is_infected = false
 
@@ -114,14 +146,6 @@ local function SetHealthStatusForBodyPart(part_data, part_name, player)
             end
         end
 
-        -- Phantom Pain
-        if part_data[part_name].is_amputation_shown and ZombRand(1, 100) < 10 then
-            local added_pain
-            if part_data[part_name].is_cauterized then added_pain = 60 else added_pain = 30 end
-            body_part:setAdditionalPain(ZombRand(1, added_pain))
-        end
-
-        -- TODO Add phantom pain to depended parts
     end
 end
 
@@ -143,33 +167,20 @@ end
 
 -- MAIN UPDATE FUNCTIONS
 
-local function TocUpdateEveryOneMinute()
+local function TocUpdateOnTick()
 
     local player = getPlayer()
-    -- To prevent errors during loading
     if player == nil then
         return
     end
-
     local toc_data = player:getModData().TOC
-
     if toc_data ~= nil then
         CheckIfPlayerIsInfected(player, toc_data)
         UpdatePlayerHealth(player, toc_data.Limbs)
     end
 
 
-
-    -- Updates toc data in a global way, basically player:transmitModData but it works
-    -- Sends only Limbs since the other stuff is mostly static
-    if toc_data ~= nil then
-        -- TODO make it so that we dont send it constantly
-        sendClientCommand(player, 'TOC', 'ChangePlayerState', { toc_data.Limbs } )
-    end
-
-
 end
-
 local function TocUpdateEveryTenMinutes()
 
     local player = getPlayer()
@@ -196,6 +207,34 @@ local function TocUpdateEveryTenMinutes()
     end
 
 end
+local function TocUpdateEveryOneMinute()
 
+    local player = getPlayer()
+    -- To prevent errors during loading
+    if player == nil then
+        return
+    end
+
+    local toc_data = player:getModData().TOC
+
+    if toc_data ~= nil then
+        TocManagePhantomPain(player, toc_data)
+    end
+
+
+
+    -- Updates toc data in a global way, basically player:transmitModData but it works
+    -- Sends only Limbs since the other stuff is mostly static
+    if toc_data ~= nil then
+        -- TODO make it so that we dont send it constantly
+        sendClientCommand(player, 'TOC', 'ChangePlayerState', { toc_data.Limbs } )
+    end
+
+
+end
+
+
+
+Events.OnTick.Add(TocUpdateOnTick)
 Events.EveryTenMinutes.Add(TocUpdateEveryTenMinutes)
 Events.EveryOneMinute.Add(TocUpdateEveryOneMinute)
