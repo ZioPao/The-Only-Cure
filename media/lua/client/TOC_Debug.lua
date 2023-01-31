@@ -48,7 +48,7 @@ end
 -- Set correct body locations for items in inventory
 function TocResetClothingItemBodyLocation(player, side, limb)
     local player_inventory = player:getInventory()
-
+    local limbs_data = player:getModData().TOC.Limbs
     local amputation_item_name = TocFindAmputationInInventory(player, side, limb)
     local equipped_prosthesis_item_name = TocFindEquippedProsthesisInInventory(player, side, limb)
     print(amputation_item_name)
@@ -61,7 +61,7 @@ function TocResetClothingItemBodyLocation(player, side, limb)
             player:removeWornItem(amputation_item)
             player:getInventory():Remove(amputation_item)
             amputation_item = player_inventory:AddItem(amputation_item_name)
-            TocSetCorrectTextureForAmputation(amputation_item, player)
+            TocSetCorrectTextureForAmputation(amputation_item, player, limbs_data[side .. "_" .. limb].is_cicatrized)
 
             player:setWornItem(amputation_item:getBodyLocation(), amputation_item)
         end

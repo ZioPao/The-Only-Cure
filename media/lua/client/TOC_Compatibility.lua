@@ -10,7 +10,7 @@ local function TocReapplyAmputationClothingItem(mod_data)
                 local amputated_clothing_name = "TOC.Amputation_" .. part_name
                 if player_inv:FindAndReturn(amputated_clothing_name) == nil then
                     local amputation_clothing_item = player:getInventory():AddItem(TocFindAmputatedClothingFromPartName(part_name))
-                    TocSetCorrectTextureForAmputation(amputation_clothing_item, player)
+                    TocSetCorrectTextureForAmputation(amputation_clothing_item, player, mod_data.TOC.Limbs[part_name].is_cicatrized)
                     player:setWornItem(amputation_clothing_item:getBodyLocation(), amputation_clothing_item)
 
                 end

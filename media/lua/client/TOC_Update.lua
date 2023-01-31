@@ -121,9 +121,14 @@ local function SetHealthStatusForBodyPart(part_data, part_name, player)
         if not part_data[part_name].is_cicatrized then
             if part_data[part_name].cicatrization_time < 0 then
                 part_data[part_name].is_cicatrized = true
+                local player_inventory = player:getInventory()
+                local amputated_clothing_item_name = TocFindAmputationOrProsthesisName(part_name, player, "Amputation")
+                local amputated_clothing_item = player_inventory:FindAndReturn(amputated_clothing_item_name)
 
-                -- TODO make this random if the player gets it or not
-
+                player:removeWornItem(amputated_clothing_item)
+                TocSetCorrectTextureForAmputation(amputated_clothing_item, player, true)
+                player:setWornItem(amputated_clothing_item:getBodyLocation(), amputated_clothing_item)
+                
                 if (not player:HasTrait("Brave")) and ZombRand(1, 11) > 5 then
                     player:getTraits():add("Brave")
 
@@ -203,6 +208,9 @@ local function TocUpdateEveryTenMinutes()
     for _, part_name in pairs(GetBodyParts()) do
         if part_data[part_name].is_cut and not part_data[part_name].is_cicatrized then
             part_data[part_name].cicatrization_time = part_data[part_name].cicatrization_time - SandboxVars.TOC.CicatrizationSpeedMultiplier
+
+
+            
         end
     end
 

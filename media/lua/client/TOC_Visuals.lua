@@ -1,4 +1,4 @@
-function TocSetCorrectTextureForAmputation(item, player)
+function TocSetCorrectTextureForAmputation(item, player, cicatrized)
     local human_visual = player:getHumanVisual()
     local texture_string = human_visual:getSkinTexture()
 
@@ -9,8 +9,13 @@ function TocSetCorrectTextureForAmputation(item, player)
 
 
     local matched_index = string.match(texture_string, "%d$")
+
+    if cicatrized then
+        matched_index = matched_index + 5           -- to use the cicatrized texture
+    end
+
     print("TOC: Setting texture " .. matched_index)
-    item:getVisual():setTextureChoice(tonumber(matched_index - 1)) -- TODO why is it correct with -1?
+    item:getVisual():setTextureChoice(tonumber(matched_index - 1)) -- it counts from 0, so we have to subtract 1
 end
 
 function TocSetBloodOnAmputation(player, body_part)

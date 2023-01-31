@@ -12,4 +12,10 @@
     <textureChoices>Amputations\skin03b</textureChoices>
     <textureChoices>Amputations\skin04b</textureChoices>
     <textureChoices>Amputations\skin05b</textureChoices>
+
+    <textureChoices>Amputations\skin01</textureChoices>
+    <textureChoices>Amputations\skin02</textureChoices>
+    <textureChoices>Amputations\skin03</textureChoices>
+    <textureChoices>Amputations\skin04</textureChoices>
+    <textureChoices>Amputations\skin05</textureChoices>
 </clothingItem>
