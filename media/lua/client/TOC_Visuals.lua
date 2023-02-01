@@ -4,7 +4,7 @@ function TocSetCorrectTextureForAmputation(item, player, cicatrized)
 
     local is_hairy = string.find(texture_string, "a$")
     -- Hairy bodies
-    if  is_hairy then
+    if is_hairy then
         texture_string = texture_string:sub(1, -2)      -- Removes b at the end to make it compatible
     end
 
@@ -17,7 +17,11 @@ function TocSetCorrectTextureForAmputation(item, player, cicatrized)
 
 
     if cicatrized then
-        matched_index = matched_index + 5           -- to use the cicatrized texture
+        if is_hairy then
+            matched_index = matched_index + 5           -- to use the cicatrized texture on hairy bodies
+        else
+            matched_index = matched_index + 10          -- cicatrized texture only, no hairs
+        end
     end
 
     print("TOC: Setting texture " .. matched_index)

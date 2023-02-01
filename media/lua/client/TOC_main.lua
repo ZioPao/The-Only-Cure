@@ -361,7 +361,7 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
 
         --Equip new model for amputation
         local amputation_clothing_item = player:getInventory():AddItem(TocFindAmputatedClothingFromPartName(part_name))
-        TocSetCorrectTextureForAmputation(amputation_clothing_item, player)
+        TocSetCorrectTextureForAmputation(amputation_clothing_item, player, false)
         player:setWornItem(amputation_clothing_item:getBodyLocation(), amputation_clothing_item)
 
 

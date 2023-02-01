@@ -1,3 +1,10 @@
+0.9.11
+- Hotfix to cicatrization visuals
+
+0.9.10
+- Modified textures once again
+
+
 0.9.9
 - Modified textures for amputations
 - Fixed a bug that caused some problems when amputating an already amputated limb
