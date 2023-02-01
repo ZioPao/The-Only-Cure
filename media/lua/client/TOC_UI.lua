@@ -133,212 +133,11 @@ local function FindMinMax(lv)
     return min, max;
 end
 
-------------------------------------------------
--- On Click Functions
-local function OnClickTocMainUI(button, args)
-
-    desc_ui:open()
-    desc_ui:setPositionPixel(main_ui:getRight(), main_ui:getY())
-    SetupTocDescUI(main_ui.surgeon, main_ui.patient, main_ui.limbs_data, args.part_name) -- surgeon is generic.
-
-end
-
-local function OnClickTocDescUI(button, args)
-    
-    -- Gets every arg from main
-    local patient = desc_ui.patient
-    local surgeon = desc_ui.surgeon
-
-    if args.option ~= "Nothing" then
-        TryTocAction(_, desc_ui.part_name, args.option, surgeon, patient)
-    end
-    main_ui:close()
-
-end
-
-function OnClickTocConfirmUIMP(button, args)
-    local player = getPlayer()
-    if confirm_ui_mp.actionAct == "Cut" and args.option == "yes" then
-        ISTimedActionQueue.add(ISCutLimb:new(confirm_ui_mp.patient, player, confirm_ui_mp.partNameAct))
-    elseif confirm_ui_mp.actionAct == "Operate" and args.option == "yes" then
-        local playerInv = player:getInventory()
-        local item = playerInv:getItemFromType('TOC.Real_surgeon_kit') or playerInv:getItemFromType('TOC.Surgeon_kit') or
-            playerInv:getItemFromType('TOC.Improvised_surgeon_kit')
-        if item then
-            ISTimedActionQueue.add(ISOperateLimb:new(confirm_ui_mp.patient, player, item, confirm_ui_mp.partNameAct,
-                false))
-        else
-            player:Say("I need a kit")
-        end
-
-    elseif confirm_ui_mp.actionAct == "Equip" and args.option == "yes" then
-        local surgeon_inventory = player:getInventory()
-
-        local prosthesis_to_equip = surgeon_inventory:getItemFromType('TOC.MetalHand') or
-            surgeon_inventory:getItemFromType('TOC.MetalHook') or
-            surgeon_inventory:getItemFromType('TOC.WoodenHook')
-
-        if prosthesis_to_equip then
-            ISTimedActionQueue.add(ISInstallProsthesis:new(player, confirm_ui_mp.patient, prosthesis_to_equip,
-                confirm_ui_mp.partNameAct))
-        else
-            player:Say("I don't have a prosthesis right now")
-        end
-
-    elseif confirm_ui_mp.actionAct == "Unequip" and args.option == "yes" then
-
-        -- We can't check if the player has a prosthesis right now, we need to do it later
-
-        -- TODO should check if player has a prosthesis equipped before doing it
-
-        -- TODO Player is surgeon, but we don't have a confirm_ui_mp.surgeon... awful awful awful
-
-        -- TODO Workaround for now, we'd need to send data from patient before doing it since we can't access his inventory from the surgeon
-        if confirm_ui_mp.patient == player then
-            ISTimedActionQueue.add(ISUninstallProsthesis:new(player, confirm_ui_mp.patient, confirm_ui_mp.partNameAct))
-
-        else
-            player:Say("I can't do that, they need to do it themselves")
-
-        end
-
-
-
-    end
-
-
-    confirm_ui_mp:close()
-    confirm_ui_mp.responseReceive = false
-
-end
-
------------------------------------------------
-
--- CREATE UI SECTION
-function CreateTocMainUI()
-    main_ui = NewUI()
-    main_ui:setTitle("The Only Cure Menu")
-    main_ui:setWidthPercent(0.1)
-
-    main_ui:addImageButton("b11", "", OnClickTocMainUI)
-    main_ui["b11"]:addArg("part_name", "Right_UpperArm")
-
-
-    main_ui:addImageButton("b12", "", OnClickTocMainUI)
-    main_ui["b12"]:addArg("part_name", "Left_UpperArm")
-
-    main_ui:nextLine()
-
-    main_ui:addImageButton("b21", "", OnClickTocMainUI)
-    main_ui["b21"]:addArg("part_name", "Right_LowerArm")
-
-
-    main_ui:addImageButton("b22", "", OnClickTocMainUI)
-    main_ui["b22"]:addArg("part_name", "Left_LowerArm")
-
-    main_ui:nextLine()
-
-    main_ui:addImageButton("b31", "", OnClickTocMainUI)
-    main_ui["b31"]:addArg("part_name", "Right_Hand")
-
-    main_ui:addImageButton("b32", "", OnClickTocMainUI)
-    main_ui["b32"]:addArg("part_name", "Left_Hand")
-
-    main_ui:saveLayout()
-
-
-end
-
-function CreateTocDescUI()
-    -- TODO most of this stuff is just temporary. We can probably wipe this off the face of the earth
-    desc_ui = NewUI()
-    desc_ui:setTitle("The only cure description");
-    desc_ui:isSubUIOf(main_ui)
-    desc_ui:setWidthPixel(250)
-    desc_ui:setColumnWidthPixel(1, 100)
-
-    desc_ui:addText("textTitle", "Right arm", "Large", "Center")
-    desc_ui:nextLine()
-
-    desc_ui:addText("textLV2", "Level 3/10", _, "Center")
-    desc_ui:nextLine()
-
-    desc_ui:addText("textLV", "Next LV:", _, "Right")
-    desc_ui:addProgressBar("pbarNLV", 39, 0, 100)
-    desc_ui["pbarNLV"]:setMarginPixel(10, 6)
-    desc_ui:nextLine()
-
-    desc_ui:addEmpty("border1")
-    desc_ui:setLineHeightPixel(1)
-    desc_ui["border1"]:setBorder(true)
-    desc_ui:nextLine()
-
-    desc_ui:addEmpty()
-    desc_ui:nextLine()
-
-    desc_ui:addText("status", "Temporary", "Medium", "Center")
-    desc_ui["status"]:setColor(1, 1, 0, 0)
-    desc_ui:nextLine()
-
-    desc_ui:addEmpty()
-    desc_ui:nextLine()
-
-    desc_ui:addButton("b1", "Operate", OnClickTocDescUI) -- TODO this is just temporary
-
-    desc_ui:saveLayout()
-end
-
-function CreateTocConfirmUIMP()
-    confirm_ui_mp = NewUI()
-    confirm_ui_mp.responseReceive = false
-
-    confirm_ui_mp:addText("text1", "Are you sure?", "Title", "Center");
-    confirm_ui_mp:setLineHeightPixel(getTextManager():getFontHeight(confirm_ui_mp.text1.font) + 10)
-    confirm_ui_mp:nextLine();
-
-    confirm_ui_mp:addText("text4", "", "Medium", "Center");
-    confirm_ui_mp:setLineHeightPixel(getTextManager():getFontHeight(confirm_ui_mp.text4.font) + 10)
-    confirm_ui_mp:nextLine();
-
-    confirm_ui_mp:addText("text2", "", _, "Center");
-    confirm_ui_mp:nextLine();
-
-    confirm_ui_mp:addText("text3", "", _, "Center");
-    confirm_ui_mp:nextLine();
-
-    confirm_ui_mp:addEmpty();
-    confirm_ui_mp:nextLine();
-
-    confirm_ui_mp:addEmpty();
-    confirm_ui_mp:addButton("b1", "Yes", OnClickTocConfirmUIMP);
-    confirm_ui_mp.b1:addArg("option", "yes");
-    confirm_ui_mp:addEmpty();
-    confirm_ui_mp:addButton("b2", "No", OnClickTocConfirmUIMP);
-    confirm_ui_mp:addEmpty();
-
-    confirm_ui_mp:nextLine();
-    confirm_ui_mp:addEmpty();
-
-    confirm_ui_mp:saveLayout();
-    confirm_ui_mp:addPrerenderFunction(PrerenderFuncMP);
-    confirm_ui_mp:close();
-
-end
-
--- We create everything from here
-function OnCreateTheOnlyCureUI()
-    CreateTocMainUI()
-    CreateTocDescUI()
-    CreateTocConfirmUIMP()
-
-    if isClient() then CreateTocConfirmUIMP() end
-    main_ui:close()
-end
 
 -----------------------------------------
 -- Setup stuff with variables and shit
 
-function SetupTocMainUI(surgeon, patient, limbs_data)
+local function SetupTocMainUI(surgeon, patient, limbs_data)
     main_ui.surgeon = surgeon -- we shouldn't need an arg for this
     main_ui.patient = patient
 
@@ -360,7 +159,7 @@ function SetupTocMainUI(surgeon, patient, limbs_data)
 
 end
 
-function SetupTocDescUI(surgeon, patient, limbs_data, part_name)
+local function SetupTocDescUI(surgeon, patient, limbs_data, part_name)
     desc_ui["textTitle"]:setText(getText("UI_ContextMenu_" .. part_name))
     desc_ui.part_name = part_name
     desc_ui.surgeon = surgeon
@@ -477,6 +276,210 @@ function SetupTocDescUI(surgeon, patient, limbs_data, part_name)
     end
 
 end
+
+
+------------------------------------------------
+-- On Click Functions
+local function OnClickTocMainUI(button, args)
+
+    desc_ui:open()
+    desc_ui:setPositionPixel(main_ui:getRight(), main_ui:getY())
+    SetupTocDescUI(main_ui.surgeon, main_ui.patient, main_ui.limbs_data, args.part_name) -- surgeon is generic.
+
+end
+
+local function OnClickTocDescUI(button, args)
+    
+    -- Gets every arg from main
+    local patient = desc_ui.patient
+    local surgeon = desc_ui.surgeon
+
+    if args.option ~= "Nothing" then
+        TryTocAction(_, desc_ui.part_name, args.option, surgeon, patient)
+    end
+    main_ui:close()
+
+end
+
+local function OnClickTocConfirmUIMP(button, args)
+    local player = getPlayer()
+    if confirm_ui_mp.actionAct == "Cut" and args.option == "yes" then
+        ISTimedActionQueue.add(ISCutLimb:new(confirm_ui_mp.patient, player, confirm_ui_mp.partNameAct))
+    elseif confirm_ui_mp.actionAct == "Operate" and args.option == "yes" then
+        local playerInv = player:getInventory()
+        local item = playerInv:getItemFromType('TOC.Real_surgeon_kit') or playerInv:getItemFromType('TOC.Surgeon_kit') or
+            playerInv:getItemFromType('TOC.Improvised_surgeon_kit')
+        if item then
+            ISTimedActionQueue.add(ISOperateLimb:new(confirm_ui_mp.patient, player, item, confirm_ui_mp.partNameAct,
+                false))
+        else
+            player:Say("I need a kit")
+        end
+
+    elseif confirm_ui_mp.actionAct == "Equip" and args.option == "yes" then
+        local surgeon_inventory = player:getInventory()
+
+        local prosthesis_to_equip = surgeon_inventory:getItemFromType('TOC.MetalHand') or
+            surgeon_inventory:getItemFromType('TOC.MetalHook') or
+            surgeon_inventory:getItemFromType('TOC.WoodenHook')
+
+        if prosthesis_to_equip then
+            ISTimedActionQueue.add(ISInstallProsthesis:new(player, confirm_ui_mp.patient, prosthesis_to_equip,
+                confirm_ui_mp.partNameAct))
+        else
+            player:Say("I don't have a prosthesis right now")
+        end
+
+    elseif confirm_ui_mp.actionAct == "Unequip" and args.option == "yes" then
+
+        -- We can't check if the player has a prosthesis right now, we need to do it later
+
+        -- TODO should check if player has a prosthesis equipped before doing it
+
+        -- TODO Player is surgeon, but we don't have a confirm_ui_mp.surgeon... awful awful awful
+
+        -- TODO Workaround for now, we'd need to send data from patient before doing it since we can't access his inventory from the surgeon
+        if confirm_ui_mp.patient == player then
+            ISTimedActionQueue.add(ISUninstallProsthesis:new(player, confirm_ui_mp.patient, confirm_ui_mp.partNameAct))
+
+        else
+            player:Say("I can't do that, they need to do it themselves")
+
+        end
+
+
+
+    end
+
+
+    confirm_ui_mp:close()
+    confirm_ui_mp.responseReceive = false
+
+end
+
+-----------------------------------------------
+
+-- CREATE UI SECTION
+local function CreateTocMainUI()
+    main_ui = NewUI()
+    main_ui:setTitle("The Only Cure Menu")
+    main_ui:setWidthPercent(0.1)
+
+    main_ui:addImageButton("b11", "", OnClickTocMainUI)
+    main_ui["b11"]:addArg("part_name", "Right_UpperArm")
+
+
+    main_ui:addImageButton("b12", "", OnClickTocMainUI)
+    main_ui["b12"]:addArg("part_name", "Left_UpperArm")
+
+    main_ui:nextLine()
+
+    main_ui:addImageButton("b21", "", OnClickTocMainUI)
+    main_ui["b21"]:addArg("part_name", "Right_LowerArm")
+
+
+    main_ui:addImageButton("b22", "", OnClickTocMainUI)
+    main_ui["b22"]:addArg("part_name", "Left_LowerArm")
+
+    main_ui:nextLine()
+
+    main_ui:addImageButton("b31", "", OnClickTocMainUI)
+    main_ui["b31"]:addArg("part_name", "Right_Hand")
+
+    main_ui:addImageButton("b32", "", OnClickTocMainUI)
+    main_ui["b32"]:addArg("part_name", "Left_Hand")
+
+    main_ui:saveLayout()
+
+
+end
+
+local function CreateTocDescUI()
+    -- TODO most of this stuff is just temporary. We can probably wipe this off the face of the earth
+    desc_ui = NewUI()
+    desc_ui:setTitle("The only cure description");
+    desc_ui:isSubUIOf(main_ui)
+    desc_ui:setWidthPixel(250)
+    desc_ui:setColumnWidthPixel(1, 100)
+
+    desc_ui:addText("textTitle", "Right arm", "Large", "Center")
+    desc_ui:nextLine()
+
+    desc_ui:addText("textLV2", "Level 3/10", _, "Center")
+    desc_ui:nextLine()
+
+    desc_ui:addText("textLV", "Next LV:", _, "Right")
+    desc_ui:addProgressBar("pbarNLV", 39, 0, 100)
+    desc_ui["pbarNLV"]:setMarginPixel(10, 6)
+    desc_ui:nextLine()
+
+    desc_ui:addEmpty("border1")
+    desc_ui:setLineHeightPixel(1)
+    desc_ui["border1"]:setBorder(true)
+    desc_ui:nextLine()
+
+    desc_ui:addEmpty()
+    desc_ui:nextLine()
+
+    desc_ui:addText("status", "Temporary", "Medium", "Center")
+    desc_ui["status"]:setColor(1, 1, 0, 0)
+    desc_ui:nextLine()
+
+    desc_ui:addEmpty()
+    desc_ui:nextLine()
+
+    desc_ui:addButton("b1", "Operate", OnClickTocDescUI) -- TODO this is just temporary
+
+    desc_ui:saveLayout()
+end
+
+local function CreateTocConfirmUIMP()
+    confirm_ui_mp = NewUI()
+    confirm_ui_mp.responseReceive = false
+
+    confirm_ui_mp:addText("text1", "Are you sure?", "Title", "Center");
+    confirm_ui_mp:setLineHeightPixel(getTextManager():getFontHeight(confirm_ui_mp.text1.font) + 10)
+    confirm_ui_mp:nextLine();
+
+    confirm_ui_mp:addText("text4", "", "Medium", "Center");
+    confirm_ui_mp:setLineHeightPixel(getTextManager():getFontHeight(confirm_ui_mp.text4.font) + 10)
+    confirm_ui_mp:nextLine();
+
+    confirm_ui_mp:addText("text2", "", _, "Center");
+    confirm_ui_mp:nextLine();
+
+    confirm_ui_mp:addText("text3", "", _, "Center");
+    confirm_ui_mp:nextLine();
+
+    confirm_ui_mp:addEmpty();
+    confirm_ui_mp:nextLine();
+
+    confirm_ui_mp:addEmpty();
+    confirm_ui_mp:addButton("b1", "Yes", OnClickTocConfirmUIMP);
+    confirm_ui_mp.b1:addArg("option", "yes");
+    confirm_ui_mp:addEmpty();
+    confirm_ui_mp:addButton("b2", "No", OnClickTocConfirmUIMP);
+    confirm_ui_mp:addEmpty();
+
+    confirm_ui_mp:nextLine();
+    confirm_ui_mp:addEmpty();
+
+    confirm_ui_mp:saveLayout();
+    confirm_ui_mp:addPrerenderFunction(PrerenderFuncMP);
+    confirm_ui_mp:close();
+
+end
+
+-- We create everything from here
+function OnCreateTheOnlyCureUI()
+    CreateTocMainUI()
+    CreateTocDescUI()
+    CreateTocConfirmUIMP()
+
+    if isClient() then CreateTocConfirmUIMP() end
+    main_ui:close()
+end
+
 
 --------------------------------------------
 -- MP Confirm (I should add it to client too but hey not sure how it works tbh)
