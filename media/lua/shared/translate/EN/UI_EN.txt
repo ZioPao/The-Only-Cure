@@ -6,14 +6,14 @@ UI_EN = {
     UI_ContextMenu_CutArm = "Cut arm",
 
     UI_prof_surgeon = "Surgeon",
-    UI_profdesc_surgeon = "You are a surgeon! Start with all recipe of the mod the only cure.<br>You are also better to cut and operate.",
+    UI_profdesc_surgeon = "You are a surgeon! Start with all recipe of the mod the only cure.<br>Easier to amputate and operate amputees.",
 
-    UI_trait_Amputee_Hand = "Amputee hand",
-    UI_trait_Amputee_Hand_desc = "Begin the game without a hand but also a metal hook.",
-    UI_trait_Amputee_LowerArm = "Amputee forearm",
-    UI_trait_Amputee_LowerArm_desc = "Begin the game without a forearm but also a metal hook.",
-    UI_trait_Amputee_UpperArm = "Amputee arm",
-    UI_trait_Amputee_UpperArm_desc = "Begin the game without an arm, good luck.",
+    UI_trait_Amputee_Hand = "Left Hand Amputated",
+    UI_trait_Amputee_Hand_desc = "You lost your left hand way before the apocalypse began.",
+    UI_trait_Amputee_LowerArm = "Left Forearm Amputated",
+    UI_trait_Amputee_LowerArm_desc = "You lost your left forearm way before the apocalypse began.",
+    UI_trait_Amputee_UpperArm = "Entire left Arm Amputated",
+    UI_trait_Amputee_UpperArm_desc = "You lost your entire left arm before the apocalypse, good luck.",
     UI_trait_Insensitive = "Insensitive to pain",
     UI_trait_Insensitivedesc = "Reduces maximum pain.",
 

@@ -1,3 +1,26 @@
+-- Init
+function TocCutLimbForTrait(player, limbs_data, part_name)
+    local amputation_clothing_item = player:getInventory():AddItem("TOC.Amputation_" .. part_name)
+    TocSetCorrectTextureForAmputation(amputation_clothing_item, player, true)
+
+    player:setWornItem(amputation_clothing_item:getBodyLocation(), amputation_clothing_item)
+    limbs_data[part_name].is_cut = true
+    limbs_data[part_name].is_operated = true
+    limbs_data[part_name].is_amputation_shown = true
+    limbs_data[part_name].is_cicatrized = true
+
+    for _, v in pairs(limbs_data[part_name].depends_on) do
+        limbs_data[v].is_cut = true
+        limbs_data[v].is_operated = true
+        limbs_data[v].is_amputation_shown = false
+        limbs_data[v].is_cicatrized = true
+    end
+end
+
+
+
+
+
 -- CutLimb
 function TocCheckIfStillInfected(limbs_data)
     if limbs_data == nil then
@@ -177,7 +200,7 @@ function TocFindItemInProstBodyLocation(part_name, patient)
 end
 
 
--- Debug cheat
+-- Debug cheat and update every minute for cicatrization
 function TocFindAmputationOrProsthesisName(part_name, player, choice)
     local worn_items = player:getWornItems()
     for i = 1, worn_items:size() - 1 do 

@@ -1,3 +1,7 @@
+0.9.12
+- Fixed traits icons
+- Some cleaning to the code
+
 0.9.11
 - Hotfix to cicatrization visuals
 
