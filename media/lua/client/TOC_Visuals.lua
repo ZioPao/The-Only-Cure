@@ -24,9 +24,8 @@ function TocSetCorrectTextureForAmputation(item, player, cicatrized)
     item:getVisual():setTextureChoice(tonumber(matched_index - 1)) -- it counts from 0, so we have to subtract 1
 end
 
+
 function TocSetBloodOnAmputation(player, body_part)
-
-
     local body_part_type = body_part:getType()
     local blood_body_part_type
     if body_part_type == BodyPartType.Hand_R then

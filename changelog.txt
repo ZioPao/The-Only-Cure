@@ -1,3 +1,11 @@
+0.9.9
+- Modified textures for amputations
+- Fixed a bug that caused some problems when amputating an already amputated limb
+
+0.9.8
+- New textures for amputations
+- When cicatrized, an amputation will not be bloody anymore (visual thing only)
+
 0.9.7
 - Now amputations should spawn in every case, damn hairs. Thanks Dev for the tip!
 

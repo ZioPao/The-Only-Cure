@@ -316,23 +316,22 @@ function TheOnlyCure.CutLimb(part_name, surgeon_factor, bandage_table, painkille
         limbs_data[part_name].cicatrization_time = limbs_data[part_name].cicatrization_base_time - surgeon_factor * 50
 
         for _, depended_v in pairs(limbs_data[part_name].depends_on) do
-            if limbs_data[depended_v].is_cut == false then
-                limbs_data[depended_v].is_cut = true
-                limbs_data[depended_v].is_amputation_shown = false
-                limbs_data[depended_v].cicatrization_time = limbs_data[part_name].cicatrization_base_time -
-                    surgeon_factor * 50
+            limbs_data[depended_v].is_cut = true
+            limbs_data[depended_v].is_amputation_shown = false
+            limbs_data[depended_v].cicatrization_time = limbs_data[part_name].cicatrization_base_time -
+                surgeon_factor * 50
 
-                local should_depended_v_be_healed_of_bite = limbs_data[depended_v].is_infected and
-                    body_damage:getInfectionLevel() < 20
-                local depended_body_part = body_damage:getBodyPart(TocGetBodyPartFromPartName(depended_v))
-                TocSetParametersForMissingLimb(depended_body_part, should_depended_v_be_healed_of_bite)
+            local should_depended_v_be_healed_of_bite = limbs_data[depended_v].is_infected and
+                body_damage:getInfectionLevel() < 20
+            local depended_body_part = body_damage:getBodyPart(TocGetBodyPartFromPartName(depended_v))
+            TocSetParametersForMissingLimb(depended_body_part, should_depended_v_be_healed_of_bite)
 
-                if should_depended_v_be_healed_of_bite then
-                    limbs_data[depended_v].is_infected = false
-                end
-
-
+            if should_depended_v_be_healed_of_bite then
+                limbs_data[depended_v].is_infected = false
             end
+
+
+            
         end
 
 

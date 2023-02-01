@@ -9,17 +9,17 @@
     <m_Masks>4</m_Masks>
     <m_MasksFolder>none</m_MasksFolder>
     
-    <textureChoices>Amputations\skin01_b</textureChoices>
-    <textureChoices>Amputations\skin02_b</textureChoices>
-    <textureChoices>Amputations\skin03_b</textureChoices>
-    <textureChoices>Amputations\skin04_b</textureChoices>
-    <textureChoices>Amputations\skin05_b</textureChoices>
+    <textureChoices>Amputations\Forearm\skin01_b</textureChoices>
+    <textureChoices>Amputations\Forearm\skin02_b</textureChoices>
+    <textureChoices>Amputations\Forearm\skin03_b</textureChoices>
+    <textureChoices>Amputations\Forearm\skin04_b</textureChoices>
+    <textureChoices>Amputations\Forearm\skin05_b</textureChoices>
 
-    <textureChoices>Amputations\skin01_hairy_b</textureChoices>
-    <textureChoices>Amputations\skin02_hairy_b</textureChoices>
-    <textureChoices>Amputations\skin03_hairy_b</textureChoices>
-    <textureChoices>Amputations\skin04_hairy_b</textureChoices>
-    <textureChoices>Amputations\skin05_hairy_b</textureChoices>
+    <textureChoices>Amputations\Forearm\skin01_hairy_b</textureChoices>
+    <textureChoices>Amputations\Forearm\skin02_hairy_b</textureChoices>
+    <textureChoices>Amputations\Forearm\skin03_hairy_b</textureChoices>
+    <textureChoices>Amputations\Forearm\skin04_hairy_b</textureChoices>
+    <textureChoices>Amputations\Forearm\skin05_hairy_b</textureChoices>
 
     <textureChoices>Body\MaleBody01</textureChoices>
     <textureChoices>Body\MaleBody02</textureChoices>
