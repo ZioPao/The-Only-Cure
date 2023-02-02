@@ -1,3 +1,7 @@
+0.9.13
+- Some little optimizations
+- Fixed a bug that made Fancy Handwork compat not work as intended
+
 0.9.12
 - Fixed traits icons
 - Some cleaning to the code
