@@ -433,7 +433,7 @@ local function CreateTocDescUI()
     desc_ui:saveLayout()
 end
 
-local function CreateTocConfirmUIMP()
+function CreateTocConfirmUIMP()
     confirm_ui_mp = NewUI()
     confirm_ui_mp.responseReceive = false
 
