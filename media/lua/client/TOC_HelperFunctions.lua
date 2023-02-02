@@ -282,6 +282,4 @@ function TocPopulateCanBeHeldTable(can_be_held, limbs_data)
         end
     end
 
-    return 
-
 end

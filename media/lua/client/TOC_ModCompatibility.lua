@@ -4,7 +4,7 @@
 
 local function OverrideFancyHandwork()
     if getActivatedMods():contains('FancyHandwork') == false then return end
-
+    require "TimedActions/FHSwapHandsAction"
 
 
     local og_ISHotbar_equipItem = ISHotbar.equipItem
@@ -18,12 +18,14 @@ local function OverrideFancyHandwork()
 
         local limbs_data = getPlayer():getModData().TOC.Limbs
         local can_be_held = {}
+
+        -- TODO not totally realiable
         TocPopulateCanBeHeldTable(can_be_held, limbs_data)
 
 
-        for _, test in pairs(can_be_held) do
-            print(test)
-        end
+        -- for _, test in pairs(can_be_held) do
+        --     print(test)
+        -- end
         --ISInventoryPaneContextMenu.transferIfNeeded(self.chr, item)
 
         -- If we already have the item equipped
@@ -41,6 +43,7 @@ local function OverrideFancyHandwork()
                 equip = false
             end
             if mod then
+                print("TOC: Fancy Handwork modifier")
                 -- If we still have something equipped in secondary, unequip
                 if secondary and equip and can_be_held["Left"] then
                     ISTimedActionQueue.add(ISUnequipAction:new(self.chr, secondary, 20))
@@ -48,7 +51,7 @@ local function OverrideFancyHandwork()
 
                 if can_be_held["Left"] then
                     ISTimedActionQueue.add(ISEquipWeaponAction:new(self.chr, item, 20, false, item:isTwoHandWeapon()))
-                else
+                elseif can_be_held["Right"] then
                     ISTimedActionQueue.add(ISEquipWeaponAction:new(self.chr, item, 20, true, item:isTwoHandWeapon()))
 
                 end
@@ -60,7 +63,7 @@ local function OverrideFancyHandwork()
                 -- Equip Primary
                 if can_be_held["Right"] then
                     ISTimedActionQueue.add(ISEquipWeaponAction:new(self.chr, item, 20, true, item:isTwoHandWeapon()))
-                else
+                elseif can_be_held["Left"] then
                     ISTimedActionQueue.add(ISEquipWeaponAction:new(self.chr, item, 20, false, item:isTwoHandWeapon()))
 
                 end
@@ -73,32 +76,12 @@ local function OverrideFancyHandwork()
 
     local og_FHSwapHandsAction = FHSwapHandsAction.start
 
-    function FHSwapHandsAction:start()
+
+    function FHSwapHandsAction:isValid()
         local limbs_data = getPlayer():getModData().TOC.Limbs
         local can_be_held = {}
         TocPopulateCanBeHeldTable(can_be_held, limbs_data)
-
-
-        if self.itemL and can_be_held["Right"] then
-            self.itemL:setJobType(getText("ContextMenu_Equip_Primary") .. " " .. self.itemL:getName())
-            self.itemL:setJobDelta(0.0)
-
-        else
-            self:stop()
-            return
-        end
-
-        if self.itemR and can_be_held["Left"] then
-            self.itemR:setJobType(getText("ContextMenu_Equip_Secondary") .. " " .. self.itemR:getName())
-            self.itemR:setJobDelta(0.0)
-        else
-            self:stop()
-            return
-        end
-
-        self:setActionAnim("EquipItem")
-        self:setOverrideHandModels(self.itemR, self.itemL)
-
+        return  (can_be_held["Right"] and can_be_held["Left"]) and(((self.character:getPrimaryHandItem() or self.character:getSecondaryHandItem()) ~= nil))
     end
 
 end
