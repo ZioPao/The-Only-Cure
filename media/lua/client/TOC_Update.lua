@@ -117,15 +117,9 @@ local function SetHealthStatusForBodyPart(part_data, part_name, player)
         end
 
 
-        --Wound cleanliness
-        -- TODO we need to check the upper body part since that's what getting wounded eheh
-
-
-        local amputated_limb_item = TocGetAmputationItemInInventory(player, part_name)
 
 
 
-        --getDirtyness
 
         -- Cicatrization check
         if not part_data[part_name].is_cicatrized then
@@ -217,8 +211,21 @@ local function TocUpdateEveryTenMinutes()
     -- Updates the cicatrization time
     for _, part_name in pairs(GetBodyParts()) do
         if part_data[part_name].is_cut and not part_data[part_name].is_cicatrized then
-            part_data[part_name].cicatrization_time = part_data[part_name].cicatrization_time - SandboxVars.TOC.CicatrizationSpeedMultiplier
 
+            --Wound cleanliness contributes to cicatrization
+            -- TODO we reset this stuff every time we restart the game for compat reason, this is an issue
+            local amputated_limb_item = TocGetAmputationItemInInventory(player, part_name)
+            local item_dirtyness = amputated_limb_item:getDirtyness()/100
+            local item_bloodyness = amputated_limb_item:getBloodLevel()/100
+
+            local modifier = SandboxVars.TOC.CicatrizationSpeedMultiplier - item_bloodyness - item_dirtyness
+
+            print("TOC: Type " .. amputated_limb_item:getFullType())
+            print("TOC: Dirtyness " .. item_dirtyness)
+            print("TOC: Bloodyness " .. item_bloodyness)
+
+
+            part_data[part_name].cicatrization_time = part_data[part_name].cicatrization_time - modifier
 
             
         end

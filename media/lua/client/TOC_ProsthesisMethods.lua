@@ -1,4 +1,3 @@
-
 ------------------------------------------
 -------- THE ONLY CURE BUT BETTER --------
 ------------------------------------------
@@ -33,12 +32,8 @@ function TocEquipProsthesis(part_name, prosthesis_base_name)
 
         end
     end
-
-
-
-
-
 end
+
 
 ---Unequip a prosthesis clothing item and returns it to the inventory as a normal item
 ---@param part_name string

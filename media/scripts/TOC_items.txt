@@ -15,7 +15,7 @@ imports
 
             Weight = 0,
             CombatSpeedModifier = 0.9,
-            /*BloodLocation = UpperArms;LowerArms,*/
+            BloodLocation = Hands;LowerArms,
 
             Insulation = 1.0,
             WindResistance = 1.0,
@@ -69,7 +69,7 @@ imports
 
             Weight = 0,
             CombatSpeedModifier = 0.9,
-            /*BloodLocation = UpperArms;LowerArms,*/
+            BloodLocation = Hands;LowerArms,
             Insulation = 1.0,
             
             WindResistance = 1.0,
