@@ -154,6 +154,20 @@ function ISEquipWeaponAction:perform()
     end
 
 
+    -- Check if it's a prosthesis and let the player know that they're fucking things up 
+    if self.item then
+        local item_name = self.item:getFullType()
+
+        for _, prost_v in ipairs(GetProsthesisList()) do
+            local prosthesis_name = string.match(item_name, prost_v)
+            if prosthesis_name then
+                self.character:Say("This isn't the right way to equip this...")
+            end
+        end
+
+    end
+
+
 
 end
 
