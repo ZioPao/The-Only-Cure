@@ -41,7 +41,7 @@ function TocResetEverything()
 
     -- Destroy the amputation or prosthesis item
     for _, v in ipairs(GetBodyParts()) do
-        -- TODO This is incredibly shitty
+        -- TODO This is incredibly shitty, but we can't use worn items since we need to consider the case that the item wasn't applied
         local amputation_item_name = TocFindAmputationOrProsthesisName(v, player, "Amputation")
         local prosthesis_item_name = TocFindAmputationOrProsthesisName(v, player, "Prosthesis")
 

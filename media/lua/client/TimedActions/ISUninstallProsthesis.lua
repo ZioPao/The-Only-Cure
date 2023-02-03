@@ -56,9 +56,9 @@ function ISUninstallProsthesis:perform()
 
     if self.patient ~= self.surgeon and isClient() then
 
-        SendUnequipProsthesis(self.patient, self.part_name)
+        SendUnequipProsthesis(self.patient, self.part_name, self.item)
     else
-        TheOnlyCure.UnequipProsthesis(self.patient, self.part_name)
+        TheOnlyCure.UnequipProsthesis(self.patient, self.part_name, self.item)
     end
 
     ISBaseTimedAction.perform(self)
@@ -69,7 +69,7 @@ function ISUninstallProsthesis:new(surgeon, patient, part_name)
 
     local toc_limbs_data = patient:getModData().TOC.Limbs
 
-    o.item = toc_limbs_data[part_name].equipped_prosthesis
+    o.item = TocFindItemInProstBodyLocation(part_name, patient)
     o.character = surgeon         -- For animation purposes
 
     o.patient = patient

@@ -44,12 +44,12 @@ function SendEquipProsthesis(player, part_name, prosthesis_base_name)
     sendClientCommand("TOC", "SendServer", arg)
 end
 
-function SendUnequipProsthesis(player, part_name)
+function SendUnequipProsthesis(player, part_name, item)
     local arg = {}
     arg["From"] = getPlayer():getOnlineID()
     arg["To"] = player:getOnlineID()
     arg["command"] = "UnequipProsthesis"
-    arg["toSend"] = { player, part_name}
+    arg["toSend"] = { player, part_name, item}
     sendClientCommand("TOC", "SendServer", arg)
 end
 

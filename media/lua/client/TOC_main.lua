@@ -23,6 +23,59 @@ local function TocCutLimbForTrait(player, limbs_data, part_name)
     end
 end
 
+-- Sub function of TocSetInitData
+local function TocUpdateBaseData(mod_data)
+
+    -- TODO The prosthetic knife needs to be a weapon first and foremost, so other than a
+    -- clothing item it needs to be a weapon too (an invisible one maybe?)
+
+    --local prosthesis_list = { "WoodenHook", "MetalHook", "MetalHand", "ProstheticKnife" }
+
+    local accepted_prosthesis_hand = { "WoodenHook", "MetalHook", "MetalHand", "ProstheticKnife" }
+    local accepted_prosthesis_lowerarm = { "WoodenHook", "MetalHook", "MetalHand", "ProstheticKnife" }
+    local accepted_prosthesis_upperarm = {} -- For future stuff
+
+    for _, side in ipairs(TOC_sides) do
+        for _, limb in ipairs(TOC_limbs) do
+
+            local part_name = side .. "_" .. limb
+
+            if limb == "Hand" then
+                mod_data.TOC.Limbs[part_name].cicatrization_base_time = 1700
+                mod_data.TOC.Limbs[part_name].depends_on = {}
+
+
+                mod_data.TOC.Prosthesis.Accepted_Prosthesis[part_name] = accepted_prosthesis_hand
+                mod_data.TOC.Prosthesis["WoodenHook"][part_name].prosthesis_factor = 1.3
+                mod_data.TOC.Prosthesis["MetalHook"][part_name].prosthesis_factor = 1.2
+                mod_data.TOC.Prosthesis["MetalHand"][part_name].prosthesis_factor = 1.1
+                --mod_data.TOC.Prosthesis["ProstheticKnife"][part_name].prosthesis_factor = 1.5
+
+
+            elseif limb == "LowerArm" then
+                mod_data.TOC.Limbs[part_name].cicatrization_base_time = 1800
+                mod_data.TOC.Limbs[part_name].depends_on = { side .. "_Hand", }
+                mod_data.TOC.Prosthesis.Accepted_Prosthesis[part_name] = accepted_prosthesis_lowerarm
+
+                mod_data.TOC.Prosthesis["WoodenHook"][part_name].prosthesis_factor = 1.35
+                mod_data.TOC.Prosthesis["MetalHook"][part_name].prosthesis_factor = 1.25
+                mod_data.TOC.Prosthesis["MetalHand"][part_name].prosthesis_factor = 1.15
+                --mod_data.TOC.Prosthesis["ProstheticKnife"][part_name].prosthesis_factor = 1.6
+
+            elseif limb == "UpperArm" then
+                mod_data.TOC.Limbs[part_name].cicatrization_base_time = 2000
+                mod_data.TOC.Limbs[part_name].depends_on = { side .. "_Hand", side .. "_LowerArm", }
+                mod_data.TOC.Prosthesis.Accepted_Prosthesis[part_name] = accepted_prosthesis_upperarm
+            end
+
+        end
+    end
+
+
+
+
+end
+
 local function TocSetInitData(mod_data, player)
 
     print("TOC: Creating mod_data.TOC")
@@ -121,7 +174,7 @@ local function TocSetInitData(mod_data, player)
 
 
             mod_data.TOC.Limbs[part_name].is_prosthesis_equipped = false
-            mod_data.TOC.Limbs[part_name].equipped_prosthesis = {} -- TODO i'm still not usign this, I should though
+            mod_data.TOC.Limbs[part_name].equipped_prosthesis = {}
 
             -- Even if there are some duplicates, this is just easier in the end since we're gonna get fairly easily part_name
 
@@ -144,57 +197,6 @@ local function TocSetInitData(mod_data, player)
 
 end
 
-local function TocUpdateBaseData(mod_data)
-
-    -- TODO The prosthetic knife needs to be a weapon first and foremost, so other than a
-    -- clothing item it needs to be a weapon too (an invisible one maybe?)
-
-    --local prosthesis_list = { "WoodenHook", "MetalHook", "MetalHand", "ProstheticKnife" }
-
-    local accepted_prosthesis_hand = { "WoodenHook", "MetalHook", "MetalHand", "ProstheticKnife" }
-    local accepted_prosthesis_lowerarm = { "WoodenHook", "MetalHook", "MetalHand", "ProstheticKnife" }
-    local accepted_prosthesis_upperarm = {} -- For future stuff
-
-    for _, side in ipairs(TOC_sides) do
-        for _, limb in ipairs(TOC_limbs) do
-
-            local part_name = side .. "_" .. limb
-
-            if limb == "Hand" then
-                mod_data.TOC.Limbs[part_name].cicatrization_base_time = 1700
-                mod_data.TOC.Limbs[part_name].depends_on = {}
-
-
-                mod_data.TOC.Prosthesis.Accepted_Prosthesis[part_name] = accepted_prosthesis_hand
-                mod_data.TOC.Prosthesis["WoodenHook"][part_name].prosthesis_factor = 1.3
-                mod_data.TOC.Prosthesis["MetalHook"][part_name].prosthesis_factor = 1.2
-                mod_data.TOC.Prosthesis["MetalHand"][part_name].prosthesis_factor = 1.1
-                --mod_data.TOC.Prosthesis["ProstheticKnife"][part_name].prosthesis_factor = 1.5
-
-
-            elseif limb == "LowerArm" then
-                mod_data.TOC.Limbs[part_name].cicatrization_base_time = 1800
-                mod_data.TOC.Limbs[part_name].depends_on = { side .. "_Hand", }
-                mod_data.TOC.Prosthesis.Accepted_Prosthesis[part_name] = accepted_prosthesis_lowerarm
-
-                mod_data.TOC.Prosthesis["WoodenHook"][part_name].prosthesis_factor = 1.35
-                mod_data.TOC.Prosthesis["MetalHook"][part_name].prosthesis_factor = 1.25
-                mod_data.TOC.Prosthesis["MetalHand"][part_name].prosthesis_factor = 1.15
-                --mod_data.TOC.Prosthesis["ProstheticKnife"][part_name].prosthesis_factor = 1.6
-
-            elseif limb == "UpperArm" then
-                mod_data.TOC.Limbs[part_name].cicatrization_base_time = 2000
-                mod_data.TOC.Limbs[part_name].depends_on = { side .. "_Hand", side .. "_LowerArm", }
-                mod_data.TOC.Prosthesis.Accepted_Prosthesis[part_name] = accepted_prosthesis_upperarm
-            end
-
-        end
-    end
-
-
-
-
-end
 
 
 function TheOnlyCure.InitTheOnlyCure(_, player)

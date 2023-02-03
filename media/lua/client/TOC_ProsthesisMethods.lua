@@ -42,14 +42,13 @@ end
 
 ---Unequip a prosthesis clothing item and returns it to the inventory as a normal item
 ---@param part_name string
-function TheOnlyCure.UnequipProsthesis(patient, part_name)
+function TheOnlyCure.UnequipProsthesis(patient, part_name, equipped_prosthesis)
 
 
     local toc_data = patient:getModData().TOC
     toc_data.Limbs[part_name].is_prosthesis_equipped = false
 
 
-    local equipped_prosthesis = toc_data.Limbs[part_name].equipped_prosthesis    -- TODO Test this
     local equipped_prosthesis_full_type = equipped_prosthesis:getFullType()
 
 

@@ -94,7 +94,6 @@ function TocFindCorrectClothingProsthesis(item_name, part_name)
 
 end
 
-
 function TocGetAmputationItemInInventory(player, part_name)
 
     local player_inventory = player:getInventory()

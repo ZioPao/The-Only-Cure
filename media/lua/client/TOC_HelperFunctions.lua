@@ -1,12 +1,4 @@
-
-
-
-
-
-
-
-
-
+-- TODO this needs to be moved away
 function TocGetKitInInventory(surgeon)
     local playerInv = surgeon:getInventory();
     local item = playerInv:getItemFromType('TOC.Real_surgeon_kit') or playerInv:getItemFromType('TOC.Surgeon_kit') or
@@ -17,7 +9,7 @@ end
 
 -- Unequip Prosthesis
 
-local function PartNameToBodyLocationProsthesis(name)
+function PartNameToBodyLocationProsthesis(name)
     if name == "Right_Hand" then return "TOC_ArmRightProsthesis" end
     if name == "Right_LowerArm" then return "TOC_ArmRightProsthesis" end
     if name == "Right_UpperArm" then return "TOC_ArmRightProsthesis" end
@@ -26,7 +18,7 @@ local function PartNameToBodyLocationProsthesis(name)
     if name == "Left_UpperArm" then return "TOC_ArmLeftProsthesis" end
 end
 
-local function PartNameToBodyLocationAmputation(name)
+function PartNameToBodyLocationAmputation(name)
     if name == "Right_Hand" then return "TOC_ArmRight" end
     if name == "Right_LowerArm" then return "TOC_ArmRight" end
     if name == "Right_UpperArm" then return "TOC_ArmRight" end
@@ -47,12 +39,6 @@ function TocFindItemInProstBodyLocation(part_name, patient)
     end
 
 end
-
-
-
-
-
-
 
 -- Debug cheat and update every minute for cicatrization
 function TocFindAmputationOrProsthesisName(part_name, player, choice)
@@ -77,8 +63,12 @@ function TocFindAmputationOrProsthesisName(part_name, player, choice)
 
 end
 
+
+
+
+
 -------------------------------------
--- Override helper
+-- Override and mod compat helper
 function TocPopulateCanBeHeldTable(can_be_held, limbs_data)
 
     for _, side in ipairs(TOC_sides) do
