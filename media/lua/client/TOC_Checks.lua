@@ -42,8 +42,47 @@ function CheckIfProsthesisCanBeUnequipped(part_name)
     return true
 
 end
--------------------------------
+-----------------------------------------
 
+function CheckIfItemIsAmputatedLimb(item)
+    -- TODO Benchmark if this is faster
+    local item_full_type = item:getFullType()
+
+
+    if string.find(item_full_type, "TOC.Amputation_") then
+        return true
+    else
+        return false
+    end
+
+
+end
+
+function CheckIfItemIsProsthesis(item)
+
+    -- TODO find a cleaner way
+    local item_full_type = item:getFullType()
+    local prosthesis_list = GetProsthesisList()
+
+    for _, v in pairs(prosthesis_list) do
+        if v == item_full_type then
+            return true
+        end
+    end
+
+    return false
+
+end
+
+function CheckIfItemIsInstalledProsthesis(item)
+    local item_full_type = item:getFullType()
+    if string.find(item_full_type, "TOC.Prost_") then
+        return true
+    else
+        return false
+    end
+
+end
 
 
 

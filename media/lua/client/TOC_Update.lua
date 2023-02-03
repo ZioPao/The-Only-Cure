@@ -117,6 +117,16 @@ local function SetHealthStatusForBodyPart(part_data, part_name, player)
         end
 
 
+        --Wound cleanliness
+        -- TODO we need to check the upper body part since that's what getting wounded eheh
+
+
+        local amputated_limb_item = TocGetAmputationItemInInventory(player, part_name)
+
+
+
+        --getDirtyness
+
         -- Cicatrization check
         if not part_data[part_name].is_cicatrized then
             if part_data[part_name].cicatrization_time < 0 then

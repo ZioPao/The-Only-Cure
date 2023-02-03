@@ -116,7 +116,7 @@ function ISCutLimb:perform()
     if self.patient ~= self.surgeon and isClient() then
         SendCutLimb(self.patient, self.part_name, surgeon_factor, bandage_table, painkiller_table)
     else
-        TheOnlyCure.CutLimb(self.part_name, surgeon_factor, bandage_table, painkiller_table)
+        TocCutLimb(self.part_name, surgeon_factor, bandage_table, painkiller_table)
     end
 
     self.character:getEmitter():stopSoundByName("Amputation_Sound")

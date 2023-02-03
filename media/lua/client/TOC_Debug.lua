@@ -1,3 +1,28 @@
+
+-- Side functions
+local function TocGetAmputationFullTypeFromInventory(player, side, limb)
+    local player_inventory = player:getInventory()
+    local item_name = "TOC.Amputation_" .. side .. "_" .. limb
+    local found_item = player_inventory:FindAndReturn(item_name)
+    if found_item then
+        return found_item:getFullType()
+
+    end
+
+end
+
+local function TocGetEquippedProsthesisFullTypeFromInventory(player, side, limb)
+    local player_inventory = player:getInventory()
+    for _, prost in ipairs(GetProsthesisList()) do
+        local item_name = TocFindCorrectClothingProsthesis(prost, side .."_" .. limb)
+        local found_item = player_inventory:FindAndReturn(item_name)
+        if found_item then
+            return found_item:getFullType()
+        end
+    end
+end
+
+
 function TocResetEverything()
     -- This has to be run on the local player to be sure that we're correctly reassigning everything
     local player = getPlayer()
@@ -16,8 +41,7 @@ function TocResetEverything()
 
     -- Destroy the amputation or prosthesis item
     for _, v in ipairs(GetBodyParts()) do
-        --local amputated_clothing = player:getInventory():FindAndReturn(TocFindAmputatedClothingFromPartName(v))
-        -- TODO make it better
+        -- TODO This is incredibly shitty
         local amputation_item_name = TocFindAmputationOrProsthesisName(v, player, "Amputation")
         local prosthesis_item_name = TocFindAmputationOrProsthesisName(v, player, "Prosthesis")
 
@@ -49,8 +73,8 @@ end
 function TocResetClothingItemBodyLocation(player, side, limb)
     local player_inventory = player:getInventory()
     local limbs_data = player:getModData().TOC.Limbs
-    local amputation_item_name = TocFindAmputationInInventory(player, side, limb)
-    local equipped_prosthesis_item_name = TocFindEquippedProsthesisInInventory(player, side, limb)
+    local amputation_item_name = TocGetAmputationFullTypeFromInventory(player, side, limb)
+    local equipped_prosthesis_item_name = TocGetEquippedProsthesisFullTypeFromInventory(player, side, limb)
     print(amputation_item_name)
     print(equipped_prosthesis_item_name)
 

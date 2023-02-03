@@ -56,7 +56,7 @@ function ISInstallProsthesis:perform()
 
         SendEquipProsthesis(self.patient, self.part_name, prosthesis_base_name)
     else
-        TheOnlyCure.EquipProsthesis(self.part_name, prosthesis_base_name)
+        TocEquipProsthesis(self.part_name, prosthesis_base_name)
 
     end
 

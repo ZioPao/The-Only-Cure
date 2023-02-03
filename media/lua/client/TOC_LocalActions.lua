@@ -12,7 +12,7 @@ function TocOperateLocal(_, player, part_name, use_oven)
     if use_oven then
         ISTimedActionQueue.add(ISOperateLimb:new(player, player, _, part_name, use_oven));
     else
-        local kit = TocGetKitInInventory(player)
+        local kit = TocGetKitInInventory(player)            -- TODO Why is it here and only for local?
         if kit ~= nil then
             ISTimedActionQueue.add(ISOperateLimb:new(player, player, kit, part_name, false))
         else

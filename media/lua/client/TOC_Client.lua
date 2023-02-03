@@ -44,12 +44,12 @@ function SendEquipProsthesis(player, part_name, prosthesis_base_name)
     sendClientCommand("TOC", "SendServer", arg)
 end
 
-function SendUnequipProsthesis(player, part_name, equipped_prosthesis)
+function SendUnequipProsthesis(player, part_name)
     local arg = {}
     arg["From"] = getPlayer():getOnlineID()
     arg["To"] = player:getOnlineID()
     arg["command"] = "UnequipProsthesis"
-    arg["toSend"] = { part_name, equipped_prosthesis}
+    arg["toSend"] = { player, part_name}
     sendClientCommand("TOC", "SendServer", arg)
 end
 
@@ -100,7 +100,7 @@ end
 -- Patient (receive)
 Commands["CutLimb"] = function(arg)
     local arg = arg["toSend"]
-    TheOnlyCure.CutLimb(arg[1], arg[2], arg[3], arg[4])
+    TocCutLimb(arg[1], arg[2], arg[3], arg[4])
 end
 
 Commands["OperateLimb"] = function(arg)
@@ -116,7 +116,7 @@ Commands["EquipProsthesis"] = function(arg)
 
     local arg = arg["toSend"]
 
-    TheOnlyCure.EquipProsthesis(arg[1], arg[2])
+    TocEquipProsthesis(arg[1], arg[2])
 
 end
 
@@ -126,7 +126,7 @@ Commands["UnequipProsthesis"] = function(arg)
 
     local arg = arg["toSend"]
 
-    TheOnlyCure.UnequipProsthesis(arg[1])
+    TheOnlyCure.UnequipProsthesis(arg[1], arg[2])
 
 end
 

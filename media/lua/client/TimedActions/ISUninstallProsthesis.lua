@@ -4,7 +4,7 @@ ISUninstallProsthesis = ISBaseTimedAction:derive("ISUninstallProsthesis");
 
 function ISUninstallProsthesis:isValid()
 
-    if self.item ~= nil then
+    if self.item ~= nil and self.is_prosthesis_equipped then
         return true
     else
         return false
@@ -56,66 +56,20 @@ function ISUninstallProsthesis:perform()
 
     if self.patient ~= self.surgeon and isClient() then
 
-        SendUnequipProsthesis(self.patient, self.part_name, self.item)
+        SendUnequipProsthesis(self.patient, self.part_name)
     else
-        TheOnlyCure.UnequipProsthesis(self.part_name, self.item)
+        TheOnlyCure.UnequipProsthesis(self.patient, self.part_name)
     end
 
-
     ISBaseTimedAction.perform(self)
-
-   
-
-
-
-
-
-    -- for _, v in ipairs(GetAcceptingProsthesisBodyPartTypes()) do
-    --     if self.bodyPart:getType() == v then
-    --         local part_name = TocGetPartNameFromBodyPartType(v)
-
-    --         print("Found prost in " .. part_name)
-    --         if part_name then
-    --             toc_data.Limbs[part_name].is_prosthesis_equipped = false
-    --             local item_full_type = self.item:getFullType()
-    --             print("Searching for " .. item_full_type)
-    --             for _, prost_v in ipairs(GetProsthesisList()) do
-    --                 local prosthesis_name = string.match(item_full_type, prost_v)
-
-    --                 if prosthesis_name then
-    --                     self.character:getInventory():AddItem(prosthesis_name)
-
-    --                     self.character:setWornItem(self.item:getBodyLocation(), nil)
-    --                     self.character:getInventory():Remove(self.item)
-    --                     self.character:transmitModData()
-
-    --                     -- needed to remove from queue / start next.
-    --                     ISBaseTimedAction.perform(self)
-
-    --                 end
-    --             end
-
-    --         end
-
-
-
-
-
-
-
-
-
-    --     end
-    -- end
-
-    -- TODO Make the object currently on the hand return to the inventory
-
 end
 
 function ISUninstallProsthesis:new(surgeon, patient, part_name)
     local o = ISBaseTimedAction.new(self, surgeon)
 
-    o.item = TocFindItemInProstBodyLocation(part_name, patient)
+    local toc_limbs_data = patient:getModData().TOC.Limbs
+
+    o.item = toc_limbs_data[part_name].equipped_prosthesis
     o.character = surgeon         -- For animation purposes
 
     o.patient = patient
@@ -124,6 +78,7 @@ function ISUninstallProsthesis:new(surgeon, patient, part_name)
     o.part_name = part_name
 
 
+    o.is_prosthesis_equipped = toc_limbs_data[part_name].is_prosthesis_equipped
 
 
     o.maxTime = 100;

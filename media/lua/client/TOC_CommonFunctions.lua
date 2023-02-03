@@ -95,28 +95,18 @@ function TocFindCorrectClothingProsthesis(item_name, part_name)
 end
 
 
-function TocFindAmputationInInventory(player, side, limb)
+function TocGetAmputationItemInInventory(player, part_name)
+
     local player_inventory = player:getInventory()
-    local item_name = "TOC.Amputation_" .. side .. "_" .. limb
-    local found_item = player_inventory:FindAndReturn(item_name)
-    if found_item then
-        return found_item:getFullType()
-
-    end
-
+    local amputation_item_name = TocFindAmputationOrProsthesisName(part_name, player, "Amputation")
+    local amputation_item = player_inventory:FindAndReturn(amputation_item_name)
+    return amputation_item
 end
 
-function TocFindEquippedProsthesisInInventory(player, side, limb)
-    local player_inventory = player:getInventory()
-    for _, prost in ipairs(GetProsthesisList()) do
-        local item_name = TocFindCorrectClothingProsthesis(prost, side .."_" .. limb)
-        local found_item = player_inventory:FindAndReturn(item_name)
+function TocGetSawInInventory(surgeon)
 
-        if found_item then
-            return found_item:getFullType()
-
-        end
-
-    end
-
+    local player_inv = surgeon:getInventory()
+    local item = player_inv:getItemFromType("Saw") or player_inv:getItemFromType("GardenSaw") or
+        player_inv:getItemFromType("Chainsaw")
+    return item
 end
