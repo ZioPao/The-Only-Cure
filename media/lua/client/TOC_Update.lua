@@ -220,9 +220,9 @@ local function TocUpdateEveryTenMinutes()
 
             local modifier = SandboxVars.TOC.CicatrizationSpeedMultiplier - item_bloodyness - item_dirtyness
 
-            print("TOC: Type " .. amputated_limb_item:getFullType())
-            print("TOC: Dirtyness " .. item_dirtyness)
-            print("TOC: Bloodyness " .. item_bloodyness)
+            --print("TOC: Type " .. amputated_limb_item:getFullType())
+            --print("TOC: Dirtyness " .. item_dirtyness)
+            --print("TOC: Bloodyness " .. item_bloodyness)
 
 
             part_data[part_name].cicatrization_time = part_data[part_name].cicatrization_time - modifier

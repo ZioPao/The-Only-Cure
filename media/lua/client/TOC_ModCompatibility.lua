@@ -2,7 +2,14 @@
 -- Compatibility for various mods
 ---------------------------------
 
-local function OverrideFancyHandwork()
+TOC_ModTable = {
+    FancyHandwork = false,
+    LeftIsRight = false,
+}
+
+
+
+local function SetCompatibilityFancyHandwork()
     if getActivatedMods():contains('FancyHandwork') == false then return end
     require "TimedActions/FHSwapHandsAction"
 
@@ -43,7 +50,7 @@ local function OverrideFancyHandwork()
                 equip = false
             end
             if mod then
-                print("TOC: Fancy Handwork modifier")
+                --print("TOC: Fancy Handwork modifier")
                 -- If we still have something equipped in secondary, unequip
                 if secondary and equip and can_be_held["Left"] then
                     ISTimedActionQueue.add(ISUnequipAction:new(self.chr, secondary, 20))
@@ -86,4 +93,14 @@ local function OverrideFancyHandwork()
 
 end
 
-Events.OnGameStart.Add(OverrideFancyHandwork)
+local function SetCompatibilityLeftIsRight()
+    if getActivatedMods():contains('LeftIsRight') == false then return end
+
+    -- This check is needed since we're gonna add a little check in adjustMaxTime
+    -- to prevent problems with maxTime scaling
+    TOC_ModTable.LeftIsRight = true
+    
+end
+
+Events.OnGameStart.Add(SetCompatibilityFancyHandwork)
+Events.OnGameStart.Add(SetCompatibilityLeftIsRight)
