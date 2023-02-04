@@ -108,6 +108,7 @@ Commands["CutLimb"] = function(arg)
     local arg = arg["toSend"]
     local surgeon_id = arg[5]
     
+    -- Disable the sound coming from the surgeon
     getPlayerByOnlineID(surgeon_id):getEmitter():stopSoundByName("Amputation_Sound")
 
 
