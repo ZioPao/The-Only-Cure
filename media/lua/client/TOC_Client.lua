@@ -22,7 +22,13 @@ function SendCutLimb(player, part_name, surgeon_factor, bandage_table, painkille
     arg["From"] = getPlayer():getOnlineID()
     arg["To"] = player:getOnlineID()
     arg["command"] = "CutLimb"
-    arg["toSend"] = { part_name, surgeon_factor, bandage_table, painkiller_table }
+
+
+    -- TODO Hotfix for sound, fix this later
+    arg["toSend"] = {part_name, surgeon_factor, bandage_table, painkiller_table, getPlayer():getOnlineID()}
+
+
+
     sendClientCommand("TOC", "SendServer", arg)
 end
 
@@ -100,6 +106,12 @@ end
 -- Patient (receive)
 Commands["CutLimb"] = function(arg)
     local arg = arg["toSend"]
+    local surgeon_id = arg[5]
+    
+    getPlayerByOnlineID(surgeon_id):getEmitter():stopSoundByName("Amputation_Sound")
+
+
+
     TocCutLimb(arg[1], arg[2], arg[3], arg[4])
 end
 

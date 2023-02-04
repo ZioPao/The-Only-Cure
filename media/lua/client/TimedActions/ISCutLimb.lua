@@ -24,7 +24,7 @@ end
 
 function ISCutLimb:stop()
 
-    self.character:getEmitter():stopSoundByName("Amputation_Sound")
+    self.surgeon:getEmitter():stopSoundByName("Amputation_Sound")
 
 
 end
@@ -36,7 +36,7 @@ function ISCutLimb:start()
 
     self:setActionAnim("SawLog")
     local saw_item = TocGetSawInInventory(self.surgeon)
-    self.sound = self.character:getEmitter():playSound("Amputation_Sound")
+    self.surgeon:getEmitter():playSound("Amputation_Sound")
 
     -- Return whatever object we've got in the inventory
     if self.surgeon:getPrimaryHandItem() then
@@ -119,7 +119,7 @@ function ISCutLimb:perform()
         TocCutLimb(self.part_name, surgeon_factor, bandage_table, painkiller_table)
     end
 
-    self.character:getEmitter():stopSoundByName("Amputation_Sound")
+    self.surgeon:getEmitter():stopSoundByName("Amputation_Sound")         -- TODO This doesn't work reliably
     self.surgeon:getXp():AddXP(Perks.Doctor, 400)
     ISBaseTimedAction.perform(self)
 
