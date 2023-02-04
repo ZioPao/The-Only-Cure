@@ -1,3 +1,11 @@
+0.9.14
+- Optimizations
+- New icon for the mod
+- Added a dirtyness malus for cicatrization, you'll have to keep your wound clean while it's healing (wash it you animal)
+- When trying to equip a prosthesis from the inventory you'll get a message to let you know that you're doing it wrong
+- Added explicit support to Left Is Right, making it work a lot better when you've got an amputated right limb
+
+
 0.9.13
 - Some little optimizations
 - Fixed a bug that made Fancy Handwork compat not work as intended

@@ -150,6 +150,11 @@ imports
 
 /************************ Prosthesis clothing item ************************/
 
+
+
+/* Right Hand, Right Forearm, Right UpperArm,*/
+/* Left Hand, Left Forearm, Left Upperarm */
+
     item Prost_Right_Hand_WoodenHook
         {
             Weight = 1,
