@@ -93,7 +93,7 @@ def generate_item(item_name, weight, item_type, display_category, display_name, 
 
 
 
-#generate_clothing_item()
+generate_clothing_item()
 
 
 recipe_name = "Test Recipe"
