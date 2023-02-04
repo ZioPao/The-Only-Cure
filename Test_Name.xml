@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<clothingItem>
+  <m_MaleModel>TEST TEXT FROM SOMETHING</m_MaleModel>
+  <m_FemaleModel>TEST TEXT FROM SOMETHING FEMALE</m_FemaleModel>
+  <m_GUID>get guid</m_GUID>
+</clothingItem>
