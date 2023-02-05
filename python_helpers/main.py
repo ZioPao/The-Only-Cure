@@ -1,4 +1,5 @@
-import lxml.etree as gfg 
+import lxml.etree as gfg
+import pandas as pd
   
 
 def generate_clothing_item(model, texture_choices, guid = None):
@@ -94,6 +95,15 @@ def generate_item(item_name, weight, item_type, display_category, display_name, 
     with open("Test_Item.txt", "wt") as file:
         file.write(root_element)
         file.close()
+
+###########################################################################################
+
+forearm_data = pd.read_excel('modules_prost.xlsx', sheet_name = "Forearm")
+
+data = pd.DataFrame(excel_data, columns)
+
+
+
 
 
 
