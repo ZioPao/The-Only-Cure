@@ -37,7 +37,7 @@ end
 
 ---Unequip a prosthesis clothing item and returns it to the inventory as a normal item
 ---@param part_name string
-function TheOnlyCure.UnequipProsthesis(patient, part_name, equipped_prosthesis)
+function TocUnequipProsthesis(patient, part_name, equipped_prosthesis)
 
 
     local toc_data = patient:getModData().TOC

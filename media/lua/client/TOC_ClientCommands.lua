@@ -139,7 +139,7 @@ Commands["UnequipProsthesis"] = function(arg)
 
     local arg = arg["toSend"]
 
-    TheOnlyCure.UnequipProsthesis(arg[1], arg[2])
+    TheOnlyCure.TocUnequipProsthesis(arg[1], arg[2])
 
 end
 

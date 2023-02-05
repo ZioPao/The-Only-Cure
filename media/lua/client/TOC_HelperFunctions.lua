@@ -9,7 +9,7 @@ end
 
 -- Unequip Prosthesis
 
-function PartNameToBodyLocationProsthesis(name)
+local function PartNameToBodyLocationProsthesis(name)
     if name == "Right_Hand" then return "TOC_ArmRightProsthesis" end
     if name == "Right_LowerArm" then return "TOC_ArmRightProsthesis" end
     if name == "Right_UpperArm" then return "TOC_ArmRightProsthesis" end
@@ -18,7 +18,7 @@ function PartNameToBodyLocationProsthesis(name)
     if name == "Left_UpperArm" then return "TOC_ArmLeftProsthesis" end
 end
 
-function PartNameToBodyLocationAmputation(name)
+local function PartNameToBodyLocationAmputation(name)
     if name == "Right_Hand" then return "TOC_ArmRight" end
     if name == "Right_LowerArm" then return "TOC_ArmRight" end
     if name == "Right_UpperArm" then return "TOC_ArmRight" end

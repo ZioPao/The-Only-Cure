@@ -1,3 +1,8 @@
+------------------------------------------
+-------- THE ONLY CURE BUT BETTER --------
+------------------------------------------
+------------- INIT FUNCTIONS -------------
+
 if not TheOnlyCure then
     TheOnlyCure = {}
 end
@@ -22,8 +27,6 @@ local function TocCutLimbForTrait(player, limbs_data, part_name)
         limbs_data[v].is_cicatrized = true
     end
 end
-
--- Sub function of TocSetInitData
 local function TocUpdateBaseData(mod_data)
 
     -- TODO The prosthetic knife needs to be a weapon first and foremost, so other than a
@@ -197,8 +200,6 @@ local function TocSetInitData(mod_data, player)
 
 end
 
-
-
 function TheOnlyCure.InitTheOnlyCure(_, player)
 
     local mod_data = player:getModData()
@@ -211,8 +212,7 @@ function TheOnlyCure.InitTheOnlyCure(_, player)
 
 end
 
-
-function TheOnlyCure.DeclareTraits()
+local function TocDeclareTraits()
     local amp1 = TraitFactory.addTrait("Amputee_Hand", getText("UI_trait_Amputee_Hand"), -8,
         getText("UI_trait_Amputee_Hand_desc"), false, false)
     amp1:addXPBoost(Perks.Left_Hand, 4)
@@ -232,52 +232,6 @@ function TheOnlyCure.DeclareTraits()
     TraitFactory.setMutualExclusive("Amputee_LowerArm", "Amputee_UpperArm")
 end
 
-function TryTocAction(_, part_name, action, surgeon, patient)
-    -- TODO add checks so that we don't show these menus if a player has already beeen operated or amputated
-    -- TODO at this point surgeon doesnt do anything. We'll fix this later
-
-    -- Check if SinglePlayer
-    if not isServer() and not isClient() then
-
-        if action == "Cut" then
-            TocCutLocal(_, surgeon, part_name)
-        elseif action == "Operate" then
-            TocOperateLocal(_, surgeon, part_name, false)
-        elseif action == "Equip" then
-            TocEquipProsthesisLocal(_, surgeon, part_name)
-        elseif action == "Unequip" then
-            TocUnequipProsthesisLocal(_, surgeon, part_name)
-        end
-    else
-        local ui = GetConfirmUIMP()
-        if not ui then
-            CreateTocConfirmUIMP()
-            ui = GetConfirmUIMP()
-        end
-
-        if patient == nil then
-            patient = surgeon
-        end
-
-
-        if action == "Cut" then
-            AskCanCutLimb(patient, part_name)
-        elseif action == "Operate" then
-            AskCanOperateLimb(patient, part_name)
-        elseif action == "Equip" then
-            AskCanEquipProsthesis(patient, part_name)
-        elseif action == "Unequip" then
-            AskCanUnequipProsthesis(patient, part_name)
-        end
-
-        ui.actionAct = action
-        ui.partNameAct = part_name
-        ui.patient = patient
-
-        SendCommandToConfirmUIMP("Wait server")
-
-    end
-end
 
 Events.OnCreatePlayer.Add(TheOnlyCure.InitTheOnlyCure)
-Events.OnGameBoot.Add(TheOnlyCure.DeclareTraits)
+Events.OnGameBoot.Add(TocDeclareTraits)

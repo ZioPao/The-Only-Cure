@@ -1,6 +1,6 @@
 -- TODO this should be moved
 
-function TryToToResetEverythingOtherPlayer(_, patient, surgeon)
+local function TryToToResetEverythingOtherPlayer(_, patient, surgeon)
     sendClientCommand(surgeon, "TOC", "AskToResetEverything", { patient:getOnlineID() })
 end
 

@@ -21,3 +21,15 @@ option TOC.CicatrizationSpeedMultiplier
     translation = TOC_CicatrizationSpeedMultiplier,
 
 }
+
+option TOC.AmputationTimeMultiplier
+{
+    type = integer,
+    min = 1,
+    max = 10,
+    default = 1,
+    page = TOC,
+    translation = TOC_AmputationTimeMultiplier
+
+
+}
