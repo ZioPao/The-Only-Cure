@@ -1,19 +1,23 @@
 import lxml.etree as gfg 
   
 
-def generate_clothing_item():
+def generate_clothing_item(model, texture_choices, guid = None):
     root = gfg.Element("clothingItem")
 
     m_MaleModel = gfg.Element("m_MaleModel")
-    m_MaleModel.text = "TEST TEXT FROM SOMETHING"
+    m_MaleModel.text = f"{model}_Male"
     root.append(m_MaleModel)
 
     m_FemaleModel = gfg.Element("m_FemaleModel")
-    m_FemaleModel.text = "TEST TEXT FROM SOMETHING FEMALE"
+    m_FemaleModel.text = f"{model}_Female"
     root.append(m_FemaleModel)
 
     m_GUID = gfg.Element("m_GUID")
-    m_GUID.text = "get guid"
+    if guid:
+        m_GUID.text = guid
+    else:
+        m_GUID.text = "get guid from func"
+
     root.append(m_GUID)
 
     m_Static = gfg.Element("m_Static")
@@ -23,10 +27,10 @@ def generate_clothing_item():
     m_AllowRandomTint.text = "false"
 
     # TODO Defined by the amount of textures that we're gonna pass
-    for x in range(2):
+    for tex in texture_choices:
 
         textureChoices = gfg.Element("textureChoices")
-        textureChoices.text = "Texture path"
+        textureChoices.text = tex
 
     tree = gfg.ElementTree(root)
 
@@ -93,8 +97,9 @@ def generate_item(item_name, weight, item_type, display_category, display_name, 
 
 
 
-generate_clothing_item()
+#generate_clothing_item()
 
+# TODO we should get this stuff from a csv\xlsx and generate the correct values from that
 
 recipe_name = "Test Recipe"
 recipe_items = ["Ass", "Penis", "Shit=3"]
