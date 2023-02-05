@@ -17,11 +17,8 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
         -- MOD SUPPORT ACTIONS
         ----------------------
         -- LIR
-
         if TOC_ModTable.LeftIsRight then
-
             if mod_data.LIR.is_attacking then
-                -- TODO we need to check if we're doing that specific action
                 return original_max_time
             end
         end
