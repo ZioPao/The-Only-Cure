@@ -76,14 +76,18 @@ function ISInventoryPane:onMouseDoubleClick(x, y)
 
     local item_to_check = self.items[self.mouseOverOption]
     local player_inventory = getPlayerInventory(self.player).inventory
-    if instanceof(item_to_check, "InventoryItem") then
-        og_ISInventoryPaneOnMouseDoubleClick(self, x, y)
-    elseif CheckIfItemIsAmputatedLimb(item_to_check.items[1]) or CheckIfItemIsInstalledProsthesis(item_to_check.items[1]) then
-        --print("TOC: Can't double click this item")
-    else
-        og_ISInventoryPaneOnMouseDoubleClick(self, x, y)
+-----------------------------------------------------------------------------------
+    -- TODO THIS IS DISABLED ONLY FOR TEST!!!!! REMEMBER TO RESTORE IT
+-----------------------------------------------------------------------------------
 
-    end
+    -- if instanceof(item_to_check, "InventoryItem") then
+    --     og_ISInventoryPaneOnMouseDoubleClick(self, x, y)
+    -- elseif CheckIfItemIsAmputatedLimb(item_to_check.items[1]) or CheckIfItemIsInstalledProsthesis(item_to_check.items[1]) then
+    --     --print("TOC: Can't double click this item")
+    -- else
+
+    -- end
+    og_ISInventoryPaneOnMouseDoubleClick(self, x, y)
 
 
 
@@ -96,13 +100,17 @@ function ISInventoryPane.getActualItems(items)
     local ret = og_ISInventoryPaneGetActualItems(items)
 
     -- This is gonna be slower than just overriding the function but hey it's more compatible
+-----------------------------------------------------------------------------------
+    -- TODO THIS IS DISABLED ONLY FOR TEST!!!!! REMEMBER TO RESTORE IT
+-----------------------------------------------------------------------------------
 
-    for i = 1, #ret do
-        local item_full_type = ret[i]:getFullType()
-        if string.find(item_full_type, "Amputation_") or string.find(item_full_type, "Prost_") then
-            table.remove(ret, i)
-        end
-    end
+
+    -- for i = 1, #ret do
+    --     local item_full_type = ret[i]:getFullType()
+    --     if string.find(item_full_type, "Amputation_") or string.find(item_full_type, "Prost_") then
+    --         table.remove(ret, i)
+    --     end
+    -- end
     return ret
 end
 

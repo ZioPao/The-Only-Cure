@@ -24,6 +24,14 @@ TOC_Commands["AskDamageOtherPlayer"] = function(_, arg)
 end
 
 
+-------- ANIMATIONS
+TOC_Commands["SetCrawlAnimation"] = function(player, args)
+
+    local player_id = player:getOnlineID()
+
+    sendServerCommand(player, "TOC", "SetCrawlAnimation", {})
+
+end
 
 
 

@@ -208,6 +208,26 @@ end
 
 
 
+-- ANIMATIONS
+-----------------------
+Commands["SetCrawlAnimation"] = function(args)
+
+    local source = getPlayer()
+    local player = getPlayerByOnlineID(args.id)
+
+    if source ~= player then
+        if args.hasInjury then
+            player:setVariable('SetCrawlAnimation', 'true');
+        else
+            player:setVariable('SetCrawlAnimation', 'false');
+        end
+    end
+
+end
+
+
+
+
 
 -- Base stuff
 local function OnTocServerCommand(module, command, args)

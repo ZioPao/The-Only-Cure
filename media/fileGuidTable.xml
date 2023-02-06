@@ -76,4 +76,9 @@
         <path>media/clothing/clothingItems/Prost_Left_LowerArm_MetalHand.xml</path>
         <guid>0405a4c0-f71b-45a8-9edc-489fc81dca39</guid>
     </files>
+
+    <files>
+        <path>media/clothing/clothingItems/Amputation_Left_Foot.xml</path>
+        <guid>45c0b872-bdf1-466f-b810-c7783171bda1</guid>
+    </files>
 </fileGuidTable>

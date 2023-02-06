@@ -176,12 +176,29 @@ end
 
 -- MAIN UPDATE FUNCTIONS
 
+local testOnAnimEvent = IsoGameCharacter.OnAnimEvent
+
+function IsoGameCharacter.OnAnimEvent(animLayer, animEvent)
+    print("ENTERING ON ANIM EVENT!!!")
+end
+
+
+
 local function TocUpdateOnTick()
 
     local player = getPlayer()
     if player == nil then
         return
     end
+
+
+    
+
+
+
+
+
+
     local toc_data = player:getModData().TOC
     if toc_data ~= nil then
         CheckIfPlayerIsInfected(player, toc_data)

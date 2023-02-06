@@ -18,7 +18,7 @@ local function addBodyLocationBefore(newLocation, movetoLocation)
 
 
 
-  list:remove(list:size()-1)
+  list:remove(newItem)
   local i = group:indexOf(movetoLocation)
   list:add(i, newItem)
 end
@@ -70,6 +70,7 @@ local group = BodyLocations.getGroup("Human")
 
 addBodyLocationBefore("TOC_ArmRight", "Shoes")
 addBodyLocationBefore("TOC_ArmLeft", "Shoes")
+addBodyLocationBefore("TOC_LegLeft", "Shoes")
 addBodyLocationBefore("TOC_ArmRightProsthesis", "Shoes")
 addBodyLocationBefore("TOC_ArmLeftProsthesis", "Shoes")
 
