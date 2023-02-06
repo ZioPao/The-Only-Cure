@@ -2,11 +2,11 @@
 <clothingItem>
     <m_MaleModel>Amputation\Amputation_GenericModel</m_MaleModel>
     <m_FemaleModel>Amputation\Amputation_GenericModel</m_FemaleModel>
-    <m_GUID>45c0b872-bdf1-466f-b810-c7783171bda1</m_GUID>
+    <m_GUID>d6576bb2-f5f1-4cb6-a17e-aab131214e4b</m_GUID>
     <m_Static>false</m_Static>
     <m_AllowRandomHue>false</m_AllowRandomHue>
     <m_AllowRandomTint>false</m_AllowRandomTint>
-    <m_Masks>8</m_Masks>
+    <m_Masks>10</m_Masks>
     <m_MasksFolder>none</m_MasksFolder>
 
     <textureChoices>Amputations\Forearm\skin01_b</textureChoices>

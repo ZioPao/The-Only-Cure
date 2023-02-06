@@ -90,4 +90,10 @@
         <path>media/clothing/clothingItems/Amputation_Left_Foot.xml</path>
         <guid>45c0b872-bdf1-466f-b810-c7783171bda1</guid>
     </files>
+
+    <files>
+        <path>media/clothing/clothingItems/Amputation_Left_Foot.xml</path>
+        <guid>d6576bb2-f5f1-4cb6-a17e-aab131214e4b</guid>
+    </files>
+
 </fileGuidTable>

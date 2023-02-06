@@ -74,6 +74,11 @@ function TocGetBodyPartFromPartName(part_name)
     if part_name == "Left_Hand" then return BodyPartType.Hand_L end
     if part_name == "Left_LowerArm" then return BodyPartType.ForeArm_L end
     if part_name == "Left_UpperArm" then return BodyPartType.UpperArm_L end
+
+    -- New Legs stuff
+    if part_name == "Right_Foot" then return BodyPartType.Foot_R end
+    if part_name == "Left_Foot" then return BodyPartType.Foot_L end
+
 end
 
 -- Custom mapping to make more sense when cutting a limb
@@ -85,6 +90,11 @@ function TocGetAdiacentBodyPartFromPartName(part_name)
     if part_name == "Left_Hand" then return BodyPartType.ForeArm_L end
     if part_name == "Left_LowerArm" then return BodyPartType.UpperArm_L end
     if part_name == "Left_UpperArm" then return BodyPartType.Torso_Upper end
+
+    if part_name == "Right_Foot" then return BodyPartType.LowerLeg_R end
+    if part_name == "Left_Foot" then return BodyPartType.LowerLeg_L end
+
+
 end
 
 function TocFindCorrectClothingProsthesis(item_name, part_name)

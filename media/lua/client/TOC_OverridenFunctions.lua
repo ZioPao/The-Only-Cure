@@ -3,9 +3,8 @@ require "TimedActions/ISEquipWeaponAction"
 require "TimedActions/ISUnequipAction"
 require "ISUI/ISInventoryPaneContextMenu"
 
+
 local og_ISBaseTimedActionAdjustMaxTime = ISBaseTimedAction.adjustMaxTime
-
-
 function ISBaseTimedAction:adjustMaxTime(maxTime)
 
     local original_max_time = og_ISBaseTimedActionAdjustMaxTime(self, maxTime)
@@ -128,7 +127,6 @@ end
 
 local og_ISEquipWeaponActionPerform = ISEquipWeaponAction.perform
 function ISEquipWeaponAction:perform()
-
     -- TODO this is only for weapons, not items. Won't work for everything I think
     --TODO Block it before even performing
     -- TODO in the inventory menu there is something broken, even though this works

@@ -13,11 +13,14 @@ end
 addBodyLocationBefore("TOC_ArmRight", "Shoes")
 addBodyLocationBefore("TOC_ArmLeft", "Shoes")
 
-addBodyLocationBefore("TOC_LegRight", "Shoes")
-addBodyLocationBefore("TOC_LegLeft", "Shoes")
+
 
 addBodyLocationBefore("TOC_ArmRightProsthesis", "Shoes")
 addBodyLocationBefore("TOC_ArmLeftProsthesis", "Shoes")
 
-addBodyLocationBefore("TOC_LegRightProsthesis", "Shoes")
-addBodyLocationBefore("TOC_LegLeftProsthesis", "Shoes")
+addBodyLocationBefore("TOC_LegRight", "FannyPackFront")
+addBodyLocationBefore("TOC_LegLeft", "FannyPackFront")
+
+
+addBodyLocationBefore("TOC_LegRightProsthesis", "FannyPackFront")
+addBodyLocationBefore("TOC_LegLeftProsthesis", "FannyPackFront")

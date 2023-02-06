@@ -104,7 +104,7 @@ local function FindTourniquetInWornItems(patient, side)
     for i = 1, worn_items:size() - 1 do -- Maybe wornItems:size()-1
         local item = worn_items:get(i):getItem()
         local item_full_type = item:getFullType()
-        if string.find(item_full_type, "Test_Tourniquet_" .. side) then
+        if string.find(item_full_type, "Surgery_" .. side .. "_Tourniquet") then
             return item
         end
     end
@@ -151,7 +151,7 @@ function TocCutLimb(part_name, surgeon_factor, bandage_table, painkiller_table)
     local base_damage_value = 100
 
     if tourniquet_item ~= nil then
-        base_damage_value = 50
+        base_damage_value = 50  -- TODO Decrease mostly blood and damage, add pain, not everything else
 
         if part_name == "Left_UpperArm" or part_name == "Right_UpperArm" then
             player:removeWornItem(tourniquet_item)
@@ -240,7 +240,11 @@ function TocCutLimb(part_name, surgeon_factor, bandage_table, painkiller_table)
         TocDeleteOtherAmputatedLimbs(side)
 
         --Equip new model for amputation
-        local amputation_clothing_item = player:getInventory():AddItem(TocFindAmputatedClothingFromPartName(part_name))
+        local amputation_clothing_item_name = TocFindAmputatedClothingFromPartName(part_name)
+        print(amputation_clothing_item_name)
+
+
+        local amputation_clothing_item = player:getInventory():AddItem(amputation_clothing_item_name)
         TocSetCorrectTextureForAmputation(amputation_clothing_item, player, false)
         player:setWornItem(amputation_clothing_item:getBodyLocation(), amputation_clothing_item)
 

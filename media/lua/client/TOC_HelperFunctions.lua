@@ -25,6 +25,9 @@ local function PartNameToBodyLocationAmputation(name)
     if name == "Left_Hand" then return "TOC_ArmLeft" end
     if name == "Left_LowerArm" then return "TOC_ArmLeft" end
     if name == "Left_UpperArm" then return "TOC_ArmLeft" end
+
+    if name == "Left_Foot" then return "TOC_LegLeft" end
+    if name == "Right_Foot" then return "TOC_LegRight" end
 end
 
 function TocFindItemInProstBodyLocation(part_name, patient)
