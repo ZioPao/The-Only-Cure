@@ -442,19 +442,41 @@ item ProthesisMag3
     }
 
 
-    item Test_Tourniquet_Left
+item Surgery_Left_Tourniquet
     {
         Weight = 1,
         Type = Clothing,
-        DisplayCategory = Prosthesis,
-        DisplayName	= Tourniquet Left,
-        ClothingItem = Test_Tourniquet_Left,
+        DisplayCategory = Surgery,
+        DisplayName	= Tourniquet - Left Arm,
+        ClothingItem = Surgery_Left_Tourniquet,
         BodyLocation = Hands,
-        BloodLocation = Hands,
         Icon = tourniquet,
+        BloodLocation = Hands,
+        ClothingItemExtra = Surgery_Right_Tourniquet,
+        ClothingItemExtraOption = TourniquetRightSwitch,
+        clothingExtraSubmenu = TourniquetLeftSwitch,
         Tooltip = Test,
         CanHaveHoles = false,
+    }
 
+item Surgery_Right_Tourniquet
+    {
+        Weight = 1,
+        Type = Clothing,
+        DisplayCategory = Surgery,
+        DisplayName	= Tourniquet - Right Arm,
+        ClothingItem = Surgery_Right_Tourniquet,
+        BodyLocation = Hands,
+        Icon = tourniquet,
+        BloodLocation = Hands,
+        ClothingItemExtra = Surgery_Left_Tourniquet,
+        ClothingItemExtraOption = TourniquetLeftSwitch,
+        clothingExtraSubmenu = TourniquetRightSwitch,
+
+
+
+        Tooltip = Test,
+        CanHaveHoles = false,
     }
 }
 
