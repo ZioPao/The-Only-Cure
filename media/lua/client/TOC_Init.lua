@@ -257,6 +257,7 @@ function TheOnlyCure.InitTheOnlyCure(_, player)
     else
         TocCheckCompatibilityWithOlderVersions(mod_data)
         TocUpdateBaseData(mod_data) -- Since it's gonna be common to update stuff
+        TocCheckLegsAmputations(mod_data)
     end
 
 end

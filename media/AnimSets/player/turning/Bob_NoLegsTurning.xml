@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animNode x_extends="turn_idle_180.xml">
+	<m_Name>turn_idle_180L_craw;</m_Name>
+	<m_AnimName>Zombie_Crawl</m_AnimName>
+	<m_Conditions />
+	<m_Conditions />
+	<m_Conditions />
+	<m_Conditions />
+	<m_Conditions>
+        <m_Name>IsCrawling</m_Name>
+        <m_Type>BOOL</m_Type>
+        <m_BoolValue>true</m_BoolValue>
+    </m_Conditions>
+</animNode>

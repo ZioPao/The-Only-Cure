@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<animNode>
+	<m_Name>aim_default</m_Name>
+	<m_AnimName>Zombie_Idle_FloorOnFront</m_AnimName>
+	<m_Priority>4</m_Priority>
+	<m_deferredBoneAxis>Y</m_deferredBoneAxis>
+	<m_SyncTrackingEnabled>false</m_SyncTrackingEnabled>
+	<m_SpeedScale>IdleSpeed</m_SpeedScale>
+	<m_BlendTime>0.30</m_BlendTime>
+	<m_maxTorsoTwist>70.0</m_maxTorsoTwist>
+		<m_Conditions>
+        <m_Name>IsCrawling</m_Name>
+        <m_Type>BOOL</m_Type>
+        <m_BoolValue>true</m_BoolValue>
+    </m_Conditions>
+	<m_Transitions>
+		<m_Target>Idle</m_Target>
+		<m_AnimName>Zombie_Idle_FloorOnFront</m_AnimName>
+		<m_blendInTime>0.3</m_blendInTime>
+		<m_blendOutTime>0.3</m_blendOutTime>
+		<m_speedScale>1.2</m_speedScale>
+	</m_Transitions>
+	<m_Transitions>
+		<m_Target>sneakIdle</m_Target>
+		<m_AnimName>Zombie_Idle_FloorOnFront</m_AnimName>
+		<m_blendInTime>0.3</m_blendInTime>
+		<m_blendOutTime>0.3</m_blendOutTime>
+		<m_speedScale>1.2</m_speedScale>
+	</m_Transitions>
+	<m_Transitions>
+		<m_Target>sneakIdleLow</m_Target>
+		<m_AnimName>Zombie_Idle_FloorOnFront</m_AnimName>
+		<m_blendInTime>0.3</m_blendInTime>
+		<m_blendOutTime>0.3</m_blendOutTime>
+		<m_speedScale>1.2</m_speedScale>
+	</m_Transitions>
+</animNode>

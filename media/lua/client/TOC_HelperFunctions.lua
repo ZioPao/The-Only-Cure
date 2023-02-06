@@ -89,3 +89,17 @@ function TocPopulateCanBeHeldTable(can_be_held, limbs_data)
     end
 
 end
+
+
+
+
+
+-----------------------------------------
+function TocCheckLegsAmputations(mod_data)
+
+    if mod_data.TOC.Limbs["Left_Foot"].is_cut or mod_data.TOC.Limbs["Right_Foot"].is_cut then
+        SetMissingFootAnimation(true)
+    end
+
+
+end
