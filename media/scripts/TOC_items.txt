@@ -440,4 +440,23 @@ item ProthesisMag3
         ReplaceOnUse = ProthesisMag3,
         Tooltip = Tooltip_ProthesisMag2,
     }
+
+
+    item Test_Tourniquet_Left
+    {
+        Weight = 1,
+        Type = Clothing,
+        DisplayCategory = Prosthesis,
+        DisplayName	= Tourniquet Left,
+        ClothingItem = Test_Tourniquet_Left,
+        BodyLocation = Hands,
+        BloodLocation = Hands,
+        Icon = tourniquet,
+        Tooltip = Test,
+        CanHaveHoles = false,
+
+    }
 }
+
+
+

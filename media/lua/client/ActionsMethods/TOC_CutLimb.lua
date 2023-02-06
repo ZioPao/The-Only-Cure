@@ -98,6 +98,20 @@ function TocDamagePlayerDuringAmputation(patient, part_name)
     body_damage_part:setBleedingTime(ZombRand(10, 20))
 end
 
+local function FindTourniquetInWornItems(patient, side)
+    local worn_items = patient:getWornItems()
+
+    for i = 1, worn_items:size() - 1 do -- Maybe wornItems:size()-1
+        local item = worn_items:get(i):getItem()
+        local item_full_type = item:getFullType()
+        if string.find(item_full_type, "Test_Tourniquet_" .. side) then
+            return item
+        end
+    end
+
+    return nil
+
+end
 ----------------------------------------------------------------------------------
 
 --- Main function for cutting a limb
@@ -116,13 +130,9 @@ function TocCutLimb(part_name, surgeon_factor, bandage_table, painkiller_table)
     local limbs_data = toc_data.Limbs
 
 
-
-    -- TODO Stop for a bit,
-
     -- Cut Hand -> Damage in forearm
     -- Cut Forearm -> Damage in Upperarm
     -- Cut UpperArm -> Damage to torso
-
     local body_damage = player:getBodyDamage()
     local body_part = body_damage:getBodyPart(TocGetBodyPartFromPartName(part_name))
     local adiacent_body_part = player:getBodyDamage():getBodyPart(TocGetAdiacentBodyPartFromPartName(part_name))
@@ -135,18 +145,33 @@ function TocCutLimb(part_name, surgeon_factor, bandage_table, painkiller_table)
     -- The bit will be checked later since we're not sure if the player is not infected from another wound
     TocSetParametersForMissingLimb(body_part, false)
 
+    -- Use a tourniquet if available
+    local tourniquet_item = FindTourniquetInWornItems(player, TocGetSideFromPartName(part_name))
+
+    local base_damage_value = 100
+
+    if tourniquet_item ~= nil then
+        base_damage_value = 50
+
+        if part_name == "Left_UpperArm" or part_name == "Right_UpperArm" then
+            player:removeWornItem(tourniquet_item)
+        end
+
+    end
+
     -- Set damage, stress, and low endurance after amputation
-    adiacent_body_part:AddDamage(100 - surgeon_factor)
-    adiacent_body_part:setAdditionalPain(100 - surgeon_factor)
+    adiacent_body_part:AddDamage(base_damage_value - surgeon_factor)
+    adiacent_body_part:setAdditionalPain(base_damage_value - surgeon_factor)
     adiacent_body_part:setBleeding(true)
-    adiacent_body_part:setBleedingTime(100 - surgeon_factor)
+    adiacent_body_part:setBleedingTime(base_damage_value - surgeon_factor)
     adiacent_body_part:setDeepWounded(true)
-    adiacent_body_part:setDeepWoundTime(100 - surgeon_factor)
+    adiacent_body_part:setDeepWoundTime(base_damage_value - surgeon_factor)
     stats:setEndurance(surgeon_factor)
-    stats:setStress(100 - surgeon_factor)
+    stats:setStress(base_damage_value - surgeon_factor)
 
 
     -- Set malus for strength and fitness
+    -- TODO Make it more "random" with just some XP scaling down instead of a whole level, depending on the limb that we're cutting
     player:LoseLevel(Perks.Fitness)
     player:LoseLevel(Perks.Strength)
 
@@ -161,8 +186,9 @@ function TocCutLimb(part_name, surgeon_factor, bandage_table, painkiller_table)
     -- If painkillers are available, use them
     -- TODO add painkiller support
 
-    -- Use a tourniquet if available
-    -- TODO add tourniquet
+
+
+    -- A check for is_cut shouldn't be necessary here since if we've got here we've already checked it out enough
 
     if limbs_data[part_name].is_cut == false then
         limbs_data[part_name].is_cut = true

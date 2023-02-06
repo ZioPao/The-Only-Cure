@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<clothingItem>
+    <m_MaleModel>test_left_tourniquet</m_MaleModel>
+    <m_FemaleModel>test_left_tourniquet</m_FemaleModel>
+    <m_GUID>afbab35d-8bd4-4d61-87c7-054651ead1bd</m_GUID>
+    <m_Static>false</m_Static>
+    <m_AllowRandomHue>false</m_AllowRandomHue>
+    <m_AllowRandomTint>false</m_AllowRandomTint>
+    <textureChoices>Prosthesis\wood_base</textureChoices>
+</clothingItem>

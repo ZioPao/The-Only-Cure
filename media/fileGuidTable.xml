@@ -76,4 +76,11 @@
         <path>media/clothing/clothingItems/Prost_Left_LowerArm_MetalHand.xml</path>
         <guid>0405a4c0-f71b-45a8-9edc-489fc81dca39</guid>
     </files>
+
+    <files>
+        <path>media/clothing/clothingItems/Test_Tourniquet_Left.xml</path>
+        <guid>afbab35d-8bd4-4d61-87c7-054651ead1bd</guid>
+    </files>
+
+
 </fileGuidTable>
