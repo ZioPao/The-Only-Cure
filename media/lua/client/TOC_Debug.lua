@@ -74,6 +74,11 @@ function TocResetEverything()
 
         end
     end
+
+
+    -- Reset special flag for legs amputations
+    SetMissingFootAnimation(false)
+
 end
 
 

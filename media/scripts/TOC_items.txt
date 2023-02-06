@@ -480,40 +480,42 @@ item Surgery_Right_Tourniquet
     }
 
 item Amputation_Left_Foot
-    {
-        Type = Clothing,
-        DisplayName	= Amputated Left Foot,
-        ClothingItem = Amputation_Left_Foot,
-        BodyLocation = TOC_LegLeft,
-        Weight = 0,
-        CombatSpeedModifier = 0.9,
-        BloodLocation = Feet,
-        Insulation = 1.0,
-        WindResistance = 1.0,
-        WaterResistance = 1.0,
-        Icon = genericAmputation,
-        CanHaveHoles = false,
+        {
+            Type = Clothing,
+            DisplayName	= Amputated Left Foot,
 
-        
-    }
-    
+            ClothingItem = Amputation_Left_Foot,
+            BodyLocation = TOC_LegLeft,
+
+            Weight = 0,
+            CombatSpeedModifier = 0.9,
+            BloodLocation = Hands;LowerArms,
+
+            Insulation = 1.0,
+            WindResistance = 1.0,
+            WaterResistance = 1.0,
+            Icon = genericAmputation,
+            CanHaveHoles = false,
+        }
+
 item Amputation_Right_Foot
-    {
-        Type = Clothing,
-        DisplayName	= Amputated Right Foot,
-        ClothingItem = Amputation_Right_Foot,
-        BodyLocation = TOC_LegRight,
-        Weight = 0,
-        CombatSpeedModifier = 0.9,
-        BloodLocation = Feet,
-        Insulation = 1.0,
-        WindResistance = 1.0,
-        WaterResistance = 1.0,
-        Icon = genericAmputation,
-        CanHaveHoles = false,
+        {
+            Type = Clothing,
+            DisplayName	= Amputated Right Foot,
 
-        
-    }
+            ClothingItem = Amputation_Right_Foot,
+            BodyLocation = TOC_LegRight,
+
+            Weight = 0,
+            CombatSpeedModifier = 0.9,
+            BloodLocation = Hands;LowerArms,
+
+            Insulation = 1.0,
+            WindResistance = 1.0,
+            WaterResistance = 1.0,
+            Icon = genericAmputation,
+            CanHaveHoles = false,
+        }
 
 }
 

@@ -88,12 +88,12 @@
 
     <files>
         <path>media/clothing/clothingItems/Amputation_Left_Foot.xml</path>
-        <guid>45c0b872-bdf1-466f-b810-c7783171bda1</guid>
+        <guid>506c0fc0-b50c-4667-bafa-ae22e3c2c0dc</guid>
     </files>
 
     <files>
-        <path>media/clothing/clothingItems/Amputation_Left_Foot.xml</path>
-        <guid>d6576bb2-f5f1-4cb6-a17e-aab131214e4b</guid>
+        <path>media/clothing/clothingItems/Amputation_Right_Foot.xml</path>
+        <guid>2600c2ab-bfeb-49c3-b0b5-e21c6d83d5c2</guid>
     </files>
 
 </fileGuidTable>

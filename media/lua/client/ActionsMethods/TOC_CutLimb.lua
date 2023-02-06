@@ -243,7 +243,6 @@ function TocCutLimb(part_name, surgeon_factor, bandage_table, painkiller_table)
         local amputation_clothing_item_name = TocFindAmputatedClothingFromPartName(part_name)
         print(amputation_clothing_item_name)
 
-
         local amputation_clothing_item = player:getInventory():AddItem(amputation_clothing_item_name)
         TocSetCorrectTextureForAmputation(amputation_clothing_item, player, false)
         player:setWornItem(amputation_clothing_item:getBodyLocation(), amputation_clothing_item)
@@ -251,6 +250,10 @@ function TocCutLimb(part_name, surgeon_factor, bandage_table, painkiller_table)
 
         -- Set blood on the amputated limb
         TocSetBloodOnAmputation(getPlayer(), adiacent_body_part)
+
+        if part_name == "Left_Foot" or part_name == "Right_Foot" then
+            SetMissingFootAnimation(true)
+        end
     end
 
 end
