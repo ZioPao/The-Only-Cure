@@ -176,13 +176,6 @@ end
 
 -- MAIN UPDATE FUNCTIONS
 
-local testOnAnimEvent = IsoGameCharacter.OnAnimEvent
-
-function IsoGameCharacter.OnAnimEvent(animLayer, animEvent)
-    print("ENTERING ON ANIM EVENT!!!")
-end
-
-
 
 local function TocUpdateOnTick()
 
@@ -190,14 +183,6 @@ local function TocUpdateOnTick()
     if player == nil then
         return
     end
-
-
-    
-
-
-
-
-
 
     local toc_data = player:getModData().TOC
     if toc_data ~= nil then
