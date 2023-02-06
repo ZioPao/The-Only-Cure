@@ -1,6 +1,6 @@
 -- TODO this should be moved
 
-function TryToToResetEverythingOtherPlayer(_, patient, surgeon)
+local function TryToToResetEverythingOtherPlayer(_, patient, surgeon)
     sendClientCommand(surgeon, "TOC", "AskToResetEverything", { patient:getOnlineID() })
 end
 
@@ -67,18 +67,10 @@ end
 
 TocContextMenus.CreateOperateWithOvenMenu = function(player, context, worldObjects, test)
     local player_obj = getSpecificPlayer(player)
-    --local clickedPlayer
-
-
-    -- TODO Add a way to move the player towards the oven
-
+    -- TODO Let the player move towards the oven
 
     local part_data = player_obj:getModData().TOC.Limbs
-
     local is_main_menu_already_created = false
-
-
-    --local props = v:getSprite() and v:getSprite():getProperties() or nil
 
     for _, v_stove in pairs(worldObjects) do
         if instanceof(v_stove, "IsoStove") and

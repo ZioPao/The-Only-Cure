@@ -23,7 +23,7 @@ end
 function ISOperateLimb:start()
     self:setActionAnim("MedicalCheck")
     if self.use_oven then
-        self.sound = self.patient:getEmitter():playSound("Burn_sound")      -- TODO currently broken, but maybe that's good
+        self.sound = self.patient:getEmitter():playSound("Burn_sound")
         self:forceComplete()
     end
 end
@@ -63,7 +63,6 @@ function ISOperateLimb:perform()
     end
     self.surgeon:getXp():AddXP(Perks.Doctor, 400)
 
-    -- FIXME Add a check for kit to prevent errors
     if self.kit and not use_oven then
         self.surgeon:getInventory():Remove(self.kit)
     end

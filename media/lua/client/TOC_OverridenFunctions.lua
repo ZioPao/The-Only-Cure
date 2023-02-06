@@ -17,11 +17,8 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
         -- MOD SUPPORT ACTIONS
         ----------------------
         -- LIR
-
         if TOC_ModTable.LeftIsRight then
-
             if mod_data.LIR.is_attacking then
-                -- TODO we need to check if we're doing that specific action
                 return original_max_time
             end
         end
@@ -195,4 +192,31 @@ function ISInventoryPaneContextMenu.dropItem(item, player)
         og_ISInventoryPaneContextMenuDropItem(item, player)
     end
 
+end
+
+-- Make the player unable to equip a tourniquet on an already fully amputated limb
+local og_ISWearClothingIsValid = ISWearClothing.isValid
+function ISWearClothing:isValid()
+	local base_check = og_ISWearClothingIsValid(self)
+	--return self.character:getInventory():contains(self.item);
+
+    local item_full_type = self.item:getFullType()
+
+    -- TODO Sides
+    local limbs_data = self.character:getModData().TOC.Limbs
+
+    for _, side in pairs(TOC_sides) do
+        if string.find(item_full_type, "Test_Tourniquet_" .. side) then
+            if limbs_data[side .. "_UpperArm"].is_cut then
+                return false
+            end
+            
+
+        end
+
+    end
+
+    return base_check
+
+    
 end

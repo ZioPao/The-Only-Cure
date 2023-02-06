@@ -1,3 +1,10 @@
+------------------------------------------
+-------- THE ONLY CURE BUT BETTER --------
+------------------------------------------
+------------- LOCAL ACTIONS --------------
+
+
+
 function TocCutLocal(_, player, part_name)
     if TocGetSawInInventory(player) ~= nil then
         ISTimedActionQueue.add(ISCutLimb:new(player, player, part_name))
@@ -7,12 +14,10 @@ function TocCutLocal(_, player, part_name)
 end
 
 function TocOperateLocal(_, player, part_name, use_oven)
-    --local player = getPlayer();
-    -- todo add a check if the player has already been amputated or somethin
     if use_oven then
         ISTimedActionQueue.add(ISOperateLimb:new(player, player, _, part_name, use_oven));
     else
-        local kit = TocGetKitInInventory(player)            -- TODO Why is it here and only for local?
+        local kit = TocGetKitInInventory(player)
         if kit ~= nil then
             ISTimedActionQueue.add(ISOperateLimb:new(player, player, kit, part_name, false))
         else

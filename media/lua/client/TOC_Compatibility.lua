@@ -22,9 +22,8 @@ local function TocReapplyAmputationClothingItem(mod_data)
 
 end
 
-
+-- Gets the old status and turns it into the new.
 function TocCheckCompatibilityWithOlderVersions(mod_data)
-    -- Gets the old status and turns it into the new.
 
     if mod_data.TOC.Limbs == nil then
         print("TOC: Limbs is nil, setting new mod_data")

@@ -2,7 +2,6 @@ require "TimedActions/ISBaseTimedAction"
 
 ISCutLimb = ISBaseTimedAction:derive("ISCutLimb")
 
--- TODO Add a check so you can't cut your arm if you don't have hands or if you only have one arm and want to cut that same arm.
 
 function ISCutLimb:isValid()
     return self.patientX == self.patient:getX() and self.patientY == self.patient:getY()
@@ -24,7 +23,7 @@ end
 
 function ISCutLimb:stop()
 
-    self.character:getEmitter():stopSoundByName("Amputation_Sound")
+    self.surgeon:getEmitter():stopSoundByName("Amputation_Sound")
 
 
 end
@@ -33,10 +32,11 @@ end
 
 
 function ISCutLimb:start()
+    -- TODO Add a check so you can't cut your arm if you don't have hands or if you only have one arm and want to cut that same arm.
 
     self:setActionAnim("SawLog")
     local saw_item = TocGetSawInInventory(self.surgeon)
-    self.sound = self.character:getEmitter():playSound("Amputation_Sound")
+    self.surgeon:getEmitter():playSound("Amputation_Sound")
 
     -- Return whatever object we've got in the inventory
     if self.surgeon:getPrimaryHandItem() then
@@ -119,7 +119,7 @@ function ISCutLimb:perform()
         TocCutLimb(self.part_name, surgeon_factor, bandage_table, painkiller_table)
     end
 
-    self.character:getEmitter():stopSoundByName("Amputation_Sound")
+    self.surgeon:getEmitter():stopSoundByName("Amputation_Sound")
     self.surgeon:getXp():AddXP(Perks.Doctor, 400)
     ISBaseTimedAction.perform(self)
 
@@ -131,7 +131,7 @@ function ISCutLimb:new(patient, surgeon, part_name)
 
 
     local o = {}
-    setmetatable(o, self)           -- TODO what's this crap?
+    setmetatable(o, self)
     self.__index = self
     o.part_name = part_name
     o.character = surgeon -- For anim

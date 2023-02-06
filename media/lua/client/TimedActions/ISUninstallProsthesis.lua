@@ -58,7 +58,7 @@ function ISUninstallProsthesis:perform()
 
         SendUnequipProsthesis(self.patient, self.part_name, self.item)
     else
-        TheOnlyCure.UnequipProsthesis(self.patient, self.part_name, self.item)
+        TheOnlyCure.TocUnequipProsthesis(self.patient, self.part_name, self.item)
     end
 
     ISBaseTimedAction.perform(self)
