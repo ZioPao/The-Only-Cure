@@ -53,7 +53,7 @@ local function GetImageName(part_name, limbs_data)
     elseif part_data.is_cut and not part_data.is_amputation_shown then -- Empty (like hand if forearm cut)
         name = "media/ui/TOC/Empty.png"
     elseif not part_data.is_cut and
-        -- TODO This doesn't work in MP on another player since we're trying to retrieve bodyDamage from another player
+        -- FIXME This doesn't work in MP on another player since we're trying to retrieve bodyDamage from another player
         getPlayer():getBodyDamage():getBodyPart(TocGetBodyPartFromPartName(part_name)):bitten() then -- Not cut but bitten
         name = "media/ui/TOC/" .. part_name .. "/Bite.png"
     else -- Not cut
@@ -383,9 +383,7 @@ local function OnClickTocConfirmUIMP(button, args)
         -- We can't check if the player has a prosthesis right now, we need to do it later
 
         -- TODO should check if player has a prosthesis equipped before doing it
-
         -- TODO Player is surgeon, but we don't have a confirm_ui_mp.surgeon... awful awful awful
-
         -- TODO Workaround for now, we'd need to send data from patient before doing it since we can't access his inventory from the surgeon
         if confirm_ui_mp.patient == player then
             ISTimedActionQueue.add(ISUninstallProsthesis:new(player, confirm_ui_mp.patient, confirm_ui_mp.partNameAct))
@@ -442,8 +440,8 @@ local function CreateTocMainUI()
 
 end
 
+-- Create a temporary desc UI with fake data (for now)
 local function CreateTocDescUI()
-    -- TODO most of this stuff is just temporary. We can probably wipe this off the face of the earth
     desc_ui = NewUI()
     desc_ui:setTitle("The only cure description");
     desc_ui:isSubUIOf(main_ui)
@@ -476,7 +474,7 @@ local function CreateTocDescUI()
     desc_ui:addEmpty()
     desc_ui:nextLine()
 
-    desc_ui:addButton("b1", "Operate", OnClickTocDescUI) -- TODO this is just temporary
+    desc_ui:addButton("b1", "Operate", OnClickTocDescUI)
 
     desc_ui:saveLayout()
 end
