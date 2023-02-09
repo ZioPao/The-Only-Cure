@@ -47,6 +47,18 @@ TOC_Commands["AskToResetEverything"] = function(_, arg)
 end
 
 
+TOC_Commands.AskStopAmputationSound = function(_, args)
+
+    print("TOC: We're in AskStopAmputationSound")
+    sendServerCommand("TOC", "StopAmputationSound", {surgeon_id = args.surgeon_id})
+
+
+end
+
+TOC_Commands.ChangePlayerState = function(playerObj, args)
+    ModData.get("TOC_PLAYER_DATA")[playerObj:getUsername()] = args
+    ModData.transmit("TOC_PLAYER_DATA")
+end
 
 
 ------ Global Mod Data -----------
@@ -57,8 +69,14 @@ end
 
 Events.OnInitGlobalModData.Add(TOC_OnInitGlobalModData)
 
+
+------------------------------------------------------
+
+
+
 TOC_Commands.OnClientCommand = function(module, command, playerObj, args)
 
+    print("TOC: Running ClientCommand " .. command)
     if module == 'TOC' and TOC_Commands[command] then
         TOC_Commands[command](playerObj, args)
     end
@@ -68,7 +86,3 @@ end
 Events.OnClientCommand.Add(TOC_Commands.OnClientCommand)
 
 
-TOC_Commands.ChangePlayerState = function(playerObj, args)
-    ModData.get("TOC_PLAYER_DATA")[playerObj:getUsername()] = args
-    ModData.transmit("TOC_PLAYER_DATA")
-end

@@ -1,20 +1,10 @@
--- Synchronization and MP related stuff
+------------------------------------------
+-------- THE ONLY CURE BUT BETTER --------
+------------------------------------------
+------------ CLIENT COMMANDS -------------
+
 
 local Commands = {}
-
-Commands["ResponseCanAct"] = function(arg)
-
-
-    print("TOC: ResponseCanAct")
-    local ui = GetConfirmUIMP()
-    ui.responseReceive = true
-    ui.responseAction = arg["toSend"][2]
-    ui.responsePartName = arg["toSend"][1]
-    ui.responseCan = arg["toSend"][3]
-    ui.responseUserName = getPlayerByOnlineID(arg["From"]):getUsername()
-    ui.responseActionIsBitten = getPlayerByOnlineID(arg["From"]):getBodyDamage():getBodyPart(TocGetBodyPartFromPartName(ui
-        .responsePartName)):bitten()
-end
 
 
 function SendCutLimb(player, part_name, surgeon_factor, bandage_table, painkiller_table)
@@ -25,7 +15,7 @@ function SendCutLimb(player, part_name, surgeon_factor, bandage_table, painkille
 
 
     -- TODO Hotfix for sound, fix this later
-    arg["toSend"] = {part_name, surgeon_factor, bandage_table, painkiller_table, getPlayer():getOnlineID()}
+    arg["toSend"] = {part_name, surgeon_factor, bandage_table, painkiller_table}
 
 
 
@@ -103,13 +93,30 @@ function AskCanUnequipProsthesis(player, part_name)
 end
 
 
+--------------------------------------------------------------------------
+
+Commands["ResponseCanAct"] = function(arg)
+
+
+    print("TOC: ResponseCanAct")
+    local ui = GetConfirmUIMP()
+    ui.responseReceive = true
+    ui.responseAction = arg["toSend"][2]
+    ui.responsePartName = arg["toSend"][1]
+    ui.responseCan = arg["toSend"][3]
+    ui.responseUserName = getPlayerByOnlineID(arg["From"]):getUsername()
+    ui.responseActionIsBitten = getPlayerByOnlineID(arg["From"]):getBodyDamage():getBodyPart(TocGetBodyPartFromPartName(ui
+        .responsePartName)):bitten()
+end
+
+
 -- Patient (receive)
 Commands["CutLimb"] = function(arg)
     local arg = arg["toSend"]
-    local surgeon_id = arg[5]
+    --local surgeon_id = arg[5]
     
     -- Disable the sound coming from the surgeon
-    getPlayerByOnlineID(surgeon_id):getEmitter():stopSoundByName("Amputation_Sound")
+    --getPlayerByOnlineID(surgeon_id):getEmitter():stopSoundByName("Amputation_Sound")
 
 
 
@@ -120,7 +127,6 @@ Commands["OperateLimb"] = function(arg)
     local arg = arg["toSend"]
     TocOperateLimb(arg[1], arg[2], arg[3])
 end
-
 
 Commands["EquipProsthesis"] = function(arg)
 
@@ -208,8 +214,6 @@ Commands["AcceptResetEverything"] = function(arg)
 end
 
 
-
-
 -- Cut Limb stuff
 Commands["AcceptDamageOtherPlayer"] = function(arg)
 
@@ -218,8 +222,6 @@ Commands["AcceptDamageOtherPlayer"] = function(arg)
     local part_name = arg[2]
     TocDamagePlayerDuringAmputation(patient, part_name)
 end
-
-
 
 -- ANIMATIONS
 -----------------------
@@ -237,6 +239,31 @@ Commands["SetCrawlAnimation"] = function(args)
     end
 
 end
+
+
+
+
+-------------------------------
+--- GENERIC COMMANDS ---------
+
+Commands["StopAmputationSound"] = function(args)
+
+    local player = getPlayerByOnlineID(args.surgeon_id)
+    print("TOC: Running StopAmputationSound for " .. player:getUsername())
+
+    player:getEmitter():stopSoundByName("Amputation_Sound")
+
+end
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -263,7 +290,7 @@ Events.OnServerCommand.Add(OnTocServerCommand)
 
 
 
----------------------------------- TEST -----------------------------
+---------------------------------- Global Mod Data -----------------------------
 
 
 function TOC_OnReceiveGlobalModData(key, modData)

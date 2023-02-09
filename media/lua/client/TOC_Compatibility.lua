@@ -1,3 +1,8 @@
+
+
+
+
+
 local function TocReapplyAmputationClothingItem(mod_data)
     local player = getPlayer()
     local player_inv = player:getInventory()
@@ -40,7 +45,7 @@ function TocCheckCompatibilityWithOlderVersions(mod_data)
         print("TOC: Something was wrongly initiliazed before. Resetting parameters")
         TocResetEverything()
     else
-        print("TOC: Found compatible data, correcting models in case of errors")
+        print("TOC: Found compatible data, correcting models in case of errors and adding limbs")
         TocReapplyAmputationClothingItem(mod_data)
     end
 

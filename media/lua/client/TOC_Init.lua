@@ -78,11 +78,6 @@ local function TocUpdateBaseData(mod_data)
             end
 
 
-
-
-
-
-
             if limb == "Hand" then
                 mod_data.TOC.Limbs[part_name].cicatrization_base_time = 1700
                 mod_data.TOC.Limbs[part_name].depends_on = {}
@@ -256,7 +251,7 @@ function TheOnlyCure.InitTheOnlyCure(_, player)
         TocSetInitData(mod_data, player)
     else
         TocCheckCompatibilityWithOlderVersions(mod_data)
-        TocUpdateBaseData(mod_data) -- Since it's gonna be common to update stuff
+        TocUpdateBaseData(mod_data)                 -- Since it's gonna be common to update stuff
         TocCheckLegsAmputations(mod_data)
     end
 

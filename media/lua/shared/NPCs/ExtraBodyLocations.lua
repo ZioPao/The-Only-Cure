@@ -1,4 +1,4 @@
-local function addBodyLocationBefore(new_location, move_to_location)
+local function AddBodyLocationBefore(new_location, move_to_location)
   local group = BodyLocations.getGroup("Human")
   local list = getClassFieldVal(group, getClassField(group, 1))
   group:getOrCreateLocation(new_location)
@@ -10,17 +10,17 @@ local function addBodyLocationBefore(new_location, move_to_location)
 end
 
 
-addBodyLocationBefore("TOC_ArmRight", "Shoes")
-addBodyLocationBefore("TOC_ArmLeft", "Shoes")
+AddBodyLocationBefore("TOC_ArmRight", "Shoes")
+AddBodyLocationBefore("TOC_ArmLeft", "Shoes")
 
 
 
-addBodyLocationBefore("TOC_ArmRightProsthesis", "Shoes")
-addBodyLocationBefore("TOC_ArmLeftProsthesis", "Shoes")
+AddBodyLocationBefore("TOC_ArmRightProsthesis", "Shoes")
+AddBodyLocationBefore("TOC_ArmLeftProsthesis", "Shoes")
 
-addBodyLocationBefore("TOC_LegRight", "FannyPackFront")
-addBodyLocationBefore("TOC_LegLeft", "FannyPackFront")
+AddBodyLocationBefore("TOC_LegRight", "FannyPackFront")
+AddBodyLocationBefore("TOC_LegLeft", "FannyPackFront")
 
 
-addBodyLocationBefore("TOC_LegRightProsthesis", "FannyPackFront")
-addBodyLocationBefore("TOC_LegLeftProsthesis", "FannyPackFront")
+AddBodyLocationBefore("TOC_LegRightProsthesis", "FannyPackFront")
+AddBodyLocationBefore("TOC_LegLeftProsthesis", "FannyPackFront")
