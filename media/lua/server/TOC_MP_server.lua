@@ -5,9 +5,11 @@
 local TOC_Commands = {}
 
 
-TOC_Commands["SendServer"] = function(player, arg)
+-- TODO rework this
+TOC_Commands.SendServer = function(player, arg)
     local otherPlayer = getPlayerByOnlineID(arg["To"])
     sendServerCommand(otherPlayer, "TOC", arg["command"], arg)
+
 end
 
 
@@ -39,11 +41,7 @@ end
 -- CHEATING STUFF
 TOC_Commands["AskToResetEverything"] = function(_, arg)
     local clicked_player = getPlayerByOnlineID(arg[1])
-    local clicked_player_id = arg[1]
-
-
-    sendServerCommand(clicked_player, "TOC", "AcceptResetEverything", { clicked_player_id })
-
+    sendServerCommand(clicked_player, "TOC", "ResetEverything", {})
 end
 
 

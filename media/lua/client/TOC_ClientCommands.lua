@@ -3,8 +3,192 @@
 ------------------------------------------
 ------------ CLIENT COMMANDS -------------
 
+local ServerCommands = {}
 
-local Commands = {}
+ServerCommands["ResponseCanAct"] = function(arg)
+
+
+    print("TOC: ResponseCanAct")
+    local ui = GetConfirmUIMP()
+    ui.responseReceive = true
+    ui.responseAction = arg["toSend"][2]
+    ui.responsePartName = arg["toSend"][1]
+    ui.responseCan = arg["toSend"][3]
+    ui.responseUserName = getPlayerByOnlineID(arg["From"]):getUsername()
+    ui.responseActionIsBitten = getPlayerByOnlineID(arg["From"]):getBodyDamage():getBodyPart(TocGetBodyPartFromPartName(ui
+        .responsePartName)):bitten()
+end
+
+
+
+ServerCommands["CanCutLimb"] = function(arg)
+    local part_name = arg["toSend"]
+
+    arg["To"] = arg["From"]
+    arg["From"] = getPlayer():getOnlineID()
+    arg["command"] = "ResponseCanAct"
+    arg["toSend"] = { part_name, "Cut", CheckIfCanBeCut(part_name) }
+    sendClientCommand("TOC", "SendServer", arg)
+end
+
+ServerCommands["CutLimb"] = function(arg)
+    local arg = arg["toSend"]
+    --local surgeon_id = arg[5]
+    
+    -- Disable the sound coming from the surgeon
+    --getPlayerByOnlineID(surgeon_id):getEmitter():stopSoundByName("Amputation_Sound")
+
+
+
+    TocCutLimb(arg[1], arg[2], arg[3], arg[4])
+end
+
+
+
+ServerCommands["CanOperateLimb"] = function(arg)
+    local part_name = arg["toSend"]
+
+    arg["To"] = arg["From"]
+    arg["From"] = getPlayer():getOnlineID()
+    arg["command"] = "ResponseCanAct"
+    arg["toSend"] = { part_name, "Operate", CheckIfCanBeOperated(part_name) }
+    sendClientCommand("TOC", "SendServer", arg)
+end
+ServerCommands["OperateLimb"] = function(arg)
+    local arg = arg["toSend"]
+    TocOperateLimb(arg[1], arg[2], arg[3])
+end
+
+
+ServerCommands["CanEquipProsthesis"] = function(arg)
+    local part_name = arg["toSend"]
+    --local item = arg["toSend"][2]     -- TODO Add item prosth here
+
+    arg["To"] = arg["From"]
+    arg["From"] = getPlayer():getOnlineID()
+    arg["command"] = "ResponseCanAct"
+    arg["toSend"] = {part_name, "Equip", CheckIfProsthesisCanBeEquipped(part_name) }
+    sendClientCommand("TOC", "SendServer", arg)
+
+end
+ServerCommands["EquipProsthesis"] = function(arg)
+
+    -- part_name = arg[1]
+    -- prosthesis = arg[2]
+
+    local arg = arg["toSend"]
+
+    TocEquipProsthesis(arg[1], arg[2])
+
+end
+
+
+ServerCommands["CanUnequipProsthesis"] = function(arg)
+    local part_name = arg["toSend"]
+    arg["To"] = arg["From"]
+    arg["From"] = getPlayer():getOnlineID()
+    arg["command"] = "ResponseCanAct"
+    arg["toSend"] = { part_name, "Unequip", CheckIfProsthesisCanBeUnequipped(part_name)}
+    sendClientCommand("TOC", "SendServer", arg)
+end
+ServerCommands["UnequipProsthesis"] = function(arg)
+
+    -- part_name = arg[1]
+
+    local arg = arg["toSend"]
+
+    TheOnlyCure.TocUnequipProsthesis(arg[1], arg[2])
+
+end
+
+
+
+ServerCommands["CanResetEverything"] = function(arg)
+    local part_name = "RightHand" --useless
+
+    arg["To"] = arg["From"]
+    arg["From"] = getPlayer():getOnlineID()
+    arg["command"] = "ResponseCanAct"
+    arg["toSend"] = { part_name, "Cut", true }
+    sendClientCommand("TOC", "SendServer", arg)
+end
+ServerCommands["ResetEverything"] = function(_)
+    TocResetEverything()
+end
+
+
+-- Used when amputating the limb of another player
+ServerCommands["AcceptDamageOtherPlayer"] = function(arg)
+
+    local patient_id = arg[1]
+    local patient = getPlayerByOnlineID(arg[1])
+    local part_name = arg[2]
+    TocDamagePlayerDuringAmputation(patient, part_name)
+end
+
+-- Used to propagate animation changes after amputating a foot
+ServerCommands["SetCrawlAnimation"] = function(args)
+
+    local source = getPlayer()
+    local player = getPlayerByOnlineID(args.id)
+
+    if source ~= player then
+        if args.hasInjury then
+            player:setVariable('SetCrawlAnimation', 'true');
+        else
+            player:setVariable('SetCrawlAnimation', 'false');
+        end
+    end
+
+end
+
+-- Used to propagate the stop of the sound of amputation
+ServerCommands["StopAmputationSound"] = function(args)
+
+    local player = getPlayerByOnlineID(args.surgeon_id)
+    player:getEmitter():stopSoundByName("Amputation_Sound")
+
+end
+
+
+
+local function OnTocServerCommand(module, command, args)
+    if module == 'TOC' then
+        print("TOC: On Toc Server Command " .. command)
+        if ServerCommands[command] then
+            print("Found command, executing it now")
+            args = args or {}
+            ServerCommands[command](args)
+
+        end
+    end
+end
+
+Events.OnServerCommand.Add(OnTocServerCommand)
+
+
+---------------------------------- Global Mod Data -----------------------------
+
+
+function TOC_OnReceiveGlobalModData(key, modData)
+    if modData then
+        ModData.remove(key)
+        ModData.add(key, modData)
+    end
+end
+
+
+Events.OnReceiveGlobalModData.Add(TOC_OnReceiveGlobalModData)
+
+function TOC_OnConnected()
+    ModData.request("TOC_PLAYER_DATA")
+end
+
+
+Events.OnConnected.Add(TOC_OnConnected)
+
+
+--------------------------------------------------------
 
 
 function SendCutLimb(player, part_name, surgeon_factor, bandage_table, painkiller_table)
@@ -80,7 +264,6 @@ function AskCanEquipProsthesis(player, part_name)
     sendClientCommand("TOC", "SendServer", arg)
 end
 
-
 function AskCanUnequipProsthesis(player, part_name)
     GetConfirmUIMP().responseReceive = false
     local arg = {}
@@ -91,222 +274,3 @@ function AskCanUnequipProsthesis(player, part_name)
 
     sendClientCommand("TOC", "SendServer", arg)
 end
-
-
---------------------------------------------------------------------------
-
-Commands["ResponseCanAct"] = function(arg)
-
-
-    print("TOC: ResponseCanAct")
-    local ui = GetConfirmUIMP()
-    ui.responseReceive = true
-    ui.responseAction = arg["toSend"][2]
-    ui.responsePartName = arg["toSend"][1]
-    ui.responseCan = arg["toSend"][3]
-    ui.responseUserName = getPlayerByOnlineID(arg["From"]):getUsername()
-    ui.responseActionIsBitten = getPlayerByOnlineID(arg["From"]):getBodyDamage():getBodyPart(TocGetBodyPartFromPartName(ui
-        .responsePartName)):bitten()
-end
-
-
--- Patient (receive)
-Commands["CutLimb"] = function(arg)
-    local arg = arg["toSend"]
-    --local surgeon_id = arg[5]
-    
-    -- Disable the sound coming from the surgeon
-    --getPlayerByOnlineID(surgeon_id):getEmitter():stopSoundByName("Amputation_Sound")
-
-
-
-    TocCutLimb(arg[1], arg[2], arg[3], arg[4])
-end
-
-Commands["OperateLimb"] = function(arg)
-    local arg = arg["toSend"]
-    TocOperateLimb(arg[1], arg[2], arg[3])
-end
-
-Commands["EquipProsthesis"] = function(arg)
-
-    -- part_name = arg[1]
-    -- prosthesis = arg[2]
-
-    local arg = arg["toSend"]
-
-    TocEquipProsthesis(arg[1], arg[2])
-
-end
-
-Commands["UnequipProsthesis"] = function(arg)
-
-    -- part_name = arg[1]
-
-    local arg = arg["toSend"]
-
-    TheOnlyCure.TocUnequipProsthesis(arg[1], arg[2])
-
-end
-
-Commands["CanCutLimb"] = function(arg)
-    local part_name = arg["toSend"]
-
-    arg["To"] = arg["From"]
-    arg["From"] = getPlayer():getOnlineID()
-    arg["command"] = "ResponseCanAct"
-    arg["toSend"] = { part_name, "Cut", CheckIfCanBeCut(part_name) }
-    sendClientCommand("TOC", "SendServer", arg)
-end
-
-Commands["CanOperateLimb"] = function(arg)
-    local part_name = arg["toSend"]
-
-    arg["To"] = arg["From"]
-    arg["From"] = getPlayer():getOnlineID()
-    arg["command"] = "ResponseCanAct"
-    arg["toSend"] = { part_name, "Operate", CheckIfCanBeOperated(part_name) }
-    sendClientCommand("TOC", "SendServer", arg)
-end
-
-Commands["CanEquipProsthesis"] = function(arg)
-    local part_name = arg["toSend"]
-    --local item = arg["toSend"][2]     -- TODO Add item prosth here
-
-    arg["To"] = arg["From"]
-    arg["From"] = getPlayer():getOnlineID()
-    arg["command"] = "ResponseCanAct"
-    arg["toSend"] = {part_name, "Equip", CheckIfProsthesisCanBeEquipped(part_name) }
-    sendClientCommand("TOC", "SendServer", arg)
-
-end
-
-Commands["CanUnequipProsthesis"] = function(arg)
-    local part_name = arg["toSend"]
-    arg["To"] = arg["From"]
-    arg["From"] = getPlayer():getOnlineID()
-    arg["command"] = "ResponseCanAct"
-    arg["toSend"] = { part_name, "Unequip", CheckIfProsthesisCanBeUnequipped(part_name)}
-    sendClientCommand("TOC", "SendServer", arg)
-
-end
-
-Commands["CanResetEverything"] = function(arg)
-    local part_name = "RightHand" --useless
-
-    arg["To"] = arg["From"]
-    arg["From"] = getPlayer():getOnlineID()
-    arg["command"] = "ResponseCanAct"
-    arg["toSend"] = { part_name, "Cut", true }
-    sendClientCommand("TOC", "SendServer", arg)
-end
-
-Commands["ResetEverything"] = function(arg)
-    local arg = arg["toSend"]
-    TocResetEverything()
-end
-
--- Cheating stuff
-Commands["AcceptResetEverything"] = function(arg)
-
-    local clicked_player = getPlayerByOnlineID(arg[1]) -- TODO delete this
-    TocResetEverything()
-end
-
-
--- Cut Limb stuff
-Commands["AcceptDamageOtherPlayer"] = function(arg)
-
-    local patient_id = arg[1]
-    local patient = getPlayerByOnlineID(arg[1])
-    local part_name = arg[2]
-    TocDamagePlayerDuringAmputation(patient, part_name)
-end
-
--- ANIMATIONS
------------------------
-Commands["SetCrawlAnimation"] = function(args)
-
-    local source = getPlayer()
-    local player = getPlayerByOnlineID(args.id)
-
-    if source ~= player then
-        if args.hasInjury then
-            player:setVariable('SetCrawlAnimation', 'true');
-        else
-            player:setVariable('SetCrawlAnimation', 'false');
-        end
-    end
-
-end
-
-
-
-
--------------------------------
---- GENERIC COMMANDS ---------
-
-Commands["StopAmputationSound"] = function(args)
-
-    local player = getPlayerByOnlineID(args.surgeon_id)
-    print("TOC: Running StopAmputationSound for " .. player:getUsername())
-
-    player:getEmitter():stopSoundByName("Amputation_Sound")
-
-end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--- Base stuff
-local function OnTocServerCommand(module, command, args)
-    if module == 'TOC' then
-        print("TOC: On Toc Server Command " .. command)
-        if Commands[command] then
-            print("Found command, executing it now")
-            args = args or {}
-            Commands[command](args)
-
-        end
-    end
-end
-
-Events.OnServerCommand.Add(OnTocServerCommand)
-
-
-
-
-
-
-
----------------------------------- Global Mod Data -----------------------------
-
-
-function TOC_OnReceiveGlobalModData(key, modData)
-    if modData then
-        ModData.remove(key)
-        ModData.add(key, modData)
-    end
-end
-
-
-Events.OnReceiveGlobalModData.Add(TOC_OnReceiveGlobalModData)
-
-function TOC_OnConnected()
-    ModData.request("TOC_PLAYER_DATA")
-end
-
-
-Events.OnConnected.Add(TOC_OnConnected)
-
