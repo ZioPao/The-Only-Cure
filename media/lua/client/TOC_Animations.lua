@@ -1,23 +1,17 @@
 -- Thanks to Glytcher and Matías N. Salas for helping out with this
 
-
-
-
-
 function SetMissingFootAnimation(check)
 
 
     local player = getPlayer()
-
-    if check then
-        player:setVariable("IsCrawling", "true")
-    else
-        player:setVariable("IsCrawling", "false")
-    end
+    player:setVariable("IsCrawling", tostring(check))
     
-    -- if isClient() then
-    --     sendClientCommand("TOC", "SetCrawlAnimation", {})
-    -- end
+    if not isServer() and not isClient() then
+        print("SP, so it's fine")
+    else
+
+        sendClientCommand(player, "TOC", "NotifyNewCrawlAnimation", {id = player:getOnlineID(), check = check})
+    end
 
 end
 

@@ -129,16 +129,10 @@ end
 -- Used to propagate animation changes after amputating a foot
 ServerCommands["SetCrawlAnimation"] = function(args)
 
-    local source = getPlayer()
     local player = getPlayerByOnlineID(args.id)
+    local check = args.check
 
-    if source ~= player then
-        if args.hasInjury then
-            player:setVariable('SetCrawlAnimation', 'true');
-        else
-            player:setVariable('SetCrawlAnimation', 'false');
-        end
-    end
+    player:setVariable('IsCrawling', tostring(check))
 
 end
 

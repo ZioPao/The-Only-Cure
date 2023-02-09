@@ -27,11 +27,9 @@ end
 
 
 -------- ANIMATIONS
-TOC_Commands["SetCrawlAnimation"] = function(player, args)
+TOC_Commands["NotifyNewCrawlAnimation"] = function(player, args)
 
-    local player_id = player:getOnlineID()
-
-    sendServerCommand(player, "TOC", "SetCrawlAnimation", {})
+    sendServerCommand("TOC", "SetCrawlAnimation", {id = args.id, check = args.check})
 
 end
 
