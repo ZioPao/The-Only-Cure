@@ -5,7 +5,7 @@
 
 local ServerCommands = {}
 
-ServerCommands["ResponseCanAct"] = function(arg)
+ServerCommands.ResponseCanAct = function(arg)
 
 
     print("TOC: ResponseCanAct")
@@ -21,7 +21,7 @@ end
 
 
 
-ServerCommands["CanCutLimb"] = function(arg)
+ServerCommands.CanCutLimb = function(arg)
     local part_name = arg["toSend"]
 
     arg["To"] = arg["From"]
@@ -31,21 +31,14 @@ ServerCommands["CanCutLimb"] = function(arg)
     sendClientCommand("TOC", "SendServer", arg)
 end
 
-ServerCommands["CutLimb"] = function(arg)
-    local arg = arg["toSend"]
-    --local surgeon_id = arg[5]
-    
-    -- Disable the sound coming from the surgeon
-    --getPlayerByOnlineID(surgeon_id):getEmitter():stopSoundByName("Amputation_Sound")
-
-
-
-    TocCutLimb(arg[1], arg[2], arg[3], arg[4])
+ServerCommands.CutLimb = function(arg)
+    local data = arg["toSend"]
+    TocCutLimb(data[1], data[2], data[3], data[4])
 end
 
 
 
-ServerCommands["CanOperateLimb"] = function(arg)
+ServerCommands.CanOperateLimb = function(arg)
     local part_name = arg["toSend"]
 
     arg["To"] = arg["From"]
@@ -54,13 +47,14 @@ ServerCommands["CanOperateLimb"] = function(arg)
     arg["toSend"] = { part_name, "Operate", CheckIfCanBeOperated(part_name) }
     sendClientCommand("TOC", "SendServer", arg)
 end
-ServerCommands["OperateLimb"] = function(arg)
-    local arg = arg["toSend"]
-    TocOperateLimb(arg[1], arg[2], arg[3])
+ServerCommands.OperateLimb = function(arg)
+
+    local data = arg["toSend"]
+    TocOperateLimb(data[1], data[2], data[3])
 end
 
 
-ServerCommands["CanEquipProsthesis"] = function(arg)
+ServerCommands.CanEquipProsthesis = function(arg)
     local part_name = arg["toSend"]
     --local item = arg["toSend"][2]     -- TODO Add item prosth here
 
@@ -71,19 +65,18 @@ ServerCommands["CanEquipProsthesis"] = function(arg)
     sendClientCommand("TOC", "SendServer", arg)
 
 end
-ServerCommands["EquipProsthesis"] = function(arg)
+ServerCommands.EquipProsthesis = function(arg)
 
     -- part_name = arg[1]
     -- prosthesis = arg[2]
 
-    local arg = arg["toSend"]
-
-    TocEquipProsthesis(arg[1], arg[2])
+    local data = arg["toSend"]
+    TocEquipProsthesis(data[1], data[2])
 
 end
 
 
-ServerCommands["CanUnequipProsthesis"] = function(arg)
+ServerCommands.CanUnequipProsthesis = function(arg)
     local part_name = arg["toSend"]
     arg["To"] = arg["From"]
     arg["From"] = getPlayer():getOnlineID()
@@ -91,19 +84,18 @@ ServerCommands["CanUnequipProsthesis"] = function(arg)
     arg["toSend"] = { part_name, "Unequip", CheckIfProsthesisCanBeUnequipped(part_name)}
     sendClientCommand("TOC", "SendServer", arg)
 end
-ServerCommands["UnequipProsthesis"] = function(arg)
+ServerCommands.UnequipProsthesis = function(arg)
 
     -- part_name = arg[1]
 
-    local arg = arg["toSend"]
-
-    TheOnlyCure.TocUnequipProsthesis(arg[1], arg[2])
+    local data = arg["toSend"]
+    TheOnlyCure.TocUnequipProsthesis(data[1], data[2])
 
 end
 
 
 
-ServerCommands["CanResetEverything"] = function(arg)
+ServerCommands.CanResetEverything = function(arg)
     local part_name = "RightHand" --useless
 
     arg["To"] = arg["From"]
@@ -112,22 +104,20 @@ ServerCommands["CanResetEverything"] = function(arg)
     arg["toSend"] = { part_name, "Cut", true }
     sendClientCommand("TOC", "SendServer", arg)
 end
-ServerCommands["ResetEverything"] = function(_)
+ServerCommands.ResetEverything = function(_)
     TocResetEverything()
 end
 
 
 -- Used when amputating the limb of another player
-ServerCommands["AcceptDamageOtherPlayer"] = function(arg)
-
-    local patient_id = arg[1]
+ServerCommands.AcceptDamageOtherPlayer = function(arg)
     local patient = getPlayerByOnlineID(arg[1])
     local part_name = arg[2]
     TocDamagePlayerDuringAmputation(patient, part_name)
 end
 
 -- Used to propagate animation changes after amputating a foot
-ServerCommands["SetCrawlAnimation"] = function(args)
+ServerCommands.SetCrawlAnimation = function(args)
 
     local player = getPlayerByOnlineID(args.id)
     local check = args.check
@@ -137,7 +127,7 @@ ServerCommands["SetCrawlAnimation"] = function(args)
 end
 
 -- Used to propagate the stop of the sound of amputation
-ServerCommands["StopAmputationSound"] = function(args)
+ServerCommands.StopAmputationSound = function(args)
 
     local player = getPlayerByOnlineID(args.surgeon_id)
     player:getEmitter():stopSoundByName("Amputation_Sound")

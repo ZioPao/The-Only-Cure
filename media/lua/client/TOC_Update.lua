@@ -249,6 +249,7 @@ local function TocUpdateEveryOneMinute()
     -- Sends only Limbs since the other stuff is mostly static
     if toc_data ~= nil then
         -- FIXME Send little packets instead of the whole thing?
+            -- TODO we shouldn't run this if we're in SP I guess?
         sendClientCommand(player, 'TOC', 'ChangePlayerState', { toc_data.Limbs } )
     end
 

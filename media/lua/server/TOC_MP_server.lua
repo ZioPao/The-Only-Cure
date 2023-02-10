@@ -1,21 +1,18 @@
---- A rly big thx to Fenris_Wolf and Chuck to help me with that. Love you guy
 
 
----Server side
-local TOC_Commands = {}
+local ClientCommands = {}
 
 
--- TODO rework this
-TOC_Commands.SendServer = function(player, arg)
+-- Main handler of base functions for TOC, not changed till now 'cause it works
+ClientCommands.SendServer = function(player, arg)
     local otherPlayer = getPlayerByOnlineID(arg["To"])
     sendServerCommand(otherPlayer, "TOC", arg["command"], arg)
 
 end
 
 
-
--- Cut Limb stuff
-TOC_Commands["AskDamageOtherPlayer"] = function(_, arg)
+-- Cutting Limbs
+ClientCommands.AskDamageOtherPlayer = function(_, arg)
 
     local patient = getPlayerByOnlineID(arg[1])
     local patient_id = arg[1]
@@ -25,9 +22,16 @@ TOC_Commands["AskDamageOtherPlayer"] = function(_, arg)
 
 end
 
+ClientCommands.AskStopAmputationSound = function(_, args)
 
--------- ANIMATIONS
-TOC_Commands["NotifyNewCrawlAnimation"] = function(player, args)
+    print("TOC: We're in AskStopAmputationSound")
+    sendServerCommand("TOC", "StopAmputationSound", {surgeon_id = args.surgeon_id})
+
+
+end
+
+-- Animations
+ClientCommands.NotifyNewCrawlAnimation = function(player, args)
 
     sendServerCommand("TOC", "SetCrawlAnimation", {id = args.id, check = args.check})
 
@@ -36,22 +40,15 @@ end
 
 
 
--- CHEATING STUFF
-TOC_Commands["AskToResetEverything"] = function(_, arg)
+-- Cheats
+ClientCommands.AskToResetEverything = function(_, arg)
     local clicked_player = getPlayerByOnlineID(arg[1])
     sendServerCommand(clicked_player, "TOC", "ResetEverything", {})
 end
 
 
-TOC_Commands.AskStopAmputationSound = function(_, args)
-
-    print("TOC: We're in AskStopAmputationSound")
-    sendServerCommand("TOC", "StopAmputationSound", {surgeon_id = args.surgeon_id})
-
-
-end
-
-TOC_Commands.ChangePlayerState = function(playerObj, args)
+-- Global Mod Data data handler
+ClientCommands.ChangePlayerState = function(playerObj, args)
     ModData.get("TOC_PLAYER_DATA")[playerObj:getUsername()] = args
     ModData.transmit("TOC_PLAYER_DATA")
 end
@@ -68,17 +65,12 @@ Events.OnInitGlobalModData.Add(TOC_OnInitGlobalModData)
 
 ------------------------------------------------------
 
-
-
-TOC_Commands.OnClientCommand = function(module, command, playerObj, args)
-
-    print("TOC: Running ClientCommand " .. command)
-    if module == 'TOC' and TOC_Commands[command] then
-        TOC_Commands[command](playerObj, args)
+local function OnClientCommand(module, command, playerObj, args)
+    if module == 'TOC' and ClientCommands[command] then
+        ClientCommands[command](playerObj, args)
     end
 end
 
-
-Events.OnClientCommand.Add(TOC_Commands.OnClientCommand)
+Events.OnClientCommand.Add(OnClientCommand)
 
 
