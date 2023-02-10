@@ -82,7 +82,7 @@ recipe Make wooden hook
 		Category: Surgeon,
 		Tooltip: Recipe_Tooltip_Wooden_hook,
 		NeedToBeLearn: true,
-		OnCreate: ProsthesisRecipe.OnCreate.Hook,
+		
 	}
 
 recipe Make metal hook

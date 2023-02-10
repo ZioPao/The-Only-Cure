@@ -68,10 +68,11 @@ end
 ServerCommands.EquipProsthesis = function(arg)
 
     -- part_name = arg[1]
-    -- prosthesis = arg[2]
-
+    -- prosthesis_item = arg[2]
+    -- prosthesis_name = arg[3]
+    
     local data = arg["toSend"]
-    TocEquipProsthesis(data[1], data[2])
+    TocEquipProsthesis(data[1], data[2], data[3])
 
 end
 
@@ -199,12 +200,12 @@ function SendOperateLimb(player, part_name, surgeon_factor, use_oven)
     sendClientCommand("TOC", "SendServer", arg)
 end
 
-function SendEquipProsthesis(player, part_name, prosthesis_base_name)
+function SendEquipProsthesis(player, part_name, item, prosthesis_base_name)
     local arg = {}
     arg["From"] = getPlayer():getOnlineID()
     arg["To"] = player:getOnlineID()
     arg["command"] = "EquipProsthesis"
-    arg["toSend"] = { part_name, prosthesis_base_name}
+    arg["toSend"] = { part_name, item, prosthesis_base_name}
     sendClientCommand("TOC", "SendServer", arg)
 end
 

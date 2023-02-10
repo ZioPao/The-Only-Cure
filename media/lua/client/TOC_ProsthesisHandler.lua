@@ -28,8 +28,10 @@ local TopStats = {
 
 
 
-function GenerateEquippedProsthesis(prosthesis_item)
+function GenerateEquippedProsthesis(prosthesis_item, limb)
     -- TODO Durability should be decided from the clothing item xml. Same thing for disassembling stuff
+
+    -- TODO some stuff should be defined by the limb, like -10 if forearm in speed
 
     local durability = 0
     local speed = 0
@@ -54,39 +56,36 @@ function GenerateEquippedProsthesis(prosthesis_item)
         end
     end
 
-    -- TODO This won't work since if we unequip it we would lose this stuff. We need to bind it to the item
-    local prosthesis_table = {
-        prost_id = prosthesis_item:getID(),
-        prost_name = prosthesis_name,
+    local item_mod_data = prosthesis_item:getModData()
+
+    --------------------
+    -- TEST STUFF
+    durability = 12
+    speed = 51
+
+    -------------------
+
+
+    item_mod_data.TOC = {
         durability = durability,
-        speed = speed
+        speed = speed,
     }
-
-
-    return prosthesis_table
 end
 
-local ProsthesisRecipe = {}
+--local ProsthesisRecipe = {}
 
 
-function ProsthesisRecipe.OnCreate.Hook(items, result, player, selectedItem)
+-- function ProsthesisRecipe.OnCreate.Hook(items, result, player, selectedItem)
 
-    -- Set mod data for item with durability and all that crap
-
-
-    -- when we equip a prosthesis, we're gonna pass these parameters to the newly generated clothing item
-
-    -- when we unequip it, we regen the normal item with the parameters from the clothing item
+--     -- Set mod data for item with durability and all that crap
 
 
-end
+--     -- when we equip a prosthesis, we're gonna pass these parameters to the newly generated clothing item
+
+--     -- when we unequip it, we regen the normal item with the parameters from the clothing item
+
+
+-- end
 
 
 
-
-function DoWeReallyNeedThis()
-
-    -- We need a durability check... so in modData
-
-    --
-end

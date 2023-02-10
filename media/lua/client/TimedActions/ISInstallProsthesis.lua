@@ -3,6 +3,9 @@ require "TimedActions/ISBaseTimedAction"
 ISInstallProsthesis = ISBaseTimedAction:derive("ISInstallProsthesis");
 
 function ISInstallProsthesis:isValid()
+
+    -- TODO add here conditions if the action can be performed or not, so if thing is in inventory
+    -- TODO 'not sure about multiplayer, maybe an overriding check?
     return true
 end
 
@@ -49,16 +52,18 @@ function ISInstallProsthesis:perform()
         return
     end
 
-    self.surgeon:getInventory():Remove(prosthesis_base_name)         -- Removes the base item and substitute it with the part one
 
 
     if self.patient ~= self.surgeon and isClient() then
 
-        SendEquipProsthesis(self.patient, self.part_name, prosthesis_base_name)
+        SendEquipProsthesis(self.patient, self.part_name, self.item, prosthesis_base_name)
     else
-        TocEquipProsthesis(self.part_name, prosthesis_base_name)
+        TocEquipProsthesis(self.part_name, self.item, prosthesis_base_name)
 
     end
+
+
+    self.surgeon:getInventory():Remove(prosthesis_base_name)         -- Removes the base item after we transferred everything
 
     -- needed to remove from queue / start next.
     ISBaseTimedAction.perform(self)

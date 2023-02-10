@@ -146,5 +146,7 @@ function TocTestItem()
     local found_item = player_inventory:FindAndReturn(item_name)
 
     print(found_item:getID())
-    
+    print("_______________")
+    found_item:setID(12334)
+    print(found_item:getID())
 end
