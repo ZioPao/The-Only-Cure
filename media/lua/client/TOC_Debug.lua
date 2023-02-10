@@ -138,3 +138,13 @@ function TocTestBodyLocations()
 
     end
 end
+
+function TocTestItem()
+    local player = getPlayer()
+    local player_inventory = player:getInventory()
+    local item_name = "TOC.Amputation_" .. "Right" .. "_" .. "Hand"
+    local found_item = player_inventory:FindAndReturn(item_name)
+
+    print(found_item:getID())
+    
+end

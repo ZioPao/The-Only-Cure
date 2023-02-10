@@ -45,8 +45,9 @@ function TocCheckCompatibilityWithOlderVersions(mod_data)
         print("TOC: Something was wrongly initiliazed before. Resetting parameters")
         TocResetEverything()
     else
-        print("TOC: Found compatible data, correcting models in case of errors and adding limbs")
-        TocReapplyAmputationClothingItem(mod_data)
+        print("TOC: Bypassing reapplying of amputations, assuming that everything is correct")
+        --print("TOC: Found compatible data, correcting models in case of errors and adding limbs")
+        --TocReapplyAmputationClothingItem(mod_data)
     end
 
 end

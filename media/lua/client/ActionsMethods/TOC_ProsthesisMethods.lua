@@ -8,6 +8,10 @@
 ---@param part_name string
 ---@param prosthesis_base_name string
 function TocEquipProsthesis(part_name, prosthesis_base_name)
+
+    -- TODO probably will have to move this from the TOC menu to classic equip to have dynamic durability
+
+
     local player = getPlayer()
 
     local toc_data = player:getModData().TOC
