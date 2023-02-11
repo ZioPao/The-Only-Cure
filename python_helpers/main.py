@@ -194,31 +194,3 @@ for base_row in df_base.iterrows():
         skill_required = ["FirstAid","2"]       # TODO Change this
         tooltip = "Tooltip_test"
         generate_recipe(recipe_name, recipe_items, result, time, skill_required, tooltip)
-
-
-
-
-
-
-
-#########################################################################################
-
-recipe_name = "Test Recipe"
-recipe_items = ["Ass", "Penis", "Shit=3"]
-result_name = "Cum sock"
-time = 10
-skill_required = ["Carpentry", "4"]
-tooltip = "tooltip_test"
-
-#generate_recipe(recipe_name, recipe_items, result_name, time, skill_required, tooltip)
-
-
-item_name = "Ass Ass Ass"
-weight = 100
-item_type = "Clothing"
-display_category = "Prosthesis"
-display_name = "Ass cock"
-clothing_item = "ClothingItemSomethingProst"
-body_location = "TOC_ArmRightProsthesis"
-
-#generate_item(item_name, weight, item_type, display_category, display_name, "test_icon", "test_tooltip", "false", clothing_item, body_location, "Hands")
