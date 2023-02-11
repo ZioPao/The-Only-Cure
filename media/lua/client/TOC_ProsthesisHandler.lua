@@ -32,6 +32,8 @@ function GenerateEquippedProsthesis(prosthesis_item, limb)
     -- TODO Durability should be decided from the clothing item xml. Same thing for disassembling stuff
 
     -- TODO some stuff should be defined by the limb, like -10 if forearm in speed
+--     -- when we equip a prosthesis, we're gonna pass these parameters to the newly generated clothing item
+--     -- when we unequip it, we regen the normal item with the parameters from the clothing item
 
     local durability = 0
     local speed = 0
@@ -79,10 +81,6 @@ end
 
 --     -- Set mod data for item with durability and all that crap
 
-
---     -- when we equip a prosthesis, we're gonna pass these parameters to the newly generated clothing item
-
---     -- when we unequip it, we regen the normal item with the parameters from the clothing item
 
 
 -- end
