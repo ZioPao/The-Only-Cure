@@ -1,10 +1,11 @@
 import lxml.etree as gfg
 import pandas as pd
 import numpy as np
+import uuid
 import openpyxl
   
 
-def generate_clothing_item(name, model, texture_choices, guid = None):
+def generate_clothing_item(name, model, texture_choices):
     root = gfg.Element("clothingItem")
 
     m_MaleModel = gfg.Element("m_MaleModel")
@@ -15,11 +16,9 @@ def generate_clothing_item(name, model, texture_choices, guid = None):
     m_FemaleModel.text = f"{model}_Female"
     root.append(m_FemaleModel)
 
+    guid = str(uuid.uuid4())
     m_GUID = gfg.Element("m_GUID")
-    if guid:
-        m_GUID.text = guid
-    else:
-        m_GUID.text = "get guid from func"
+    m_GUID.text = guid
 
     root.append(m_GUID)
 
@@ -43,6 +42,40 @@ def generate_clothing_item(name, model, texture_choices, guid = None):
 
     with open(path, "wb") as file:
         tree.write(file, encoding='utf-8', xml_declaration=True, pretty_print=True )
+
+
+    # Add a new part for guid table
+    # <files>
+    #     <path>media/clothing/clothingItems/Amputation_Right_Foot.xml</path>
+    #     <guid>2600c2ab-bfeb-49c3-b0b5-e21c6d83d5c2</guid>
+    # </files>
+
+    root_guid = gfg.Element("files")
+
+    path_guidtable = gfg.Element("path")
+    path_guidtable.text = "media/clothing/clothingItems/" + name + ".xml"
+    root_guid.append(path_guidtable)
+
+    guid_guidtable = gfg.Element("guid")
+    guid_guidtable.text = guid
+    root_guid.append(guid_guidtable)
+
+    tree_guid = gfg.ElementTree(root_guid)
+
+
+
+    path_idtable = r'python_helpers/outputs/fileGuidTable.xml'
+
+    with open(path_idtable, "ab") as file:
+       tree_guid.write(file, encoding='utf-8', pretty_print=True) 
+
+
+
+
+
+
+
+
 
 def generate_recipe(recipe_name, recipe_items, result_name, time, skill_required, tooltip):
     root_element = f"recipe {recipe_name}\n"
@@ -126,6 +159,7 @@ df_top = read_table(excel_path, "TopTable")
 limbs = ["Hand", "LowerArm"]
 sides = ["Left", "Right"]
 prost_bodylocations = ["TOC_ArmRightProsthesis", "TOC_ArmLeftProsthesis"]
+texture_types = ["Wooden", "Metal"]
 
 
 
@@ -137,7 +171,8 @@ for base_row in df_base.iterrows():
         for limb in limbs:
             for side in sides:
                 current_name = "Prost_" + side + "_" + limb + "_" + base_name + "_" + top_name
-                generate_clothing_item(current_name, "test", {"test1", "test2"}, "123")
+                texture_choices = {r"Amputations\\Upperarm\\skin01_b"}
+                generate_clothing_item(current_name, "test", texture_choices)
 
 
 
@@ -162,7 +197,7 @@ for base_row in df_base.iterrows():
                 bl = prost_bodylocations[0] if side == "Right" else prost_bodylocations[1]
 
                 icon = "metalLeg"
-                generate_item(item_id, weight, item_type, display_category, display_name, icon, "TempTooltip", "false", clothing_item_name, bl, "TestBloodLocation")
+                generate_item(item_id, weight, item_type, display_category, display_name, icon, "TempTooltip", "false", clothing_item_name, bl, "Hands")
 
 
 # ITEM GENERATION PASS - Single item to assemble stuff
@@ -183,14 +218,27 @@ generate_normal_items(df_top, "Top")
 # RECIPE GENERATION PASS
 for base_row in df_base.iterrows():
     for top_row in df_top.iterrows():
+
+        base_name = base_row[1]["Base"]
+        top_name = top_row[1]["Top"]
+
+
         recipe_name = f"Craft prosthesis with {base_name} and {top_name}"
 
         first_item = "ProstPart_" + base_row[1]["Base"]
         second_item = "ProstPart_" + top_row[1]["Top"]
 
         recipe_items = [first_item, second_item]
-        result = "Prost_" + base_row[1]["Base"] + "_" + top_row[1]["Top"]
+        result = "Prost_" + base_name + "_" + top_name
         time = 10       # TODO Change this
         skill_required = ["FirstAid","2"]       # TODO Change this
         tooltip = "Tooltip_test"
         generate_recipe(recipe_name, recipe_items, result, time, skill_required, tooltip)
+
+
+
+
+# GENERATE NEW GUID TABLE
+
+
+
