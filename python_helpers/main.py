@@ -60,10 +60,12 @@ def generate_recipe(recipe_name, recipe_items, result_name, time, skill_required
     root_element += "\t\tCategory: Surgeon,\n"
     root_element += f"\t\tTooltip: {tooltip},\n"
 
-    root_element += "\t}"
+    root_element += "\t}\n"
 
 
-    with open("Test_recipe.txt", "wt") as file:
+    path = r'python_helpers/outputs/output_recipe/script.txt'
+
+    with open(path, "at") as file:
         file.write(root_element)
         file.close()
 
@@ -148,7 +150,7 @@ for base_row in df_base.iterrows():
         base_id = base_row[1]["Base"]
         top_id = top_row[1]["Top"]
 
-        item_id = base_id + "_" + top_id
+        item_id = "Prost_" + base_id + "_" + top_id
         item_type = "Clothing"
         weight = "{0:.2f}".format(float(base_row[1]["Weight"]) + float(top_row[1]["Weight"]))
         display_category = "Prosthesis"
@@ -158,21 +160,45 @@ for base_row in df_base.iterrows():
             for side in sides:
                 clothing_item_name = "Prost_" + side + "_" + limb + "_" + base_id + "_" + top_id
                 bl = prost_bodylocations[0] if side == "Right" else prost_bodylocations[1]
-                generate_item(item_id, weight, item_type, display_category, display_name, "TempIcon", "TempTooltip", "false", clothing_item_name, bl, "TestBloodLocation")
+
+                icon = "metalLeg"
+                generate_item(item_id, weight, item_type, display_category, display_name, icon, "TempTooltip", "false", clothing_item_name, bl, "TestBloodLocation")
 
 
 # ITEM GENERATION PASS - Single item to assemble stuff
 def generate_normal_items(df, type):
     for row in df.iterrows():
-        item_id = "ProsthPart_" + row[1][type]
+        item_id = "ProstPart_" + row[1][type]
         item_type = "Normal"
         weight = "{0:.2f}".format(float(row[1]["Weight"]))
         display_category = "Prosthesis"
         display_name = row[1]["Display Name"]
-        generate_item(item_id, weight, item_type, display_category, display_name, "TempIcon", "TempTooltip", "false")
+        icon = "ProstTest" + type
+        generate_item(item_id, weight, item_type, display_category, display_name, icon, "TempTooltip", "false")
 
 generate_normal_items(df_base, "Base")
 generate_normal_items(df_top, "Top")
+
+
+# RECIPE GENERATION PASS
+for base_row in df_base.iterrows():
+    for top_row in df_top.iterrows():
+        recipe_name = f"Craft prosthesis with {base_name} and {top_name}"
+
+        first_item = "ProstPart_" + base_row[1]["Base"]
+        second_item = "ProstPart_" + top_row[1]["Top"]
+
+        recipe_items = [first_item, second_item]
+        result = "Prost_" + base_row[1]["Base"] + "_" + top_row[1]["Top"]
+        time = 10       # TODO Change this
+        skill_required = ["FirstAid","2"]       # TODO Change this
+        tooltip = "Tooltip_test"
+        generate_recipe(recipe_name, recipe_items, result, time, skill_required, tooltip)
+
+
+
+
+
 
 
 #########################################################################################
