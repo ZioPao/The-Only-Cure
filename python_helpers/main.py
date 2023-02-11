@@ -72,7 +72,6 @@ def generate_recipe(recipe_name, recipe_items, result_name, time, skill_required
 
 def generate_item(item_name, weight, item_type, display_category, display_name, icon, tooltip, can_have_holes, clothing_item=None, body_location = None, blood_location = None):
     # TODO This is a txt, so we're gonna use simple strings I guess
-    print("Generating item")
 
     root_element = f"item {item_name}\n"
     root_element += "\t{\n"
@@ -129,6 +128,9 @@ df_top = read_table(excel_path, "TopTable")
 
 limbs = ["Hand", "LowerArm"]
 sides = ["Left", "Right"]
+prost_bodylocations = ["TOC_ArmRightProsthesis", "TOC_ArmLeftProsthesis"]
+
+
 
 for base_row in df_base.iterrows():
     for top_row in df_top.iterrows():
@@ -142,7 +144,6 @@ for base_row in df_base.iterrows():
 
 
 
-prost_bodylocations = ["TOC_ArmRightProsthesis", "TOC_ArmLeftProsthesis"]
 
 
 
@@ -156,7 +157,7 @@ for base_row in df_base.iterrows():
         item_type = "Clothing"
         weight = "{0:.2f}".format(float(base_row[1]["Weight"]) + float(top_row[1]["Weight"]))
         display_category = "Prosthesis"
-        display_name = "Prosthesis - " + base_row[1]["Display Name"] + " - " + top_row[1]["Display Name"]
+        display_name = "Prosthesis - " + base_row[1]["Display Name"] + " and " + top_row[1]["Display Name"]
 
         for limb in limbs:
             for side in sides:
@@ -165,9 +166,18 @@ for base_row in df_base.iterrows():
                 generate_item(item_id, weight, item_type, display_category, display_name, "TempIcon", "TempTooltip", "false", clothing_item_name, bl, "TestBloodLocation")
 
 
+# ITEM GENERATION PASS - Single item to assemble stuff
+def generate_normal_items(df, type):
+    for row in df.iterrows():
+        item_id = "ProsthPart_" + row[1][type]
+        item_type = "Normal"
+        weight = "{0:.2f}".format(float(row[1]["Weight"]))
+        display_category = "Prosthesis"
+        display_name = row[1]["Display Name"]
+        generate_item(item_id, weight, item_type, display_category, display_name, "TempIcon", "TempTooltip", "false")
 
-
-
+generate_normal_items(df_base, "Base")
+generate_normal_items(df_top, "Top")
 
 
 #generate_clothing_item()
