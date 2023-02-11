@@ -66,8 +66,8 @@ local function TocUpdateBaseData(mod_data)
     local accepted_prosthesis_upperarm = {} -- For future stuff
     local accepted_prosthesis_foot = {}
 
-    for _, side in ipairs(TOC_sides) do
-        for _, limb in ipairs(TOC_limbs) do
+    for _, side in pairs(TOC_sides) do
+        for _, limb in pairs(TOC_limbs) do
 
             local part_name = side .. "_" .. limb
 
@@ -205,8 +205,8 @@ local function TocSetInitData(mod_data, player)
 
 
 
-    for _, side in ipairs(TOC_sides) do
-        for _, limb in ipairs(TOC_limbs) do
+    for _, side in pairs(TOC_sides) do
+        for _, limb in pairs(TOC_limbs) do
 
             local part_name = side .. "_" .. limb
 

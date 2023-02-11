@@ -31,7 +31,7 @@ def generate_clothing_item(name, model, texture_choices, guid = None):
     m_AllowRandomTint.text = "false"
     root.append(m_AllowRandomTint)
 
-    # TODO Defined by the amount of textures that we're gonna pass
+    # Defined by the amount of textures that we're gonna pass
     for tex in texture_choices:
         textureChoices = gfg.Element("textureChoices")
         textureChoices.text = tex
@@ -45,9 +45,6 @@ def generate_clothing_item(name, model, texture_choices, guid = None):
         tree.write(file, encoding='utf-8', xml_declaration=True, pretty_print=True )
 
 def generate_recipe(recipe_name, recipe_items, result_name, time, skill_required, tooltip):
-    # TODO Simple txt, so strings should be fine.
-    print("Generating recipe")
-
     root_element = f"recipe {recipe_name}\n"
     root_element += "\t{\n"
 
@@ -71,8 +68,6 @@ def generate_recipe(recipe_name, recipe_items, result_name, time, skill_required
         file.close()
 
 def generate_item(item_name, weight, item_type, display_category, display_name, icon, tooltip, can_have_holes, clothing_item=None, body_location = None, blood_location = None):
-    # TODO This is a txt, so we're gonna use simple strings I guess
-
     root_element = f"item {item_name}\n"
     root_element += "\t{\n"
 
@@ -180,9 +175,7 @@ generate_normal_items(df_base, "Base")
 generate_normal_items(df_top, "Top")
 
 
-#generate_clothing_item()
-
-# TODO we should get this stuff from a csv\xlsx and generate the correct values from that
+#########################################################################################
 
 recipe_name = "Test Recipe"
 recipe_items = ["Ass", "Penis", "Shit=3"]

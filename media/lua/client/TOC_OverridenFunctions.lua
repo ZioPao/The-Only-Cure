@@ -151,7 +151,7 @@ function ISEquipWeaponAction:perform()
     if self.item then
         local item_name = self.item:getFullType()
 
-        for _, prost_v in ipairs(GetProsthesisList()) do
+        for _, prost_v in pairs(GetProsthesisList()) do
             local prosthesis_name = string.match(item_name, prost_v)
             if prosthesis_name then
                 self.character:Say("This isn't the right way to equip this...")

@@ -11,7 +11,7 @@ local function TocCheckIfStillInfected(limbs_data)
     local check = false
 
 
-    for _, v in ipairs(GetBodyParts()) do
+    for _, v in pairs(GetBodyParts()) do
         if limbs_data[v].is_infected then
             check = true
         end
@@ -37,8 +37,8 @@ local function TocCureInfection(body_damage, part_name)
 
     -- TODO I think this is enough... we should just cycle if with everything instead of that crap up there
     for i = body_part_types:size() - 1, 0, -1 do
-        local bodyPart = body_part_types:get(i);
-        bodyPart:SetInfected(false);
+        local bodyPart = body_part_types:get(i)
+        bodyPart:SetInfected(false)
     end
     
     if body_part_type:scratched() then body_part_type:setScratched(false, false) end
