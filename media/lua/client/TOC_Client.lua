@@ -219,6 +219,13 @@ Commands["AcceptDamageOtherPlayer"] = function(arg)
 end
 
 
+-- Hotfix for sounds
+Commands.StopAmputationSound = function(args)
+
+    local player = getPlayerByOnlineID(args.surgeon_id)
+    player:getEmitter():stopSoundByName("Amputation_Sound")
+
+end
 
 
 -- Base stuff

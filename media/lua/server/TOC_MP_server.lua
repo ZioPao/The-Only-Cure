@@ -38,7 +38,13 @@ TOC_Commands["AskToResetEverything"] = function(_, arg)
 
 end
 
+TOC_Commands.AskStopAmputationSound = function(_, args)
 
+    print("TOC: We're in AskStopAmputationSound")
+    sendServerCommand("TOC", "StopAmputationSound", {surgeon_id = args.surgeon_id})
+
+
+end
 
 
 ------ Global Mod Data -----------

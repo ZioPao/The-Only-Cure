@@ -25,6 +25,7 @@ end
 function ISCutLimb:stop()
 
     self.surgeon:getEmitter():stopSoundByName("Amputation_Sound")
+    sendClientCommand(self.surgeon, "TOC", "AskStopAmputationSound", {surgeon_id = self.surgeon:getOnlineID()})
 
 
 end
@@ -115,11 +116,12 @@ function ISCutLimb:perform()
 
     if self.patient ~= self.surgeon and isClient() then
         SendCutLimb(self.patient, self.part_name, surgeon_factor, bandage_table, painkiller_table)
+        sendClientCommand(self.surgeon, "TOC", "AskStopAmputationSound", {surgeon_id = self.surgeon:getOnlineID()})
     else
         TocCutLimb(self.part_name, surgeon_factor, bandage_table, painkiller_table)
     end
 
-    self.surgeon:getEmitter():stopSoundByName("Amputation_Sound")         -- TODO This doesn't work reliably
+    self.surgeon:getEmitter():stopSoundByName("Amputation_Sound")
     self.surgeon:getXp():AddXP(Perks.Doctor, 400)
     ISBaseTimedAction.perform(self)
 
