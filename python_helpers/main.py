@@ -4,7 +4,7 @@ import numpy as np
 import openpyxl
   
 
-def generate_clothing_item(name, part, model, texture_choices, guid = None):
+def generate_clothing_item(name, model, texture_choices, guid = None):
     root = gfg.Element("clothingItem")
 
     m_MaleModel = gfg.Element("m_MaleModel")
@@ -39,7 +39,7 @@ def generate_clothing_item(name, part, model, texture_choices, guid = None):
 
     tree = gfg.ElementTree(root)
 
-    path = r'output_clothing/Prost_' + part + "_" + name + ".xml"
+    path = r'python_helpers/outputs/output_clothing/' + name + ".xml"
 
     with open(path, "wb") as file:
         tree.write(file, encoding='utf-8', xml_declaration=True, pretty_print=True )
@@ -89,15 +89,17 @@ def generate_item(item_name, weight, item_type, display_category, display_name, 
     
     root_element += f"\t\tIcon = {icon},\n"
     root_element += f"\t\tTooltip = {tooltip},\n"
-    root_element += f"\t\tCanHaveHoles = {can_have_holes},\n"
+    root_element += f"\t\tCanHaveHoles = {can_have_holes.lower()},\n"
 
-    root_element += "\t}"
+    root_element += "\t}\n"
 
 
+    path = r'python_helpers/outputs/output_item/script.txt'
 
-    with open("Test_Item.txt", "wt") as file:
+    with open(path, "at") as file:
         file.write(root_element)
         file.close()
+
 
 ###########################################################################################
 def read_table(file_name: str, table_name: str) -> pd.DataFrame:
@@ -122,16 +124,45 @@ excel_path = r'python_helpers/modules_prost.xlsx'
 df_base = read_table(excel_path, "BaseTable")
 df_top = read_table(excel_path, "TopTable")
 
+
+# CLOTHING GENERATION PASS
+
+limbs = ["Hand", "LowerArm"]
+sides = ["Left", "Right"]
+
 for base_row in df_base.iterrows():
     for top_row in df_top.iterrows():
         base_name = base_row[1][0]
         top_name = top_row[1][0]
 
-        current_name = base_name + "_" + top_name
-        generate_clothing_item(current_name, "LowerArm", "test", {"test1", "test2"}, "123")
+        for limb in limbs:
+            for side in sides:
+                current_name = "Prost_" + side + "_" + limb + "_" + base_name + "_" + top_name
+                generate_clothing_item(current_name, "test", {"test1", "test2"}, "123")
 
 
 
+prost_bodylocations = ["TOC_ArmRightProsthesis", "TOC_ArmLeftProsthesis"]
+
+
+
+# ITEM GENERATION PASS - ASSEMBLED
+for base_row in df_base.iterrows():
+    for top_row in df_top.iterrows():
+        base_id = base_row[1]["Base"]
+        top_id = top_row[1]["Top"]
+
+        item_id = base_id + "_" + top_id
+        item_type = "Clothing"
+        weight = "{0:.2f}".format(float(base_row[1]["Weight"]) + float(top_row[1]["Weight"]))
+        display_category = "Prosthesis"
+        display_name = "Prosthesis - " + base_row[1]["Display Name"] + " - " + top_row[1]["Display Name"]
+
+        for limb in limbs:
+            for side in sides:
+                clothing_item_name = "Prost_" + side + "_" + limb + "_" + base_id + "_" + top_id
+                bl = prost_bodylocations[0] if side == "Right" else prost_bodylocations[1]
+                generate_item(item_id, weight, item_type, display_category, display_name, "TempIcon", "TempTooltip", "false", clothing_item_name, bl, "TestBloodLocation")
 
 
 
