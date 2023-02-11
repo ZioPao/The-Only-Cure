@@ -154,6 +154,9 @@ local function SetupTocMainUI(surgeon, patient, limbs_data)
         main_ui["b31"]:setPath(GetImageName("Right_Hand", limbs_data))
         main_ui["b32"]:setPath(GetImageName("Left_Hand", limbs_data))
 
+        main_ui["b41"]:setPath(GetImageName("Right_Foot", limbs_data))
+        main_ui["b42"]:setPath(GetImageName("Left_Foot", limbs_data))
+
     end
 
 
@@ -434,6 +437,15 @@ local function CreateTocMainUI()
 
     main_ui:addImageButton("b32", "", OnClickTocMainUI)
     main_ui["b32"]:addArg("part_name", "Left_Hand")
+
+
+    main_ui:nextLine()
+
+    main_ui:addImageButton("b41", "", OnClickTocMainUI)
+    main_ui["b41"]:addArg("part_name", "Right_Foot")
+
+    main_ui:addImageButton("b42", "", OnClickTocMainUI)
+    main_ui["b42"]:addArg("part_name", "Left_Foot")
 
     main_ui:saveLayout()
 

@@ -4,6 +4,10 @@ if TheOnlyCure == nil then
     TheOnlyCure = {}
 end
 
+
+local pairs = pairs
+
+
 -----------------------------------------
 -- MP HANDLING CHECKS
 function CheckIfCanBeCut(part_name, limbs_data)
@@ -60,9 +64,8 @@ end
 
 function CheckIfItemIsProsthesis(item)
 
-    -- TODO find a cleaner way
     local item_full_type = item:getFullType()
-    local prosthesis_list = GetProsthesisList()
+    local prosthesis_list = GetProsthesisList()     -- TODO this isn't gonna work after the modular prost rewrite
 
     for _, v in pairs(prosthesis_list) do
         if v == item_full_type then
@@ -88,7 +91,7 @@ end
 
 function CheckIfProsthesisAlreadyInstalled(limbs_data, part_name)
 
-    for _, side in ipairs(TOC_sides) do
+    for _, side in pairs(TOC_sides) do
         if string.find(part_name, side) then
             return (limbs_data[side .. "_Hand"].is_prosthesis_equipped or limbs_data[side .. "_LowerArm"].is_prosthesis_equipped)
         end

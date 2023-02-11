@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animNode x_extends="NoLegs_TurnIdle180.xml">
+	<m_Name>NoLegs_turnIdle180L</m_Name>
+	<m_AnimName>Bob_Crawl</m_AnimName>
+	<m_Conditions>
+		<m_Name>IsCrawling</m_Name>
+		<m_Type>BOOL</m_Type>
+		<m_BoolValue>true</m_BoolValue>
+	</m_Conditions>
+	<m_Conditions>
+		<m_Name>twist</m_Name>
+		<m_Type>LESS</m_Type>
+		<m_FloatValue>0</m_FloatValue>
+	</m_Conditions>
+</animNode>

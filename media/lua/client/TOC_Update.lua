@@ -19,7 +19,7 @@ local function CheckIfPlayerIsInfected(player, toc_data)
     end
 
     -- Check for everything else
-    for _, v in ipairs(GetOtherBodyPartTypes()) do
+    for _, v in pairs(GetOtherBodyPartTypes()) do
         if body_damage:getBodyPart(v):bitten() then
             toc_data.Limbs.is_other_bodypart_infected = true -- Even one is enough, stop cycling if we find it
             break
@@ -171,12 +171,14 @@ end
 
 -- MAIN UPDATE FUNCTIONS
 
+
 local function TocUpdateOnTick()
 
     local player = getPlayer()
     if player == nil then
         return
     end
+
     local toc_data = player:getModData().TOC
     if toc_data ~= nil then
         CheckIfPlayerIsInfected(player, toc_data)
@@ -196,7 +198,7 @@ local function TocUpdateEveryTenMinutes()
     local part_data = player:getModData().TOC.Limbs
 
     --Experience for prosthesis user
-    for _, side in ipairs(TOC_sides) do
+    for _, side in pairs(TOC_sides) do
         if part_data[side .. "_Hand"].is_prosthesis_equipped or part_data[side .. "_LowerArm"].is_prosthesis_equipped then
             player:getXp():AddXP(Perks[side .. "_Hand"], 4)
         end
@@ -247,6 +249,7 @@ local function TocUpdateEveryOneMinute()
     -- Sends only Limbs since the other stuff is mostly static
     if toc_data ~= nil then
         -- FIXME Send little packets instead of the whole thing?
+            -- TODO we shouldn't run this if we're in SP I guess?
         sendClientCommand(player, 'TOC', 'ChangePlayerState', { toc_data.Limbs } )
     end
 

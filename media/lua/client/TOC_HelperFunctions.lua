@@ -25,6 +25,9 @@ local function PartNameToBodyLocationAmputation(name)
     if name == "Left_Hand" then return "TOC_ArmLeft" end
     if name == "Left_LowerArm" then return "TOC_ArmLeft" end
     if name == "Left_UpperArm" then return "TOC_ArmLeft" end
+
+    if name == "Left_Foot" then return "TOC_LegLeft" end
+    if name == "Right_Foot" then return "TOC_LegRight" end
 end
 
 function TocFindItemInProstBodyLocation(part_name, patient)
@@ -71,7 +74,7 @@ end
 -- Override and mod compat helper
 function TocPopulateCanBeHeldTable(can_be_held, limbs_data)
 
-    for _, side in ipairs(TOC_sides) do
+    for _, side in pairs(TOC_sides) do
         can_be_held[side] = true
 
         if limbs_data[side .. "_Hand"].is_cut then
@@ -84,5 +87,19 @@ function TocPopulateCanBeHeldTable(can_be_held, limbs_data)
             end
         end
     end
+
+end
+
+
+
+
+
+-----------------------------------------
+function TocCheckLegsAmputations(mod_data)
+
+    if mod_data.TOC.Limbs["Left_Foot"].is_cut or mod_data.TOC.Limbs["Right_Foot"].is_cut then
+        SetMissingFootAnimation(true)
+    end
+
 
 end

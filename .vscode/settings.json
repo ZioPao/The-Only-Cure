@@ -53,6 +53,7 @@
         "FHSwapHandsAction",
         "getClassFieldVal",
         "SandboxVars",
-        "getClassField"
+        "getClassField",
+        "ISWearClothing"
     ]
 }

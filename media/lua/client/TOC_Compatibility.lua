@@ -1,3 +1,8 @@
+
+
+
+
+
 local function TocReapplyAmputationClothingItem(mod_data)
     local player = getPlayer()
     local player_inv = player:getInventory()
@@ -6,15 +11,21 @@ local function TocReapplyAmputationClothingItem(mod_data)
         for _, limb in ipairs(TOC_limbs) do
             local part_name = side .. "_" .. limb
 
-            if mod_data.TOC.Limbs[part_name].is_cut and mod_data.TOC.Limbs[part_name].is_amputation_shown then
-                local amputated_clothing_name = "TOC.Amputation_" .. part_name
-                if player_inv:FindAndReturn(amputated_clothing_name) == nil then
-                    local amputation_clothing_item = player:getInventory():AddItem(TocFindAmputatedClothingFromPartName(part_name))
-                    TocSetCorrectTextureForAmputation(amputation_clothing_item, player, mod_data.TOC.Limbs[part_name].is_cicatrized)
-                    player:setWornItem(amputation_clothing_item:getBodyLocation(), amputation_clothing_item)
-
+            -- Check this before since we could have changed some stuff about part names before fixing them. Could break things
+            local part_data = mod_data.TOC.Limbs[part_name]
+            if part_data then
+                if part_data.is_cut and part_data.is_amputation_shown then
+                    local amputated_clothing_name = "TOC.Amputation_" .. part_name
+                    if player_inv:FindAndReturn(amputated_clothing_name) == nil then
+                        local amputation_clothing_item = player:getInventory():AddItem(TocFindAmputatedClothingFromPartName(part_name))
+                        TocSetCorrectTextureForAmputation(amputation_clothing_item, player, part_data.is_cicatrized)
+                        player:setWornItem(amputation_clothing_item:getBodyLocation(), amputation_clothing_item)
+    
+                    end
                 end
             end
+
+
 
             TocResetClothingItemBodyLocation(player, side, limb)
         end
@@ -34,8 +45,9 @@ function TocCheckCompatibilityWithOlderVersions(mod_data)
         print("TOC: Something was wrongly initiliazed before. Resetting parameters")
         TocResetEverything()
     else
-        print("TOC: Found compatible data, correcting models in case of errors")
-        TocReapplyAmputationClothingItem(mod_data)
+        print("TOC: Bypassing reapplying of amputations, assuming that everything is correct")
+        --print("TOC: Found compatible data, correcting models in case of errors and adding limbs")
+        --TocReapplyAmputationClothingItem(mod_data)
     end
 
 end

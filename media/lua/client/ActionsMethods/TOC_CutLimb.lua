@@ -11,7 +11,7 @@ local function TocCheckIfStillInfected(limbs_data)
     local check = false
 
 
-    for _, v in ipairs(GetBodyParts()) do
+    for _, v in pairs(GetBodyParts()) do
         if limbs_data[v].is_infected then
             check = true
         end
@@ -37,8 +37,8 @@ local function TocCureInfection(body_damage, part_name)
 
     -- TODO I think this is enough... we should just cycle if with everything instead of that crap up there
     for i = body_part_types:size() - 1, 0, -1 do
-        local bodyPart = body_part_types:get(i);
-        bodyPart:SetInfected(false);
+        local bodyPart = body_part_types:get(i)
+        bodyPart:SetInfected(false)
     end
     
     if body_part_type:scratched() then body_part_type:setScratched(false, false) end
@@ -104,7 +104,7 @@ local function FindTourniquetInWornItems(patient, side)
     for i = 1, worn_items:size() - 1 do -- Maybe wornItems:size()-1
         local item = worn_items:get(i):getItem()
         local item_full_type = item:getFullType()
-        if string.find(item_full_type, "Test_Tourniquet_" .. side) then
+        if string.find(item_full_type, "Surgery_" .. side .. "_Tourniquet") then
             return item
         end
     end
@@ -151,7 +151,7 @@ function TocCutLimb(part_name, surgeon_factor, bandage_table, painkiller_table)
     local base_damage_value = 100
 
     if tourniquet_item ~= nil then
-        base_damage_value = 50
+        base_damage_value = 50  -- TODO Decrease mostly blood and damage, add pain, not everything else
 
         if part_name == "Left_UpperArm" or part_name == "Right_UpperArm" then
             player:removeWornItem(tourniquet_item)
@@ -240,13 +240,20 @@ function TocCutLimb(part_name, surgeon_factor, bandage_table, painkiller_table)
         TocDeleteOtherAmputatedLimbs(side)
 
         --Equip new model for amputation
-        local amputation_clothing_item = player:getInventory():AddItem(TocFindAmputatedClothingFromPartName(part_name))
+        local amputation_clothing_item_name = TocFindAmputatedClothingFromPartName(part_name)
+        print(amputation_clothing_item_name)
+
+        local amputation_clothing_item = player:getInventory():AddItem(amputation_clothing_item_name)
         TocSetCorrectTextureForAmputation(amputation_clothing_item, player, false)
         player:setWornItem(amputation_clothing_item:getBodyLocation(), amputation_clothing_item)
 
 
         -- Set blood on the amputated limb
         TocSetBloodOnAmputation(getPlayer(), adiacent_body_part)
+
+        if part_name == "Left_Foot" or part_name == "Right_Foot" then
+            SetMissingFootAnimation(true)
+        end
     end
 
 end

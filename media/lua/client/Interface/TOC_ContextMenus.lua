@@ -16,7 +16,7 @@ TocContextMenus.CreateMenus = function(player, context, worldObjects, test)
     local local_player = getSpecificPlayer(player)
     --local players = getOnlinePlayers()
 
-    for k, v in ipairs(worldObjects) do
+    for k, v in pairs(worldObjects) do
         -- help detecting a player by checking nearby squares
         for x = v:getSquare():getX() - 1, v:getSquare():getX() + 1 do
             for y = v:getSquare():getY() - 1, v:getSquare():getY() + 1 do
@@ -79,6 +79,7 @@ TocContextMenus.CreateOperateWithOvenMenu = function(player, context, worldObjec
             -- Check temperature
             if v_stove:getCurrentTemperature() > 250 then
 
+                -- ipairs here to keep the order
                 for _, v_bodypart in ipairs(GetBodyParts()) do
                     if part_data[v_bodypart].is_cut and part_data[v_bodypart].is_amputation_shown and
                         not part_data[v_bodypart].is_operated then

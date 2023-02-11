@@ -85,4 +85,15 @@
         <path>media/clothing/clothingItems/Surgery_Right_Tourniquet.xml</path>
         <guid>9a5fe063-63c7-4e6f-81ca-ee77c6678e0d</guid>
     </files>
+
+    <files>
+        <path>media/clothing/clothingItems/Amputation_Left_Foot.xml</path>
+        <guid>506c0fc0-b50c-4667-bafa-ae22e3c2c0dc</guid>
+    </files>
+
+    <files>
+        <path>media/clothing/clothingItems/Amputation_Right_Foot.xml</path>
+        <guid>2600c2ab-bfeb-49c3-b0b5-e21c6d83d5c2</guid>
+    </files>
+
 </fileGuidTable>

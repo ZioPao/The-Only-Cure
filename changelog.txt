@@ -1,3 +1,6 @@
+0.9.15
+- Hotfix to sound not stopping when performing an amputation on another player
+
 0.9.14
 - Optimizations
 - New icon for the mod

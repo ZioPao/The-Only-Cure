@@ -45,32 +45,40 @@ function TocResetEverything()
     TheOnlyCure.InitTheOnlyCure(_, player)
 
     -- Destroy the amputation or prosthesis item
-    for _, v in ipairs(GetBodyParts()) do
-        -- TODO This is incredibly shitty, but we can't use worn items since we need to consider the case that the item wasn't applied
-        local amputation_item_name = TocFindAmputationOrProsthesisName(v, player, "Amputation")
-        local prosthesis_item_name = TocFindAmputationOrProsthesisName(v, player, "Prosthesis")
 
-        if amputation_item_name ~= nil then
-            local amputation_item = player_inventory:FindAndReturn(amputation_item_name)
-            if amputation_item ~= nil then
-                print("Resetting " .. amputation_item:getName())
-                player:removeWornItem(amputation_item)
-                player:getInventory():Remove(amputation_item)
+    for _, side in pairs(TOC_sides) do
+        for _, limb in pairs(TOC_limbs) do
+        
+            local part_name = side .. "_" .. limb
+            local amputation_item_name = TocFindAmputationOrProsthesisName(part_name, player, "Amputation")
+            local prosthesis_item_name = TocFindAmputationOrProsthesisName(part_name, player, "Prosthesis")
+            if amputation_item_name ~= nil then
+                local amputation_item = player_inventory:FindAndReturn(amputation_item_name)
+                if amputation_item ~= nil then
+                    print("Resetting " .. amputation_item:getName())
+                    player:removeWornItem(amputation_item)
+                    player:getInventory():Remove(amputation_item)
+                end
+                amputation_item = nil -- reset it
             end
-            amputation_item = nil -- reset it
-        end
-        if prosthesis_item_name ~= nil then
-            local prosthesis_item = player_inventory:FindAndReturn(prosthesis_item_name)
-            if prosthesis_item ~= nil then
-                print("Resetting " .. prosthesis_item:getName())
-                player:removeWornItem(prosthesis_item)
-                player:getInventory():Remove(prosthesis_item)
+            if prosthesis_item_name ~= nil then
+                local prosthesis_item = player_inventory:FindAndReturn(prosthesis_item_name)
+                if prosthesis_item ~= nil then
+                    print("Resetting " .. prosthesis_item:getName())
+                    player:removeWornItem(prosthesis_item)
+                    player:getInventory():Remove(prosthesis_item)
+                end
+                prosthesis_item = nil -- reset it
             end
-            prosthesis_item = nil -- reset it
+    
+
         end
-
-
     end
+
+
+    -- Reset special flag for legs amputations
+    SetMissingFootAnimation(false)
+
 end
 
 
@@ -129,4 +137,16 @@ function TocTestBodyLocations()
             print(list:get(i -1):getId())
 
     end
+end
+
+function TocTestItem()
+    local player = getPlayer()
+    local player_inventory = player:getInventory()
+    local item_name = "TOC.Amputation_" .. "Right" .. "_" .. "Hand"
+    local found_item = player_inventory:FindAndReturn(item_name)
+
+    print(found_item:getID())
+    print("_______________")
+    found_item:setID(12334)
+    print(found_item:getID())
 end

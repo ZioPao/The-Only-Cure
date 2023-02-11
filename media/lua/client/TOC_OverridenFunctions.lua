@@ -3,9 +3,8 @@ require "TimedActions/ISEquipWeaponAction"
 require "TimedActions/ISUnequipAction"
 require "ISUI/ISInventoryPaneContextMenu"
 
+
 local og_ISBaseTimedActionAdjustMaxTime = ISBaseTimedAction.adjustMaxTime
-
-
 function ISBaseTimedAction:adjustMaxTime(maxTime)
 
     local original_max_time = og_ISBaseTimedActionAdjustMaxTime(self, maxTime)
@@ -73,14 +72,15 @@ function ISInventoryPane:onMouseDoubleClick(x, y)
 
     local item_to_check = self.items[self.mouseOverOption]
     local player_inventory = getPlayerInventory(self.player).inventory
+
+
     if instanceof(item_to_check, "InventoryItem") then
         og_ISInventoryPaneOnMouseDoubleClick(self, x, y)
     elseif CheckIfItemIsAmputatedLimb(item_to_check.items[1]) or CheckIfItemIsInstalledProsthesis(item_to_check.items[1]) then
         --print("TOC: Can't double click this item")
-    else
-        og_ISInventoryPaneOnMouseDoubleClick(self, x, y)
 
     end
+    og_ISInventoryPaneOnMouseDoubleClick(self, x, y)
 
 
 
@@ -93,7 +93,6 @@ function ISInventoryPane.getActualItems(items)
     local ret = og_ISInventoryPaneGetActualItems(items)
 
     -- This is gonna be slower than just overriding the function but hey it's more compatible
-
     for i = 1, #ret do
         local item_full_type = ret[i]:getFullType()
         if string.find(item_full_type, "Amputation_") or string.find(item_full_type, "Prost_") then
@@ -120,7 +119,6 @@ end
 
 local og_ISEquipWeaponActionPerform = ISEquipWeaponAction.perform
 function ISEquipWeaponAction:perform()
-
     -- TODO this is only for weapons, not items. Won't work for everything I think
     --TODO Block it before even performing
     -- TODO in the inventory menu there is something broken, even though this works
@@ -153,7 +151,7 @@ function ISEquipWeaponAction:perform()
     if self.item then
         local item_name = self.item:getFullType()
 
-        for _, prost_v in ipairs(GetProsthesisList()) do
+        for _, prost_v in pairs(GetProsthesisList()) do
             local prosthesis_name = string.match(item_name, prost_v)
             if prosthesis_name then
                 self.character:Say("This isn't the right way to equip this...")

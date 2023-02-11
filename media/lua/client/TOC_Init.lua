@@ -8,7 +8,7 @@ if not TheOnlyCure then
 end
 
 TOC_sides = { "Left", "Right" }
-TOC_limbs = { "Hand", "LowerArm", "UpperArm" }
+TOC_limbs = { "Hand", "LowerArm", "UpperArm", "Foot"}
 
 local function TocCutLimbForTrait(player, limbs_data, part_name)
     local amputation_clothing_item = player:getInventory():AddItem("TOC.Amputation_" .. part_name)
@@ -27,6 +27,33 @@ local function TocCutLimbForTrait(player, limbs_data, part_name)
         limbs_data[v].is_cicatrized = true
     end
 end
+
+local function InitSpecificPart(mod_data, part_name)
+
+    if mod_data.TOC.Limbs[part_name] == nil then
+        mod_data.TOC.Limbs[part_name] = {}
+    end
+
+
+    mod_data.TOC.Limbs[part_name].is_cut = false
+    mod_data.TOC.Limbs[part_name].is_infected = false
+    mod_data.TOC.Limbs[part_name].is_operated = false
+    mod_data.TOC.Limbs[part_name].is_cicatrized = false
+    mod_data.TOC.Limbs[part_name].is_cauterized = false
+    mod_data.TOC.Limbs[part_name].is_amputation_shown = false
+
+    mod_data.TOC.Limbs[part_name].cicatrization_time = 0
+
+
+    mod_data.TOC.Limbs[part_name].is_prosthesis_equipped = false
+    mod_data.TOC.Limbs[part_name].equipped_prosthesis = {}
+
+
+
+end
+
+
+
 local function TocUpdateBaseData(mod_data)
 
     -- TODO The prosthetic knife needs to be a weapon first and foremost, so other than a
@@ -37,11 +64,19 @@ local function TocUpdateBaseData(mod_data)
     local accepted_prosthesis_hand = { "WoodenHook", "MetalHook", "MetalHand", "ProstheticKnife" }
     local accepted_prosthesis_lowerarm = { "WoodenHook", "MetalHook", "MetalHand", "ProstheticKnife" }
     local accepted_prosthesis_upperarm = {} -- For future stuff
+    local accepted_prosthesis_foot = {}
 
-    for _, side in ipairs(TOC_sides) do
-        for _, limb in ipairs(TOC_limbs) do
+    for _, side in pairs(TOC_sides) do
+        for _, limb in pairs(TOC_limbs) do
 
             local part_name = side .. "_" .. limb
+
+
+            -- Check if part was initialized
+            if mod_data.TOC.Limbs[part_name] == nil then
+                InitSpecificPart(mod_data, part_name)
+            end
+
 
             if limb == "Hand" then
                 mod_data.TOC.Limbs[part_name].cicatrization_base_time = 1700
@@ -69,6 +104,11 @@ local function TocUpdateBaseData(mod_data)
                 mod_data.TOC.Limbs[part_name].cicatrization_base_time = 2000
                 mod_data.TOC.Limbs[part_name].depends_on = { side .. "_Hand", side .. "_LowerArm", }
                 mod_data.TOC.Prosthesis.Accepted_Prosthesis[part_name] = accepted_prosthesis_upperarm
+            elseif limb == "Foot" then
+                mod_data.TOC.Limbs[part_name].cicatrization_base_time = 1700
+                mod_data.TOC.Limbs[part_name].depends_on = {}
+                mod_data.TOC.Prosthesis.Accepted_Prosthesis[part_name] = accepted_prosthesis_foot
+
             end
 
         end
@@ -102,6 +142,10 @@ local function TocSetInitData(mod_data, player)
             Left_Hand = {},
             Left_LowerArm = {},
             Left_UpperArm = {},
+
+            Left_Foot = {},
+            Right_Foot = {},
+
             is_other_bodypart_infected = false
         },
         Prosthesis = {
@@ -161,8 +205,8 @@ local function TocSetInitData(mod_data, player)
 
 
 
-    for _, side in ipairs(TOC_sides) do
-        for _, limb in ipairs(TOC_limbs) do
+    for _, side in pairs(TOC_sides) do
+        for _, limb in pairs(TOC_limbs) do
 
             local part_name = side .. "_" .. limb
 
@@ -207,7 +251,8 @@ function TheOnlyCure.InitTheOnlyCure(_, player)
         TocSetInitData(mod_data, player)
     else
         TocCheckCompatibilityWithOlderVersions(mod_data)
-        TocUpdateBaseData(mod_data) -- Since it's gonna be common to update stuff
+        TocUpdateBaseData(mod_data)                 -- Since it's gonna be common to update stuff
+        TocCheckLegsAmputations(mod_data)
     end
 
 end
@@ -216,14 +261,20 @@ local function TocDeclareTraits()
     local amp1 = TraitFactory.addTrait("Amputee_Hand", getText("UI_trait_Amputee_Hand"), -8,
         getText("UI_trait_Amputee_Hand_desc"), false, false)
     amp1:addXPBoost(Perks.Left_Hand, 4)
+    amp1:addXPBoost(Perks.Fitness, -1)
+    amp1:addXPBoost(Perks.Strength, -1)
 
     local amp2 = TraitFactory.addTrait("Amputee_LowerArm", getText("UI_trait_Amputee_LowerArm"), -10,
         getText("UI_trait_Amputee_LowerArm_desc"), false, false)
     amp2:addXPBoost(Perks.Left_Hand, 4)
+    amp2:addXPBoost(Perks.Fitness, -1)
+    amp2:addXPBoost(Perks.Strength, -1)
 
     local amp3 = TraitFactory.addTrait("Amputee_UpperArm", getText("UI_trait_Amputee_UpperArm"), -20,
         getText("UI_trait_Amputee_UpperArm_desc"), false, false)
     amp3:addXPBoost(Perks.Left_Hand, 4)
+    amp3:addXPBoost(Perks.Fitness, -1)
+    amp3:addXPBoost(Perks.Strength, -1)
 
     TraitFactory.addTrait("Insensitive", getText("UI_trait_Insensitive"), 6, getText("UI_trait_Insensitivedesc"), false,
         false)
