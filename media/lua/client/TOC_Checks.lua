@@ -45,16 +45,16 @@ end
 -----------------------------------------
 
 function CheckIfItemIsAmputatedLimb(item)
+    -- TODO Benchmark if this is faster
     local item_full_type = item:getFullType()
-    local check
+
 
     if string.find(item_full_type, "TOC.Amputation_") then
-        check = true
+        return true
     else
-        check = false
+        return false
     end
 
-    return check
 
 end
 

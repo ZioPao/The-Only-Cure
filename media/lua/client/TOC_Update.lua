@@ -49,6 +49,9 @@ local function TocManagePhantomPain(player, toc_data)
         end
     end
 
+    -- TODO Add phantom pain to depended parts
+
+
 end
 
 
@@ -82,9 +85,9 @@ local function SetHealthStatusForBodyPart(part_data, part_name, player)
 
 
     -- Check for stitching
-    local is_stitched = false    -- TODO Implement this
+    local is_stitched = false
 
-
+    -- TODO Implement this
 
     if part_data[part_name].is_cut then
         --print("TOC: Check update for " .. part_name)
@@ -158,6 +161,8 @@ end
 
 local function UpdatePlayerHealth(player, part_data)
     local body_damage = player:getBodyDamage()
+
+
 
     if player:HasTrait("Insensitive") then body_damage:setPainReduction(49) end
 
@@ -246,7 +251,7 @@ local function TocUpdateEveryOneMinute()
     -- Updates toc data in a global way, basically player:transmitModData but it works
     -- Sends only Limbs since the other stuff is mostly static
     if toc_data ~= nil then
-        -- FIXME Send little packets instead of the whole thing?
+        -- TODO make it so that we dont send it constantly
         sendClientCommand(player, 'TOC', 'ChangePlayerState', { toc_data.Limbs } )
     end
 

@@ -109,13 +109,3 @@ function TocGetSawInInventory(surgeon)
         player_inv:getItemFromType("Chainsaw")
     return item
 end
-
-function TocGetSideFromPartName(part_name)
-
-    if string.find(part_name, "Left") then
-        return "Left"
-    else
-        return "Right"
-    end
-
-end

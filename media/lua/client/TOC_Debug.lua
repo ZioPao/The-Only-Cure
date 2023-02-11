@@ -1,8 +1,3 @@
-------------------------------------------
--------- THE ONLY CURE BUT BETTER --------
-------------------------------------------
------------- DEBUG FUNCTIONS -------------
-
 
 -- Side functions
 local function TocGetAmputationFullTypeFromInventory(player, side, limb)
@@ -110,14 +105,8 @@ function TocResetClothingItemBodyLocation(player, side, limb)
         prosthesis_item = nil -- reset it
     end
 end
-
 -----------------------------------------------------------------------
 
-
-
-
-
------- TEST FUNCTIONS, DON'T USE THESE!!! ---------------
 
 function TocTestBodyLocations()
 

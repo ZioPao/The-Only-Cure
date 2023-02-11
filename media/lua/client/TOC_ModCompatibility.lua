@@ -26,7 +26,14 @@ local function SetCompatibilityFancyHandwork()
         local limbs_data = getPlayer():getModData().TOC.Limbs
         local can_be_held = {}
 
+        -- TODO not totally realiable
         TocPopulateCanBeHeldTable(can_be_held, limbs_data)
+
+
+        -- for _, test in pairs(can_be_held) do
+        --     print(test)
+        -- end
+        --ISInventoryPaneContextMenu.transferIfNeeded(self.chr, item)
 
         -- If we already have the item equipped
         if (primary and primary == item) or (secondary and secondary == item) then
@@ -75,6 +82,7 @@ local function SetCompatibilityFancyHandwork()
     end
 
     local og_FHSwapHandsAction = FHSwapHandsAction.start
+
 
     function FHSwapHandsAction:isValid()
         local limbs_data = getPlayer():getModData().TOC.Limbs

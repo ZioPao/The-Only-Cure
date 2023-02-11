@@ -108,7 +108,6 @@ Commands["CutLimb"] = function(arg)
     local arg = arg["toSend"]
     local surgeon_id = arg[5]
     
-    -- Disable the sound coming from the surgeon
     getPlayerByOnlineID(surgeon_id):getEmitter():stopSoundByName("Amputation_Sound")
 
 
@@ -139,7 +138,7 @@ Commands["UnequipProsthesis"] = function(arg)
 
     local arg = arg["toSend"]
 
-    TheOnlyCure.TocUnequipProsthesis(arg[1], arg[2])
+    TheOnlyCure.UnequipProsthesis(arg[1], arg[2])
 
 end
 
