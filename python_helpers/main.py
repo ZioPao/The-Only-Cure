@@ -69,14 +69,6 @@ def generate_clothing_item(name, model, texture_choices):
     with open(path_idtable, "ab") as file:
        tree_guid.write(file, encoding='utf-8', pretty_print=True) 
 
-
-
-
-
-
-
-
-
 def generate_recipe(recipe_name, recipe_items, result_name, time, skill_required, tooltip):
     root_element = f"recipe {recipe_name}\n"
     root_element += "\t{\n"
@@ -153,16 +145,13 @@ excel_path = r'python_helpers/modules_prost.xlsx'
 df_base = read_table(excel_path, "BaseTable")
 df_top = read_table(excel_path, "TopTable")
 
-
-# CLOTHING GENERATION PASS
-
 limbs = ["Hand", "LowerArm"]
 sides = ["Left", "Right"]
 prost_bodylocations = ["TOC_ArmRightProsthesis", "TOC_ArmLeftProsthesis"]
 texture_types = ["Wooden", "Metal"]
 
 
-
+# CLOTHING GENERATION PASS
 for base_row in df_base.iterrows():
     for top_row in df_top.iterrows():
         base_name = base_row[1][0]
@@ -173,11 +162,6 @@ for base_row in df_base.iterrows():
                 current_name = "Prost_" + side + "_" + limb + "_" + base_name + "_" + top_name
                 texture_choices = {r"Amputations\\Upperarm\\skin01_b"}
                 generate_clothing_item(current_name, "test", texture_choices)
-
-
-
-
-
 
 # ITEM GENERATION PASS - ASSEMBLED
 for base_row in df_base.iterrows():
@@ -198,7 +182,6 @@ for base_row in df_base.iterrows():
 
                 icon = "metalLeg"
                 generate_item(item_id, weight, item_type, display_category, display_name, icon, "TempTooltip", "false", clothing_item_name, bl, "Hands")
-
 
 # ITEM GENERATION PASS - Single item to assemble stuff
 def generate_normal_items(df, type):
@@ -234,11 +217,3 @@ for base_row in df_base.iterrows():
         skill_required = ["FirstAid","2"]       # TODO Change this
         tooltip = "Tooltip_test"
         generate_recipe(recipe_name, recipe_items, result, time, skill_required, tooltip)
-
-
-
-
-# GENERATE NEW GUID TABLE
-
-
-

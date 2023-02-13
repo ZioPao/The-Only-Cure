@@ -170,8 +170,6 @@ local function UpdatePlayerHealth(player, part_data)
 end
 
 -- MAIN UPDATE FUNCTIONS
-
-
 local function TocUpdateOnTick()
 
     local player = getPlayer()
@@ -187,6 +185,7 @@ local function TocUpdateOnTick()
 
 
 end
+
 local function TocUpdateEveryTenMinutes()
 
     local player = getPlayer()
@@ -229,6 +228,7 @@ local function TocUpdateEveryTenMinutes()
     end
 
 end
+
 local function TocUpdateEveryOneMinute()
 
     local player = getPlayer()
@@ -252,6 +252,14 @@ local function TocUpdateEveryOneMinute()
             -- TODO we shouldn't run this if we're in SP I guess?
         sendClientCommand(player, 'TOC', 'ChangePlayerState', { toc_data.Limbs } )
     end
+
+
+end
+
+
+
+local function TocOnDamage(player, type, amount)
+
 
 
 end

@@ -7,6 +7,8 @@ require "ISUI/ISInventoryPaneContextMenu"
 local og_ISBaseTimedActionAdjustMaxTime = ISBaseTimedAction.adjustMaxTime
 function ISBaseTimedAction:adjustMaxTime(maxTime)
 
+    -- TODO we can customize it better through clothing items modifier, you mook
+    --        RunSpeedModifier = 0.93 for example
     local original_max_time = og_ISBaseTimedActionAdjustMaxTime(self, maxTime)
 
     if original_max_time ~= -1 then

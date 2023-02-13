@@ -14,33 +14,9 @@ function TocEquipProsthesis(part_name, prosthesis_item, prosthesis_base_name)
     -- TODO We need to pass the original item so we can get its data!
 
     local player = getPlayer()
-
     local toc_data = player:getModData().TOC
 
-
-
-    local item_mod_data = prosthesis_item:getModData()
-
-    if item_mod_data.TOC == nil then
-        GenerateEquippedProsthesis(prosthesis_item, "Test")     -- TODO Change it with the limb
-        item_mod_data = prosthesis_item:getModData()        -- Updates it
-    end
-
-
-    --print("TOC: Test durability normal item " .. item_mod_data.TOC.durability)
-
-
-    local prosthesis_name = TocFindCorrectClothingProsthesis(prosthesis_base_name, part_name)
-    local added_prosthesis = player:getInventory():AddItem(prosthesis_name)
-
-
-    -- Add parameters to added_prosthesis
-    local added_prosthesis_mod_data = added_prosthesis:getModData()
-
-    added_prosthesis_mod_data.TOC = {
-        durability = item_mod_data.TOC.durability,
-        speed = item_mod_data.TOC.speed,
-    }
+    local equipped_prosthesis = GenerateEquippedProsthesis(prosthesis_item, player:getInventory(), "Hand")
 
 
     --print("TOC: Test durability new item " .. added_prosthesis_mod_data.TOC.durability)
@@ -49,16 +25,16 @@ function TocEquipProsthesis(part_name, prosthesis_item, prosthesis_base_name)
 
     if part_name ~= nil then
 
-        if added_prosthesis ~= nil then
+        if equipped_prosthesis ~= nil then
             toc_data.Limbs[part_name].is_prosthesis_equipped = true
-            toc_data.Limbs[part_name].equipped_prosthesis = toc_data.Prosthesis[prosthesis_base_name][part_name]
+            toc_data.Limbs[part_name].equipped_prosthesis = toc_data.Prosthesis[prosthesis_base_name][part_name]    -- TODO Change this, it's old
 
             if player:isFemale() then
-                added_prosthesis:getVisual():setTextureChoice(1)
+                equipped_prosthesis:getVisual():setTextureChoice(1)
             else
-                added_prosthesis:getVisual():setTextureChoice(0)
+                equipped_prosthesis:getVisual():setTextureChoice(0)
             end
-            player:setWornItem(added_prosthesis:getBodyLocation(), added_prosthesis)
+            player:setWornItem(equipped_prosthesis:getBodyLocation(), equipped_prosthesis)
 
 
 
