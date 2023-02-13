@@ -1,6 +1,5 @@
 import lxml.etree as gfg
 import pandas as pd
-import numpy as np
 import uuid
 import openpyxl
   

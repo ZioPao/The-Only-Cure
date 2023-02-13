@@ -171,12 +171,8 @@ function ProsthesisRecipes.OnDisassembleProsthesis(item, result_items, player, s
 
 end
 
-
-
 function ProsthesisRecipes.OnCreateProsthesisPartItem(items, result, player, selectedItem)
     -- TODO Assign condition here from the table
-
-
 end
 
 
