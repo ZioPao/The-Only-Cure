@@ -17,8 +17,6 @@ local base_table = {
 
 
 }
-
-
 local top_table = {
     MetalHook = {
         durability = 1,
@@ -53,7 +51,7 @@ end
 ---@param prosthesis_item any Normal item
 ---@param inventory any player inventory
 ---@param limb any
----@return unknown equipped_prosthesis clothing item equipped prosthesis
+---@return any equipped_prosthesis clothing item equipped prosthesis
 function GenerateEquippedProsthesis(prosthesis_item, inventory, limb)
     -- TODO Durability should be decided from the clothing item xml. Same thing for disassembling stuff
     -- TODO some stuff should be defined by the limb, like -10 if forearm in speed
@@ -62,8 +60,6 @@ function GenerateEquippedProsthesis(prosthesis_item, inventory, limb)
 
     local prosthesis_name = prosthesis_item:getFullType()
     local item_mod_data = prosthesis_item:getModData()
-
-
 
     local durability_base = 0
     local speed_base = 0
@@ -100,8 +96,13 @@ end
 
 ProsthesisRecipes = {}
 
+-- Parts should have a default condition max set at creation
+-- When we create a prosthesis, we carry the condition from the parts
+-- If we disassemble the prosthesis, the condition will be carried back to the parts
+-- Speed stat should be managed in another way, so change it
 
-local function GetProshetsisPartName(array_stats, prosthesis_name)
+
+local function GetProsthesisPartName(array_stats, prosthesis_name)
     for name, _ in pairs(array_stats) do
         if string.find(prosthesis_name, name) then
             return name
@@ -151,8 +152,8 @@ function ProsthesisRecipes.OnDisassembleProsthesis(item, result_items, player, s
     -- Check name of the item
     local prosthesis_item_name = item:getFullType()
 
-    local base_name = GetProshetsisPartName(base_table, prosthesis_item_name)
-    local top_name = GetProshetsisPartName(top_table, prosthesis_item_name)
+    local base_name = GetProsthesisPartName(base_table, prosthesis_item_name)
+    local top_name = GetProsthesisPartName(top_table, prosthesis_item_name)
 
     print("TOC: " .. base_name .. " and " .. top_name)
 
@@ -179,9 +180,3 @@ end
 
 
 
-
--- Parts should have a default condition max set at creation
--- When we create a prosthesis, we carry the condition from the parts
--- If we disassemble the prosthesis, the condition will be carried back to the parts
-
--- Speed stat should be managed in another way, so change it
