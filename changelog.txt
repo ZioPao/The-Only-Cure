@@ -1,3 +1,11 @@
+0.9.18
+- Hotfix to Fitness\Strength XP being broken after amputation
+
+
+0.9.17
+- Added compatibility fix for Swap It + Fancy Handwork, it should work fine now with both of them active
+
+
 0.9.16
 - Second hotfix for sound related stuff
 

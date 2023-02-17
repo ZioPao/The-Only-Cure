@@ -4,8 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c9319ecd-a8a9-44f1-9d9a-f3ba15489ace" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/media/lua/client/TOC_ModCompatibility.lua" beforeDir="false" afterPath="$PROJECT_DIR$/media/lua/client/TOC_ModCompatibility.lua" afterDir="false" />
+    <list default="true" id="c9319ecd-a8a9-44f1-9d9a-f3ba15489ace" name="Changes" comment="Cleaned patch a bit">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/changelog.txt" beforeDir="false" afterPath="$PROJECT_DIR$/changelog.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/lua/client/TOC_CutLimb.lua" beforeDir="false" afterPath="$PROJECT_DIR$/media/lua/client/TOC_CutLimb.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/lua/client/TOC_main.lua" beforeDir="false" afterPath="$PROJECT_DIR$/media/lua/client/TOC_main.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mod.info" beforeDir="false" afterPath="$PROJECT_DIR$/mod.info" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -110,7 +114,28 @@
       <option name="project" value="LOCAL" />
       <updated>1676631554170</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Working SwapIt + FancyHandwork compat">
+      <created>1676632316570</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1676632316570</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Working SwapIt + FancyHandwork compat">
+      <created>1676632326967</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1676632326967</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Cleaned patch a bit">
+      <created>1676632484915</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1676632484915</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <option name="createChangelist" value="false" />
     <option name="createBranch" value="false" />
     <servers />
@@ -144,7 +169,9 @@
     <MESSAGE value="Some more stuff for generating recipes" />
     <MESSAGE value="Added a todo" />
     <MESSAGE value="Tests" />
-    <option name="LAST_COMMIT_MESSAGE" value="Tests" />
+    <MESSAGE value="Working SwapIt + FancyHandwork compat" />
+    <MESSAGE value="Cleaned patch a bit" />
+    <option name="LAST_COMMIT_MESSAGE" value="Cleaned patch a bit" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
