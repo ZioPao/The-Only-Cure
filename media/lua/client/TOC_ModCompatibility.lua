@@ -93,11 +93,10 @@ local function SetCompatibilityLeftIsRight()
 end
 
 local function SetCompatibilityFancyHandWorkAndSwapIt()
- -- TODO can't require Swap it for some reason
 
+    SetCompatibilityFancyHandwork()
 
-    local og_ISHotbar_equipItem = ISHotbar.equipItem
-
+    -- Override equip Item once again with the necessary changes
     function ISHotbar:equipItem(item)
         local mod = isFHModKeyDown()
         local primary = self.chr:getPrimaryHandItem()
@@ -169,15 +168,7 @@ local function SetCompatibilityFancyHandWorkAndSwapIt()
         getPlayerData(self.chr:getPlayerNum()).playerInventory:refreshBackpacks()
     end
 
-    local og_FHSwapHandsAction = FHSwapHandsAction.start
 
-
-    function FHSwapHandsAction:isValid()
-        local limbs_data = getPlayer():getModData().TOC.Limbs
-        local can_be_held = {}
-        TocPopulateCanBeHeldTable(can_be_held, limbs_data)
-        return  (can_be_held["Right"] and can_be_held["Left"]) and(((self.character:getPrimaryHandItem() or self.character:getSecondaryHandItem()) ~= nil))
-    end
 end
 
 --------------------------------------------------------
