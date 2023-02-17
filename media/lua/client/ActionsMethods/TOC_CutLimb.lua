@@ -66,6 +66,17 @@ local function TocDeleteOtherAmputatedLimbs(side)
 
 end
 
+---@param player any
+---@param perk any The perk to scale down
+local function LosePerkLevel(player, perk)
+    player:LoseLevel(perk)
+    local actual_level = player:getPerkLevel(perk)
+    local perk_xp = player:getXp()
+    perk_xp:setXPToLevel(perk, actual_level)
+    SyncXp(player)
+
+end
+
 ---@param heal_bite boolean
 local function TocSetParametersForMissingLimb(body_part, heal_bite)
     body_part:setBleeding(false)
@@ -172,8 +183,8 @@ function TocCutLimb(part_name, surgeon_factor, bandage_table, painkiller_table)
 
     -- Set malus for strength and fitness
     -- TODO Make it more "random" with just some XP scaling down instead of a whole level, depending on the limb that we're cutting
-    player:LoseLevel(Perks.Fitness)
-    player:LoseLevel(Perks.Strength)
+    LosePerkLevel(player, Perks.Fitness)
+    LosePerkLevel(player, Perks.Strength)
 
 
 
