@@ -168,6 +168,8 @@ function ProsthesisRecipes.OnDisassembleProsthesis(item, result_items, player, s
     part_top:setCondition(durability_top)
 
 
+    -- TODO Add Screws from the item back with a chance of them breaking
+
 
 
 end
