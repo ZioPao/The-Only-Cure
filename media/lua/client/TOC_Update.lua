@@ -197,7 +197,7 @@ local function TocUpdateEveryTenMinutes()
     local part_data = player:getModData().TOC.Limbs
 
     --Experience for prosthesis user
-    for _, side in pairs(TOC_sides) do
+    for _, side in pairs(TOC.side_names) do
         if part_data[side .. "_Hand"].is_prosthesis_equipped or part_data[side .. "_LowerArm"].is_prosthesis_equipped then
             player:getXp():AddXP(Perks[side .. "_Hand"], 4)
         end

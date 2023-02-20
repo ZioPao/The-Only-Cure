@@ -7,8 +7,8 @@ local function TocReapplyAmputationClothingItem(mod_data)
     local player = getPlayer()
     local player_inv = player:getInventory()
 
-    for _, side in ipairs(TOC_sides) do
-        for _, limb in ipairs(TOC_limbs) do
+    for _, side in ipairs(TOC.side_names) do
+        for _, limb in ipairs(TOC.limb_names) do
             local part_name = side .. "_" .. limb
 
             -- Check this before since we could have changed some stuff about part names before fixing them. Could break things

@@ -197,7 +197,7 @@ function ISWearClothing:isValid()
     -- TODO Sides
     local limbs_data = self.character:getModData().TOC.Limbs
 
-    for _, side in pairs(TOC_sides) do
+    for _, side in pairs(TOC.side_names) do
         if string.find(item_full_type, "Test_Tourniquet_" .. side) then
             if limbs_data[side .. "_UpperArm"].is_cut then
                 return false

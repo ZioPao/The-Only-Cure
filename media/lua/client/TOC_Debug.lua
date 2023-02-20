@@ -42,12 +42,12 @@ function TocResetEverything()
     toc_traits:remove("Amputee_UpperArm")
 
 
-    TheOnlyCure.InitTheOnlyCure(_, player)
+    TOC.Init(_, player)
 
     -- Destroy the amputation or prosthesis item
 
-    for _, side in pairs(TOC_sides) do
-        for _, limb in pairs(TOC_limbs) do
+    for _, side in pairs(TOC.side_names) do
+        for _, limb in pairs(TOC.limb_names) do
         
             local part_name = side .. "_" .. limb
             local amputation_item_name = TocFindAmputationOrProsthesisName(part_name, player, "Amputation")

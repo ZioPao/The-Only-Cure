@@ -91,7 +91,7 @@ end
 
 function CheckIfProsthesisAlreadyInstalled(limbs_data, part_name)
 
-    for _, side in pairs(TOC_sides) do
+    for _, side in pairs(TOC.side_names) do
         if string.find(part_name, side) then
             return (limbs_data[side .. "_Hand"].is_prosthesis_equipped or limbs_data[side .. "_LowerArm"].is_prosthesis_equipped)
         end

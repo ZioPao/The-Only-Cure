@@ -3,12 +3,10 @@
 ------------------------------------------
 ------------- INIT FUNCTIONS -------------
 
-if not TheOnlyCure then
-    TheOnlyCure = {}
-end
+if not TOC then
+    TOC = {}
 
-TOC_sides = { "Left", "Right" }
-TOC_limbs = { "Hand", "LowerArm", "UpperArm", "Foot"}
+end
 
 local function TocCutLimbForTrait(player, limbs_data, part_name)
     local amputation_clothing_item = player:getInventory():AddItem("TOC.Amputation_" .. part_name)
@@ -66,8 +64,8 @@ local function TocUpdateBaseData(mod_data)
     local accepted_prosthesis_upperarm = {} -- For future stuff
     local accepted_prosthesis_foot = {}
 
-    for _, side in pairs(TOC_sides) do
-        for _, limb in pairs(TOC_limbs) do
+    for _, side in pairs(TOC.side_names) do
+        for _, limb in pairs(TOC.limb_names) do
 
             local part_name = side .. "_" .. limb
 
@@ -122,68 +120,6 @@ end
 local function TocSetInitData(mod_data, player)
 
     print("TOC: Creating mod_data.TOC")
-
-
-    -- TODO this is gonna become a mess really fast, i fucked up.
-    -- TODO Move prosthesis to something more easily accessible
-    -- TODO Acceptable prosthesis need to be moved to something more accessible
-
-
-
-
-
-    mod_data.TOC = {
-
-        Limbs = {
-            Right_Hand = {},
-            Right_LowerArm = {},
-            Right_UpperArm = {},
-
-            Left_Hand = {},
-            Left_LowerArm = {},
-            Left_UpperArm = {},
-
-            Left_Foot = {},
-            Right_Foot = {},
-
-            is_other_bodypart_infected = false
-        },
-        Prosthesis = {
-            WoodenHook = {
-                Right_Hand = {},
-                Right_LowerArm = {},
-                Right_UpperArm = {},
-
-                Left_Hand = {},
-                Left_LowerArm = {},
-                Left_UpperArm = {},
-            },
-            MetalHook = {
-                Right_Hand = {},
-                Right_LowerArm = {},
-                Right_UpperArm = {},
-
-                Left_Hand = {},
-                Left_LowerArm = {},
-                Left_UpperArm = {},
-            },
-            MetalHand = {
-                Right_Hand = {},
-                Right_LowerArm = {},
-                Right_UpperArm = {},
-
-                Left_Hand = {},
-                Left_LowerArm = {},
-                Left_UpperArm = {},
-            },
-
-
-
-            Accepted_Prosthesis = {}
-
-        },
-        Generic = {},
-    }
     --------
     -- NEW NAMING SCHEME
 
@@ -200,13 +136,72 @@ local function TocSetInitData(mod_data, player)
     --- Objects
     -- Prost_Object_WoddenHook
 
+    -- TODO this is gonna become a mess really fast, i fucked up.
+    -- TODO Move prosthesis to something more easily accessible
+    -- TODO Acceptable prosthesis need to be moved to something more accessible
+
+    mod_data.TOC = {}
+
+    -- Limbs
+    mod_data.TOC.Limbs = {
+        Right_Hand = {},
+        Right_LowerArm = {},
+        Right_UpperArm = {},
+
+        Left_Hand = {},
+        Left_LowerArm = {},
+        Left_UpperArm = {},
+
+        Left_Foot = {},
+        Right_Foot = {},
+
+        is_other_bodypart_infected = false
+    }
+
+    -- TODO Move this to the global TOC thing
+    -- Prosthetics
+    mod_data.TOC.Prosthesis = {
+        WoodenHook = {
+            Right_Hand = {},
+            Right_LowerArm = {},
+            Right_UpperArm = {},
+
+            Left_Hand = {},
+            Left_LowerArm = {},
+            Left_UpperArm = {},
+        },
+        MetalHook = {
+            Right_Hand = {},
+            Right_LowerArm = {},
+            Right_UpperArm = {},
+
+            Left_Hand = {},
+            Left_LowerArm = {},
+            Left_UpperArm = {},
+        },
+        MetalHand = {
+            Right_Hand = {},
+            Right_LowerArm = {},
+            Right_UpperArm = {},
+
+            Left_Hand = {},
+            Left_LowerArm = {},
+            Left_UpperArm = {},
+        },
 
 
 
+        Accepted_Prosthesis = {}
+
+    }
+
+    -- TODO Move this to the global TOC thing
+    -- Generic (future uses)
+    mod_data.TOC.Generic = {}
 
 
-    for _, side in pairs(TOC_sides) do
-        for _, limb in pairs(TOC_limbs) do
+    for _, side in pairs(TOC.side_names) do
+        for _, limb in pairs(TOC.limb_names) do
 
             local part_name = side .. "_" .. limb
 
@@ -244,7 +239,7 @@ local function TocSetInitData(mod_data, player)
 
 end
 
-function TheOnlyCure.InitTheOnlyCure(_, player)
+function TOC.Init(_, player)
 
     local mod_data = player:getModData()
     if mod_data.TOC == nil then
@@ -257,7 +252,7 @@ function TheOnlyCure.InitTheOnlyCure(_, player)
 
 end
 
-local function TocDeclareTraits()
+local function InitializeTraits()
     local amp1 = TraitFactory.addTrait("Amputee_Hand", getText("UI_trait_Amputee_Hand"), -8,
         getText("UI_trait_Amputee_Hand_desc"), false, false)
     amp1:addXPBoost(Perks.Left_Hand, 4)
@@ -283,6 +278,21 @@ local function TocDeclareTraits()
     TraitFactory.setMutualExclusive("Amputee_LowerArm", "Amputee_UpperArm")
 end
 
+------------------------------------------------------------------------------------
 
-Events.OnCreatePlayer.Add(TheOnlyCure.InitTheOnlyCure)
-Events.OnGameBoot.Add(TocDeclareTraits)
+-- Rewrite 2 Electirc Bogaloo
+local function InitializeTheOnlyCure()
+
+    -- Initializes global lists
+    TOC.side_names = {"Left", "Right"}
+    TOC.limb_names = { "Hand", "LowerArm", "UpperArm", "Foot"}
+
+    InitializeTraits()
+
+
+    Events.OnCreatePlayer.Add(TOC.Init)
+end
+
+
+
+Events.OnGameBoot.Add(InitializeTheOnlyCure)

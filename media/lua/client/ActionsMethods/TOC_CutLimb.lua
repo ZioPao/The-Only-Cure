@@ -55,7 +55,7 @@ local function TocDeleteOtherAmputatedLimbs(side)
     -- if left hand is cut and we cut left lowerarm, then delete hand
 
 
-    for _, limb in pairs(TOC_limbs) do
+    for _, limb in pairs(TOC.limb_names) do
         local part_name = "TOC.Amputation_" .. side .. "_" .. limb
         local amputated_limb = getPlayer():getInventory():FindAndReturn(part_name)
         if amputated_limb then
