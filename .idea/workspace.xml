@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c9319ecd-a8a9-44f1-9d9a-f3ba15489ace" name="Changes" comment="Cleaned patch a bit">
+    <list default="true" id="5f6ebe17-2c11-4869-8f44-d188ef59cf58" name="Changes" comment="Cleaned patch a bit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/changelog.txt" beforeDir="false" afterPath="$PROJECT_DIR$/changelog.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/lua/client/TOC_CutLimb.lua" beforeDir="false" afterPath="$PROJECT_DIR$/media/lua/client/TOC_CutLimb.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/lua/client/TOC_main.lua" beforeDir="false" afterPath="$PROJECT_DIR$/media/lua/client/TOC_main.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/lua/client/TOC_Update.lua" beforeDir="false" afterPath="$PROJECT_DIR$/media/lua/client/TOC_Update.lua" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mod.info" beforeDir="false" afterPath="$PROJECT_DIR$/mod.info" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -45,18 +44,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "jdk.selected.JAVA_MODULE": "openjdk-19",
-    "last_opened_file_path": "C:/Users/picch/Zomboid/mods/The-Only-Cure-But-Better",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.keymap"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;openjdk-19&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/picch/Zomboid/mods/The-Only-Cure-But-Better&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\picch\Zomboid\mods\The-Only-Cure-But-Better\dev_stuff" />

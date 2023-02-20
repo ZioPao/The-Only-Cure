@@ -1,3 +1,6 @@
+0.9.19
+- Fixed a huge bug that caused reinfection after succesful cicatrization
+
 0.9.18
 - Hotfix to Fitness\Strength XP being broken after amputation
 

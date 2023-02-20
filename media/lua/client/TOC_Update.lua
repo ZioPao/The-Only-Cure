@@ -116,11 +116,6 @@ local function SetHealthStatusForBodyPart(part_data, part_name, player)
             body_part:SetHealth(40)
         end
 
-
-
-
-
-
         -- Cicatrization check
         if not part_data[part_name].is_cicatrized then
             if part_data[part_name].cicatrization_time < 0 then
@@ -141,17 +136,7 @@ local function SetHealthStatusForBodyPart(part_data, part_name, player)
                 if (not player:HasTrait("Insensitive")) and ZombRand(1, 11) > 5 then
                     player:getTraits():add("Insensitive")
                 end
-
-                -- if the player gets attacked and damaged in a cut area we have to reset it here since it doesn't make any sense
-                body_part:setBleeding(false);
-                body_part:setDeepWounded(false)
-                body_part:setBleedingTime(0)
-                body_part:setDeepWoundTime(0)
-                body_part:SetBitten(false)
-                body_part:setBiteTime(0)
-                part_data.is_infected = false
-
-
+                
             end
         end
 
