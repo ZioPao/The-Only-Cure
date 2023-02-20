@@ -5,7 +5,6 @@
 
 if not TOC then
     TOC = {}
-
 end
 
 local function TocCutLimbForTrait(player, limbs_data, part_name)
@@ -26,12 +25,7 @@ local function TocCutLimbForTrait(player, limbs_data, part_name)
     end
 end
 
-local function InitSpecificPart(mod_data, part_name)
-
-    if mod_data.TOC.Limbs[part_name] == nil then
-        mod_data.TOC.Limbs[part_name] = {}
-    end
-
+TOC.InitPart = function(mod_data, part_name)
 
     mod_data.TOC.Limbs[part_name].is_cut = false
     mod_data.TOC.Limbs[part_name].is_infected = false
@@ -50,9 +44,8 @@ local function InitSpecificPart(mod_data, part_name)
 
 end
 
-
-
 local function TocUpdateBaseData(mod_data)
+    -- TODO Gonna delete this soon, overhauling the whole init thing
 
     -- TODO The prosthetic knife needs to be a weapon first and foremost, so other than a
     -- clothing item it needs to be a weapon too (an invisible one maybe?)
@@ -70,9 +63,9 @@ local function TocUpdateBaseData(mod_data)
             local part_name = side .. "_" .. limb
 
 
-            -- Check if part was initialized
+            -- Check if part was initialized, in case of previous errors
             if mod_data.TOC.Limbs[part_name] == nil then
-                InitSpecificPart(mod_data, part_name)
+                TOC.InitPart(mod_data, part_name)
             end
 
 
@@ -117,8 +110,7 @@ local function TocUpdateBaseData(mod_data)
 
 end
 
-local function TocSetInitData(mod_data, player)
-
+TOC.SetInitData = function(mod_data, player)
     print("TOC: Creating mod_data.TOC")
     --------
     -- NEW NAMING SCHEME
@@ -202,30 +194,13 @@ local function TocSetInitData(mod_data, player)
 
     for _, side in pairs(TOC.side_names) do
         for _, limb in pairs(TOC.limb_names) do
-
             local part_name = side .. "_" .. limb
-
-            mod_data.TOC.Limbs[part_name].is_cut = false
-            mod_data.TOC.Limbs[part_name].is_infected = false
-            mod_data.TOC.Limbs[part_name].is_operated = false
-            mod_data.TOC.Limbs[part_name].is_cicatrized = false
-            mod_data.TOC.Limbs[part_name].is_cauterized = false
-            mod_data.TOC.Limbs[part_name].is_amputation_shown = false
-
-            mod_data.TOC.Limbs[part_name].cicatrization_time = 0
-
-
-            mod_data.TOC.Limbs[part_name].is_prosthesis_equipped = false
-            mod_data.TOC.Limbs[part_name].equipped_prosthesis = {}
-
-            -- Even if there are some duplicates, this is just easier in the end since we're gonna get fairly easily part_name
-
-
-
+            TOC.InitPart(mod_data, part_name)
         end
     end
 
     -- Set data like prosthesis lists, cicatrization time etc
+    -- TODO Change this
     TocUpdateBaseData(mod_data)
 
     -- Setup traits
@@ -242,10 +217,13 @@ end
 function TOC.Init(_, player)
 
     local mod_data = player:getModData()
+
     if mod_data.TOC == nil then
-        TocSetInitData(mod_data, player)
+        TOC.SetInitData(mod_data, player)
     else
         TocCheckCompatibilityWithOlderVersions(mod_data)
+
+        -- TODO This is gonna be deleted and moved directly to TOC
         TocUpdateBaseData(mod_data)                 -- Since it's gonna be common to update stuff
         TocCheckLegsAmputations(mod_data)
     end
@@ -283,14 +261,35 @@ end
 -- Rewrite 2 Electirc Bogaloo
 local function InitializeTheOnlyCure()
 
-    -- Initializes global lists
+    -- Initializes static values in a global table
     TOC.side_names = {"Left", "Right"}
     TOC.limb_names = { "Hand", "LowerArm", "UpperArm", "Foot"}
 
+    TOC.limb_parameters = {}
+    for _, side in pairs(TOC.side_names) do
+        for _, limb in pairs(TOC.limb_names) do
+            local part_name = side .. "_" .. limb
+
+            if limb == "Hand" then
+                TOC.limb_parameters[part_name].cicatrization_base_time = 1700
+                TOC.limb_parameters[part_name].depends_on = {}
+            elseif limb == "LowerArm" then
+                TOC.limb_parameters[part_name].cicatrization_base_time = 1800
+                TOC.limb_parameters[part_name].depends_on = { side .. "_Hand", }
+            elseif limb == "UpperArm" then
+                TOC.limb_parameters[part_name].cicatrization_base_time = 2000
+                TOC.limb_parameters[part_name].depends_on = { side .. "_Hand", side .. "_LowerArm", }
+            elseif limb == "Foot" then
+                TOC.limb_parameters[part_name].cicatrization_base_time = 1700
+                TOC.limb_parameters[part_name].depends_on = {}
+            end
+        end
+    end
+
     InitializeTraits()
-
-
     Events.OnCreatePlayer.Add(TOC.Init)
+
+
 end
 
 

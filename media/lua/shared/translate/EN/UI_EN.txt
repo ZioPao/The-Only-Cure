@@ -23,12 +23,12 @@ UI_EN = {
     UI_ContextMenu_Left_Hand = "Left hand",
     UI_ContextMenu_Left_LowerArm = "Left forearm",
     UI_ContextMenu_Left_UpperArm = "Left arm",
+    UI_ContextMenu_Left_Foot = "Left foot",
+    UI_ContextMenu_Right_Foot = "Right foot"
 
     UI_ContextMenu_My = "My ",
     UI_ContextMenu_Now_cut = " is now healed!",
 
-    UI_ContextMenu_Heal_from_zomb = "I think I'm gonna be fine!",
-    UI_ContextMenu_Cut_for_nothing = "I did it for nothing..."
 
 
 
