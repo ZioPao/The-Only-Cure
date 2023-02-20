@@ -14,20 +14,6 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
     if original_max_time ~= -1 then
         local mod_data = getPlayer():getModData()
 
-        ----------------------
-        -- MOD SUPPORT ACTIONS
-        ----------------------
-        -- LIR
-        if TOC_ModTable.LeftIsRight then
-            if mod_data.LIR.is_attacking then
-                return original_max_time
-            end
-        end
-
-
-        ----------------------------------
-
-
         local limbs_data = mod_data.TOC.Limbs
         local modified_max_time = original_max_time
         local burn_factor = 1.3         -- TODO Move this crap

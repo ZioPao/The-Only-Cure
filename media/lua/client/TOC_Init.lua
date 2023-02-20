@@ -2,6 +2,10 @@
 -------- THE ONLY CURE BUT BETTER --------
 ------------------------------------------
 ------------- INIT FUNCTIONS -------------
+--[[
+Original code and idea by: Mr. Bounty
+Rewritten by: Pao
+--]]
 
 if not TOC then
     TOC = {}
@@ -55,7 +59,7 @@ local function TocUpdateBaseData(mod_data)
 
             -- Check if part was initialized, in case of previous errors
             if mod_data.TOC.Limbs[part_name] == nil then
-                TOC.InitPart(mod_data, part_name)
+                TOC.InitPart(mod_data.TOC.Limbs, part_name)
             end
 
 
@@ -117,22 +121,19 @@ TOC.CutLimbForTrait = function(player, limbs_data, part_name)
         limbs_data[v].is_cicatrized = true
     end
 end
-TOC.InitPart = function(mod_data, part_name)
+TOC.InitPart = function(limbs_data, part_name)
 
-    mod_data.TOC.Limbs[part_name].is_cut = false
-    mod_data.TOC.Limbs[part_name].is_infected = false
-    mod_data.TOC.Limbs[part_name].is_operated = false
-    mod_data.TOC.Limbs[part_name].is_cicatrized = false
-    mod_data.TOC.Limbs[part_name].is_cauterized = false
-    mod_data.TOC.Limbs[part_name].is_amputation_shown = false
+    limbs_data[part_name].is_cut = false
+    limbs_data[part_name].is_infected = false
+    limbs_data[part_name].is_operated = false
+    limbs_data[part_name].is_cicatrized = false
+    limbs_data[part_name].is_cauterized = false
+    limbs_data[part_name].is_amputation_shown = false
 
-    mod_data.TOC.Limbs[part_name].cicatrization_time = 0
+    limbs_data[part_name].cicatrization_time = 0
 
-
-    mod_data.TOC.Limbs[part_name].is_prosthesis_equipped = false
-    mod_data.TOC.Limbs[part_name].equipped_prosthesis = {}
-
-
+    limbs_data[part_name].is_prosthesis_equipped = false
+    limbs_data[part_name].equipped_prosthesis = {}
 
 end
 TOC.SetInitData = function(mod_data, player)
@@ -220,7 +221,7 @@ TOC.SetInitData = function(mod_data, player)
     for _, side in pairs(TOC.side_names) do
         for _, limb in pairs(TOC.limb_names) do
             local part_name = side .. "_" .. limb
-            TOC.InitPart(mod_data, part_name)
+            TOC.InitPart(mod_data.TOC.Limbs, part_name)
         end
     end
 
@@ -285,8 +286,15 @@ local function InitializeTheOnlyCure()
         end
     end
 
+    --------------------------
+
     InitializeTraits()
     Events.OnCreatePlayer.Add(TOC.Init)
+
+    -- Setup updates
+    Events.OnTick.Add(TOC.UpdateOnTick)
+    Events.EveryTenMinutes.Add(TOC.UpdateEveryTenMinutes)
+    Events.EveryOneMinute.Add(TOC.UpdateEveryOneMinute)
 
 
 end

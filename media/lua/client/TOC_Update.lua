@@ -1,3 +1,5 @@
+require "TOC_Init"
+
 local function CheckIfPlayerIsInfected(player, toc_data)
 
     local body_damage = player:getBodyDamage()
@@ -26,7 +28,6 @@ local function CheckIfPlayerIsInfected(player, toc_data)
         end
     end
 end
-
 local function TocManagePhantomPain(player, toc_data)
     -- Phantom Pain
     local part_data = toc_data.Limbs
@@ -154,8 +155,6 @@ local function SetHealthStatusForBodyPart(part_data, part_name, player)
 
     end
 end
-
-
 local function UpdatePlayerHealth(player, part_data)
     local body_damage = player:getBodyDamage()
 
@@ -170,7 +169,7 @@ local function UpdatePlayerHealth(player, part_data)
 end
 
 -- MAIN UPDATE FUNCTIONS
-local function TocUpdateOnTick()
+TOC.UpdateOnTick = function()
 
     local player = getPlayer()
     if player == nil then
@@ -185,8 +184,7 @@ local function TocUpdateOnTick()
 
 
 end
-
-local function TocUpdateEveryTenMinutes()
+TOC.UpdateEveryTenMinutes = function()
 
     local player = getPlayer()
 
@@ -228,8 +226,7 @@ local function TocUpdateEveryTenMinutes()
     end
 
 end
-
-local function TocUpdateEveryOneMinute()
+TOC.UpdateEveryOneMinute = function()
 
     local player = getPlayer()
     -- To prevent errors during loading
@@ -256,16 +253,3 @@ local function TocUpdateEveryOneMinute()
 
 end
 
-
-
-local function TocOnDamage(player, type, amount)
-
-
-
-end
-
-
-
-Events.OnTick.Add(TocUpdateOnTick)
-Events.EveryTenMinutes.Add(TocUpdateEveryTenMinutes)
-Events.EveryOneMinute.Add(TocUpdateEveryOneMinute)

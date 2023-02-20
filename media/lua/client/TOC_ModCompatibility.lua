@@ -2,12 +2,6 @@
 -- Compatibility for various mods
 ---------------------------------
 
-TOC_ModTable = {
-    FancyHandwork = false,
-    SwapIt = false,
-    LeftIsRight = false,
-}
-
 
 local function SetCompatibilityFancyHandwork()
     local og_ISHotbar_equipItem = ISHotbar.equipItem
@@ -80,15 +74,6 @@ local function SetCompatibilityFancyHandwork()
         TocPopulateCanBeHeldTable(can_be_held, limbs_data)
         return  (can_be_held["Right"] and can_be_held["Left"]) and(((self.character:getPrimaryHandItem() or self.character:getSecondaryHandItem()) ~= nil))
     end
-
-end
-
-local function SetCompatibilityLeftIsRight()
-    if getActivatedMods():contains('LeftIsRight') == false then return end
-
-    -- This check is needed since we're gonna add a little check in adjustMaxTime
-    -- to prevent problems with maxTime scaling
-    TOC_ModTable.LeftIsRight = true
 
 end
 
@@ -173,7 +158,7 @@ end
 
 --------------------------------------------------------
 
-function TOC_CheckModCompatibility()
+local function CheckModCompatibility()
     local activated_mods = getActivatedMods()
     print("TOC: Checking mods")
 
@@ -190,17 +175,8 @@ function TOC_CheckModCompatibility()
             SetCompatibilityFancyHandwork()
         end
     end
-
-    if activated_mods:contains("LeftIsRight") then
-        TOC_ModTable.LeftIsRight = true
-    end
-
-
-
-
 end
 
 print("TOC: Starting CheckModCompatibility")
-
-Events.OnGameStart.Add(TOC_CheckModCompatibility)
+Events.OnGameStart.Add(CheckModCompatibility)
 
