@@ -9,45 +9,57 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
 
     -- TODO we can customize it better through clothing items modifier, you mook
     --        RunSpeedModifier = 0.93 for example
-    local original_max_time = og_ISBaseTimedActionAdjustMaxTime(self, maxTime)
+    local originalMaxTime = og_ISBaseTimedActionAdjustMaxTime(self, maxTime)
 
-    if original_max_time ~= -1 then
-        local mod_data = getPlayer():getModData()
+    if originalMaxTime ~= -1 then
 
-        local limbs_data = mod_data.TOC.Limbs
-        local modified_max_time = original_max_time
-        local burn_factor = 1.3         -- TODO Move this crap
 
-        for _, part_name in pairs(GetBodyParts()) do
-            if limbs_data[part_name].is_cut then
+        local modData = getPlayer():getModData()
+
+        local limbParameters = modData.JCIO.limbParameters
+        local limbsData = modData.JCIO.limbs
+
+        local modifiedMaxTime = originalMaxTime
+        local burnFactor = 1.3         -- TODO Move this crap
+
+        for _, partName in pairs(GetBodyParts()) do
+            if limbsData[partName].isCut then
+
+
+
+
+
+
 
                 --Equipped prosthesis or not
-                if limbs_data[part_name].is_prosthesis_equipped then
-                    modified_max_time = modified_max_time * limbs_data[part_name].equipped_prosthesis.prosthesis_factor
+                if limbsData[partName].isProsthesisEquipped then
+                -- FIXME We should apply the correct values to equippedProsthesis once we equip it 
+
+                    --modifiedMaxTime = modifiedMaxTime * limbsData[partName].equipped_prosthesis.prosthesis_factor
                 else
                     -- TODO this should depend on the limb?
-                    modified_max_time = modified_max_time * 1.5
+                    modifiedMaxTime = modifiedMaxTime * 1.5
                 end
 
                 -- Cauterization check
-                if limbs_data[part_name].is_cauterized then
-                    modified_max_time = modified_max_time * burn_factor
+                if limbsData[partName].is_cauterized then
+                    modifiedMaxTime = modifiedMaxTime * burnFactor
                 end
 
                 -- Perk scaling
-                if part_name == "Right_Hand" or part_name == "Left_Hand" then
-                    modified_max_time = modified_max_time *
-                        (1 + (9 - self.character:getPerkLevel(Perks[part_name])) / 20)
+                if partName == "Right_Hand" or partName == "Left_Hand" then
+                    modifiedMaxTime = modifiedMaxTime *
+                        (1 + (9 - self.character:getPerkLevel(Perks[partName])) / 20)
                 end
 
             end
         end
-        if modified_max_time > 10 * original_max_time then modified_max_time = 10 * original_max_time end
-        return modified_max_time
+        if modifiedMaxTime > 10 * originalMaxTime then modifiedMaxTime = 10 * originalMaxTime end
+        return modifiedMaxTime
 
     end
         
-    return original_max_time
+    return originalMaxTime
     
 
 end
@@ -181,11 +193,11 @@ function ISWearClothing:isValid()
     local item_full_type = self.item:getFullType()
 
     -- TODO Sides
-    local limbs_data = self.character:getModData().TOC.Limbs
+    local limbs_data = self.character:getModData().JCIO.limbs
 
     for _, side in pairs(JCIO.sideNames) do
         if string.find(item_full_type, "Test_Tourniquet_" .. side) then
-            if limbs_data[side .. "_UpperArm"].is_cut then
+            if limbs_data[side .. "_UpperArm"].isCut then
                 return false
             end
             

@@ -13,10 +13,10 @@ local pairs = pairs
 function CheckIfCanBeCut(part_name, limbs_data)
 
     if limbs_data == nil then
-        limbs_data = getPlayer():getModData().TOC.Limbs
-  
+        limbs_data = getPlayer():getModData().JCIO.limbs
     end
-    local check = (not limbs_data[part_name].is_cut) and
+    
+    local check = (not limbs_data[part_name].isCut) and
         (not CheckIfProsthesisAlreadyInstalled(limbs_data, part_name))
 
     return check

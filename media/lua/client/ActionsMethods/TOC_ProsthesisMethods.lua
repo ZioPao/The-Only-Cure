@@ -5,36 +5,42 @@
 
 
 ---Equip a prosthesis transforming a normal item into a clothing item
----@param part_name string
----@param prosthesis_item any the prosthesis item
----@param prosthesis_base_name string
-function TocEquipProsthesis(part_name, prosthesis_item, prosthesis_base_name)
+---@param partName string
+---@param prosthesisItem any the prosthesis item
+---@param prosthesisBaseName string
+function JCIO.EquipProsthesis(partName, prosthesisItem, prosthesisBaseName)
 
     -- TODO probably will have to move this from the TOC menu to classic equip to have dynamic durability
     -- TODO We need to pass the original item so we can get its data!
 
     local player = getPlayer()
-    local toc_data = player:getModData().TOC
+    local jcioModData = player:getModData().JCIO
 
-    local equipped_prosthesis = GenerateEquippedProsthesis(prosthesis_item, player:getInventory(), "Hand")
+    local equippedProsthesis = GenerateEquippedProsthesis(prosthesisItem, player:getInventory(), "Hand")
 
 
     --print("TOC: Test durability new item " .. added_prosthesis_mod_data.TOC.durability)
 
+    -- TODO equippedProsthesis must have something like the ProsthesisFactor from before!!!
+
+    if partName ~= nil then
+
+        if equippedProsthesis ~= nil then
+            jcioModData.limbs[partName].isProsthesisEquipped = true
 
 
-    if part_name ~= nil then
+            -- Fill equippedProsthesis with the correct stuff
+            -- TODO For prosthetics we should fetch the data from a modData INSIDE them!
 
-        if equipped_prosthesis ~= nil then
-            toc_data.Limbs[part_name].is_prosthesis_equipped = true
-            toc_data.Limbs[part_name].equipped_prosthesis = toc_data.Prosthesis[prosthesis_base_name][part_name]    -- TODO Change this, it's old
+            -- TODO Change the value passed, it's wrong
+            --jcioModData.limbs[partName].equippedProsthesis = jcioModData.Prosthesis[prosthesisBaseName][partName]
 
             if player:isFemale() then
-                equipped_prosthesis:getVisual():setTextureChoice(1)
+                equippedProsthesis:getVisual():setTextureChoice(1)
             else
-                equipped_prosthesis:getVisual():setTextureChoice(0)
+                equippedProsthesis:getVisual():setTextureChoice(0)
             end
-            player:setWornItem(equipped_prosthesis:getBodyLocation(), equipped_prosthesis)
+            player:setWornItem(equippedProsthesis:getBodyLocation(), equippedProsthesis)
 
 
 
@@ -44,37 +50,36 @@ end
 
 
 ---Unequip a prosthesis clothing item and returns it to the inventory as a normal item
----@param part_name string
-function TocUnequipProsthesis(patient, part_name, equipped_prosthesis)
+---@param partName string
+function JCIO.UnequipProsthesis(patient, partName, equippedProsthesis)
 
 
     -- TODO Pass the parameters generated from EquipProsthesis to the re-generated normal item
 
-    local toc_data = patient:getModData().TOC
-    toc_data.Limbs[part_name].is_prosthesis_equipped = false
+    local jcioModData = patient:getModData().JCIO
+    jcioModData.limbs[partName].isProsthesisEquipped = false
 
 
-    local equipped_prosthesis_full_type = equipped_prosthesis:getFullType()
+    local equippedProstFullType = equippedProsthesis:getFullType()
 
 
-    for _, prost_v in ipairs(GetProsthesisList()) do
-        local prosthesis_name = string.match(equipped_prosthesis_full_type, prost_v)
-        if prosthesis_name then
-
+    for _, prostValue in ipairs(GetProsthesisList()) do
+        local prostName = string.match(equippedProstFullType, prostValue)
+        if prostName then
             -- Get mod data from equipped prosthesis so we can get its parameters
-            local equipped_prosthesis_mod_data = equipped_prosthesis:getModData()
+            local equippedProstModData = equippedProsthesis:getModData()
 
 
-            local base_prosthesis_item = patient:getInventory():AddItem("TOC." .. prosthesis_name)
-            local base_prosthesis_item_mod_data = base_prosthesis_item.getModData()
-            base_prosthesis_item_mod_data.TOC = {
-                durability = equipped_prosthesis_mod_data.TOC.durability,
-                speed = equipped_prosthesis_mod_data.TOC.speed
+            local baseProstItem = patient:getInventory():AddItem("JCIO." .. prostName)
+            local baseProstItemModData = baseProstItem.getModData()
+            baseProstItemModData.JCIO = {
+                durability = equippedProstModData.JCIO.durability,
+                speed = equippedProstModData.JCIO.speed
             }
 
-            patient:setWornItem(equipped_prosthesis:getBodyLocation(), nil)
-            patient:getInventory():Remove(equipped_prosthesis)
-            toc_data.Limbs[part_name].equipped_prosthesis = nil
+            patient:setWornItem(equippedProsthesis:getBodyLocation(), nil)
+            patient:getInventory():Remove(equippedProsthesis)
+            jcioModData.Limbs[partName].equipped_prosthesis = nil
         end
     end
 end

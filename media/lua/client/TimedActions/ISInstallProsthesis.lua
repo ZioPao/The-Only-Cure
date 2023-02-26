@@ -58,7 +58,7 @@ function ISInstallProsthesis:perform()
 
         SendEquipProsthesis(self.patient, self.part_name, self.item, prosthesis_base_name)
     else
-        TocEquipProsthesis(self.part_name, self.item, prosthesis_base_name)
+        JCIO.EquipProsthesis(self.part_name, self.item, prosthesis_base_name)
 
     end
 

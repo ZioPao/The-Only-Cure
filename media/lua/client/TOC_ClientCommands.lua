@@ -57,7 +57,7 @@ end
 ServerCommands.OperateLimb = function(arg)
 
     local data = arg["toSend"]
-    TocOperateLimb(data[1], data[2], data[3])
+    JCIO.OperateLimb(data[1], data[2], data[3])
 end
 
 
@@ -79,7 +79,7 @@ ServerCommands.EquipProsthesis = function(arg)
     -- prosthesis_name = arg[3]
     
     local data = arg["toSend"]
-    TocEquipProsthesis(data[1], data[2], data[3])
+    JCIO.EquipProsthesis(data[1], data[2], data[3])
 
 end
 
