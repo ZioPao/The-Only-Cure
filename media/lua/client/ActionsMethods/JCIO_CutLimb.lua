@@ -212,7 +212,7 @@ JCIO.CutLimb = function(partName, surgeonFactor, bandageTable, painkillerTable)
 
 
 
-    -- A check for is_cut shouldn't be necessary here since if we've got here we've already checked it out enough
+    -- A check for isCut shouldn't be necessary here since if we've got here we've already checked it out enough
 
     if limbsData[partName].isCut == false then
         limbsData[partName].isCut = true
@@ -276,7 +276,7 @@ JCIO.CutLimb = function(partName, surgeonFactor, bandageTable, painkillerTable)
         TocSetBloodOnAmputation(getPlayer(), adjacentBodyPart)
 
         if partName == "Left_Foot" or partName == "Right_Foot" then
-            JCIOAnims.SetMissingFootAnimation(true)
+            JCIO_Anims.SetMissingFootAnimation(true)
         end
     end
 

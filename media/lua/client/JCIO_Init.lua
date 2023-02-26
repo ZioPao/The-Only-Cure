@@ -41,7 +41,7 @@ JCIO.CutLimbForTrait = function(player, jcioModData, partName)
     local limbsData = jcioModData.limbs
 
     local amputationClothingItem = player:getInventory():AddItem("TOC.Amputation_" .. partName)
-    JCIOVisuals.SetTextureForAmputation(amputationClothingItem, player, true)
+    JCIO_Visuals.SetTextureForAmputation(amputationClothingItem, player, true)
 
     player:setWornItem(amputationClothingItem:getBodyLocation(), amputationClothingItem)
     limbsData[partName].isCut = true
@@ -179,15 +179,15 @@ JCIO.Init = function(_, player)
     if modData.JCIO == nil then
         JCIO.SetInitData(modData, player)
     else
-        JCIOCompat.CheckCompatibilityWithOlderVersions(modData)
-        JCIOAnims.CheckAndSetMissingFootAnims(modData)
+        JCIO_Compat.CheckCompatibilityWithOlderVersions(modData)
+        JCIO_Anims.CheckAndSetMissingFootAnims(modData)
         
     end
 
     -- Compat fix with older versions
     if modData.TOC ~= nil then
         print("JCIO: found older data from TOC or TOCBB")
-        JCIOCompat.CheckCompatibilityWithOlderVersions(modData)
+        JCIO_Compat.CheckCompatibilityWithOlderVersions(modData)
     end
 
 end

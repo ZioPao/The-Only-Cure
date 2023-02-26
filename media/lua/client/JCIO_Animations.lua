@@ -1,11 +1,11 @@
 -- Thanks to Glytcher and Matías N. Salas for helping out with this
 
-if JCIOAnims == nil then
-    JCIOAnims = {}
+if JCIO_Anims == nil then
+    JCIO_Anims = {}
 end
 
 
-JCIOAnims.SetMissingFootAnimation = function(check)
+JCIO_Anims.SetMissingFootAnimation = function(check)
     local player = getPlayer()
     player:setVariable("IsCrawling", tostring(check))
     
@@ -17,9 +17,9 @@ JCIOAnims.SetMissingFootAnimation = function(check)
     end
 end
 
-JCIOAnims.CheckAndSetMissingFootAnims = function(modData)
+JCIO_Anims.CheckAndSetMissingFootAnims = function(modData)
 
     if modData.JCIO.limbs["Left_Foot"].isCut or modData.JCIO.limbs["Right_Foot"].isCut then
-        JCIOAnims.SetMissingFootAnimation(true)
+        JCIO_Anims.SetMissingFootAnimation(true)
     end
 end

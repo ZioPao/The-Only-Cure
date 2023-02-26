@@ -4,17 +4,17 @@
 ---------- COMPATIBILITY FUNCS -----------
 
 
-if JCIOCompat == nil then
-    JCIOCompat = {}
+if JCIO_Compat == nil then
+    JCIO_Compat = {}
 end
 
 -- Gets the old status and turns it into the new.
-JCIOCompat.CheckCompatibilityWithOlderVersions = function(modData)
+JCIO_Compat.CheckCompatibilityWithOlderVersions = function(modData)
 
     if modData.TOC ~= nil then
         print("JCIO: found old data from TOC")
         if modData.TOC.Limbs ~= nil then
-            JCIOCompat.MapOldDataToNew(modData)
+            JCIO_Compat.MapOldDataToNew(modData)
             modData.TOC = nil   -- Deletes the old mod data stuff
         else
             print("JCIO: something is wrong, couldn't find Limbs table in old TOC modData")
@@ -27,7 +27,7 @@ JCIOCompat.CheckCompatibilityWithOlderVersions = function(modData)
 end
 
 
-JCIOCompat.MapOldDataToNew = function(modData)
+JCIO_Compat.MapOldDataToNew = function(modData)
 
     local oldNamesTable = { "RightHand", "RightForearm", "RightArm", "LeftHand", "LeftForearm", "LeftArm" }
     local newNamesTable = { "Right_Hand", "Right_LowerArm", "Right_UpperArm", "Left_Hand", "Left_LowerArm", "Left_UpperArm" }

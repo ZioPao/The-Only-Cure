@@ -4,12 +4,12 @@
 ------------ VISUALS FUNCTIONS -----------
 
 
-if JCIOVisuals == nil then
-    JCIOVisuals = {}
+if JCIO_Visuals == nil then
+    JCIO_Visuals = {}
 end
 
 
-JCIOVisuals.SetTextureForAmputation = function(item, player, cicatrized)
+JCIO_Visuals.SetTextureForAmputation = function(item, player, cicatrized)
     local humanVisual = player:getHumanVisual()
     local textureString = humanVisual:getSkinTexture()
 
@@ -40,7 +40,7 @@ JCIOVisuals.SetTextureForAmputation = function(item, player, cicatrized)
 
 end
 
-JCIOVisuals.SetBloodOnAmputation = function(player, bodyPart)
+JCIO_Visuals.SetBloodOnAmputation = function(player, bodyPart)
 
     local bodyPartType = bodyPart:getType()
     local bloodBodyPartType

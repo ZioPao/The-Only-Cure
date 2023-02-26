@@ -122,7 +122,7 @@ local function SetHealthStatusForBodyPart(partData, partName, player)
                 local amputatedClothingItem = playerInv:FindAndReturn(amputatedClothingItemName)
 
                 player:removeWornItem(amputatedClothingItem)
-                JCIOVisuals.SetTextureForAmputation(amputatedClothingItem, player, true)
+                JCIO_Visuals.SetTextureForAmputation(amputatedClothingItem, player, true)
                 player:setWornItem(amputatedClothingItem:getBodyLocation(), amputatedClothingItem)
                 
                 if (not player:HasTrait("Brave")) and ZombRand(1, 11) > 5 then

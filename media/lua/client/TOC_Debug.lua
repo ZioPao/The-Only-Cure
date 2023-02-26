@@ -77,7 +77,7 @@ function TocResetEverything()
 
 
     -- Reset special flag for legs amputations
-    JCIOAnims.SetMissingFootAnimation(false)
+    JCIO_Anims.SetMissingFootAnimation(false)
 
 end
 
@@ -98,7 +98,7 @@ function TocResetClothingItemBodyLocation(player, side, limb)
             player:removeWornItem(amputationItem)
             player:getInventory():Remove(amputationItem)
             amputationItem = playerInv:AddItem(amputationItemName)
-            JCIOVisuals.SetTextureForAmputation(amputationItem, player, limbsData[side .. "_" .. limb].is_cicatrized)
+            JCIO_Visuals.SetTextureForAmputation(amputationItem, player, limbsData[side .. "_" .. limb].is_cicatrized)
             player:setWornItem(amputationItem:getBodyLocation(), amputationItem)
         end
         amputationItem = nil -- reset it
