@@ -158,7 +158,7 @@ local function UpdatePlayerHealth(player, part_data)
 end
 
 -- MAIN UPDATE FUNCTIONS
-TOC.UpdateOnTick = function()
+JCIO.UpdateOnTick = function()
 
     local player = getPlayer()
     if player == nil then
@@ -173,7 +173,7 @@ TOC.UpdateOnTick = function()
 
 
 end
-TOC.UpdateEveryTenMinutes = function()
+JCIO.UpdateEveryTenMinutes = function()
 
     local player = getPlayer()
 
@@ -184,7 +184,7 @@ TOC.UpdateEveryTenMinutes = function()
     local part_data = player:getModData().TOC.Limbs
 
     --Experience for prosthesis user
-    for _, side in pairs(TOC.side_names) do
+    for _, side in pairs(JCIO.sideNames) do
         if part_data[side .. "_Hand"].is_prosthesis_equipped or part_data[side .. "_LowerArm"].is_prosthesis_equipped then
             player:getXp():AddXP(Perks[side .. "_Hand"], 4)
         end
@@ -215,7 +215,7 @@ TOC.UpdateEveryTenMinutes = function()
     end
 
 end
-TOC.UpdateEveryOneMinute = function()
+JCIO.UpdateEveryOneMinute = function()
 
     local player = getPlayer()
     -- To prevent errors during loading

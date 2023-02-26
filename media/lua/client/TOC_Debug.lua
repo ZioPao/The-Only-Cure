@@ -1,5 +1,5 @@
 ------------------------------------------
--------- THE ONLY CURE BUT BETTER --------
+-------- JUST CUT IT OFF --------
 ------------------------------------------
 ------------ DEBUG FUNCTIONS -------------
 
@@ -42,12 +42,12 @@ function TocResetEverything()
     toc_traits:remove("Amputee_UpperArm")
 
 
-    TOC.Init(_, player)
+    JCIO.Init(_, player)
 
     -- Destroy the amputation or prosthesis item
 
-    for _, side in pairs(TOC.side_names) do
-        for _, limb in pairs(TOC.limb_names) do
+    for _, side in pairs(JCIO.sideNames) do
+        for _, limb in pairs(JCIO.limbNames) do
         
             local part_name = side .. "_" .. limb
             local amputation_item_name = TocFindAmputationOrProsthesisName(part_name, player, "Amputation")

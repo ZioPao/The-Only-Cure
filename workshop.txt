@@ -1,6 +1,6 @@
 version=1
 id=2916771109
-title=The Only Cure but better DEV
+title=JUST CUT IT OFF DEV
 description=Just for testing and shit
 tags=
 visibility=public

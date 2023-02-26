@@ -82,7 +82,7 @@ function TocGetBodyPartFromPartName(part_name)
 end
 
 -- Custom mapping to make more sense when cutting a limb
-function TocGetAdiacentBodyPartFromPartName(part_name)
+function TocGetAdjacentBodyPartFromPartName(part_name)
 
     if part_name == "Right_Hand" then return BodyPartType.ForeArm_R end
     if part_name == "Right_LowerArm" then return BodyPartType.UpperArm_R end

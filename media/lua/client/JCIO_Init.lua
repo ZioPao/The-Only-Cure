@@ -1,15 +1,11 @@
 ------------------------------------------
--------- THE ONLY CURE BUT BETTER --------
+------------- JUST CUT IT OFF ------------
 ------------------------------------------
 ------------- INIT FUNCTIONS -------------
 --[[
 Original code and idea by: Mr. Bounty
 Rewritten by: Pao
 --]]
-
-if not TOC then
-    TOC = {}
-end
 
 
 local function InitializeTraits()
@@ -51,15 +47,15 @@ local function TocUpdateBaseData(mod_data)
     local accepted_prosthesis_upperarm = {} -- For future stuff
     local accepted_prosthesis_foot = {}
 
-    for _, side in pairs(TOC.side_names) do
-        for _, limb in pairs(TOC.limb_names) do
+    for _, side in pairs(JCIO.sideNames) do
+        for _, limb in pairs(JCIO.limbNames) do
 
             local part_name = side .. "_" .. limb
 
 
             -- Check if part was initialized, in case of previous errors
             if mod_data.TOC.Limbs[part_name] == nil then
-                TOC.InitPart(mod_data.TOC.Limbs, part_name)
+                JCIO.InitPart(mod_data.TOC.Limbs, part_name)
             end
 
 
@@ -104,7 +100,7 @@ local function TocUpdateBaseData(mod_data)
 
 end
 
-TOC.CutLimbForTrait = function(player, limbs_data, part_name)
+JCIO.CutLimbForTrait = function(player, limbs_data, part_name)
     local amputation_clothing_item = player:getInventory():AddItem("TOC.Amputation_" .. part_name)
     TocSetCorrectTextureForAmputation(amputation_clothing_item, player, true)
 
@@ -121,7 +117,7 @@ TOC.CutLimbForTrait = function(player, limbs_data, part_name)
         limbs_data[v].is_cicatrized = true
     end
 end
-TOC.InitPart = function(limbs_data, part_name)
+JCIO.InitPart = function(limbs_data, part_name)
 
     limbs_data[part_name].is_cut = false
     limbs_data[part_name].is_infected = false
@@ -136,7 +132,7 @@ TOC.InitPart = function(limbs_data, part_name)
     limbs_data[part_name].equipped_prosthesis = {}
 
 end
-TOC.SetInitData = function(mod_data, player)
+JCIO.SetInitData = function(modData, player)
     print("TOC: Creating mod_data.TOC")
     --------
     -- NEW NAMING SCHEME
@@ -158,10 +154,10 @@ TOC.SetInitData = function(mod_data, player)
     -- TODO Move prosthesis to something more easily accessible
     -- TODO Acceptable prosthesis need to be moved to something more accessible
 
-    mod_data.TOC = {}
+    modData.JCIO = {}
 
     -- Limbs
-    mod_data.TOC.Limbs = {
+    modData.JCIO.limbs = {
         Right_Hand = {},
         Right_LowerArm = {},
         Right_UpperArm = {},
@@ -173,12 +169,12 @@ TOC.SetInitData = function(mod_data, player)
         Left_Foot = {},
         Right_Foot = {},
 
-        is_other_bodypart_infected = false
+        isOtherBodypartInfected = false
     }
 
     -- TODO Move this to the global TOC thing
     -- Prosthetics
-    mod_data.TOC.Prosthesis = {
+    modData.JCIO.prosthesis = {
         WoodenHook = {
             Right_Hand = {},
             Right_LowerArm = {},
@@ -215,42 +211,47 @@ TOC.SetInitData = function(mod_data, player)
 
     -- TODO Move this to the global TOC thing
     -- Generic (future uses)
-    mod_data.TOC.Generic = {}
+    modData.JCIO.generic = {}
 
 
-    for _, side in pairs(TOC.side_names) do
-        for _, limb in pairs(TOC.limb_names) do
-            local part_name = side .. "_" .. limb
-            TOC.InitPart(mod_data.TOC.Limbs, part_name)
+    for _, side in pairs(JCIO.sideNames) do
+        for _, limb in pairs(JCIO.limbNames) do
+            local partName = side .. "_" .. limb
+            JCIO.InitPart(modData.JCIO.limbs, partName)
         end
     end
 
     -- Set data like prosthesis lists, cicatrization time etc
     -- TODO Change this
-    TocUpdateBaseData(mod_data)
+    TocUpdateBaseData(modData)
 
     -- Setup traits
     if player:HasTrait("Amputee_Hand") then
-        TOC.CutLimbForTrait(player, mod_data.TOC.Limbs, "Left_Hand")
+        JCIO.CutLimbForTrait(player, modData.JCIO.limbs, "Left_Hand")
     elseif player:HasTrait("Amputee_LowerArm") then
-        TOC.CutLimbForTrait(player, mod_data.TOC.Limbs, "Left_LowerArm")
+        JCIO.CutLimbForTrait(player, modData.TOC.limbs, "Left_LowerArm")
     elseif player:HasTrait("Amputee_UpperArm") then
-        TOC.CutLimbForTrait(player, mod_data.TOC.Limbs, "Left_UpperArm")
+        JCIO.CutLimbForTrait(player, modData.TOC.limbs, "Left_UpperArm")
     end
 
 end
-TOC.Init = function(_, player)
+JCIO.Init = function(_, player)
 
-    local mod_data = player:getModData()
-
-    if mod_data.TOC == nil then
-        TOC.SetInitData(mod_data, player)
+    local modData = player:getModData()
+    if modData.JCIO == nil then
+        JCIO.SetInitData(modData, player)
     else
-        TocCheckCompatibilityWithOlderVersions(mod_data)
+        JCIOCompat.CheckCompatibilityWithOlderVersions(modData)
 
         -- TODO This is gonna be deleted and moved directly to TOC
-        TocUpdateBaseData(mod_data)                 -- Since it's gonna be common to update stuff
-        TocCheckLegsAmputations(mod_data)
+        TocUpdateBaseData(modData)                 -- Since it's gonna be common to update stuff
+        TocCheckLegsAmputations(modData)
+    end
+
+    -- Compat fix with older versions
+    if modData.TOC ~= nil then
+        print("JCIO: found older data from TOC or TOCBB")
+        JCIOCompat.CheckCompatibilityWithOlderVersions(modData)
     end
 
 end
@@ -258,30 +259,35 @@ end
 ------------------------------------------------------------------------------------
 
 -- Rewrite 2 Electirc Bogaloo
-local function InitializeTheOnlyCure()
+local function InitializeJustCutItOff()
+
+    if not JCIO then
+        JCIO = {}
+    end
+
 
     -- Initializes static values in a global table
-    TOC.side_names = {"Left", "Right"}
-    TOC.limb_names = { "Hand", "LowerArm", "UpperArm", "Foot"}
+    JCIO.sideNames = {"Left", "Right"}
+    JCIO.limbNames = { "Hand", "LowerArm", "UpperArm", "Foot"}
 
-    TOC.limb_parameters = {}
-    for _, side in pairs(TOC.side_names) do
-        for _, limb in pairs(TOC.limb_names) do
-            local part_name = side .. "_" .. limb
-            TOC.limb_parameters[part_name] = {}
+    JCIO.limbParameters = {}
+    for _, side in pairs(JCIO.sideNames) do
+        for _, limb in pairs(JCIO.limbNames) do
+            local partName = side .. "_" .. limb
+            JCIO.limbParameters[partName] = {}
 
             if limb == "Hand" then
-                TOC.limb_parameters[part_name].cicatrization_base_time = 1700
-                TOC.limb_parameters[part_name].depends_on = {}
+                JCIO.limbParameters[partName].cicatrization_base_time = 1700
+                JCIO.limbParameters[partName].depends_on = {}
             elseif limb == "LowerArm" then
-                TOC.limb_parameters[part_name].cicatrization_base_time = 1800
-                TOC.limb_parameters[part_name].depends_on = { side .. "_Hand", }
+                JCIO.limbParameters[partName].cicatrization_base_time = 1800
+                JCIO.limbParameters[partName].depends_on = { side .. "_Hand", }
             elseif limb == "UpperArm" then
-                TOC.limb_parameters[part_name].cicatrization_base_time = 2000
-                TOC.limb_parameters[part_name].depends_on = { side .. "_Hand", side .. "_LowerArm", }
+                JCIO.limbParameters[partName].cicatrization_base_time = 2000
+                JCIO.limbParameters[partName].depends_on = { side .. "_Hand", side .. "_LowerArm", }
             elseif limb == "Foot" then
-                TOC.limb_parameters[part_name].cicatrization_base_time = 1700
-                TOC.limb_parameters[part_name].depends_on = {}
+                JCIO.limbParameters[partName].cicatrization_base_time = 1700
+                JCIO.limbParameters[partName].depends_on = {}
             end
         end
     end
@@ -289,13 +295,13 @@ local function InitializeTheOnlyCure()
     --------------------------
 
     InitializeTraits()
-    Events.OnCreatePlayer.Add(TOC.Init)
+    Events.OnCreatePlayer.Add(JCIO.Init)
 
     -- Setup updates
-    Events.OnTick.Add(TOC.UpdateOnTick)
-    Events.EveryTenMinutes.Add(TOC.UpdateEveryTenMinutes)
-    Events.EveryOneMinute.Add(TOC.UpdateEveryOneMinute)
+    Events.OnTick.Add(JCIO.UpdateOnTick)
+    Events.EveryTenMinutes.Add(JCIO.UpdateEveryTenMinutes)
+    Events.EveryOneMinute.Add(JCIO.UpdateEveryOneMinute)
 
 
 end
-Events.OnGameBoot.Add(InitializeTheOnlyCure)
+Events.OnGameBoot.Add(InitializeJustCutItOff)

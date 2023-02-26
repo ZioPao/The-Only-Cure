@@ -1,5 +1,5 @@
 ------------------------------------------
--------- THE ONLY CURE BUT BETTER --------
+-------- JUST CUT IT OFF --------
 ------------------------------------------
 ----------- CUT LIMB FUNCTIONS -----------
 
@@ -55,7 +55,7 @@ local function TocDeleteOtherAmputatedLimbs(side)
     -- if left hand is cut and we cut left lowerarm, then delete hand
 
 
-    for _, limb in pairs(TOC.limb_names) do
+    for _, limb in pairs(JCIO.limbNames) do
         local part_name = "TOC.Amputation_" .. side .. "_" .. limb
         local amputated_limb = getPlayer():getInventory():FindAndReturn(part_name)
         if amputated_limb then
@@ -126,27 +126,28 @@ end
 ----------------------------------------------------------------------------------
 
 --- Main function for cutting a limb
----@param part_name string the part name to amputate
----@param surgeon_factor any the surgeon factor, which will determine some stats for the inflicted wound
----@param bandage_table any bandages info
+---@param partName string the part name to amputate
+---@param surgeonFactor any the surgeon factor, which will determine some stats for the inflicted wound
+---@param bandageTable any bandages info
 ---@param painkiller_table any painkillers info, not used
-function TocCutLimb(part_name, surgeon_factor, bandage_table, painkiller_table)
+function TocCutLimb(partName, surgeonFactor, bandageTable, painkiller_table)
 
     -- TODO Separate Cut Limb in side and limb instead of single part_name
 
     -- Items get unequipped in ISCutLimb.Start
-
     local player = getPlayer()
-    local toc_data = player:getModData().TOC
-    local limbs_data = toc_data.Limbs
+
+    local jcioModData = player:getModData().JCIO
+    local partsParameters = jcioModData.limbParameters
+    local limbsData = jcioModData.Limbs
 
 
     -- Cut Hand -> Damage in forearm
     -- Cut Forearm -> Damage in Upperarm
     -- Cut UpperArm -> Damage to torso
-    local body_damage = player:getBodyDamage()
-    local body_part = body_damage:getBodyPart(TocGetBodyPartFromPartName(part_name))
-    local adiacent_body_part = player:getBodyDamage():getBodyPart(TocGetAdiacentBodyPartFromPartName(part_name))
+    local bodyDamage = player:getBodyDamage()
+    local bodyPart = bodyDamage:getBodyPart(TocGetBodyPartFromPartName(partName))
+    local adjacentBodyPart = player:getBodyDamage():getBodyPart(TocGetAdjacentBodyPartFromPartName(partName))
 
     local stats = player:getStats()
 
@@ -154,31 +155,31 @@ function TocCutLimb(part_name, surgeon_factor, bandage_table, painkiller_table)
 
     -- Reset the status of the first body part, since we just cut it off it shouldn't be bleeding anymore
     -- The bit will be checked later since we're not sure if the player is not infected from another wound
-    TocSetParametersForMissingLimb(body_part, false)
+    TocSetParametersForMissingLimb(bodyPart, false)
 
     -- Use a tourniquet if available
-    local tourniquet_item = FindTourniquetInWornItems(player, TocGetSideFromPartName(part_name))
+    local tourniquetItem = FindTourniquetInWornItems(player, TocGetSideFromPartName(partName))
 
-    local base_damage_value = 100
+    local baseDamageValue = 100
 
-    if tourniquet_item ~= nil then
-        base_damage_value = 50  -- TODO Decrease mostly blood and damage, add pain, not everything else
+    if tourniquetItem ~= nil then
+        baseDamageValue = 50  -- TODO Decrease mostly blood and damage, add pain, not everything else
 
-        if part_name == "Left_UpperArm" or part_name == "Right_UpperArm" then
-            player:removeWornItem(tourniquet_item)
+        if partName == "Left_UpperArm" or partName == "Right_UpperArm" then
+            player:removeWornItem(tourniquetItem)
         end
 
     end
 
     -- Set damage, stress, and low endurance after amputation
-    adiacent_body_part:AddDamage(base_damage_value - surgeon_factor)
-    adiacent_body_part:setAdditionalPain(base_damage_value - surgeon_factor)
-    adiacent_body_part:setBleeding(true)
-    adiacent_body_part:setBleedingTime(base_damage_value - surgeon_factor)
-    adiacent_body_part:setDeepWounded(true)
-    adiacent_body_part:setDeepWoundTime(base_damage_value - surgeon_factor)
-    stats:setEndurance(surgeon_factor)
-    stats:setStress(base_damage_value - surgeon_factor)
+    adjacentBodyPart:AddDamage(baseDamageValue - surgeonFactor)
+    adjacentBodyPart:setAdditionalPain(baseDamageValue - surgeonFactor)
+    adjacentBodyPart:setBleeding(true)
+    adjacentBodyPart:setBleedingTime(baseDamageValue - surgeonFactor)
+    adjacentBodyPart:setDeepWounded(true)
+    adjacentBodyPart:setDeepWoundTime(baseDamageValue - surgeonFactor)
+    stats:setEndurance(surgeonFactor)
+    stats:setStress(baseDamageValue - surgeonFactor)
 
 
     -- Set malus for strength and fitness
@@ -189,8 +190,8 @@ function TocCutLimb(part_name, surgeon_factor, bandage_table, painkiller_table)
 
 
     -- If bandages are available, use them
-    adiacent_body_part:setBandaged(bandage_table.use_bandage, 10, bandage_table.is_bandage_sterilized,
-        bandage_table.bandage_type)
+    adjacentBodyPart:setBandaged(bandageTable.use_bandage, 10, bandageTable.is_bandage_sterilized,
+        bandageTable.bandage_type)
 
 
 
@@ -201,24 +202,24 @@ function TocCutLimb(part_name, surgeon_factor, bandage_table, painkiller_table)
 
     -- A check for is_cut shouldn't be necessary here since if we've got here we've already checked it out enough
 
-    if limbs_data[part_name].is_cut == false then
-        limbs_data[part_name].is_cut = true
-        limbs_data[part_name].is_amputation_shown = true
-        limbs_data[part_name].cicatrization_time = limbs_data[part_name].cicatrization_base_time - surgeon_factor * 50
+    if limbsData[partName].is_cut == false then
+        limbsData[partName].is_cut = true
+        limbsData[partName].is_amputation_shown = true
+        limbsData[partName].cicatrization_time = partsParameters[partName].cicatrization_base_time - surgeonFactor * 50
 
-        for _, depended_v in pairs(limbs_data[part_name].depends_on) do
-            limbs_data[depended_v].is_cut = true
-            limbs_data[depended_v].is_amputation_shown = false
-            limbs_data[depended_v].cicatrization_time = limbs_data[part_name].cicatrization_base_time -
-                surgeon_factor * 50
+        for _, depended_v in pairs(limbsData[partName].depends_on) do
+            limbsData[depended_v].is_cut = true
+            limbsData[depended_v].is_amputation_shown = false
+            limbsData[depended_v].cicatrization_time = partsParameters[partName].cicatrization_base_time -
+                surgeonFactor * 50
 
-            local should_depended_v_be_healed_of_bite = limbs_data[depended_v].is_infected and
-                body_damage:getInfectionLevel() < 20
-            local depended_body_part = body_damage:getBodyPart(TocGetBodyPartFromPartName(depended_v))
+            local should_depended_v_be_healed_of_bite = limbsData[depended_v].is_infected and
+                bodyDamage:getInfectionLevel() < 20
+            local depended_body_part = bodyDamage:getBodyPart(TocGetBodyPartFromPartName(depended_v))
             TocSetParametersForMissingLimb(depended_body_part, should_depended_v_be_healed_of_bite)
 
             if should_depended_v_be_healed_of_bite then
-                limbs_data[depended_v].is_infected = false
+                limbsData[depended_v].is_infected = false
             end
 
 
@@ -228,16 +229,16 @@ function TocCutLimb(part_name, surgeon_factor, bandage_table, painkiller_table)
 
         -- Heal the infection here
         local body_damage = player:getBodyDamage()
-        if limbs_data[part_name].is_infected and body_damage:getInfectionLevel() < 20 then
-            limbs_data[part_name].is_infected = false
+        if limbsData[partName].is_infected and body_damage:getInfectionLevel() < 20 then
+            limbsData[partName].is_infected = false
 
             -- NOT THE ADIACENT ONE!!!
-            body_part:SetBitten(false)
-            body_part:setBiteTime(0)
+            bodyPart:SetBitten(false)
+            bodyPart:setBiteTime(0)
 
             -- Second check, let's see if there is any other infected limb.
-            if TocCheckIfStillInfected(limbs_data) == false then
-                TocCureInfection(body_damage, part_name)
+            if TocCheckIfStillInfected(limbsData) == false then
+                TocCureInfection(body_damage, partName)
                 getPlayer():Say("I'm gonna be fine...")         -- TODO Make it visible to other players, check True Actions as reference
             else
                 getPlayer():Say("I'm still gonna die...")
@@ -247,11 +248,11 @@ function TocCutLimb(part_name, surgeon_factor, bandage_table, painkiller_table)
 
 
         -- Check for older amputation models and deletes them from player's inventory
-        local side = string.match(part_name, '(%w+)_')
+        local side = string.match(partName, '(%w+)_')
         TocDeleteOtherAmputatedLimbs(side)
 
         --Equip new model for amputation
-        local amputation_clothing_item_name = TocFindAmputatedClothingFromPartName(part_name)
+        local amputation_clothing_item_name = TocFindAmputatedClothingFromPartName(partName)
         print(amputation_clothing_item_name)
 
         local amputation_clothing_item = player:getInventory():AddItem(amputation_clothing_item_name)
@@ -260,9 +261,9 @@ function TocCutLimb(part_name, surgeon_factor, bandage_table, painkiller_table)
 
 
         -- Set blood on the amputated limb
-        TocSetBloodOnAmputation(getPlayer(), adiacent_body_part)
+        TocSetBloodOnAmputation(getPlayer(), adjacentBodyPart)
 
-        if part_name == "Left_Foot" or part_name == "Right_Foot" then
+        if partName == "Left_Foot" or partName == "Right_Foot" then
             SetMissingFootAnimation(true)
         end
     end

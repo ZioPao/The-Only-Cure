@@ -74,7 +74,7 @@ end
 -- Override and mod compat helper
 function TocPopulateCanBeHeldTable(can_be_held, limbs_data)
 
-    for _, side in pairs(TOC.side_names) do
+    for _, side in pairs(JCIO.sideNames) do
         can_be_held[side] = true
 
         if limbs_data[side .. "_Hand"].is_cut then
