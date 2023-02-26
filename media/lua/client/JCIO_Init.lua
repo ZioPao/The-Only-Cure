@@ -59,17 +59,17 @@ end
 
 JCIO.InitPart = function(limbs_data, part_name)
 
-    limbs_data[part_name].is_cut = false
-    limbs_data[part_name].is_infected = false
-    limbs_data[part_name].is_operated = false
-    limbs_data[part_name].is_cicatrized = false
-    limbs_data[part_name].is_cauterized = false
-    limbs_data[part_name].is_amputation_shown = false
+    limbs_data[part_name].isCut = false
+    limbs_data[part_name].isInfected = false
+    limbs_data[part_name].isOperated = false
+    limbs_data[part_name].isCicatrized = false
+    limbs_data[part_name].isCauterized = false
+    limbs_data[part_name].isAmputation_shown = false
 
-    limbs_data[part_name].cicatrization_time = 0
+    limbs_data[part_name].cicatrizationTime = 0
 
-    limbs_data[part_name].is_prosthesis_equipped = false
-    limbs_data[part_name].equipped_prosthesis = {}
+    limbs_data[part_name].isProsthesisEquipped = false
+    limbs_data[part_name].equippedProsthesis = {}
 
 end
 

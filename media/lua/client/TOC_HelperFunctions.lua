@@ -77,12 +77,12 @@ function TocPopulateCanBeHeldTable(can_be_held, limbs_data)
     for _, side in pairs(JCIO.sideNames) do
         can_be_held[side] = true
 
-        if limbs_data[side .. "_Hand"].is_cut then
-            if limbs_data[side .. "_LowerArm"].is_cut then
-                if not limbs_data[side .. "_LowerArm"].is_prosthesis_equipped then
+        if limbs_data[side .. "_Hand"].isCut then
+            if limbs_data[side .. "_LowerArm"].isCut then
+                if not limbs_data[side .. "_LowerArm"].isProsthesisEquipped then
                     can_be_held[side] = false
                 end
-            elseif not limbs_data[side .. "_Hand"].is_prosthesis_equipped then
+            elseif not limbs_data[side .. "_Hand"].isProsthesisEquipped then
                 can_be_held[side] = false
             end
         end
