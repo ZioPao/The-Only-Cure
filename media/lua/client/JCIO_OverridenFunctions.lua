@@ -125,7 +125,7 @@ function ISEquipWeaponAction:perform()
     og_ISEquipWeaponActionPerform(self)
     local limbs_data = self.character:getModData().TOC.Limbs
     local can_be_held = {}
-    TocPopulateCanBeHeldTable(can_be_held, limbs_data)
+    JCIO_Common.GetCanBeHeldTable(can_be_held, limbs_data)
 
     if not self.item:isRequiresEquippedBothHands() then
         if can_be_held["Right"] and not can_be_held["Left"] then

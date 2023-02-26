@@ -67,29 +67,3 @@ function TocFindAmputationOrProsthesisName(part_name, player, choice)
 end
 
 
-
-
-
--------------------------------------
--- Override and mod compat helper
-function TocPopulateCanBeHeldTable(can_be_held, limbs_data)
-
-    for _, side in pairs(JCIO.sideNames) do
-        can_be_held[side] = true
-
-        if limbs_data[side .. "_Hand"].isCut then
-            if limbs_data[side .. "_LowerArm"].isCut then
-                if not limbs_data[side .. "_LowerArm"].isProsthesisEquipped then
-                    can_be_held[side] = false
-                end
-            elseif not limbs_data[side .. "_Hand"].isProsthesisEquipped then
-                can_be_held[side] = false
-            end
-        end
-    end
-
-end
-
-
-
-

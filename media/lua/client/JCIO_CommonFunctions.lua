@@ -251,3 +251,27 @@ function JCIO_Common.CheckIfProsthesisAlreadyInstalled(limbsData, partName)
     end
 
 end
+
+
+function JCIO_Common.GetCanBeHeldTable(limbs_data)
+
+    local canBeHeld = {}
+
+    for _, side in pairs(JCIO.sideNames) do
+        canBeHeld[side] = true
+
+        if limbs_data[side .. "_Hand"].isCut then
+            if limbs_data[side .. "_LowerArm"].isCut then
+                if not limbs_data[side .. "_LowerArm"].isProsthesisEquipped then
+                    canBeHeld[side] = false
+                end
+            elseif not limbs_data[side .. "_Hand"].isProsthesisEquipped then
+                canBeHeld[side] = false
+            end
+        end
+    end
+
+    return canBeHeld
+
+end
+-------------------------------

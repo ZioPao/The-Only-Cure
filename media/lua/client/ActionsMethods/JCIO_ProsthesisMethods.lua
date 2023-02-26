@@ -7,7 +7,7 @@
 ---Equip a prosthesis transforming a normal item into a clothing item
 ---@param partName string
 ---@param prosthesisItem any the prosthesis item
----@param prosthesisBaseName string
+---@param prosthesisBaseName string I don't really remember
 function JCIO.EquipProsthesis(partName, prosthesisItem, prosthesisBaseName)
 
     -- TODO probably will have to move this from the TOC menu to classic equip to have dynamic durability

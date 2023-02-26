@@ -1,3 +1,9 @@
+------------------------------------------
+------------- JUST CUT IT OFF ------------
+------------------------------------------
+------------- UPDATE EVENTS --------------
+
+
 require "TOC_Init"
 
 local function CheckIfPlayerIsInfected(player, limbsData)
@@ -48,7 +54,6 @@ local function ManagePhantomPain(player, limbsData)
     end
 
 end
-
 local function SetHealthStatusForBodyPart(partData, partName, player)
 
 
@@ -137,7 +142,6 @@ local function SetHealthStatusForBodyPart(partData, partName, player)
         end
     end
 end
-
 local function UpdatePlayerHealth(player, partData)
     local bodyDamage = player:getBodyDamage()
 
@@ -235,7 +239,7 @@ JCIO.UpdateEveryOneMinute = function()
     if jcioModData ~= nil then
         -- FIXME Send little packets instead of the whole thing?
             -- TODO we shouldn't run this if we're in SP I guess?
-        sendClientCommand(player, 'TOC', 'ChangePlayerState', { jcioModData.limbs } )
+        sendClientCommand(player, 'JCIO', 'ChangePlayerState', { jcioModData.limbs } )
     end
 
 

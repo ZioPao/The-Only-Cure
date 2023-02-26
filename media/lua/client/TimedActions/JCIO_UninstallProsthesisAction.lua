@@ -54,7 +54,7 @@ function JCIO_UninstallProsthesisAction:perform()
 
         SendUnequipProsthesis(self.patient, self.partName, self.item)
     else
-        TheOnlyCure.TocUnequipProsthesis(self.patient, self.partName, self.item)
+        JCIO.OperateLimb(self.patient, self.partName, self.item)
     end
 
     ISBaseTimedAction.perform(self)

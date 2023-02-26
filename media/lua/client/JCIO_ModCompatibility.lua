@@ -1,6 +1,10 @@
----------------------------------
--- Compatibility for various mods
----------------------------------
+------------------------------------------
+------------- JUST CUT IT OFF ------------
+------------------------------------------
+
+------------------------------------------
+--      Compatibility for various mods
+------------------------------------------
 
 
 local function SetCompatibilityFancyHandwork()
@@ -12,13 +16,10 @@ local function SetCompatibilityFancyHandwork()
         local secondary = self.chr:getSecondaryHandItem()
         local equip = true
 
-        local limbs_data = getPlayer():getModData().TOC.Limbs
-        local can_be_held = {}
+        local limbsData = getPlayer():getModData().JCIO.limbs
+        local canBeHeld = JCIO_Common.GetCanBeHeldTable(limbsData)
 
-        -- TODO not totally realiable
-        TocPopulateCanBeHeldTable(can_be_held, limbs_data)
-
-
+        
         -- If we already have the item equipped
         if (primary and primary == item) or (secondary and secondary == item) then
             ISTimedActionQueue.add(ISUnequipAction:new(self.chr, item, 20))
@@ -36,25 +37,25 @@ local function SetCompatibilityFancyHandwork()
             if mod then
                 --print("JCIO: Fancy Handwork modifier")
                 -- If we still have something equipped in secondary, unequip
-                if secondary and equip and can_be_held["Left"] then
+                if secondary and equip and canBeHeld["Left"] then
                     ISTimedActionQueue.add(ISUnequipAction:new(self.chr, secondary, 20))
                 end
 
-                if can_be_held["Left"] then
+                if canBeHeld["Left"] then
                     ISTimedActionQueue.add(ISEquipWeaponAction:new(self.chr, item, 20, false, item:isTwoHandWeapon()))
-                elseif can_be_held["Right"] then
+                elseif canBeHeld["Right"] then
                     ISTimedActionQueue.add(ISEquipWeaponAction:new(self.chr, item, 20, true, item:isTwoHandWeapon()))
 
                 end
             else
                 -- If we still have something equipped in primary, unequip
-                if primary and equip and can_be_held["Right"] then
+                if primary and equip and canBeHeld["Right"] then
                     ISTimedActionQueue.add(ISUnequipAction:new(self.chr, primary, 20))
                 end
                 -- Equip Primary
-                if can_be_held["Right"] then
+                if canBeHeld["Right"] then
                     ISTimedActionQueue.add(ISEquipWeaponAction:new(self.chr, item, 20, true, item:isTwoHandWeapon()))
-                elseif can_be_held["Left"] then
+                elseif canBeHeld["Left"] then
                     ISTimedActionQueue.add(ISEquipWeaponAction:new(self.chr, item, 20, false, item:isTwoHandWeapon()))
 
                 end
@@ -69,10 +70,10 @@ local function SetCompatibilityFancyHandwork()
 
 
     function FHSwapHandsAction:isValid()
-        local limbs_data = getPlayer():getModData().TOC.Limbs
-        local can_be_held = {}
-        TocPopulateCanBeHeldTable(can_be_held, limbs_data)
-        return  (can_be_held["Right"] and can_be_held["Left"]) and(((self.character:getPrimaryHandItem() or self.character:getSecondaryHandItem()) ~= nil))
+        local limbsData = getPlayer():getModData().JCIO.limbs
+        local canBeHeld = JCIO_Common.GetCanBeHeldTable(limbsData)
+
+        return (canBeHeld["Right"] and canBeHeld["Left"]) and(((self.character:getPrimaryHandItem() or self.character:getSecondaryHandItem()) ~= nil))
     end
 
 end
@@ -88,12 +89,8 @@ local function SetCompatibilityFancyHandWorkAndSwapIt()
         local secondary = self.chr:getSecondaryHandItem()
         local equip = true
 
-        local limbs_data = getPlayer():getModData().TOC.Limbs
-        local can_be_held = {}
-
-        -- TODO not totally realiable
-        TocPopulateCanBeHeldTable(can_be_held, limbs_data)
-
+        local limbsData = getPlayer():getModData().JCIO.limbs
+        local canBeHeld = JCIO_Common.GetCanBeHeldTable(limbsData)
 
         -- If we already have the item equipped
         if (primary and primary == item) or (secondary and secondary == item) then
@@ -112,25 +109,25 @@ local function SetCompatibilityFancyHandWorkAndSwapIt()
             if mod then
                 --print("JCIO: Fancy Handwork modifier")
                 -- If we still have something equipped in secondary, unequip
-                if secondary and equip and can_be_held["Left"] then
+                if secondary and equip and canBeHeld["Left"] then
                     ISTimedActionQueue.add(ISUnequipAction:new(self.chr, secondary, 20))
                 end
 
-                if can_be_held["Left"] then
+                if canBeHeld["Left"] then
                     ISTimedActionQueue.add(ISEquipWeaponAction:new(self.chr, item, 20, false, item:isTwoHandWeapon()))
-                elseif can_be_held["Right"] then
+                elseif canBeHeld["Right"] then
                     ISTimedActionQueue.add(ISEquipWeaponAction:new(self.chr, item, 20, true, item:isTwoHandWeapon()))
 
                 end
             else
                 -- If we still have something equipped in primary, unequip
-                if primary and equip and can_be_held["Right"] then
+                if primary and equip and canBeHeld["Right"] then
                     ISTimedActionQueue.add(ISUnequipAction:new(self.chr, primary, 20))
                 end
                 -- Equip Primary
-                if can_be_held["Right"] then
+                if canBeHeld["Right"] then
                     ISTimedActionQueue.add(ISEquipWeaponAction:new(self.chr, item, 20, true, item:isTwoHandWeapon()))
-                elseif can_be_held["Left"] then
+                elseif canBeHeld["Left"] then
                     ISTimedActionQueue.add(ISEquipWeaponAction:new(self.chr, item, 20, false, item:isTwoHandWeapon()))
 
                 end
@@ -159,13 +156,12 @@ end
 --------------------------------------------------------
 
 local function CheckModCompatibility()
-    local activated_mods = getActivatedMods()
+    local activatedMods = getActivatedMods()
     print("JCIO: Checking mods")
 
+    if activatedMods:contains("FancyHandwork") then
 
-    if activated_mods:contains("FancyHandwork") then
-
-        if activated_mods:contains("SwapIt") then
+        if activatedMods:contains("SwapIt") then
             require "SwapIt Main"
             print("JCIO: Overriding FancyHandwork and SwapIt methods")
             SetCompatibilityFancyHandWorkAndSwapIt()

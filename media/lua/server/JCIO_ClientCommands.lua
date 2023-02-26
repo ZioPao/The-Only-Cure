@@ -1,4 +1,7 @@
-
+------------------------------------------
+------------- JUST CUT IT OFF ------------
+------------------------------------------
+------------- CLIENT COMMANDS ------------
 
 local ClientCommands = {}
 
@@ -31,7 +34,7 @@ ClientCommands.AskStopAmputationSound = function(_, args)
 end
 
 -- Animations
-ClientCommands.NotifyNewCrawlAnimation = function(player, args)
+ClientCommands.NotifyNewCrawlAnimation = function(_, args)
 
     sendServerCommand("JCIO", "SetCrawlAnimation", {id = args.id, check = args.check})
 
@@ -42,8 +45,8 @@ end
 
 -- Cheats
 ClientCommands.AskToResetEverything = function(_, arg)
-    local clicked_player = getPlayerByOnlineID(arg[1])
-    sendServerCommand(clicked_player, "JCIO", "ResetEverything", {})
+    local clickedPlayer = getPlayerByOnlineID(arg[1])
+    sendServerCommand(clickedPlayer, "JCIO", "ResetEverything", {})
 end
 
 
@@ -56,17 +59,17 @@ end
 
 ------ Global Mod Data -----------
 
-function TOC_OnInitGlobalModData()
+local function OnInitGlobalModData()
     ModData.getOrCreate("JCIO_PLAYER_DATA")
 end
 
-Events.OnInitGlobalModData.Add(TOC_OnInitGlobalModData)
+Events.OnInitGlobalModData.Add(OnInitGlobalModData)
 
 
 ------------------------------------------------------
 
 local function OnClientCommand(module, command, playerObj, args)
-    if module == 'TOC' and ClientCommands[command] then
+    if module == 'JCIO' and ClientCommands[command] then
         ClientCommands[command](playerObj, args)
     end
 end

@@ -1,7 +1,7 @@
 ------------------------------------------
--------- JUST CUT IT OFF --------
+------------- JUST CUT IT OFF ------------
 ------------------------------------------
------------- CLIENT COMMANDS -------------
+------------- SERVER COMMANDS ------------
 
 local ServerCommands = {}
 
@@ -30,7 +30,6 @@ ServerCommands.CanCutLimb = function(arg)
     arg["toSend"] = { part_name, "Cut", JCIO_Common.CheckIfCanBeCut(part_name) }
     sendClientCommand("JCIO", "SendServer", arg)
 end
-
 ServerCommands.CutLimb = function(arg)
     local data = arg["toSend"]
 
@@ -42,7 +41,6 @@ ServerCommands.CutLimb = function(arg)
 
     JCIO.CutLimb(partName, surgeonFactor, bandageTable, painkillerTable)
 end
-
 
 
 ServerCommands.CanOperateLimb = function(arg)
@@ -57,7 +55,12 @@ end
 ServerCommands.OperateLimb = function(arg)
 
     local data = arg["toSend"]
-    JCIO.OperateLimb(data[1], data[2], data[3])
+
+    local partName = data[1]
+    local surgeonFactor = data[2]
+    local useOven = data[3]
+
+    JCIO.OperateLimb(partName, surgeonFactor, useOven)
 end
 
 
@@ -79,7 +82,11 @@ ServerCommands.EquipProsthesis = function(arg)
     -- prosthesis_name = arg[3]
     
     local data = arg["toSend"]
-    JCIO.EquipProsthesis(data[1], data[2], data[3])
+
+    local partName = data[1]
+    local prosthesisItem = data[2]
+    
+    JCIO.EquipProsthesis(partName, prosthesisItem, _)       -- TODO Add the third param
 
 end
 
@@ -93,14 +100,15 @@ ServerCommands.CanUnequipProsthesis = function(arg)
     sendClientCommand("JCIO", "SendServer", arg)
 end
 ServerCommands.UnequipProsthesis = function(arg)
-
-    -- part_name = arg[1]
-
     local data = arg["toSend"]
-    TheOnlyCure.TocUnequipProsthesis(data[1], data[2])
+
+    local patient = data[1]
+    local partName = data[2]
+    local equippedProsthesis = data[3]
+
+    JCIO.UnequipProsthesis(patient, partName, equippedProsthesis)
 
 end
-
 
 
 ServerCommands.CanResetEverything = function(arg)
