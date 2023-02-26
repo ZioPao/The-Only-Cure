@@ -1,8 +1,8 @@
 require "TimedActions/ISBaseTimedAction"
 
-ISUninstallProsthesis = ISBaseTimedAction:derive("ISUninstallProsthesis");
+JCIO_UninstallProsthesisAction = ISBaseTimedAction:derive("JCIO_UninstallProsthesisAction")
 
-function ISUninstallProsthesis:isValid()
+function JCIO_UninstallProsthesisAction:isValid()
 
     if self.item ~= nil and self.is_prosthesis_equipped then
         return true
@@ -15,12 +15,12 @@ function ISUninstallProsthesis:isValid()
 
 end
 
-function ISUninstallProsthesis:update()
-    self.item:setJobDelta(self:getJobDelta());
+function JCIO_UninstallProsthesisAction:update()
+    self.item:setJobDelta(self:getJobDelta())
 end
 
-function ISUninstallProsthesis:start()
-    self.item:setJobType("Uninstall prothesis");
+function JCIO_UninstallProsthesisAction:start()
+    self.item:setJobType("Uninstall prothesis")
     self.item:setJobDelta(0.0);
     self:setActionAnim("WearClothing");
     if self.item:IsClothing() then
@@ -33,12 +33,12 @@ function ISUninstallProsthesis:start()
     self.character:setSecondaryHandItem(self.item)
 end
 
-function ISUninstallProsthesis:stop()
+function JCIO_UninstallProsthesisAction:stop()
     ISBaseTimedAction.stop(self);
     self.item:setJobDelta(0.0);
 end
 
-function ISUninstallProsthesis:perform()
+function JCIO_UninstallProsthesisAction:perform()
 
     self.item:getContainer():setDrawDirty(true)
     self.item:setJobDelta(0.0)
@@ -64,7 +64,7 @@ function ISUninstallProsthesis:perform()
     ISBaseTimedAction.perform(self)
 end
 
-function ISUninstallProsthesis:new(surgeon, patient, part_name)
+function JCIO_UninstallProsthesisAction:new(surgeon, patient, part_name)
     local o = ISBaseTimedAction.new(self, surgeon)
 
     local toc_limbs_data = patient:getModData().TOC.Limbs

@@ -1,19 +1,19 @@
 require "TimedActions/ISBaseTimedAction"
 
-ISInstallProsthesis = ISBaseTimedAction:derive("ISInstallProsthesis");
+JCIO_InstallProsthesisAction = ISBaseTimedAction:derive("JCIO_InstallProsthesisAction")
 
-function ISInstallProsthesis:isValid()
+function JCIO_InstallProsthesisAction:isValid()
 
     -- TODO add here conditions if the action can be performed or not, so if thing is in inventory
     -- TODO 'not sure about multiplayer, maybe an overriding check?
     return true
 end
 
-function ISInstallProsthesis:update()
+function JCIO_InstallProsthesisAction:update()
     self.item:setJobDelta(self:getJobDelta())
 end
 
-function ISInstallProsthesis:start()
+function JCIO_InstallProsthesisAction:start()
     self.item:setJobType("Install prosthesis")
     self.item:setJobDelta(0.0)
 
@@ -27,12 +27,12 @@ function ISInstallProsthesis:start()
 
 end
 
-function ISInstallProsthesis:stop()
+function JCIO_InstallProsthesisAction:stop()
     ISBaseTimedAction.stop(self)
     self.item:setJobDelta(0.0)
 end
 
-function ISInstallProsthesis:perform()
+function JCIO_InstallProsthesisAction:perform()
 
 
 
@@ -69,7 +69,7 @@ function ISInstallProsthesis:perform()
     ISBaseTimedAction.perform(self)
 end
 
-function ISInstallProsthesis:new(surgeon, patient, item, part_name)
+function JCIO_InstallProsthesisAction:new(surgeon, patient, item, part_name)
 
     local o = ISBaseTimedAction.new(self, patient)
 

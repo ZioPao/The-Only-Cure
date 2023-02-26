@@ -361,13 +361,13 @@ end
 local function OnClickTocConfirmUIMP(button, args)
     local player = getPlayer()
     if confirmUIMP.actionAct == "Cut" and args.option == "yes" then
-        ISTimedActionQueue.add(ISCutLimb:new(confirmUIMP.patient, player, confirmUIMP.partNameAct))
+        ISTimedActionQueue.add(JCIO_CutLimbAction:new(confirmUIMP.patient, player, confirmUIMP.partNameAct))
     elseif confirmUIMP.actionAct == "Operate" and args.option == "yes" then
         local playerInv = player:getInventory()
         local item = playerInv:getItemFromType('TOC.Real_surgeon_kit') or playerInv:getItemFromType('TOC.Surgeon_kit') or
             playerInv:getItemFromType('TOC.Improvised_surgeon_kit')
         if item then
-            ISTimedActionQueue.add(ISOperateLimb:new(confirmUIMP.patient, player, item, confirmUIMP.partNameAct,
+            ISTimedActionQueue.add(JCIO_OperateLimbAction:new(confirmUIMP.patient, player, item, confirmUIMP.partNameAct,
                 false))
         else
             player:Say("I need a kit")
@@ -381,7 +381,7 @@ local function OnClickTocConfirmUIMP(button, args)
             surgeon_inventory:getItemFromType('TOC.WoodenHook')
 
         if prosthesis_to_equip then
-            ISTimedActionQueue.add(ISInstallProsthesis:new(player, confirmUIMP.patient, prosthesis_to_equip,
+            ISTimedActionQueue.add(JCIO_InstallProsthesisAction:new(player, confirmUIMP.patient, prosthesis_to_equip,
                 confirmUIMP.partNameAct))
         else
             player:Say("I don't have a prosthesis right now")
@@ -395,7 +395,7 @@ local function OnClickTocConfirmUIMP(button, args)
         -- TODO Player is surgeon, but we don't have a confirm_ui_mp.surgeon... awful awful awful
         -- TODO Workaround for now, we'd need to send data from patient before doing it since we can't access his inventory from the surgeon
         if confirmUIMP.patient == player then
-            ISTimedActionQueue.add(ISUninstallProsthesis:new(player, confirmUIMP.patient, confirmUIMP.partNameAct))
+            ISTimedActionQueue.add(JCIO_UninstallProsthesisAction:new(player, confirmUIMP.patient, confirmUIMP.partNameAct))
 
         else
             player:Say("I can't do that, they need to do it themselves")

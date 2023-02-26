@@ -1,12 +1,12 @@
 require "TimedActions/ISBaseTimedAction"
 
-ISOperateLimb = ISBaseTimedAction:derive("ISOperateLimb");
+JCIO_OperateLimbAction = ISBaseTimedAction:derive("JCIO_OperateLimbAction")
 
-function ISOperateLimb:isValid()
-    return self.patientX == self.patient:getX() and self.patientY == self.patient:getY();
+function JCIO_OperateLimbAction:isValid()
+    return self.patientX == self.patient:getX() and self.patientY == self.patient:getY()
 end
 
-function ISOperateLimb:waitToStart()
+function JCIO_OperateLimbAction:waitToStart()
     if self.patient == self.surgeon then
         return false
     end
@@ -14,13 +14,13 @@ function ISOperateLimb:waitToStart()
     return self.surgeon:shouldBeTurning()
 end
 
-function ISOperateLimb:update()
+function JCIO_OperateLimbAction:update()
     if self.patient ~= self.surgeon then
         self.surgeon:faceThisObject(self.patient)
     end
 end
 
-function ISOperateLimb:start()
+function JCIO_OperateLimbAction:start()
     self:setActionAnim("MedicalCheck")
     if self.use_oven then
         self.sound = self.patient:getEmitter():playSound("Burn_sound")
@@ -28,7 +28,7 @@ function ISOperateLimb:start()
     end
 end
 
-function ISOperateLimb:findArgs()
+function JCIO_OperateLimbAction:findArgs()
     local surgeon_factor = self.surgeon:getPerkLevel(Perks.Doctor)
 
     if self.use_oven then
@@ -53,7 +53,7 @@ function ISOperateLimb:findArgs()
     return surgeon_factor, self.use_oven;
 end
 
-function ISOperateLimb:perform()
+function JCIO_OperateLimbAction:perform()
     local surgeon_factor, use_oven = self:findArgs()
 
     if self.patient ~= self.surgeon and isClient() then
@@ -70,7 +70,7 @@ function ISOperateLimb:perform()
     ISBaseTimedAction.perform(self)
 end
 
-function ISOperateLimb:new(patient, surgeon, kit, part_name, use_oven)
+function JCIO_OperateLimbAction:new(patient, surgeon, kit, part_name, use_oven)
     local o = ISBaseTimedAction.new(self, patient)
     o.part_name = part_name
     o.patient = patient

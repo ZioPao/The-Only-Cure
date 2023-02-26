@@ -7,7 +7,7 @@
 
 function TocCutLocal(_, player, part_name)
     if JCIO_Common.GetSawInInventory(player) ~= nil then
-        ISTimedActionQueue.add(ISCutLimb:new(player, player, part_name))
+        ISTimedActionQueue.add(JCIO_CutLimbAction:new(player, player, part_name))
     else
         player:Say("I don't have a saw on me")
     end
@@ -15,11 +15,11 @@ end
 
 function TocOperateLocal(_, player, part_name, use_oven)
     if use_oven then
-        ISTimedActionQueue.add(ISOperateLimb:new(player, player, _, part_name, use_oven));
+        ISTimedActionQueue.add(JCIO_OperateLimbAction:new(player, player, _, part_name, use_oven));
     else
         local kit = TocGetKitInInventory(player)
         if kit ~= nil then
-            ISTimedActionQueue.add(ISOperateLimb:new(player, player, kit, part_name, false))
+            ISTimedActionQueue.add(JCIO_OperateLimbAction:new(player, player, kit, part_name, false))
         else
             player:Say("I don't have a kit on me")
         end
@@ -32,13 +32,13 @@ function TocEquipProsthesisLocal(_, player, part_name)
         surgeon_inventory:getItemFromType('TOC.MetalHook') or
         surgeon_inventory:getItemFromType('TOC.WoodenHook')
     if prosthesis_to_equip then
-        ISTimedActionQueue.add(ISInstallProsthesis:new(player, player, prosthesis_to_equip, part_name))
+        ISTimedActionQueue.add(JCIO_InstallProsthesisAction:new(player, player, prosthesis_to_equip, part_name))
     else
         player:Say("I need a prosthesis")
     end
 end
 
 function TocUnequipProsthesisLocal(_, player, part_name)
-    ISTimedActionQueue.add(ISUninstallProsthesis:new(player, player, part_name))
+    ISTimedActionQueue.add(JCIO_UninstallProsthesisAction:new(player, player, part_name))
 
 end

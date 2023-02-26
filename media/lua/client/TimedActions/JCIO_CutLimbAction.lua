@@ -1,13 +1,13 @@
 require "TimedActions/ISBaseTimedAction"
 
-ISCutLimb = ISBaseTimedAction:derive("ISCutLimb")
+JCIO_CutLimbAction = ISBaseTimedAction:derive("JCIO_CutLimbAction")
 
 
-function ISCutLimb:isValid()
+function JCIO_CutLimbAction:isValid()
     return self.patientX == self.patient:getX() and self.patientY == self.patient:getY()
 end
 
-function ISCutLimb:waitToStart()
+function JCIO_CutLimbAction:waitToStart()
     if self.patient == self.surgeon then
         return false
     end
@@ -15,13 +15,13 @@ function ISCutLimb:waitToStart()
     return self.surgeon:shouldBeTurning()
 end
 
-function ISCutLimb:update()
+function JCIO_CutLimbAction:update()
     if self.patient ~= self.surgeon then
         self.surgeon:faceThisObject(self.patient)
     end
 end
 
-function ISCutLimb:stop()
+function JCIO_CutLimbAction:stop()
 
     print("Stopping ISCutLimb")
     self.surgeon:getEmitter():stopSoundByName("Amputation_Sound")
@@ -36,7 +36,7 @@ end
 
 
 
-function ISCutLimb:start()
+function JCIO_CutLimbAction:start()
     -- TODO Add a check so you can't cut your arm if you don't have hands or if you only have one arm and want to cut that same arm.
 
     self:setActionAnim("SawLog")
@@ -68,7 +68,7 @@ function ISCutLimb:start()
 
 end
 
-function ISCutLimb:findArgs()
+function JCIO_CutLimbAction:findArgs()
     local surgeon_factor = self.surgeon:getPerkLevel(Perks.Doctor)
     if self.surgeon:getDescriptor():getProfession() == "surgeon" then surgeon_factor = surgeon_factor + 15 end
     if self.surgeon:getDescriptor():getProfession() == "doctor" then surgeon_factor = surgeon_factor + 9 end
@@ -115,7 +115,7 @@ function ISCutLimb:findArgs()
     return surgeon_factor, bandage_table, painkiller_table
 end
 
-function ISCutLimb:perform()
+function JCIO_CutLimbAction:perform()
     local surgeon_factor, bandage_table, painkiller_table = self:findArgs()
 
     if self.patient ~= self.surgeon and isClient() then
@@ -131,7 +131,7 @@ function ISCutLimb:perform()
 
 end
 
-function ISCutLimb:new(patient, surgeon, part_name)
+function JCIO_CutLimbAction:new(patient, surgeon, part_name)
 
     -- TODO align surgeon, patient not patient, surgeon
 
