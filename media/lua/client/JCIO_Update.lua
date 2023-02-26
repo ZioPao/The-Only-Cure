@@ -4,7 +4,7 @@
 ------------- UPDATE EVENTS --------------
 
 
-require "TOC_Init"
+require "JCIO_Init"
 
 local function CheckIfPlayerIsInfected(player, limbsData)
 

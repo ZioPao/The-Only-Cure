@@ -123,9 +123,9 @@ function ISEquipWeaponAction:perform()
     --TODO Block it before even performing
     -- TODO in the inventory menu there is something broken, even though this works
     og_ISEquipWeaponActionPerform(self)
-    local limbs_data = self.character:getModData().TOC.Limbs
-    local can_be_held = {}
-    JCIO_Common.GetCanBeHeldTable(can_be_held, limbs_data)
+    local limbs_data = self.character:getModData().JCIO.limbs
+    local can_be_held = JCIO_Common.GetCanBeHeldTable(limbs_data)
+
 
     if not self.item:isRequiresEquippedBothHands() then
         if can_be_held["Right"] and not can_be_held["Left"] then

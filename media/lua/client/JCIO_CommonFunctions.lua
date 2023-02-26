@@ -25,7 +25,7 @@ JCIO_Common.GeneratePartNames = function()
 end
 
 JCIO_Common.GetPartNames = function()
-    if JCIO_Common.partNames.size() == nil then
+    if JCIO_Common.partNames[1] == nil then
         JCIO_Common.GeneratePartNames()
     end
 

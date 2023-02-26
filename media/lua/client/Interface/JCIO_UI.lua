@@ -592,7 +592,7 @@ JCIO.RefreshClientMenu = function(_)
 
     else
 
-        local limbs_data = JCIO_UI.onlineTempTable.patient:getModData().TOC.Limbs
+        local limbs_data = JCIO_UI.onlineTempTable.patient:getModData().JCIO.limbs
         JCIO_UI.SetupMainUI(JCIO_UI.onlineTempTable.patient, JCIO_UI.onlineTempTable.patient, limbs_data)
     end
 

@@ -30,13 +30,13 @@ local function PartNameToBodyLocationAmputation(name)
     if name == "Right_Foot" then return "JCIO_LegRight" end
 end
 
-function TocFindItemInProstBodyLocation(part_name, patient)
+function TocFindItemInProstBodyLocation(partName, patient)
     -- Can't be used for online purposes, since we can't get the online inventory of another player
     local worn_items = patient:getWornItems()
 
     for i = 1, worn_items:size() - 1 do -- Maybe wornItems:size()-1
         local item = worn_items:get(i):getItem()
-        if item:getBodyLocation() == PartNameToBodyLocationProsthesis(part_name) then
+        if item:getBodyLocation() == PartNameToBodyLocationProsthesis(partName) then
             return item
         end
     end
@@ -44,19 +44,19 @@ function TocFindItemInProstBodyLocation(part_name, patient)
 end
 
 -- Debug cheat and update every minute for cicatrization
-function TocFindAmputationOrProsthesisName(part_name, player, choice)
+function TocFindAmputationOrProsthesisName(partName, player, choice)
     local worn_items = player:getWornItems()
     for i = 1, worn_items:size() - 1 do 
         local item = worn_items:get(i):getItem()
 
         if choice == "Amputation" then
             
-            if item:getBodyLocation() == PartNameToBodyLocationAmputation(part_name) then
+            if item:getBodyLocation() == PartNameToBodyLocationAmputation(partName) then
                 return item:getFullType()
             end
         elseif choice == "Prosthesis" then
 
-            if item:getBodyLocation() == PartNameToBodyLocationProsthesis(part_name) then
+            if item:getBodyLocation() == PartNameToBodyLocationProsthesis(partName) then
                 return item:getFullType()
 
             end

@@ -3,6 +3,10 @@
 ------------------------------------------
 ----------- CUT LIMB FUNCTIONS -----------
 
+-- Seems to be the first file loaded, so let's add this
+if JCIO == nil then
+    JCIO = {}
+end
 
 
 
