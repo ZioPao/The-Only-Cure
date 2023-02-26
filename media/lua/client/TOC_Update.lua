@@ -5,8 +5,8 @@ local function CheckIfPlayerIsInfected(player, limbsData)
     local bodyDamage = player:getBodyDamage()
 
     -- Check for amputable limbs
-    for _, v in ipairs(GetLimbsBodyPartTypes()) do
-        local partName = TocGetPartNameFromBodyPartType(v)
+    for _, v in ipairs(JCIO_Common.GetAcceptableBodyPartTypes()) do
+        local partName = JCIO_Common.GetPartNameFromBodyPartType(v)
         local partData = limbsData[partName]
         local bodyPart = bodyDamage:getBodyPart(v)
 
@@ -21,7 +21,7 @@ local function CheckIfPlayerIsInfected(player, limbsData)
     end
 
     -- Check for everything else
-    for _, v in pairs(GetOtherBodyPartTypes()) do
+    for _, v in pairs(JCIO_Common.GetOtherBodyPartTypes()) do
         if bodyDamage:getBodyPart(v):bitten() then
             limbsData.isOtherBodypartInfected = true -- Even one is enough, stop cycling if we find it
             break
@@ -31,10 +31,10 @@ end
 local function ManagePhantomPain(player, limbsData)
     local body_damage = player:getBodyDamage()
 
-    for _, partName in pairs(GetBodyParts()) do
+    for _, partName in pairs(JCIO_Common.GetPartNames()) do
 
         if limbsData[partName].isCut and limbsData[partName].isAmputationShown and ZombRand(1, 100) < 10 then
-            local body_part = body_damage:getBodyPart(TocGetBodyPartFromPartName(partName))
+            local body_part = body_damage:getBodyPart(JCIO_Common.GetBodyPartFromPartName(partName))
             local added_pain
             if limbsData[partName].isCauterized then added_pain = 60 else added_pain = 30 end
             body_part:setAdditionalPain(ZombRand(1, added_pain))
@@ -57,7 +57,7 @@ local function SetHealthStatusForBodyPart(partData, partName, player)
 
 
     local bodyDamage = player:getBodyDamage()
-    local bodyPart = bodyDamage:getBodyPart(TocGetBodyPartFromPartName(partName))
+    local bodyPart = bodyDamage:getBodyPart(JCIO_Common.GetBodyPartFromPartName(partName))
     if not bodyPart then
         print("JCIO ERROR: Can't update health of " .. partName)
         return false
@@ -143,7 +143,7 @@ local function UpdatePlayerHealth(player, partData)
 
     if player:HasTrait("Insensitive") then bodyDamage:setPainReduction(49) end
 
-    for _, partName in pairs(GetBodyParts()) do
+    for _, partName in pairs(JCIO_Common.GetPartNames()) do
         if partData[partName].isCut then
             SetHealthStatusForBodyPart(partData, partName, player)
 
@@ -191,12 +191,12 @@ JCIO.UpdateEveryTenMinutes = function()
     end
 
     -- Updates the cicatrization time
-    for _, partName in pairs(GetBodyParts()) do
+    for _, partName in pairs(JCIO_Common.GetPartNames()) do
         if partData[partName].isCut and not partData[partName].isCicatrized then
 
             --Wound cleanliness contributes to cicatrization
             -- TODO we reset this stuff every time we restart the game for compat reason, this is an issue
-            local amputatedLimbItem = TocGetAmputationItemInInventory(player, partName)
+            local amputatedLimbItem = JCIO_Common.GetAmputationItemInInventory(player, partName)
             local itemDirtyness = amputatedLimbItem:getDirtyness()/100
             local itemBloodyness = amputatedLimbItem:getBloodLevel()/100
 

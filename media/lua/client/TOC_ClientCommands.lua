@@ -15,7 +15,7 @@ ServerCommands.ResponseCanAct = function(arg)
     ui.responsePartName = arg["toSend"][1]
     ui.responseCan = arg["toSend"][3]
     ui.responseUserName = getPlayerByOnlineID(arg["From"]):getUsername()
-    ui.responseActionIsBitten = getPlayerByOnlineID(arg["From"]):getBodyDamage():getBodyPart(TocGetBodyPartFromPartName(ui
+    ui.responseActionIsBitten = getPlayerByOnlineID(arg["From"]):getBodyDamage():getBodyPart(JCIO_Common.GetBodyPartFromPartName(ui
         .responsePartName)):bitten()
 end
 
@@ -113,7 +113,7 @@ ServerCommands.CanResetEverything = function(arg)
     sendClientCommand("TOC", "SendServer", arg)
 end
 ServerCommands.ResetEverything = function(_)
-    TocResetEverything()
+    JCIO_Cheat.ResetEverything()
 end
 
 
@@ -173,7 +173,7 @@ end
 Events.OnReceiveGlobalModData.Add(TOC_OnReceiveGlobalModData)
 
 function TOC_OnConnected()
-    ModData.request("TOC_PLAYER_DATA")
+    ModData.request("JCIO_PLAYER_DATA")
 end
 
 

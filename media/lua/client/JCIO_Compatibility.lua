@@ -41,7 +41,7 @@ JCIO_Compat.MapOldDataToNew = function(modData)
     print("JCIO: found old data from TOC")
 
 
-    TocResetEverything()
+    JCIO_Cheat.ResetEverything()
 
     -- Another check just in case the user is using Mr Bounty og version. I really don't wanna map that out so let's just reset everything directly
 
@@ -124,7 +124,7 @@ JCIO_Compat.MapOldDataToNew = function(modData)
 
         if modData.JCIO.limbs[newName].isCut then
             print("JCIO: Found old cut limb, reapplying model")
-            local cloth = getPlayer():getInventory():AddItem(TocFindAmputatedClothingFromPartName(newName))
+            local cloth = getPlayer():getInventory():AddItem(JCIO_Common.FindAmputatedClothingName(newName))
             getPlayer():setWornItem(cloth:getBodyLocation(), cloth)
         end
 

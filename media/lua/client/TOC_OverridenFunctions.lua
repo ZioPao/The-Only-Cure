@@ -22,7 +22,7 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
         local modifiedMaxTime = originalMaxTime
         local burnFactor = 1.3         -- TODO Move this crap
 
-        for _, partName in pairs(GetBodyParts()) do
+        for _, partName in pairs(JCIO_Common.GetPartNames()) do
             if limbsData[partName].isCut then
 
 

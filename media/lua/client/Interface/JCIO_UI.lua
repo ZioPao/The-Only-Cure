@@ -60,7 +60,7 @@ local function GetImageName(partName, limbsData)
         name = "media/ui/TOC/Empty.png"
     elseif not part_data.isCut and
         -- FIXME This doesn't work in MP on another player since we're trying to retrieve bodyDamage from another player
-        getPlayer():getBodyDamage():getBodyPart(TocGetBodyPartFromPartName(partName)):bitten() then -- Not cut but bitten
+        getPlayer():getBodyDamage():getBodyPart(JCIO_Common.GetBodyPartFromPartName(partName)):bitten() then -- Not cut but bitten
         name = "media/ui/TOC/" .. partName .. "/Bite.png"
     else -- Not cut
         name = "media/ui/TOC/" .. partName .. "/Base.png"
@@ -100,7 +100,7 @@ end
 
 local function IsPartBitten(partData, partName)
     return not partData.isCut and
-        getPlayer():getBodyDamage():getBodyPart(TocGetBodyPartFromPartName(partName)):bitten()
+        getPlayer():getBodyDamage():getBodyPart(JCIO_Common.GetBodyPartFromPartName(partName)):bitten()
 end
 
 local function FindMinMax(lv)
@@ -243,11 +243,11 @@ JCIO_UI.SetupDescUI = function(surgeon, patient, limbsData, partName)
         -- TODO add check for cuts and scratches
         descUI["status"]:setText("Not cut")
         descUI["status"]:setColor(1, 1, 1, 1)
-        if TocGetSawInInventory(surgeon) and not CheckIfProsthesisAlreadyInstalled(limbsData, partName) then
+        if JCIO_Common.GetSawInInventory(surgeon) and not CheckIfProsthesisAlreadyInstalled(limbsData, partName) then
             descUI["b1"]:setVisible(true)
             descUI["b1"]:setText("Cut")
             descUI["b1"]:addArg("option", "Cut")
-        elseif TocGetSawInInventory(surgeon) and CheckIfProsthesisAlreadyInstalled(limbsData, partName) then
+        elseif JCIO_Common.GetSawInInventory(surgeon) and CheckIfProsthesisAlreadyInstalled(limbsData, partName) then
             descUI["b1"]:setVisible(true)
             descUI["b1"]:setText("Remove prosthesis before")
             descUI["b1"]:addArg("option", "Nothing")
@@ -582,18 +582,18 @@ end
 
 
 
-TocTempTable = {patient = nil, surgeon = nil}
+JCIO_UI.onlineTempTable = {patient = nil, surgeon = nil}
 
 JCIO.RefreshClientMenu = function(_)
     if mainUI:getIsVisible() == false then
         Events.OnTick.Remove(JCIO.RefreshClientMenu)
-        TocTempTable.patient = nil
-        TocTempTable.surgeon = nil
+        JCIO_UI.onlineTempTable.patient = nil
+        JCIO_UI.onlineTempTable.surgeon = nil
 
     else
 
-        local limbs_data = TocTempTable.patient:getModData().TOC.Limbs
-        JCIO_UI.SetupMainUI(TocTempTable.patient, TocTempTable.patient, limbs_data)
+        local limbs_data = JCIO_UI.onlineTempTable.patient:getModData().TOC.Limbs
+        JCIO_UI.SetupMainUI(JCIO_UI.onlineTempTable.patient, JCIO_UI.onlineTempTable.patient, limbs_data)
     end
 
 end
@@ -604,14 +604,14 @@ JCIO.RefreshOtherPlayerMenu = function(_)
     if mainUI:getIsVisible() == false then
 
         Events.OnTick.Remove(JCIO.RefreshOtherPlayerMenu)
-        TocTempTable.patient = nil
-        TocTempTable.surgeon = nil
+        JCIO_UI.onlineTempTable.patient = nil
+        JCIO_UI.onlineTempTable.surgeon = nil
 
         else
-        if ModData.get("TOC_PLAYER_DATA")[TocTempTable.patient:getUsername()] ~= nil then
-            local other_player_part_data = ModData.get("TOC_PLAYER_DATA")[TocTempTable.patient:getUsername()]
+        if ModData.get("JCIO_PLAYER_DATA")[JCIO_UI.onlineTempTable.patient:getUsername()] ~= nil then
+            local otherPlayerPartData = ModData.get("JCIO_PLAYER_DATA")[JCIO_UI.onlineTempTable.patient:getUsername()]
 
-            JCIO_UI.SetupMainUI(TocTempTable.surgeon, TocTempTable.patient, other_player_part_data[1])
+            JCIO_UI.SetupMainUI(JCIO_UI.onlineTempTable.surgeon, JCIO_UI.onlineTempTable.patient, otherPlayerPartData[1])
 
 
         end
@@ -630,8 +630,8 @@ function ISNewHealthPanel.onClickJCIO(button)
     local surgeon = button.otherPlayer
     local patient = button.character
 
-    TocTempTable.patient = patient
-    TocTempTable.surgeon = surgeon
+    JCIO_UI.onlineTempTable.patient = patient
+    JCIO_UI.onlineTempTable.surgeon = surgeon
 
     -- MP Handling
     if surgeon then
@@ -670,10 +670,6 @@ function ISNewHealthPanel.onClickJCIO(button)
     mainUI:setInCenterOfScreen()
 
 end
-
-
-
-
 
 function ISHealthPanel:createChildren()
     ISHealthPanel_createChildren(self)

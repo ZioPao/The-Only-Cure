@@ -1,22 +1,44 @@
-function GetBodyParts()
-    local bodyparts = {
-        "Right_Hand", "Right_LowerArm", "Right_UpperArm", "Left_Hand",
-        "Left_LowerArm", "Left_UpperArm"
-    }
-    return bodyparts
+------------------------------------------
+------------- JUST CUT IT OFF ------------
+------------------------------------------
+------------ COMMON FUNCTIONS ------------
+
+
+
+if JCIO_Common == nil then
+    JCIO_Common = {}
 end
 
-function GetProsthesisList()
-    return {"WoodenHook", "MetalHook", "MetalHand"}
+
+JCIO_Common.partNames = {}
+
+JCIO_Common.GeneratePartNames = function()
+
+    local partNamesTable = {}
+    for _, side in ipairs(JCIO.sideNames) do
+        for _, limb in ipairs(JCIO.limbNames) do
+            local tempPartName = side .. "_" .. limb
+            table.insert(partNamesTable, tempPartName)
+        end
+    end
+
+    JCIO_Common.partNames = partNamesTable
 
 end
 
-function TocFindAmputatedClothingFromPartName(part_name)
-    return "TOC.Amputation_" .. part_name
+
+
+JCIO_Common.GetPartNames = function()
+    if JCIO_Common.partNames.size() == nil then
+        JCIO_Common.GeneratePartNames()
+    end
+
+    return JCIO_Common.partNames
 end
 
-function GetLimbsBodyPartTypes()
+JCIO_Common.GetAcceptableBodyPartTypes = function()
 
+    -- TODO Add Foot_L and Foot_R
     return {
         BodyPartType.Hand_R, BodyPartType.ForeArm_R, BodyPartType.UpperArm_R,
         BodyPartType.Hand_L, BodyPartType.ForeArm_L, BodyPartType.UpperArm_L
@@ -24,7 +46,7 @@ function GetLimbsBodyPartTypes()
 
 end
 
-function GetOtherBodyPartTypes()
+JCIO_Common.GetOtherBodyPartTypes = function()
 
     return {
         BodyPartType.Torso_Upper, BodyPartType.Torso_Lower, BodyPartType.Head,
@@ -36,28 +58,30 @@ function GetOtherBodyPartTypes()
 
 end
 
-function GetAcceptingProsthesisBodyPartTypes()
 
-    return {
-        BodyPartType.Hand_R, BodyPartType.ForeArm_R, BodyPartType.Hand_L,
-        BodyPartType.ForeArm_L
-    }
+function GetProsthesisList()
+    -- TODO Not gonna work anymore
+    return {"WoodenHook", "MetalHook", "MetalHand"}
 
 end
 
-function TocGetPartNameFromBodyPartType(body_part)
+function JCIO_Common.FindAmputatedClothingName(partName)
+    return "TOC.Amputation_" .. partName
+end
 
-    if body_part == BodyPartType.Hand_R then
+function JCIO_Common.GetPartNameFromBodyPartType(bodyPartType)
+
+    if bodyPartType == BodyPartType.Hand_R then
         return "Right_Hand"
-    elseif body_part == BodyPartType.ForeArm_R then
+    elseif bodyPartType == BodyPartType.ForeArm_R then
         return "Right_LowerArm"
-    elseif body_part == BodyPartType.UpperArm_R then
+    elseif bodyPartType == BodyPartType.UpperArm_R then
         return "Right_UpperArm"
-    elseif body_part == BodyPartType.Hand_L then
+    elseif bodyPartType == BodyPartType.Hand_L then
         return "Left_Hand"
-    elseif body_part == BodyPartType.ForeArm_L then
+    elseif bodyPartType == BodyPartType.ForeArm_L then
         return "Left_LowerArm"
-    elseif body_part == BodyPartType.UpperArm_L then
+    elseif bodyPartType == BodyPartType.UpperArm_L then
         return "Left_UpperArm"
     else
         return nil
@@ -67,62 +91,65 @@ end
 
 
 -- 1:1 map of part_name to BodyPartType
-function TocGetBodyPartFromPartName(part_name)
-    if part_name == "Right_Hand" then return BodyPartType.Hand_R end
-    if part_name == "Right_LowerArm" then return BodyPartType.ForeArm_R end
-    if part_name == "Right_UpperArm" then return BodyPartType.UpperArm_R end
-    if part_name == "Left_Hand" then return BodyPartType.Hand_L end
-    if part_name == "Left_LowerArm" then return BodyPartType.ForeArm_L end
-    if part_name == "Left_UpperArm" then return BodyPartType.UpperArm_L end
+function JCIO_Common.GetBodyPartFromPartName(partName)
+    if partName == "Right_Hand" then return BodyPartType.Hand_R end
+    if partName == "Right_LowerArm" then return BodyPartType.ForeArm_R end
+    if partName == "Right_UpperArm" then return BodyPartType.UpperArm_R end
+    if partName == "Left_Hand" then return BodyPartType.Hand_L end
+    if partName == "Left_LowerArm" then return BodyPartType.ForeArm_L end
+    if partName == "Left_UpperArm" then return BodyPartType.UpperArm_L end
 
     -- New Legs stuff
-    if part_name == "Right_Foot" then return BodyPartType.Foot_R end
-    if part_name == "Left_Foot" then return BodyPartType.Foot_L end
+    if partName == "Right_Foot" then return BodyPartType.Foot_R end
+    if partName == "Left_Foot" then return BodyPartType.Foot_L end
 
 end
 
 -- Custom mapping to make more sense when cutting a limb
-function TocGetAdjacentBodyPartFromPartName(part_name)
+function JCIO_Common.GetAdjacentBodyPartFromPartName(partName)
 
-    if part_name == "Right_Hand" then return BodyPartType.ForeArm_R end
-    if part_name == "Right_LowerArm" then return BodyPartType.UpperArm_R end
-    if part_name == "Right_UpperArm" then return BodyPartType.Torso_Upper end
-    if part_name == "Left_Hand" then return BodyPartType.ForeArm_L end
-    if part_name == "Left_LowerArm" then return BodyPartType.UpperArm_L end
-    if part_name == "Left_UpperArm" then return BodyPartType.Torso_Upper end
+    if partName == "Right_Hand" then return BodyPartType.ForeArm_R end
+    if partName == "Right_LowerArm" then return BodyPartType.UpperArm_R end
+    if partName == "Right_UpperArm" then return BodyPartType.Torso_Upper end
+    if partName == "Left_Hand" then return BodyPartType.ForeArm_L end
+    if partName == "Left_LowerArm" then return BodyPartType.UpperArm_L end
+    if partName == "Left_UpperArm" then return BodyPartType.Torso_Upper end
+    if partName == "Right_Foot" then return BodyPartType.LowerLeg_R end
+    if partName == "Left_Foot" then return BodyPartType.LowerLeg_L end
 
-    if part_name == "Right_Foot" then return BodyPartType.LowerLeg_R end
-    if part_name == "Left_Foot" then return BodyPartType.LowerLeg_L end
-
-
-end
-
-function TocFindCorrectClothingProsthesis(item_name, part_name)
-
-    local correct_name = "TOC.Prost_" .. part_name .. "_" .. item_name
-    return correct_name
 
 end
 
-function TocGetAmputationItemInInventory(player, part_name)
+function TocFindCorrectClothingProsthesis(itemName, partName)
 
-    local player_inventory = player:getInventory()
-    local amputation_item_name = TocFindAmputationOrProsthesisName(part_name, player, "Amputation")
-    local amputation_item = player_inventory:FindAndReturn(amputation_item_name)
-    return amputation_item
+    -- TODO This is not gonna work soon, so don't use this
+    local correctName = "TOC.Prost_" .. partName .. "_" .. itemName
+    return correctName
+
 end
 
-function TocGetSawInInventory(surgeon)
+JCIO_Common.GetAmputationItemInInventory = function(player, partName)
 
-    local player_inv = surgeon:getInventory()
-    local item = player_inv:getItemFromType("Saw") or player_inv:getItemFromType("GardenSaw") or
-        player_inv:getItemFromType("Chainsaw")
+    local playerInv = player:getInventory()
+    local amputationItemName = TocFindAmputationOrProsthesisName(partName, player, "Amputation")
+    local amputationItem = playerInv:FindAndReturn(amputationItemName)
+    return amputationItem
+end
+
+function JCIO_Common.GetSawInInventory(surgeon)
+
+    local playerInv = surgeon:getInventory()
+    local item = playerInv:getItemFromType("Saw") or playerInv:getItemFromType("GardenSaw") or
+        playerInv:getItemFromType("Chainsaw")
     return item
 end
 
-function TocGetSideFromPartName(part_name)
 
-    if string.find(part_name, "Left") then
+
+
+function JCIO_Common.GetSideFromPartName(partName)
+
+    if string.find(partName, "Left") then
         return "Left"
     else
         return "Right"

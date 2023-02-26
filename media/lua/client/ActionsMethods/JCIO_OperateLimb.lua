@@ -22,11 +22,11 @@ end
 local function SetBodyPartsStatusAfterOperation(player, limbParameters, partName, useOven)
 
 
-    local bodyPartType = player:getBodyDamage():getBodyPart(TocGetAdjacentBodyPartFromPartName(partName))
+    local bodyPartType = player:getBodyDamage():getBodyPart(JCIO_Common.GetAdjacentBodyPartFromPartName(partName))
     FixSingleBodyPartType(bodyPartType, useOven)
 
     for _, v in pairs(limbParameters[partName].dependsOn) do
-        local dependedBodyPartType = player:getBodyDamage():getBodyPart(TocGetAdjacentBodyPartFromPartName(v))
+        local dependedBodyPartType = player:getBodyDamage():getBodyPart(JCIO_Common.GetAdjacentBodyPartFromPartName(v))
         FixSingleBodyPartType(dependedBodyPartType, useOven)
 
     end

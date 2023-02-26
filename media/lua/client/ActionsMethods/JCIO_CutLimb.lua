@@ -18,7 +18,7 @@ local function TocCheckIfStillInfected(limbs_data)
     local check = false
 
 
-    for _, v in pairs(GetBodyParts()) do
+    for _, v in pairs(JCIO_Common.GetPartNames()) do
         if limbs_data[v].is_infected then
             check = true
         end
@@ -33,7 +33,7 @@ end
 
 local function TocCureInfection(body_damage, part_name)
 
-    local body_part_type = body_damage:getBodyPart(TocGetBodyPartFromPartName(part_name))
+    local body_part_type = body_damage:getBodyPart(JCIO_Common.GetBodyPartFromPartName(part_name))
 
     body_damage:setInfected(false)
     body_part_type:SetInfected(false)
@@ -106,7 +106,7 @@ function TocDamagePlayerDuringAmputation(patient, part_name)
 
     -- Since we're cutting that specific part, it only makes sense that the bleeding starts from there. 
     -- Then, we just delete the bleeding somewhere else before applying the other damage to to upper part of the limb
-    local body_part_type = TocGetBodyPartFromPartName(part_name)
+    local body_part_type = JCIO_Common.GetBodyPartFromPartName(part_name)
     local body_damage = patient:getBodyDamage()
     local body_damage_part = body_damage:getBodyPart(body_part_type)
 
@@ -158,8 +158,8 @@ JCIO.CutLimb = function(partName, surgeonFactor, bandageTable, painkillerTable)
     -- Cut Forearm -> Damage in Upperarm
     -- Cut UpperArm -> Damage to torso
     local bodyDamage = player:getBodyDamage()
-    local bodyPart = bodyDamage:getBodyPart(TocGetBodyPartFromPartName(partName))
-    local adjacentBodyPart = player:getBodyDamage():getBodyPart(TocGetAdjacentBodyPartFromPartName(partName))
+    local bodyPart = bodyDamage:getBodyPart(JCIO_Common.GetBodyPartFromPartName(partName))
+    local adjacentBodyPart = player:getBodyDamage():getBodyPart(JCIO_Common.GetAdjacentBodyPartFromPartName(partName))
 
     local stats = player:getStats()
 
@@ -170,7 +170,7 @@ JCIO.CutLimb = function(partName, surgeonFactor, bandageTable, painkillerTable)
     TocSetParametersForMissingLimb(bodyPart, false)
 
     -- Use a tourniquet if available
-    local tourniquetItem = FindTourniquetInWornItems(player, TocGetSideFromPartName(partName))
+    local tourniquetItem = FindTourniquetInWornItems(player, JCIO_Common.GetSideFromPartName(partName))
 
     local baseDamageValue = 100
 
@@ -227,7 +227,7 @@ JCIO.CutLimb = function(partName, surgeonFactor, bandageTable, painkillerTable)
 
             local canHealDependedV = limbsData[depended_v].isInfected and
                 bodyDamage:getInfectionLevel() < 20
-            local depended_body_part = bodyDamage:getBodyPart(TocGetBodyPartFromPartName(depended_v))
+            local depended_body_part = bodyDamage:getBodyPart(JCIO_Common.GetBodyPartFromPartName(depended_v))
             TocSetParametersForMissingLimb(depended_body_part, canHealDependedV)
 
             if canHealDependedV then
@@ -264,7 +264,7 @@ JCIO.CutLimb = function(partName, surgeonFactor, bandageTable, painkillerTable)
         TocDeleteOtherAmputatedLimbs(side)
 
         --Equip new model for amputation
-        local amputation_clothing_item_name = TocFindAmputatedClothingFromPartName(partName)
+        local amputation_clothing_item_name = JCIO_Common.FindAmputatedClothingName(partName)
         print(amputation_clothing_item_name)
 
         local amputation_clothing_item = player:getInventory():AddItem(amputation_clothing_item_name)

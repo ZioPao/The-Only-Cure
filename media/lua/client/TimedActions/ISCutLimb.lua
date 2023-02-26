@@ -40,7 +40,7 @@ function ISCutLimb:start()
     -- TODO Add a check so you can't cut your arm if you don't have hands or if you only have one arm and want to cut that same arm.
 
     self:setActionAnim("SawLog")
-    local saw_item = TocGetSawInInventory(self.surgeon)
+    local saw_item = JCIO_Common.GetSawInInventory(self.surgeon)
     self.surgeon:getEmitter():playSound("Amputation_Sound")
 
     -- Return whatever object we've got in the inventory

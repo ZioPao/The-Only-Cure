@@ -49,15 +49,15 @@ end
 
 -- Global Mod Data data handler
 ClientCommands.ChangePlayerState = function(playerObj, args)
-    ModData.get("TOC_PLAYER_DATA")[playerObj:getUsername()] = args
-    ModData.transmit("TOC_PLAYER_DATA")
+    ModData.get("JCIO_PLAYER_DATA")[playerObj:getUsername()] = args
+    ModData.transmit("JCIO_PLAYER_DATA")
 end
 
 
 ------ Global Mod Data -----------
 
 function TOC_OnInitGlobalModData()
-    ModData.getOrCreate("TOC_PLAYER_DATA")
+    ModData.getOrCreate("JCIO_PLAYER_DATA")
 end
 
 Events.OnInitGlobalModData.Add(TOC_OnInitGlobalModData)

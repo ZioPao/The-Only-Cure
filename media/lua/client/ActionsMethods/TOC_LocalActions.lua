@@ -6,7 +6,7 @@
 
 
 function TocCutLocal(_, player, part_name)
-    if TocGetSawInInventory(player) ~= nil then
+    if JCIO_Common.GetSawInInventory(player) ~= nil then
         ISTimedActionQueue.add(ISCutLimb:new(player, player, part_name))
     else
         player:Say("I don't have a saw on me")
