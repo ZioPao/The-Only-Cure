@@ -57,9 +57,9 @@ function JCIO_CutLimbAction:start()
     end
 
     if self.patient == self.surgeon then
-        TocDamagePlayerDuringAmputation(self.patient, self.part_name)
+        TocDamagePlayerDuringAmputation(self.patient, self.partName)
     else
-        sendClientCommand(self.surgeon, "TOC", "AskDamageOtherPlayer", {self.patient:getOnlineID(), self.part_name})
+        sendClientCommand(self.surgeon, "TOC", "AskDamageOtherPlayer", {self.patient:getOnlineID(), self.partName})
     end
 
 
@@ -119,10 +119,10 @@ function JCIO_CutLimbAction:perform()
     local surgeon_factor, bandage_table, painkiller_table = self:findArgs()
 
     if self.patient ~= self.surgeon and isClient() then
-        SendCutLimb(self.patient, self.part_name, surgeon_factor, bandage_table, painkiller_table)
+        SendCutLimb(self.patient, self.partName, surgeon_factor, bandage_table, painkiller_table)
         sendClientCommand(self.surgeon, "TOC", "AskStopAmputationSound", {surgeon_id = self.surgeon:getOnlineID()})
     else
-        JCIO.CutLimb(self.part_name, surgeon_factor, bandage_table, painkiller_table)
+        JCIO.CutLimb(self.partName, surgeon_factor, bandage_table, painkiller_table)
     end
 
     self.surgeon:getEmitter():stopSoundByName("Amputation_Sound")
@@ -131,7 +131,7 @@ function JCIO_CutLimbAction:perform()
 
 end
 
-function JCIO_CutLimbAction:new(patient, surgeon, part_name)
+function JCIO_CutLimbAction:new(patient, surgeon, partName)
 
     -- TODO align surgeon, patient not patient, surgeon
 
@@ -139,7 +139,7 @@ function JCIO_CutLimbAction:new(patient, surgeon, part_name)
     local o = {}
     setmetatable(o, self)
     self.__index = self
-    o.part_name = part_name
+    o.partName = partName
     o.character = surgeon -- For anim
 
     o.surgeon = surgeon; -- Surgeon or player that make the operation

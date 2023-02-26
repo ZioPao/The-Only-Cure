@@ -17,13 +17,8 @@ function JCIO_InstallProsthesisAction:start()
     self.item:setJobType("Install prosthesis")
     self.item:setJobDelta(0.0)
 
-
-
     self:setActionAnim("WearClothing")
     self:setAnimVariable("WearClothingLocation", "Jacket")
-
-
-
 
 end
 
@@ -34,20 +29,16 @@ end
 
 function JCIO_InstallProsthesisAction:perform()
 
-
-
-    local prosthesis_base_name = self.item:getType()
-
-
+    local prosthesisBaseName = self.item:getType()
 
     self.item:setJobDelta(0.0)
     -- local toc_data = self.character:getModData().TOC
-    --local part_name = TocGetPartNameFromBodyPartType(self.bodyPart:getType())
+    --local partName = TocGetPartNameFromBodyPartType(self.bodyPart:getType())
 
-    local body_part_type = JCIO_Common.GetBodyPartFromPartName(self.part_name)
+    local bodyPartType = JCIO_Common.GetBodyPartFromPartName(self.partName)
 
     -- Check if can be performed. This shouldn't be necessary, but just to be sure
-    if body_part_type == BodyPartType.UpperArm_L or body_part_type == BodyPartType.UpperArm_R then
+    if bodyPartType == BodyPartType.UpperArm_L or bodyPartType == BodyPartType.UpperArm_R then
         print("Can't equip prosthesis")
         return
     end
@@ -56,20 +47,20 @@ function JCIO_InstallProsthesisAction:perform()
 
     if self.patient ~= self.surgeon and isClient() then
 
-        SendEquipProsthesis(self.patient, self.part_name, self.item, prosthesis_base_name)
+        SendEquipProsthesis(self.patient, self.partName, self.item, prosthesisBaseName)
     else
-        JCIO.EquipProsthesis(self.part_name, self.item, prosthesis_base_name)
+        JCIO.EquipProsthesis(self.partName, self.item, prosthesisBaseName)
 
     end
 
 
-    self.surgeon:getInventory():Remove(prosthesis_base_name)         -- Removes the base item after we transferred everything
+    self.surgeon:getInventory():Remove(prosthesisBaseName)         -- Removes the base item after we transferred everything
 
     -- needed to remove from queue / start next.
     ISBaseTimedAction.perform(self)
 end
 
-function JCIO_InstallProsthesisAction:new(surgeon, patient, item, part_name)
+function JCIO_InstallProsthesisAction:new(surgeon, patient, item, partName)
 
     local o = ISBaseTimedAction.new(self, patient)
 
@@ -79,7 +70,7 @@ function JCIO_InstallProsthesisAction:new(surgeon, patient, item, part_name)
 
     o.item = item
 
-    o.part_name = part_name
+    o.partName = partName
 
     --o.bodyPart = bodyPart
     o.maxTime = 100

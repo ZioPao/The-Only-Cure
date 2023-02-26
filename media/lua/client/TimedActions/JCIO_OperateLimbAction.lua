@@ -22,57 +22,57 @@ end
 
 function JCIO_OperateLimbAction:start()
     self:setActionAnim("MedicalCheck")
-    if self.use_oven then
+    if self.useOven then
         self.sound = self.patient:getEmitter():playSound("Burn_sound")
         self:forceComplete()
     end
 end
 
 function JCIO_OperateLimbAction:findArgs()
-    local surgeon_factor = self.surgeon:getPerkLevel(Perks.Doctor)
+    local surgeonFactor = self.surgeon:getPerkLevel(Perks.Doctor)
 
-    if self.use_oven then
-        surgeon_factor = surgeon_factor + 100
+    if self.useOven then
+        surgeonFactor = surgeonFactor + 100
     else
         if self.kit then
             local weight = math.floor(self.kit:getWeight() * 10 + 0.5)
             if weight == 1 then
-                surgeon_factor = surgeon_factor + 2
-            elseif weight == surgeon_factor then
-                surgeon_factor = surgeon_factor + 4
+                surgeonFactor = surgeonFactor + 2
+            elseif weight == surgeonFactor then
+                surgeonFactor = surgeonFactor + 4
             elseif weight == 3 then
-                surgeon_factor = surgeon_factor + 6
+                surgeonFactor = surgeonFactor + 6
             end
         end
 
-        if self.surgeon:getDescriptor():getProfession() == "surgeon" then surgeon_factor = surgeon_factor + 10 end
-        if self.surgeon:getDescriptor():getProfession() == "doctor" then surgeon_factor = surgeon_factor + 5 end
-        if self.surgeon:getDescriptor():getProfession() == "nurse" then surgeon_factor = surgeon_factor + 2 end
+        if self.surgeon:getDescriptor():getProfession() == "surgeon" then surgeonFactor = surgeonFactor + 10 end
+        if self.surgeon:getDescriptor():getProfession() == "doctor" then surgeonFactor = surgeonFactor + 5 end
+        if self.surgeon:getDescriptor():getProfession() == "nurse" then surgeonFactor = surgeonFactor + 2 end
     end
 
-    return surgeon_factor, self.use_oven;
+    return surgeonFactor, self.useOven;
 end
 
 function JCIO_OperateLimbAction:perform()
-    local surgeon_factor, use_oven = self:findArgs()
+    local surgeonFactor, useOven = self:findArgs()
 
     if self.patient ~= self.surgeon and isClient() then
-        SendOperateLimb(self.patient, self.part_name, surgeon_factor, use_oven)
+        SendOperateLimb(self.patient, self.partName, surgeonFactor, useOven)
     else
-        JCIO.OperateLimb(self.part_name, surgeon_factor, use_oven)
+        JCIO.OperateLimb(self.partName, surgeonFactor, useOven)
     end
     self.surgeon:getXp():AddXP(Perks.Doctor, 400)
 
-    if self.kit and not use_oven then
+    if self.kit and not useOven then
         self.surgeon:getInventory():Remove(self.kit)
     end
 
     ISBaseTimedAction.perform(self)
 end
 
-function JCIO_OperateLimbAction:new(patient, surgeon, kit, part_name, use_oven)
+function JCIO_OperateLimbAction:new(patient, surgeon, kit, partName, useOven)
     local o = ISBaseTimedAction.new(self, patient)
-    o.part_name = part_name
+    o.partName = partName
     o.patient = patient
     o.character = surgeon -- For anim
     o.patientX = patient:getX()
@@ -80,11 +80,11 @@ function JCIO_OperateLimbAction:new(patient, surgeon, kit, part_name, use_oven)
     o.surgeon = surgeon
     o.kit = kit
 
-    o.use_oven = use_oven
+    o.useOven = useOven
 
 
-    --o.use_oven = use_oven;
-    if use_oven then
+    --o.useOven = useOven;
+    if useOven then
         o.maxTime = 30
     else
         o.maxTime = 200 - (surgeon:getPerkLevel(Perks.Doctor) * 10)

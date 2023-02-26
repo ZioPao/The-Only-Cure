@@ -4,15 +4,11 @@ JCIO_UninstallProsthesisAction = ISBaseTimedAction:derive("JCIO_UninstallProsthe
 
 function JCIO_UninstallProsthesisAction:isValid()
 
-    if self.item ~= nil and self.is_prosthesis_equipped then
+    if self.item ~= nil and self.isProsthesisEquipped then
         return true
     else
         return false
     end
-
-
-
-
 end
 
 function JCIO_UninstallProsthesisAction:update()
@@ -56,36 +52,36 @@ function JCIO_UninstallProsthesisAction:perform()
 
     if self.patient ~= self.surgeon and isClient() then
 
-        SendUnequipProsthesis(self.patient, self.part_name, self.item)
+        SendUnequipProsthesis(self.patient, self.partName, self.item)
     else
-        TheOnlyCure.TocUnequipProsthesis(self.patient, self.part_name, self.item)
+        TheOnlyCure.TocUnequipProsthesis(self.patient, self.partName, self.item)
     end
 
     ISBaseTimedAction.perform(self)
 end
 
-function JCIO_UninstallProsthesisAction:new(surgeon, patient, part_name)
+function JCIO_UninstallProsthesisAction:new(surgeon, patient, partName)
     local o = ISBaseTimedAction.new(self, surgeon)
 
-    local toc_limbs_data = patient:getModData().TOC.Limbs
+    local limbsData = patient:getModData().JCIO.limbs
 
-    o.item = TocFindItemInProstBodyLocation(part_name, patient)
+    o.item = TocFindItemInProstBodyLocation(partName, patient)
     o.character = surgeon         -- For animation purposes
 
     o.patient = patient
     o.surgeon = surgeon
 
-    o.part_name = part_name
+    o.partName = partName
 
 
-    o.is_prosthesis_equipped = toc_limbs_data[part_name].is_prosthesis_equipped
+    o.isProsthesisEquipped = limbsData[partName].isProsthesisEquipped
 
 
     o.maxTime = 100;
-    o.stopOnWalk = true;
-    o.stopOnRun = true;
-    o.ignoreHandsWounds = false;
-    o.fromHotbar = true; -- just to disable hotbar:update() during the wearing
-    if o.character:isTimedActionInstant() then o.maxTime = 1; end
-    return o;
+    o.stopOnWalk = true
+    o.stopOnRun = true
+    o.ignoreHandsWounds = false
+    o.fromHotbar = true -- just to disable hotbar:update() during the wearing
+    if o.character:isTimedActionInstant() then o.maxTime = 1 end
+    return o
 end
