@@ -154,7 +154,7 @@ JCIO.CutLimb = function(partName, surgeonFactor, bandageTable, painkillerTable)
     local player = getPlayer()
 
     local jcioModData = player:getModData().JCIO
-    local partsParameters = jcioModData.limbParameters
+    local limbParameters = JCIO.limbParameters
     local limbsData = jcioModData.limbs
 
 
@@ -221,12 +221,12 @@ JCIO.CutLimb = function(partName, surgeonFactor, bandageTable, painkillerTable)
     if limbsData[partName].isCut == false then
         limbsData[partName].isCut = true
         limbsData[partName].isAmputationShown = true
-        limbsData[partName].cicatrizationTime = partsParameters[partName].cicatrizationBaseTime - surgeonFactor * 50
+        limbsData[partName].cicatrizationTime = limbParameters[partName].cicatrizationBaseTime - surgeonFactor * 50
 
-        for _, depended_v in pairs(limbsData[partName].depends_on) do
+        for _, depended_v in pairs(limbParameters[partName].dependsOn) do
             limbsData[depended_v].isCut = true
             limbsData[depended_v].isAmputationShown = false
-            limbsData[depended_v].cicatrizationTime = partsParameters[partName].cicatrizationBaseTime -
+            limbsData[depended_v].cicatrizationTime = limbParameters[partName].cicatrizationBaseTime -
                 surgeonFactor * 50
 
             local canHealDependedV = limbsData[depended_v].isInfected and

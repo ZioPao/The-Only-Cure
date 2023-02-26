@@ -34,7 +34,12 @@ local function CheckIfPlayerIsInfected(player, limbsData)
         end
     end
 end
-local function ManagePhantomPain(player, limbsData)
+local function ManagePhantomPain(player, jcioModData)
+
+    local limbsData = jcioModData.limbs
+    local limbParameters = JCIO.limbParameters
+
+
     local body_damage = player:getBodyDamage()
 
     for _, partName in pairs(JCIO_Common.GetPartNames()) do
@@ -44,7 +49,7 @@ local function ManagePhantomPain(player, limbsData)
             local added_pain
             if limbsData[partName].isCauterized then added_pain = 60 else added_pain = 30 end
             body_part:setAdditionalPain(ZombRand(1, added_pain))
-            for _, depended_v in pairs(limbsData[partName].dependsOn) do
+            for _, depended_v in pairs(limbParameters[partName].dependsOn) do
                 if limbsData[depended_v].isCauterized then added_pain = 60 else added_pain = 30 end
                 body_part:setAdditionalPain(ZombRand(1, added_pain))
             end
@@ -229,7 +234,7 @@ JCIO.UpdateEveryOneMinute = function()
     local jcioModData = player:getModData().JCIO
 
     if jcioModData ~= nil then
-        ManagePhantomPain(player, jcioModData.limbs)
+        ManagePhantomPain(player, jcioModData)
     end
 
 

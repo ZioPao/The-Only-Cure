@@ -81,9 +81,9 @@ function GenerateEquippedProsthesis(prosthesis_item, inventory, limb)
     local equipped_prosthesis = inventory:AddItem(prosthesis_name)
     equipped_prosthesis:setCondition(prosthesis_item:getCondition())
 
-    equipped_prosthesis:getModData().TOC = {
-        base_durability = durability_base,
-        top_durability = durability_top,
+    equipped_prosthesis:getModData().JCIO = {
+        baseDurability = durability_base,
+        topDurability = durability_top,
     }
 
     return equipped_prosthesis
@@ -159,12 +159,12 @@ function ProsthesisRecipes.OnDisassembleProsthesis(item, result_items, player, s
 
     local player_inv = player:getInventory()
 
-    local part_base = player_inv:AddItem("TOC.ProstPart" .. base_name)
+    local part_base = player_inv:AddItem("JCIO.ProstPart" .. base_name)
     part_base:setCondition(durability_base)
 
 
 
-    local part_top = player_inv:AddItem("TOC.ProstPart" .. top_name)
+    local part_top = player_inv:AddItem("JCIO.ProstPart" .. top_name)
     part_top:setCondition(durability_top)
 
 

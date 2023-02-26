@@ -37,10 +37,9 @@ end
 
 JCIO.CutLimbForTrait = function(player, jcioModData, partName)
 
-    local limbParameters = jcioModData.limbParameters
     local limbsData = jcioModData.limbs
 
-    local amputationClothingItem = player:getInventory():AddItem("TOC.Amputation_" .. partName)
+    local amputationClothingItem = player:getInventory():AddItem("JCIO.Amputation_" .. partName)
     JCIO_Visuals.SetTextureForAmputation(amputationClothingItem, player, true)
 
     player:setWornItem(amputationClothingItem:getBodyLocation(), amputationClothingItem)
@@ -49,7 +48,7 @@ JCIO.CutLimbForTrait = function(player, jcioModData, partName)
     limbsData[partName].isAmputationShown = true
     limbsData[partName].isCicatrized = true
 
-    for _, v in pairs(limbParameters[partName].dependsOn) do
+    for _, v in pairs(JCIO.limbParameters[partName].dependsOn) do
         limbsData[v].isCut = true
         limbsData[v].isOperated = true
         limbsData[v].isAmputationShown = false

@@ -16,7 +16,7 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
 
         local modData = getPlayer():getModData()
 
-        local limbParameters = modData.JCIO.limbParameters
+        local limbParameters = JCIO.limbParameters
         local limbsData = modData.JCIO.limbs
 
         local modifiedMaxTime = originalMaxTime

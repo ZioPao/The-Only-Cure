@@ -74,7 +74,7 @@ function GetProsthesisList()
 end
 
 function JCIO_Common.FindAmputatedClothingName(partName)
-    return "TOC.Amputation_" .. partName
+    return "JCIO.Amputation_" .. partName
 end
 
 function JCIO_Common.GetPartNameFromBodyPartType(bodyPartType)

@@ -46,7 +46,7 @@ function JCIO.OperateLimb(partName, surgeonFactor, useOven)
 
     local jcioModData = player:getModData().JCIO
 
-    local limbParameters = jcioModData.limbParameters
+    local limbParameters = JCIO.limbParameters
     local limbsData = jcioModData.limbs
 
     if useOven then
