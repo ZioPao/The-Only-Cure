@@ -33,7 +33,14 @@ end
 
 ServerCommands.CutLimb = function(arg)
     local data = arg["toSend"]
-    TocCutLimb(data[1], data[2], data[3], data[4])
+
+    local partName = data[1]
+    local surgeonFactor = data[2]
+    local bandageTable = data[3]
+    local painkillerTable = data[4]
+
+
+    JCIO.CutLimb(partName, surgeonFactor, bandageTable, painkillerTable)
 end
 
 

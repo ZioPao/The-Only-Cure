@@ -122,7 +122,7 @@ function ISCutLimb:perform()
         SendCutLimb(self.patient, self.part_name, surgeon_factor, bandage_table, painkiller_table)
         sendClientCommand(self.surgeon, "TOC", "AskStopAmputationSound", {surgeon_id = self.surgeon:getOnlineID()})
     else
-        TocCutLimb(self.part_name, surgeon_factor, bandage_table, painkiller_table)
+        JCIO.CutLimb(self.part_name, surgeon_factor, bandage_table, painkiller_table)
     end
 
     self.surgeon:getEmitter():stopSoundByName("Amputation_Sound")

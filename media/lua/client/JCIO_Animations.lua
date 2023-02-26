@@ -1,8 +1,11 @@
 -- Thanks to Glytcher and Matías N. Salas for helping out with this
 
-function SetMissingFootAnimation(check)
+if JCIOAnims == nil then
+    JCIOAnims = {}
+end
 
 
+JCIOAnims.SetMissingFootAnimation = function(check)
     local player = getPlayer()
     player:setVariable("IsCrawling", tostring(check))
     
@@ -12,7 +15,11 @@ function SetMissingFootAnimation(check)
 
         sendClientCommand(player, "TOC", "NotifyNewCrawlAnimation", {id = player:getOnlineID(), check = check})
     end
-
 end
 
+JCIOAnims.CheckAndSetMissingFootAnims = function(modData)
 
+    if modData.JCIO.limbs["Left_Foot"].isCut or modData.JCIO.limbs["Right_Foot"].isCut then
+        JCIOAnims.SetMissingFootAnimation(true)
+    end
+end

@@ -8,7 +8,7 @@ Rewritten by: Pao
 --]]
 
 
-local function InitializeTraits()
+JCIO.InitializeTraits = function()
     local amp1 = TraitFactory.addTrait("Amputee_Hand", getText("UI_trait_Amputee_Hand"), -8,
             getText("UI_trait_Amputee_Hand_desc"), false, false)
     amp1:addXPBoost(Perks.Left_Hand, 4)
@@ -34,89 +34,29 @@ local function InitializeTraits()
     TraitFactory.setMutualExclusive("Amputee_LowerArm", "Amputee_UpperArm")
 end
 -- TODO Refactor this
-local function TocUpdateBaseData(mod_data)
-    -- TODO Gonna delete this soon, overhauling the whole init thing
 
-    -- TODO The prosthetic knife needs to be a weapon first and foremost, so other than a
-    -- clothing item it needs to be a weapon too (an invisible one maybe?)
+JCIO.CutLimbForTrait = function(player, jcioModData, partName)
 
-    --local prosthesis_list = { "WoodenHook", "MetalHook", "MetalHand", "ProstheticKnife" }
+    local limbParameters = jcioModData.limbParameters
+    local limbsData = jcioModData.limbs
 
-    local accepted_prosthesis_hand = { "WoodenHook", "MetalHook", "MetalHand", "ProstheticKnife" }
-    local accepted_prosthesis_lowerarm = { "WoodenHook", "MetalHook", "MetalHand", "ProstheticKnife" }
-    local accepted_prosthesis_upperarm = {} -- For future stuff
-    local accepted_prosthesis_foot = {}
+    local amputationClothingItem = player:getInventory():AddItem("TOC.Amputation_" .. partName)
+    JCIOVisuals.SetTextureForAmputation(amputationClothingItem, player, true)
 
-    for _, side in pairs(JCIO.sideNames) do
-        for _, limb in pairs(JCIO.limbNames) do
+    player:setWornItem(amputationClothingItem:getBodyLocation(), amputationClothingItem)
+    limbsData[partName].isCut = true
+    limbsData[partName].isOperated = true
+    limbsData[partName].isAmputationShown = true
+    limbsData[partName].isCicatrized = true
 
-            local part_name = side .. "_" .. limb
-
-
-            -- Check if part was initialized, in case of previous errors
-            if mod_data.TOC.Limbs[part_name] == nil then
-                JCIO.InitPart(mod_data.TOC.Limbs, part_name)
-            end
-
-
-            if limb == "Hand" then
-                mod_data.TOC.Limbs[part_name].cicatrization_base_time = 1700
-                mod_data.TOC.Limbs[part_name].depends_on = {}
-
-
-                mod_data.TOC.Prosthesis.Accepted_Prosthesis[part_name] = accepted_prosthesis_hand
-                mod_data.TOC.Prosthesis["WoodenHook"][part_name].prosthesis_factor = 1.3
-                mod_data.TOC.Prosthesis["MetalHook"][part_name].prosthesis_factor = 1.2
-                mod_data.TOC.Prosthesis["MetalHand"][part_name].prosthesis_factor = 1.1
-                --mod_data.TOC.Prosthesis["ProstheticKnife"][part_name].prosthesis_factor = 1.5
-
-
-            elseif limb == "LowerArm" then
-                mod_data.TOC.Limbs[part_name].cicatrization_base_time = 1800
-                mod_data.TOC.Limbs[part_name].depends_on = { side .. "_Hand", }
-                mod_data.TOC.Prosthesis.Accepted_Prosthesis[part_name] = accepted_prosthesis_lowerarm
-
-                mod_data.TOC.Prosthesis["WoodenHook"][part_name].prosthesis_factor = 1.35
-                mod_data.TOC.Prosthesis["MetalHook"][part_name].prosthesis_factor = 1.25
-                mod_data.TOC.Prosthesis["MetalHand"][part_name].prosthesis_factor = 1.15
-                --mod_data.TOC.Prosthesis["ProstheticKnife"][part_name].prosthesis_factor = 1.6
-
-            elseif limb == "UpperArm" then
-                mod_data.TOC.Limbs[part_name].cicatrization_base_time = 2000
-                mod_data.TOC.Limbs[part_name].depends_on = { side .. "_Hand", side .. "_LowerArm", }
-                mod_data.TOC.Prosthesis.Accepted_Prosthesis[part_name] = accepted_prosthesis_upperarm
-            elseif limb == "Foot" then
-                mod_data.TOC.Limbs[part_name].cicatrization_base_time = 1700
-                mod_data.TOC.Limbs[part_name].depends_on = {}
-                mod_data.TOC.Prosthesis.Accepted_Prosthesis[part_name] = accepted_prosthesis_foot
-
-            end
-
-        end
-    end
-
-
-
-
-end
-
-JCIO.CutLimbForTrait = function(player, limbs_data, part_name)
-    local amputation_clothing_item = player:getInventory():AddItem("TOC.Amputation_" .. part_name)
-    TocSetCorrectTextureForAmputation(amputation_clothing_item, player, true)
-
-    player:setWornItem(amputation_clothing_item:getBodyLocation(), amputation_clothing_item)
-    limbs_data[part_name].is_cut = true
-    limbs_data[part_name].is_operated = true
-    limbs_data[part_name].is_amputation_shown = true
-    limbs_data[part_name].is_cicatrized = true
-
-    for _, v in pairs(limbs_data[part_name].depends_on) do
-        limbs_data[v].is_cut = true
-        limbs_data[v].is_operated = true
-        limbs_data[v].is_amputation_shown = false
-        limbs_data[v].is_cicatrized = true
+    for _, v in pairs(limbParameters[partName].dependsOn) do
+        limbsData[v].isCut = true
+        limbsData[v].isOperated = true
+        limbsData[v].isAmputationShown = false
+        limbsData[v].isCicatrized = true
     end
 end
+
 JCIO.InitPart = function(limbs_data, part_name)
 
     limbs_data[part_name].is_cut = false
@@ -132,6 +72,7 @@ JCIO.InitPart = function(limbs_data, part_name)
     limbs_data[part_name].equipped_prosthesis = {}
 
 end
+
 JCIO.SetInitData = function(modData, player)
     print("TOC: Creating mod_data.TOC")
     --------
@@ -221,20 +162,17 @@ JCIO.SetInitData = function(modData, player)
         end
     end
 
-    -- Set data like prosthesis lists, cicatrization time etc
-    -- TODO Change this
-    TocUpdateBaseData(modData)
-
     -- Setup traits
     if player:HasTrait("Amputee_Hand") then
-        JCIO.CutLimbForTrait(player, modData.JCIO.limbs, "Left_Hand")
+        JCIO.CutLimbForTrait(player, modData.JCIO, "Left_Hand")
     elseif player:HasTrait("Amputee_LowerArm") then
-        JCIO.CutLimbForTrait(player, modData.TOC.limbs, "Left_LowerArm")
+        JCIO.CutLimbForTrait(player, modData.JCIO, "Left_LowerArm")
     elseif player:HasTrait("Amputee_UpperArm") then
-        JCIO.CutLimbForTrait(player, modData.TOC.limbs, "Left_UpperArm")
+        JCIO.CutLimbForTrait(player, modData.JCIO, "Left_UpperArm")
     end
 
 end
+
 JCIO.Init = function(_, player)
 
     local modData = player:getModData()
@@ -242,10 +180,8 @@ JCIO.Init = function(_, player)
         JCIO.SetInitData(modData, player)
     else
         JCIOCompat.CheckCompatibilityWithOlderVersions(modData)
-
-        -- TODO This is gonna be deleted and moved directly to TOC
-        TocUpdateBaseData(modData)                 -- Since it's gonna be common to update stuff
-        TocCheckLegsAmputations(modData)
+        JCIOAnims.CheckAndSetMissingFootAnims(modData)
+        
     end
 
     -- Compat fix with older versions
@@ -277,24 +213,24 @@ local function InitializeJustCutItOff()
             JCIO.limbParameters[partName] = {}
 
             if limb == "Hand" then
-                JCIO.limbParameters[partName].cicatrization_base_time = 1700
-                JCIO.limbParameters[partName].depends_on = {}
+                JCIO.limbParameters[partName].cicatrizationBaseTime = 1700
+                JCIO.limbParameters[partName].dependsOn = {}
             elseif limb == "LowerArm" then
-                JCIO.limbParameters[partName].cicatrization_base_time = 1800
-                JCIO.limbParameters[partName].depends_on = { side .. "_Hand", }
+                JCIO.limbParameters[partName].cicatrizationBaseTime = 1800
+                JCIO.limbParameters[partName].dependsOn = { side .. "_Hand", }
             elseif limb == "UpperArm" then
-                JCIO.limbParameters[partName].cicatrization_base_time = 2000
-                JCIO.limbParameters[partName].depends_on = { side .. "_Hand", side .. "_LowerArm", }
+                JCIO.limbParameters[partName].cicatrizationBaseTime = 2000
+                JCIO.limbParameters[partName].dependsOn = { side .. "_Hand", side .. "_LowerArm", }
             elseif limb == "Foot" then
-                JCIO.limbParameters[partName].cicatrization_base_time = 1700
-                JCIO.limbParameters[partName].depends_on = {}
+                JCIO.limbParameters[partName].cicatrizationBaseTime = 1700
+                JCIO.limbParameters[partName].dependsOn = {}
             end
         end
     end
 
     --------------------------
 
-    InitializeTraits()
+    JCIO.InitializeTraits()
     Events.OnCreatePlayer.Add(JCIO.Init)
 
     -- Setup updates

@@ -77,45 +77,44 @@ function TocResetEverything()
 
 
     -- Reset special flag for legs amputations
-    SetMissingFootAnimation(false)
+    JCIOAnims.SetMissingFootAnimation(false)
 
 end
 
 
 -- Set correct body locations for items in inventory
 function TocResetClothingItemBodyLocation(player, side, limb)
-    local player_inventory = player:getInventory()
-    local limbs_data = player:getModData().TOC.Limbs
-    local amputation_item_name = TocGetAmputationFullTypeFromInventory(player, side, limb)
-    local equipped_prosthesis_item_name = TocGetEquippedProsthesisFullTypeFromInventory(player, side, limb)
-    print(amputation_item_name)
-    print(equipped_prosthesis_item_name)
 
-    if amputation_item_name ~= nil then
+    local playerInv = player:getInventory()
+    local limbsData = player:getModData().JCIO.limbs
 
-        local amputation_item = player_inventory:FindAndReturn(amputation_item_name)
-        if amputation_item ~= nil then
-            player:removeWornItem(amputation_item)
-            player:getInventory():Remove(amputation_item)
-            amputation_item = player_inventory:AddItem(amputation_item_name)
-            TocSetCorrectTextureForAmputation(amputation_item, player, limbs_data[side .. "_" .. limb].is_cicatrized)
+    local amputationItemName = TocGetAmputationFullTypeFromInventory(player, side, limb)
+    local equippedProsthesisItemName = TocGetEquippedProsthesisFullTypeFromInventory(player, side, limb)
 
-            player:setWornItem(amputation_item:getBodyLocation(), amputation_item)
+    if amputationItemName ~= nil then
+
+        local amputationItem = playerInv:FindAndReturn(amputationItemName)
+        if amputationItem ~= nil then
+            player:removeWornItem(amputationItem)
+            player:getInventory():Remove(amputationItem)
+            amputationItem = playerInv:AddItem(amputationItemName)
+            JCIOVisuals.SetTextureForAmputation(amputationItem, player, limbsData[side .. "_" .. limb].is_cicatrized)
+            player:setWornItem(amputationItem:getBodyLocation(), amputationItem)
         end
-        amputation_item = nil -- reset it
+        amputationItem = nil -- reset it
     end
 
-    if equipped_prosthesis_item_name ~= nil then
-        local prosthesis_item = player_inventory:FindAndReturn(equipped_prosthesis_item_name)
-        if prosthesis_item ~= nil then
-            print("Resetting " .. prosthesis_item:getName())
-            player:removeWornItem(prosthesis_item)
-            player:getInventory():Remove(prosthesis_item)
-            prosthesis_item = player_inventory:AddItem(equipped_prosthesis_item_name)
-            player:setWornItem(prosthesis_item:getBodyLocation(), prosthesis_item)
+    if equippedProsthesisItemName ~= nil then
+        local prosthesisItem = playerInv:FindAndReturn(equippedProsthesisItemName)
+        if prosthesisItem ~= nil then
+            print("Resetting " .. prosthesisItem:getName())
+            player:removeWornItem(prosthesisItem)
+            player:getInventory():Remove(prosthesisItem)
+            prosthesisItem = playerInv:AddItem(equippedProsthesisItemName)
+            player:setWornItem(prosthesisItem:getBodyLocation(), prosthesisItem)
 
         end
-        prosthesis_item = nil -- reset it
+        prosthesisItem = nil -- reset it
     end
 end
 

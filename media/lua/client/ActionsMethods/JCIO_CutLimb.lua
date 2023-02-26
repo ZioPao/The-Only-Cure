@@ -1,7 +1,14 @@
 ------------------------------------------
--------- JUST CUT IT OFF --------
+------------- JUST CUT IT OFF ------------
 ------------------------------------------
 ----------- CUT LIMB FUNCTIONS -----------
+
+
+
+
+
+
+
 
 local function TocCheckIfStillInfected(limbs_data)
     if limbs_data == nil then
@@ -125,12 +132,17 @@ local function FindTourniquetInWornItems(patient, side)
 end
 ----------------------------------------------------------------------------------
 
+
+
+
+
+
 --- Main function for cutting a limb
 ---@param partName string the part name to amputate
 ---@param surgeonFactor any the surgeon factor, which will determine some stats for the inflicted wound
 ---@param bandageTable any bandages info
----@param painkiller_table any painkillers info, not used
-function TocCutLimb(partName, surgeonFactor, bandageTable, painkiller_table)
+---@param painkillerTable any painkillers info, not used
+JCIO.CutLimb = function(partName, surgeonFactor, bandageTable, painkillerTable)
 
     -- TODO Separate Cut Limb in side and limb instead of single part_name
 
@@ -202,24 +214,24 @@ function TocCutLimb(partName, surgeonFactor, bandageTable, painkiller_table)
 
     -- A check for is_cut shouldn't be necessary here since if we've got here we've already checked it out enough
 
-    if limbsData[partName].is_cut == false then
-        limbsData[partName].is_cut = true
-        limbsData[partName].is_amputation_shown = true
-        limbsData[partName].cicatrization_time = partsParameters[partName].cicatrization_base_time - surgeonFactor * 50
+    if limbsData[partName].isCut == false then
+        limbsData[partName].isCut = true
+        limbsData[partName].isAmputationShown = true
+        limbsData[partName].cicatrizationTime = partsParameters[partName].cicatrizationBaseTime - surgeonFactor * 50
 
         for _, depended_v in pairs(limbsData[partName].depends_on) do
-            limbsData[depended_v].is_cut = true
-            limbsData[depended_v].is_amputation_shown = false
-            limbsData[depended_v].cicatrization_time = partsParameters[partName].cicatrization_base_time -
+            limbsData[depended_v].isCut = true
+            limbsData[depended_v].isAmputationShown = false
+            limbsData[depended_v].cicatrizationTime = partsParameters[partName].cicatrizationBaseTime -
                 surgeonFactor * 50
 
-            local should_depended_v_be_healed_of_bite = limbsData[depended_v].is_infected and
+            local canHealDependedV = limbsData[depended_v].isInfected and
                 bodyDamage:getInfectionLevel() < 20
             local depended_body_part = bodyDamage:getBodyPart(TocGetBodyPartFromPartName(depended_v))
-            TocSetParametersForMissingLimb(depended_body_part, should_depended_v_be_healed_of_bite)
+            TocSetParametersForMissingLimb(depended_body_part, canHealDependedV)
 
-            if should_depended_v_be_healed_of_bite then
-                limbsData[depended_v].is_infected = false
+            if canHealDependedV then
+                limbsData[depended_v].isInfected = false
             end
 
 
@@ -229,8 +241,8 @@ function TocCutLimb(partName, surgeonFactor, bandageTable, painkiller_table)
 
         -- Heal the infection here
         local body_damage = player:getBodyDamage()
-        if limbsData[partName].is_infected and body_damage:getInfectionLevel() < 20 then
-            limbsData[partName].is_infected = false
+        if limbsData[partName].isInfected and body_damage:getInfectionLevel() < 20 then
+            limbsData[partName].isInfected = false
 
             -- NOT THE ADIACENT ONE!!!
             bodyPart:SetBitten(false)
@@ -264,7 +276,7 @@ function TocCutLimb(partName, surgeonFactor, bandageTable, painkiller_table)
         TocSetBloodOnAmputation(getPlayer(), adjacentBodyPart)
 
         if partName == "Left_Foot" or partName == "Right_Foot" then
-            SetMissingFootAnimation(true)
+            JCIOAnims.SetMissingFootAnimation(true)
         end
     end
 
