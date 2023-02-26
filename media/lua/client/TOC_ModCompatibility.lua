@@ -34,7 +34,7 @@ local function SetCompatibilityFancyHandwork()
                 equip = false
             end
             if mod then
-                --print("TOC: Fancy Handwork modifier")
+                --print("JCIO: Fancy Handwork modifier")
                 -- If we still have something equipped in secondary, unequip
                 if secondary and equip and can_be_held["Left"] then
                     ISTimedActionQueue.add(ISUnequipAction:new(self.chr, secondary, 20))
@@ -110,7 +110,7 @@ local function SetCompatibilityFancyHandWorkAndSwapIt()
                 equip = false
             end
             if mod then
-                --print("TOC: Fancy Handwork modifier")
+                --print("JCIO: Fancy Handwork modifier")
                 -- If we still have something equipped in secondary, unequip
                 if secondary and equip and can_be_held["Left"] then
                     ISTimedActionQueue.add(ISUnequipAction:new(self.chr, secondary, 20))
@@ -160,23 +160,23 @@ end
 
 local function CheckModCompatibility()
     local activated_mods = getActivatedMods()
-    print("TOC: Checking mods")
+    print("JCIO: Checking mods")
 
 
     if activated_mods:contains("FancyHandwork") then
 
         if activated_mods:contains("SwapIt") then
             require "SwapIt Main"
-            print("TOC: Overriding FancyHandwork and SwapIt methods")
+            print("JCIO: Overriding FancyHandwork and SwapIt methods")
             SetCompatibilityFancyHandWorkAndSwapIt()
         else
-            print("TOC: Overriding FancyHandwork methods")
+            print("JCIO: Overriding FancyHandwork methods")
             require "TimedActions/FHSwapHandsAction"
             SetCompatibilityFancyHandwork()
         end
     end
 end
 
-print("TOC: Starting CheckModCompatibility")
+print("JCIO: Starting CheckModCompatibility")
 Events.OnGameStart.Add(CheckModCompatibility)
 

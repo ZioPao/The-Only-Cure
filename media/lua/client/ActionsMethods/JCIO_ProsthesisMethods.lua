@@ -19,7 +19,7 @@ function JCIO.EquipProsthesis(partName, prosthesisItem, prosthesisBaseName)
     local equippedProsthesis = GenerateEquippedProsthesis(prosthesisItem, player:getInventory(), "Hand")
 
 
-    --print("TOC: Test durability new item " .. added_prosthesis_mod_data.TOC.durability)
+    --print("JCIO: Test durability new item " .. added_prosthesis_mod_data.TOC.durability)
 
     -- TODO equippedProsthesis must have something like the ProsthesisFactor from before!!!
 

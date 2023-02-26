@@ -1,8 +1,8 @@
-name=JUST CUT IT OFF
+name=Just Cut It Off
 poster=generic.png
 require=UIAPI
 description=Bitten? Not a problem!
-id=Amputation2
+id=JCIO
 icon=icon.png
 url=https://github.com/ZioPao/The-Only-Cure-But-Better
 modversion=0.9.15

@@ -8,7 +8,7 @@ local ServerCommands = {}
 ServerCommands.ResponseCanAct = function(arg)
 
 
-    print("TOC: ResponseCanAct")
+    print("JCIO: ResponseCanAct")
     local ui = GetConfirmUIMP()
     ui.responseReceive = true
     ui.responseAction = arg["toSend"][2]
@@ -146,7 +146,7 @@ end
 
 local function OnTocServerCommand(module, command, args)
     if module == 'TOC' then
-        print("TOC: On Toc Server Command " .. command)
+        print("JCIO: On Toc Server Command " .. command)
         if ServerCommands[command] then
             print("Found command, executing it now")
             args = args or {}

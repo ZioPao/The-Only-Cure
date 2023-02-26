@@ -305,13 +305,13 @@ local function TryTocAction(_, part_name, action, surgeon, patient)
     if not isServer() and not isClient() then
 
         if action == "Cut" then
-            TocCutLocal(_, surgeon, part_name)
+            JCIO_LocalActions.Cut(_, surgeon, part_name)
         elseif action == "Operate" then
-            TocOperateLocal(_, surgeon, part_name, false)
+            JCIO_LocalActions.Operate(_, surgeon, part_name, false)
         elseif action == "Equip" then
-            TocEquipProsthesisLocal(_, surgeon, part_name)
+            JCIO_LocalActions.EquipProsthesis(_, surgeon, part_name)
         elseif action == "Unequip" then
-            TocUnequipProsthesisLocal(_, surgeon, part_name)
+            JCIO_LocalActions.UnequipProsthesis(_, surgeon, part_name)
         end
     else
         local ui = GetConfirmUIMP()

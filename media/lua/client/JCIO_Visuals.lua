@@ -35,7 +35,7 @@ JCIO_Visuals.SetTextureForAmputation = function(item, player, cicatrized)
         end
     end
 
-    --print("TOC: Setting texture " .. matched_index)
+    --print("JCIO: Setting texture " .. matched_index)
     item:getVisual():setTextureChoice(tonumber(matchedIndex - 1)) -- it counts from 0, so we have to subtract 1
 
 end
@@ -85,7 +85,7 @@ function TocSetCorrectTextureForAmputation(item, player, cicatrized)
         end
     end
 
-    --print("TOC: Setting texture " .. matched_index)
+    --print("JCIO: Setting texture " .. matched_index)
     item:getVisual():setTextureChoice(tonumber(matched_index - 1)) -- it counts from 0, so we have to subtract 1
 end
 
@@ -104,7 +104,7 @@ function TocSetBloodOnAmputation(player, body_part)
     end
 
 
-    --print("TOC: Adding blood based on " .. tostring(body_part_type))
+    --print("JCIO: Adding blood based on " .. tostring(body_part_type))
 
     player:addBlood(blood_body_part_type, false, true, false)
     player:addBlood(BloodBodyPartType.Torso_Lower, false, true, false)

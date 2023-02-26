@@ -88,7 +88,7 @@ JCIO_ContextMenu.CreateOperateWithOvenMenu = function(playerId, context, worldOb
                             context:addSubMenu(rootMenu, subMenu)
                             isMainMenuAlreadyCreated = true
                         end
-                        subMenu:addOption(getText('UI_ContextMenu_' .. partName), worldObjects, TocOperateLocal,
+                        subMenu:addOption(getText('UI_ContextMenu_' .. partName), worldObjects, JCIO_LocalActions.Operate,
                             getSpecificPlayer(playerId), partName,true)
                     end
                 end

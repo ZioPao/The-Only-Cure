@@ -83,7 +83,7 @@ local function SetHealthStatusForBodyPart(partData, partName, player)
 
 
     if partData[partName].isCut then
-        --print("TOC: Check update for " .. part_name)
+        --print("JCIO: Check update for " .. part_name)
         -- if the player gets attacked and damaged in a cut area we have to reset it here since it doesn't make any sense
         -- this is using map 1:1, so it doesn't affect the wound caused by the amputation
 
@@ -202,9 +202,9 @@ JCIO.UpdateEveryTenMinutes = function()
 
             local modifier = SandboxVars.JCIO.CicatrizationSpeedMultiplier - itemBloodyness - itemDirtyness
 
-            --print("TOC: Type " .. amputated_limb_item:getFullType())
-            --print("TOC: Dirtyness " .. item_dirtyness)
-            --print("TOC: Bloodyness " .. item_bloodyness)
+            --print("JCIO: Type " .. amputated_limb_item:getFullType())
+            --print("JCIO: Dirtyness " .. item_dirtyness)
+            --print("JCIO: Bloodyness " .. item_bloodyness)
 
 
             partData[partName].cicatrizationTime = partData[partName].cicatrizationTime - modifier

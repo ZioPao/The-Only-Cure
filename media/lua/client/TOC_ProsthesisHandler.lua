@@ -155,7 +155,7 @@ function ProsthesisRecipes.OnDisassembleProsthesis(item, result_items, player, s
     local base_name = GetProsthesisPartName(base_table, prosthesis_item_name)
     local top_name = GetProsthesisPartName(top_table, prosthesis_item_name)
 
-    print("TOC: " .. base_name .. " and " .. top_name)
+    print("JCIO: " .. base_name .. " and " .. top_name)
 
     local player_inv = player:getInventory()
 

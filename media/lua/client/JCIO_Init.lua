@@ -74,7 +74,7 @@ JCIO.InitPart = function(limbs_data, part_name)
 end
 
 JCIO.SetInitData = function(modData, player)
-    print("TOC: Creating mod_data.TOC")
+    print("JCIO: Creating mod_data.TOC")
     --------
     -- NEW NAMING SCHEME
 
