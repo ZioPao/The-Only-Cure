@@ -155,7 +155,7 @@ JCIO.CutLimb = function(partName, surgeonFactor, bandageTable, painkillerTable)
 
     local jcioModData = player:getModData().JCIO
     local partsParameters = jcioModData.limbParameters
-    local limbsData = jcioModData.Limbs
+    local limbsData = jcioModData.limbs
 
 
     -- Cut Hand -> Damage in forearm

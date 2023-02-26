@@ -79,7 +79,7 @@ function JCIO.UnequipProsthesis(patient, partName, equippedProsthesis)
 
             patient:setWornItem(equippedProsthesis:getBodyLocation(), nil)
             patient:getInventory():Remove(equippedProsthesis)
-            jcioModData.Limbs[partName].equipped_prosthesis = nil
+            jcioModData.limbs[partName].equippedProsthesis = nil
         end
     end
 end
