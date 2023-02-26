@@ -238,16 +238,16 @@ JCIO_UI.SetupDescUI = function(surgeon, patient, limbsData, partName)
         descUI["status"]:setText("Nothing here")
         descUI["status"]:setColor(1, 1, 1, 1)
         descUI["b1"]:setVisible(false)
-    elseif CheckIfCanBeCut(partName, limbsData) then
+    elseif JCIO_Common.CheckIfCanBeCut(partName, limbsData) then
         -- Everything else
         -- TODO add check for cuts and scratches
         descUI["status"]:setText("Not cut")
         descUI["status"]:setColor(1, 1, 1, 1)
-        if JCIO_Common.GetSawInInventory(surgeon) and not CheckIfProsthesisAlreadyInstalled(limbsData, partName) then
+        if JCIO_Common.GetSawInInventory(surgeon) and not JCIO_Common.CheckIfProsthesisAlreadyInstalled(limbsData, partName) then
             descUI["b1"]:setVisible(true)
             descUI["b1"]:setText("Cut")
             descUI["b1"]:addArg("option", "Cut")
-        elseif JCIO_Common.GetSawInInventory(surgeon) and CheckIfProsthesisAlreadyInstalled(limbsData, partName) then
+        elseif JCIO_Common.GetSawInInventory(surgeon) and JCIO_Common.CheckIfProsthesisAlreadyInstalled(limbsData, partName) then
             descUI["b1"]:setVisible(true)
             descUI["b1"]:setText("Remove prosthesis before")
             descUI["b1"]:addArg("option", "Nothing")

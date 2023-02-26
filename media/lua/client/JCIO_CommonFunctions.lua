@@ -3,8 +3,6 @@
 ------------------------------------------
 ------------ COMMON FUNCTIONS ------------
 
-
-
 if JCIO_Common == nil then
     JCIO_Common = {}
 end
@@ -26,8 +24,6 @@ JCIO_Common.GeneratePartNames = function()
 
 end
 
-
-
 JCIO_Common.GetPartNames = function()
     if JCIO_Common.partNames.size() == nil then
         JCIO_Common.GeneratePartNames()
@@ -35,6 +31,18 @@ JCIO_Common.GetPartNames = function()
 
     return JCIO_Common.partNames
 end
+
+JCIO_Common.GetSideFromPartName = function(partName)
+
+    if string.find(partName, "Left") then
+        return "Left"
+    else
+        return "Right"
+    end
+
+end
+
+---------------------------------
 
 JCIO_Common.GetAcceptableBodyPartTypes = function()
 
@@ -146,13 +154,100 @@ end
 
 
 
+-----------------------------------
+-- Online Handling checks
 
-function JCIO_Common.GetSideFromPartName(partName)
 
-    if string.find(partName, "Left") then
-        return "Left"
+-----------------------------------------
+-- MP HANDLING CHECKS
+function JCIO_Common.CheckIfCanBeCut(partName, limbsData)
+
+    if limbsData == nil then
+        limbsData = getPlayer():getModData().JCIO.limbs
+    end
+    
+    local check = (not limbsData[partName].isCut) and
+        (not JCIO_Common.CheckIfProsthesisAlreadyInstalled(limbsData, partName))
+
+    return check
+
+end
+
+function JCIO_Common.CheckIfCanBeOperated(partName, limbsData)
+
+    if limbsData == nil then
+        limbsData = getPlayer():getModData().JCIO.limbs
+    end
+
+    return limbsData[partName].isOperated == false and limbsData[partName].isAmputationShown
+
+end
+
+function JCIO_Common.CheckIfProsthesisCanBeEquipped(partName)
+    local limbs_data = getPlayer():getModData().JCIO.limbs
+    return limbs_data[partName].isCauterized or limbs_data[partName].isCicatrized
+    -- check if prosthesis is in the surgeon inventory... we need to get it before
+end
+
+function JCIO_Common.CheckIfProsthesisCanBeUnequipped(partName)
+
+    -- TODO we should get item here to be sure that we can do this action instead of relying on some later checks
+    return true
+
+end
+
+
+-----------------------------------------
+-- Various checks
+-----------------------------------------
+
+function JCIO_Common.CheckIfItemIsAmputatedLimb(item)
+    local itemFullType = item:getFullType()
+    local check
+
+    if string.find(itemFullType, "JCIO.Amputation_") then
+        check = true
     else
-        return "Right"
+        check = false
+    end
+
+    return check
+
+end
+
+function CheckIfItemIsProsthesis(item)
+
+    local itemFullType = item:getFullType()
+
+    -- TODO This isn't gonna work anymore! Modular prosthetics needs to be handled in a different way
+    local prosthesisList = GetProsthesisList()     
+
+    for _, v in pairs(prosthesisList) do
+        if v == itemFullType then
+            return true
+        end
+    end
+
+    return false
+
+end
+
+function JCIO_Common.CheckIfItemIsInstalledProsthesis(item)
+    local itemFullType = item:getFullType()
+    if string.find(itemFullType, "TOC.Prost_") then
+        return true
+    else
+        return false
+    end
+
+end
+
+function JCIO_Common.CheckIfProsthesisAlreadyInstalled(limbsData, partName)
+
+    for _, side in pairs(JCIO.sideNames) do
+        if string.find(partName, side) then
+            return (limbsData[side .. "_Hand"].isProsthesisEquipped or limbsData[side .. "_LowerArm"].isProsthesisEquipped)
+        end
     end
 
 end

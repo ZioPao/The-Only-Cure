@@ -6,7 +6,7 @@ local ClientCommands = {}
 -- Main handler of base functions for TOC, not changed till now 'cause it works
 ClientCommands.SendServer = function(player, arg)
     local otherPlayer = getPlayerByOnlineID(arg["To"])
-    sendServerCommand(otherPlayer, "TOC", arg["command"], arg)
+    sendServerCommand(otherPlayer, "JCIO", arg["command"], arg)
 
 end
 
@@ -18,14 +18,14 @@ ClientCommands.AskDamageOtherPlayer = function(_, arg)
     local patient_id = arg[1]
     local part_name = arg[2]
 
-    sendServerCommand(patient, "TOC", "AcceptDamageOtherPlayer", {patient_id, part_name})
+    sendServerCommand(patient, "JCIO", "AcceptDamageOtherPlayer", {patient_id, part_name})
 
 end
 
 ClientCommands.AskStopAmputationSound = function(_, args)
 
     print("JCIO: We're in AskStopAmputationSound")
-    sendServerCommand("TOC", "StopAmputationSound", {surgeon_id = args.surgeon_id})
+    sendServerCommand("JCIO", "StopAmputationSound", {surgeon_id = args.surgeon_id})
 
 
 end
@@ -33,7 +33,7 @@ end
 -- Animations
 ClientCommands.NotifyNewCrawlAnimation = function(player, args)
 
-    sendServerCommand("TOC", "SetCrawlAnimation", {id = args.id, check = args.check})
+    sendServerCommand("JCIO", "SetCrawlAnimation", {id = args.id, check = args.check})
 
 end
 
@@ -43,7 +43,7 @@ end
 -- Cheats
 ClientCommands.AskToResetEverything = function(_, arg)
     local clicked_player = getPlayerByOnlineID(arg[1])
-    sendServerCommand(clicked_player, "TOC", "ResetEverything", {})
+    sendServerCommand(clicked_player, "JCIO", "ResetEverything", {})
 end
 
 

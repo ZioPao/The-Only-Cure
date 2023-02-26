@@ -13,7 +13,7 @@ JCIO_Anims.SetMissingFootAnimation = function(check)
         print("SP, so it's fine")
     else
 
-        sendClientCommand(player, "TOC", "NotifyNewCrawlAnimation", {id = player:getOnlineID(), check = check})
+        sendClientCommand(player, "JCIO", "NotifyNewCrawlAnimation", {id = player:getOnlineID(), check = check})
     end
 end
 

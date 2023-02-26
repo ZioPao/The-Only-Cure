@@ -76,7 +76,7 @@ function ISInventoryPane:onMouseDoubleClick(x, y)
 
     if instanceof(item_to_check, "InventoryItem") then
         og_ISInventoryPaneOnMouseDoubleClick(self, x, y)
-    elseif CheckIfItemIsAmputatedLimb(item_to_check.items[1]) or CheckIfItemIsInstalledProsthesis(item_to_check.items[1]) then
+    elseif JCIO_Common.CheckIfItemIsAmputatedLimb(item_to_check.items[1]) or JCIO_Common.CheckIfItemIsInstalledProsthesis(item_to_check.items[1]) then
         --print("JCIO: Can't double click this item")
 
     end
@@ -107,7 +107,7 @@ ISInventoryPaneContextMenu.onInspectClothing         = function(playerObj, cloth
 
     -- Inspect menu bypasses getActualItems, so we need to add that workaround here too
     local clothing_full_type = clothing:getFullType()
-    if CheckIfItemIsAmputatedLimb(clothing) or CheckIfItemIsInstalledProsthesis(clothing) then
+    if JCIO_Common.CheckIfItemIsAmputatedLimb(clothing) or JCIO_Common.CheckIfItemIsInstalledProsthesis(clothing) then
         --print("JCIO: Can't inspect this!")
     else
         og_ISInventoryPaneContextMenuOnInspectClothing(playerObj, clothing)
@@ -170,7 +170,7 @@ function ISInventoryPaneContextMenu.unequipItem(item, player)
     if item == nil then
         return
     end
-    if CheckIfItemIsAmputatedLimb(item) == false and CheckIfItemIsInstalledProsthesis(item) == false then
+    if JCIO_Common.CheckIfItemIsAmputatedLimb(item) == false and JCIO_Common.CheckIfItemIsInstalledProsthesis(item) == false then
         og_ISInventoryPaneContextMenuUnequipItem(item, player)
     end
 end
@@ -178,7 +178,7 @@ end
 local og_ISInventoryPaneContextMenuDropItem = ISInventoryPaneContextMenu.dropItem
 function ISInventoryPaneContextMenu.dropItem(item, player)
 
-    if CheckIfItemIsAmputatedLimb(item) == false and CheckIfItemIsInstalledProsthesis(item) == false then
+    if JCIO_Common.CheckIfItemIsAmputatedLimb(item) == false and JCIO_Common.CheckIfItemIsInstalledProsthesis(item) == false then
         og_ISInventoryPaneContextMenuDropItem(item, player)
     end
 

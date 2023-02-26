@@ -10,24 +10,24 @@ end
 -- Unequip Prosthesis
 
 local function PartNameToBodyLocationProsthesis(name)
-    if name == "Right_Hand" then return "TOC_ArmRightProsthesis" end
-    if name == "Right_LowerArm" then return "TOC_ArmRightProsthesis" end
-    if name == "Right_UpperArm" then return "TOC_ArmRightProsthesis" end
-    if name == "Left_Hand" then return "TOC_ArmLeftProsthesis" end
-    if name == "Left_LowerArm" then return "TOC_ArmLeftProsthesis" end
-    if name == "Left_UpperArm" then return "TOC_ArmLeftProsthesis" end
+    if name == "Right_Hand" then return "JCIO_ArmRightProsthesis" end
+    if name == "Right_LowerArm" then return "JCIO_ArmRightProsthesis" end
+    if name == "Right_UpperArm" then return "JCIO_ArmRightProsthesis" end
+    if name == "Left_Hand" then return "JCIO_ArmLeftProsthesis" end
+    if name == "Left_LowerArm" then return "JCIO_ArmLeftProsthesis" end
+    if name == "Left_UpperArm" then return "JCIO_ArmLeftProsthesis" end
 end
 
 local function PartNameToBodyLocationAmputation(name)
-    if name == "Right_Hand" then return "TOC_ArmRight" end
-    if name == "Right_LowerArm" then return "TOC_ArmRight" end
-    if name == "Right_UpperArm" then return "TOC_ArmRight" end
-    if name == "Left_Hand" then return "TOC_ArmLeft" end
-    if name == "Left_LowerArm" then return "TOC_ArmLeft" end
-    if name == "Left_UpperArm" then return "TOC_ArmLeft" end
+    if name == "Right_Hand" then return "JCIO_ArmRight" end
+    if name == "Right_LowerArm" then return "JCIO_ArmRight" end
+    if name == "Right_UpperArm" then return "JCIO_ArmRight" end
+    if name == "Left_Hand" then return "JCIO_ArmLeft" end
+    if name == "Left_LowerArm" then return "JCIO_ArmLeft" end
+    if name == "Left_UpperArm" then return "JCIO_ArmLeft" end
 
-    if name == "Left_Foot" then return "TOC_LegLeft" end
-    if name == "Right_Foot" then return "TOC_LegRight" end
+    if name == "Left_Foot" then return "JCIO_LegLeft" end
+    if name == "Right_Foot" then return "JCIO_LegRight" end
 end
 
 function TocFindItemInProstBodyLocation(part_name, patient)

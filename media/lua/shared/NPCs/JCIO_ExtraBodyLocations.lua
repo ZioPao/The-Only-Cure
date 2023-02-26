@@ -10,17 +10,17 @@ local function AddBodyLocationBefore(new_location, move_to_location)
 end
 
 
-AddBodyLocationBefore("TOC_ArmRight", "Shoes")
-AddBodyLocationBefore("TOC_ArmLeft", "Shoes")
+AddBodyLocationBefore("JCIO_ArmRight", "Shoes")
+AddBodyLocationBefore("JCIO_ArmLeft", "Shoes")
 
 
 
-AddBodyLocationBefore("TOC_ArmRightProsthesis", "Shoes")
-AddBodyLocationBefore("TOC_ArmLeftProsthesis", "Shoes")
+AddBodyLocationBefore("JCIO_ArmRightProsthesis", "Shoes")
+AddBodyLocationBefore("JCIO_ArmLeftProsthesis", "Shoes")
 
-AddBodyLocationBefore("TOC_LegRight", "FannyPackFront")
-AddBodyLocationBefore("TOC_LegLeft", "FannyPackFront")
+AddBodyLocationBefore("JCIO_LegRight", "FannyPackFront")
+AddBodyLocationBefore("JCIO_LegLeft", "FannyPackFront")
 
 
-AddBodyLocationBefore("TOC_LegRightProsthesis", "FannyPackFront")
-AddBodyLocationBefore("TOC_LegLeftProsthesis", "FannyPackFront")
+AddBodyLocationBefore("JCIO_LegRightProsthesis", "FannyPackFront")
+AddBodyLocationBefore("JCIO_LegLeftProsthesis", "FannyPackFront")

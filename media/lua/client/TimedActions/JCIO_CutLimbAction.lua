@@ -29,7 +29,7 @@ function JCIO_CutLimbAction:stop()
 
     print("Stopping ISCutLimb")
     self.surgeon:getEmitter():stopSoundByName("Amputation_Sound")
-    sendClientCommand(self.surgeon, "TOC", "AskStopAmputationSound", {surgeon_id = self.surgeon:getOnlineID()})
+    sendClientCommand(self.surgeon, "JCIO", "AskStopAmputationSound", {surgeon_id = self.surgeon:getOnlineID()})
 
     -- TODO test this with more than 2 players
     -- TODO this gets bugged when player dies while amputating
@@ -63,7 +63,7 @@ function JCIO_CutLimbAction:start()
     if self.patient == self.surgeon then
         TocDamagePlayerDuringAmputation(self.patient, self.partName)
     else
-        sendClientCommand(self.surgeon, "TOC", "AskDamageOtherPlayer", {self.patient:getOnlineID(), self.partName})
+        sendClientCommand(self.surgeon, "JCIO", "AskDamageOtherPlayer", {self.patient:getOnlineID(), self.partName})
     end
 
 
@@ -124,7 +124,7 @@ function JCIO_CutLimbAction:perform()
 
     if self.patient ~= self.surgeon and isClient() then
         SendCutLimb(self.patient, self.partName, surgeon_factor, bandage_table, painkiller_table)
-        sendClientCommand(self.surgeon, "TOC", "AskStopAmputationSound", {surgeon_id = self.surgeon:getOnlineID()})
+        sendClientCommand(self.surgeon, "JCIO", "AskStopAmputationSound", {surgeon_id = self.surgeon:getOnlineID()})
     else
         JCIO.CutLimb(self.partName, surgeon_factor, bandage_table, painkiller_table)
     end

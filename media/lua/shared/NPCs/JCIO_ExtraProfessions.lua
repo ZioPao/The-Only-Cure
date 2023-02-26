@@ -7,14 +7,16 @@ local function AddProfession()
             -6,
             getText("UI_profdesc_surgeon")
     );
-    surgeon:addXPBoost(Perks.Doctor, 4);
-    surgeon:addXPBoost(Perks.SmallBlade, 3);
-    surgeon:getFreeRecipes():add("Make metal hand");
-    surgeon:getFreeRecipes():add("Make metal hook");
-    surgeon:getFreeRecipes():add("Make wooden hook");
-    surgeon:getFreeRecipes():add("Combine real surgeon kit");
-    surgeon:getFreeRecipes():add("Combine surgeon kit");
-    surgeon:getFreeRecipes():add("Combine improvised surgeon kit");
+    surgeon:addXPBoost(Perks.Doctor, 4)
+    surgeon:addXPBoost(Perks.SmallBlade, 3)
+
+    -- TODO Fix this, it doesn't make any sense
+    surgeon:getFreeRecipes():add("Make metal hand")
+    surgeon:getFreeRecipes():add("Make metal hook")
+    surgeon:getFreeRecipes():add("Make wooden hook")
+    surgeon:getFreeRecipes():add("Combine real surgeon kit")
+    surgeon:getFreeRecipes():add("Combine surgeon kit")
+    surgeon:getFreeRecipes():add("Combine improvised surgeon kit")
 
     local profList = ProfessionFactory.getProfessions()
     for i=1,profList:size() do
