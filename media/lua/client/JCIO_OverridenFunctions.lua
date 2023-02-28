@@ -215,20 +215,34 @@ local og_ISWearClothingExtraAction = ISClothingExtraAction.isValid
 
 function ISClothingExtraAction:isValid()
 	local baseCheck = og_ISWearClothingExtraAction(self)
-    local itemToCheck = "Watch_%s"
-    local itemFullType = self.item:getFullType()
+
+    -- Check the new extra instead of the old item
+    local newItem = self:createItem(self.item, self.extra)
+
+
+    local itemFullType = newItem:getFullType()
+    local location = newItem:getBodyLocation()
+
+
+    --print("JCIO: watch full type " .. itemFullType)
+    --print("JCIO: watch location " .. location)
+
+    local itemToCheck = "Watch_"
     local limbsData = self.character:getModData().JCIO.limbs
 
-
-    for _, side in pairs(JCIO.sideNames) do
-
-        local formattedItemName = string.format(itemToCheck, side)
-
-        if string.find(itemFullType, formattedItemName) then
-            if limbsData[side .. "_LowerArm"].isCut then
-                return false
+    if string.find(itemFullType, itemToCheck) then
+        
+        for _, side in pairs (JCIO.sideNames) do
+            
+            if location == side .. "Wrist" then
+                if limbsData[side .. "_LowerArm"].isCut then
+                    return false
+                end
             end
+            
         end
+
+
     end
 
     return baseCheck
