@@ -6,8 +6,8 @@
 local ClientCommands = {}
 
 
--- Main handler of base functions for TOC, not changed till now 'cause it works
-ClientCommands.SendServer = function(player, arg)
+-- Main handler of base functions for JCIO, based on the original work for TOC
+ClientCommands.SendServer = function(_, arg)
     local otherPlayer = getPlayerByOnlineID(arg["To"])
     sendServerCommand(otherPlayer, "JCIO", arg["command"], arg)
 
@@ -19,9 +19,9 @@ ClientCommands.AskDamageOtherPlayer = function(_, arg)
 
     local patient = getPlayerByOnlineID(arg[1])
     local patient_id = arg[1]
-    local part_name = arg[2]
+    local partName = arg[2]
 
-    sendServerCommand(patient, "JCIO", "AcceptDamageOtherPlayer", {patient_id, part_name})
+    sendServerCommand(patient, "JCIO", "AcceptDamageOtherPlayer", {patient_id, partName})
 
 end
 

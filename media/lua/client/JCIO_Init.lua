@@ -56,19 +56,19 @@ JCIO.CutLimbForTrait = function(player, jcioModData, partName)
     end
 end
 
-JCIO.InitPart = function(limbs_data, part_name)
+JCIO.InitPart = function(limbsData, partName)
 
-    limbs_data[part_name].isCut = false
-    limbs_data[part_name].isInfected = false
-    limbs_data[part_name].isOperated = false
-    limbs_data[part_name].isCicatrized = false
-    limbs_data[part_name].isCauterized = false
-    limbs_data[part_name].isAmputation_shown = false
+    limbsData[partName].isCut = false
+    limbsData[partName].isInfected = false
+    limbsData[partName].isOperated = false
+    limbsData[partName].isCicatrized = false
+    limbsData[partName].isCauterized = false
+    limbsData[partName].isAmputation_shown = false
 
-    limbs_data[part_name].cicatrizationTime = 0
+    limbsData[partName].cicatrizationTime = 0
 
-    limbs_data[part_name].isProsthesisEquipped = false
-    limbs_data[part_name].equippedProsthesis = {}
+    limbsData[partName].isProsthesisEquipped = false
+    limbsData[partName].equippedProsthesis = {}
 
 end
 

@@ -294,7 +294,7 @@ local function OnClickMainUI(button, args)
 
     descUI:open()
     descUI:setPositionPixel(mainUI:getRight(), mainUI:getY())
-    JCIO_UI.SetupDescUI(mainUI.surgeon, mainUI.patient, mainUI.limbsData, args.part_name) -- surgeon is generic.
+    JCIO_UI.SetupDescUI(mainUI.surgeon, mainUI.patient, mainUI.limbsData, args.partName) -- surgeon is generic.
 
 end
 
@@ -423,37 +423,37 @@ local function CreateMainUI()
     mainUI:setWidthPercent(0.1)
 
     mainUI:addImageButton("b11", "", OnClickMainUI)
-    mainUI["b11"]:addArg("part_name", "Right_UpperArm")
+    mainUI["b11"]:addArg("partName", "Right_UpperArm")
 
 
     mainUI:addImageButton("b12", "", OnClickMainUI)
-    mainUI["b12"]:addArg("part_name", "Left_UpperArm")
+    mainUI["b12"]:addArg("partName", "Left_UpperArm")
 
     mainUI:nextLine()
 
     mainUI:addImageButton("b21", "", OnClickMainUI)
-    mainUI["b21"]:addArg("part_name", "Right_LowerArm")
+    mainUI["b21"]:addArg("partName", "Right_LowerArm")
 
 
     mainUI:addImageButton("b22", "", OnClickMainUI)
-    mainUI["b22"]:addArg("part_name", "Left_LowerArm")
+    mainUI["b22"]:addArg("partName", "Left_LowerArm")
 
     mainUI:nextLine()
 
     mainUI:addImageButton("b31", "", OnClickMainUI)
-    mainUI["b31"]:addArg("part_name", "Right_Hand")
+    mainUI["b31"]:addArg("partName", "Right_Hand")
 
     mainUI:addImageButton("b32", "", OnClickMainUI)
-    mainUI["b32"]:addArg("part_name", "Left_Hand")
+    mainUI["b32"]:addArg("partName", "Left_Hand")
 
 
     mainUI:nextLine()
 
     mainUI:addImageButton("b41", "", OnClickMainUI)
-    mainUI["b41"]:addArg("part_name", "Right_Foot")
+    mainUI["b41"]:addArg("partName", "Right_Foot")
 
     mainUI:addImageButton("b42", "", OnClickMainUI)
-    mainUI["b42"]:addArg("part_name", "Left_Foot")
+    mainUI["b42"]:addArg("partName", "Left_Foot")
 
     mainUI:saveLayout()
 

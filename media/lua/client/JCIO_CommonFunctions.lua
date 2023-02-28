@@ -98,7 +98,7 @@ JCIO_Common.GetPartNameFromBodyPartType = function(bodyPartType)
 end
 
 
--- 1:1 map of part_name to BodyPartType
+-- 1:1 map of partName to BodyPartType
 JCIO_Common.GetBodyPartFromPartName = function(partName)
     if partName == "Right_Hand" then return BodyPartType.Hand_R end
     if partName == "Right_LowerArm" then return BodyPartType.ForeArm_R end

@@ -22,12 +22,12 @@ end
 
 
 ServerCommands.CanCutLimb = function(arg)
-    local part_name = arg["toSend"]
+    local partName = arg["toSend"]
 
     arg["To"] = arg["From"]
     arg["From"] = getPlayer():getOnlineID()
     arg["command"] = "ResponseCanAct"
-    arg["toSend"] = { part_name, "Cut", JCIO_Common.CheckIfCanBeCut(part_name) }
+    arg["toSend"] = { partName, "Cut", JCIO_Common.CheckIfCanBeCut(partName) }
     sendClientCommand("JCIO", "SendServer", arg)
 end
 ServerCommands.CutLimb = function(arg)
@@ -44,12 +44,12 @@ end
 
 
 ServerCommands.CanOperateLimb = function(arg)
-    local part_name = arg["toSend"]
+    local partName = arg["toSend"]
 
     arg["To"] = arg["From"]
     arg["From"] = getPlayer():getOnlineID()
     arg["command"] = "ResponseCanAct"
-    arg["toSend"] = { part_name, "Operate", JCIO_Common.CheckIfCanBeOperated(part_name) }
+    arg["toSend"] = { partName, "Operate", JCIO_Common.CheckIfCanBeOperated(partName) }
     sendClientCommand("JCIO", "SendServer", arg)
 end
 ServerCommands.OperateLimb = function(arg)
@@ -65,13 +65,13 @@ end
 
 
 ServerCommands.CanEquipProsthesis = function(arg)
-    local part_name = arg["toSend"]
+    local partName = arg["toSend"]
     --local item = arg["toSend"][2]     -- TODO Add item prosth here
 
     arg["To"] = arg["From"]
     arg["From"] = getPlayer():getOnlineID()
     arg["command"] = "ResponseCanAct"
-    arg["toSend"] = {part_name, "Equip", JCIO_Common.CheckIfProsthesisCanBeEquipped(part_name) }
+    arg["toSend"] = {partName, "Equip", JCIO_Common.CheckIfProsthesisCanBeEquipped(partName) }
     sendClientCommand("JCIO", "SendServer", arg)
 
 end
@@ -86,17 +86,17 @@ ServerCommands.EquipProsthesis = function(arg)
     local partName = data[1]
     local prosthesisItem = data[2]
     
-    JCIO.EquipProsthesis(partName, prosthesisItem, _)       -- TODO Add the third param
+    JCIO.EquipProsthesis(partName, prosthesisItem, _)       -- TODO Add the third param when modular prost are done
 
 end
 
 
 ServerCommands.CanUnequipProsthesis = function(arg)
-    local part_name = arg["toSend"]
+    local partName = arg["toSend"]
     arg["To"] = arg["From"]
     arg["From"] = getPlayer():getOnlineID()
     arg["command"] = "ResponseCanAct"
-    arg["toSend"] = { part_name, "Unequip", JCIO_Common.CheckIfProsthesisCanBeUnequipped(part_name)}
+    arg["toSend"] = { partName, "Unequip", JCIO_Common.CheckIfProsthesisCanBeUnequipped(partName)}
     sendClientCommand("JCIO", "SendServer", arg)
 end
 ServerCommands.UnequipProsthesis = function(arg)
@@ -112,12 +112,12 @@ end
 
 
 ServerCommands.CanResetEverything = function(arg)
-    local part_name = "RightHand" --useless
+    local partName = "RightHand" --useless
 
     arg["To"] = arg["From"]
     arg["From"] = getPlayer():getOnlineID()
     arg["command"] = "ResponseCanAct"
-    arg["toSend"] = { part_name, "Cut", true }
+    arg["toSend"] = { partName, "Cut", true }
     sendClientCommand("JCIO", "SendServer", arg)
 end
 ServerCommands.ResetEverything = function(_)
@@ -128,8 +128,8 @@ end
 -- Used when amputating the limb of another player
 ServerCommands.AcceptDamageOtherPlayer = function(arg)
     local patient = getPlayerByOnlineID(arg[1])
-    local part_name = arg[2]
-    JCIO.DamagePlayerDuringAmputation(patient, part_name)
+    local partName = arg[2]
+    JCIO.DamagePlayerDuringAmputation(patient, partName)
 end
 
 -- Used to propagate animation changes after amputating a foot
@@ -191,7 +191,7 @@ Events.OnConnected.Add(OnConnected)
 --------------------------------------------------------
 
 
-function SendCutLimb(player, part_name, surgeon_factor, bandage_table, painkiller_table)
+function SendCutLimb(player, partName, surgeonFactor, bandageTable, painkillerTable)
     local arg = {}
     arg["From"] = getPlayer():getOnlineID()
     arg["To"] = player:getOnlineID()
@@ -199,78 +199,75 @@ function SendCutLimb(player, part_name, surgeon_factor, bandage_table, painkille
 
 
     -- TODO Hotfix for sound, fix this later
-    arg["toSend"] = {part_name, surgeon_factor, bandage_table, painkiller_table}
-
-
-
+    arg["toSend"] = {partName, surgeonFactor, bandageTable, painkillerTable}
     sendClientCommand("JCIO", "SendServer", arg)
 end
 
-function SendOperateLimb(player, part_name, surgeon_factor, use_oven)
+function SendOperateLimb(player, partName, surgeonFactor, useOven)
     local arg = {}
     arg["From"] = getPlayer():getOnlineID()
     arg["To"] = player:getOnlineID()
     arg["command"] = "OperateLimb"
-    arg["toSend"] = { part_name, surgeon_factor, use_oven }
+    arg["toSend"] = { partName, surgeonFactor, useOven }
     sendClientCommand("JCIO", "SendServer", arg)
 end
 
-function SendEquipProsthesis(player, part_name, item, prosthesis_base_name)
+function SendEquipProsthesis(player, partName, item, prosthesisBaseName)
     local arg = {}
     arg["From"] = getPlayer():getOnlineID()
     arg["To"] = player:getOnlineID()
     arg["command"] = "EquipProsthesis"
-    arg["toSend"] = { part_name, item, prosthesis_base_name}
+    arg["toSend"] = { partName, item, prosthesisBaseName}
     sendClientCommand("JCIO", "SendServer", arg)
 end
 
-function SendUnequipProsthesis(player, part_name, item)
+function SendUnequipProsthesis(player, partName, item)
     local arg = {}
     arg["From"] = getPlayer():getOnlineID()
     arg["To"] = player:getOnlineID()
     arg["command"] = "UnequipProsthesis"
-    arg["toSend"] = { player, part_name, item}
+    arg["toSend"] = { player, partName, item}
     sendClientCommand("JCIO", "SendServer", arg)
 end
 
-function AskCanCutLimb(player, part_name)
+function AskCanCutLimb(player, partName)
     GetConfirmUIMP().responseReceive = false
     local arg = {}
     arg["From"] = getPlayer():getOnlineID()
     arg["To"] = player:getOnlineID()
     arg["command"] = "CanCutLimb"
-    arg["toSend"] = part_name
+    arg["toSend"] = partName
     sendClientCommand("JCIO", "SendServer", arg)
 end
 
-function AskCanOperateLimb(player, part_name)
+function AskCanOperateLimb(player, partName)
     GetConfirmUIMP().responseReceive = false
     local arg = {}
     arg["From"] = getPlayer():getOnlineID()
     arg["To"] = player:getOnlineID()
     arg["command"] = "CanOperateLimb"
-    arg["toSend"] = part_name
+    arg["toSend"] = partName
     sendClientCommand("JCIO", "SendServer", arg)
 end
 
-function AskCanEquipProsthesis(player, part_name)
+function AskCanEquipProsthesis(player, partName)
     GetConfirmUIMP().responseReceive = false
     local arg = {}
     arg["From"] = getPlayer():getOnlineID()
     arg["To"] = player:getOnlineID()
     arg["command"] = "CanEquipProsthesis"
-    arg["toSend"] = part_name               -- TODO to be more precise there should be prosthesis item here too to check
+    arg["toSend"] = partName               -- TODO to be more precise there should be prosthesis item here too to check
 
     sendClientCommand("JCIO", "SendServer", arg)
 end
 
-function AskCanUnequipProsthesis(player, part_name)
+function AskCanUnequipProsthesis(player, partName)
     GetConfirmUIMP().responseReceive = false
     local arg = {}
     arg["From"] = getPlayer():getOnlineID()
     arg["To"] = player:getOnlineID()
     arg["command"] = "CanUnequipProsthesis"
-    arg["toSend"] = part_name
+    arg["toSend"] = partName
 
     sendClientCommand("JCIO", "SendServer", arg)
 end
