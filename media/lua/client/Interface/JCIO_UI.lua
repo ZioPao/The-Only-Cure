@@ -13,6 +13,7 @@ local mainUI, descUI, confirmUI, confirmUIMP
 -------------------------
 -- MP stuff
 
+-- TODO Strip out all this crap and redo it
 local function PrerenderFuncMP()
     local toSee = confirmUIMP
     if confirmUIMP.responseReceive then
@@ -40,37 +41,37 @@ end
 local function GetImageName(partName, limbsData)
     local name = ""
 
-    local part_data = limbsData[partName]
+    local partData = limbsData[partName]
 
-    if part_data.isCut and part_data.isCicatrized and part_data.isProsthesisEquipped then -- Cut and equip
+    if partData.isCut and partData.isCicatrized and partData.isProsthesisEquipped then -- Cut and equip
         if partName == "Right_Hand" or partName == "Left_Hand" then
-            name = "media/ui/TOC/" .. partName .. "/Hook.png"
+            name = "media/ui/JCIO/" .. partName .. "/Hook.png"
         else
-            name = "media/ui/TOC/" .. partName .. "/Prothesis.png"
+            name = "media/ui/JCIO/" .. partName .. "/Prothesis.png"
         end
-    elseif part_data.isCut and part_data.isCicatrized and not part_data.isProsthesisEquipped and
-        part_data.isAmputationShown then -- Cut and heal
-        name = "media/ui/TOC/" .. partName .. "/Cut.png"
-    elseif part_data.isCut and not part_data.isCicatrized and part_data.isAmputationShown and
-        not part_data.isOperated then -- Cut not heal
-        name = "media/ui/TOC/" .. partName .. "/Bleed.png"
-    elseif part_data.isCut and not part_data.isCicatrized and part_data.isAmputationShown and part_data.isOperated then -- Cut not heal
-        name = "media/ui/TOC/" .. partName .. "/Operate.png"
-    elseif part_data.isCut and not part_data.isAmputationShown then -- Empty (like hand if forearm cut)
-        name = "media/ui/TOC/Empty.png"
-    elseif not part_data.isCut and
+    elseif partData.isCut and partData.isCicatrized and not partData.isProsthesisEquipped and
+        partData.isAmputationShown then -- Cut and heal
+        name = "media/ui/JCIO/" .. partName .. "/Cut.png"
+    elseif partData.isCut and not partData.isCicatrized and partData.isAmputationShown and
+        not partData.isOperated then -- Cut but not healead
+        name = "media/ui/JCIO/" .. partName .. "/Bleed.png"
+    elseif partData.isCut and not partData.isCicatrized and partData.isAmputationShown and partData.isOperated then -- Cut but not healed and operated
+        name = "media/ui/JCIO/" .. partName .. "/Operate.png"
+    elseif partData.isCut and not partData.isAmputationShown then -- Empty (like hand if forearm cut)
+        name = "media/ui/JCIO/Empty.png"
+    elseif not partData.isCut and
         -- FIXME This doesn't work in MP on another player since we're trying to retrieve bodyDamage from another player
         getPlayer():getBodyDamage():getBodyPart(JCIO_Common.GetBodyPartFromPartName(partName)):bitten() then -- Not cut but bitten
-        name = "media/ui/TOC/" .. partName .. "/Bite.png"
+        name = "media/ui/JCIO/" .. partName .. "/Bite.png"
     else -- Not cut
-        name = "media/ui/TOC/" .. partName .. "/Base.png"
+        name = "media/ui/JCIO/" .. partName .. "/Base.png"
     end
 
     -- If foreaerm equip, change hand
     if partName == "Right_Hand" and limbsData["Right_LowerArm"].isProsthesisEquipped then
-        name = "media/ui/TOC/" .. partName .. "/Hook.png"
+        name = "media/ui/JCIO/" .. partName .. "/Hook.png"
     elseif partName == "Left_Hand" and limbsData["Left_LowerArm"].isProsthesisEquipped then
-        name = "media/ui/TOC/" .. partName .. "/Hook.png"
+        name = "media/ui/JCIO/" .. partName .. "/Hook.png"
     end
     return name
 end
@@ -149,7 +150,7 @@ JCIO_UI.SetupMainUI = function(surgeon, patient, limbsData)
 
     if limbsData then
         
-        mainUI.limbs_data = limbsData
+        mainUI.limbsData = limbsData
 
         mainUI["b11"]:setPath(GetImageName("Right_UpperArm", limbsData))
         mainUI["b12"]:setPath(GetImageName("Left_UpperArm", limbsData))
@@ -170,7 +171,7 @@ end
 
 JCIO_UI.SetupDescUI = function(surgeon, patient, limbsData, partName)
     descUI["textTitle"]:setText(getText("UI_ContextMenu_" .. partName))
-    descUI.part_name = partName
+    descUI.partName = partName
     descUI.surgeon = surgeon
     descUI.patient = patient
 
@@ -289,34 +290,34 @@ end
 
 ------------------------------------------------
 -- On Click Functions
-local function OnClickTocMainUI(button, args)
+local function OnClickMainUI(button, args)
 
     descUI:open()
     descUI:setPositionPixel(mainUI:getRight(), mainUI:getY())
-    JCIO_UI.SetupDescUI(mainUI.surgeon, mainUI.patient, mainUI.limbs_data, args.part_name) -- surgeon is generic.
+    JCIO_UI.SetupDescUI(mainUI.surgeon, mainUI.patient, mainUI.limbsData, args.part_name) -- surgeon is generic.
 
 end
 
--- Generic TOC action, used in OnClickTocDescUI
-local function TryTocAction(_, part_name, action, surgeon, patient)
+-- Generic JCIO action, used in OnClickDescUI
+local function TryJcioAction(_, partName, action, surgeon, patient)
     -- TODO at this point surgeon doesnt do anything. We'll fix this later
 
     -- Check if SinglePlayer
     if not isServer() and not isClient() then
 
         if action == "Cut" then
-            JCIO_LocalActions.Cut(_, surgeon, part_name)
+            JCIO_LocalActions.Cut(_, surgeon, partName)
         elseif action == "Operate" then
-            JCIO_LocalActions.Operate(_, surgeon, part_name, false)
+            JCIO_LocalActions.Operate(_, surgeon, partName, false)
         elseif action == "Equip" then
-            JCIO_LocalActions.EquipProsthesis(_, surgeon, part_name)
+            JCIO_LocalActions.EquipProsthesis(_, surgeon, partName)
         elseif action == "Unequip" then
-            JCIO_LocalActions.UnequipProsthesis(_, surgeon, part_name)
+            JCIO_LocalActions.UnequipProsthesis(_, surgeon, partName)
         end
     else
         local ui = GetConfirmUIMP()
         if not ui then
-            CreateTocConfirmUIMP()
+            CreateConfirmUIMP()
             ui = GetConfirmUIMP()
         end
 
@@ -326,17 +327,17 @@ local function TryTocAction(_, part_name, action, surgeon, patient)
 
 
         if action == "Cut" then
-            AskCanCutLimb(patient, part_name)
+            AskCanCutLimb(patient, partName)
         elseif action == "Operate" then
-            AskCanOperateLimb(patient, part_name)
+            AskCanOperateLimb(patient, partName)
         elseif action == "Equip" then
-            AskCanEquipProsthesis(patient, part_name)
+            AskCanEquipProsthesis(patient, partName)
         elseif action == "Unequip" then
-            AskCanUnequipProsthesis(patient, part_name)
+            AskCanUnequipProsthesis(patient, partName)
         end
 
         ui.actionAct = action
-        ui.partNameAct = part_name
+        ui.partNameAct = partName
         ui.patient = patient
 
         SendCommandToConfirmUIMP("Wait server")
@@ -345,35 +346,36 @@ local function TryTocAction(_, part_name, action, surgeon, patient)
 end
 
 
-local function OnClickTocDescUI(button, args)
+local function OnClickDescUI(button, args)
     
     -- Gets every arg from main
     local patient = descUI.patient
     local surgeon = descUI.surgeon
 
     if args.option ~= "Nothing" then
-        TryTocAction(_, descUI.part_name, args.option, surgeon, patient)
+        TryJcioAction(_, descUI.partName, args.option, surgeon, patient)
     end
     mainUI:close()
 
 end
 
-local function OnClickTocConfirmUIMP(button, args)
+local function OnClickConfirmUIMP(button, args)
     local player = getPlayer()
     if confirmUIMP.actionAct == "Cut" and args.option == "yes" then
         ISTimedActionQueue.add(JCIO_CutLimbAction:new(confirmUIMP.patient, player, confirmUIMP.partNameAct))
     elseif confirmUIMP.actionAct == "Operate" and args.option == "yes" then
-        local playerInv = player:getInventory()
-        local item = playerInv:getItemFromType('TOC.Real_surgeon_kit') or playerInv:getItemFromType('TOC.Surgeon_kit') or
-            playerInv:getItemFromType('TOC.Improvised_surgeon_kit')
-        if item then
-            ISTimedActionQueue.add(JCIO_OperateLimbAction:new(confirmUIMP.patient, player, item, confirmUIMP.partNameAct,
+        local kit = JCIO_Common.GetKitInInventory(player)
+        if kit then
+            ISTimedActionQueue.add(JCIO_OperateLimbAction:new(confirmUIMP.patient, player, kit, confirmUIMP.partNameAct,
                 false))
         else
             player:Say("I need a kit")
         end
 
     elseif confirmUIMP.actionAct == "Equip" and args.option == "yes" then
+
+
+        -- TODO Gonna be broken soon!
         local surgeon_inventory = player:getInventory()
 
         local prosthesis_to_equip = surgeon_inventory:getItemFromType('TOC.MetalHand') or
@@ -415,42 +417,42 @@ end
 -----------------------------------------------
 
 -- CREATE UI SECTION
-local function CreateTocMainUI()
+local function CreateMainUI()
     mainUI = NewUI()
     mainUI:setTitle("The Only Cure Menu")
     mainUI:setWidthPercent(0.1)
 
-    mainUI:addImageButton("b11", "", OnClickTocMainUI)
+    mainUI:addImageButton("b11", "", OnClickMainUI)
     mainUI["b11"]:addArg("part_name", "Right_UpperArm")
 
 
-    mainUI:addImageButton("b12", "", OnClickTocMainUI)
+    mainUI:addImageButton("b12", "", OnClickMainUI)
     mainUI["b12"]:addArg("part_name", "Left_UpperArm")
 
     mainUI:nextLine()
 
-    mainUI:addImageButton("b21", "", OnClickTocMainUI)
+    mainUI:addImageButton("b21", "", OnClickMainUI)
     mainUI["b21"]:addArg("part_name", "Right_LowerArm")
 
 
-    mainUI:addImageButton("b22", "", OnClickTocMainUI)
+    mainUI:addImageButton("b22", "", OnClickMainUI)
     mainUI["b22"]:addArg("part_name", "Left_LowerArm")
 
     mainUI:nextLine()
 
-    mainUI:addImageButton("b31", "", OnClickTocMainUI)
+    mainUI:addImageButton("b31", "", OnClickMainUI)
     mainUI["b31"]:addArg("part_name", "Right_Hand")
 
-    mainUI:addImageButton("b32", "", OnClickTocMainUI)
+    mainUI:addImageButton("b32", "", OnClickMainUI)
     mainUI["b32"]:addArg("part_name", "Left_Hand")
 
 
     mainUI:nextLine()
 
-    mainUI:addImageButton("b41", "", OnClickTocMainUI)
+    mainUI:addImageButton("b41", "", OnClickMainUI)
     mainUI["b41"]:addArg("part_name", "Right_Foot")
 
-    mainUI:addImageButton("b42", "", OnClickTocMainUI)
+    mainUI:addImageButton("b42", "", OnClickMainUI)
     mainUI["b42"]:addArg("part_name", "Left_Foot")
 
     mainUI:saveLayout()
@@ -459,7 +461,7 @@ local function CreateTocMainUI()
 end
 
 -- Create a temporary desc UI with fake data (for now)
-local function CreateTocDescUI()
+local function CreateDescUI()
     descUI = NewUI()
     descUI:setTitle("The only cure description");
     descUI:isSubUIOf(mainUI)
@@ -492,12 +494,12 @@ local function CreateTocDescUI()
     descUI:addEmpty()
     descUI:nextLine()
 
-    descUI:addButton("b1", "Operate", OnClickTocDescUI)
+    descUI:addButton("b1", "Operate", OnClickDescUI)
 
     descUI:saveLayout()
 end
 
-function CreateTocConfirmUIMP()
+function CreateConfirmUIMP()
     confirmUIMP = NewUI()
     confirmUIMP.responseReceive = false
 
@@ -519,10 +521,10 @@ function CreateTocConfirmUIMP()
     confirmUIMP:nextLine();
 
     confirmUIMP:addEmpty();
-    confirmUIMP:addButton("b1", "Yes", OnClickTocConfirmUIMP);
+    confirmUIMP:addButton("b1", "Yes", OnClickConfirmUIMP);
     confirmUIMP.b1:addArg("option", "yes");
     confirmUIMP:addEmpty();
-    confirmUIMP:addButton("b2", "No", OnClickTocConfirmUIMP);
+    confirmUIMP:addButton("b2", "No", OnClickConfirmUIMP);
     confirmUIMP:addEmpty();
 
     confirmUIMP:nextLine();
@@ -537,11 +539,11 @@ end
 -- We create everything from here
 
 JCIO_UI.OnCreate = function()
-    CreateTocMainUI()
-    CreateTocDescUI()
-    CreateTocConfirmUIMP()
+    CreateMainUI()
+    CreateDescUI()
+    CreateConfirmUIMP()
 
-    if isClient() then CreateTocConfirmUIMP() end
+    if isClient() then CreateConfirmUIMP() end
     mainUI:close()
 
 end
@@ -578,7 +580,7 @@ function SendCommandToConfirmUIMP(action, isBitten, userName, partName)
 end
 
 --------------------------------------------
--- Add TOC element to Health Panel
+-- Add JCIO element to Health Panel
 
 
 
@@ -676,22 +678,22 @@ function ISHealthPanel:createChildren()
 
     self.fitness:setWidth(self.fitness:getWidth() / 1.4)
 
-    self.TOCButton = ISButton:new(self.fitness:getRight() + 10, self.healthPanel.y, 60, 20, "", self,
+    self.JCIOButton = ISButton:new(self.fitness:getRight() + 10, self.healthPanel.y, 60, 20, "", self,
         ISNewHealthPanel.onClickJCIO)
-    self.TOCButton:setImage(getTexture("media/ui/TOC/iconForMenu.png"))
-    self.TOCButton.anchorTop = false
-    self.TOCButton.anchorBottom = true
-    self.TOCButton:initialise()
-    self.TOCButton:instantiate()
-    self:addChild(self.TOCButton)
+    self.JCIOButton:setImage(getTexture("media/ui/JCIO/iconForMenu.png"))
+    self.JCIOButton.anchorTop = false
+    self.JCIOButton.anchorBottom = true
+    self.JCIOButton:initialise()
+    self.JCIOButton:instantiate()
+    self:addChild(self.JCIOButton)
     if getCore():getGameMode() == "Tutorial" then
-        self.TOCButton:setVisible(false)
+        self.JCIOButton:setVisible(false)
     end
 end
 
 function ISHealthPanel:render()
     ISHealthPanel_render(self);
-    self.TOCButton:setY(self.fitness:getY());
+    self.JCIOButton:setY(self.fitness:getY());
 end
 
 -- EVENTS

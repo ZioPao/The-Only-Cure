@@ -23,7 +23,7 @@ function JCIO_LocalActions.Operate(_, player, partName, useOven)
     if useOven then
         ISTimedActionQueue.add(JCIO_OperateLimbAction:new(player, player, _, partName, useOven));
     else
-        local kit = TocGetKitInInventory(player)
+        local kit = JCIO_Common.GetKitInInventory(player)
         if kit ~= nil then
             ISTimedActionQueue.add(JCIO_OperateLimbAction:new(player, player, kit, partName, false))
         else
@@ -32,6 +32,7 @@ function JCIO_LocalActions.Operate(_, player, partName, useOven)
     end
 end
 
+-- TODO This is gonna get deleted
 function JCIO_LocalActions.EquipProsthesis(_, player, partName)
     local surgeonInv = player:getInventory()
     local prosthesisToEquip = surgeonInv:getItemFromType('TOC.MetalHand') or

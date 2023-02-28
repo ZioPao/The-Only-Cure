@@ -61,7 +61,7 @@ function JCIO_CutLimbAction:start()
     end
 
     if self.patient == self.surgeon then
-        TocDamagePlayerDuringAmputation(self.patient, self.partName)
+        JCIO.DamagePlayerDuringAmputation(self.patient, self.partName)
     else
         sendClientCommand(self.surgeon, "JCIO", "AskDamageOtherPlayer", {self.patient:getOnlineID(), self.partName})
     end

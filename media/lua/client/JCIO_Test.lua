@@ -78,10 +78,10 @@ function TocTestBodyLocations()
     end
 end
 
-function TocTestItem()
+function JCIOTestItem()
     local player = getPlayer()
     local player_inventory = player:getInventory()
-    local item_name = "TOC.Amputation_" .. "Right" .. "_" .. "Hand"
+    local item_name = "JCIO.Amputation_" .. "Right" .. "_" .. "Hand"
     local found_item = player_inventory:FindAndReturn(item_name)
 
     print(found_item:getID())

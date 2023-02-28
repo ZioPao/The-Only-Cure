@@ -73,11 +73,11 @@ function GetProsthesisList()
 
 end
 
-function JCIO_Common.FindAmputatedClothingName(partName)
+JCIO_Common.FindAmputatedClothingName = function(partName)
     return "JCIO.Amputation_" .. partName
 end
 
-function JCIO_Common.GetPartNameFromBodyPartType(bodyPartType)
+JCIO_Common.GetPartNameFromBodyPartType = function(bodyPartType)
 
     if bodyPartType == BodyPartType.Hand_R then
         return "Right_Hand"
@@ -99,7 +99,7 @@ end
 
 
 -- 1:1 map of part_name to BodyPartType
-function JCIO_Common.GetBodyPartFromPartName(partName)
+JCIO_Common.GetBodyPartFromPartName = function(partName)
     if partName == "Right_Hand" then return BodyPartType.Hand_R end
     if partName == "Right_LowerArm" then return BodyPartType.ForeArm_R end
     if partName == "Right_UpperArm" then return BodyPartType.UpperArm_R end
@@ -114,7 +114,7 @@ function JCIO_Common.GetBodyPartFromPartName(partName)
 end
 
 -- Custom mapping to make more sense when cutting a limb
-function JCIO_Common.GetAdjacentBodyPartFromPartName(partName)
+JCIO_Common.GetAdjacentBodyPartFromPartName = function(partName)
 
     if partName == "Right_Hand" then return BodyPartType.ForeArm_R end
     if partName == "Right_LowerArm" then return BodyPartType.UpperArm_R end
@@ -139,12 +139,12 @@ end
 JCIO_Common.GetAmputationItemInInventory = function(player, partName)
 
     local playerInv = player:getInventory()
-    local amputationItemName = TocFindAmputationOrProsthesisName(partName, player, "Amputation")
+    local amputationItemName = JCIO_Common.FindAmputationOrProsthesisName(partName, player, "Amputation")
     local amputationItem = playerInv:FindAndReturn(amputationItemName)
     return amputationItem
 end
 
-function JCIO_Common.GetSawInInventory(surgeon)
+JCIO_Common.GetSawInInventory = function(surgeon)
 
     local playerInv = surgeon:getInventory()
     local item = playerInv:getItemFromType("Saw") or playerInv:getItemFromType("GardenSaw") or
@@ -160,7 +160,7 @@ end
 
 -----------------------------------------
 -- MP HANDLING CHECKS
-function JCIO_Common.CheckIfCanBeCut(partName, limbsData)
+JCIO_Common.CheckIfCanBeCut = function(partName, limbsData)
 
     if limbsData == nil then
         limbsData = getPlayer():getModData().JCIO.limbs
@@ -173,7 +173,7 @@ function JCIO_Common.CheckIfCanBeCut(partName, limbsData)
 
 end
 
-function JCIO_Common.CheckIfCanBeOperated(partName, limbsData)
+JCIO_Common.CheckIfCanBeOperated = function(partName, limbsData)
 
     if limbsData == nil then
         limbsData = getPlayer():getModData().JCIO.limbs
@@ -183,13 +183,13 @@ function JCIO_Common.CheckIfCanBeOperated(partName, limbsData)
 
 end
 
-function JCIO_Common.CheckIfProsthesisCanBeEquipped(partName)
+JCIO_Common.CheckIfProsthesisCanBeEquipped = function(partName)
     local limbs_data = getPlayer():getModData().JCIO.limbs
     return limbs_data[partName].isCauterized or limbs_data[partName].isCicatrized
     -- check if prosthesis is in the surgeon inventory... we need to get it before
 end
 
-function JCIO_Common.CheckIfProsthesisCanBeUnequipped(partName)
+JCIO_Common.CheckIfProsthesisCanBeUnequipped = function(partName)
 
     -- TODO we should get item here to be sure that we can do this action instead of relying on some later checks
     return true
@@ -201,7 +201,7 @@ end
 -- Various checks
 -----------------------------------------
 
-function JCIO_Common.CheckIfItemIsAmputatedLimb(item)
+JCIO_Common.CheckIfItemIsAmputatedLimb = function(item)
     local itemFullType = item:getFullType()
     local check
 
@@ -232,7 +232,7 @@ function CheckIfItemIsProsthesis(item)
 
 end
 
-function JCIO_Common.CheckIfItemIsInstalledProsthesis(item)
+JCIO_Common.CheckIfItemIsInstalledProsthesis = function(item)
     local itemFullType = item:getFullType()
     if string.find(itemFullType, "TOC.Prost_") then
         return true
@@ -242,7 +242,7 @@ function JCIO_Common.CheckIfItemIsInstalledProsthesis(item)
 
 end
 
-function JCIO_Common.CheckIfProsthesisAlreadyInstalled(limbsData, partName)
+JCIO_Common.CheckIfProsthesisAlreadyInstalled = function(limbsData, partName)
 
     for _, side in pairs(JCIO.sideNames) do
         if string.find(partName, side) then
@@ -252,8 +252,7 @@ function JCIO_Common.CheckIfProsthesisAlreadyInstalled(limbsData, partName)
 
 end
 
-
-function JCIO_Common.GetCanBeHeldTable(limbs_data)
+JCIO_Common.GetCanBeHeldTable = function(limbs_data)
 
     local canBeHeld = {}
 

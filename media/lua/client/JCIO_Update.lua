@@ -128,7 +128,7 @@ local function SetHealthStatusForBodyPart(partData, partName, player)
             if partData[partName].cicatrizationTime < 0 then
                 partData[partName].isCicatrized = true
                 local playerInv = player:getInventory()
-                local amputatedClothingItemName = TocFindAmputationOrProsthesisName(partName, player, "Amputation")
+                local amputatedClothingItemName = JCIO_Common.FindAmputationOrProsthesisName(partName, player, "Amputation")
                 local amputatedClothingItem = playerInv:FindAndReturn(amputatedClothingItemName)
 
                 player:removeWornItem(amputatedClothingItem)
@@ -170,9 +170,7 @@ JCIO.UpdateOnTick = function()
         return
     end
 
-    --local toc_data = player:getModData().TOC
     local jcioModData = player:getModData().JCIO
-
 
     if jcioModData ~= nil then
         CheckIfPlayerIsInfected(player, jcioModData.limbs)
@@ -239,7 +237,7 @@ JCIO.UpdateEveryOneMinute = function()
 
 
 
-    -- Updates toc data in a global way, basically player:transmitModData but it works
+    -- Updates JCIO data in a global way, basically player:transmitModData but it works
     -- Sends only Limbs since the other stuff is mostly static
     if jcioModData ~= nil then
         -- FIXME Send little packets instead of the whole thing?

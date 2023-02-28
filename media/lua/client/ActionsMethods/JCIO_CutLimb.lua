@@ -10,12 +10,8 @@ end
 
 
 
-
-
-
-
-local function TocCheckIfStillInfected(limbs_data)
-    if limbs_data == nil then
+local function CheckIfStillInfected(limbsData)
+    if limbsData == nil then
         return
     end
     -- Check ALL body part types to check if the player is still gonna die
@@ -23,54 +19,51 @@ local function TocCheckIfStillInfected(limbs_data)
 
 
     for _, v in pairs(JCIO_Common.GetPartNames()) do
-        if limbs_data[v].is_infected then
+        if limbsData[v].isInfected then
             check = true
         end
     end
 
-    if limbs_data.is_other_bodypart_infected then
+    if limbsData.isOtherBodypartInfected then
         check = true
     end
 
     return check
 end
 
-local function TocCureInfection(body_damage, part_name)
+local function CureInfection(bodyDamage, partName)
 
-    local body_part_type = body_damage:getBodyPart(JCIO_Common.GetBodyPartFromPartName(part_name))
+    local bodyPartType = bodyDamage:getBodyPart(JCIO_Common.GetBodyPartFromPartName(partName))
 
-    body_damage:setInfected(false)
-    body_part_type:SetInfected(false)
-    body_damage:setInfectionMortalityDuration(-1)
-    body_damage:setInfectionTime(-1)
-    body_damage:setInfectionLevel(0)
-    local body_part_types = body_damage:getBodyParts()
+    bodyDamage:setInfected(false)
+    bodyPartType:SetInfected(false)
+    bodyDamage:setInfectionMortalityDuration(-1)
+    bodyDamage:setInfectionTime(-1)
+    bodyDamage:setInfectionLevel(0)
+    local bodypartTypesTable = bodyDamage:getBodyParts()
 
     -- TODO I think this is enough... we should just cycle if with everything instead of that crap up there
-    for i = body_part_types:size() - 1, 0, -1 do
-        local bodyPart = body_part_types:get(i)
+    for i = bodypartTypesTable:size() - 1, 0, -1 do
+        local bodyPart = bodypartTypesTable:get(i)
         bodyPart:SetInfected(false)
     end
     
-    if body_part_type:scratched() then body_part_type:setScratched(false, false) end
-    if body_part_type:haveGlass() then body_part_type:setHaveGlass(false) end
-    if body_part_type:haveBullet() then body_part_type:setHaveBullet(false, 0) end
-    if body_part_type:isInfectedWound() then body_part_type:setInfectedWound(false) end
-    if body_part_type:isBurnt() then body_part_type:setBurnTime(0) end
-    if body_part_type:isCut() then body_part_type:setCut(false, false) end --Lacerations
-    if body_part_type:getFractureTime() > 0 then body_part_type:setFractureTime(0) end
+    if bodyPartType:scratched() then bodyPartType:setScratched(false, false) end
+    if bodyPartType:haveGlass() then bodyPartType:setHaveGlass(false) end
+    if bodyPartType:haveBullet() then bodyPartType:setHaveBullet(false, 0) end
+    if bodyPartType:isInfectedWound() then bodyPartType:setInfectedWound(false) end
+    if bodyPartType:isBurnt() then bodyPartType:setBurnTime(0) end
+    if bodyPartType:isCut() then bodyPartType:setCut(false, false) end --Lacerations
+    if bodyPartType:getFractureTime() > 0 then bodyPartType:setFractureTime(0) end
 end
 
-local function TocDeleteOtherAmputatedLimbs(side)
-
+local function DeleteOtherAmputatedLimbs(side)
     -- if left hand is cut and we cut left lowerarm, then delete hand
-
-
     for _, limb in pairs(JCIO.limbNames) do
-        local part_name = "TOC.Amputation_" .. side .. "_" .. limb
-        local amputated_limb = getPlayer():getInventory():FindAndReturn(part_name)
-        if amputated_limb then
-            getPlayer():getInventory():Remove(amputated_limb)
+        local partName = "JCIO.Amputation_" .. side .. "_" .. limb
+        local amputatedLimbItem = getPlayer():getInventory():FindAndReturn(partName)
+        if amputatedLimbItem then
+            getPlayer():getInventory():Remove(amputatedLimbItem)
         end
 
     end
@@ -81,43 +74,43 @@ end
 ---@param perk any The perk to scale down
 local function LosePerkLevel(player, perk)
     player:LoseLevel(perk)
-    local actual_level = player:getPerkLevel(perk)
-    local perk_xp = player:getXp()
-    perk_xp:setXPToLevel(perk, actual_level)
+    local actualLevel = player:getPerkLevel(perk)
+    local perkXp = player:getXp()
+    perkXp:setXPToLevel(perk, actualLevel)
     SyncXp(player)
 
 end
 
----@param heal_bite boolean
-local function TocSetParametersForMissingLimb(body_part, heal_bite)
-    body_part:setBleeding(false)
-    body_part:setBleedingTime(0)
-    body_part:setDeepWounded(false)
-    body_part:setDeepWoundTime(0)
-    body_part:setScratched(false, false)        -- why the fuck are there 2 booleans TIS?
-    body_part:setScratchTime(0)
-    body_part:setCut(false)
-    body_part:setCutTime(0)
+---@param isHealingBite boolean
+local function SetParametersForMissingLimb(bodyPart, isHealingBite)
+    bodyPart:setBleeding(false)
+    bodyPart:setBleedingTime(0)
+    bodyPart:setDeepWounded(false)
+    bodyPart:setDeepWoundTime(0)
+    bodyPart:setScratched(false, false)        -- why the fuck are there 2 booleans TIS?
+    bodyPart:setScratchTime(0)
+    bodyPart:setCut(false)
+    bodyPart:setCutTime(0)
 
-    if heal_bite then
-        body_part:SetBitten(false)
-        body_part:setBiteTime(0)
+    if isHealingBite then
+        bodyPart:SetBitten(false)
+        bodyPart:setBiteTime(0)
     end
 
 end
 
-function TocDamagePlayerDuringAmputation(patient, part_name)
+function JCIO.DamagePlayerDuringAmputation(patient, partName)
 
     -- Since we're cutting that specific part, it only makes sense that the bleeding starts from there. 
     -- Then, we just delete the bleeding somewhere else before applying the other damage to to upper part of the limb
-    local body_part_type = JCIO_Common.GetBodyPartFromPartName(part_name)
-    local body_damage = patient:getBodyDamage()
-    local body_damage_part = body_damage:getBodyPart(body_part_type)
+    local bodyPartType = JCIO_Common.GetBodyPartFromPartName(partName)
+    local bodyDamage = patient:getBodyDamage()
+    local bodyDamagePart = bodyDamage:getBodyPart(bodyPartType)
 
 
-    body_damage_part:setBleeding(true)
-    body_damage_part:setCut(true)
-    body_damage_part:setBleedingTime(ZombRand(10, 20))
+    bodyDamagePart:setBleeding(true)
+    bodyDamagePart:setCut(true)
+    bodyDamagePart:setBleedingTime(ZombRand(10, 20))
 end
 
 local function FindTourniquetInWornItems(patient, side)
@@ -171,7 +164,7 @@ JCIO.CutLimb = function(partName, surgeonFactor, bandageTable, painkillerTable)
 
     -- Reset the status of the first body part, since we just cut it off it shouldn't be bleeding anymore
     -- The bit will be checked later since we're not sure if the player is not infected from another wound
-    TocSetParametersForMissingLimb(bodyPart, false)
+    SetParametersForMissingLimb(bodyPart, false)
 
     -- Use a tourniquet if available
     local tourniquetItem = FindTourniquetInWornItems(player, JCIO_Common.GetSideFromPartName(partName))
@@ -232,7 +225,7 @@ JCIO.CutLimb = function(partName, surgeonFactor, bandageTable, painkillerTable)
             local canHealDependedV = limbsData[depended_v].isInfected and
                 bodyDamage:getInfectionLevel() < 20
             local depended_body_part = bodyDamage:getBodyPart(JCIO_Common.GetBodyPartFromPartName(depended_v))
-            TocSetParametersForMissingLimb(depended_body_part, canHealDependedV)
+            SetParametersForMissingLimb(depended_body_part, canHealDependedV)
 
             if canHealDependedV then
                 limbsData[depended_v].isInfected = false
@@ -253,8 +246,8 @@ JCIO.CutLimb = function(partName, surgeonFactor, bandageTable, painkillerTable)
             bodyPart:setBiteTime(0)
 
             -- Second check, let's see if there is any other infected limb.
-            if TocCheckIfStillInfected(limbsData) == false then
-                TocCureInfection(body_damage, partName)
+            if CheckIfStillInfected(limbsData) == false then
+                CureInfection(body_damage, partName)
                 getPlayer():Say("I'm gonna be fine...")         -- TODO Make it visible to other players, check True Actions as reference
             else
                 getPlayer():Say("I'm still gonna die...")
@@ -265,19 +258,19 @@ JCIO.CutLimb = function(partName, surgeonFactor, bandageTable, painkillerTable)
 
         -- Check for older amputation models and deletes them from player's inventory
         local side = string.match(partName, '(%w+)_')
-        TocDeleteOtherAmputatedLimbs(side)
+        DeleteOtherAmputatedLimbs(side)
 
         --Equip new model for amputation
         local amputation_clothing_item_name = JCIO_Common.FindAmputatedClothingName(partName)
         print(amputation_clothing_item_name)
 
         local amputation_clothing_item = player:getInventory():AddItem(amputation_clothing_item_name)
-        TocSetCorrectTextureForAmputation(amputation_clothing_item, player, false)
+        JCIO_Visuals.SetTextureForAmputation(amputation_clothing_item, player, false)
         player:setWornItem(amputation_clothing_item:getBodyLocation(), amputation_clothing_item)
 
 
         -- Set blood on the amputated limb
-        TocSetBloodOnAmputation(getPlayer(), adjacentBodyPart)
+        JCIO_Visuals.SetBloodOnAmputation(getPlayer(), adjacentBodyPart)
 
         if partName == "Left_Foot" or partName == "Right_Foot" then
             JCIO_Anims.SetMissingFootAnimation(true)

@@ -65,7 +65,7 @@ function JCIO_UninstallProsthesisAction:new(surgeon, patient, partName)
 
     local limbsData = patient:getModData().JCIO.limbs
 
-    o.item = TocFindItemInProstBodyLocation(partName, patient)
+    o.item = JCIO_Common.FindItemInProstBodyLocation(partName, patient)
     o.character = surgeon         -- For animation purposes
 
     o.patient = patient

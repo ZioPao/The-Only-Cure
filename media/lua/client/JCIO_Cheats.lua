@@ -27,8 +27,8 @@ JCIO_Cheat.ResetEverything = function()
 
     -- Destroy the amputation or prosthesis item
     for _, partName in pairs(JCIO_Common.GetPartNames()) do
-        local amputationItemName = TocFindAmputationOrProsthesisName(partName, player, "Amputation")
-        local prostItemName = TocFindAmputationOrProsthesisName(partName, player, "Prosthesis")
+        local amputationItemName = JCIO_Common.FindAmputationOrProsthesisName(partName, player, "Amputation")
+        local prostItemName = JCIO_Common.FindAmputationOrProsthesisName(partName, player, "Prosthesis")
         if amputationItemName ~= nil then
             local amputationItem = playerInv:FindAndReturn(amputationItemName)
             if amputationItem ~= nil then

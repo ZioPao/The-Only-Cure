@@ -70,9 +70,9 @@ function GenerateEquippedProsthesis(prosthesis_item, inventory, limb)
 
     -- Check the item mod data if the values are different than the default values
 
-    if item_mod_data.TOC ~= nil then
-        durability_base = item_mod_data.base_durability
-        durability_top = item_mod_data.top_durability
+    if item_mod_data.JCIO ~= nil then
+        durability_base = item_mod_data.baseDurability
+        durability_top = item_mod_data.topDurability
     -- else
     --     durability_base, speed_base = GetProsthesisStats(base_table, prosthesis_name)
     --     durability_top, speed_top = GetProsthesisStats(top_table, prosthesis_name)
@@ -127,45 +127,45 @@ function ProsthesisRecipes.OnCreateProsthesis(items, result, player, selectedIte
 
     result:setCondition(condition)      -- Should be the sum?
 
-    result:getModData().TOC = {
-        base_durability = 100,
-        top_durability = 100,           -- Stores it here too so we can re-reference it for later
+    result:getModData().JCIO = {
+        baseDurability = 100,
+        topDurability = 100,           -- Stores it here too so we can re-reference it for later
     }
 
 end
 
 
 -- Reassign the correct condition to each item
-function ProsthesisRecipes.OnDisassembleProsthesis(item, result_items, player, selectedItem)
+function ProsthesisRecipes.OnDisassembleProsthesis(item, resultItems, player, selectedItem)
 
     -- Check durability of original item
-    local item_mod_data = item.getModData().TOC
+    local itemModData = item.getModData().JCIO
 
-    local durability_top = item_mod_data.top.durability
-    local durability_base = item_mod_data.base.durability
+    local durabilityTop = itemModData.top.durability
+    local durabilityBase = itemModData.base.durability
 
     -- TODO do we actually need to store speed again?
-    local speed_top = item_mod_data.top.speed
-    local speed_base = item_mod_data.base.speed
+    local speedTop = itemModData.top.speed
+    local speedBase = itemModData.base.speed
 
 
     -- Check name of the item
-    local prosthesis_item_name = item:getFullType()
+    local prosthesisItemName = item:getFullType()
 
-    local base_name = GetProsthesisPartName(base_table, prosthesis_item_name)
-    local top_name = GetProsthesisPartName(top_table, prosthesis_item_name)
+    local baseName = GetProsthesisPartName(base_table, prosthesisItemName)
+    local topName = GetProsthesisPartName(top_table, prosthesisItemName)
 
-    print("JCIO: " .. base_name .. " and " .. top_name)
+    print("JCIO: " .. baseName .. " and " .. topName)
 
-    local player_inv = player:getInventory()
+    local playerInv = player:getInventory()
 
-    local part_base = player_inv:AddItem("JCIO.ProstPart" .. base_name)
-    part_base:setCondition(durability_base)
+    local partBase = playerInv:AddItem("JCIO.ProstPart" .. baseName)
+    partBase:setCondition(durabilityBase)
 
 
 
-    local part_top = player_inv:AddItem("JCIO.ProstPart" .. top_name)
-    part_top:setCondition(durability_top)
+    local partTop = playerInv:AddItem("JCIO.ProstPart" .. topName)
+    partTop:setCondition(durabilityTop)
 
 
     -- TODO Add Screws from the item back with a chance of them breaking

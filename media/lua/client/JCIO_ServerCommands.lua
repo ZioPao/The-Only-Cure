@@ -129,7 +129,7 @@ end
 ServerCommands.AcceptDamageOtherPlayer = function(arg)
     local patient = getPlayerByOnlineID(arg[1])
     local part_name = arg[2]
-    TocDamagePlayerDuringAmputation(patient, part_name)
+    JCIO.DamagePlayerDuringAmputation(patient, part_name)
 end
 
 -- Used to propagate animation changes after amputating a foot

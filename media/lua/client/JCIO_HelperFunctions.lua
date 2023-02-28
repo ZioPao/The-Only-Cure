@@ -1,8 +1,8 @@
 -- TODO this needs to be moved away
-function TocGetKitInInventory(surgeon)
-    local playerInv = surgeon:getInventory();
-    local item = playerInv:getItemFromType('TOC.Real_surgeon_kit') or playerInv:getItemFromType('TOC.Surgeon_kit') or
-        playerInv:getItemFromType('TOC.Improvised_surgeon_kit')
+function JCIO_Common.GetKitInInventory(surgeon)
+    local playerInv = surgeon:getInventory()
+    local item = playerInv:getItemFromType('JCIO.Real_surgeon_kit') or playerInv:getItemFromType('JCIO.Surgeon_kit') or
+        playerInv:getItemFromType('JCIO.Improvised_surgeon_kit')
     return item
 
 end
@@ -30,12 +30,13 @@ local function PartNameToBodyLocationAmputation(name)
     if name == "Right_Foot" then return "JCIO_LegRight" end
 end
 
-function TocFindItemInProstBodyLocation(partName, patient)
+function JCIO_Common.FindItemInProstBodyLocation(partName, patient)
     -- Can't be used for online purposes, since we can't get the online inventory of another player
-    local worn_items = patient:getWornItems()
+    local wornItems = patient:getWornItems()
 
-    for i = 1, worn_items:size() - 1 do -- Maybe wornItems:size()-1
-        local item = worn_items:get(i):getItem()
+    -- Particular case where i= 1 and size - 1 I guess?
+    for i = 1, wornItems:size() - 1 do
+        local item = wornItems:get(i):getItem()
         if item:getBodyLocation() == PartNameToBodyLocationProsthesis(partName) then
             return item
         end
@@ -44,10 +45,10 @@ function TocFindItemInProstBodyLocation(partName, patient)
 end
 
 -- Debug cheat and update every minute for cicatrization
-function TocFindAmputationOrProsthesisName(partName, player, choice)
-    local worn_items = player:getWornItems()
-    for i = 1, worn_items:size() - 1 do 
-        local item = worn_items:get(i):getItem()
+function JCIO_Common.FindAmputationOrProsthesisName(partName, player, choice)
+    local wornItems = player:getWornItems()
+    for i = 1, wornItems:size() - 1 do
+        local item = wornItems:get(i):getItem()
 
         if choice == "Amputation" then
             
