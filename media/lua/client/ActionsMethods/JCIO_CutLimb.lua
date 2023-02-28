@@ -175,7 +175,7 @@ JCIO.CutLimb = function(partName, surgeonFactor, bandageTable, painkillerTable)
     if tourniquetItem ~= nil then
         baseDamageValue = 50  -- TODO Decrease mostly blood and damage, add pain, not everything else
 
-        if partName == "Left_UpperArm" or partName == "Right_UpperArm" then
+        if partName == side .. "_UpperArm" then
             player:removeWornItem(tourniquetItem)
         end
     end
@@ -185,7 +185,9 @@ JCIO.CutLimb = function(partName, surgeonFactor, bandageTable, painkillerTable)
     local wristWatchItem = FindWristWatchInWornItems(player, side)
 
     if wristWatchItem ~= nil then
-        player:removeWornItem(wristWatchItem)
+        if partName == side .. "_LowerArm" or partName == side .. "_UpperArm" then
+            player:removeWornItem(wristWatchItem)
+        end
     end
 
 

@@ -190,30 +190,46 @@ end
 -- Make the player unable to equip a tourniquet or watches on an already fully amputated limb
 local og_ISWearClothingIsValid = ISWearClothing.isValid
 function ISWearClothing:isValid()
-    
+
 	local baseCheck = og_ISWearClothingIsValid(self)
     local itemFullType = self.item:getFullType()
     local limbsData = self.character:getModData().JCIO.limbs
-    local itemsToBeChecked = {
-        "Surgery_%1_Tourniquet",         -- 1
-        "Watch_%1"                      -- 2
-    }
 
+    local itemToCheck = "Surgery_%s_Tourniquet"
     for _, side in pairs(JCIO.sideNames) do
-        for indexItem, itemName in pairs(itemsToBeChecked) do
-            local formattedItemName = string.format(itemName, side)
 
-            if string.find(itemFullType, formattedItemName) then
-                if indexItem == 1 and limbsData[side .. "_UpperArm"].isCut then
-                    return false
-                elseif indexItem == 2 and limbsData[side .. "_Hand"].isCut then
-                    return false
-                end
+        local formattedItemName = string.format(itemToCheck, side)
+
+        if string.find(itemFullType, formattedItemName) then
+            if limbsData[side .. "_UpperArm"].isCut then
+                return false
             end
         end
     end
 
     return baseCheck
-
     
+end
+
+local og_ISWearClothingExtraAction = ISClothingExtraAction.isValid
+
+function ISClothingExtraAction:isValid()
+	local baseCheck = og_ISWearClothingExtraAction(self)
+    local itemToCheck = "Watch_%s"
+    local itemFullType = self.item:getFullType()
+    local limbsData = self.character:getModData().JCIO.limbs
+
+
+    for _, side in pairs(JCIO.sideNames) do
+
+        local formattedItemName = string.format(itemToCheck, side)
+
+        if string.find(itemFullType, formattedItemName) then
+            if limbsData[side .. "_LowerArm"].isCut then
+                return false
+            end
+        end
+    end
+
+    return baseCheck
 end

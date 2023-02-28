@@ -55,6 +55,7 @@
         "SandboxVars",
         "getClassField",
         "ISWearClothing",
-        "SyncXp"
+        "SyncXp",
+        "ISClothingExtraAction"
     ]
 }
