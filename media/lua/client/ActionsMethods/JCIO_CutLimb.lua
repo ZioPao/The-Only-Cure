@@ -114,17 +114,17 @@ function JCIO.DamagePlayerDuringAmputation(patient, partName)
 end
 
 local function FindTourniquetInWornItems(patient, side)
-    local worn_items = patient:getWornItems()
+    
+    local checkString = "Surgery_" .. side .. "_Tourniquet"
+    local item = JCIO_Common.FindItemInWornItems(patient, checkString)
+    return item
 
-    for i = 1, worn_items:size() - 1 do -- Maybe wornItems:size()-1
-        local item = worn_items:get(i):getItem()
-        local item_full_type = item:getFullType()
-        if string.find(item_full_type, "Surgery_" .. side .. "_Tourniquet") then
-            return item
-        end
-    end
+end
 
-    return nil
+local function FindWristWatchInWornItems(patient, side)
+    local checkString = "Watch_" .. side
+    local item = JCIO_Common.FindItemInWornItems(patient, checkString)
+    return item
 
 end
 ----------------------------------------------------------------------------------
@@ -159,6 +159,7 @@ JCIO.CutLimb = function(partName, surgeonFactor, bandageTable, painkillerTable)
     local adjacentBodyPart = player:getBodyDamage():getBodyPart(JCIO_Common.GetAdjacentBodyPartFromPartName(partName))
 
     local stats = player:getStats()
+    local side = JCIO_Common.GetSideFromPartName(partName)
 
 
 
@@ -167,7 +168,7 @@ JCIO.CutLimb = function(partName, surgeonFactor, bandageTable, painkillerTable)
     SetParametersForMissingLimb(bodyPart, false)
 
     -- Use a tourniquet if available
-    local tourniquetItem = FindTourniquetInWornItems(player, JCIO_Common.GetSideFromPartName(partName))
+    local tourniquetItem = FindTourniquetInWornItems(player, side)
 
     local baseDamageValue = 100
 
@@ -177,8 +178,19 @@ JCIO.CutLimb = function(partName, surgeonFactor, bandageTable, painkillerTable)
         if partName == "Left_UpperArm" or partName == "Right_UpperArm" then
             player:removeWornItem(tourniquetItem)
         end
-
     end
+
+
+    -- Removes wrist watches in case they're amputating the same side where they equipped it
+    local wristWatchItem = FindWristWatchInWornItems(player, side)
+
+    if wristWatchItem ~= nil then
+        player:removeWornItem(wristWatchItem)
+    end
+
+
+
+
 
     -- Set damage, stress, and low endurance after amputation
     adjacentBodyPart:AddDamage(baseDamageValue - surgeonFactor)

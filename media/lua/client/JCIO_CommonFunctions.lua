@@ -274,3 +274,18 @@ JCIO_Common.GetCanBeHeldTable = function(limbs_data)
 
 end
 -------------------------------
+
+JCIO_Common.FindItemInWornItems = function(player, checkString)
+    local wornItems = player:getWornItems()
+
+    for i = 1, wornItems:size() - 1 do -- Maybe wornItems:size()-1
+        local item = wornItems:get(i):getItem()
+        local itemFullType = item:getFullType()
+        if string.find(itemFullType, checkString) then
+            return item
+        end
+    end
+
+    return nil
+
+end

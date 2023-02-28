@@ -4,6 +4,9 @@ require "TimedActions/ISUnequipAction"
 require "ISUI/ISInventoryPaneContextMenu"
 
 
+
+-- TODO 1) Add exceptions for watches
+
 local og_ISBaseTimedActionAdjustMaxTime = ISBaseTimedAction.adjustMaxTime
 function ISBaseTimedAction:adjustMaxTime(maxTime)
 
@@ -184,29 +187,33 @@ function ISInventoryPaneContextMenu.dropItem(item, player)
 
 end
 
--- Make the player unable to equip a tourniquet on an already fully amputated limb
+-- Make the player unable to equip a tourniquet or watches on an already fully amputated limb
 local og_ISWearClothingIsValid = ISWearClothing.isValid
 function ISWearClothing:isValid()
-	local base_check = og_ISWearClothingIsValid(self)
-	--return self.character:getInventory():contains(self.item);
-
-    local item_full_type = self.item:getFullType()
-
-    -- TODO Sides
-    local limbs_data = self.character:getModData().JCIO.limbs
+    
+	local baseCheck = og_ISWearClothingIsValid(self)
+    local itemFullType = self.item:getFullType()
+    local limbsData = self.character:getModData().JCIO.limbs
+    local itemsToBeChecked = {
+        "Surgery_%1_Tourniquet",         -- 1
+        "Watch_%1"                      -- 2
+    }
 
     for _, side in pairs(JCIO.sideNames) do
-        if string.find(item_full_type, "Test_Tourniquet_" .. side) then
-            if limbs_data[side .. "_UpperArm"].isCut then
-                return false
+        for indexItem, itemName in pairs(itemsToBeChecked) do
+            local formattedItemName = string.format(itemName, side)
+
+            if string.find(itemFullType, formattedItemName) then
+                if indexItem == 1 and limbsData[side .. "_UpperArm"].isCut then
+                    return false
+                elseif indexItem == 2 and limbsData[side .. "_Hand"].isCut then
+                    return false
+                end
             end
-            
-
         end
-
     end
 
-    return base_check
+    return baseCheck
 
     
 end
