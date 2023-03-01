@@ -24,30 +24,18 @@ function JCIO_CutLimbAction:update()
         self.surgeon:faceThisObject(self.patient)
     end
 
-
-    local worldSoundRadius = 3
-
-    local soundDelay = 6
-
     -- Sound handling
-    if self.soundTime + soundDelay < getTimestamp() then
-
+    if self.soundTime < getTimestamp() then
         self.soundTime = getTimestamp()
 
-        if not self.chatacter:getEmitter():isPlaying(self.sawSound) then
+        if not self.character:getEmitter():isPlaying(self.sawSound) then
+            print("JCIO: Running sound again")
             self.sawSound = self.character:getEmitter():playSound("Amputation_Sound")
-
+            addSound(self.surgeon, self.surgeon:getX(), self.surgeon:getY(), self.surgeon:getZ(), 3, 3)
         end
-
-
-
     end
 
-    -- TODO This is to handle MP I guess?
-    if worldSoundRadius > 0 then
-        self.worldSoundTime = getTimestamp()
-        addSound(self.surgeon, self.surgeon:getX(), self.surgeon:getY(), self.surgeon:getZ(), worldSoundRadius, worldSoundRadius)
-    end
+
 end
 
 function JCIO_CutLimbAction:stop()

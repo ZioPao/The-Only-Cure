@@ -1,5 +1,5 @@
 Sandbox_EN = {
-    Sandbox_JCIO = "JUST CUT IT OFF",
+    Sandbox_JCIO = "Just Cut It Off",
 
     Sandbox_JCIO_RollUpSleeves = "Roll up sleeves",
     Sandbox_JCIO_RollUpSleeves_tooltip = "Currently broken, will not do anything",
@@ -8,7 +8,7 @@ Sandbox_EN = {
     Sandbox_JCIO_CicatrizationSpeedMultiplier_tooltip = "Customize this to make the cicatrization process faster",
 
     Sandbox_JCIO_AmputationTimeMultiplier = "Amputation Time Scaler",
-    Sandbox_JCIO_AmputationTimeMultiplier_tooltip = "Scales the amount of time multplying added after amputation"
+    Sandbox_JCIO_AmputationTimeMultiplier_tooltip = "Scales the amount of time multplying added after amputation",
 
 
 }
