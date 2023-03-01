@@ -211,8 +211,8 @@ function ISWearClothing:isValid()
     
 end
 
+-- This is to manage the watches, we don't want them equipped over an amputated limb of course
 local og_ISWearClothingExtraAction = ISClothingExtraAction.isValid
-
 function ISClothingExtraAction:isValid()
 	local baseCheck = og_ISWearClothingExtraAction(self)
 

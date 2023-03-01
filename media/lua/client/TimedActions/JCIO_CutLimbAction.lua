@@ -23,13 +23,43 @@ function JCIO_CutLimbAction:update()
     if self.patient ~= self.surgeon then
         self.surgeon:faceThisObject(self.patient)
     end
+
+
+    local worldSoundRadius = 3
+
+    local soundDelay = 6
+
+    -- Sound handling
+    if self.soundTime + soundDelay < getTimestamp() then
+
+        self.soundTime = getTimestamp()
+
+        if not self.chatacter:getEmitter():isPlaying(self.sawSound) then
+            self.sawSound = self.character:getEmitter():playSound("Amputation_Sound")
+
+        end
+
+
+
+    end
+
+    -- TODO This is to handle MP I guess?
+    if worldSoundRadius > 0 then
+        self.worldSoundTime = getTimestamp()
+        addSound(self.surgeon, self.surgeon:getX(), self.surgeon:getY(), self.surgeon:getZ(), worldSoundRadius, worldSoundRadius)
+    end
 end
 
 function JCIO_CutLimbAction:stop()
 
     print("Stopping ISCutLimb")
-    self.surgeon:getEmitter():stopSoundByName("Amputation_Sound")
-    sendClientCommand(self.surgeon, "JCIO", "AskStopAmputationSound", {surgeon_id = self.surgeon:getOnlineID()})
+
+    -- Handles sound
+
+    if self.sawSound and self.sawSound ~= 0 and self.surgeon:getEmitter():isPlaying(self.sawSound) then
+        self.surgeon:getEmitter():stopSound(self.sawSound)
+    end
+
 
     -- TODO test this with more than 2 players
     -- TODO this gets bugged when player dies while amputating
@@ -44,8 +74,11 @@ function JCIO_CutLimbAction:start()
     -- TODO Add a check so you can't cut your arm if you don't have hands or if you only have one arm and want to cut that same arm.
 
     self:setActionAnim("SawLog")
-    local saw_item = JCIO_Common.GetSawInInventory(self.surgeon)
-    self.surgeon:getEmitter():playSound("Amputation_Sound")
+    local sawItem = JCIO_Common.GetSawInInventory(self.surgeon)
+
+	self.soundTime = 0
+    self.worldSoundTime = 0
+    self.sawSound = self.surgeon:getEmitter():playSound("Amputation_Sound")
 
     -- Return whatever object we've got in the inventory
     if self.surgeon:getPrimaryHandItem() then
@@ -55,8 +88,8 @@ function JCIO_CutLimbAction:start()
         ISTimedActionQueue.add(ISUnequipAction:new(self.surgeon, self.surgeon:getSecondaryHandItem(), 2));
     end
 
-    if saw_item then
-        self:setOverrideHandModels(saw_item:getStaticModel(), nil)
+    if sawItem then
+        self:setOverrideHandModels(sawItem:getStaticModel(), nil)
 
     end
 
@@ -124,7 +157,7 @@ function JCIO_CutLimbAction:perform()
 
     if self.patient ~= self.surgeon and isClient() then
         SendCutLimb(self.patient, self.partName, surgeon_factor, bandage_table, painkiller_table)
-        sendClientCommand(self.surgeon, "JCIO", "AskStopAmputationSound", {surgeon_id = self.surgeon:getOnlineID()})
+        sendClientCommand(self.surgeon, "JCIO", "AskStopAmputationSound", {surgeonID = self.surgeon:getOnlineID()})
     else
         JCIO.CutLimb(self.partName, surgeon_factor, bandage_table, painkiller_table)
     end

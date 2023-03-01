@@ -239,5 +239,11 @@ local function InitializeJustCutItOff()
     Events.EveryOneMinute.Add(JCIO.UpdateEveryOneMinute)
 
 
+    -- Mod Checker
+    CheckMyModTable = CheckMyModTable or {}
+    CheckMyModTable["JCIO"] = 2915572347
+
+
+
 end
 Events.OnGameBoot.Add(InitializeJustCutItOff)

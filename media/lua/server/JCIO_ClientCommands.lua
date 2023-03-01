@@ -28,7 +28,7 @@ end
 ClientCommands.AskStopAmputationSound = function(_, args)
 
     print("JCIO: We're in AskStopAmputationSound")
-    sendServerCommand("JCIO", "StopAmputationSound", {surgeon_id = args.surgeon_id})
+    sendServerCommand("JCIO", "StopAmputationSound", {surgeon_id = args.surgeonID})
 
 
 end
