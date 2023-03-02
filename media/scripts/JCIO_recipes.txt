@@ -2,8 +2,7 @@ module JCIO
 {
 	imports
 	{
-		Base
-		TOC
+		
 	}
 
 /*************Surgeon Kits*******************/
@@ -190,6 +189,23 @@ recipe Craft prosthesis with Leather Base and Metal Hook
 		Tooltip: Recipe_Tooltip_AssembleProsthesis,
 	}
 recipe Craft prosthesis with Leather Base and Metal Hand
+	{
+		ProstPart_LeatherBase,
+		ProstPart_MetalHand,
+
+
+		Time: 10.00,
+		NeedToBeLearn: true,
+		CanBeDoneFromFloor: false,
+		OnGiveXP: NoXP_OnGiveXP,
+		SkillRequired: FirstAid=2,
+		Category: Surgeon,
+		OnCreate:ProsthesisRecipes.OnCreateProsthesis,
+		Tooltip: Recipe_Tooltip_AssembleProsthesis,
+	}
 
 /*************Disassemble Prosthetics*******************/
 
+
+
+}
