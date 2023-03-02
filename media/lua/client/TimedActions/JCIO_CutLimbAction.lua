@@ -29,7 +29,7 @@ function JCIO_CutLimbAction:update()
         self.soundTime = getTimestamp()
 
         if not self.character:getEmitter():isPlaying(self.sawSound) then
-            print("JCIO: Running sound again")
+            --print("JCIO: Running sound again")
             self.sawSound = self.character:getEmitter():playSound("Amputation_Sound")
             addSound(self.surgeon, self.surgeon:getX(), self.surgeon:getY(), self.surgeon:getZ(), 3, 3)
         end
@@ -40,7 +40,7 @@ end
 
 function JCIO_CutLimbAction:stop()
 
-    print("Stopping ISCutLimb")
+    --print("Stopping ISCutLimb")
 
     -- Handles sound
 
@@ -94,39 +94,39 @@ function JCIO_CutLimbAction:start()
 end
 
 function JCIO_CutLimbAction:findArgs()
-    local surgeon_factor = self.surgeon:getPerkLevel(Perks.Doctor)
-    if self.surgeon:getDescriptor():getProfession() == "surgeon" then surgeon_factor = surgeon_factor + 15 end
-    if self.surgeon:getDescriptor():getProfession() == "doctor" then surgeon_factor = surgeon_factor + 9 end
-    if self.surgeon:getDescriptor():getProfession() == "nurse" then surgeon_factor = surgeon_factor + 4 end
+    local surgeonFactor = self.surgeon:getPerkLevel(Perks.Doctor)
+    if self.surgeon:getDescriptor():getProfession() == "surgeon" then surgeonFactor = surgeonFactor + 15 end
+    if self.surgeon:getDescriptor():getProfession() == "doctor" then surgeonFactor = surgeonFactor + 9 end
+    if self.surgeon:getDescriptor():getProfession() == "nurse" then surgeonFactor = surgeonFactor + 4 end
 
-    local bandage_table = {
-        use_bandage = false,
-        bandage_type = nil,
-        is_bandage_sterilized = nil
+    local bandageTable = {
+        useBandage = false,
+        bandageType = nil,
+        isBandageSterilized = nil
     }
     local painkiller_table = {}
 
 
     local bandage = self.surgeon:getInventory():FindAndReturn('Bandage')
-    local sterilized_bandage = self.surgeon:getInventory():FindAndReturn('AlcoholBandage')
+    local sterilizedBandage = self.surgeon:getInventory():FindAndReturn('AlcoholBandage')
     --local ripped_sheets = self.surgeon:getInventory():FindAndReturn("...")
 
-    if sterilized_bandage then
-        bandage_table.bandage_type = sterilized_bandage:getType()
-        bandage_table.is_bandage_sterilized = true
-        bandage_table.use_bandage = true
-        self.surgeon:getInventory():Remove(sterilized_bandage)
-        surgeon_factor = surgeon_factor + 4
+    if sterilizedBandage then
+        bandageTable.bandageType = sterilizedBandage:getType()
+        bandageTable.isBandageSterilized = true
+        bandageTable.useBandage = true
+        self.surgeon:getInventory():Remove(sterilizedBandage)
+        surgeonFactor = surgeonFactor + 4
     elseif bandage then
-        bandage_table.bandage_type = bandage:getType()
-        bandage_table.is_bandage_sterilized = false
-        bandage_table.use_bandage = true
+        bandageTable.bandageType = bandage:getType()
+        bandageTable.isBandageSterilized = false
+        bandageTable.useBandage = true
         self.surgeon:getInventory():Remove(bandage)
-        surgeon_factor = surgeon_factor + 2
+        surgeonFactor = surgeonFactor + 2
     else
-        bandage_table.bandage_type = ""
-        bandage_table.use_bandage = false
-        bandage_table.is_bandage_sterilized = false
+        bandageTable.bandageType = ""
+        bandageTable.useBandage = false
+        bandageTable.isBandageSterilized = false
     end
 
 
@@ -137,17 +137,17 @@ function JCIO_CutLimbAction:findArgs()
     --     painkillerCount = painkiller:getRemainingUses();
     -- end
 
-    return surgeon_factor, bandage_table, painkiller_table
+    return surgeonFactor, bandageTable, painkiller_table
 end
 
 function JCIO_CutLimbAction:perform()
-    local surgeon_factor, bandage_table, painkiller_table = self:findArgs()
+    local surgeonFactor, bandageTable, painkillerTable = self:findArgs()
 
     if self.patient ~= self.surgeon and isClient() then
-        SendCutLimb(self.patient, self.partName, surgeon_factor, bandage_table, painkiller_table)
+        SendCutLimb(self.patient, self.partName, surgeonFactor, bandageTable, painkillerTable)
         sendClientCommand(self.surgeon, "JCIO", "AskStopAmputationSound", {surgeonID = self.surgeon:getOnlineID()})
     else
-        JCIO.CutLimb(self.partName, surgeon_factor, bandage_table, painkiller_table)
+        JCIO.CutLimb(self.partName, surgeonFactor, bandageTable, painkillerTable)
     end
 
     self.surgeon:getEmitter():stopSoundByName("Amputation_Sound")

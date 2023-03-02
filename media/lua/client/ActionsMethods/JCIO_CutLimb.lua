@@ -213,8 +213,8 @@ JCIO.CutLimb = function(partName, surgeonFactor, bandageTable, painkillerTable)
 
 
     -- If bandages are available, use them
-    adjacentBodyPart:setBandaged(bandageTable.use_bandage, 10, bandageTable.is_bandage_sterilized,
-        bandageTable.bandage_type)
+    adjacentBodyPart:setBandaged(bandageTable.useBandage, 10, bandageTable.isBandageSterilized,
+        bandageTable.bandageType)
 
 
 
