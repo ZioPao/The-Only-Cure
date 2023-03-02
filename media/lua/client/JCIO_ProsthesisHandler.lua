@@ -119,6 +119,7 @@ function ProsthesisRecipes.OnCreateProsthesis(items, result, player, selectedIte
     -- Set mod data for item with durability and all that crap
 
     -- Get condition from the items
+    print("JCIO: setting stats for prosthesis item")
     local condition = 0
     for i=1,items:size() do
         local item = items:get(i-1)

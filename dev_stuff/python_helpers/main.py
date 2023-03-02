@@ -75,7 +75,7 @@ def generate_clothing_item(name, model, texture_choices):
     with open(path_idtable, "ab") as file:
        tree_guid.write(file, encoding='utf-8', pretty_print=True) 
 
-def generate_recipe(recipe_name, recipe_items, on_create_func, time, skill_required, tooltip):
+def generate_recipe(recipe_name, result_name, recipe_items, on_create_func, time, skill_required, tooltip):
     root_element = f"recipe {recipe_name}\n"
     root_element += "\t{\n"
 
@@ -86,7 +86,8 @@ def generate_recipe(recipe_name, recipe_items, on_create_func, time, skill_requi
 
     # if result != "":
     #     root_element += f"\t\tResult: {result_name},\n"
-    root_element += f"\t\tTime: {time:.2f},\n"
+    root_element += f"\t\tTime: {time:.1f},\n"
+    root_element += f"\t\tResult: {result_name},\n"
     root_element += "\t\tNeedToBeLearn: true,\n"
     root_element += "\t\tCanBeDoneFromFloor: false,\n"
     root_element += "\t\tOnGiveXP: NoXP_OnGiveXP,\n"
@@ -232,12 +233,13 @@ def run_recipe_assemble_generation():
             # TODO add screwdriver and some screws to the items
 
 
+            result_name = "Prost_" + base_row[1]["Base"] + "_" + top_row[1]["Top"]
             recipe_items = [first_item, second_item]
             on_create_func = "ProsthesisRecipes.OnCreateProsthesis"
             time = 10       # TODO Change this
             skill_required = ["FirstAid", "2"]       # TODO Change this
             tooltip = "Recipe_Tooltip_AssembleProsthesis"
-            generate_recipe(recipe_name, recipe_items, on_create_func, time, skill_required, tooltip)
+            generate_recipe(recipe_name, result_name, recipe_items, on_create_func, time, skill_required, tooltip)
 
 
 # RECIPE GENERATION PASS - Disassembly
@@ -251,13 +253,16 @@ def run_recipe_disassemble_generation():
             base_display_name = base_row[1]["Display Name"]
             top_display_name = top_row[1]["Display Name"]
 
+
+            # TODO Add result name
+            result_name = ""
             recipe_name = f"Disassemble prosthesis with {base_display_name} and {top_display_name}"
             recipe_item = [f"Prost_{base_name}_{top_name}"]
             on_create_func = "ProsthesisRecipes.OnDisassembleProsthesis"
             time = 10       # TODO Change this
             skill_required = ["FirstAid", "2"]       # TODO Change this
             tooltip = "Recipe_Tooltip_DisassembleProsthesis"
-            generate_recipe(recipe_name, recipe_item, on_create_func, time, skill_required, tooltip)
+            generate_recipe(recipe_name, result_name, recipe_item, on_create_func, time, skill_required, tooltip)
 
 
 # RECIPE GENERATION PASS - Single parts - Base
@@ -266,4 +271,4 @@ def run_recipe_disassemble_generation():
 
 
 
-run_single_part_item_generation()
+run_recipe_assemble_generation()

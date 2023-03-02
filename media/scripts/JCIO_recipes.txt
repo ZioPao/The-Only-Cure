@@ -74,7 +74,8 @@ recipe Craft prosthesis with Wooden Base and Wooden Hook
 		ProstPart_WoodenHook,
 
 
-		Time: 10.00,
+		Time: 10.0,
+		Result: Prost_WoodenBase_WoodenHook,
 		NeedToBeLearn: true,
 		CanBeDoneFromFloor: false,
 		OnGiveXP: NoXP_OnGiveXP,
@@ -89,7 +90,8 @@ recipe Craft prosthesis with Wooden Base and Metal Hook
 		ProstPart_MetalHook,
 
 
-		Time: 10.00,
+		Time: 10.0,
+		Result: Prost_WoodenBase_MetalHook,
 		NeedToBeLearn: true,
 		CanBeDoneFromFloor: false,
 		OnGiveXP: NoXP_OnGiveXP,
@@ -104,7 +106,8 @@ recipe Craft prosthesis with Wooden Base and Metal Hand
 		ProstPart_MetalHand,
 
 
-		Time: 10.00,
+		Time: 10.0,
+		Result: Prost_WoodenBase_MetalHand,
 		NeedToBeLearn: true,
 		CanBeDoneFromFloor: false,
 		OnGiveXP: NoXP_OnGiveXP,
@@ -119,7 +122,8 @@ recipe Craft prosthesis with Metal Base and Wooden Hook
 		ProstPart_WoodenHook,
 
 
-		Time: 10.00,
+		Time: 10.0,
+		Result: Prost_MetalBase_WoodenHook,
 		NeedToBeLearn: true,
 		CanBeDoneFromFloor: false,
 		OnGiveXP: NoXP_OnGiveXP,
@@ -134,7 +138,8 @@ recipe Craft prosthesis with Metal Base and Metal Hook
 		ProstPart_MetalHook,
 
 
-		Time: 10.00,
+		Time: 10.0,
+		Result: Prost_MetalBase_MetalHook,
 		NeedToBeLearn: true,
 		CanBeDoneFromFloor: false,
 		OnGiveXP: NoXP_OnGiveXP,
@@ -149,7 +154,8 @@ recipe Craft prosthesis with Metal Base and Metal Hand
 		ProstPart_MetalHand,
 
 
-		Time: 10.00,
+		Time: 10.0,
+		Result: Prost_MetalBase_MetalHand,
 		NeedToBeLearn: true,
 		CanBeDoneFromFloor: false,
 		OnGiveXP: NoXP_OnGiveXP,
@@ -164,7 +170,8 @@ recipe Craft prosthesis with Leather Base and Wooden Hook
 		ProstPart_WoodenHook,
 
 
-		Time: 10.00,
+		Time: 10.0,
+		Result: Prost_LeatherBase_WoodenHook,
 		NeedToBeLearn: true,
 		CanBeDoneFromFloor: false,
 		OnGiveXP: NoXP_OnGiveXP,
@@ -179,7 +186,8 @@ recipe Craft prosthesis with Leather Base and Metal Hook
 		ProstPart_MetalHook,
 
 
-		Time: 10.00,
+		Time: 10.0,
+		Result: Prost_LeatherBase_MetalHook,
 		NeedToBeLearn: true,
 		CanBeDoneFromFloor: false,
 		OnGiveXP: NoXP_OnGiveXP,
@@ -194,7 +202,8 @@ recipe Craft prosthesis with Leather Base and Metal Hand
 		ProstPart_MetalHand,
 
 
-		Time: 10.00,
+		Time: 10.0,
+		Result: Prost_LeatherBase_MetalHand,
 		NeedToBeLearn: true,
 		CanBeDoneFromFloor: false,
 		OnGiveXP: NoXP_OnGiveXP,
@@ -203,6 +212,7 @@ recipe Craft prosthesis with Leather Base and Metal Hand
 		OnCreate:ProsthesisRecipes.OnCreateProsthesis,
 		Tooltip: Recipe_Tooltip_AssembleProsthesis,
 	}
+
 
 /*************Disassemble Prosthetics*******************/
 
