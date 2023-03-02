@@ -2,6 +2,13 @@ import lxml.etree as gfg
 import pandas as pd
 import uuid
 import openpyxl
+import os
+
+
+os.chdir(os.getcwd() + "\\dev_stuff\\python_helpers\\")
+
+
+
   
 
 def generate_clothing_item(name, model, texture_choices):
@@ -124,6 +131,17 @@ def generate_item(item_name, weight, item_type, display_category, display_name, 
         file.write(root_element)
         file.close()
 
+def generate_normal_items(df, part_type):
+    for row in df.iterrows():
+        item_id = "ProstPart_" + row[1][part_type]
+        item_type = "Normal"
+        weight = "{0:.2f}".format(float(row[1]["Weight"]))
+        display_category = "Prosthesis"
+        display_name = row[1]["Display Name"]
+        icon = "ProstTest" + part_type
+        generate_item(item_id, weight, item_type, display_category, display_name, icon, "TempTooltip", "false")
+
+
 
 ###########################################################################################
 def read_table(file_name: str, table_name: str) -> pd.DataFrame:
@@ -154,97 +172,98 @@ prost_bodylocations = ["JCIO_ArmRightProsthesis", "JCIO_ArmLeftProsthesis"]
 texture_types = ["Wooden", "Metal"]
 
 
-# CLOTHING GENERATION PASS
-for base_row in df_base.iterrows():
-    for top_row in df_top.iterrows():
-        base_name = base_row[1][0]
-        top_name = top_row[1][0]
 
-        for limb in limbs:
-            for side in sides:
-                current_name = "Prost_" + side + "_" + limb + "_" + base_name + "_" + top_name
-                texture_choices = {r"Amputations\\Upperarm\\skin01_b"}
-                generate_clothing_item(current_name, "test", texture_choices)
+#########################
+
+# CLOTHING GENERATION PASS
+def run_clothing_generation():
+    for base_row in df_base.iterrows():
+        for top_row in df_top.iterrows():
+            base_name = base_row[1][0]
+            top_name = top_row[1][0]
+
+            for limb in limbs:
+                for side in sides:
+                    current_name = "Prost_" + side + "_" + limb + "_" + base_name + "_" + top_name
+                    texture_choices = {r"Amputations\\Upperarm\\skin01_b"}
+                    generate_clothing_item(current_name, "test", texture_choices)
 
 # ITEM GENERATION PASS - ASSEMBLED
-for base_row in df_base.iterrows():
-    for top_row in df_top.iterrows():
-        base_id = base_row[1]["Base"]
-        top_id = top_row[1]["Top"]
+def run_assembled_item_generation():
+    for base_row in df_base.iterrows():
+        for top_row in df_top.iterrows():
+            base_id = base_row[1]["Base"]
+            top_id = top_row[1]["Top"]
 
-        item_id = "Prost_" + base_id + "_" + top_id
-        item_type = "Clothing"
-        weight = "{0:.2f}".format(float(base_row[1]["Weight"]) + float(top_row[1]["Weight"]))
-        display_category = "Prosthesis"
-        display_name = "Prosthesis - " + base_row[1]["Display Name"] + " and " + top_row[1]["Display Name"]
+            item_id = "Prost_" + base_id + "_" + top_id
+            item_type = "Clothing"
+            weight = "{0:.2f}".format(float(base_row[1]["Weight"]) + float(top_row[1]["Weight"]))
+            display_category = "Prosthesis"
+            display_name = "Prosthesis - " + base_row[1]["Display Name"] + " and " + top_row[1]["Display Name"]
 
-        for limb in limbs:
-            for side in sides:
-                clothing_item_name = "Prost_" + side + "_" + limb + "_" + base_id + "_" + top_id
-                bl = prost_bodylocations[0] if side == "Right" else prost_bodylocations[1]
+            for limb in limbs:
+                for side in sides:
+                    clothing_item_name = "Prost_" + side + "_" + limb + "_" + base_id + "_" + top_id
+                    bl = prost_bodylocations[0] if side == "Right" else prost_bodylocations[1]
 
-                icon = "metalLeg"
-                generate_item(item_id, weight, item_type, display_category, display_name, icon, "TempTooltip", "false", clothing_item_name, bl, "Hands")
-
+                    icon = "metalLeg"
+                    generate_item(item_id, weight, item_type, display_category, display_name, icon, "TempTooltip", "false", clothing_item_name, bl, "Hands")
 
 # ITEM GENERATION PASS - Single item to assemble stuff
-def generate_normal_items(df, part_type):
-    for row in df.iterrows():
-        item_id = "ProstPart_" + row[1][part_type]
-        item_type = "Normal"
-        weight = "{0:.2f}".format(float(row[1]["Weight"]))
-        display_category = "Prosthesis"
-        display_name = row[1]["Display Name"]
-        icon = "ProstTest" + part_type
-        generate_item(item_id, weight, item_type, display_category, display_name, icon, "TempTooltip", "false")
-
-
-generate_normal_items(df_base, "Base")
-generate_normal_items(df_top, "Top")
+def run_single_part_item_generation():
+    generate_normal_items(df_base, "Base")
+    generate_normal_items(df_top, "Top")
 
 
 # RECIPE GENERATION PASS - Assembly
-for base_row in df_base.iterrows():
-    for top_row in df_top.iterrows():
+def run_recipe_assemble_generation():
+    for base_row in df_base.iterrows():
+        for top_row in df_top.iterrows():
 
-        base_name = base_row[1]["Base"]
-        top_name = top_row[1]["Top"]
-        base_display_name = base_row[1]["Display Name"]
-        top_display_name = top_row[1]["Display Name"]
+            base_name = base_row[1]["Base"]
+            top_name = top_row[1]["Top"]
+            base_display_name = base_row[1]["Display Name"]
+            top_display_name = top_row[1]["Display Name"]
 
-        recipe_name = f"Craft prosthesis with {base_display_name} and {top_display_name}"
+            recipe_name = f"Craft prosthesis with {base_display_name} and {top_display_name}"
 
-        first_item = "ProstPart_" + base_row[1]["Base"]
-        second_item = "ProstPart_" + top_row[1]["Top"]
-        # TODO add screwdriver and some screws to the items
+            first_item = "ProstPart_" + base_row[1]["Base"]
+            second_item = "ProstPart_" + top_row[1]["Top"]
+            # TODO add screwdriver and some screws to the items
 
 
-        recipe_items = [first_item, second_item]
-        on_create_func = "ProsthesisRecipes.OnCreateProsthesis"
-        time = 10       # TODO Change this
-        skill_required = ["FirstAid", "2"]       # TODO Change this
-        tooltip = "Tooltip_test"
-        generate_recipe(recipe_name, recipe_items, on_create_func, time, skill_required, tooltip)
+            recipe_items = [first_item, second_item]
+            on_create_func = "ProsthesisRecipes.OnCreateProsthesis"
+            time = 10       # TODO Change this
+            skill_required = ["FirstAid", "2"]       # TODO Change this
+            tooltip = "Recipe_Tooltip_AssembleProsthesis"
+            generate_recipe(recipe_name, recipe_items, on_create_func, time, skill_required, tooltip)
 
 
 # RECIPE GENERATION PASS - Disassembly
-for base_row in df_base.iterrows():
-    for top_row in df_top.iterrows():
+def run_recipe_disassemble_generation():
+    for base_row in df_base.iterrows():
+        for top_row in df_top.iterrows():
 
-        base_name = base_row[1]["Base"]
-        top_name = top_row[1]["Top"]
+            base_name = base_row[1]["Base"]
+            top_name = top_row[1]["Top"]
 
-        base_display_name = base_row[1]["Display Name"]
-        top_display_name = top_row[1]["Display Name"]
+            base_display_name = base_row[1]["Display Name"]
+            top_display_name = top_row[1]["Display Name"]
 
-        recipe_name = f"Disassemble prosthesis with {base_display_name} and {top_display_name}"
-        recipe_item = [f"Prost_{base_name}_{top_name}"]
-        on_create_func = "ProsthesisRecipes.OnDisassembleProsthesis"
-        time = 10       # TODO Change this
-        skill_required = ["FirstAid", "2"]       # TODO Change this
-        tooltip = "Tooltip_test"
-        generate_recipe(recipe_name, recipe_item, on_create_func, time, skill_required, tooltip)
+            recipe_name = f"Disassemble prosthesis with {base_display_name} and {top_display_name}"
+            recipe_item = [f"Prost_{base_name}_{top_name}"]
+            on_create_func = "ProsthesisRecipes.OnDisassembleProsthesis"
+            time = 10       # TODO Change this
+            skill_required = ["FirstAid", "2"]       # TODO Change this
+            tooltip = "Recipe_Tooltip_DisassembleProsthesis"
+            generate_recipe(recipe_name, recipe_item, on_create_func, time, skill_required, tooltip)
 
 
 # RECIPE GENERATION PASS - Single parts - Base
 # TODO do this
+
+
+
+
+run_single_part_item_generation()

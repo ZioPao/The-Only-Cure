@@ -6,7 +6,7 @@ module JCIO
 		TOC
 	}
 
-/*************RECIPES*******************/
+/*************Surgeon Kits*******************/
 
 recipe Combine improvised surgeon kit
 	{
@@ -66,61 +66,130 @@ recipe Combine real surgeon kit
 		NeedToBeLearn: true,
 	}
 
-recipe Make wooden hook
-	{
-		Nails=10,
-		Plank=3,
-		keep [Recipe.GetItemTypes.Saw],
-		keep [Recipe.GetItemTypes.Hammer],
 
-		Result: WoodenHook,
-		Time: 100.0,
-		NeedToBeLearn: false,
+
+/*************Craft Prosthetics*******************/
+recipe Craft prosthesis with Wooden Base and Wooden Hook
+	{
+		ProstPart_WoodenBase,
+		ProstPart_WoodenHook,
+
+
+		Time: 10.00,
+		NeedToBeLearn: true,
 		CanBeDoneFromFloor: false,
 		OnGiveXP: NoXP_OnGiveXP,
-		SkillRequired: Carpentry=4,
+		SkillRequired: FirstAid=2,
 		Category: Surgeon,
-		Tooltip: Recipe_Tooltip_Wooden_hook,
-		NeedToBeLearn: true,
-		
+		OnCreate:ProsthesisRecipes.OnCreateProsthesis,
+		Tooltip: Recipe_Tooltip_AssembleProsthesis,
 	}
-
-recipe Make metal hook
+recipe Craft prosthesis with Wooden Base and Metal Hook
 	{
-		SheetMetal,
-        BlowTorch=7,
-        keep WeldingMask,
+		ProstPart_WoodenBase,
+		ProstPart_MetalHook,
 
-		Result: MetalHook,
-		Time: 250.0,
-		NeedToBeLearn: false,
+
+		Time: 10.00,
+		NeedToBeLearn: true,
 		CanBeDoneFromFloor: false,
 		OnGiveXP: NoXP_OnGiveXP,
-		SkillRequired: MetalWelding=4,
+		SkillRequired: FirstAid=2,
 		Category: Surgeon,
-		Tooltip: Recipe_Tooltip_Metal_hook,
-		NeedToBeLearn: true,
+		OnCreate:ProsthesisRecipes.OnCreateProsthesis,
+		Tooltip: Recipe_Tooltip_AssembleProsthesis,
 	}
-
-recipe Make metal hand
+recipe Craft prosthesis with Wooden Base and Metal Hand
 	{
-		Nails=10,
-		Plank,
-		keep [Recipe.GetItemTypes.Saw],
-		keep [Recipe.GetItemTypes.Hammer],
-		SheetMetal,
-        BlowTorch=7,
-        keep WeldingMask,
+		ProstPart_WoodenBase,
+		ProstPart_MetalHand,
 
-		Result: MetalHand,
-		Time: 250.0,
-		NeedToBeLearn: false,
+
+		Time: 10.00,
+		NeedToBeLearn: true,
 		CanBeDoneFromFloor: false,
 		OnGiveXP: NoXP_OnGiveXP,
-		SkillRequired: Carpentry=8,
-		SkillRequired: MetalWelding=8,
+		SkillRequired: FirstAid=2,
 		Category: Surgeon,
-		Tooltip: Recipe_Tooltip_Metal_hand,
-		NeedToBeLearn: true,
+		OnCreate:ProsthesisRecipes.OnCreateProsthesis,
+		Tooltip: Recipe_Tooltip_AssembleProsthesis,
 	}
-}
+recipe Craft prosthesis with Metal Base and Wooden Hook
+	{
+		ProstPart_MetalBase,
+		ProstPart_WoodenHook,
+
+
+		Time: 10.00,
+		NeedToBeLearn: true,
+		CanBeDoneFromFloor: false,
+		OnGiveXP: NoXP_OnGiveXP,
+		SkillRequired: FirstAid=2,
+		Category: Surgeon,
+		OnCreate:ProsthesisRecipes.OnCreateProsthesis,
+		Tooltip: Recipe_Tooltip_AssembleProsthesis,
+	}
+recipe Craft prosthesis with Metal Base and Metal Hook
+	{
+		ProstPart_MetalBase,
+		ProstPart_MetalHook,
+
+
+		Time: 10.00,
+		NeedToBeLearn: true,
+		CanBeDoneFromFloor: false,
+		OnGiveXP: NoXP_OnGiveXP,
+		SkillRequired: FirstAid=2,
+		Category: Surgeon,
+		OnCreate:ProsthesisRecipes.OnCreateProsthesis,
+		Tooltip: Recipe_Tooltip_AssembleProsthesis,
+	}
+recipe Craft prosthesis with Metal Base and Metal Hand
+	{
+		ProstPart_MetalBase,
+		ProstPart_MetalHand,
+
+
+		Time: 10.00,
+		NeedToBeLearn: true,
+		CanBeDoneFromFloor: false,
+		OnGiveXP: NoXP_OnGiveXP,
+		SkillRequired: FirstAid=2,
+		Category: Surgeon,
+		OnCreate:ProsthesisRecipes.OnCreateProsthesis,
+		Tooltip: Recipe_Tooltip_AssembleProsthesis,
+	}
+recipe Craft prosthesis with Leather Base and Wooden Hook
+	{
+		ProstPart_LeatherBase,
+		ProstPart_WoodenHook,
+
+
+		Time: 10.00,
+		NeedToBeLearn: true,
+		CanBeDoneFromFloor: false,
+		OnGiveXP: NoXP_OnGiveXP,
+		SkillRequired: FirstAid=2,
+		Category: Surgeon,
+		OnCreate:ProsthesisRecipes.OnCreateProsthesis,
+		Tooltip: Recipe_Tooltip_AssembleProsthesis,
+	}
+recipe Craft prosthesis with Leather Base and Metal Hook
+	{
+		ProstPart_LeatherBase,
+		ProstPart_MetalHook,
+
+
+		Time: 10.00,
+		NeedToBeLearn: true,
+		CanBeDoneFromFloor: false,
+		OnGiveXP: NoXP_OnGiveXP,
+		SkillRequired: FirstAid=2,
+		Category: Surgeon,
+		OnCreate:ProsthesisRecipes.OnCreateProsthesis,
+		Tooltip: Recipe_Tooltip_AssembleProsthesis,
+	}
+recipe Craft prosthesis with Leather Base and Metal Hand
+
+/*************Disassemble Prosthetics*******************/
+

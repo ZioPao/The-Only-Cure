@@ -57,6 +57,8 @@
         "ISWearClothing",
         "SyncXp",
         "ISClothingExtraAction",
-        "SwapItConfig"
+        "SwapItConfig",
+        "getTimestamp",
+        "addSound"
     ]
 }

@@ -43,7 +43,6 @@ function JCIO_CutLimbAction:stop()
     --print("Stopping ISCutLimb")
 
     -- Handles sound
-
     if self.sawSound and self.sawSound ~= 0 and self.surgeon:getEmitter():isPlaying(self.sawSound) then
         self.surgeon:getEmitter():stopSound(self.sawSound)
     end

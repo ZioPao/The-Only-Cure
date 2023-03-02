@@ -10,7 +10,8 @@ Tooltip_EN = {
 
     Tooltip_ProstheticKnife = "Prost Knife test",
 
-
+    Recipe_Tooltip_AssembleProsthesis = "Make a prosthetic limb",
+    Recipe_Tooltip_DisassembleProsthesis = "Disassemble a prosthetic limb",
 
 
     Recipe_Tooltip_Wooden_hook = "Make a prosthesic wooden hook.<br>Can be used on an amputated hand or forearm.<br>Can't be equipped if the upper arm is amputated.",
