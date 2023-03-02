@@ -1,4 +1,4 @@
-# JUST CUT IT OFF
+# JUST CUT IT OUT
 ```
 Workshop ID: 2915572347
 Mod ID: Amputation2
