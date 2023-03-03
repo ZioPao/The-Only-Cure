@@ -70,7 +70,7 @@ function GenerateEquippedProsthesis(prosthesisItem, inventory, limb)
 
     -- Check the item mod data if the values are different than the default values
 
-    if itemModData.JCIO ~= nil then
+    if itemModData.TOC ~= nil then
         durabilityBase = itemModData.baseDurability
         durabilityTop = itemModData.topDurability
     -- else
@@ -81,7 +81,7 @@ function GenerateEquippedProsthesis(prosthesisItem, inventory, limb)
     local equippedProsthesis = inventory:AddItem(prosthesisName)
     equippedProsthesis:setCondition(prosthesisItem:getCondition())
 
-    equippedProsthesis:getModData().JCIO = {
+    equippedProsthesis:getModData().TOC = {
         baseDurability = durabilityBase,
         topDurability = durabilityTop,
     }
@@ -119,7 +119,7 @@ function ProsthesisRecipes.OnCreateProsthesis(items, result, player, selectedIte
     -- Set mod data for item with durability and all that crap
 
     -- Get condition from the items
-    print("JCIO: setting stats for prosthesis item")
+    print("TOC: setting stats for prosthesis item")
     local condition = 0
     for i=1,items:size() do
         local item = items:get(i-1)
@@ -128,7 +128,7 @@ function ProsthesisRecipes.OnCreateProsthesis(items, result, player, selectedIte
 
     result:setCondition(condition)      -- Should be the sum?
 
-    result:getModData().JCIO = {
+    result:getModData().TOC = {
         baseDurability = 100,
         topDurability = 100,           -- Stores it here too so we can re-reference it for later
     }
@@ -140,7 +140,7 @@ end
 function ProsthesisRecipes.OnDisassembleProsthesis(item, resultItems, player, selectedItem)
 
     -- Check durability of original item
-    local itemModData = item.getModData().JCIO
+    local itemModData = item.getModData().TOC
 
     local durabilityTop = itemModData.top.durability
     local durabilityBase = itemModData.base.durability
@@ -156,16 +156,16 @@ function ProsthesisRecipes.OnDisassembleProsthesis(item, resultItems, player, se
     local baseName = GetProsthesisPartName(baseTable, prosthesisItemName)
     local topName = GetProsthesisPartName(topTable, prosthesisItemName)
 
-    print("JCIO: " .. baseName .. " and " .. topName)
+    print("TOC: " .. baseName .. " and " .. topName)
 
     local playerInv = player:getInventory()
 
-    local partBase = playerInv:AddItem("JCIO.ProstPart" .. baseName)
+    local partBase = playerInv:AddItem("TOC.ProstPart" .. baseName)
     partBase:setCondition(durabilityBase)
 
 
 
-    local partTop = playerInv:AddItem("JCIO.ProstPart" .. topName)
+    local partTop = playerInv:AddItem("TOC.ProstPart" .. topName)
     partTop:setCondition(durabilityTop)
 
 

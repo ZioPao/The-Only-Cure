@@ -1,9 +1,9 @@
-name=Just Cut It Out
+name=The Only Cure
 poster=generic.png
 require=UIAPI
 description=Bitten? Not a problem!
-id=JCIO
+id=TOC
 icon=icon.png
 url=https://github.com/ZioPao/The-Only-Cure-But-Better
-modversion=0.9.15
+modversion=1.0
 pzversion=41.65

@@ -1,11 +1,11 @@
 ------------------------------------------
-------------- JUST CUT IT OUT ------------
+-------------- THE ONLY CURE -------------
 ------------------------------------------
 ----------- CUT LIMB FUNCTIONS -----------
 
 -- Seems to be the first file loaded, so let's add this
-if JCIO == nil then
-    JCIO = {}
+if TOC == nil then
+    TOC = {}
 end
 
 
@@ -18,7 +18,7 @@ local function CheckIfStillInfected(limbsData)
     local check = false
 
 
-    for _, v in pairs(JCIO_Common.GetPartNames()) do
+    for _, v in pairs(TOC_Common.GetPartNames()) do
         if limbsData[v].isInfected then
             check = true
         end
@@ -33,7 +33,7 @@ end
 
 local function CureInfection(bodyDamage, partName)
 
-    local bodyPartType = bodyDamage:getBodyPart(JCIO_Common.GetBodyPartFromPartName(partName))
+    local bodyPartType = bodyDamage:getBodyPart(TOC_Common.GetBodyPartFromPartName(partName))
 
     bodyDamage:setInfected(false)
     bodyPartType:SetInfected(false)
@@ -59,8 +59,8 @@ end
 
 local function DeleteOtherAmputatedLimbs(side)
     -- if left hand is cut and we cut left lowerarm, then delete hand
-    for _, limb in pairs(JCIO.limbNames) do
-        local partName = "JCIO.Amputation_" .. side .. "_" .. limb
+    for _, limb in pairs(TOC.limbNames) do
+        local partName = "TOC.Amputation_" .. side .. "_" .. limb
         local amputatedLimbItem = getPlayer():getInventory():FindAndReturn(partName)
         if amputatedLimbItem then
             getPlayer():getInventory():Remove(amputatedLimbItem)
@@ -99,11 +99,11 @@ local function SetParametersForMissingLimb(bodyPart, isHealingBite)
 
 end
 
-function JCIO.DamagePlayerDuringAmputation(patient, partName)
+function TOC.DamagePlayerDuringAmputation(patient, partName)
 
     -- Since we're cutting that specific part, it only makes sense that the bleeding starts from there. 
     -- Then, we just delete the bleeding somewhere else before applying the other damage to to upper part of the limb
-    local bodyPartType = JCIO_Common.GetBodyPartFromPartName(partName)
+    local bodyPartType = TOC_Common.GetBodyPartFromPartName(partName)
     local bodyDamage = patient:getBodyDamage()
     local bodyDamagePart = bodyDamage:getBodyPart(bodyPartType)
 
@@ -116,14 +116,14 @@ end
 local function FindTourniquetInWornItems(patient, side)
     
     local checkString = "Surgery_" .. side .. "_Tourniquet"
-    local item = JCIO_Common.FindItemInWornItems(patient, checkString)
+    local item = TOC_Common.FindItemInWornItems(patient, checkString)
     return item
 
 end
 
 local function FindWristWatchInWornItems(patient, side)
     local checkString = "Watch_" .. side
-    local item = JCIO_Common.FindItemInWornItems(patient, checkString)
+    local item = TOC_Common.FindItemInWornItems(patient, checkString)
     return item
 
 end
@@ -139,27 +139,27 @@ end
 ---@param surgeonFactor any the surgeon factor, which will determine some stats for the inflicted wound
 ---@param bandageTable any bandages info
 ---@param painkillerTable any painkillers info, not used
-JCIO.CutLimb = function(partName, surgeonFactor, bandageTable, painkillerTable)
+TOC.CutLimb = function(partName, surgeonFactor, bandageTable, painkillerTable)
 
     -- TODO Separate Cut Limb in side and limb instead of single part_name
 
     -- Items get unequipped in ISCutLimb.Start
     local player = getPlayer()
 
-    local jcioModData = player:getModData().JCIO
-    local limbParameters = JCIO.limbParameters
-    local limbsData = jcioModData.limbs
+    local TOCModData = player:getModData().TOC
+    local limbParameters = TOC.limbParameters
+    local limbsData = TOCModData.limbs
 
 
     -- Cut Hand -> Damage in forearm
     -- Cut Forearm -> Damage in Upperarm
     -- Cut UpperArm -> Damage to torso
     local bodyDamage = player:getBodyDamage()
-    local bodyPart = bodyDamage:getBodyPart(JCIO_Common.GetBodyPartFromPartName(partName))
-    local adjacentBodyPart = player:getBodyDamage():getBodyPart(JCIO_Common.GetAdjacentBodyPartFromPartName(partName))
+    local bodyPart = bodyDamage:getBodyPart(TOC_Common.GetBodyPartFromPartName(partName))
+    local adjacentBodyPart = player:getBodyDamage():getBodyPart(TOC_Common.GetAdjacentBodyPartFromPartName(partName))
 
     local stats = player:getStats()
-    local side = JCIO_Common.GetSideFromPartName(partName)
+    local side = TOC_Common.GetSideFromPartName(partName)
 
 
 
@@ -238,7 +238,7 @@ JCIO.CutLimb = function(partName, surgeonFactor, bandageTable, painkillerTable)
 
             local canHealDependedV = limbsData[depended_v].isInfected and
                 bodyDamage:getInfectionLevel() < 20
-            local depended_body_part = bodyDamage:getBodyPart(JCIO_Common.GetBodyPartFromPartName(depended_v))
+            local depended_body_part = bodyDamage:getBodyPart(TOC_Common.GetBodyPartFromPartName(depended_v))
             SetParametersForMissingLimb(depended_body_part, canHealDependedV)
 
             if canHealDependedV then
@@ -275,19 +275,19 @@ JCIO.CutLimb = function(partName, surgeonFactor, bandageTable, painkillerTable)
         DeleteOtherAmputatedLimbs(side)
 
         --Equip new model for amputation
-        local amputation_clothing_item_name = JCIO_Common.FindAmputatedClothingName(partName)
+        local amputation_clothing_item_name = TOC_Common.FindAmputatedClothingName(partName)
         print(amputation_clothing_item_name)
 
         local amputation_clothing_item = player:getInventory():AddItem(amputation_clothing_item_name)
-        JCIO_Visuals.SetTextureForAmputation(amputation_clothing_item, player, false)
+        TOC_Visuals.SetTextureForAmputation(amputation_clothing_item, player, false)
         player:setWornItem(amputation_clothing_item:getBodyLocation(), amputation_clothing_item)
 
 
         -- Set blood on the amputated limb
-        JCIO_Visuals.SetBloodOnAmputation(getPlayer(), adjacentBodyPart)
+        TOC_Visuals.SetBloodOnAmputation(getPlayer(), adjacentBodyPart)
 
         if partName == "Left_Foot" or partName == "Right_Foot" then
-            JCIO_Anims.SetMissingFootAnimation(true)
+            TOC_Anims.SetMissingFootAnimation(true)
         end
     end
 

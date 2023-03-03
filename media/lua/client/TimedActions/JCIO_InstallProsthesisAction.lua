@@ -1,19 +1,19 @@
 require "TimedActions/ISBaseTimedAction"
 
-JCIO_InstallProsthesisAction = ISBaseTimedAction:derive("JCIO_InstallProsthesisAction")
+TOC_InstallProsthesisAction = ISBaseTimedAction:derive("TOC_InstallProsthesisAction")
 
-function JCIO_InstallProsthesisAction:isValid()
+function TOC_InstallProsthesisAction:isValid()
 
     -- TODO add here conditions if the action can be performed or not, so if thing is in inventory
     -- TODO 'not sure about multiplayer, maybe an overriding check?
     return true
 end
 
-function JCIO_InstallProsthesisAction:update()
+function TOC_InstallProsthesisAction:update()
     self.item:setJobDelta(self:getJobDelta())
 end
 
-function JCIO_InstallProsthesisAction:start()
+function TOC_InstallProsthesisAction:start()
     self.item:setJobType("Install prosthesis")
     self.item:setJobDelta(0.0)
 
@@ -22,12 +22,12 @@ function JCIO_InstallProsthesisAction:start()
 
 end
 
-function JCIO_InstallProsthesisAction:stop()
+function TOC_InstallProsthesisAction:stop()
     ISBaseTimedAction.stop(self)
     self.item:setJobDelta(0.0)
 end
 
-function JCIO_InstallProsthesisAction:perform()
+function TOC_InstallProsthesisAction:perform()
 
     local prosthesisBaseName = self.item:getType()
 
@@ -35,7 +35,7 @@ function JCIO_InstallProsthesisAction:perform()
     -- local toc_data = self.character:getModData().TOC
     --local partName = TocGetPartNameFromBodyPartType(self.bodyPart:getType())
 
-    local bodyPartType = JCIO_Common.GetBodyPartFromPartName(self.partName)
+    local bodyPartType = TOC_Common.GetBodyPartFromPartName(self.partName)
 
     -- Check if can be performed. This shouldn't be necessary, but just to be sure
     if bodyPartType == BodyPartType.UpperArm_L or bodyPartType == BodyPartType.UpperArm_R then
@@ -49,7 +49,7 @@ function JCIO_InstallProsthesisAction:perform()
 
         SendEquipProsthesis(self.patient, self.partName, self.item, prosthesisBaseName)
     else
-        JCIO.EquipProsthesis(self.partName, self.item, prosthesisBaseName)
+        TOC.EquipProsthesis(self.partName, self.item, prosthesisBaseName)
 
     end
 
@@ -60,7 +60,7 @@ function JCIO_InstallProsthesisAction:perform()
     ISBaseTimedAction.perform(self)
 end
 
-function JCIO_InstallProsthesisAction:new(surgeon, patient, item, partName)
+function TOC_InstallProsthesisAction:new(surgeon, patient, item, partName)
 
     local o = ISBaseTimedAction.new(self, patient)
 

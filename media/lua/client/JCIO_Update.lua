@@ -1,18 +1,18 @@
 ------------------------------------------
-------------- JUST CUT IT OUT ------------
+-------------- THE ONLY CURE -------------
 ------------------------------------------
 ------------- UPDATE EVENTS --------------
 
 
-require "JCIO_Init"
+require "TOC_Init"
 
 local function CheckIfPlayerIsInfected(player, limbsData)
 
     local bodyDamage = player:getBodyDamage()
 
     -- Check for amputable limbs
-    for _, v in ipairs(JCIO_Common.GetAcceptableBodyPartTypes()) do
-        local partName = JCIO_Common.GetPartNameFromBodyPartType(v)
+    for _, v in ipairs(TOC_Common.GetAcceptableBodyPartTypes()) do
+        local partName = TOC_Common.GetPartNameFromBodyPartType(v)
         local partData = limbsData[partName]
         local bodyPart = bodyDamage:getBodyPart(v)
 
@@ -27,25 +27,25 @@ local function CheckIfPlayerIsInfected(player, limbsData)
     end
 
     -- Check for everything else
-    for _, v in pairs(JCIO_Common.GetOtherBodyPartTypes()) do
+    for _, v in pairs(TOC_Common.GetOtherBodyPartTypes()) do
         if bodyDamage:getBodyPart(v):bitten() then
             limbsData.isOtherBodypartInfected = true -- Even one is enough, stop cycling if we find it
             break
         end
     end
 end
-local function ManagePhantomPain(player, jcioModData)
+local function ManagePhantomPain(player, TOCModData)
 
-    local limbsData = jcioModData.limbs
-    local limbParameters = JCIO.limbParameters
+    local limbsData = TOCModData.limbs
+    local limbParameters = TOC.limbParameters
 
 
     local body_damage = player:getBodyDamage()
 
-    for _, partName in pairs(JCIO_Common.GetPartNames()) do
+    for _, partName in pairs(TOC_Common.GetPartNames()) do
 
         if limbsData[partName].isCut and limbsData[partName].isAmputationShown and ZombRand(1, 100) < 10 then
-            local body_part = body_damage:getBodyPart(JCIO_Common.GetBodyPartFromPartName(partName))
+            local body_part = body_damage:getBodyPart(TOC_Common.GetBodyPartFromPartName(partName))
             local added_pain
             if limbsData[partName].isCauterized then added_pain = 60 else added_pain = 30 end
             body_part:setAdditionalPain(ZombRand(1, added_pain))
@@ -67,9 +67,9 @@ local function SetHealthStatusForBodyPart(partData, partName, player)
 
 
     local bodyDamage = player:getBodyDamage()
-    local bodyPart = bodyDamage:getBodyPart(JCIO_Common.GetBodyPartFromPartName(partName))
+    local bodyPart = bodyDamage:getBodyPart(TOC_Common.GetBodyPartFromPartName(partName))
     if not bodyPart then
-        print("JCIO ERROR: Can't update health of " .. partName)
+        print("TOC ERROR: Can't update health of " .. partName)
         return false
     end
 
@@ -93,7 +93,7 @@ local function SetHealthStatusForBodyPart(partData, partName, player)
 
 
     if partData[partName].isCut then
-        --print("JCIO: Check update for " .. part_name)
+        --print("TOC: Check update for " .. part_name)
         -- if the player gets attacked and damaged in a cut area we have to reset it here since it doesn't make any sense
         -- this is using map 1:1, so it doesn't affect the wound caused by the amputation
 
@@ -128,11 +128,11 @@ local function SetHealthStatusForBodyPart(partData, partName, player)
             if partData[partName].cicatrizationTime < 0 then
                 partData[partName].isCicatrized = true
                 local playerInv = player:getInventory()
-                local amputatedClothingItemName = JCIO_Common.FindAmputationOrProsthesisName(partName, player, "Amputation")
+                local amputatedClothingItemName = TOC_Common.FindAmputationOrProsthesisName(partName, player, "Amputation")
                 local amputatedClothingItem = playerInv:FindAndReturn(amputatedClothingItemName)
 
                 player:removeWornItem(amputatedClothingItem)
-                JCIO_Visuals.SetTextureForAmputation(amputatedClothingItem, player, true)
+                TOC_Visuals.SetTextureForAmputation(amputatedClothingItem, player, true)
                 player:setWornItem(amputatedClothingItem:getBodyLocation(), amputatedClothingItem)
                 
                 if (not player:HasTrait("Brave")) and ZombRand(1, 11) > 5 then
@@ -152,7 +152,7 @@ local function UpdatePlayerHealth(player, partData)
 
     if player:HasTrait("Insensitive") then bodyDamage:setPainReduction(49) end
 
-    for _, partName in pairs(JCIO_Common.GetPartNames()) do
+    for _, partName in pairs(TOC_Common.GetPartNames()) do
         if partData[partName].isCut then
             SetHealthStatusForBodyPart(partData, partName, player)
 
@@ -163,23 +163,23 @@ end
 -------------------------------------------
 
 -- MAIN UPDATE FUNCTIONS
-JCIO.UpdateOnTick = function()
+TOC.UpdateOnTick = function()
 
     local player = getPlayer()
     if player == nil then
         return
     end
 
-    local jcioModData = player:getModData().JCIO
+    local TOCModData = player:getModData().TOC
 
-    if jcioModData ~= nil then
-        CheckIfPlayerIsInfected(player, jcioModData.limbs)
-        UpdatePlayerHealth(player, jcioModData.limbs)
+    if TOCModData ~= nil then
+        CheckIfPlayerIsInfected(player, TOCModData.limbs)
+        UpdatePlayerHealth(player, TOCModData.limbs)
     end
 
 
 end
-JCIO.UpdateEveryTenMinutes = function()
+TOC.UpdateEveryTenMinutes = function()
 
     local player = getPlayer()
 
@@ -187,10 +187,10 @@ JCIO.UpdateEveryTenMinutes = function()
         return
     end
 
-    local partData = player:getModData().JCIO.limbs
+    local partData = player:getModData().TOC.limbs
 
     --Experience for prosthesis user
-    for _, side in pairs(JCIO.sideNames) do
+    for _, side in pairs(TOC.sideNames) do
         if partData[side .. "_Hand"].isProsthesisEquipped or partData[side .. "_LowerArm"].isProsthesisEquipped then
             player:getXp():AddXP(Perks[side .. "_Hand"], 4)
         end
@@ -198,20 +198,20 @@ JCIO.UpdateEveryTenMinutes = function()
     end
 
     -- Updates the cicatrization time
-    for _, partName in pairs(JCIO_Common.GetPartNames()) do
+    for _, partName in pairs(TOC_Common.GetPartNames()) do
         if partData[partName].isCut and not partData[partName].isCicatrized then
 
             --Wound cleanliness contributes to cicatrization
             -- TODO we reset this stuff every time we restart the game for compat reason, this is an issue
-            local amputatedLimbItem = JCIO_Common.GetAmputationItemInInventory(player, partName)
+            local amputatedLimbItem = TOC_Common.GetAmputationItemInInventory(player, partName)
             local itemDirtyness = amputatedLimbItem:getDirtyness()/100
             local itemBloodyness = amputatedLimbItem:getBloodLevel()/100
 
-            local modifier = SandboxVars.JCIO.CicatrizationSpeedMultiplier - itemBloodyness - itemDirtyness
+            local modifier = SandboxVars.TOC.CicatrizationSpeedMultiplier - itemBloodyness - itemDirtyness
 
-            --print("JCIO: Type " .. amputated_limb_item:getFullType())
-            --print("JCIO: Dirtyness " .. item_dirtyness)
-            --print("JCIO: Bloodyness " .. item_bloodyness)
+            --print("TOC: Type " .. amputated_limb_item:getFullType())
+            --print("TOC: Dirtyness " .. item_dirtyness)
+            --print("TOC: Bloodyness " .. item_bloodyness)
 
 
             partData[partName].cicatrizationTime = partData[partName].cicatrizationTime - modifier
@@ -221,7 +221,7 @@ JCIO.UpdateEveryTenMinutes = function()
     end
 
 end
-JCIO.UpdateEveryOneMinute = function()
+TOC.UpdateEveryOneMinute = function()
 
     local player = getPlayer()
     -- To prevent errors during loading
@@ -229,20 +229,20 @@ JCIO.UpdateEveryOneMinute = function()
         return
     end
 
-    local jcioModData = player:getModData().JCIO
+    local TOCModData = player:getModData().TOC
 
-    if jcioModData ~= nil then
-        ManagePhantomPain(player, jcioModData)
+    if TOCModData ~= nil then
+        ManagePhantomPain(player, TOCModData)
     end
 
 
 
-    -- Updates JCIO data in a global way, basically player:transmitModData but it works
+    -- Updates TOC data in a global way, basically player:transmitModData but it works
     -- Sends only Limbs since the other stuff is mostly static
-    if jcioModData ~= nil then
+    if TOCModData ~= nil then
         -- FIXME Send little packets instead of the whole thing?
             -- TODO we shouldn't run this if we're in SP I guess?
-        sendClientCommand(player, 'JCIO', 'ChangePlayerState', { jcioModData.limbs } )
+        sendClientCommand(player, 'TOC', 'ChangePlayerState', { TOCModData.limbs } )
     end
 
 

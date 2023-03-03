@@ -1,4 +1,4 @@
-# JUST CUT IT OUT
+# THE ONLY CURE
 ```
 Workshop ID: 2915572347
 Mod ID: Amputation2

@@ -1,34 +1,34 @@
 VERSION = 1,
 
 
-/* option JCIO.RollUpSleeves
+/* option TOC.RollUpSleeves
 {
 	type = boolean,
 	default = true,
 
-	page = JCIO,
-	translation = JCIO_RollUpSleeves,
+	page = TOC,
+	translation = TOC_RollUpSleeves,
 
 } */
 
-option JCIO.CicatrizationSpeedMultiplier
+option TOC.CicatrizationSpeedMultiplier
 {
     type = integer,
     min = 1,
     max = 10,
     default = 1,
-    page = JCIO,
-    translation = JCIO_CicatrizationSpeedMultiplier,
+    page = TOC,
+    translation = TOC_CicatrizationSpeedMultiplier,
 
 }
-option JCIO.AmputationTimeMultiplier
+option TOC.AmputationTimeMultiplier
 {
     type = integer,
     min = 1,
     max = 10,
     default = 1,
-    page = JCIO,
-    translation = JCIO_AmputationTimeMultiplier
+    page = TOC,
+    translation = TOC_AmputationTimeMultiplier
 
 
 }

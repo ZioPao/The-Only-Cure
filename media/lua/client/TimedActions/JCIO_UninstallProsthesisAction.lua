@@ -1,8 +1,8 @@
 require "TimedActions/ISBaseTimedAction"
 
-JCIO_UninstallProsthesisAction = ISBaseTimedAction:derive("JCIO_UninstallProsthesisAction")
+TOC_UninstallProsthesisAction = ISBaseTimedAction:derive("TOC_UninstallProsthesisAction")
 
-function JCIO_UninstallProsthesisAction:isValid()
+function TOC_UninstallProsthesisAction:isValid()
 
     if self.item ~= nil and self.isProsthesisEquipped then
         return true
@@ -11,11 +11,11 @@ function JCIO_UninstallProsthesisAction:isValid()
     end
 end
 
-function JCIO_UninstallProsthesisAction:update()
+function TOC_UninstallProsthesisAction:update()
     self.item:setJobDelta(self:getJobDelta())
 end
 
-function JCIO_UninstallProsthesisAction:start()
+function TOC_UninstallProsthesisAction:start()
     self.item:setJobType("Uninstall prothesis")
     self.item:setJobDelta(0.0);
     self:setActionAnim("WearClothing");
@@ -29,12 +29,12 @@ function JCIO_UninstallProsthesisAction:start()
     self.character:setSecondaryHandItem(self.item)
 end
 
-function JCIO_UninstallProsthesisAction:stop()
+function TOC_UninstallProsthesisAction:stop()
     ISBaseTimedAction.stop(self);
     self.item:setJobDelta(0.0);
 end
 
-function JCIO_UninstallProsthesisAction:perform()
+function TOC_UninstallProsthesisAction:perform()
 
     self.item:getContainer():setDrawDirty(true)
     self.item:setJobDelta(0.0)
@@ -54,18 +54,18 @@ function JCIO_UninstallProsthesisAction:perform()
 
         SendUnequipProsthesis(self.patient, self.partName, self.item)
     else
-        JCIO.OperateLimb(self.patient, self.partName, self.item)
+        TOC.OperateLimb(self.patient, self.partName, self.item)
     end
 
     ISBaseTimedAction.perform(self)
 end
 
-function JCIO_UninstallProsthesisAction:new(surgeon, patient, partName)
+function TOC_UninstallProsthesisAction:new(surgeon, patient, partName)
     local o = ISBaseTimedAction.new(self, surgeon)
 
-    local limbsData = patient:getModData().JCIO.limbs
+    local limbsData = patient:getModData().TOC.limbs
 
-    o.item = JCIO_Common.FindItemInProstBodyLocation(partName, patient)
+    o.item = TOC_Common.FindItemInProstBodyLocation(partName, patient)
     o.character = surgeon         -- For animation purposes
 
     o.patient = patient

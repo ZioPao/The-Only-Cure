@@ -169,7 +169,7 @@ df_top = read_table(excel_path, "TopTable")
 
 limbs = ["Hand", "LowerArm"]
 sides = ["Left", "Right"]
-prost_bodylocations = ["JCIO_ArmRightProsthesis", "JCIO_ArmLeftProsthesis"]
+prost_bodylocations = ["TOC_ArmRightProsthesis", "TOC_ArmLeftProsthesis"]
 texture_types = ["Wooden", "Metal"]
 
 

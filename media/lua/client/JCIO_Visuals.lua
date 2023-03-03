@@ -1,15 +1,15 @@
 ------------------------------------------
-------------- JUST CUT IT OUT ------------
+-------------- THE ONLY CURE -------------
 ------------------------------------------
 ------------ VISUALS FUNCTIONS -----------
 
 
-if JCIO_Visuals == nil then
-    JCIO_Visuals = {}
+if TOC_Visuals == nil then
+    TOC_Visuals = {}
 end
 
 
-JCIO_Visuals.SetTextureForAmputation = function(item, player, cicatrized)
+TOC_Visuals.SetTextureForAmputation = function(item, player, cicatrized)
     local humanVisual = player:getHumanVisual()
     local textureString = humanVisual:getSkinTexture()
 
@@ -35,12 +35,12 @@ JCIO_Visuals.SetTextureForAmputation = function(item, player, cicatrized)
         end
     end
 
-    --print("JCIO: Setting texture " .. matched_index)
+    --print("TOC: Setting texture " .. matched_index)
     item:getVisual():setTextureChoice(tonumber(matchedIndex - 1)) -- it counts from 0, so we have to subtract 1
 
 end
 
-JCIO_Visuals.SetBloodOnAmputation = function(player, bodyPart)
+TOC_Visuals.SetBloodOnAmputation = function(player, bodyPart)
 
     local bodyPartType = bodyPart:getType()
     local bloodBodyPartType

@@ -1,47 +1,47 @@
 ------------------------------------------
-------------- JUST CUT IT OUT ------------
+-------------- THE ONLY CURE -------------
 ------------------------------------------
 ---------- COMPATIBILITY FUNCS -----------
 
 
-if JCIO_Compat == nil then
-    JCIO_Compat = {}
+if TOC_Compat == nil then
+    TOC_Compat = {}
 end
 
 -- Gets the old status and turns it into the new.
-JCIO_Compat.CheckCompatibilityWithOlderVersions = function(modData)
+TOC_Compat.CheckCompatibilityWithOlderVersions = function(modData)
 
     if modData.TOC ~= nil then
-        print("JCIO: found old data from TOC")
+        print("TOC: found old data from TOC")
         if modData.TOC.Limbs ~= nil then
-            JCIO_Compat.MapOldDataToNew(modData)
+            TOC_Compat.MapOldDataToNew(modData)
             modData.TOC = nil   -- Deletes the old mod data stuff
         else
-            print("JCIO: something is wrong, couldn't find Limbs table in old TOC modData")
+            print("TOC: something is wrong, couldn't find Limbs table in old TOC modData")
         end
     else
-        print("JCIO: couldn't find old TOC data")
+        print("TOC: couldn't find old TOC data")
 
     end
 
 end
 
 
-JCIO_Compat.MapOldDataToNew = function(modData)
+TOC_Compat.MapOldDataToNew = function(modData)
 
     local oldNamesTable = { "RightHand", "RightForearm", "RightArm", "LeftHand", "LeftForearm", "LeftArm" }
     local newNamesTable = { "Right_Hand", "Right_LowerArm", "Right_UpperArm", "Left_Hand", "Left_LowerArm", "Left_UpperArm" }
 
-    print("JCIO: Trying to backup old data from TOC")
+    print("TOC: Trying to backup old data from TOC")
 
     if modData == nil then
         return
     end
 
-    print("JCIO: found old data from TOC")
+    print("TOC: found old data from TOC")
 
 
-    JCIO_Cheat.ResetEverything()
+    TOC_Cheat.ResetEverything()
 
     -- Another check just in case the user is using Mr Bounty og version. I really don't wanna map that out so let's just reset everything directly
 
@@ -51,16 +51,16 @@ JCIO_Compat.MapOldDataToNew = function(modData)
 
     -- Player has the og version of the mod
     if modData.TOC.Limbs.RightHand.IsCut ~= nil then
-        print("JCIO: Found TOC Beta data")
+        print("TOC: Found TOC Beta data")
         compatEnum = 1
     elseif modData.TOC.Limbs.Right_Hand.is_cut ~= nil then
-        print("JCIO: Found TOCBB data")
+        print("TOC: Found TOCBB data")
         compatEnum = 2
     end
 
 
     if compatEnum == nil then
-        print("JCIO: Couldn't find any compatible data that could be retrieved")
+        print("TOC: Couldn't find any compatible data that could be retrieved")
         return
     end
 
@@ -107,34 +107,34 @@ JCIO_Compat.MapOldDataToNew = function(modData)
 
 
     -- Starts reapplying stuff
-    modData.JCIO.limbs.isOtherBodypartInfected = modData.TOC.Limbs[isOtherBodypartInfectedOldKey]
+    modData.TOC.limbs.isOtherBodypartInfected = modData.TOC.Limbs[isOtherBodypartInfectedOldKey]
 
     for i = 1, #newNamesTable do
 
         local oldName = oldNamesTable[i]
         local newName = newNamesTable[i]
-        print("JCIO: isCut: " .. oldName .. " " .. tostring(modData.TOC.Limbs[oldName][isCutOldKey]))
-        print("JCIO: isOperated: " .. oldName .. " " .. tostring(modData.TOC.Limbs[oldName][isOperatedOldKey]))
-        print("JCIO: isCicatrized: " .. oldName .. " " .. tostring(modData.TOC.Limbs[oldName][isCicatrizedOldKey]))
-        print("JCIO: isAmputationShown: " .. oldName .. " " .. tostring(modData.TOC.Limbs[oldName][isAmputationShownOldKey]))
-        print("JCIO: cicatrizationTime: " .. oldName .. " " .. tostring(modData.TOC.Limbs[oldName][cicatrizationTimeOldKey]))
+        print("TOC: isCut: " .. oldName .. " " .. tostring(modData.TOC.Limbs[oldName][isCutOldKey]))
+        print("TOC: isOperated: " .. oldName .. " " .. tostring(modData.TOC.Limbs[oldName][isOperatedOldKey]))
+        print("TOC: isCicatrized: " .. oldName .. " " .. tostring(modData.TOC.Limbs[oldName][isCicatrizedOldKey]))
+        print("TOC: isAmputationShown: " .. oldName .. " " .. tostring(modData.TOC.Limbs[oldName][isAmputationShownOldKey]))
+        print("TOC: cicatrizationTime: " .. oldName .. " " .. tostring(modData.TOC.Limbs[oldName][cicatrizationTimeOldKey]))
 
         
-        modData.JCIO.limbs[newName].isCut = modData.TOC.Limbs[oldName][isCutOldKey]
+        modData.TOC.limbs[newName].isCut = modData.TOC.Limbs[oldName][isCutOldKey]
 
-        if modData.JCIO.limbs[newName].isCut then
-            print("JCIO: Found old cut limb, reapplying model")
-            local cloth = getPlayer():getInventory():AddItem(JCIO_Common.FindAmputatedClothingName(newName))
+        if modData.TOC.limbs[newName].isCut then
+            print("TOC: Found old cut limb, reapplying model")
+            local cloth = getPlayer():getInventory():AddItem(TOC_Common.FindAmputatedClothingName(newName))
             getPlayer():setWornItem(cloth:getBodyLocation(), cloth)
         end
 
 
-        modData.JCIO.limbs[newName].isInfected = modData.TOC.Limbs[oldName][isInfectedOldKey]
-        modData.JCIO.limbs[newName].isOperated = modData.TOC.Limbs[oldName][isOperatedOldKey]
-        modData.JCIO.limbs[newName].isCicatrized = modData.TOC.Limbs[oldName][isCicatrizedOldKey]
-        modData.JCIO.limbs[newName].isCauterized = modData.TOC.Limbs[oldName][isCauterizedOldKey]
-        modData.JCIO.limbs[newName].isAmputationShown = modData.TOC.Limbs[oldName][isAmputationShownOldKey]
-        modData.JCIO.limbs[newName].cicatrizationTime = modData.TOC.Limbs[oldName][cicatrizationTimeOldKey]
+        modData.TOC.limbs[newName].isInfected = modData.TOC.Limbs[oldName][isInfectedOldKey]
+        modData.TOC.limbs[newName].isOperated = modData.TOC.Limbs[oldName][isOperatedOldKey]
+        modData.TOC.limbs[newName].isCicatrized = modData.TOC.Limbs[oldName][isCicatrizedOldKey]
+        modData.TOC.limbs[newName].isCauterized = modData.TOC.Limbs[oldName][isCauterizedOldKey]
+        modData.TOC.limbs[newName].isAmputationShown = modData.TOC.Limbs[oldName][isAmputationShownOldKey]
+        modData.TOC.limbs[newName].cicatrizationTime = modData.TOC.Limbs[oldName][cicatrizationTimeOldKey]
     end
 
 

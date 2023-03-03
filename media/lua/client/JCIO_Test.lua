@@ -1,5 +1,5 @@
 ------------------------------------------
-------------- JUST CUT IT OUT ------------
+-------------- THE ONLY CURE -------------
 ------------------------------------------
 --------- TEST AND DEBUG FUNCTIONS -------
 
@@ -32,7 +32,7 @@ end
 function TocResetClothingItemBodyLocation(player, side, limb)
 
     local playerInv = player:getInventory()
-    local limbsData = player:getModData().JCIO.limbs
+    local limbsData = player:getModData().TOC.limbs
 
     local amputationItemName = TocGetAmputationFullTypeFromInventory(player, side, limb)
     local equippedProsthesisItemName = TocGetEquippedProsthesisFullTypeFromInventory(player, side, limb)
@@ -44,7 +44,7 @@ function TocResetClothingItemBodyLocation(player, side, limb)
             player:removeWornItem(amputationItem)
             player:getInventory():Remove(amputationItem)
             amputationItem = playerInv:AddItem(amputationItemName)
-            JCIO_Visuals.SetTextureForAmputation(amputationItem, player, limbsData[side .. "_" .. limb].is_cicatrized)
+            TOC_Visuals.SetTextureForAmputation(amputationItem, player, limbsData[side .. "_" .. limb].is_cicatrized)
             player:setWornItem(amputationItem:getBodyLocation(), amputationItem)
         end
         amputationItem = nil -- reset it
@@ -78,10 +78,10 @@ function TocTestBodyLocations()
     end
 end
 
-function JCIOTestItem()
+function TOCTestItem()
     local player = getPlayer()
     local player_inventory = player:getInventory()
-    local item_name = "JCIO.Amputation_" .. "Right" .. "_" .. "Hand"
+    local item_name = "TOC.Amputation_" .. "Right" .. "_" .. "Hand"
     local found_item = player_inventory:FindAndReturn(item_name)
 
     print(found_item:getID())

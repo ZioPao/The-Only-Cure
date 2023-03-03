@@ -1,8 +1,8 @@
 -- TODO this needs to be moved away
-function JCIO_Common.GetKitInInventory(surgeon)
+function TOC_Common.GetKitInInventory(surgeon)
     local playerInv = surgeon:getInventory()
-    local item = playerInv:getItemFromType('JCIO.Real_surgeon_kit') or playerInv:getItemFromType('JCIO.Surgeon_kit') or
-        playerInv:getItemFromType('JCIO.Improvised_surgeon_kit')
+    local item = playerInv:getItemFromType('TOC.Real_surgeon_kit') or playerInv:getItemFromType('TOC.Surgeon_kit') or
+        playerInv:getItemFromType('TOC.Improvised_surgeon_kit')
     return item
 
 end
@@ -10,27 +10,27 @@ end
 -- Unequip Prosthesis
 
 local function PartNameToBodyLocationProsthesis(name)
-    if name == "Right_Hand" then return "JCIO_ArmRightProsthesis" end
-    if name == "Right_LowerArm" then return "JCIO_ArmRightProsthesis" end
-    if name == "Right_UpperArm" then return "JCIO_ArmRightProsthesis" end
-    if name == "Left_Hand" then return "JCIO_ArmLeftProsthesis" end
-    if name == "Left_LowerArm" then return "JCIO_ArmLeftProsthesis" end
-    if name == "Left_UpperArm" then return "JCIO_ArmLeftProsthesis" end
+    if name == "Right_Hand" then return "TOC_ArmRightProsthesis" end
+    if name == "Right_LowerArm" then return "TOC_ArmRightProsthesis" end
+    if name == "Right_UpperArm" then return "TOC_ArmRightProsthesis" end
+    if name == "Left_Hand" then return "TOC_ArmLeftProsthesis" end
+    if name == "Left_LowerArm" then return "TOC_ArmLeftProsthesis" end
+    if name == "Left_UpperArm" then return "TOC_ArmLeftProsthesis" end
 end
 
 local function PartNameToBodyLocationAmputation(name)
-    if name == "Right_Hand" then return "JCIO_ArmRight" end
-    if name == "Right_LowerArm" then return "JCIO_ArmRight" end
-    if name == "Right_UpperArm" then return "JCIO_ArmRight" end
-    if name == "Left_Hand" then return "JCIO_ArmLeft" end
-    if name == "Left_LowerArm" then return "JCIO_ArmLeft" end
-    if name == "Left_UpperArm" then return "JCIO_ArmLeft" end
+    if name == "Right_Hand" then return "TOC_ArmRight" end
+    if name == "Right_LowerArm" then return "TOC_ArmRight" end
+    if name == "Right_UpperArm" then return "TOC_ArmRight" end
+    if name == "Left_Hand" then return "TOC_ArmLeft" end
+    if name == "Left_LowerArm" then return "TOC_ArmLeft" end
+    if name == "Left_UpperArm" then return "TOC_ArmLeft" end
 
-    if name == "Left_Foot" then return "JCIO_LegLeft" end
-    if name == "Right_Foot" then return "JCIO_LegRight" end
+    if name == "Left_Foot" then return "TOC_LegLeft" end
+    if name == "Right_Foot" then return "TOC_LegRight" end
 end
 
-function JCIO_Common.FindItemInProstBodyLocation(partName, patient)
+function TOC_Common.FindItemInProstBodyLocation(partName, patient)
     -- Can't be used for online purposes, since we can't get the online inventory of another player
     local wornItems = patient:getWornItems()
 
@@ -45,7 +45,7 @@ function JCIO_Common.FindItemInProstBodyLocation(partName, patient)
 end
 
 -- Debug cheat and update every minute for cicatrization
-function JCIO_Common.FindAmputationOrProsthesisName(partName, player, choice)
+function TOC_Common.FindAmputationOrProsthesisName(partName, player, choice)
     local wornItems = player:getWornItems()
     for i = 1, wornItems:size() - 1 do
         local item = wornItems:get(i):getItem()

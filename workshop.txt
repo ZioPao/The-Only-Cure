@@ -1,6 +1,6 @@
 version=1
 id=2915572347
-title=Just Cut It Out
+title=THE ONLY CURE
 description=TODO
 tags=
 visibility=public

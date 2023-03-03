@@ -1,17 +1,17 @@
 ------------------------------------------
-------------- JUST CUT IT OUT ------------
+-------------- THE ONLY CURE -------------
 ------------------------------------------
 
 require "TimedActions/ISBaseTimedAction"
 
-JCIO_CutLimbAction = ISBaseTimedAction:derive("JCIO_CutLimbAction")
+TOC_CutLimbAction = ISBaseTimedAction:derive("TOC_CutLimbAction")
 
 
-function JCIO_CutLimbAction:isValid()
+function TOC_CutLimbAction:isValid()
     return self.patientX == self.patient:getX() and self.patientY == self.patient:getY()
 end
 
-function JCIO_CutLimbAction:waitToStart()
+function TOC_CutLimbAction:waitToStart()
     if self.patient == self.surgeon then
         return false
     end
@@ -19,7 +19,7 @@ function JCIO_CutLimbAction:waitToStart()
     return self.surgeon:shouldBeTurning()
 end
 
-function JCIO_CutLimbAction:update()
+function TOC_CutLimbAction:update()
     if self.patient ~= self.surgeon then
         self.surgeon:faceThisObject(self.patient)
     end
@@ -29,7 +29,7 @@ function JCIO_CutLimbAction:update()
         self.soundTime = getTimestamp()
 
         if not self.character:getEmitter():isPlaying(self.sawSound) then
-            --print("JCIO: Running sound again")
+            --print("TOC: Running sound again")
             self.sawSound = self.character:getEmitter():playSound("Amputation_Sound")
             addSound(self.surgeon, self.surgeon:getX(), self.surgeon:getY(), self.surgeon:getZ(), 3, 3)
         end
@@ -38,7 +38,7 @@ function JCIO_CutLimbAction:update()
 
 end
 
-function JCIO_CutLimbAction:stop()
+function TOC_CutLimbAction:stop()
 
     --print("Stopping ISCutLimb")
 
@@ -57,11 +57,11 @@ end
 
 
 
-function JCIO_CutLimbAction:start()
+function TOC_CutLimbAction:start()
     -- TODO Add a check so you can't cut your arm if you don't have hands or if you only have one arm and want to cut that same arm.
 
     self:setActionAnim("SawLog")
-    local sawItem = JCIO_Common.GetSawInInventory(self.surgeon)
+    local sawItem = TOC_Common.GetSawInInventory(self.surgeon)
 
 	self.soundTime = 0
     self.worldSoundTime = 0
@@ -81,9 +81,9 @@ function JCIO_CutLimbAction:start()
     end
 
     if self.patient == self.surgeon then
-        JCIO.DamagePlayerDuringAmputation(self.patient, self.partName)
+        TOC.DamagePlayerDuringAmputation(self.patient, self.partName)
     else
-        sendClientCommand(self.surgeon, "JCIO", "AskDamageOtherPlayer", {self.patient:getOnlineID(), self.partName})
+        sendClientCommand(self.surgeon, "TOC", "AskDamageOtherPlayer", {self.patient:getOnlineID(), self.partName})
     end
 
 
@@ -92,7 +92,7 @@ function JCIO_CutLimbAction:start()
 
 end
 
-function JCIO_CutLimbAction:findArgs()
+function TOC_CutLimbAction:findArgs()
     local surgeonFactor = self.surgeon:getPerkLevel(Perks.Doctor)
     if self.surgeon:getDescriptor():getProfession() == "surgeon" then surgeonFactor = surgeonFactor + 15 end
     if self.surgeon:getDescriptor():getProfession() == "doctor" then surgeonFactor = surgeonFactor + 9 end
@@ -139,14 +139,14 @@ function JCIO_CutLimbAction:findArgs()
     return surgeonFactor, bandageTable, painkiller_table
 end
 
-function JCIO_CutLimbAction:perform()
+function TOC_CutLimbAction:perform()
     local surgeonFactor, bandageTable, painkillerTable = self:findArgs()
 
     if self.patient ~= self.surgeon and isClient() then
         SendCutLimb(self.patient, self.partName, surgeonFactor, bandageTable, painkillerTable)
-        sendClientCommand(self.surgeon, "JCIO", "AskStopAmputationSound", {surgeonID = self.surgeon:getOnlineID()})
+        sendClientCommand(self.surgeon, "TOC", "AskStopAmputationSound", {surgeonID = self.surgeon:getOnlineID()})
     else
-        JCIO.CutLimb(self.partName, surgeonFactor, bandageTable, painkillerTable)
+        TOC.CutLimb(self.partName, surgeonFactor, bandageTable, painkillerTable)
     end
 
     self.surgeon:getEmitter():stopSoundByName("Amputation_Sound")
@@ -155,7 +155,7 @@ function JCIO_CutLimbAction:perform()
 
 end
 
-function JCIO_CutLimbAction:new(patient, surgeon, partName)
+function TOC_CutLimbAction:new(patient, surgeon, partName)
 
     -- TODO align surgeon, patient not patient, surgeon
 

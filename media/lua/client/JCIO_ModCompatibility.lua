@@ -1,5 +1,5 @@
 ------------------------------------------
-------------- JUST CUT IT OUT ------------
+-------------- THE ONLY CURE -------------
 ------------------------------------------
 
 ------------------------------------------
@@ -16,8 +16,8 @@ local function SetCompatibilityFancyHandwork()
         local secondary = self.chr:getSecondaryHandItem()
         local equip = true
 
-        local limbsData = getPlayer():getModData().JCIO.limbs
-        local canBeHeld = JCIO_Common.GetCanBeHeldTable(limbsData)
+        local limbsData = getPlayer():getModData().TOC.limbs
+        local canBeHeld = TOC_Common.GetCanBeHeldTable(limbsData)
 
         
         -- If we already have the item equipped
@@ -35,7 +35,7 @@ local function SetCompatibilityFancyHandwork()
                 equip = false
             end
             if mod then
-                --print("JCIO: Fancy Handwork modifier")
+                --print("TOC: Fancy Handwork modifier")
                 -- If we still have something equipped in secondary, unequip
                 if secondary and equip and canBeHeld["Left"] then
                     ISTimedActionQueue.add(ISUnequipAction:new(self.chr, secondary, 20))
@@ -70,8 +70,8 @@ local function SetCompatibilityFancyHandwork()
 
 
     function FHSwapHandsAction:isValid()
-        local limbsData = getPlayer():getModData().JCIO.limbs
-        local canBeHeld = JCIO_Common.GetCanBeHeldTable(limbsData)
+        local limbsData = getPlayer():getModData().TOC.limbs
+        local canBeHeld = TOC_Common.GetCanBeHeldTable(limbsData)
 
         return (canBeHeld["Right"] and canBeHeld["Left"]) and(((self.character:getPrimaryHandItem() or self.character:getSecondaryHandItem()) ~= nil))
     end
@@ -89,8 +89,8 @@ local function SetCompatibilityFancyHandWorkAndSwapIt()
         local secondary = self.chr:getSecondaryHandItem()
         local equip = true
 
-        local limbsData = getPlayer():getModData().JCIO.limbs
-        local canBeHeld = JCIO_Common.GetCanBeHeldTable(limbsData)
+        local limbsData = getPlayer():getModData().TOC.limbs
+        local canBeHeld = TOC_Common.GetCanBeHeldTable(limbsData)
 
         -- If we already have the item equipped
         if (primary and primary == item) or (secondary and secondary == item) then
@@ -107,7 +107,7 @@ local function SetCompatibilityFancyHandWorkAndSwapIt()
                 equip = false
             end
             if mod then
-                --print("JCIO: Fancy Handwork modifier")
+                --print("TOC: Fancy Handwork modifier")
                 -- If we still have something equipped in secondary, unequip
                 if secondary and equip and canBeHeld["Left"] then
                     ISTimedActionQueue.add(ISUnequipAction:new(self.chr, secondary, 20))
@@ -157,22 +157,22 @@ end
 
 local function CheckModCompatibility()
     local activatedMods = getActivatedMods()
-    print("JCIO: Checking mods")
+    print("TOC: Checking mods")
 
     if activatedMods:contains("FancyHandwork") then
 
         if activatedMods:contains("SwapIt") then
             require "SwapIt Main"
-            print("JCIO: Overriding FancyHandwork and SwapIt methods")
+            print("TOC: Overriding FancyHandwork and SwapIt methods")
             SetCompatibilityFancyHandWorkAndSwapIt()
         else
-            print("JCIO: Overriding FancyHandwork methods")
+            print("TOC: Overriding FancyHandwork methods")
             require "TimedActions/FHSwapHandsAction"
             SetCompatibilityFancyHandwork()
         end
     end
 end
 
-print("JCIO: Starting CheckModCompatibility")
+print("TOC: Starting CheckModCompatibility")
 Events.OnGameStart.Add(CheckModCompatibility)
 

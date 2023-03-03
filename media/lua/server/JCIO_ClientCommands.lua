@@ -1,15 +1,15 @@
 ------------------------------------------
-------------- JUST CUT IT OUT ------------
+-------------- THE ONLY CURE -------------
 ------------------------------------------
 ------------- CLIENT COMMANDS ------------
 
 local ClientCommands = {}
 
 
--- Main handler of base functions for JCIO, based on the original work for TOC
+-- Main handler of base functions for TOC, based on the original work for TOC
 ClientCommands.SendServer = function(_, arg)
     local otherPlayer = getPlayerByOnlineID(arg["To"])
-    sendServerCommand(otherPlayer, "JCIO", arg["command"], arg)
+    sendServerCommand(otherPlayer, "TOC", arg["command"], arg)
 
 end
 
@@ -21,14 +21,14 @@ ClientCommands.AskDamageOtherPlayer = function(_, arg)
     local patient_id = arg[1]
     local partName = arg[2]
 
-    sendServerCommand(patient, "JCIO", "AcceptDamageOtherPlayer", {patient_id, partName})
+    sendServerCommand(patient, "TOC", "AcceptDamageOtherPlayer", {patient_id, partName})
 
 end
 
 ClientCommands.AskStopAmputationSound = function(_, args)
 
-    print("JCIO: We're in AskStopAmputationSound")
-    sendServerCommand("JCIO", "StopAmputationSound", {surgeon_id = args.surgeonID})
+    print("TOC: We're in AskStopAmputationSound")
+    sendServerCommand("TOC", "StopAmputationSound", {surgeon_id = args.surgeonID})
 
 
 end
@@ -36,7 +36,7 @@ end
 -- Animations
 ClientCommands.NotifyNewCrawlAnimation = function(_, args)
 
-    sendServerCommand("JCIO", "SetCrawlAnimation", {id = args.id, check = args.check})
+    sendServerCommand("TOC", "SetCrawlAnimation", {id = args.id, check = args.check})
 
 end
 
@@ -46,21 +46,21 @@ end
 -- Cheats
 ClientCommands.AskToResetEverything = function(_, arg)
     local clickedPlayer = getPlayerByOnlineID(arg[1])
-    sendServerCommand(clickedPlayer, "JCIO", "ResetEverything", {})
+    sendServerCommand(clickedPlayer, "TOC", "ResetEverything", {})
 end
 
 
 -- Global Mod Data data handler
 ClientCommands.ChangePlayerState = function(playerObj, args)
-    ModData.get("JCIO_PLAYER_DATA")[playerObj:getUsername()] = args
-    ModData.transmit("JCIO_PLAYER_DATA")
+    ModData.get("TOC_PLAYER_DATA")[playerObj:getUsername()] = args
+    ModData.transmit("TOC_PLAYER_DATA")
 end
 
 
 ------ Global Mod Data -----------
 
 local function OnInitGlobalModData()
-    ModData.getOrCreate("JCIO_PLAYER_DATA")
+    ModData.getOrCreate("TOC_PLAYER_DATA")
 end
 
 Events.OnInitGlobalModData.Add(OnInitGlobalModData)
@@ -69,7 +69,7 @@ Events.OnInitGlobalModData.Add(OnInitGlobalModData)
 ------------------------------------------------------
 
 local function OnClientCommand(module, command, playerObj, args)
-    if module == 'JCIO' and ClientCommands[command] then
+    if module == 'TOC' and ClientCommands[command] then
         ClientCommands[command](playerObj, args)
     end
 end

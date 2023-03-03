@@ -1,12 +1,12 @@
 require "TimedActions/ISBaseTimedAction"
 
-JCIO_OperateLimbAction = ISBaseTimedAction:derive("JCIO_OperateLimbAction")
+TOC_OperateLimbAction = ISBaseTimedAction:derive("TOC_OperateLimbAction")
 
-function JCIO_OperateLimbAction:isValid()
+function TOC_OperateLimbAction:isValid()
     return self.patientX == self.patient:getX() and self.patientY == self.patient:getY()
 end
 
-function JCIO_OperateLimbAction:waitToStart()
+function TOC_OperateLimbAction:waitToStart()
     if self.patient == self.surgeon then
         return false
     end
@@ -14,13 +14,13 @@ function JCIO_OperateLimbAction:waitToStart()
     return self.surgeon:shouldBeTurning()
 end
 
-function JCIO_OperateLimbAction:update()
+function TOC_OperateLimbAction:update()
     if self.patient ~= self.surgeon then
         self.surgeon:faceThisObject(self.patient)
     end
 end
 
-function JCIO_OperateLimbAction:start()
+function TOC_OperateLimbAction:start()
     self:setActionAnim("MedicalCheck")
     if self.useOven then
         self.sound = self.patient:getEmitter():playSound("Burn_sound")
@@ -28,7 +28,7 @@ function JCIO_OperateLimbAction:start()
     end
 end
 
-function JCIO_OperateLimbAction:findArgs()
+function TOC_OperateLimbAction:findArgs()
     local surgeonFactor = self.surgeon:getPerkLevel(Perks.Doctor)
 
     if self.useOven then
@@ -53,13 +53,13 @@ function JCIO_OperateLimbAction:findArgs()
     return surgeonFactor, self.useOven;
 end
 
-function JCIO_OperateLimbAction:perform()
+function TOC_OperateLimbAction:perform()
     local surgeonFactor, useOven = self:findArgs()
 
     if self.patient ~= self.surgeon and isClient() then
         SendOperateLimb(self.patient, self.partName, surgeonFactor, useOven)
     else
-        JCIO.OperateLimb(self.partName, surgeonFactor, useOven)
+        TOC.OperateLimb(self.partName, surgeonFactor, useOven)
     end
     self.surgeon:getXp():AddXP(Perks.Doctor, 400)
 
@@ -70,7 +70,7 @@ function JCIO_OperateLimbAction:perform()
     ISBaseTimedAction.perform(self)
 end
 
-function JCIO_OperateLimbAction:new(patient, surgeon, kit, partName, useOven)
+function TOC_OperateLimbAction:new(patient, surgeon, kit, partName, useOven)
     local o = ISBaseTimedAction.new(self, patient)
     o.partName = partName
     o.patient = patient

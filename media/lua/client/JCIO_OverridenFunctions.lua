@@ -19,13 +19,13 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
 
         local modData = getPlayer():getModData()
 
-        local limbParameters = JCIO.limbParameters
-        local limbsData = modData.JCIO.limbs
+        local limbParameters = TOC.limbParameters
+        local limbsData = modData.TOC.limbs
 
         local modifiedMaxTime = originalMaxTime
         local burnFactor = 1.3         -- TODO Move this crap
 
-        for _, partName in pairs(JCIO_Common.GetPartNames()) do
+        for _, partName in pairs(TOC_Common.GetPartNames()) do
             if limbsData[partName].isCut then
 
 
@@ -79,8 +79,8 @@ function ISInventoryPane:onMouseDoubleClick(x, y)
 
     if instanceof(item_to_check, "InventoryItem") then
         og_ISInventoryPaneOnMouseDoubleClick(self, x, y)
-    elseif JCIO_Common.CheckIfItemIsAmputatedLimb(item_to_check.items[1]) or JCIO_Common.CheckIfItemIsInstalledProsthesis(item_to_check.items[1]) then
-        --print("JCIO: Can't double click this item")
+    elseif TOC_Common.CheckIfItemIsAmputatedLimb(item_to_check.items[1]) or TOC_Common.CheckIfItemIsInstalledProsthesis(item_to_check.items[1]) then
+        --print("TOC: Can't double click this item")
 
     end
     og_ISInventoryPaneOnMouseDoubleClick(self, x, y)
@@ -110,8 +110,8 @@ ISInventoryPaneContextMenu.onInspectClothing         = function(playerObj, cloth
 
     -- Inspect menu bypasses getActualItems, so we need to add that workaround here too
     local clothing_full_type = clothing:getFullType()
-    if JCIO_Common.CheckIfItemIsAmputatedLimb(clothing) or JCIO_Common.CheckIfItemIsInstalledProsthesis(clothing) then
-        --print("JCIO: Can't inspect this!")
+    if TOC_Common.CheckIfItemIsAmputatedLimb(clothing) or TOC_Common.CheckIfItemIsInstalledProsthesis(clothing) then
+        --print("TOC: Can't inspect this!")
     else
         og_ISInventoryPaneContextMenuOnInspectClothing(playerObj, clothing)
 
@@ -126,8 +126,8 @@ function ISEquipWeaponAction:perform()
     --TODO Block it before even performing
     -- TODO in the inventory menu there is something broken, even though this works
     og_ISEquipWeaponActionPerform(self)
-    local limbs_data = self.character:getModData().JCIO.limbs
-    local can_be_held = JCIO_Common.GetCanBeHeldTable(limbs_data)
+    local limbs_data = self.character:getModData().TOC.limbs
+    local can_be_held = TOC_Common.GetCanBeHeldTable(limbs_data)
 
 
     if not self.item:isRequiresEquippedBothHands() then
@@ -173,7 +173,7 @@ function ISInventoryPaneContextMenu.unequipItem(item, player)
     if item == nil then
         return
     end
-    if JCIO_Common.CheckIfItemIsAmputatedLimb(item) == false and JCIO_Common.CheckIfItemIsInstalledProsthesis(item) == false then
+    if TOC_Common.CheckIfItemIsAmputatedLimb(item) == false and TOC_Common.CheckIfItemIsInstalledProsthesis(item) == false then
         og_ISInventoryPaneContextMenuUnequipItem(item, player)
     end
 end
@@ -181,7 +181,7 @@ end
 local og_ISInventoryPaneContextMenuDropItem = ISInventoryPaneContextMenu.dropItem
 function ISInventoryPaneContextMenu.dropItem(item, player)
 
-    if JCIO_Common.CheckIfItemIsAmputatedLimb(item) == false and JCIO_Common.CheckIfItemIsInstalledProsthesis(item) == false then
+    if TOC_Common.CheckIfItemIsAmputatedLimb(item) == false and TOC_Common.CheckIfItemIsInstalledProsthesis(item) == false then
         og_ISInventoryPaneContextMenuDropItem(item, player)
     end
 
@@ -193,10 +193,10 @@ function ISWearClothing:isValid()
 
 	local baseCheck = og_ISWearClothingIsValid(self)
     local itemFullType = self.item:getFullType()
-    local limbsData = self.character:getModData().JCIO.limbs
+    local limbsData = self.character:getModData().TOC.limbs
 
     local itemToCheck = "Surgery_%s_Tourniquet"
-    for _, side in pairs(JCIO.sideNames) do
+    for _, side in pairs(TOC.sideNames) do
 
         local formattedItemName = string.format(itemToCheck, side)
 
@@ -224,15 +224,15 @@ function ISClothingExtraAction:isValid()
     local location = newItem:getBodyLocation()
 
 
-    --print("JCIO: watch full type " .. itemFullType)
-    --print("JCIO: watch location " .. location)
+    --print("TOC: watch full type " .. itemFullType)
+    --print("TOC: watch location " .. location)
 
     local itemToCheck = "Watch_"
-    local limbsData = self.character:getModData().JCIO.limbs
+    local limbsData = self.character:getModData().TOC.limbs
 
     if string.find(itemFullType, itemToCheck) then
         
-        for _, side in pairs (JCIO.sideNames) do
+        for _, side in pairs (TOC.sideNames) do
             
             if location == side .. "Wrist" then
                 if limbsData[side .. "_LowerArm"].isCut then

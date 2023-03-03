@@ -1,15 +1,15 @@
 -- TODO this should be moved
 
 local function TryToToResetEverythingOtherPlayer(_, patient, surgeon)
-    sendClientCommand(surgeon, "JCIO", "AskToResetEverything", { patient:getOnlineID() })
+    sendClientCommand(surgeon, "TOC", "AskToResetEverything", { patient:getOnlineID() })
 end
 
 ----------------------------------------------------------------------------------------------------------
-if JCIO_ContextMenu == nil then
-    JCIO_ContextMenu = {}
+if TOC_ContextMenu == nil then
+    TOC_ContextMenu = {}
 end
 
-JCIO_ContextMenu.CreateCheatsMenu = function(playerId, context, worldObjects, _)
+TOC_ContextMenu.CreateCheatsMenu = function(playerId, context, worldObjects, _)
     local clickedPlayers = {}
     local currentClickedPlayer = nil
 
@@ -37,10 +37,10 @@ JCIO_ContextMenu.CreateCheatsMenu = function(playerId, context, worldObjects, _)
                                     local rootMenu = context:getNew(context)
 
                                     if currentClickedPlayer == localPlayer then
-                                        rootMenu:addOption("Reset JCIO for me", _, JCIO_Cheat.ResetEverything)
+                                        rootMenu:addOption("Reset TOC for me", _, TOC_Cheat.ResetEverything)
                             
                                     else
-                                        rootMenu:addOption("Reset JCIO for " .. currentClickedPlayer:getUsername(), _, TryToToResetEverythingOtherPlayer,
+                                        rootMenu:addOption("Reset TOC for " .. currentClickedPlayer:getUsername(), _, TryToToResetEverythingOtherPlayer,
                                             currentClickedPlayer, localPlayer)
                             
                                     end
@@ -65,11 +65,11 @@ JCIO_ContextMenu.CreateCheatsMenu = function(playerId, context, worldObjects, _)
 end
 
 
-JCIO_ContextMenu.CreateOperateWithOvenMenu = function(playerId, context, worldObjects, test)
+TOC_ContextMenu.CreateOperateWithOvenMenu = function(playerId, context, worldObjects, test)
     local player = getSpecificPlayer(playerId)
     -- TODO Let the player move towards the oven
 
-    local partData = player:getModData().JCIO.limbs
+    local partData = player:getModData().TOC.limbs
     local isMainMenuAlreadyCreated = false
 
     for _, currentObject in pairs(worldObjects) do
@@ -78,7 +78,7 @@ JCIO_ContextMenu.CreateOperateWithOvenMenu = function(playerId, context, worldOb
             -- Check temperature
             if currentObject:getCurrentTemperature() > 250 then
 
-                for _, partName in ipairs(JCIO_Common.GetPartNames()) do
+                for _, partName in ipairs(TOC_Common.GetPartNames()) do
                     if partData[partName].isCut and partData[partName].isAmputationShown and
                         not partData[partName].isOperated then
                         local subMenu = context:getNew(context);
@@ -88,7 +88,7 @@ JCIO_ContextMenu.CreateOperateWithOvenMenu = function(playerId, context, worldOb
                             context:addSubMenu(rootMenu, subMenu)
                             isMainMenuAlreadyCreated = true
                         end
-                        subMenu:addOption(getText('UI_ContextMenu_' .. partName), worldObjects, JCIO_LocalActions.Operate,
+                        subMenu:addOption(getText('UI_ContextMenu_' .. partName), worldObjects, TOC_LocalActions.Operate,
                             getSpecificPlayer(playerId), partName,true)
                     end
                 end
@@ -101,7 +101,7 @@ JCIO_ContextMenu.CreateOperateWithOvenMenu = function(playerId, context, worldOb
     end
 end
 
-JCIO_ContextMenu.CreateNewMenu = function(name, context, rootMenu)
+TOC_ContextMenu.CreateNewMenu = function(name, context, rootMenu)
 
     local new_option = rootMenu:addOption(name)
     local new_menu = context:getNew(context)
@@ -110,14 +110,14 @@ JCIO_ContextMenu.CreateNewMenu = function(name, context, rootMenu)
     return new_menu
 end
 
-JCIO_ContextMenu.FillCheatMenus = function(context, cheat_menu)
+TOC_ContextMenu.FillCheatMenus = function(context, cheat_menu)
 
     if cheat_menu then
-        local cheat_cut_and_fix_menu = JCIO_ContextMenu.CreateNewMenu("Cut and Fix", context, cheat_menu)
+        local cheat_cut_and_fix_menu = TOC_ContextMenu.CreateNewMenu("Cut and Fix", context, cheat_menu)
 
     end
 end
 
 
-Events.OnFillWorldObjectContextMenu.Add(JCIO_ContextMenu.CreateOperateWithOvenMenu) -- this is probably too much
-Events.OnFillWorldObjectContextMenu.Add(JCIO_ContextMenu.CreateCheatsMenu)       -- TODO Add check only when admin is active
+Events.OnFillWorldObjectContextMenu.Add(TOC_ContextMenu.CreateOperateWithOvenMenu) -- this is probably too much
+Events.OnFillWorldObjectContextMenu.Add(TOC_ContextMenu.CreateCheatsMenu)       -- TODO Add check only when admin is active

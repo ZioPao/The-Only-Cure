@@ -22,11 +22,11 @@ end
 local function SetBodyPartsStatusAfterOperation(player, limbParameters, partName, useOven)
 
 
-    local bodyPartType = player:getBodyDamage():getBodyPart(JCIO_Common.GetAdjacentBodyPartFromPartName(partName))
+    local bodyPartType = player:getBodyDamage():getBodyPart(TOC_Common.GetAdjacentBodyPartFromPartName(partName))
     FixSingleBodyPartType(bodyPartType, useOven)
 
     for _, v in pairs(limbParameters[partName].dependsOn) do
-        local dependedBodyPartType = player:getBodyDamage():getBodyPart(JCIO_Common.GetAdjacentBodyPartFromPartName(v))
+        local dependedBodyPartType = player:getBodyDamage():getBodyPart(TOC_Common.GetAdjacentBodyPartFromPartName(v))
         FixSingleBodyPartType(dependedBodyPartType, useOven)
 
     end
@@ -39,15 +39,15 @@ end
 ---@param partName any
 ---@param surgeonFactor any
 ---@param useOven boolean wheter using oven instead of a kit or not
-function JCIO.OperateLimb(partName, surgeonFactor, useOven)
+function TOC.OperateLimb(partName, surgeonFactor, useOven)
 
     local player = getPlayer()
 
 
-    local jcioModData = player:getModData().JCIO
+    local TOCModData = player:getModData().TOC
 
-    local limbParameters = JCIO.limbParameters
-    local limbsData = jcioModData.limbs
+    local limbParameters = TOC.limbParameters
+    local limbsData = TOCModData.limbs
 
     if useOven then
         local stats = player:getStats()

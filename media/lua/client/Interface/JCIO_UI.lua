@@ -1,7 +1,7 @@
 
 
-if JCIO_UI == nil then
-    JCIO_UI = {}
+if TOC_UI == nil then
+    TOC_UI = {}
 end
 
 
@@ -45,33 +45,33 @@ local function GetImageName(partName, limbsData)
 
     if partData.isCut and partData.isCicatrized and partData.isProsthesisEquipped then -- Cut and equip
         if partName == "Right_Hand" or partName == "Left_Hand" then
-            name = "media/ui/JCIO/" .. partName .. "/Hook.png"
+            name = "media/ui/TOC/" .. partName .. "/Hook.png"
         else
-            name = "media/ui/JCIO/" .. partName .. "/Prothesis.png"
+            name = "media/ui/TOC/" .. partName .. "/Prothesis.png"
         end
     elseif partData.isCut and partData.isCicatrized and not partData.isProsthesisEquipped and
         partData.isAmputationShown then -- Cut and heal
-        name = "media/ui/JCIO/" .. partName .. "/Cut.png"
+        name = "media/ui/TOC/" .. partName .. "/Cut.png"
     elseif partData.isCut and not partData.isCicatrized and partData.isAmputationShown and
         not partData.isOperated then -- Cut but not healead
-        name = "media/ui/JCIO/" .. partName .. "/Bleed.png"
+        name = "media/ui/TOC/" .. partName .. "/Bleed.png"
     elseif partData.isCut and not partData.isCicatrized and partData.isAmputationShown and partData.isOperated then -- Cut but not healed and operated
-        name = "media/ui/JCIO/" .. partName .. "/Operate.png"
+        name = "media/ui/TOC/" .. partName .. "/Operate.png"
     elseif partData.isCut and not partData.isAmputationShown then -- Empty (like hand if forearm cut)
-        name = "media/ui/JCIO/Empty.png"
+        name = "media/ui/TOC/Empty.png"
     elseif not partData.isCut and
         -- FIXME This doesn't work in MP on another player since we're trying to retrieve bodyDamage from another player
-        getPlayer():getBodyDamage():getBodyPart(JCIO_Common.GetBodyPartFromPartName(partName)):bitten() then -- Not cut but bitten
-        name = "media/ui/JCIO/" .. partName .. "/Bite.png"
+        getPlayer():getBodyDamage():getBodyPart(TOC_Common.GetBodyPartFromPartName(partName)):bitten() then -- Not cut but bitten
+        name = "media/ui/TOC/" .. partName .. "/Bite.png"
     else -- Not cut
-        name = "media/ui/JCIO/" .. partName .. "/Base.png"
+        name = "media/ui/TOC/" .. partName .. "/Base.png"
     end
 
     -- If foreaerm equip, change hand
     if partName == "Right_Hand" and limbsData["Right_LowerArm"].isProsthesisEquipped then
-        name = "media/ui/JCIO/" .. partName .. "/Hook.png"
+        name = "media/ui/TOC/" .. partName .. "/Hook.png"
     elseif partName == "Left_Hand" and limbsData["Left_LowerArm"].isProsthesisEquipped then
-        name = "media/ui/JCIO/" .. partName .. "/Hook.png"
+        name = "media/ui/TOC/" .. partName .. "/Hook.png"
     end
     return name
 end
@@ -101,7 +101,7 @@ end
 
 local function IsPartBitten(partData, partName)
     return not partData.isCut and
-        getPlayer():getBodyDamage():getBodyPart(JCIO_Common.GetBodyPartFromPartName(partName)):bitten()
+        getPlayer():getBodyDamage():getBodyPart(TOC_Common.GetBodyPartFromPartName(partName)):bitten()
 end
 
 local function FindMinMax(lv)
@@ -144,7 +144,7 @@ end
 -----------------------------------------
 -- Setup stuff with variables and shit
 
-JCIO_UI.SetupMainUI = function(surgeon, patient, limbsData)
+TOC_UI.SetupMainUI = function(surgeon, patient, limbsData)
     mainUI.surgeon = surgeon -- we shouldn't need an arg for this
     mainUI.patient = patient
 
@@ -169,7 +169,7 @@ JCIO_UI.SetupMainUI = function(surgeon, patient, limbsData)
 
 end
 
-JCIO_UI.SetupDescUI = function(surgeon, patient, limbsData, partName)
+TOC_UI.SetupDescUI = function(surgeon, patient, limbsData, partName)
     descUI["textTitle"]:setText(getText("UI_ContextMenu_" .. partName))
     descUI.partName = partName
     descUI.surgeon = surgeon
@@ -239,16 +239,16 @@ JCIO_UI.SetupDescUI = function(surgeon, patient, limbsData, partName)
         descUI["status"]:setText("Nothing here")
         descUI["status"]:setColor(1, 1, 1, 1)
         descUI["b1"]:setVisible(false)
-    elseif JCIO_Common.CheckIfCanBeCut(partName, limbsData) then
+    elseif TOC_Common.CheckIfCanBeCut(partName, limbsData) then
         -- Everything else
         -- TODO add check for cuts and scratches
         descUI["status"]:setText("Not cut")
         descUI["status"]:setColor(1, 1, 1, 1)
-        if JCIO_Common.GetSawInInventory(surgeon) and not JCIO_Common.CheckIfProsthesisAlreadyInstalled(limbsData, partName) then
+        if TOC_Common.GetSawInInventory(surgeon) and not TOC_Common.CheckIfProsthesisAlreadyInstalled(limbsData, partName) then
             descUI["b1"]:setVisible(true)
             descUI["b1"]:setText("Cut")
             descUI["b1"]:addArg("option", "Cut")
-        elseif JCIO_Common.GetSawInInventory(surgeon) and JCIO_Common.CheckIfProsthesisAlreadyInstalled(limbsData, partName) then
+        elseif TOC_Common.GetSawInInventory(surgeon) and TOC_Common.CheckIfProsthesisAlreadyInstalled(limbsData, partName) then
             descUI["b1"]:setVisible(true)
             descUI["b1"]:setText("Remove prosthesis before")
             descUI["b1"]:addArg("option", "Nothing")
@@ -294,25 +294,25 @@ local function OnClickMainUI(button, args)
 
     descUI:open()
     descUI:setPositionPixel(mainUI:getRight(), mainUI:getY())
-    JCIO_UI.SetupDescUI(mainUI.surgeon, mainUI.patient, mainUI.limbsData, args.partName) -- surgeon is generic.
+    TOC_UI.SetupDescUI(mainUI.surgeon, mainUI.patient, mainUI.limbsData, args.partName) -- surgeon is generic.
 
 end
 
--- Generic JCIO action, used in OnClickDescUI
-local function TryJcioAction(_, partName, action, surgeon, patient)
+-- Generic TOC action, used in OnClickDescUI
+local function TryTOCAction(_, partName, action, surgeon, patient)
     -- TODO at this point surgeon doesnt do anything. We'll fix this later
 
     -- Check if SinglePlayer
     if not isServer() and not isClient() then
 
         if action == "Cut" then
-            JCIO_LocalActions.Cut(_, surgeon, partName)
+            TOC_LocalActions.Cut(_, surgeon, partName)
         elseif action == "Operate" then
-            JCIO_LocalActions.Operate(_, surgeon, partName, false)
+            TOC_LocalActions.Operate(_, surgeon, partName, false)
         elseif action == "Equip" then
-            JCIO_LocalActions.EquipProsthesis(_, surgeon, partName)
+            TOC_LocalActions.EquipProsthesis(_, surgeon, partName)
         elseif action == "Unequip" then
-            JCIO_LocalActions.UnequipProsthesis(_, surgeon, partName)
+            TOC_LocalActions.UnequipProsthesis(_, surgeon, partName)
         end
     else
         local ui = GetConfirmUIMP()
@@ -353,7 +353,7 @@ local function OnClickDescUI(button, args)
     local surgeon = descUI.surgeon
 
     if args.option ~= "Nothing" then
-        TryJcioAction(_, descUI.partName, args.option, surgeon, patient)
+        TryTOCAction(_, descUI.partName, args.option, surgeon, patient)
     end
     mainUI:close()
 
@@ -362,11 +362,11 @@ end
 local function OnClickConfirmUIMP(button, args)
     local player = getPlayer()
     if confirmUIMP.actionAct == "Cut" and args.option == "yes" then
-        ISTimedActionQueue.add(JCIO_CutLimbAction:new(confirmUIMP.patient, player, confirmUIMP.partNameAct))
+        ISTimedActionQueue.add(TOC_CutLimbAction:new(confirmUIMP.patient, player, confirmUIMP.partNameAct))
     elseif confirmUIMP.actionAct == "Operate" and args.option == "yes" then
-        local kit = JCIO_Common.GetKitInInventory(player)
+        local kit = TOC_Common.GetKitInInventory(player)
         if kit then
-            ISTimedActionQueue.add(JCIO_OperateLimbAction:new(confirmUIMP.patient, player, kit, confirmUIMP.partNameAct,
+            ISTimedActionQueue.add(TOC_OperateLimbAction:new(confirmUIMP.patient, player, kit, confirmUIMP.partNameAct,
                 false))
         else
             player:Say("I need a kit")
@@ -383,7 +383,7 @@ local function OnClickConfirmUIMP(button, args)
             surgeon_inventory:getItemFromType('TOC.WoodenHook')
 
         if prosthesis_to_equip then
-            ISTimedActionQueue.add(JCIO_InstallProsthesisAction:new(player, confirmUIMP.patient, prosthesis_to_equip,
+            ISTimedActionQueue.add(TOC_InstallProsthesisAction:new(player, confirmUIMP.patient, prosthesis_to_equip,
                 confirmUIMP.partNameAct))
         else
             player:Say("I don't have a prosthesis right now")
@@ -397,7 +397,7 @@ local function OnClickConfirmUIMP(button, args)
         -- TODO Player is surgeon, but we don't have a confirm_ui_mp.surgeon... awful awful awful
         -- TODO Workaround for now, we'd need to send data from patient before doing it since we can't access his inventory from the surgeon
         if confirmUIMP.patient == player then
-            ISTimedActionQueue.add(JCIO_UninstallProsthesisAction:new(player, confirmUIMP.patient, confirmUIMP.partNameAct))
+            ISTimedActionQueue.add(TOC_UninstallProsthesisAction:new(player, confirmUIMP.patient, confirmUIMP.partNameAct))
 
         else
             player:Say("I can't do that, they need to do it themselves")
@@ -538,7 +538,7 @@ end
 
 -- We create everything from here
 
-JCIO_UI.OnCreate = function()
+TOC_UI.OnCreate = function()
     CreateMainUI()
     CreateDescUI()
     CreateConfirmUIMP()
@@ -580,40 +580,40 @@ function SendCommandToConfirmUIMP(action, isBitten, userName, partName)
 end
 
 --------------------------------------------
--- Add JCIO element to Health Panel
+-- Add TOC element to Health Panel
 
 
 
-JCIO_UI.onlineTempTable = {patient = nil, surgeon = nil}
+TOC_UI.onlineTempTable = {patient = nil, surgeon = nil}
 
-JCIO.RefreshClientMenu = function(_)
+TOC.RefreshClientMenu = function(_)
     if mainUI:getIsVisible() == false then
-        Events.OnTick.Remove(JCIO.RefreshClientMenu)
-        JCIO_UI.onlineTempTable.patient = nil
-        JCIO_UI.onlineTempTable.surgeon = nil
+        Events.OnTick.Remove(TOC.RefreshClientMenu)
+        TOC_UI.onlineTempTable.patient = nil
+        TOC_UI.onlineTempTable.surgeon = nil
 
     else
 
-        local limbs_data = JCIO_UI.onlineTempTable.patient:getModData().JCIO.limbs
-        JCIO_UI.SetupMainUI(JCIO_UI.onlineTempTable.patient, JCIO_UI.onlineTempTable.patient, limbs_data)
+        local limbs_data = TOC_UI.onlineTempTable.patient:getModData().TOC.limbs
+        TOC_UI.SetupMainUI(TOC_UI.onlineTempTable.patient, TOC_UI.onlineTempTable.patient, limbs_data)
     end
 
 end
 
 
-JCIO.RefreshOtherPlayerMenu = function(_)
+TOC.RefreshOtherPlayerMenu = function(_)
 
     if mainUI:getIsVisible() == false then
 
-        Events.OnTick.Remove(JCIO.RefreshOtherPlayerMenu)
-        JCIO_UI.onlineTempTable.patient = nil
-        JCIO_UI.onlineTempTable.surgeon = nil
+        Events.OnTick.Remove(TOC.RefreshOtherPlayerMenu)
+        TOC_UI.onlineTempTable.patient = nil
+        TOC_UI.onlineTempTable.surgeon = nil
 
         else
-        if ModData.get("JCIO_PLAYER_DATA")[JCIO_UI.onlineTempTable.patient:getUsername()] ~= nil then
-            local otherPlayerPartData = ModData.get("JCIO_PLAYER_DATA")[JCIO_UI.onlineTempTable.patient:getUsername()]
+        if ModData.get("TOC_PLAYER_DATA")[TOC_UI.onlineTempTable.patient:getUsername()] ~= nil then
+            local otherPlayerPartData = ModData.get("TOC_PLAYER_DATA")[TOC_UI.onlineTempTable.patient:getUsername()]
 
-            JCIO_UI.SetupMainUI(JCIO_UI.onlineTempTable.surgeon, JCIO_UI.onlineTempTable.patient, otherPlayerPartData[1])
+            TOC_UI.SetupMainUI(TOC_UI.onlineTempTable.surgeon, TOC_UI.onlineTempTable.patient, otherPlayerPartData[1])
 
 
         end
@@ -627,27 +627,27 @@ end
 local ISHealthPanel_createChildren = ISHealthPanel.createChildren
 local ISHealthPanel_render = ISHealthPanel.render
 -- Add button to health panel
-function ISNewHealthPanel.onClickJCIO(button)
+function ISNewHealthPanel.onClickTOC(button)
 
     local surgeon = button.otherPlayer
     local patient = button.character
 
-    JCIO_UI.onlineTempTable.patient = patient
-    JCIO_UI.onlineTempTable.surgeon = surgeon
+    TOC_UI.onlineTempTable.patient = patient
+    TOC_UI.onlineTempTable.surgeon = surgeon
 
     -- MP Handling
     if surgeon then
 
 
         if surgeon == patient then
-            Events.OnTick.Add(JCIO.RefreshClientMenu)
+            Events.OnTick.Add(TOC.RefreshClientMenu)
 
         else
-            Events.OnTick.Add(JCIO.RefreshOtherPlayerMenu)            -- MP stuff, try to get the other player data and display it on the surgeon display
+            Events.OnTick.Add(TOC.RefreshOtherPlayerMenu)            -- MP stuff, try to get the other player data and display it on the surgeon display
         end
     else
         -- SP Handling
-        Events.OnTick.Add(JCIO.RefreshClientMenu)
+        Events.OnTick.Add(TOC.RefreshClientMenu)
     end
 
 
@@ -661,9 +661,9 @@ function ISNewHealthPanel.onClickJCIO(button)
 
     local main_title
     if separatedUsername[1] == nil then
-        main_title = patient:getUsername() .. " - JCIO"
+        main_title = patient:getUsername() .. " - TOC"
     else
-        main_title = separatedUsername[1] .. " " .. separatedUsername[2] .. " - JCIO"
+        main_title = separatedUsername[1] .. " " .. separatedUsername[2] .. " - TOC"
     end
 
     mainUI:setTitle(main_title)
@@ -678,23 +678,23 @@ function ISHealthPanel:createChildren()
 
     self.fitness:setWidth(self.fitness:getWidth() / 1.4)
 
-    self.JCIOButton = ISButton:new(self.fitness:getRight() + 10, self.healthPanel.y, 60, 20, "", self,
-        ISNewHealthPanel.onClickJCIO)
-    self.JCIOButton:setImage(getTexture("media/ui/JCIO/iconForMenu.png"))
-    self.JCIOButton.anchorTop = false
-    self.JCIOButton.anchorBottom = true
-    self.JCIOButton:initialise()
-    self.JCIOButton:instantiate()
-    self:addChild(self.JCIOButton)
+    self.TOCButton = ISButton:new(self.fitness:getRight() + 10, self.healthPanel.y, 60, 20, "", self,
+        ISNewHealthPanel.onClickTOC)
+    self.TOCButton:setImage(getTexture("media/ui/TOC/iconForMenu.png"))
+    self.TOCButton.anchorTop = false
+    self.TOCButton.anchorBottom = true
+    self.TOCButton:initialise()
+    self.TOCButton:instantiate()
+    self:addChild(self.TOCButton)
     if getCore():getGameMode() == "Tutorial" then
-        self.JCIOButton:setVisible(false)
+        self.TOCButton:setVisible(false)
     end
 end
 
 function ISHealthPanel:render()
     ISHealthPanel_render(self);
-    self.JCIOButton:setY(self.fitness:getY());
+    self.TOCButton:setY(self.fitness:getY());
 end
 
 -- EVENTS
-Events.OnCreateUI.Add(JCIO_UI.OnCreate)
+Events.OnCreateUI.Add(TOC_UI.OnCreate)
