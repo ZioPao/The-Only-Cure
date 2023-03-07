@@ -200,18 +200,22 @@ function ISWearClothing:isValid()
 end
 
 
+
 local og_ISInventoryPagePrerender = ISInventoryPage.prerender
 
 function ISInventoryPage:prerender()
     -- Check if there is any amputated limb here. if there is, just fail and maybe notify the player
     og_ISInventoryPagePrerender(self)
-
     if TocCheckIfAnyAmputationItemInInventory(self.inventory) then
-        self.transferAll:setVisible(false)
+        self.canLootAll = false
+    else
+        self.canLootAll = true
     end
-   
 end
 
--- function ISInventoryPage:transferAll()
---     self.inventoryPane:transferAll()
--- end
+local og_ISInventoryPageLootAll = ISInventoryPage.lootAll
+function ISInventoryPage:lootAll()
+    if self.canLootAll then
+        og_ISInventoryPageLootAll(self)
+    end
+end
