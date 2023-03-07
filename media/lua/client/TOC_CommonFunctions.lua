@@ -289,3 +289,13 @@ TOC_Common.FindItemInWornItems = function(player, checkString)
     return nil
 
 end
+
+TOC_Common.FindModItem = function(inventory)
+    for _, partName in pairs(TOC_Common.GetPartNames()) do
+        if inventory:contains("TOC.Amputation_" .. partName) then
+            return true
+        end
+    end
+    return false
+
+end
