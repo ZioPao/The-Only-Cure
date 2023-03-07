@@ -204,3 +204,4 @@ print("TOC: Starting CheckModCompatibility")
 
 Events.OnGameStart.Add(TOC_CheckModCompatibility)
 
+-- TODO Replace it with TOC COmpat from dhert
