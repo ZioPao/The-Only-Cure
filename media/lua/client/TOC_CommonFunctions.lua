@@ -109,3 +109,13 @@ function TocGetSawInInventory(surgeon)
         player_inv:getItemFromType("Chainsaw")
     return item
 end
+
+
+function TocCheckIfAnyAmputationItemInInventory(inv)
+    for _, partName in pairs(GetBodyParts()) do
+        if inv:contains("TOC.Amputation_" .. partName) then
+            return true
+        end
+    end
+    return false
+end
