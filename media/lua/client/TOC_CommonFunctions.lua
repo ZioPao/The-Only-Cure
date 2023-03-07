@@ -112,6 +112,17 @@ function TocGetAmputationItemInInventory(player, part_name)
     return amputation_item
 end
 
+function TocCheckIfAnyAmputationItemInInventory(inv)
+
+    for _, partName in pairs(GetBodyParts()) do
+        if inv:contains("TOC.Amputation_" .. partName) then
+            return true
+        end
+    end
+    return false
+end
+
+
 function TocGetSawInInventory(surgeon)
 
     local player_inv = surgeon:getInventory()
