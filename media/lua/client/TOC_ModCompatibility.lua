@@ -3,176 +3,70 @@
 ------------------------------------------
 
 ------------------------------------------
---      Compatibility for various mods
+--      Compatibility Handler by Dhert
 ------------------------------------------
 
 
-local function SetCompatibilityFancyHandwork()
-    local og_ISHotbar_equipItem = ISHotbar.equipItem
 
-    function ISHotbar:equipItem(item)
-        local mod = isFHModKeyDown()
-        local primary = self.chr:getPrimaryHandItem()
-        local secondary = self.chr:getSecondaryHandItem()
-        local equip = true
-
-        local limbsData = getPlayer():getModData().TOC.limbs
-        local canBeHeld = TOC_Common.GetCanBeHeldTable(limbsData)
-
-        
-        -- If we already have the item equipped
-        if (primary and primary == item) or (secondary and secondary == item) then
-            ISTimedActionQueue.add(ISUnequipAction:new(self.chr, item, 20))
-            equip = false
-        end
-
-        -- If we didn't just do something
-        if equip then
-            -- Handle holding big objects
-            if primary and isForceDropHeavyItem(primary) then
-                ISTimedActionQueue.add(ISUnequipAction:new(self.chr, primary, 50))
-                ----- treat "equip" as if we have something equipped from here down
-                equip = false
-            end
-            if mod then
-                --print("TOC: Fancy Handwork modifier")
-                -- If we still have something equipped in secondary, unequip
-                if secondary and equip and canBeHeld["Left"] then
-                    ISTimedActionQueue.add(ISUnequipAction:new(self.chr, secondary, 20))
-                end
-
-                if canBeHeld["Left"] then
-                    ISTimedActionQueue.add(ISEquipWeaponAction:new(self.chr, item, 20, false, item:isTwoHandWeapon()))
-                elseif canBeHeld["Right"] then
-                    ISTimedActionQueue.add(ISEquipWeaponAction:new(self.chr, item, 20, true, item:isTwoHandWeapon()))
-
-                end
-            else
-                -- If we still have something equipped in primary, unequip
-                if primary and equip and canBeHeld["Right"] then
-                    ISTimedActionQueue.add(ISUnequipAction:new(self.chr, primary, 20))
-                end
-                -- Equip Primary
-                if canBeHeld["Right"] then
-                    ISTimedActionQueue.add(ISEquipWeaponAction:new(self.chr, item, 20, true, item:isTwoHandWeapon()))
-                elseif canBeHeld["Left"] then
-                    ISTimedActionQueue.add(ISEquipWeaponAction:new(self.chr, item, 20, false, item:isTwoHandWeapon()))
-
-                end
-            end
-        end
-
-        self.chr:getInventory():setDrawDirty(true)
-        getPlayerData(self.chr:getPlayerNum()).playerInventory:refreshBackpacks()
-    end
-
-    local og_FHSwapHandsAction = FHSwapHandsAction.start
+-- TODO Connect this with TOC logic instead of hardcoding it here
+local parts = {
+    "Right_Hand",
+    "Left_Hand",
+    "Right_LowerArm",
+    "Left_LowerArm"
+}
+-- TODO Connect this with TOC logic instead of hardcoding it here
+local vars = {
+    "isCut",
+    "isProsthesisEquipped"
+}
 
 
-    function FHSwapHandsAction:isValid()
-        local limbsData = getPlayer():getModData().TOC.limbs
-        local canBeHeld = TOC_Common.GetCanBeHeldTable(limbsData)
+local TOC_Compat = {}
 
-        return (canBeHeld["Right"] and canBeHeld["Left"]) and(((self.character:getPrimaryHandItem() or self.character:getSecondaryHandItem()) ~= nil))
-    end
-
+-- Raw access, must pass valid part
+--- @param player
+--- @param part string
+--- @return boolean
+TOC_Compat.hasArmPart = function(player, part)
+    if not player or not part then return false end
+    local data = (player:getModData().TOC and player:getModData().TOC.Limbs) or nil
+    return not data or not data[part] or (data[part][vars[1]] and data[part][vars[2]]) or not data[part][vars[1]]
 end
 
-local function SetCompatibilityFancyHandWorkAndSwapIt()
-
-    SetCompatibilityFancyHandwork()
-
-    -- Override equip Item once again with the necessary changes
-    function ISHotbar:equipItem(item)
-        local mod = isFHModKeyDown()
-        local primary = self.chr:getPrimaryHandItem()
-        local secondary = self.chr:getSecondaryHandItem()
-        local equip = true
-
-        local limbsData = getPlayer():getModData().TOC.limbs
-        local canBeHeld = TOC_Common.GetCanBeHeldTable(limbsData)
-
-        -- If we already have the item equipped
-        if (primary and primary == item) or (secondary and secondary == item) then
-            ISTimedActionQueue.add(ISUnequipAction:new(self.chr, item, 20))
-            equip = false
-        end
-
-        -- If we didn't just do something
-        if equip then
-            -- Handle holding big objects
-            if primary and isForceDropHeavyItem(primary) then
-                ISTimedActionQueue.add(ISUnequipAction:new(self.chr, primary, 50))
-                ----- treat "equip" as if we have something equipped from here down
-                equip = false
-            end
-            if mod then
-                --print("TOC: Fancy Handwork modifier")
-                -- If we still have something equipped in secondary, unequip
-                if secondary and equip and canBeHeld["Left"] then
-                    ISTimedActionQueue.add(ISUnequipAction:new(self.chr, secondary, 20))
-                end
-
-                if canBeHeld["Left"] then
-                    ISTimedActionQueue.add(ISEquipWeaponAction:new(self.chr, item, 20, false, item:isTwoHandWeapon()))
-                elseif canBeHeld["Right"] then
-                    ISTimedActionQueue.add(ISEquipWeaponAction:new(self.chr, item, 20, true, item:isTwoHandWeapon()))
-
-                end
-            else
-                -- If we still have something equipped in primary, unequip
-                if primary and equip and canBeHeld["Right"] then
-                    ISTimedActionQueue.add(ISUnequipAction:new(self.chr, primary, 20))
-                end
-                -- Equip Primary
-                if canBeHeld["Right"] then
-                    ISTimedActionQueue.add(ISEquipWeaponAction:new(self.chr, item, 20, true, item:isTwoHandWeapon()))
-                elseif canBeHeld["Left"] then
-                    ISTimedActionQueue.add(ISEquipWeaponAction:new(self.chr, item, 20, false, item:isTwoHandWeapon()))
-
-                end
-            end
-
-            -- Swap It part
-            local i_slotinuse = item:getAttachedSlot()
-            local slot = self.availableSlot[i_slotinuse]
-            local slotIndexID = "swap_Hotbar"..i_slotinuse
-            if slot and SwapItConfig.config[slotIndexID] == true then
-                if primary and not self:isInHotbar(primary) and self:canBeAttached(slot, primary) then
-                    self:removeItem(item, false)--false = don't run animation
-                    self:attachItem(primary, slot.def.attachments[primary:getAttachmentType()], i_slotinuse, slot.def, true)
-                end
-            end
-
-        end
-
-        self.chr:getInventory():setDrawDirty(true)
-        getPlayerData(self.chr:getPlayerNum()).playerInventory:refreshBackpacks()
-    end
-
-
+-- Raw access, must pass valid parts. Will check for 2 parts (arm and hand)
+--- @param player
+--- @param part string
+--- @param part2 string
+--- @return boolean
+TOC_Compat.hasArm = function(player, part, part2)
+    if not player or not part then return false end
+    local data = (player:getModData().TOC and player:getModData().TOC.Limbs) or nil
+    return not data or (not data[part] or (data[part][vars[1]] and data[part][vars[2]]) or not data[part][vars[1]]) or (not data[part] or (data[part2][vars[1]] and data[part2][vars[2]]) or not data[part2][vars[1]])
 end
 
---------------------------------------------------------
-
-local function CheckModCompatibility()
-    local activatedMods = getActivatedMods()
-    print("TOC: Checking mods")
-
-    if activatedMods:contains("FancyHandwork") then
-
-        if activatedMods:contains("SwapIt") then
-            require "SwapIt Main"
-            print("TOC: Overriding FancyHandwork and SwapIt methods")
-            SetCompatibilityFancyHandWorkAndSwapIt()
-        else
-            print("TOC: Overriding FancyHandwork methods")
-            require "TimedActions/FHSwapHandsAction"
-            SetCompatibilityFancyHandwork()
-        end
-    end
+-- Check if hand is available
+--- @param player
+--- @param left boolean -- optional
+--- @return boolean
+TOC_Compat.hasHand = function(player, left)
+    return TOC_Compat.hasArm(player, ((left and parts[2]) or parts[1]), ((left and parts[4]) or parts[3]))
 end
 
-print("TOC: Starting CheckModCompatibility")
-Events.OnGameStart.Add(CheckModCompatibility)
+-- Check if both hands are available
+--- @param player
+--- @return boolean
+TOC_Compat.hasBothHands = function(player)
+    return TOC_Compat.hasArm(player, parts[1], parts[3]) and TOC_Compat.hasArm(player, parts[2], parts[4])
+end
 
+-- This returns a number for the hands that you have
+----- 11 == both hands
+----- 10 == left hand
+----- 01 (1) == right hand
+----- 00 (0) == no hands
+--- @param player 
+--- @return integer
+TOC_Compat.getHands = function(player)
+    return ((TOC_Compat.hasArm(player, parts[1], parts[3]) and 1) or 0) + ((TOC_Compat.hasArm(player, parts[2], parts[4]) and 10) or 0)
+end

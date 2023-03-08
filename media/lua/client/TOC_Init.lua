@@ -4,7 +4,7 @@
 ------------- INIT FUNCTIONS -------------
 --[[
 Original code and idea by: Mr. Bounty
-Rewritten by: Pao
+Rewritten and maintained by: Pao
 --]]
 
 
@@ -74,26 +74,6 @@ end
 
 TOC.SetInitData = function(modData, player)
     print("TOC: Creating mod_data.TOC")
-    --------
-    -- NEW NAMING SCHEME
-
-    ---- Amputations
-
-    -- Amputation_Left_Hand
-    -- Amputation_Right_UpperArm
-
-
-    ---- Prosthesis to equip
-    -- Prost_Left_Hand_MetalHook
-    -- Prost_Right_Forearm_WoodenHook
-
-    --- Objects
-    -- Prost_Object_WoddenHook
-
-    -- TODO this is gonna become a mess really fast, i fucked up.
-    -- TODO Move prosthesis to something more easily accessible
-    -- TODO Acceptable prosthesis need to be moved to something more accessible
-
     modData.TOC = {}
 
     -- Limbs
@@ -111,49 +91,6 @@ TOC.SetInitData = function(modData, player)
 
         isOtherBodypartInfected = false
     }
-
-    -- TODO Move this to the global TOC thing
-    -- Prosthetics
-    modData.TOC.prosthesis = {
-        WoodenHook = {
-            Right_Hand = {},
-            Right_LowerArm = {},
-            Right_UpperArm = {},
-
-            Left_Hand = {},
-            Left_LowerArm = {},
-            Left_UpperArm = {},
-        },
-        MetalHook = {
-            Right_Hand = {},
-            Right_LowerArm = {},
-            Right_UpperArm = {},
-
-            Left_Hand = {},
-            Left_LowerArm = {},
-            Left_UpperArm = {},
-        },
-        MetalHand = {
-            Right_Hand = {},
-            Right_LowerArm = {},
-            Right_UpperArm = {},
-
-            Left_Hand = {},
-            Left_LowerArm = {},
-            Left_UpperArm = {},
-        },
-
-
-
-        Accepted_Prosthesis = {}
-
-    }
-
-    -- TODO Move this to the global TOC thing
-    -- Generic (future uses)
-    modData.TOC.generic = {}
-
-
     for _, side in pairs(TOC.sideNames) do
         for _, limb in pairs(TOC.limbNames) do
             local partName = side .. "_" .. limb
@@ -194,7 +131,7 @@ end
 ------------------------------------------------------------------------------------
 
 -- Rewrite 2 Electirc Bogaloo
-local function InitializeJustCutItOff()
+local function InitializeTheOnlyCure()
 
     if not TOC then
         TOC = {}
@@ -241,9 +178,9 @@ local function InitializeJustCutItOff()
 
     -- Mod Checker
     CheckMyModTable = CheckMyModTable or {}
-    CheckMyModTable["TOC"] = 2915572347
+    CheckMyModTable["Amputation"] = 2703664356     -- TODO should we change the ID with the update or not?
 
 
 
 end
-Events.OnGameBoot.Add(InitializeJustCutItOff)
+Events.OnGameBoot.Add(InitializeTheOnlyCure)
