@@ -1,0 +1,78 @@
+[h1] News 03/03 [/h1] 
+
+Good news!
+
+Pao joins this mod to develop it! 
+He developed a new version without bugs on this page:
+https://steamcommunity.com/sharedfiles/filedetails/?id=2915572347&searchtext=the+only+cure
+
+But his work is coming to this mod ! You can expect an update soon ;)
+I stay on the project behind and for the UI part.
+
+[img]https://i.imgur.com/RNxXaZ8.gif[/img]
+
+[h1]The only cure - PZ mod[/h1]
+Bitten by a zombie? Do not panic ! At least if it's at the level of arms.
+
+I introduce you the only cure. The saw. If you apply the saw to the infected area before the infection spreads too far into your body. The infection will go away and you can resume your life as normal!
+
+Small flat on the other hand, during the application of the remedy you risk to scream very loudly. That's why I recommend having a box of painkillers with you at this time. (The fuller the box, the more efficient). I also recommend having a bandage, with alcohol is better, at the time to reduce healing time.
+
+Once the saw is applied, you end up with a wound that needs to heal. For that you can wait but it takes a lot of time. You can also operate with a surgeon's kit to speed up the process. There are three craftable kits, some better than others. You can also heal instantly by using an oven but that gonna leave a mark.
+
+Now with your hand cut off, everything will take a long time and some actions (like holding a weapon in your hand) are no longer available. But then how to do? Once again, don't panic. I also offer prostheses to replace your severed limb! (Not available for fully cut arms). There are 3 prosthesis models, wooden hook, metal hook and metal hand. Equipped with a better prosthesis to reduce the time taken for actions. You need to be fully heal to equip it.
+
+Thanks Arko Piktuviry for the spanish translation!
+
+[h1]Features[/h1]
+-Custom UI
+-Operate and cut other in mp
+-6 recipes and 6 magazines. 3 kit of surgeon and 3 prothesis.
+-Surgeon occupation, start with the 6 recipes knows and is better to cut and operate.
+-Add insensitive to pain trait, reduce pain by 50%.
+-Once bitten, you have about 12 hours to cut it or it spreads. (Depends on the infection rate)
+-Use a saw, gardensaw or chainsaw to cut your arm in three places.
+-Carry an alcohol bandage and a box of painkiller with you during the cut to avoid screaming and reduce healing time.
+-The speed of any actions will now take longer and you can't equip in the cut hand.
+-Once cut, the part needs healing. It takes a lot of time. To reduce the time, it is necessary to operate. A better level in medicine reduces the time.
+-Operate with a kit to reduce the healing time, or an oven if you have the brave trait or at least 6 in strength.(The oven heals instantly but leaves a permanent mark, it need to be on and at least 250°C)
+-Once healed, you can equipe prothesis and actions take less time. You also gain the brave and insensible to pain traits.
+-Perks for the level of mastery of prostheses, increases over time if a prosthesis is fitted. A higher level reduces the time of actions
+
+[h1]What I plan to add[/h1]
+-Prevent driving if two hands are missing and reduce speed by 15% if one is missing, not affected if prostheses are fitted
+-Add a place to put a gun on the forearm metal hook and metal hand
+-3D model for map
+-Attacking with weapon in secondary hand
+-Durability for prostheses
+-Make some zombie start with an arm cut
+-Better forearm texture
+-Better model
+-Better icons
+-Better sound
+-Less bugs
+-Legs
+
+Maybe:
+-More prostheses
+-Tourniquet for more time to cut
+-A more thorough healing mechanism
+-Customization of prostheses
+Feel free to suggest features.
+
+[h1] Issue [/h1]
+Does not work in splitscreen.
+
+[h1]Others mods[/h1]
+Pager mod: https://steamcommunity.com/sharedfiles/filedetails/?id=2773785202&searchtext=
+
+QOF - Equipment window: 
+https://steamcommunity.com/sharedfiles/filedetails/?id=2733680483&searchtext=
+
+Minimal HUD: 
+https://steamcommunity.com/sharedfiles/filedetails/?id=2713305028&searchtext=
+
+You are allowed to look at my mod code as inspiration but not to copy or patch it!
+
+Workshop ID: 2703664356
+Mod ID: Amputation
