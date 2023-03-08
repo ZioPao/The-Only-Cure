@@ -1,5 +1,5 @@
 Sandbox_EN = {
-    Sandbox_TOC = "Just Cut It Off",
+    Sandbox_TOC = "The Only Cure",
 
     Sandbox_TOC_RollUpSleeves = "Roll up sleeves",
     Sandbox_TOC_RollUpSleeves_tooltip = "Currently broken, will not do anything",

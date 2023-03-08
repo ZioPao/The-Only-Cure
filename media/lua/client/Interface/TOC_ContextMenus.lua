@@ -33,7 +33,7 @@ TOC_ContextMenu.CreateCheatsMenu = function(playerId, context, worldObjects, _)
                                 clickedPlayers[currentClickedPlayer:getUsername()] = true
 
                                 if localPlayer:getAccessLevel() == "Admin" or isDebugEnabled() then
-                                    local rootOption = context:addOption("Just Cut It Off Cheats on " .. currentClickedPlayer:getUsername())
+                                    local rootOption = context:addOption("TOC - Cheats on " .. currentClickedPlayer:getUsername())
                                     local rootMenu = context:getNew(context)
 
                                     if currentClickedPlayer == localPlayer then
