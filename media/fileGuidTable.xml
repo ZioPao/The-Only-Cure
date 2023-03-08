@@ -76,4 +76,14 @@
         <path>media/clothing/clothingItems/Prost_Left_LowerArm_MetalHand.xml</path>
         <guid>0405a4c0-f71b-45a8-9edc-489fc81dca39</guid>
     </files>
+    <files>
+        <path>media/clothing/clothingItems/Prost_Right_Hand_MetalHand.xml</path>
+        <guid>585d0a86-2a4b-404f-a492-9c0e768fb351</guid>
+    </files>
+    <files>
+        <path>media/clothing/clothingItems/Prost_Left_Hand_MetalHand.xml</path>
+        <guid>9f0a8ed2-7754-4762-ba61-a4101c0fe86c</guid>
+    </files>
+
+
 </fileGuidTable>
