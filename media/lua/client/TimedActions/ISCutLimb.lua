@@ -20,13 +20,31 @@ function ISCutLimb:update()
     if self.patient ~= self.surgeon then
         self.surgeon:faceThisObject(self.patient)
     end
+
+
+    -- Sound handling
+    if self.soundTime < getTimestamp() then
+        self.soundTime = getTimestamp()
+
+        if not self.character:getEmitter():isPlaying(self.sawSound) then
+            --print("TOC: Running sound again")
+            self.sawSound = self.character:getEmitter():playSound("Amputation_Sound")
+            addSound(self.surgeon, self.surgeon:getX(), self.surgeon:getY(), self.surgeon:getZ(), 3, 3)
+        end
+    end
+
+
+
+
+
+
 end
 
 function ISCutLimb:stop()
 
-    self.surgeon:getEmitter():stopSoundByName("Amputation_Sound")
-    sendClientCommand(self.surgeon, "TOC", "AskStopAmputationSound", {surgeon_id = self.surgeon:getOnlineID()})
-
+    if self.sawSound and self.sawSound ~= 0 and self.surgeon:getEmitter():isPlaying(self.sawSound) then
+        self.surgeon:getEmitter():stopSound(self.sawSound)
+    end
 
 end
 
@@ -37,7 +55,11 @@ function ISCutLimb:start()
 
     self:setActionAnim("SawLog")
     local saw_item = TocGetSawInInventory(self.surgeon)
-    self.surgeon:getEmitter():playSound("Amputation_Sound")
+
+	self.soundTime = 0
+    self.worldSoundTime = 0
+    self.sawSound = self.surgeon:getEmitter():playSound("Amputation_Sound")
+
 
     -- Return whatever object we've got in the inventory
     if self.surgeon:getPrimaryHandItem() then
