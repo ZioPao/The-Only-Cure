@@ -26,6 +26,7 @@ jobs:
       with:
         name: ${{ inputs.mod_name }}-${{ inputs.version }}
         path: |
+          root
           root/${{ inputs.mod_name }}
           root/${{ inputs.mod_name }}/Contents/
           root/${{ inputs.mod_name }}/Contents/mods
