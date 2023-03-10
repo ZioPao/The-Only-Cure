@@ -17,7 +17,7 @@ jobs:
     - run: mkdir -p ${{ inputs.mod_name }}/Contents/mods/${{ inputs.mod_name }}
     - run: cp workshop.txt  ${{ inputs.mod_name }}/workshop.txt
     - run: cp mod.info ${{ inputs.mod_name }}/Contents/mods/${{ inputs.mod_name }}/mod.info
-    - run: cp media ${{ inputs.mod_name }}/Contents/mods/${{ inputs.mod_name }}/media
+    - run: cp -r media ${{ inputs.mod_name }}/Contents/mods/${{ inputs.mod_name }}/media
     - uses: actions/upload-artifact@v3
       with:
         name: ${{ inputs.mod_name }} 
