@@ -115,7 +115,14 @@ function TocTestBodyLocations()
 
     for i=1, list:size() do
  
-            print(list:get(i -1):getId())
+        print(list:get(i -1):getId())
 
     end
+end
+
+
+function TocTestHiddenLocations()
+
+    BodyLocationsAPI.checkHiddenModels("Tail")
+
 end
