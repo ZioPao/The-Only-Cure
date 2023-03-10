@@ -15,8 +15,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - run: mkdir -p ${{ inputs.mod_name }}/Contents/mods/${{ inputs.mod_name }}
-    - run: mkdir -p testpath/test2/test1
-    - run: ls
+    - run: cp workshop.txt  ${{ inputs.mod_name }}/workshop.txt
+    - run: cp mod.info ${{ inputs.mod_name }}/Contents/mods/${{ inputs.mod_name }}/mod.info
+    - run: cp media ${{ inputs.mod_name }}/Contents/mods/${{ inputs.mod_name }}/media
     - uses: actions/upload-artifact@v3
       with:
         name: ${{ inputs.mod_name }} 
@@ -24,4 +25,4 @@ jobs:
           ${{ inputs.mod_name }}
           ${{ inputs.mod_name }}/Contents/
           ${{ inputs.mod_name }}/Contents/mods
-          ${{ inputs.mod_name }}/Contents/mods/${{ inputs.mod_name }}
+          ${{ inputs.mod_name }}/Contents/mods/${{ inputs.mod_name }}/*
