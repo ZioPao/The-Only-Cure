@@ -14,7 +14,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - run: mkdir -p ${{ inputs.mod_name }}
+    - run: mkdir -p ${{ inputs.mod_name }}/Contents
+    - run: mkdir -p ${{ inputs.mod_name }}/Contents/mods/
     - run: mkdir -p ${{ inputs.mod_name }}/Contents/mods/${{ inputs.mod_name }}
+
+    
     - run: echo hello > ${{ inputs.mod_name}}/Contents/mods/${{ inputs.mod_name }}/world.txt
     - uses: actions/upload-artifact@v3
       with:
