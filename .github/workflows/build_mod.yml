@@ -14,14 +14,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    # - run: mkdir -p ${{ inputs.mod_name }}/Contents/mods/${{ inputs.mod_name }}
-    # - run: echo hello > ${{ inputs.mod_name }}/Contents/mods/${{ inputs.mod_name }}/world.txt
+    - run: mkdir -p ${{ inputs.mod_name }}/Contents/mods/${{ inputs.mod_name }}
     - run: mkdir -p testpath/test2/test1
-    - run: echo hello > testpath/test2/test1/world.txt
+    - run: echo ls
     - uses: actions/upload-artifact@v3
       with:
         name: ${{ inputs.mod_name }} 
         path: |
-          testpath
-          testpath/test2
-          testpath/test2/test1
+          ${{ inputs.mod_name }}
+          ${{ inputs.mod_name }}/Contents/
+          ${{ inputs.mod_name }}/Contents/mods
+          ${{ inputs.mod_name }}/Contents/mods/${{ inputs.mod_name }}
