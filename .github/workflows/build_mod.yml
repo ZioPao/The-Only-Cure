@@ -22,4 +22,6 @@ jobs:
       with:
         name: ${{ inputs.mod_name }} 
         path: |
-          testpath/test2/test1/
+          testpath
+          testpath/test2
+          testpath/test2/test1
