@@ -24,4 +24,6 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: ${{ inputs.mod_name }} 
-        path: ${{ inputs.mod_name }}/Contents/mods/${{ inputs.mod_name }}/world.txt
+        path: |
+          ${{ inputs.mod_name }}/Contents/mods/${{ inputs.mod_name }}
+          ${{ inputs.mod_name }}/Contents/mods/${{ inputs.mod_name }}/world.txt
