@@ -10,7 +10,7 @@ on:
         # Input has to be provided for the workflow to run
         required: true
 jobs:
-  my_first_job:
+  main_job:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -20,4 +20,4 @@ jobs:
       with:
         name: ${{ inputs.mod_name }} 
         path: |
-          ${{ inputs.mod_name }}/Contents/mods/${{ inputs.mod_name }}
+          ./${{ inputs.mod_name }}/Contents/mods/${{ inputs.mod_name }}
