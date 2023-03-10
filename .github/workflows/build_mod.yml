@@ -15,18 +15,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - run: mkdir -p ${{ inputs.mod_name }}/Contents/mods/${{ inputs.mod_name }}
-    - run: cp workshop.txt  ${{ inputs.mod_name }}/workshop.txt
-    - run: cp preview.png ${{ inputs.mod_name}}/preview.png
-    - run: cp mod.info ${{ inputs.mod_name }}/Contents/mods/${{ inputs.mod_name }}/mod.info
-    - run: cp icon.png ${{ inputs.mod_name }}/Contents/mods/${{ inputs.mod_name }}/icon.png
-    - run: cp generic.png ${{ inputs.mod_name }}/Contents/mods/${{ inputs.mod_name }}/generic.png
-    - run: cp -r media ${{ inputs.mod_name }}/Contents/mods/${{ inputs.mod_name }}/media
+    - run: mkdir -p root/${{ inputs.mod_name }}/Contents/mods/${{ inputs.mod_name }}
+    - run: cp workshop.txt  root/${{ inputs.mod_name }}/workshop.txt
+    - run: cp preview.png root/${{ inputs.mod_name}}/preview.png
+    - run: cp mod.info root/${{ inputs.mod_name }}/Contents/mods/${{ inputs.mod_name }}/mod.info
+    - run: cp icon.png root/${{ inputs.mod_name }}/Contents/mods/${{ inputs.mod_name }}/icon.png
+    - run: cp generic.png root/${{ inputs.mod_name }}/Contents/mods/${{ inputs.mod_name }}/generic.png
+    - run: cp -r media root/${{ inputs.mod_name }}/Contents/mods/${{ inputs.mod_name }}/media
     - uses: actions/upload-artifact@v3
       with:
         name: ${{ inputs.mod_name }}-${{ inputs.version }}
         path: |
-          ${{ inputs.mod_name }}
-          ${{ inputs.mod_name }}/Contents/
-          ${{ inputs.mod_name }}/Contents/mods
-          ${{ inputs.mod_name }}/Contents/mods/${{ inputs.mod_name }}/*
+          root/${{ inputs.mod_name }}
+          root/${{ inputs.mod_name }}/Contents/
+          root/${{ inputs.mod_name }}/Contents/mods
+          root/${{ inputs.mod_name }}/Contents/mods/${{ inputs.mod_name }}/*
