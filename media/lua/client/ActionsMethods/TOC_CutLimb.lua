@@ -60,7 +60,7 @@ end
 local function DeleteOtherAmputatedLimbs(side)
     -- if left hand is cut and we cut left lowerarm, then delete hand
     for _, limb in pairs(TOC.limbNames) do
-        local partName = "TOC.Amputation_" .. side .. "_" .. limb
+        local partName = "TOC.Amputation_" .. TOC_Common.ConcatPartName(side, limb)
         local amputatedLimbItem = getPlayer():getInventory():FindAndReturn(partName)
         if amputatedLimbItem then
             getPlayer():getInventory():Remove(amputatedLimbItem)
@@ -175,7 +175,7 @@ TOC.CutLimb = function(partName, surgeonFactor, bandageTable, painkillerTable)
     if tourniquetItem ~= nil then
         baseDamageValue = 50  -- TODO Decrease mostly blood and damage, add pain, not everything else
 
-        if partName == side .. "_UpperArm" then
+        if partName == TOC_Common.ConcatPartName(side, "UpperArm") then
             player:removeWornItem(tourniquetItem)
         end
     end

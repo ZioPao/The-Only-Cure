@@ -70,3 +70,6 @@ end
 TOC_Compat.getHands = function(player)
     return ((TOC_Compat.hasArm(player, parts[1], parts[3]) and 1) or 0) + ((TOC_Compat.hasArm(player, parts[2], parts[4]) and 10) or 0)
 end
+
+
+return TOC_Compat

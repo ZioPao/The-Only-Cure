@@ -8,7 +8,7 @@
 -- Side functions
 local function TocGetAmputationFullTypeFromInventory(player, side, limb)
     local player_inventory = player:getInventory()
-    local item_name = "TOC.Amputation_" .. side .. "_" .. limb
+    local item_name = "TOC.Amputation_" .. TOC_Common.ConcatPartName(side, limb)
     local found_item = player_inventory:FindAndReturn(item_name)
     if found_item then
         return found_item:getFullType()
@@ -18,12 +18,12 @@ local function TocGetAmputationFullTypeFromInventory(player, side, limb)
 end
 
 local function TocGetEquippedProsthesisFullTypeFromInventory(player, side, limb)
-    local player_inventory = player:getInventory()
+    local playerInventory = player:getInventory()
     for _, prost in ipairs(GetProsthesisList()) do
-        local item_name = TocFindCorrectClothingProsthesis(prost, side .."_" .. limb)
-        local found_item = player_inventory:FindAndReturn(item_name)
-        if found_item then
-            return found_item:getFullType()
+        local itemName = TocFindCorrectClothingProsthesis(prost, TOC_Common.ConcatPartName(side, limb))
+        local foundItem = playerInventory:FindAndReturn(itemName)
+        if foundItem then
+            return foundItem:getFullType()
         end
     end
 end
@@ -44,7 +44,7 @@ function TocResetClothingItemBodyLocation(player, side, limb)
             player:removeWornItem(amputationItem)
             player:getInventory():Remove(amputationItem)
             amputationItem = playerInv:AddItem(amputationItemName)
-            TOC_Visuals.SetTextureForAmputation(amputationItem, player, limbsData[side .. "_" .. limb].is_cicatrized)
+            TOC_Visuals.SetTextureForAmputation(amputationItem, player, limbsData[TOC_Common.ConcatPartName(side, limb)].isCicatrized)
             player:setWornItem(amputationItem:getBodyLocation(), amputationItem)
         end
         amputationItem = nil -- reset it

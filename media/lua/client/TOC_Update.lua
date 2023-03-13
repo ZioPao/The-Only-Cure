@@ -191,8 +191,8 @@ TOC.UpdateEveryTenMinutes = function()
 
     --Experience for prosthesis user
     for _, side in pairs(TOC.sideNames) do
-        if partData[side .. "_Hand"].isProsthesisEquipped or partData[side .. "_LowerArm"].isProsthesisEquipped then
-            player:getXp():AddXP(Perks[side .. "_Hand"], 4)
+        if partData[TOC_Common.ConcatPartName(side, "Hand")].isProsthesisEquipped or partData[TOC_Common.ConcatPartName(side, "LowerArm")].isProsthesisEquipped then
+            player:getXp():AddXP(Perks[TOC_Common.ConcatPartName(side, "Hand")], 4)
         end
 
     end

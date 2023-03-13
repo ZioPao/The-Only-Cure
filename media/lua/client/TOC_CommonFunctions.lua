@@ -15,7 +15,7 @@ TOC_Common.GeneratePartNames = function()
     local partNamesTable = {}
     for _, side in ipairs(TOC.sideNames) do
         for _, limb in ipairs(TOC.limbNames) do
-            local tempPartName = side .. "_" .. limb
+            local tempPartName = TOC_Common.ConcatPartName(side, limb)
             table.insert(partNamesTable, tempPartName)
         end
     end
@@ -42,6 +42,11 @@ TOC_Common.GetSideFromPartName = function(partName)
 
 end
 
+TOC_Common.ConcatPartName = function(side, limb)
+
+    return side .. "_" .. limb
+
+end
 ---------------------------------
 
 TOC_Common.GetAcceptableBodyPartTypes = function()
@@ -157,9 +162,6 @@ end
 -----------------------------------
 -- Online Handling checks
 
-
------------------------------------------
--- MP HANDLING CHECKS
 TOC_Common.CheckIfCanBeCut = function(partName, limbsData)
 
     if limbsData == nil then
@@ -246,7 +248,7 @@ TOC_Common.CheckIfProsthesisAlreadyInstalled = function(limbsData, partName)
 
     for _, side in pairs(TOC.sideNames) do
         if string.find(partName, side) then
-            return (limbsData[side .. "_Hand"].isProsthesisEquipped or limbsData[side .. "_LowerArm"].isProsthesisEquipped)
+            return (limbsData[TOC_Common.ConcatPartName(side, "Hand")].isProsthesisEquipped or limbsData[TOC_Common.ConcatPartName(side, "LowerArm")].isProsthesisEquipped)
         end
     end
 
@@ -259,12 +261,12 @@ TOC_Common.GetCanBeHeldTable = function(limbs_data)
     for _, side in pairs(TOC.sideNames) do
         canBeHeld[side] = true
 
-        if limbs_data[side .. "_Hand"].isCut then
-            if limbs_data[side .. "_LowerArm"].isCut then
-                if not limbs_data[side .. "_LowerArm"].isProsthesisEquipped then
+        if limbs_data[TOC_Common.ConcatPartName(side, "Hand")].isCut then
+            if limbs_data[TOC_Common.ConcatPartName(side, "LowerArm")].isCut then
+                if not limbs_data[TOC_Common.ConcatPartName(side, "LowerArm")].isProsthesisEquipped then
                     canBeHeld[side] = false
                 end
-            elseif not limbs_data[side .. "_Hand"].isProsthesisEquipped then
+            elseif not limbs_data[TOC_Common.ConcatPartName(side, "Hand")].isProsthesisEquipped then
                 canBeHeld[side] = false
             end
         end

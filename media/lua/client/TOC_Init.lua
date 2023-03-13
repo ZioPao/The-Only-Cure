@@ -93,7 +93,7 @@ TOC.SetInitData = function(modData, player)
     }
     for _, side in pairs(TOC.sideNames) do
         for _, limb in pairs(TOC.limbNames) do
-            local partName = side .. "_" .. limb
+            local partName = TOC_Common.ConcatPartName(side, limb)
             TOC.InitPart(modData.TOC.limbs, partName)
         end
     end
@@ -145,7 +145,7 @@ local function InitializeTheOnlyCure()
     TOC.limbParameters = {}
     for _, side in pairs(TOC.sideNames) do
         for _, limb in pairs(TOC.limbNames) do
-            local partName = side .. "_" .. limb
+            local partName = TOC_Common.ConcatPartName(side, limb)
             TOC.limbParameters[partName] = {}
 
             if limb == "Hand" then
@@ -153,10 +153,10 @@ local function InitializeTheOnlyCure()
                 TOC.limbParameters[partName].dependsOn = {}
             elseif limb == "LowerArm" then
                 TOC.limbParameters[partName].cicatrizationBaseTime = 1800
-                TOC.limbParameters[partName].dependsOn = { side .. "_Hand", }
+                TOC.limbParameters[partName].dependsOn = { TOC_Common.ConcatPartName(side, "Hand") }
             elseif limb == "UpperArm" then
                 TOC.limbParameters[partName].cicatrizationBaseTime = 2000
-                TOC.limbParameters[partName].dependsOn = { side .. "_Hand", side .. "_LowerArm", }
+                TOC.limbParameters[partName].dependsOn = { TOC_Common.ConcatPartName(side, "Hand"), TOC_Common.ConcatPartName(side, "LowerArm"), }
             elseif limb == "Foot" then
                 TOC.limbParameters[partName].cicatrizationBaseTime = 1700
                 TOC.limbParameters[partName].dependsOn = {}

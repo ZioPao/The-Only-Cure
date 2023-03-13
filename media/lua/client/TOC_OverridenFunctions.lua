@@ -235,7 +235,7 @@ function ISClothingExtraAction:isValid()
         for _, side in pairs (TOC.sideNames) do
             
             if location == side .. "Wrist" then
-                if limbsData[side .. "_LowerArm"].isCut then
+                if limbsData[TOC_Common.ConcatPartName(side, "LowerArm")].isCut then
                     return false
                 end
             end
