@@ -201,7 +201,7 @@ function ISWearClothing:isValid()
         local formattedItemName = string.format(itemToCheck, side)
 
         if string.find(itemFullType, formattedItemName) then
-            if limbsData[side .. "_UpperArm"].isCut then
+            if limbsData[TOC_Common.ConcatPartName(side, "UpperArm")].isCut then
                 return false
             end
         end
