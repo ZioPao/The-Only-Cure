@@ -6,9 +6,8 @@
     <m_Static>false</m_Static>
     <m_AllowRandomHue>false</m_AllowRandomHue>
     <m_AllowRandomTint>false</m_AllowRandomTint>
-    <m_Masks>3</m_Masks>
     <m_Masks>4</m_Masks>
-    <m_MasksFolder>none</m_MasksFolder>
+	<m_UnderlayMasksFolder>media/textures/Amputations/Forearm/Masks_L</m_UnderlayMasksFolder>
     
     <textureChoices>Amputations\Forearm\skin01_b</textureChoices>
     <textureChoices>Amputations\Forearm\skin02_b</textureChoices>
