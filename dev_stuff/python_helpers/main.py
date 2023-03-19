@@ -8,6 +8,26 @@ import os
 os.chdir(os.getcwd() + "\\dev_stuff\\python_helpers\\")
 
 
+def generate_file_table(name, guid):
+    root_guid = gfg.Element("files")
+
+    path_guidtable = gfg.Element("path")
+    path_guidtable.text = "media/clothing/clothingItems/" + name + ".xml"
+    root_guid.append(path_guidtable)
+
+    guid_guidtable = gfg.Element("guid")
+    guid_guidtable.text = guid
+    root_guid.append(guid_guidtable)
+
+    tree_guid = gfg.ElementTree(root_guid)
+
+    path_idtable = r'outputs/fileGuidTable.xml'
+
+    with open(path_idtable, "ab") as file:
+       tree_guid.write(file, encoding='utf-8', pretty_print=True) 
+
+
+
 
   
 
@@ -49,31 +69,8 @@ def generate_clothing_item(name, model, texture_choices):
     with open(path, "wb") as file:
         tree.write(file, encoding='utf-8', xml_declaration=True, pretty_print=True )
 
-
-    # Add a new part for guid table
-    # <files>
-    #     <path>media/clothing/clothingItems/Amputation_Right_Foot.xml</path>
-    #     <guid>2600c2ab-bfeb-49c3-b0b5-e21c6d83d5c2</guid>
-    # </files>
-
-    root_guid = gfg.Element("files")
-
-    path_guidtable = gfg.Element("path")
-    path_guidtable.text = "media/clothing/clothingItems/" + name + ".xml"
-    root_guid.append(path_guidtable)
-
-    guid_guidtable = gfg.Element("guid")
-    guid_guidtable.text = guid
-    root_guid.append(guid_guidtable)
-
-    tree_guid = gfg.ElementTree(root_guid)
-
-
-
-    path_idtable = r'outputs/fileGuidTable.xml'
-
-    with open(path_idtable, "ab") as file:
-       tree_guid.write(file, encoding='utf-8', pretty_print=True) 
+    # Generate the element inside the file table
+    generate_file_table(name, guid)
 
 def generate_recipe(recipe_name, result_name, recipe_items, on_create_func, time, skill_required, tooltip):
     root_element = f"recipe {recipe_name}\n"
@@ -105,7 +102,7 @@ def generate_recipe(recipe_name, result_name, recipe_items, on_create_func, time
         file.write(root_element)
         file.close()
 
-def generate_item(item_name, weight, item_type, display_category, display_name, icon, tooltip, can_have_holes, clothing_item=None, body_location = None, blood_location = None):
+def generate_item(item_name, weight, item_type, display_category, display_name, icon, tooltip, can_have_holes, clothing_item=None, body_location = None, blood_location = None, world_static_model = None):
     root_element = f"item {item_name}\n"
     root_element += "\t{\n"
 
@@ -122,6 +119,7 @@ def generate_item(item_name, weight, item_type, display_category, display_name, 
     root_element += f"\t\tIcon = {icon},\n"
     root_element += f"\t\tTooltip = {tooltip},\n"
     root_element += f"\t\tCanHaveHoles = {can_have_holes.lower()},\n"
+    root_element += f"\t\tWorldStaticModel = {world_static_model},\n"
 
     root_element += "\t}\n"
 
@@ -178,6 +176,8 @@ texture_types = ["Wooden", "Metal"]
 
 # CLOTHING GENERATION PASS
 def run_clothing_generation():
+
+    # TODO Fix this, model is wrong!
     for base_row in df_base.iterrows():
         for top_row in df_top.iterrows():
             base_name = base_row[1][0]
@@ -186,29 +186,54 @@ def run_clothing_generation():
             for limb in limbs:
                 for side in sides:
                     current_name = "Prost_" + side + "_" + limb + "_" + base_name + "_" + top_name
-                    texture_choices = {r"Amputations\\Upperarm\\skin01_b"}
-                    generate_clothing_item(current_name, "test", texture_choices)
+                    texture_choices = {r"Amputations\Upperarm\skin01_b"}
+                    generate_clothing_item(current_name, current_name, texture_choices)
 
-# ITEM GENERATION PASS - ASSEMBLED
+# CLOTHING ITEM GENERATION PASS - ASSEMBLED
 def run_assembled_item_generation():
     for base_row in df_base.iterrows():
         for top_row in df_top.iterrows():
-            base_id = base_row[1]["Base"]
-            top_id = top_row[1]["Top"]
-
-            item_id = "Prost_" + base_id + "_" + top_id
-            item_type = "Clothing"
-            weight = "{0:.2f}".format(float(base_row[1]["Weight"]) + float(top_row[1]["Weight"]))
-            display_category = "Prosthesis"
-            display_name = "Prosthesis - " + base_row[1]["Display Name"] + " and " + top_row[1]["Display Name"]
-
             for limb in limbs:
                 for side in sides:
+
+                    base_id = base_row[1]["Base"]
+                    top_id = top_row[1]["Top"]
+
+                    item_id = "Prost_" + side + "_" + limb + "_" + base_id + "_" + top_id
+                    item_type = "Clothing"
+                    weight = "{0:.2f}".format(float(base_row[1]["Weight"]) + float(top_row[1]["Weight"]))
+                    display_category = "Prosthesis"
+                    display_name = "Prosthesis - " + base_row[1]["Display Name"] + " and " + top_row[1]["Display Name"]
+
+
                     clothing_item_name = "Prost_" + side + "_" + limb + "_" + base_id + "_" + top_id
                     bl = prost_bodylocations[0] if side == "Right" else prost_bodylocations[1]
 
                     icon = "metalLeg"
                     generate_item(item_id, weight, item_type, display_category, display_name, icon, "TempTooltip", "false", clothing_item_name, bl, "Hands")
+
+# NORMAL ITEM
+def run_assembled_normal_item_generation():
+    for base_row in df_base.iterrows():
+        for top_row in df_top.iterrows():
+            base_id = base_row[1]["Base"]
+            top_id = top_row[1]["Top"]
+
+            item_id = base_id + "_" + top_id
+            item_type = "Normal"
+            weight = "{0:.2f}".format(float(base_row[1]["Weight"]) + float(top_row[1]["Weight"]))
+            display_category = "Prosthesis"
+            display_name = "Prosthesis - " + base_row[1]["Display Name"] + " and " + top_row[1]["Display Name"]
+
+            world_static_model = "TOC.MetalHook"
+
+            icon = "metalLeg"
+            generate_item(item_id, weight, item_type, display_category, display_name, icon, "TempTooltip", "false", None, None, "Hands", world_static_model)
+
+
+
+
+
 
 # ITEM GENERATION PASS - Single item to assemble stuff
 def run_single_part_item_generation():
@@ -271,4 +296,4 @@ def run_recipe_disassemble_generation():
 
 
 
-run_recipe_assemble_generation()
+run_assembled_normal_item_generation()

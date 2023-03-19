@@ -2,7 +2,7 @@ module TOC
 {
 	model MetalHook
     {
-        mesh = WorldItems/hook,
+        mesh = WorldItems/Prosthetic1_Hook,
         texture = WorldItems/metal,
         scale = 0.15,
     }

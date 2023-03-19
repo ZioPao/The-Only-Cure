@@ -78,6 +78,10 @@ function GenerateEquippedProsthesis(prosthesisItem, inventory, limb)
     --     durability_top, speed_top = GetProsthesisStats(top_table, prosthesis_name)
     end
 
+
+    local equippedProsthesisName = TocFindCorrectClothingProsthesis()
+
+
     local equippedProsthesis = inventory:AddItem(prosthesisName)
     equippedProsthesis:setCondition(prosthesisItem:getCondition())
 

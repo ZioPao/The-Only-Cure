@@ -155,178 +155,477 @@ imports
 /* Right Hand, Right Forearm, Right UpperArm,*/
 /* Left Hand, Left Forearm, Left Upperarm */
 
-    item Prost_Right_Hand_WoodenHook
-        {
-            Weight = 1,
-            Type = Clothing,
-            DisplayCategory = Prosthesis,
-            DisplayName	= Right Hand - Wooden Hook,
-            ClothingItem = Prost_Right_Hand_WoodenHook,
-            BodyLocation = TOC_ArmRightProsthesis,
-            BloodLocation = Hands,
-            Icon = woodenHook,
-            Tooltip = Tooltip_equip_prothesis_hand,
-            CanHaveHoles = false,
+item Prost_Left_Hand_WoodenBase_WoodenHook
+	{
+		Weight = 0.90,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Wooden Base and Wooden Hook,
+		ClothingItem = Prost_Left_Hand_WoodenBase_WoodenHook,
+		BodyLocation = TOC_ArmLeftProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Right_Hand_WoodenBase_WoodenHook
+	{
+		Weight = 0.90,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Wooden Base and Wooden Hook,
+		ClothingItem = Prost_Right_Hand_WoodenBase_WoodenHook,
+		BodyLocation = TOC_ArmRightProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Left_LowerArm_WoodenBase_WoodenHook
+	{
+		Weight = 0.90,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Wooden Base and Wooden Hook,
+		ClothingItem = Prost_Left_LowerArm_WoodenBase_WoodenHook,
+		BodyLocation = TOC_ArmLeftProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Right_LowerArm_WoodenBase_WoodenHook
+	{
+		Weight = 0.90,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Wooden Base and Wooden Hook,
+		ClothingItem = Prost_Right_LowerArm_WoodenBase_WoodenHook,
+		BodyLocation = TOC_ArmRightProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Left_Hand_WoodenBase_MetalHook
+	{
+		Weight = 1.20,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Wooden Base and Metal Hook,
+		ClothingItem = Prost_Left_Hand_WoodenBase_MetalHook,
+		BodyLocation = TOC_ArmLeftProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Right_Hand_WoodenBase_MetalHook
+	{
+		Weight = 1.20,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Wooden Base and Metal Hook,
+		ClothingItem = Prost_Right_Hand_WoodenBase_MetalHook,
+		BodyLocation = TOC_ArmRightProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Left_LowerArm_WoodenBase_MetalHook
+	{
+		Weight = 1.20,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Wooden Base and Metal Hook,
+		ClothingItem = Prost_Left_LowerArm_WoodenBase_MetalHook,
+		BodyLocation = TOC_ArmLeftProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Right_LowerArm_WoodenBase_MetalHook
+	{
+		Weight = 1.20,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Wooden Base and Metal Hook,
+		ClothingItem = Prost_Right_LowerArm_WoodenBase_MetalHook,
+		BodyLocation = TOC_ArmRightProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Left_Hand_WoodenBase_MetalHand
+	{
+		Weight = 1.40,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Wooden Base and Metal Hand,
+		ClothingItem = Prost_Left_Hand_WoodenBase_MetalHand,
+		BodyLocation = TOC_ArmLeftProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Right_Hand_WoodenBase_MetalHand
+	{
+		Weight = 1.40,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Wooden Base and Metal Hand,
+		ClothingItem = Prost_Right_Hand_WoodenBase_MetalHand,
+		BodyLocation = TOC_ArmRightProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Left_LowerArm_WoodenBase_MetalHand
+	{
+		Weight = 1.40,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Wooden Base and Metal Hand,
+		ClothingItem = Prost_Left_LowerArm_WoodenBase_MetalHand,
+		BodyLocation = TOC_ArmLeftProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Right_LowerArm_WoodenBase_MetalHand
+	{
+		Weight = 1.40,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Wooden Base and Metal Hand,
+		ClothingItem = Prost_Right_LowerArm_WoodenBase_MetalHand,
+		BodyLocation = TOC_ArmRightProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Left_Hand_MetalBase_WoodenHook
+	{
+		Weight = 1.40,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Metal Base and Wooden Hook,
+		ClothingItem = Prost_Left_Hand_MetalBase_WoodenHook,
+		BodyLocation = TOC_ArmLeftProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Right_Hand_MetalBase_WoodenHook
+	{
+		Weight = 1.40,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Metal Base and Wooden Hook,
+		ClothingItem = Prost_Right_Hand_MetalBase_WoodenHook,
+		BodyLocation = TOC_ArmRightProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Left_LowerArm_MetalBase_WoodenHook
+	{
+		Weight = 1.40,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Metal Base and Wooden Hook,
+		ClothingItem = Prost_Left_LowerArm_MetalBase_WoodenHook,
+		BodyLocation = TOC_ArmLeftProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Right_LowerArm_MetalBase_WoodenHook
+	{
+		Weight = 1.40,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Metal Base and Wooden Hook,
+		ClothingItem = Prost_Right_LowerArm_MetalBase_WoodenHook,
+		BodyLocation = TOC_ArmRightProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Left_Hand_MetalBase_MetalHook
+	{
+		Weight = 1.70,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Metal Base and Metal Hook,
+		ClothingItem = Prost_Left_Hand_MetalBase_MetalHook,
+		BodyLocation = TOC_ArmLeftProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Right_Hand_MetalBase_MetalHook
+	{
+		Weight = 1.70,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Metal Base and Metal Hook,
+		ClothingItem = Prost_Right_Hand_MetalBase_MetalHook,
+		BodyLocation = TOC_ArmRightProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Left_LowerArm_MetalBase_MetalHook
+	{
+		Weight = 1.70,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Metal Base and Metal Hook,
+		ClothingItem = Prost_Left_LowerArm_MetalBase_MetalHook,
+		BodyLocation = TOC_ArmLeftProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Right_LowerArm_MetalBase_MetalHook
+	{
+		Weight = 1.70,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Metal Base and Metal Hook,
+		ClothingItem = Prost_Right_LowerArm_MetalBase_MetalHook,
+		BodyLocation = TOC_ArmRightProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Left_Hand_MetalBase_MetalHand
+	{
+		Weight = 1.90,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Metal Base and Metal Hand,
+		ClothingItem = Prost_Left_Hand_MetalBase_MetalHand,
+		BodyLocation = TOC_ArmLeftProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Right_Hand_MetalBase_MetalHand
+	{
+		Weight = 1.90,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Metal Base and Metal Hand,
+		ClothingItem = Prost_Right_Hand_MetalBase_MetalHand,
+		BodyLocation = TOC_ArmRightProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Left_LowerArm_MetalBase_MetalHand
+	{
+		Weight = 1.90,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Metal Base and Metal Hand,
+		ClothingItem = Prost_Left_LowerArm_MetalBase_MetalHand,
+		BodyLocation = TOC_ArmLeftProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Right_LowerArm_MetalBase_MetalHand
+	{
+		Weight = 1.90,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Metal Base and Metal Hand,
+		ClothingItem = Prost_Right_LowerArm_MetalBase_MetalHand,
+		BodyLocation = TOC_ArmRightProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Left_Hand_LeatherBase_WoodenHook
+	{
+		Weight = 1.20,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Leather Base and Wooden Hook,
+		ClothingItem = Prost_Left_Hand_LeatherBase_WoodenHook,
+		BodyLocation = TOC_ArmLeftProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Right_Hand_LeatherBase_WoodenHook
+	{
+		Weight = 1.20,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Leather Base and Wooden Hook,
+		ClothingItem = Prost_Right_Hand_LeatherBase_WoodenHook,
+		BodyLocation = TOC_ArmRightProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Left_LowerArm_LeatherBase_WoodenHook
+	{
+		Weight = 1.20,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Leather Base and Wooden Hook,
+		ClothingItem = Prost_Left_LowerArm_LeatherBase_WoodenHook,
+		BodyLocation = TOC_ArmLeftProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Right_LowerArm_LeatherBase_WoodenHook
+	{
+		Weight = 1.20,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Leather Base and Wooden Hook,
+		ClothingItem = Prost_Right_LowerArm_LeatherBase_WoodenHook,
+		BodyLocation = TOC_ArmRightProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Left_Hand_LeatherBase_MetalHook
+	{
+		Weight = 1.50,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Leather Base and Metal Hook,
+		ClothingItem = Prost_Left_Hand_LeatherBase_MetalHook,
+		BodyLocation = TOC_ArmLeftProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Right_Hand_LeatherBase_MetalHook
+	{
+		Weight = 1.50,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Leather Base and Metal Hook,
+		ClothingItem = Prost_Right_Hand_LeatherBase_MetalHook,
+		BodyLocation = TOC_ArmRightProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Left_LowerArm_LeatherBase_MetalHook
+	{
+		Weight = 1.50,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Leather Base and Metal Hook,
+		ClothingItem = Prost_Left_LowerArm_LeatherBase_MetalHook,
+		BodyLocation = TOC_ArmLeftProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Right_LowerArm_LeatherBase_MetalHook
+	{
+		Weight = 1.50,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Leather Base and Metal Hook,
+		ClothingItem = Prost_Right_LowerArm_LeatherBase_MetalHook,
+		BodyLocation = TOC_ArmRightProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Left_Hand_LeatherBase_MetalHand
+	{
+		Weight = 1.70,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Leather Base and Metal Hand,
+		ClothingItem = Prost_Left_Hand_LeatherBase_MetalHand,
+		BodyLocation = TOC_ArmLeftProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Right_Hand_LeatherBase_MetalHand
+	{
+		Weight = 1.70,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Leather Base and Metal Hand,
+		ClothingItem = Prost_Right_Hand_LeatherBase_MetalHand,
+		BodyLocation = TOC_ArmRightProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Left_LowerArm_LeatherBase_MetalHand
+	{
+		Weight = 1.70,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Leather Base and Metal Hand,
+		ClothingItem = Prost_Left_LowerArm_LeatherBase_MetalHand,
+		BodyLocation = TOC_ArmLeftProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
+item Prost_Right_LowerArm_LeatherBase_MetalHand
+	{
+		Weight = 1.70,
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Leather Base and Metal Hand,
+		ClothingItem = Prost_Right_LowerArm_LeatherBase_MetalHand,
+		BodyLocation = TOC_ArmRightProsthesis,
+		BloodLocation = Hands,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+	}
 
-        }
 
-    item Prost_Left_Hand_WoodenHook
-        {
-            Weight = 1,
-            Type = Clothing,
-            DisplayCategory = Prosthesis,
-            DisplayName	= Left Hand - Wooden Hook,
-            ClothingItem = Prost_Left_Hand_WoodenHook,
-            BodyLocation = TOC_ArmLeftProsthesis,
-            BloodLocation = Hands,
-            Icon = woodenHook,
-            Tooltip = Tooltip_equip_prothesis_hand,
-            WaterResistance = 15,
-            CanHaveHoles = false,
 
-        }
-
-    item Prost_Right_Hand_MetalHook
-        {
-            Weight = 0.5,
-            Type = Clothing,
-            DisplayCategory = Prosthesis,
-            DisplayName	= Right Hand - Metal Hook,
-            ClothingItem = Prost_Right_Hand_MetalHook,
-            BodyLocation = TOC_ArmRightProsthesis,
-            BloodLocation = Hands,
-            Icon = metalHook,
-            Tooltip = Tooltip_equip_prothesis_hand,
-            WaterResistance = 13,
-            CanHaveHoles = false,
-        }
-
-    item Prost_Left_Hand_MetalHook
-        {
-            Weight = 0.5,
-            Type = Clothing,
-            DisplayCategory = Prosthesis,
-            DisplayName	= Left Hand - Metal Hook,
-            ClothingItem = Prost_Left_Hand_MetalHook,
-            BodyLocation = TOC_ArmLeftProsthesis,
-            BloodLocation = Hands,
-            Icon = metalHook,
-            Tooltip = Tooltip_equip_prothesis_hand,
-            CanHaveHoles = false,
-        }
-
-    item Prost_Right_Hand_MetalHand
-        {
-            Weight = 0.3,
-            Type = Clothing,
-            DisplayCategory = Prosthesis,
-            DisplayName	= Right Hand - Metal Hand,
-            ClothingItem = Prost_Right_Hand_MetalHand,
-            BodyLocation = TOC_ArmRightProsthesis,
-            BloodLocation = Hands,
-            Icon = metalHand,
-            Tooltip = Tooltip_equip_prothesis_hand,
-            CanHaveHoles = false,
-        }
-
-    item Prost_Left_Hand_MetalHand
-        {
-            Weight = 0.3,
-            Type = Clothing,
-            DisplayCategory = Prosthesis,
-            DisplayName	= Left Hand - Metal Hand,
-            ClothingItem = Prost_Left_Hand_MetalHand,
-            BodyLocation = TOC_ArmLeftProsthesis,
-            BloodLocation = Hands,
-            Icon = metalHand,
-            Tooltip = Tooltip_equip_prothesis_hand",
-            CanHaveHoles = false,
-        }
-
-    item Prost_Right_LowerArm_WoodenHook
-        {
-            Weight = 2,
-            Type = Clothing,
-            DisplayCategory = Prosthesis,
-            DisplayName	= Right Forearm - Wooden Hook,
-            ClothingItem = Prost_Right_LowerArm_WoodenHook,
-            BodyLocation = TOC_ArmRightProsthesis,
-            BloodLocation = LowerArms;Hands,
-            Icon = woodenHook,
-            Tooltip = Tooltip_equip_prothesis_fore,
-            CanHaveHoles = false,
-        }
-
-    item Prost_Left_LowerArm_WoodenHook
-        {
-            Weight = 2,
-            Type = Clothing,
-            DisplayCategory = Prosthesis,
-            DisplayName	= Left Forearm - Wooden Hook,
-            ClothingItem = Prost_Left_LowerArm_WoodenHook,
-            BodyLocation = TOC_ArmLeftProsthesis,
-            BloodLocation = LowerArms;Hands,
-            Icon = woodenHook,
-            Tooltip = Tooltip_equip_prothesis_fore,
-            CanHaveHoles = false,
-        }
-
-    item Prost_Right_LowerArm_MetalHook
-        {
-            Weight = 1.5,
-            Type = Clothing,
-            DisplayCategory = Prosthesis,
-            DisplayName	= Right Forearm - Metal Hook,
-            ClothingItem = Prost_Right_LowerArm_MetalHook,
-            BodyLocation = TOC_ArmRightProsthesis,
-            BloodLocation = LowerArms;Hands,
-            Icon = metalHook,
-            Tooltip = Tooltip_equip_prothesis_fore,
-            CanHaveHoles = false,
-        }
-
-    item Prost_Left_LowerArm_MetalHook
-        {
-            Weight = 1.5,
-            Type = Clothing,
-            DisplayCategory = Prosthesis,
-            DisplayName	= Left Forearm - Metal Hook,
-            ClothingItem = Prost_Left_LowerArm_MetalHook,
-            BodyLocation = TOC_ArmLeftProsthesis,
-            BloodLocation = LowerArms;Hands,
-
-            Icon = metalHook,
-            Tooltip = Tooltip_equip_prothesis_fore,
-            CanHaveHoles = false,
-        }
-
-    item Prost_Right_LowerArm_MetalHand 
-        {
-            Weight = 1.2,
-            Type = Clothing,
-            DisplayCategory = Prosthesis,
-            DisplayName	= Right Forearm - Metal Hand,
-            ClothingItem = Prost_Right_LowerArm_MetalHand,
-            BodyLocation = TOC_ArmRightProsthesis,
-            BloodLocation = LowerArms;Hands,
-            Icon = metalHand,
-            Tooltip = Tooltip_equip_prothesis_fore,
-            CanHaveHoles = false,
-        }
-
-    item Prost_Left_LowerArm_MetalHand
-        {
-            Weight = 1.2,
-            Type = Clothing,
-            DisplayCategory = Prosthesis,
-            DisplayName	= Left Forearm - Metal Hand,
-            ClothingItem = Prost_Left_LowerArm_MetalHand,
-            BodyLocation = TOC_ArmLeftProsthesis,
-            BloodLocation = LowerArms;Hands,
-            Icon = metalHand,
-            Tooltip = Tooltip_equip_prothesis_fore,
-            CanHaveHoles = false,
-        }
 
 /************************ Prosthesis base items ************************/
 
@@ -393,479 +692,106 @@ item ProstPart_MetalHand
 
 
 /************************ Prosthesis full items ************************/
-item Prost_WoodenBase_WoodenHook
+
+item WoodenBase_WoodenHook
 	{
 		Weight = 0.90,
-		Type = Clothing,
+		Type = Normal,
 		DisplayCategory = Prosthesis,
 		DisplayName = Prosthesis - Wooden Base and Wooden Hook,
-		ClothingItem = Prost_Left_Hand_WoodenBase_WoodenHook,
-		BodyLocation = TOC_ArmLeftProsthesis,
-		BloodLocation = Hands,
 		Icon = metalLeg,
 		Tooltip = TempTooltip,
 		CanHaveHoles = false,
+		WorldStaticModel = TOC.MetalHook,
 	}
-item Prost_WoodenBase_WoodenHook
-	{
-		Weight = 0.90,
-		Type = Clothing,
-		DisplayCategory = Prosthesis,
-		DisplayName = Prosthesis - Wooden Base and Wooden Hook,
-		ClothingItem = Prost_Right_Hand_WoodenBase_WoodenHook,
-		BodyLocation = TOC_ArmRightProsthesis,
-		BloodLocation = Hands,
-		Icon = metalLeg,
-		Tooltip = TempTooltip,
-		CanHaveHoles = false,
-	}
-item Prost_WoodenBase_WoodenHook
-	{
-		Weight = 0.90,
-		Type = Clothing,
-		DisplayCategory = Prosthesis,
-		DisplayName = Prosthesis - Wooden Base and Wooden Hook,
-		ClothingItem = Prost_Left_LowerArm_WoodenBase_WoodenHook,
-		BodyLocation = TOC_ArmLeftProsthesis,
-		BloodLocation = Hands,
-		Icon = metalLeg,
-		Tooltip = TempTooltip,
-		CanHaveHoles = false,
-	}
-item Prost_WoodenBase_WoodenHook
-	{
-		Weight = 0.90,
-		Type = Clothing,
-		DisplayCategory = Prosthesis,
-		DisplayName = Prosthesis - Wooden Base and Wooden Hook,
-		ClothingItem = Prost_Right_LowerArm_WoodenBase_WoodenHook,
-		BodyLocation = TOC_ArmRightProsthesis,
-		BloodLocation = Hands,
-		Icon = metalLeg,
-		Tooltip = TempTooltip,
-		CanHaveHoles = false,
-	}
-item Prost_WoodenBase_MetalHook
+item WoodenBase_MetalHook
 	{
 		Weight = 1.20,
-		Type = Clothing,
+		Type = Normal,
 		DisplayCategory = Prosthesis,
 		DisplayName = Prosthesis - Wooden Base and Metal Hook,
-		ClothingItem = Prost_Left_Hand_WoodenBase_MetalHook,
-		BodyLocation = TOC_ArmLeftProsthesis,
-		BloodLocation = Hands,
 		Icon = metalLeg,
 		Tooltip = TempTooltip,
 		CanHaveHoles = false,
+		WorldStaticModel = TOC.MetalHook,
 	}
-item Prost_WoodenBase_MetalHook
-	{
-		Weight = 1.20,
-		Type = Clothing,
-		DisplayCategory = Prosthesis,
-		DisplayName = Prosthesis - Wooden Base and Metal Hook,
-		ClothingItem = Prost_Right_Hand_WoodenBase_MetalHook,
-		BodyLocation = TOC_ArmRightProsthesis,
-		BloodLocation = Hands,
-		Icon = metalLeg,
-		Tooltip = TempTooltip,
-		CanHaveHoles = false,
-	}
-item Prost_WoodenBase_MetalHook
-	{
-		Weight = 1.20,
-		Type = Clothing,
-		DisplayCategory = Prosthesis,
-		DisplayName = Prosthesis - Wooden Base and Metal Hook,
-		ClothingItem = Prost_Left_LowerArm_WoodenBase_MetalHook,
-		BodyLocation = TOC_ArmLeftProsthesis,
-		BloodLocation = Hands,
-		Icon = metalLeg,
-		Tooltip = TempTooltip,
-		CanHaveHoles = false,
-	}
-item Prost_WoodenBase_MetalHook
-	{
-		Weight = 1.20,
-		Type = Clothing,
-		DisplayCategory = Prosthesis,
-		DisplayName = Prosthesis - Wooden Base and Metal Hook,
-		ClothingItem = Prost_Right_LowerArm_WoodenBase_MetalHook,
-		BodyLocation = TOC_ArmRightProsthesis,
-		BloodLocation = Hands,
-		Icon = metalLeg,
-		Tooltip = TempTooltip,
-		CanHaveHoles = false,
-	}
-item Prost_WoodenBase_MetalHand
+item WoodenBase_MetalHand
 	{
 		Weight = 1.40,
-		Type = Clothing,
+		Type = Normal,
 		DisplayCategory = Prosthesis,
 		DisplayName = Prosthesis - Wooden Base and Metal Hand,
-		ClothingItem = Prost_Left_Hand_WoodenBase_MetalHand,
-		BodyLocation = TOC_ArmLeftProsthesis,
-		BloodLocation = Hands,
 		Icon = metalLeg,
 		Tooltip = TempTooltip,
 		CanHaveHoles = false,
+		WorldStaticModel = TOC.MetalHook,
 	}
-item Prost_WoodenBase_MetalHand
+item MetalBase_WoodenHook
 	{
 		Weight = 1.40,
-		Type = Clothing,
-		DisplayCategory = Prosthesis,
-		DisplayName = Prosthesis - Wooden Base and Metal Hand,
-		ClothingItem = Prost_Right_Hand_WoodenBase_MetalHand,
-		BodyLocation = TOC_ArmRightProsthesis,
-		BloodLocation = Hands,
-		Icon = metalLeg,
-		Tooltip = TempTooltip,
-		CanHaveHoles = false,
-	}
-item Prost_WoodenBase_MetalHand
-	{
-		Weight = 1.40,
-		Type = Clothing,
-		DisplayCategory = Prosthesis,
-		DisplayName = Prosthesis - Wooden Base and Metal Hand,
-		ClothingItem = Prost_Left_LowerArm_WoodenBase_MetalHand,
-		BodyLocation = TOC_ArmLeftProsthesis,
-		BloodLocation = Hands,
-		Icon = metalLeg,
-		Tooltip = TempTooltip,
-		CanHaveHoles = false,
-	}
-item Prost_WoodenBase_MetalHand
-	{
-		Weight = 1.40,
-		Type = Clothing,
-		DisplayCategory = Prosthesis,
-		DisplayName = Prosthesis - Wooden Base and Metal Hand,
-		ClothingItem = Prost_Right_LowerArm_WoodenBase_MetalHand,
-		BodyLocation = TOC_ArmRightProsthesis,
-		BloodLocation = Hands,
-		Icon = metalLeg,
-		Tooltip = TempTooltip,
-		CanHaveHoles = false,
-	}
-item Prost_MetalBase_WoodenHook
-	{
-		Weight = 1.40,
-		Type = Clothing,
+		Type = Normal,
 		DisplayCategory = Prosthesis,
 		DisplayName = Prosthesis - Metal Base and Wooden Hook,
-		ClothingItem = Prost_Left_Hand_MetalBase_WoodenHook,
-		BodyLocation = TOC_ArmLeftProsthesis,
-		BloodLocation = Hands,
 		Icon = metalLeg,
 		Tooltip = TempTooltip,
 		CanHaveHoles = false,
+		WorldStaticModel = TOC.MetalHook,
 	}
-item Prost_MetalBase_WoodenHook
-	{
-		Weight = 1.40,
-		Type = Clothing,
-		DisplayCategory = Prosthesis,
-		DisplayName = Prosthesis - Metal Base and Wooden Hook,
-		ClothingItem = Prost_Right_Hand_MetalBase_WoodenHook,
-		BodyLocation = TOC_ArmRightProsthesis,
-		BloodLocation = Hands,
-		Icon = metalLeg,
-		Tooltip = TempTooltip,
-		CanHaveHoles = false,
-	}
-item Prost_MetalBase_WoodenHook
-	{
-		Weight = 1.40,
-		Type = Clothing,
-		DisplayCategory = Prosthesis,
-		DisplayName = Prosthesis - Metal Base and Wooden Hook,
-		ClothingItem = Prost_Left_LowerArm_MetalBase_WoodenHook,
-		BodyLocation = TOC_ArmLeftProsthesis,
-		BloodLocation = Hands,
-		Icon = metalLeg,
-		Tooltip = TempTooltip,
-		CanHaveHoles = false,
-	}
-item Prost_MetalBase_WoodenHook
-	{
-		Weight = 1.40,
-		Type = Clothing,
-		DisplayCategory = Prosthesis,
-		DisplayName = Prosthesis - Metal Base and Wooden Hook,
-		ClothingItem = Prost_Right_LowerArm_MetalBase_WoodenHook,
-		BodyLocation = TOC_ArmRightProsthesis,
-		BloodLocation = Hands,
-		Icon = metalLeg,
-		Tooltip = TempTooltip,
-		CanHaveHoles = false,
-	}
-item Prost_MetalBase_MetalHook
+item MetalBase_MetalHook
 	{
 		Weight = 1.70,
-		Type = Clothing,
+		Type = Normal,
 		DisplayCategory = Prosthesis,
 		DisplayName = Prosthesis - Metal Base and Metal Hook,
-		ClothingItem = Prost_Left_Hand_MetalBase_MetalHook,
-		BodyLocation = TOC_ArmLeftProsthesis,
-		BloodLocation = Hands,
 		Icon = metalLeg,
 		Tooltip = TempTooltip,
 		CanHaveHoles = false,
+		WorldStaticModel = TOC.MetalHook,
 	}
-item Prost_MetalBase_MetalHook
-	{
-		Weight = 1.70,
-		Type = Clothing,
-		DisplayCategory = Prosthesis,
-		DisplayName = Prosthesis - Metal Base and Metal Hook,
-		ClothingItem = Prost_Right_Hand_MetalBase_MetalHook,
-		BodyLocation = TOC_ArmRightProsthesis,
-		BloodLocation = Hands,
-		Icon = metalLeg,
-		Tooltip = TempTooltip,
-		CanHaveHoles = false,
-	}
-item Prost_MetalBase_MetalHook
-	{
-		Weight = 1.70,
-		Type = Clothing,
-		DisplayCategory = Prosthesis,
-		DisplayName = Prosthesis - Metal Base and Metal Hook,
-		ClothingItem = Prost_Left_LowerArm_MetalBase_MetalHook,
-		BodyLocation = TOC_ArmLeftProsthesis,
-		BloodLocation = Hands,
-		Icon = metalLeg,
-		Tooltip = TempTooltip,
-		CanHaveHoles = false,
-	}
-item Prost_MetalBase_MetalHook
-	{
-		Weight = 1.70,
-		Type = Clothing,
-		DisplayCategory = Prosthesis,
-		DisplayName = Prosthesis - Metal Base and Metal Hook,
-		ClothingItem = Prost_Right_LowerArm_MetalBase_MetalHook,
-		BodyLocation = TOC_ArmRightProsthesis,
-		BloodLocation = Hands,
-		Icon = metalLeg,
-		Tooltip = TempTooltip,
-		CanHaveHoles = false,
-	}
-item Prost_MetalBase_MetalHand
+item MetalBase_MetalHand
 	{
 		Weight = 1.90,
-		Type = Clothing,
+		Type = Normal,
 		DisplayCategory = Prosthesis,
 		DisplayName = Prosthesis - Metal Base and Metal Hand,
-		ClothingItem = Prost_Left_Hand_MetalBase_MetalHand,
-		BodyLocation = TOC_ArmLeftProsthesis,
-		BloodLocation = Hands,
 		Icon = metalLeg,
 		Tooltip = TempTooltip,
 		CanHaveHoles = false,
+		WorldStaticModel = TOC.MetalHook,
 	}
-item Prost_MetalBase_MetalHand
-	{
-		Weight = 1.90,
-		Type = Clothing,
-		DisplayCategory = Prosthesis,
-		DisplayName = Prosthesis - Metal Base and Metal Hand,
-		ClothingItem = Prost_Right_Hand_MetalBase_MetalHand,
-		BodyLocation = TOC_ArmRightProsthesis,
-		BloodLocation = Hands,
-		Icon = metalLeg,
-		Tooltip = TempTooltip,
-		CanHaveHoles = false,
-	}
-item Prost_MetalBase_MetalHand
-	{
-		Weight = 1.90,
-		Type = Clothing,
-		DisplayCategory = Prosthesis,
-		DisplayName = Prosthesis - Metal Base and Metal Hand,
-		ClothingItem = Prost_Left_LowerArm_MetalBase_MetalHand,
-		BodyLocation = TOC_ArmLeftProsthesis,
-		BloodLocation = Hands,
-		Icon = metalLeg,
-		Tooltip = TempTooltip,
-		CanHaveHoles = false,
-	}
-item Prost_MetalBase_MetalHand
-	{
-		Weight = 1.90,
-		Type = Clothing,
-		DisplayCategory = Prosthesis,
-		DisplayName = Prosthesis - Metal Base and Metal Hand,
-		ClothingItem = Prost_Right_LowerArm_MetalBase_MetalHand,
-		BodyLocation = TOC_ArmRightProsthesis,
-		BloodLocation = Hands,
-		Icon = metalLeg,
-		Tooltip = TempTooltip,
-		CanHaveHoles = false,
-	}
-item Prost_LeatherBase_WoodenHook
+item LeatherBase_WoodenHook
 	{
 		Weight = 1.20,
-		Type = Clothing,
+		Type = Normal,
 		DisplayCategory = Prosthesis,
 		DisplayName = Prosthesis - Leather Base and Wooden Hook,
-		ClothingItem = Prost_Left_Hand_LeatherBase_WoodenHook,
-		BodyLocation = TOC_ArmLeftProsthesis,
-		BloodLocation = Hands,
 		Icon = metalLeg,
 		Tooltip = TempTooltip,
 		CanHaveHoles = false,
+		WorldStaticModel = TOC.MetalHook,
 	}
-item Prost_LeatherBase_WoodenHook
-	{
-		Weight = 1.20,
-		Type = Clothing,
-		DisplayCategory = Prosthesis,
-		DisplayName = Prosthesis - Leather Base and Wooden Hook,
-		ClothingItem = Prost_Right_Hand_LeatherBase_WoodenHook,
-		BodyLocation = TOC_ArmRightProsthesis,
-		BloodLocation = Hands,
-		Icon = metalLeg,
-		Tooltip = TempTooltip,
-		CanHaveHoles = false,
-	}
-item Prost_LeatherBase_WoodenHook
-	{
-		Weight = 1.20,
-		Type = Clothing,
-		DisplayCategory = Prosthesis,
-		DisplayName = Prosthesis - Leather Base and Wooden Hook,
-		ClothingItem = Prost_Left_LowerArm_LeatherBase_WoodenHook,
-		BodyLocation = TOC_ArmLeftProsthesis,
-		BloodLocation = Hands,
-		Icon = metalLeg,
-		Tooltip = TempTooltip,
-		CanHaveHoles = false,
-	}
-item Prost_LeatherBase_WoodenHook
-	{
-		Weight = 1.20,
-		Type = Clothing,
-		DisplayCategory = Prosthesis,
-		DisplayName = Prosthesis - Leather Base and Wooden Hook,
-		ClothingItem = Prost_Right_LowerArm_LeatherBase_WoodenHook,
-		BodyLocation = TOC_ArmRightProsthesis,
-		BloodLocation = Hands,
-		Icon = metalLeg,
-		Tooltip = TempTooltip,
-		CanHaveHoles = false,
-	}
-item Prost_LeatherBase_MetalHook
+item LeatherBase_MetalHook
 	{
 		Weight = 1.50,
-		Type = Clothing,
+		Type = Normal,
 		DisplayCategory = Prosthesis,
 		DisplayName = Prosthesis - Leather Base and Metal Hook,
-		ClothingItem = Prost_Left_Hand_LeatherBase_MetalHook,
-		BodyLocation = TOC_ArmLeftProsthesis,
-		BloodLocation = Hands,
 		Icon = metalLeg,
 		Tooltip = TempTooltip,
 		CanHaveHoles = false,
+		WorldStaticModel = TOC.MetalHook,
 	}
-item Prost_LeatherBase_MetalHook
-	{
-		Weight = 1.50,
-		Type = Clothing,
-		DisplayCategory = Prosthesis,
-		DisplayName = Prosthesis - Leather Base and Metal Hook,
-		ClothingItem = Prost_Right_Hand_LeatherBase_MetalHook,
-		BodyLocation = TOC_ArmRightProsthesis,
-		BloodLocation = Hands,
-		Icon = metalLeg,
-		Tooltip = TempTooltip,
-		CanHaveHoles = false,
-	}
-item Prost_LeatherBase_MetalHook
-	{
-		Weight = 1.50,
-		Type = Clothing,
-		DisplayCategory = Prosthesis,
-		DisplayName = Prosthesis - Leather Base and Metal Hook,
-		ClothingItem = Prost_Left_LowerArm_LeatherBase_MetalHook,
-		BodyLocation = TOC_ArmLeftProsthesis,
-		BloodLocation = Hands,
-		Icon = metalLeg,
-		Tooltip = TempTooltip,
-		CanHaveHoles = false,
-	}
-item Prost_LeatherBase_MetalHook
-	{
-		Weight = 1.50,
-		Type = Clothing,
-		DisplayCategory = Prosthesis,
-		DisplayName = Prosthesis - Leather Base and Metal Hook,
-		ClothingItem = Prost_Right_LowerArm_LeatherBase_MetalHook,
-		BodyLocation = TOC_ArmRightProsthesis,
-		BloodLocation = Hands,
-		Icon = metalLeg,
-		Tooltip = TempTooltip,
-		CanHaveHoles = false,
-	}
-item Prost_LeatherBase_MetalHand
+item LeatherBase_MetalHand
 	{
 		Weight = 1.70,
-		Type = Clothing,
+		Type = Normal,
 		DisplayCategory = Prosthesis,
 		DisplayName = Prosthesis - Leather Base and Metal Hand,
-		ClothingItem = Prost_Left_Hand_LeatherBase_MetalHand,
-		BodyLocation = TOC_ArmLeftProsthesis,
-		BloodLocation = Hands,
 		Icon = metalLeg,
 		Tooltip = TempTooltip,
 		CanHaveHoles = false,
+		WorldStaticModel = TOC.MetalHook,
 	}
-item Prost_LeatherBase_MetalHand
-	{
-		Weight = 1.70,
-		Type = Clothing,
-		DisplayCategory = Prosthesis,
-		DisplayName = Prosthesis - Leather Base and Metal Hand,
-		ClothingItem = Prost_Right_Hand_LeatherBase_MetalHand,
-		BodyLocation = TOC_ArmRightProsthesis,
-		BloodLocation = Hands,
-		Icon = metalLeg,
-		Tooltip = TempTooltip,
-		CanHaveHoles = false,
-	}
-item Prost_LeatherBase_MetalHand
-	{
-		Weight = 1.70,
-		Type = Clothing,
-		DisplayCategory = Prosthesis,
-		DisplayName = Prosthesis - Leather Base and Metal Hand,
-		ClothingItem = Prost_Left_LowerArm_LeatherBase_MetalHand,
-		BodyLocation = TOC_ArmLeftProsthesis,
-		BloodLocation = Hands,
-		Icon = metalLeg,
-		Tooltip = TempTooltip,
-		CanHaveHoles = false,
-	}
-item Prost_LeatherBase_MetalHand
-	{
-		Weight = 1.70,
-		Type = Clothing,
-		DisplayCategory = Prosthesis,
-		DisplayName = Prosthesis - Leather Base and Metal Hand,
-		ClothingItem = Prost_Right_LowerArm_LeatherBase_MetalHand,
-		BodyLocation = TOC_ArmRightProsthesis,
-		BloodLocation = Hands,
-		Icon = metalLeg,
-		Tooltip = TempTooltip,
-		CanHaveHoles = false,
-	}
-
-
-
-
-
 
 
 
