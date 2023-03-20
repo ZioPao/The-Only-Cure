@@ -50,9 +50,9 @@ end
 ---comment
 ---@param prosthesisItem any Normal item
 ---@param inventory any player inventory
----@param limb any
+---@param partName any
 ---@return any equipped_prosthesis clothing item equipped prosthesis
-function GenerateEquippedProsthesis(prosthesisItem, inventory, limb)
+function GenerateEquippedProsthesis(prosthesisItem, inventory, partName)
     -- TODO Durability should be decided from the clothing item xml. Same thing for disassembling stuff
     -- TODO some stuff should be defined by the limb, like -10 if forearm in speed
     -- when we equip a prosthesis, we're gonna pass these parameters to the newly generated clothing item
@@ -78,11 +78,11 @@ function GenerateEquippedProsthesis(prosthesisItem, inventory, limb)
     --     durability_top, speed_top = GetProsthesisStats(top_table, prosthesis_name)
     end
 
+    local baseName = prosthesisItem:getType()
+    local equippedProsthesisName = TocFindCorrectClothingProsthesis(baseName, partName)
 
-    local equippedProsthesisName = TocFindCorrectClothingProsthesis()
 
-
-    local equippedProsthesis = inventory:AddItem(prosthesisName)
+    local equippedProsthesis = inventory:AddItem(equippedProsthesisName)
     equippedProsthesis:setCondition(prosthesisItem:getCondition())
 
     equippedProsthesis:getModData().TOC = {

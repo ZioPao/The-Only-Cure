@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <clothingItem>
-  <m_MaleModel>Prost_Right_LowerArm_Hook_Male</m_MaleModel>
-  <m_FemaleModel>Prost_Right_LowerArm_Hook_Female</m_FemaleModel>
+  <m_MaleModel>Prost_Right_LowerArm_Base_Hook_Male</m_MaleModel>
+  <m_FemaleModel>Prost_Right_LowerArm_Base_Hook_Female</m_FemaleModel>
   <m_GUID>1eb56768-d7ef-46e4-ac07-91d0e43d15fb</m_GUID>
   <m_Static>false</m_Static>
   <m_AllowRandomTint>false</m_AllowRandomTint>

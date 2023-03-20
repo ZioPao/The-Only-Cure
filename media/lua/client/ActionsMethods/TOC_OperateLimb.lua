@@ -58,12 +58,13 @@ function TOC.OperateLimb(partName, surgeonFactor, useOven)
     if limbsData[partName].isOperated == false and limbsData[partName].isCut == true then
         limbsData[partName].isOperated = true
         limbsData[partName].cicatrizationTime = limbsData[partName].cicatrizationTime - (surgeonFactor * 200)
-        if useOven then limbsData[partName].is_cauterized = true end
-        for _, depended_v in pairs(limbParameters[partName].depends_on) do
-            limbsData[depended_v].isOperated = true
-            limbsData[depended_v].cicatrizationTime = limbsData[depended_v].cicatrizationTime -
-                (surgeonFactor * 200)
-            if useOven then limbsData[depended_v].isCauterized = true end
+        if useOven then limbsData[partName].isCauterized = true end
+        for _, dependedPart in pairs(limbParameters[partName].dependsOn) do
+            limbsData[dependedPart].isOperated = true
+            -- TODO We should not have cicatrization time for depended parts.
+            -- limbsData[dependedPart].cicatrizationTime = limbsData[dependedPart].cicatrizationTime -
+            --     (surgeonFactor * 200)
+            if useOven then limbsData[dependedPart].isCauterized = true end
         end
 
     end

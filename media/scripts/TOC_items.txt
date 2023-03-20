@@ -555,7 +555,7 @@ item Prost_Left_LowerArm_LeatherBase_MetalHook
 		BodyLocation = TOC_ArmLeftProsthesis,
 		BloodLocation = Hands,
 		Icon = metalLeg,
-		Tooltip = TempTooltip,
+		Tooltip = Tooltip test lower arm test whatever,
 		CanHaveHoles = false,
 	}
 item Prost_Right_LowerArm_LeatherBase_MetalHook

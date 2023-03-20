@@ -16,7 +16,7 @@ function TOC.EquipProsthesis(partName, prosthesisItem, prosthesisBaseName)
     local player = getPlayer()
     local TOCModData = player:getModData().TOC
 
-    local equippedProsthesis = GenerateEquippedProsthesis(prosthesisItem, player:getInventory(), "Hand")
+    local equippedProsthesis = GenerateEquippedProsthesis(prosthesisItem, player:getInventory(), partName)
 
 
     --print("TOC: Test durability new item " .. added_prosthesis_mod_data.TOC.durability)
@@ -34,7 +34,7 @@ function TOC.EquipProsthesis(partName, prosthesisItem, prosthesisBaseName)
 
             -- TODO Change the value passed, it's wrong
             --TOCModData.limbs[partName].equippedProsthesis = TOCModData.Prosthesis[prosthesisBaseName][partName]
-
+            
             if player:isFemale() then
                 equippedProsthesis:getVisual():setTextureChoice(1)
             else

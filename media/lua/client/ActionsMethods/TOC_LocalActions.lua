@@ -36,8 +36,9 @@ function TOC_LocalActions.EquipProsthesis(_, player, partName)
     local surgeonInv = player:getInventory()
 
 
+
     -- TODO Find a better way to filter objects. Disabled for now and only gets LeatherBase
-    local prosthesisToEquip = surgeonInv:getItemFromType('TOC.ProstNormal_LeatherBase_MetalHook')
+    local prosthesisToEquip = surgeonInv:getItemFromType('TOC.LeatherBase_MetalHook')
     if prosthesisToEquip then
         ISTimedActionQueue.add(TOC_InstallProsthesisAction:new(player, player, prosthesisToEquip, partName))
     else
