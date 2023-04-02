@@ -45,13 +45,13 @@ local function ManagePhantomPain(player, TOCModData)
     for _, partName in pairs(TOC_Common.GetPartNames()) do
 
         if limbsData[partName].isCut and limbsData[partName].isAmputationShown and ZombRand(1, 100) < 10 then
-            local body_part = body_damage:getBodyPart(TOC_Common.GetBodyPartFromPartName(partName))
-            local added_pain
-            if limbsData[partName].isCauterized then added_pain = 60 else added_pain = 30 end
-            body_part:setAdditionalPain(ZombRand(1, added_pain))
+            local bodyPart = body_damage:getBodyPart(TOC_Common.GetBodyPartFromPartName(partName))
+            local addedPain
+            if limbsData[partName].isCauterized then addedPain = 60 else addedPain = 30 end
+            bodyPart:setAdditionalPain(ZombRand(1, addedPain))
             for _, depended_v in pairs(limbParameters[partName].dependsOn) do
-                if limbsData[depended_v].isCauterized then added_pain = 60 else added_pain = 30 end
-                body_part:setAdditionalPain(ZombRand(1, added_pain))
+                if limbsData[depended_v].isCauterized then addedPain = 60 else addedPain = 30 end
+                bodyPart:setAdditionalPain(ZombRand(1, addedPain))
             end
 
 
@@ -231,9 +231,15 @@ TOC.UpdateEveryOneMinute = function()
 
     local TOCModData = player:getModData().TOC
 
-    if TOCModData ~= nil then
-        ManagePhantomPain(player, TOCModData)
+
+    if SandboxVars.TOC.EnablePhantomPain then
+        if TOCModData ~= nil then
+            ManagePhantomPain(player, TOCModData)
+        end
     end
+
+
+
 
 
 

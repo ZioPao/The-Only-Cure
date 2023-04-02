@@ -11,6 +11,14 @@ VERSION = 1,
 
 } */
 
+option TOC.EnablePhantomPain
+{
+    type = boolean,
+    default = true,
+    page = TOC,
+    translation = TOC_EnablePhantomPain,
+}
+
 option TOC.CicatrizationSpeedMultiplier
 {
     type = integer,
