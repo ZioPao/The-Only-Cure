@@ -59,6 +59,7 @@ function ISCutLimb:start()
 	self.soundTime = 0
     self.worldSoundTime = 0
     self.sawSound = self.surgeon:getEmitter():playSound("Amputation_Sound")
+    addSound(self.surgeon, self.surgeon:getX(), self.surgeon:getY(), self.surgeon:getZ(), 3, 1)
 
 
     -- Return whatever object we've got in the inventory
