@@ -46,57 +46,44 @@ end
 
 ---Set a limb and its dependend limbs as cut
 ---@param limbName string
----@param amputationStatus amputationTable {isOperated, isCicatrized, isCauterized}
+---@param ampStatus amputationTable {isOperated, isCicatrized, isCauterized}
 ---@param surgeonFactor number
-function ModDataHandler:setCutLimb(limbName, amputationStatus, surgeonFactor)
+function ModDataHandler:setCutLimb(limbName, ampStatus, surgeonFactor)
     local cicatrizationTime = -1
-    if amputationStatus.isCicatrized == false or amputationStatus.isCauterized == false then
+    if ampStatus.isCicatrized == false or ampStatus.isCauterized == false then
         cicatrizationTime = StaticData.LIMBS_CICATRIZATION_TIME[limbName] - surgeonFactor
     end
 
     ---@type amputationTable
-    local params = {isCut = true, isInfected = false, isOperated = amputationStatus.isOperated, isCicatrized = amputationStatus.isCicatrized, isCauterized = amputationStatus.isCauterized, isDependant = false}
+    local params = {isCut = true, isInfected = false, isOperated = ampStatus.isOperated, isCicatrized = ampStatus.isCicatrized, isCauterized = ampStatus.isCauterized, isDependant = false}
     self:setLimbParams(limbName, params, cicatrizationTime)
 
-    local dependentParams = {isCut = true, isInfected = false, isDependant = true}
 
     for i=1, #StaticData.LIMBS_DEPENDENCIES[limbName] do
         local dependedLimbName = StaticData.LIMBS_DEPENDENCIES[limbName][i]
 
-        -- We don't care about isOperated, isCicatrized and isCauterized since this is depending on another limb
-        self:setLimbParams(dependedLimbName, dependentParams, cicatrizationTime)
+        -- We don't care about isOperated, isCicatrized, isCauterized since this is depending on another limb
+        -- Same story for cicatrizationTime, which will be 0
+        self:setLimbParams(dependedLimbName, {isCut = true, isInfected = false, isDependant = true}, 0)
     end
 end
 
 
 ---Internal use only, set a limb data
 ---@param limbName string
----@param amputationStatus amputationTable {isCut, isInfected, isOperated, isCicatrized, isCauterized, isDependant}
----@param cicatrizationTime integer
+---@param ampStatus amputationTable {isCut, isInfected, isOperated, isCicatrized, isCauterized, isDependant}
+---@param cicatrizationTime integer?
 ---@private
-function ModDataHandler:setLimbParams(limbName, amputationStatus, cicatrizationTime)
+function ModDataHandler:setLimbParams(limbName, ampStatus, cicatrizationTime)
     local limbData = self.playerObj:getModData()[StaticData.MOD_NAME][limbName]
-    if amputationStatus.isCut ~= nil then
-        limbData.isCut = amputationStatus.isCut
-    end
-    if amputationStatus.isInfected ~= nil then
-        limbData.isInfected = amputationStatus.isInfected
-    end
-    if amputationStatus.isOperated ~= nil then
-        limbData.isOperated = amputationStatus.isOperated
-    end
-    if amputationStatus.isCicatrized ~= nil then
-        limbData.isCicatrized = amputationStatus.isCicatrized
-    end
-    if amputationStatus.isCauterized ~= nil then
-        limbData.isCauterized = amputationStatus.isCauterized
-    end
-    if amputationStatus.isDependant ~= nil then
-        limbData.isDependant = amputationStatus.isDependant
-    end
-    if cicatrizationTime ~= nil then
-        limbData.cicatrizationTime = cicatrizationTime
-    end
+    if ampStatus.isCut ~= nil then limbData.isCut = ampStatus.isCut end
+    if ampStatus.isInfected ~= nil then limbData.isInfected = ampStatus.isInfected end
+    if ampStatus.isOperated ~= nil then limbData.isOperated = ampStatus.isOperated end
+    if ampStatus.isCicatrized ~= nil then limbData.isCicatrized = ampStatus.isCicatrized end
+    if ampStatus.isCauterized ~= nil then limbData.isCauterized = ampStatus.isCauterized end
+    if ampStatus.isDependant ~= nil then limbData.isDependant = ampStatus.isDependant end
+
+    if cicatrizationTime ~= nil then limbData.cicatrizationTime = cicatrizationTime end
 end
 
 
