@@ -22,6 +22,7 @@ function Main.SetupTraits()
 
     for i=1, #traitsTable do
         local t = traitsTable[i]
+        ---@diagnostic disable-next-line: undefined-field
         t:addXPBoost(Perks.Left_Hand, 4)
         t:addXPBoost(Perks.Fitness, -1)
         t:addXPBoost(Perks.Strength, -1)

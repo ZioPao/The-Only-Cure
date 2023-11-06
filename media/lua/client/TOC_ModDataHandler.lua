@@ -18,6 +18,7 @@ function ModDataHandler:new(playerObj)
     self.__index = self
 
     o.playerObj = playerObj
+
     ModDataHandler.instance = o
 
     return o
@@ -25,7 +26,8 @@ end
 
 ---Setup a newly instanced ModDataHandler
 function ModDataHandler:setup()
-    if self.modData == nil then self:createData() end
+    local modData = self.playerObj:getModData()[StaticData.MOD_NAME]
+    if modData == nil then self:createData() end
     -- TODO Check compatibility or do we just skip it at this point?
 
 end
@@ -35,27 +37,62 @@ function ModDataHandler:createData()
 
     self.playerObj:getModData()[StaticData.MOD_NAME] = {}
 
+    ---@type amputationTable
+    local defaultParams = {isCut = false, isInfected = false, isOperated = false, isCicatrized = false, isCauterized = false, isDependant = false}
+
     -- Initialize limbs
     for i=1, #StaticData.LIMBS_STRINGS do
-        self:setLimbParams(StaticData.LIMBS_STRINGS[i], false, false, false, false, false, false)
+        self:setLimbParams(StaticData.LIMBS_STRINGS[i], defaultParams, 0)
     end
 end
+
+
+-----------------
+--* Setters *--
+
+---Set isCut
+---@param limbName string
+---@param isCut boolean
+function ModDataHandler:setIsCut(limbName, isCut)
+    self.playerObj:getModData()[StaticData.MOD_NAME][limbName].isCut = isCut
+end
+
+---Set isInfected
+---@param limbName string
+---@param isInfected boolean
+function ModDataHandler:setIsInfected(limbName, isInfected)
+    self.playerObj:getModData()[StaticData.MOD_NAME][limbName].isInfected = isInfected
+end
+
+-----------------
+--* Getters *--
+---Get isCut
+---@param limbName string
+---@return boolean
+function ModDataHandler:getIsCut(limbName)
+    return self.playerObj:getModData()[StaticData.MOD_NAME][limbName].isCut
+end
+
+
+
 
 
 --* Limbs data handling *--
 
 ---Set a limb and its dependend limbs as cut
 ---@param limbName string
----@param ampStatus amputationTable {isOperated, isCicatrized, isCauterized}
----@param surgeonFactor number
-function ModDataHandler:setCutLimb(limbName, ampStatus, surgeonFactor)
-    local cicatrizationTime = -1
-    if ampStatus.isCicatrized == false or ampStatus.isCauterized == false then
+---@param isOperated boolean
+---@param isCicatrized boolean
+---@param isCauterized boolean
+---@param surgeonFactor number?
+function ModDataHandler:setCutLimb(limbName, isOperated, isCicatrized, isCauterized, surgeonFactor)
+    local cicatrizationTime = 0
+    if isCicatrized == false or isCauterized == false then
         cicatrizationTime = StaticData.LIMBS_CICATRIZATION_TIME[limbName] - surgeonFactor
     end
 
     ---@type amputationTable
-    local params = {isCut = true, isInfected = false, isOperated = ampStatus.isOperated, isCicatrized = ampStatus.isCicatrized, isCauterized = ampStatus.isCauterized, isDependant = false}
+    local params = {isCut = true, isInfected = false, isOperated = isOperated, isCicatrized = isCicatrized, isCauterized = isCauterized, isDependant = false}
     self:setLimbParams(limbName, params, cicatrizationTime)
 
 

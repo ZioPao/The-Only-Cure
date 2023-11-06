@@ -16,6 +16,7 @@ StaticData.SIDES_STRINGS = {
 -- Assembled BodyParts string
 ---@enum
 StaticData.LIMBS_STRINGS = {}
+StaticData.BODYPARTSTYPES_ENUM = {}
 StaticData.LIMBS_DEPENDENCIES = {}
 StaticData.LIMBS_CICATRIZATION_TIME = {}
 
@@ -27,6 +28,7 @@ for i = 1, #StaticData.SIDES_STRINGS do
 
         -- Assembled strings
         StaticData.LIMBS_STRINGS[assembledName] = assembledName
+        StaticData.BODYPARTSTYPES_ENUM[assembledName] = BodyPartType[assembledName]
 
         -- Dependencies and cicatrization time
         if part == StaticData.PARTS_STRINGS.Hand then
