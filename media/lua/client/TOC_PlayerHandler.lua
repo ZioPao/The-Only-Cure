@@ -2,7 +2,6 @@ local ModDataHandler = require("TOC_ModDataHandler")
 local StaticData = require("TOC_StaticData")
 -----------
 
-
 ---@class PlayerHandler
 local PlayerHandler = {}
 
@@ -27,16 +26,26 @@ function PlayerHandler.ManageTraits(playerObj)
     end
 end
 
+--* Amputations *--
 
----comment
+---Starts bleeding from the point where the saw is being used
+---@param patient IsoPlayer
+---@param limbName string
+function PlayerHandler.DamageDuringAmputation(patient, limbName)
+    local bodyDamage = patient:getBodyDamage()
+    local bodyDamagePart = bodyDamage:getBodyPart(BodyPartType[limbName])
+
+    bodyDamagePart:setBleeding(true)
+    bodyDamagePart:setCut(true)
+    bodyDamagePart:setBleedingTime(ZombRand(10, 20))
+end
+
+---Do the amputation
 ---@param patient IsoPlayer
 ---@param surgeon IsoPlayer
 ---@param limbName string
 ---@param surgeryHelpItems table
 function PlayerHandler.CutLimb(patient, surgeon, limbName, surgeryHelpItems)
-
-    -- TODO Start bleeding and crap like that
-
     local patientStats = patient:getStats()
 
     -- TODO Get surgeon ability from his aid skill
@@ -78,8 +87,10 @@ end
 ---@param damageType string
 ---@param damage number
 function PlayerHandler.CheckInfection(character, damageType, damage)
-
+    
     -- This fucking event barely works. Bleeding seems to be the only thing that triggers it
+    if character ~= getPlayer() then return end
+    
     local bd = character:getBodyDamage()
 
     for i=1, #StaticData.LIMBS_STRINGS do
