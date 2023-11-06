@@ -4,28 +4,49 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "Create Workshop folder",
+            "type": "shell",
+            "options": {"statusbar": {"label": "$(combine) Assemble Mod"}},
+            "command": "python ${config:zomboid_user_folder}/PaosCrap/make_workshop_pack.py picch ${workspaceFolderBasename}",
+        },
+        {
             "label": "Run Zomboid Debug No Steam",
             "type": "shell",
-            "command": "\"E:\\Steam\\steamapps\\common\\ProjectZomboid\\ProjectZomboid64 - nosteam-debug.bat\"",
             "presentation": {
                 "group": "groupZomboid"
             },
+            "command": "\"${config:zomboid_folder}\\ProjectZomboid64 - nosteam-debug.bat\"",
+            "options": {"statusbar": {"label": "$(run) Zomboid client"}},
+            "problemMatcher": [
+                "$eslint-stylish"
+            ]
+        },
+        {
+            "label": "Run Zomboid Debug No Steam 2",
+            "type": "shell",
+            "command": "\"${config:zomboid_folder}\\ProjectZomboid64 - nosteam-debug.bat\"",
+            "options": {"statusbar": {"hide": true}},
+
             "problemMatcher": [
                 "$eslint-stylish"
             ]
         },
         {
             "label": "Run two instances of Zomboid Debug No Steam",
+            "options": {"statusbar": {"label": "$(run-all) Two Zomboid Clients"}},
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+              },
             "dependsOn": [
-                "Run Zomboid Debug No Steam",
-                "Run Zomboid Debug No Steam"
-            ],
+                "Run Zomboid Debug No Steam", "Run Zomboid Debug No Steam 2"],
             "problemMatcher": []
         },
         {
             "label": "Run Zomboid Test Server",
+            "options": {"statusbar": {"label": "$(run) Zomboid Server (Gehenna)"}},
             "type": "shell",
-            "command": "\"E:\\Steam\\steamapps\\common\\Project Zomboid Dedicated Server\\StartServer64_nosteam.bat\"",
+            "command":"\"${config:zomboid_server_folder}\\StartServer64_nosteam_custom.bat\" Gehenna",
             "problemMatcher": [
                 "$eslint-stylish"
             ]

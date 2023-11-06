@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="zdoc-lua">
-    <CLASSES>
-      <root url="jar://$USER_HOME$/IdeaProjects/decompilation-zomboid/lib/zdoc-lua.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
