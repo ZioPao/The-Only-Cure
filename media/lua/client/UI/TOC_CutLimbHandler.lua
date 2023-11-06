@@ -28,13 +28,7 @@ end
 function CutLimbHandler:addToMenu(context)
     local types = self:getAllItemTypes(self.items.ITEMS)
     if #types > 0 then
-        local option = context:addOption(contextMenuCutLimb, nil)
-        local subMenu = context:getNew(context)
-        context:addSubMenu(option, subMenu)
-        for i=1,#types do
-            local item = self:getItemOfType(self.items.ITEMS, types[i])
-            subMenu:addOption(item:getName(), self, self.onMenuOptionSelected, item:getFullType())
-        end
+        local option = context:addOption(contextMenuCutLimb, self, self.onMenuOptionSelected)
     end
 end
 

@@ -54,3 +54,13 @@ function ISHealthPanel:dropItemsOnBodyPart(bodyPart, items)
     end
 
 end
+
+local og_ISHealthPanel_doBodyPartContextMenu = ISHealthPanel.doBodyPartContextMenu
+
+function ISHealthPanel:doBodyPartContextMenu(bodyPart, x, y)
+    og_ISHealthPanel_doBodyPartContextMenu(self, bodyPart, x, y)
+    local playerNum = self.otherPlayer and self.otherPlayer:getPlayerNum() or self.character:getPlayerNum()
+    local context = getPlayerContextMenu(playerNum)     -- To not recreate it but reuse the one that has been created in the original method
+    local cutLimbHandler = CutLimbHandler:new(self, bodyPart)
+    cutLimbHandler:addToMenu(context)
+end
