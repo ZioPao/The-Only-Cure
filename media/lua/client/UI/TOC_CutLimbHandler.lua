@@ -5,8 +5,6 @@ local CutLimbAction = require("TimedActions/TOC_CutLimbAction")
 local CutLimbHandler = BaseHandler:derive("CutLimbHandler")
 
 
-local contextMenuCutLimb = "Cut"
-
 ---Creates new CutLimbHandler
 ---@param panel any
 ---@param bodyPart any
@@ -28,7 +26,7 @@ end
 function CutLimbHandler:addToMenu(context)
     local types = self:getAllItemTypes(self.items.ITEMS)
     if #types > 0 then
-        local option = context:addOption(contextMenuCutLimb, self, self.onMenuOptionSelected)
+        context:addOption(getText("ContextMenu_Amputate"), self, self.onMenuOptionSelected)
     end
 end
 
