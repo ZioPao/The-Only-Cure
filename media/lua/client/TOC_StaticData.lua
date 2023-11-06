@@ -3,6 +3,43 @@ local StaticData = {}
 
 StaticData.MOD_NAME = "TOC"
 
+---@enum
+StaticData.BP_STRINGS = {
+    RightHand = "RightHand",
+    RightLowerArm = "RightLowerArm",
+    RightUpperArm = "RightUpperArm",
+
+    LeftHand = "LeftHand",
+    LeftLowerArm = "LeftLowerArm",
+    LeftUpperArm = "LeftUpperArm"
+}
+
+-- Body Parts Strings
+-- StaticData.BP_STRINGS = {
+--     "RightHand", "RightLowerArm", "RightUpperArm",
+--     "LeftHand", "LeftLowerArm", "LeftUpperArm"
+-- }
+
+-- Link a trait to a specific body part
+StaticData.TRAITS_BP = {
+    AmputeeHand = "LeftHand",
+    AmputeeLowerArm = "LeftLowerArm",
+    AmputeeUpeerArm = "LeftUpperArm"
+}
+
+
+StaticData.LIMB_DEPENDENCIES = {
+    RightHand = {},
+    RightLowerArm = {StaticData.BP_STRINGS.RightHand},
+    RightUpperArm = {StaticData.BP_STRINGS.RightHand, StaticData.BP_STRINGS.RightLowerArm},
+
+    LeftHand = {},
+    LeftLowerArm = {StaticData.BP_STRINGS.LeftHand},
+    LeftUpperArm = {StaticData.BP_STRINGS.LeftHand, StaticData.BP_STRINGS.LeftLowerArm},
+
+}
+
+
 return StaticData
 
 

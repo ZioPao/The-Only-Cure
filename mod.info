@@ -1,6 +1,5 @@
 name=The Only Cure
 poster=generic.png
-require=UIAPI
 description=Bitten? Not a problem!
 id=TOC
 icon=icon.png

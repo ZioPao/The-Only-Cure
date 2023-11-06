@@ -1,17 +1,10 @@
-local PlayerHandler = require("TOC_PlayerHandler.lua")
+local PlayerHandler = require("TOC_PlayerHandler")
 
 
 ------------------
 ---@class Main
 local Main = {}
 
-
-function Main.Start()
-    -- Starts initialization for local client
-    Events.OnCreatePlayer.Add(PlayerHandler.InitializePlayer)
-    Main.SetupTraits()
-
-end
 
 ---Setups the custom traits
 function Main.SetupTraits()
@@ -41,6 +34,16 @@ function Main.SetupTraits()
     TraitFactory.setMutualExclusive("Amputee_LowerArm", "Amputee_UpperArm")
 end
 
+
+function Main.Start()
+    Main.SetupTraits()
+
+
+
+    -- Starts initialization for local client
+    Events.OnCreatePlayer.Add(PlayerHandler.InitializePlayer)
+
+end
 
 --* Events *--
 
