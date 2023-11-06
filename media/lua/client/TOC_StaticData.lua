@@ -3,22 +3,49 @@ local StaticData = {}
 
 StaticData.MOD_NAME = "TOC"
 
----@enum
-StaticData.BP_STRINGS = {
-    RightHand = "RightHand",
-    RightLowerArm = "RightLowerArm",
-    RightUpperArm = "RightUpperArm",
 
-    LeftHand = "LeftHand",
-    LeftLowerArm = "LeftLowerArm",
-    LeftUpperArm = "LeftUpperArm"
+StaticData.SIDES_STRINGS = {
+    Right = "Right",
+    Left = "Left"
 }
 
--- Body Parts Strings
--- StaticData.BP_STRINGS = {
---     "RightHand", "RightLowerArm", "RightUpperArm",
---     "LeftHand", "LeftLowerArm", "LeftUpperArm"
--- }
+StaticData.PARTS_STRINGS = {
+    Hand = "Hand",
+    LowerArm = "LowerArm",
+    UpperArm = "UpperArm"
+}
+
+
+-- Assembled BodyParts string
+---@enum
+StaticData.BP_STRINGS = {}
+StaticData.LIMB_DEPENDENCIES = {}
+StaticData.LIMB_CICATRIZATION_TIME = {}
+
+for i=1, #StaticData.SIDES_STRINGS do
+    local side = StaticData.PARTS_STRINGS[i]
+    for y=1, #StaticData.PARTS_STRINGS do
+        local part = StaticData.PARTS_STRINGS[y]
+        local assembledName = side .. part
+
+        -- Assembled strings
+        StaticData.BP_STRINGS[assembledName] = assembledName
+
+        -- Dependencies and cicatrization time
+        if part == StaticData.PARTS_STRINGS.Hand then
+            StaticData.LIMB_CICATRIZATION_TIME[assembledName] = 1700
+            StaticData.LIMB_DEPENDENCIES[assembledName] = {}
+        elseif part == StaticData.PARTS_STRINGS.LowerArm then
+            StaticData.LIMB_CICATRIZATION_TIME[assembledName] = 1800
+            StaticData.LIMB_DEPENDENCIES[assembledName] = {side .. StaticData.PARTS_STRINGS.Hand}
+
+        elseif part == StaticData.PART_STRINGS.UpperArm then
+            StaticData.LIMB_CICATRIZATION_TIME[assembledName] = 2000
+            StaticData.LIMB_DEPENDENCIES[assembledName] = {side .. StaticData.PARTS_STRINGS.Hand, side .. StaticData.PARTS_STRINGS.LowerArm}
+        end
+    end
+end
+
 
 -- Link a trait to a specific body part
 StaticData.TRAITS_BP = {
@@ -27,17 +54,6 @@ StaticData.TRAITS_BP = {
     AmputeeUpeerArm = "LeftUpperArm"
 }
 
-
-StaticData.LIMB_DEPENDENCIES = {
-    RightHand = {},
-    RightLowerArm = {StaticData.BP_STRINGS.RightHand},
-    RightUpperArm = {StaticData.BP_STRINGS.RightHand, StaticData.BP_STRINGS.RightLowerArm},
-
-    LeftHand = {},
-    LeftLowerArm = {StaticData.BP_STRINGS.LeftHand},
-    LeftUpperArm = {StaticData.BP_STRINGS.LeftHand, StaticData.BP_STRINGS.LeftLowerArm},
-
-}
 
 
 return StaticData

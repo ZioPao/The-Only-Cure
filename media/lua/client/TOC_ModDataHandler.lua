@@ -38,24 +38,23 @@ function ModDataHandler:createData()
     end
 end
 
-------
+
+--* Limbs data handling *--
 
 ---Set a limb and its dependend limbs as cut
 ---@param limbName string
 function ModDataHandler:setCutLimb(limbName, isOperated, isCicatrized, isCauterized)
     self:setLimbParams(limbName, true, false, isOperated, isCicatrized, isCauterized, false)
 
-    for i=1, #StaticData.LIMB_DEPENDENCIES.limbName do
-        local dependedLimbName = StaticData.LIMB_DEPENDENCIES.limbName[i]
+    for i=1, #StaticData.LIMB_DEPENDENCIES[limbName] do
+        local dependedLimbName = StaticData.LIMB_DEPENDENCIES[limbName][i]
 
         -- We don't care about isOperated, isCicatrized and isCauterized since this is depending on another limb
         self:setLimbParams(dependedLimbName, true, false, nil, nil, nil, true)
     end
 end
 
-
-
----Internal use only
+---Internal use only, set a limb data
 ---@param limbName string
 ---@param isCut boolean?
 ---@param isInfected boolean?
