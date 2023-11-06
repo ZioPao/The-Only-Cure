@@ -9,6 +9,23 @@ StaticData.PARTS_STRINGS = {
     UpperArm = "UpperArm"
 }
 
+
+-- StaticData.IGNORED_PARTS = {
+--     Foot_L = "Foot_L",
+--     Foot_R = "Foot_R",
+--     Groin = "Groin",
+--     Head = "Head",
+--     LowerLeg_L = "LowerLeg_L",
+--     LowerLeg_R = "LowerLeg_R",
+--     MAX = "MAX",
+--     Neck = "Neck",
+--     Torso_Lower = "Torso_Lower",
+--     Torso_Upper = "Torso_Upper",
+--     UpperLeg_L = "UpperLeg_L",
+--     UpperLeg_R = "UpperLeg_R"
+-- }
+StaticData.IGNORED_PARTS_STRINGS = { "Foot_L", "Foot_R", "Groin", "Head", "LowerLeg_L", "LowerLeg_R", "MAX", "Neck", "Torso_Lower", "Torso_Upper", "UpperLeg_L", "UpperLeg_R" }
+
 StaticData.SIDES_STRINGS = {
     R = "R",
     L = "L"
@@ -36,8 +53,7 @@ for side, _ in pairs(StaticData.SIDES_STRINGS) do
         -- Assembled strings
         table.insert(StaticData.LIMBS_STRINGS, assembledName)   -- We need a table like this to cycle through it easily
         StaticData.BODYPARTSTYPES_ENUM[assembledName] = BodyPartType[assembledName]
-        
-        print(assembledName)
+
         -- Dependencies and cicatrization time
         if part == StaticData.PARTS_STRINGS.Hand then
             StaticData.LIMBS_BASE_DAMAGE[assembledName] = 60
@@ -55,8 +71,6 @@ for side, _ in pairs(StaticData.SIDES_STRINGS) do
         end
     end
 end
-
-
 
 
 return StaticData

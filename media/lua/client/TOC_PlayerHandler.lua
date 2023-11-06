@@ -80,7 +80,6 @@ end
 function PlayerHandler.CheckInfection(character, damageType, damage)
 
     -- This fucking event barely works. Bleeding seems to be the only thing that triggers it
-    -- TODO Check other body parts that are not included in the mod, if there's a bite there then the player is fucked
     local bd = character:getBodyDamage()
 
     for i=1, #StaticData.LIMBS_STRINGS do
@@ -88,12 +87,24 @@ function PlayerHandler.CheckInfection(character, damageType, damage)
         local bptEnum = StaticData.BODYPARTSTYPES_ENUM[limbName]
         local bodyPart = bd:getBodyPart(bptEnum)
 
-        if bodyPart:bitten() then
+        if bodyPart:bitten() or bodyPart:IsInfected() then
             if PlayerHandler.modDataHandler:getIsCut(limbName) then
                 bodyPart:SetBitten(false)
             else
                 PlayerHandler.modDataHandler:setIsInfected(limbName, true)
             end
+        end
+    end
+
+    -- Check other body parts that are not included in the mod, if there's a bite there then the player is fucked
+    -- We can skip this loop if the player has been infected. The one before we kinda need it to handle correctly the bites in case the player wanna cut stuff off anyway
+    if PlayerHandler.modDataHandler:getIsIgnoredPartInfected() then return end
+
+    for i=1, #StaticData.IGNORED_PARTS_STRINGS do
+        local bodyPartType = BodyPartType[StaticData.IGNORED_PARTS_STRINGS[i]]
+        local bodyPart = bd:getBodyPart(bodyPartType)
+        if bodyPart:bitten() or bodyPart:IsInfected() then
+            PlayerHandler.modDataHandler:setIsIgnoredPartInfected(true)
         end
     end
 

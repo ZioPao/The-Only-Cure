@@ -38,7 +38,11 @@ function ModDataHandler:createData()
     print("TOC: createData")
 
     local modData = self.playerObj:getModData()
-    modData[StaticData.MOD_NAME] = {}
+    modData[StaticData.MOD_NAME] = {
+
+        -- Generic stuff that does not belong anywhere else
+        isIgnoredPartInfected = false
+    }
 
     ---@type amputationTable
     local defaultParams = {isCut = false, isInfected = false, isOperated = false, isCicatrized = false, isCauterized = false, isDependant = false}
@@ -70,6 +74,12 @@ function ModDataHandler:setIsInfected(limbName, isInfected)
     self.playerObj:getModData()[StaticData.MOD_NAME][limbName].isInfected = isInfected
 end
 
+---Set isInfected
+---@param isIgnoredPartInfected boolean
+function ModDataHandler:setIsIgnoredPartInfected(isIgnoredPartInfected)
+    self.playerObj:getModData()[StaticData.MOD_NAME].setIsIgnoredPartInfected = isIgnoredPartInfected
+end
+
 -----------------
 --* Getters *--
 ---Get isCut
@@ -79,6 +89,11 @@ function ModDataHandler:getIsCut(limbName)
     return self.playerObj:getModData()[StaticData.MOD_NAME][limbName].isCut
 end
 
+---Get isIgnoredPartInfected
+---@return boolean
+function ModDataHandler:getIsIgnoredPartInfected()
+    return self.playerObj:getModData()[StaticData.MOD_NAME].isIgnoredPartInfected
+end
 
 
 
