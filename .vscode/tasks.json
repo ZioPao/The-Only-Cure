@@ -44,9 +44,9 @@
         },
         {
             "label": "Run Zomboid Test Server",
-            "options": {"statusbar": {"label": "$(run) Zomboid Server (Gehenna)"}},
+            "options": {"statusbar": {"label": "$(run) Zomboid Server (TOC)"}},
             "type": "shell",
-            "command":"\"${config:zomboid_server_folder}\\StartServer64_nosteam_custom.bat\" Gehenna",
+            "command":"\"${config:zomboid_server_folder}\\StartServer64_nosteam_custom.bat\" TOC",
             "problemMatcher": [
                 "$eslint-stylish"
             ]
