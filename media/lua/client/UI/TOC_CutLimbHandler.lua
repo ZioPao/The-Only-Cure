@@ -1,5 +1,5 @@
-local BaseHandler = require("TOC_HealthPanelBaseHandler")
-local CutLimbAction = require("TOC_CutLimbAction")
+local BaseHandler = require("UI/TOC_HealthPanelBaseHandler")
+local CutLimbAction = require("TimedActions/TOC_CutLimbAction")
 
 ---@class CutLimbHandler
 local CutLimbHandler = BaseHandler:derive("CutLimbHandler")
@@ -48,10 +48,11 @@ function CutLimbHandler:dropItems(items)
 end
 
 function CutLimbHandler:isValid(itemType)
-    return self:isInjured() and self:getItemOfType(self.items.ITEMS, itemType)
+    return self:getItemOfType(self.items.ITEMS, itemType)
 end
 
 function CutLimbHandler:perform(previousAction, itemType)
+    print("perform cutlimbhandler")
     local item = self:getItemOfType(self.items.ITEMS, itemType)
     previousAction = self:toPlayerInventory(item, previousAction)
 

@@ -1,4 +1,4 @@
-local CutLimbHandler = require("TOC_UIHandler")
+local CutLimbHandler = require("UI/TOC_CutLimbHandler")
 
 -- TODO Use this to replace the sprites once a limb is cut
 ISHealthBodyPartPanel = ISBodyPartPanel:derive("ISHealthBodyPartPanel")
