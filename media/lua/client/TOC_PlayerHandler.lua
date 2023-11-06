@@ -65,7 +65,7 @@ end
 ---Set an already cut limb, for example for a trait.
 ---@param limbName string
 function PlayerHandler.ForceCutLimb(limbName)
-    PlayerHandler.modDataHandler:setCutLimb(limbName, true, true, true)
+    PlayerHandler.modDataHandler:setCutLimb(limbName, true, true, true, 0)
     -- TODO Spawn amputation item
 end
 

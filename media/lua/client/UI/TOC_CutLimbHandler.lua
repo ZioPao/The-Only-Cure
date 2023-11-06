@@ -2,6 +2,8 @@ local BaseHandler = require("UI/TOC_HealthPanelBaseHandler")
 local CutLimbAction = require("TimedActions/TOC_CutLimbAction")
 
 ---@class CutLimbHandler
+---@field panel any
+---@field bodyPart any
 local CutLimbHandler = BaseHandler:derive("CutLimbHandler")
 
 

@@ -1,3 +1,4 @@
+---@diagnostic disable: duplicate-set-field
 local CutLimbHandler = require("UI/TOC_CutLimbHandler")
 
 -- TODO Use this to replace the sprites once a limb is cut
@@ -22,7 +23,9 @@ local og_ISHealthPanel_doBodyPartContextMenu = ISHealthPanel.doBodyPartContextMe
 function ISHealthPanel:doBodyPartContextMenu(bodyPart, x, y)
     og_ISHealthPanel_doBodyPartContextMenu(self, bodyPart, x, y)
     local playerNum = self.otherPlayer and self.otherPlayer:getPlayerNum() or self.character:getPlayerNum()
-    local context = getPlayerContextMenu(playerNum)     -- To not recreate it but reuse the one that has been created in the original method
+
+    -- To not recreate it but reuse the one that has been created in the original method
+    local context = getPlayerContextMenu(playerNum) 
     local cutLimbHandler = CutLimbHandler:new(self, bodyPart)
     cutLimbHandler:addToMenu(context)
 end
@@ -30,6 +33,7 @@ end
 
 --* Modification to handle visible amputation on the health menu *--
 
+-- TODO We need male variations
 
 local handL = getTexture("media/ui/Hand_L.png")
 local forearmL = getTexture("media/ui/ForeArm_L.png")

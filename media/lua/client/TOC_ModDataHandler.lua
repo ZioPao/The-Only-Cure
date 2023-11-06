@@ -27,7 +27,9 @@ end
 ---Setup a newly instanced ModDataHandler
 function ModDataHandler:setup()
     local modData = self.playerObj:getModData()[StaticData.MOD_NAME]
-    if modData == nil then self:createData() end
+    if modData == nil or modData.Hand_L == nil or modData.Hand_L.isCut == nil then
+        self:createData()
+    end
     -- TODO Check compatibility or do we just skip it at this point?
 
 end
@@ -35,13 +37,17 @@ end
 function ModDataHandler:createData()
     print("TOC: createData")
 
-    self.playerObj:getModData()[StaticData.MOD_NAME] = {}
+    local modData = self.playerObj:getModData()
+    modData[StaticData.MOD_NAME] = {}
 
     ---@type amputationTable
     local defaultParams = {isCut = false, isInfected = false, isOperated = false, isCicatrized = false, isCauterized = false, isDependant = false}
 
+    local test = StaticData.LIMBS_STRINGS
     -- Initialize limbs
     for i=1, #StaticData.LIMBS_STRINGS do
+        local limbName = StaticData.LIMBS_STRINGS[i]
+        modData[StaticData.MOD_NAME][limbName] = {}
         self:setLimbParams(StaticData.LIMBS_STRINGS[i], defaultParams, 0)
     end
 end

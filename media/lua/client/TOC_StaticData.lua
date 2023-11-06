@@ -19,17 +19,25 @@ StaticData.LIMBS_STRINGS = {}
 StaticData.BODYPARTSTYPES_ENUM = {}
 StaticData.LIMBS_DEPENDENCIES = {}
 StaticData.LIMBS_CICATRIZATION_TIME = {}
+StaticData.LIMBS_BASE_DAMAGE = {}
 
-for i = 1, #StaticData.SIDES_STRINGS do
-    local side = StaticData.PARTS_STRINGS[i]
-    for y = 1, #StaticData.PARTS_STRINGS do
-        local part = StaticData.PARTS_STRINGS[y]
+
+-- Link a trait to a specific body part
+StaticData.TRAITS_BP = {
+    AmputeeHand = "Hand_L",
+    AmputeeLowerArm = "ForeArm_L",
+    AmputeeUpeerArm = "UpperArm_L"
+}
+
+for side, _ in pairs(StaticData.SIDES_STRINGS) do
+    for part, _ in pairs(StaticData.PARTS_STRINGS) do
         local assembledName = part .. "_" .. side
 
         -- Assembled strings
-        StaticData.LIMBS_STRINGS[assembledName] = assembledName
+        table.insert(StaticData.LIMBS_STRINGS, assembledName)   -- We need a table like this to cycle through it easily
         StaticData.BODYPARTSTYPES_ENUM[assembledName] = BodyPartType[assembledName]
-
+        
+        print(assembledName)
         -- Dependencies and cicatrization time
         if part == StaticData.PARTS_STRINGS.Hand then
             StaticData.LIMBS_BASE_DAMAGE[assembledName] = 60
@@ -39,7 +47,7 @@ for i = 1, #StaticData.SIDES_STRINGS do
             StaticData.LIMBS_BASE_DAMAGE[assembledName] = 80
             StaticData.LIMBS_CICATRIZATION_TIME[assembledName] = 1800
             StaticData.LIMBS_DEPENDENCIES[assembledName] = { side .. StaticData.PARTS_STRINGS.Hand }
-        elseif part == StaticData.PART_STRINGS.UpperArm then
+        elseif part == StaticData.PARTS_STRINGS.UpperArm then
             StaticData.LIMBS_BASE_DAMAGE[assembledName] = 100
             StaticData.LIMBS_CICATRIZATION_TIME[assembledName] = 2000
             StaticData.LIMBS_DEPENDENCIES[assembledName] = { side .. "_" .. StaticData.PARTS_STRINGS.Hand,
@@ -48,17 +56,6 @@ for i = 1, #StaticData.SIDES_STRINGS do
     end
 end
 
--- Link a trait to a specific body part
-StaticData.TRAITS_BP = {
-    AmputeeHand = "Hand_L",
-    AmputeeLowerArm = "ForeArm_L",
-    AmputeeUpeerArm = "UpperArm_L"
-}
-
-
---------
-
-StaticData.AMPUTATION_VALUES = {}
 
 
 
