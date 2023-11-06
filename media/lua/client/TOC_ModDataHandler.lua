@@ -1,6 +1,9 @@
 local StaticData = require("TOC_StaticData")
 
 ----------------
+---@alias amputationTable { isCut : boolean?, isInfected : boolean?, isOperated : boolean?, isCicatrized : boolean?, isCauterized : boolean?, isDependant : boolean? }
+
+----------------
 -- TODO This class should handle all the stuff related to the mod data
 
 ---@class ModDataHandler
@@ -33,8 +36,8 @@ function ModDataHandler:createData()
     self.playerObj:getModData()[StaticData.MOD_NAME] = {}
 
     -- Initialize limbs
-    for i=1, #StaticData.BP_STRINGS do
-        self:setLimbParams(StaticData.BP_STRINGS[i], false, false, false, false, false, false)
+    for i=1, #StaticData.LIMBS_STRINGS do
+        self:setLimbParams(StaticData.LIMBS_STRINGS[i], false, false, false, false, false, false)
     end
 end
 
@@ -43,45 +46,56 @@ end
 
 ---Set a limb and its dependend limbs as cut
 ---@param limbName string
-function ModDataHandler:setCutLimb(limbName, isOperated, isCicatrized, isCauterized)
-    self:setLimbParams(limbName, true, false, isOperated, isCicatrized, isCauterized, false)
+---@param amputationStatus amputationTable {isOperated, isCicatrized, isCauterized}
+---@param surgeonFactor number
+function ModDataHandler:setCutLimb(limbName, amputationStatus, surgeonFactor)
+    local cicatrizationTime = -1
+    if amputationStatus.isCicatrized == false or amputationStatus.isCauterized == false then
+        cicatrizationTime = StaticData.LIMBS_CICATRIZATION_TIME[limbName] - surgeonFactor
+    end
 
-    for i=1, #StaticData.LIMB_DEPENDENCIES[limbName] do
-        local dependedLimbName = StaticData.LIMB_DEPENDENCIES[limbName][i]
+    ---@type amputationTable
+    local params = {isCut = true, isInfected = false, isOperated = amputationStatus.isOperated, isCicatrized = amputationStatus.isCicatrized, isCauterized = amputationStatus.isCauterized, isDependant = false}
+    self:setLimbParams(limbName, params, cicatrizationTime)
+
+    local dependentParams = {isCut = true, isInfected = false, isDependant = true}
+
+    for i=1, #StaticData.LIMBS_DEPENDENCIES[limbName] do
+        local dependedLimbName = StaticData.LIMBS_DEPENDENCIES[limbName][i]
 
         -- We don't care about isOperated, isCicatrized and isCauterized since this is depending on another limb
-        self:setLimbParams(dependedLimbName, true, false, nil, nil, nil, true)
+        self:setLimbParams(dependedLimbName, dependentParams, cicatrizationTime)
     end
 end
 
+
 ---Internal use only, set a limb data
 ---@param limbName string
----@param isCut boolean?
----@param isInfected boolean?
----@param isOperated boolean?
----@param isCicatrized boolean?
----@param isCauterized boolean?
----@param isDependant boolean?
+---@param amputationStatus amputationTable {isCut, isInfected, isOperated, isCicatrized, isCauterized, isDependant}
+---@param cicatrizationTime integer
 ---@private
-function ModDataHandler:setLimbParams(limbName, isCut, isInfected, isOperated, isCicatrized, isCauterized, isDependant)
+function ModDataHandler:setLimbParams(limbName, amputationStatus, cicatrizationTime)
     local limbData = self.playerObj:getModData()[StaticData.MOD_NAME][limbName]
-    if isCut ~= nil then
-        limbData.isCut = isCut
+    if amputationStatus.isCut ~= nil then
+        limbData.isCut = amputationStatus.isCut
     end
-    if isInfected ~= nil then
-        limbData.isInfected = isInfected
+    if amputationStatus.isInfected ~= nil then
+        limbData.isInfected = amputationStatus.isInfected
     end
-    if isOperated ~= nil then
-        limbData.isOperated = isOperated
+    if amputationStatus.isOperated ~= nil then
+        limbData.isOperated = amputationStatus.isOperated
     end
-    if isCicatrized ~= nil then
-        limbData.isCicatrized = isCicatrized
+    if amputationStatus.isCicatrized ~= nil then
+        limbData.isCicatrized = amputationStatus.isCicatrized
     end
-    if isCauterized ~= nil then
-        limbData.isCauterized = isCauterized
+    if amputationStatus.isCauterized ~= nil then
+        limbData.isCauterized = amputationStatus.isCauterized
     end
-    if isDependant ~= nil then
-        limbData.isDependant = isDependant
+    if amputationStatus.isDependant ~= nil then
+        limbData.isDependant = amputationStatus.isDependant
+    end
+    if cicatrizationTime ~= nil then
+        limbData.cicatrizationTime = cicatrizationTime
     end
 end
 
