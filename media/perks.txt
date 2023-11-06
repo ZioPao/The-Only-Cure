@@ -1,0 +1,54 @@
+VERSION = 1,
+
+perk Prosthesis
+{
+	parent = None,
+	translation = Prosthesis,
+	passive = false,
+	xp1 = 0,
+	xp2 = 0,
+	xp3 = 0,
+	xp4 = 0,
+	xp5 = 0,
+	xp6 = 0,
+	xp7 = 0,
+	xp8 = 0,
+	xp9 = 0,
+	xp10 = 0,
+}
+
+perk Left_Hand
+{
+	parent = Prosthesis,
+	name = Left_Hand,
+	translation = Left_Hand,
+	passive = false,
+	xp1 = 50,
+	xp2 = 100,
+	xp3 = 200,
+	xp4 = 500,
+	xp5 = 1000,
+	xp6 = 2500,
+	xp7 = 4000,
+	xp8 = 5000,
+	xp9 = 7000,
+	xp10 = 9000,
+}
+
+perk Right_Hand
+{
+	parent = Prosthesis,
+	name = Right_Hand,
+	translation = Right_Hand,
+	passive = false,
+	xp1 = 50,
+	xp2 = 100,
+	xp3 = 200,
+	xp4 = 500,
+	xp5 = 1000,
+	xp6 = 2500,
+	xp7 = 4000,
+	xp8 = 6000,
+	xp9 = 7000,
+	xp10 = 9000,
+}
