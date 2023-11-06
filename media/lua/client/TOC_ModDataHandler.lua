@@ -43,7 +43,7 @@ function ModDataHandler:createData()
     ---@type amputationTable
     local defaultParams = {isCut = false, isInfected = false, isOperated = false, isCicatrized = false, isCauterized = false, isDependant = false}
 
-    local test = StaticData.LIMBS_STRINGS
+
     -- Initialize limbs
     for i=1, #StaticData.LIMBS_STRINGS do
         local limbName = StaticData.LIMBS_STRINGS[i]
@@ -101,7 +101,8 @@ function ModDataHandler:setCutLimb(limbName, isOperated, isCicatrized, isCauteri
     local params = {isCut = true, isInfected = false, isOperated = isOperated, isCicatrized = isCicatrized, isCauterized = isCauterized, isDependant = false}
     self:setLimbParams(limbName, params, cicatrizationTime)
 
-
+    local t = StaticData.LIMBS_DEPENDENCIES
+    print(t)
     for i=1, #StaticData.LIMBS_DEPENDENCIES[limbName] do
         local dependedLimbName = StaticData.LIMBS_DEPENDENCIES[limbName][i]
 

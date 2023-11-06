@@ -46,12 +46,12 @@ for side, _ in pairs(StaticData.SIDES_STRINGS) do
         elseif part == StaticData.PARTS_STRINGS.ForeArm then
             StaticData.LIMBS_BASE_DAMAGE[assembledName] = 80
             StaticData.LIMBS_CICATRIZATION_TIME[assembledName] = 1800
-            StaticData.LIMBS_DEPENDENCIES[assembledName] = { side .. StaticData.PARTS_STRINGS.Hand }
+            StaticData.LIMBS_DEPENDENCIES[assembledName] = { StaticData.PARTS_STRINGS.Hand .. "_" .. side, }
         elseif part == StaticData.PARTS_STRINGS.UpperArm then
             StaticData.LIMBS_BASE_DAMAGE[assembledName] = 100
             StaticData.LIMBS_CICATRIZATION_TIME[assembledName] = 2000
-            StaticData.LIMBS_DEPENDENCIES[assembledName] = { side .. "_" .. StaticData.PARTS_STRINGS.Hand,
-                side .. "_" .. StaticData.PARTS_STRINGS.ForeArm }
+            StaticData.LIMBS_DEPENDENCIES[assembledName] = { StaticData.PARTS_STRINGS.Hand .. "_" .. side, 
+                StaticData.PARTS_STRINGS.ForeArm .. "_" .. side }
         end
     end
 end
