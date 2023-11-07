@@ -25,6 +25,10 @@ function PlayerHandler.InitializePlayer(_, playerObj, isForced)
     -- Since isForced is used to reset an existing player data, we're gonna clean their ISHealthPanel table too
     if isForced then
         ISHealthPanel.highestAmputations = {}
+        
+        -- TODO Hacky way to check both limbs
+        AmputationHandler.DeleteOldAmputationItem(playerObj, "Hand_L")
+        AmputationHandler.DeleteOldAmputationItem(playerObj, "Hand_R")
     end
 end
 

@@ -75,7 +75,7 @@ function AmputationHandler:execute()
     ModDataHandler.GetInstance():setCutLimb(self.limbName, false, false, false, surgeonFactor)
 
     -- Give the player the correct amputation item
-    self:deleteOldAmputationItem()
+    AmputationHandler.DeleteOldAmputationItem(self.patient, self.limbName)
     self:spawnAmputationItem()
 end
 
@@ -92,16 +92,22 @@ end
 --* Amputation Items *--
 
 ---Search and deletes an old amputation clothing item
----@private
-function AmputationHandler:deleteOldAmputationItem()
-    local side = CommonMethods.GetSide(self.limbName)
-
+---@param player IsoPlayer
+---@param limbName string
+function AmputationHandler.DeleteOldAmputationItem(player, limbName)
+    local side = CommonMethods.GetSide(limbName)
     for partName, _ in pairs(StaticData.PARTS_STRINGS) do
         local othLimbName = partName .. "_" .. side
         local othClothingItemName = StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. othLimbName
-        local othClothingItem = self.patient:getInventory():FindAndReturn(othClothingItemName)
-        if othClothingItem then
-            self.patient:getInventory():Remove(othClothingItem) -- It accepts it as an Item, not a string
+
+        -- TODO FindAndReturn could return an ArrayList. We need to check for that
+
+        local othClothingItem = player:getInventory():FindAndReturn(othClothingItemName)
+
+        ---@cast othClothingItem InventoryItem
+        if othClothingItem and instanceof(othClothingItem, "InventoryItem") then
+            player:removeWornItem(othClothingItem)
+            player:getInventory():Remove(othClothingItem)       -- Can be a InventoryItem too.. I guess? todo check it
             print("TOC: found and deleted " .. othClothingItemName)
             return
         end
