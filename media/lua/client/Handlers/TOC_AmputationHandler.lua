@@ -109,6 +109,7 @@ end
 ---Returns the correct index for the textures of the amputation
 ---@param isCicatrized boolean
 ---@return number
+---@private
 function AmputationHandler:getAmputationTexturesIndex(isCicatrized)
     local textureString = self.patient:getHumanVisual():getSkinTexture()
     local isHairy = string.find(textureString, "a$")

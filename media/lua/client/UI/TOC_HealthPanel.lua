@@ -1,4 +1,4 @@
-local PlayerHandler = require("TOC_PlayerHandler")
+local PlayerHandler = require("Handlers/TOC_PlayerHandler")
 local StaticData = require("TOC_StaticData")
 local CommonMethods = require("TOC_Common")
 

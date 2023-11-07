@@ -3,6 +3,7 @@ local TestFramework = require("TestFramework/TestFramework")
 local TestUtils = require("TestFramework/TestUtils")
 
 local PlayerHandler = require("Handlers/TOC_PlayerHandler")
+local AmputationHandler = require("Handlers/TOC_AmputationHandler")
 
 
 
@@ -17,32 +18,38 @@ TestFramework.registerTestModule("Functionality", "Amputation", function()
     end
 
     function Tests.CutLeftHand()
-        PlayerHandler.ForceCutLimb("Hand_L")
+        local handler = AmputationHandler:new("Hand_L")
+        handler:execute()
         return PlayerHandler.modDataHandler:getIsCut("Hand_L")
     end
 
     function Tests.CutLeftForearm()
-        PlayerHandler.ForceCutLimb("ForeArm_L")
+        local handler = AmputationHandler:new("ForeArm_L")
+        handler:execute()
         return PlayerHandler.modDataHandler:getIsCut("ForeArm_L") and PlayerHandler.modDataHandler:getIsCut("Hand_L")
     end
 
     function Tests.CutLeftUpperarm()
-        PlayerHandler.ForceCutLimb("UpperArm_L")
+        local handler = AmputationHandler:new("UpperArm_L")
+        handler:execute()
         return PlayerHandler.modDataHandler:getIsCut("UpperArm_L") and PlayerHandler.modDataHandler:getIsCut("ForeArm_L") and PlayerHandler.modDataHandler:getIsCut("Hand_L")
     end
 
     function Tests.CutRightHand()
-        PlayerHandler.ForceCutLimb("Hand_R")
+        local handler = AmputationHandler:new("Hand_R")
+        handler:execute()
         return PlayerHandler.modDataHandler:getIsCut("Hand_R")
     end
 
     function Tests.CutRightForearm()
-        PlayerHandler.ForceCutLimb("ForeArm_R")
+        local handler = AmputationHandler:new("ForeArm_R")
+        handler:execute()
         return PlayerHandler.modDataHandler:getIsCut("ForeArm_R") and PlayerHandler.modDataHandler:getIsCut("Hand_R")
     end
 
     function Tests.CutRightUpperarm()
-        PlayerHandler.ForceCutLimb("UpperArm_R")
+        local handler = AmputationHandler:new("UpperArm_R")
+        handler:execute()
         return PlayerHandler.modDataHandler:getIsCut("UpperArm_R") and PlayerHandler.modDataHandler:getIsCut("ForeArm_R") and PlayerHandler.modDataHandler:getIsCut("Hand_R")
     end
 
