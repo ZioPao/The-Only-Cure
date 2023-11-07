@@ -1,6 +1,8 @@
-local PlayerHandler = require("TOC_PlayerHandler")
-
 require "TimedActions/ISBaseTimedAction"
+local AmputationHandler = require("Handlers/TOC_AmputationHandler")
+
+
+-----------------------------
 
 ---@class CutLimbAction
 ---@field patient IsoPlayer
@@ -35,11 +37,10 @@ function CutLimbAction:isValid()
 end
 
 function CutLimbAction:start()
-
-    print("Damage patient")
     if self.patient == self.surgeon then
         -- Self
-        PlayerHandler.DamageDuringAmputation(self.patient, self.limbName)
+        self.handler = AmputationHandler:new(self.limbName)
+        self.handler:damageDuringAmputation()
     else
         -- Other player
         -- TODO Send Damage
@@ -47,8 +48,7 @@ function CutLimbAction:start()
 end
 
 function CutLimbAction:perform()
-
-    PlayerHandler.CutLimb(self.patient, self.surgeon, self.limbName, {})
+    self.handler:execute()
     ISBaseTimedAction.perform(self)
 end
 

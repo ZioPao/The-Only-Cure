@@ -158,4 +158,16 @@ end
 
 
 
+---@return ModDataHandler
+function ModDataHandler.GetInstance()
+    if ModDataHandler.instance ~= nil then
+        return ModDataHandler.instance
+    else
+        return ModDataHandler:new(getPlayer())
+    end
+end
+
+
+
+
 return ModDataHandler

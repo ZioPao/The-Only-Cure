@@ -2,7 +2,7 @@ if not getActivatedMods():contains("TEST_FRAMEWORK") or not isDebugEnabled() the
 local TestFramework = require("TestFramework/TestFramework")
 local TestUtils = require("TestFramework/TestUtils")
 
-local PlayerHandler = require("TOC_PlayerHandler")
+local PlayerHandler = require("Handlers/TOC_PlayerHandler")
 
 
 

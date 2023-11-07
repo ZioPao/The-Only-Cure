@@ -1,10 +1,21 @@
-local ModDataHandler = require("TOC_ModDataHandler")
+local ModDataHandler = require("Handlers/TOC_ModDataHandler")
+local AmputationHandler = require("Handlers/TOC_AmputationHandler")
 local StaticData = require("TOC_StaticData")
 -----------
+
+
+-- LIST OF STUFF THAT THIS CLASS NEEDS TO DO
+
+-- Main thing, should contain the other handlers when needed
+-- Handling Items (as in amputations spawns)
+-- Update current player status (infection checks)
+-- handle stats increase\decrease
+
 
 ---@class PlayerHandler
 local PlayerHandler = {}
 
+-- TODO This should be instanceable for a player. Separate handlers not
 
 ---Setup player modData
 ---@param _ nil
@@ -20,70 +31,19 @@ function PlayerHandler.InitializePlayer(_, playerObj, isForced)
     end
 end
 
----Cut a limb for a trait
+---Handles the traits
 ---@param playerObj IsoPlayer
 function PlayerHandler.ManageTraits(playerObj)
     for k, v in pairs(StaticData.TRAITS_BP) do
         if playerObj:HasTrait(k) then
             -- Once we find one, we should be done.
-            PlayerHandler.ForceCutLimb(v)
+            local tempHandler = AmputationHandler:new(v)
+            tempHandler:executeForTrait()
+            tempHandler:close()
             return
         end
     end
 end
-
---* Amputations *--
-
----Starts bleeding from the point where the saw is being used
----@param patient IsoPlayer
----@param limbName string
-function PlayerHandler.DamageDuringAmputation(patient, limbName)
-    local bodyDamage = patient:getBodyDamage()
-    local bodyDamagePart = bodyDamage:getBodyPart(BodyPartType[limbName])
-
-    bodyDamagePart:setBleeding(true)
-    bodyDamagePart:setCut(true)
-    bodyDamagePart:setBleedingTime(ZombRand(10, 20))
-end
-
----Do the amputation
----@param patient IsoPlayer
----@param surgeon IsoPlayer
----@param limbName string
----@param surgeryHelpItems table
-function PlayerHandler.CutLimb(patient, surgeon, limbName, surgeryHelpItems)
-    local patientStats = patient:getStats()
-
-    -- TODO Get surgeon ability from his aid skill
-    local surgeonSkill = 50
-    local surgeonFactor = surgeonSkill - 1      -- TODO Should be decided by surgeryHelpItems
-
-    local bd = patient:getBodyDamage()
-    local bodyPart = bd:getBodyPart(BodyPartType[limbName])
-    local baseDamage = StaticData.LIMBS_BASE_DAMAGE[limbName]
-
-    -- Set the bleeding and all the damage stuff in that part
-    bodyPart:AddDamage(baseDamage - surgeonSkill)
-    bodyPart:setAdditionalPain(baseDamage - surgeonSkill)
-    bodyPart:setBleeding(true)
-    bodyPart:setBleedingTime(baseDamage - surgeonSkill)
-    bodyPart:setDeepWounded(true)
-    bodyPart:setDeepWoundTime(baseDamage - surgeonSkill)
-    patientStats:setEndurance(surgeonSkill)
-    patientStats:setStress(baseDamage - surgeonSkill)
-
-    PlayerHandler.modDataHandler:setCutLimb(limbName, false, false, false, surgeonFactor)
-
-end
-
-
----Set an already cut limb, for example for a trait.
----@param limbName string
-function PlayerHandler.ForceCutLimb(limbName)
-    PlayerHandler.modDataHandler:setCutLimb(limbName, true, true, true, 0)
-    -- TODO Spawn amputation item
-end
-
 
 
 --* Events *--
@@ -92,7 +52,7 @@ end
 ---@param character IsoGameCharacter
 ---@param damageType string
 ---@param damage number
-function PlayerHandler.CheckInfection(character, damageType, damage)
+function PlayerHandler.CheckInfection(character)
     
     -- This fucking event barely works. Bleeding seems to be the only thing that triggers it
     if character ~= getPlayer() then return end
