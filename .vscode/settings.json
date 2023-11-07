@@ -5,6 +5,7 @@
     "zomboid_server_folder": "E:\\Steam\\steamapps\\common\\Project Zomboid Dedicated Server",
     "Lua.diagnostics.globals": [
         "ModOptions",
-        "zombie"
+        "zombie",
+        "_"
     ],
 }
