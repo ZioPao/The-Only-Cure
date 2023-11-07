@@ -26,6 +26,26 @@ TestFramework.registerTestModule("Functionality", "Amputation", function()
         return PlayerHandler.modDataHandler:getIsCut("ForeArm_L") and PlayerHandler.modDataHandler:getIsCut("Hand_L")
     end
 
+    function Tests.CutLeftUpperarm()
+        PlayerHandler.ForceCutLimb("UpperArm_L")
+        return PlayerHandler.modDataHandler:getIsCut("UpperArm_L") and PlayerHandler.modDataHandler:getIsCut("ForeArm_L") and PlayerHandler.modDataHandler:getIsCut("Hand_L")
+    end
+
+    function Tests.CutRightHand()
+        PlayerHandler.ForceCutLimb("Hand_R")
+        return PlayerHandler.modDataHandler:getIsCut("Hand_R")
+    end
+
+    function Tests.CutRightForearm()
+        PlayerHandler.ForceCutLimb("ForeArm_R")
+        return PlayerHandler.modDataHandler:getIsCut("ForeArm_R") and PlayerHandler.modDataHandler:getIsCut("Hand_R")
+    end
+
+    function Tests.CutRightUpperarm()
+        PlayerHandler.ForceCutLimb("UpperArm_R")
+        return PlayerHandler.modDataHandler:getIsCut("UpperArm_R") and PlayerHandler.modDataHandler:getIsCut("ForeArm_R") and PlayerHandler.modDataHandler:getIsCut("Hand_R")
+    end
+
     return Tests
 
 end)

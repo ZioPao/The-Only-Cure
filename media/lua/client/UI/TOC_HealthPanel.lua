@@ -36,33 +36,17 @@ end
 
 --* Modification to handle visible amputation on the health menu *--
 
--- TODO We need male variations
-
-
 
 function ISHealthPanel.GetHighestAmputation()
     -- TODO Cache this instead of doing it here!
-
     ISHealthPanel.highestAmputations = {}
-    local prevDepSize = {}
     for i=1, #StaticData.LIMBS_STRINGS do
         local limbName = StaticData.LIMBS_STRINGS[i]
         local index
         if string.find(limbName, "_L") then index = "L" else index = "R" end
-        if PlayerHandler.modDataHandler:getIsCut(limbName) then
-
-            if ISHealthPanel.highestAmputations[index] ~= nil then
-                local cDependencySize = #StaticData.LIMBS_DEPENDENCIES[limbName]
-                if cDependencySize > prevDepSize[index] then
-                    ISHealthPanel.highestAmputations[index] = limbName
-                    prevDepSize[index] = StaticData.LIMBS_DEPENDENCIES[limbName]
-                end
-            else
-                ISHealthPanel.highestAmputations[index] = limbName
-                prevDepSize[index] = #StaticData.LIMBS_DEPENDENCIES[limbName]
-            end
+        if PlayerHandler.modDataHandler:getIsCut(limbName) and PlayerHandler.modDataHandler:getIsVisible(limbName) then
+            ISHealthPanel.highestAmputations[index] = limbName
         end
-
     end
 end
 
@@ -77,22 +61,17 @@ function ISHealthPanel:render()
         -- Left Texture
         if ISHealthPanel.highestAmputations["L"] then
             local textureL = StaticData.HEALTH_PANEL_TEXTURES[ISHealthPanel.highestAmputations["L"]]
-            self:drawTextureScaled(textureL, self.healthPanel.x/2 - 2, self.healthPanel.y/2, 123, 302, 1, 1, 0, 0)
+            self:drawTexture(textureL, self.healthPanel.x/2 - 2, self.healthPanel.y/2, 1, 1, 0, 0)
         end
 
         -- Right Texture
         if ISHealthPanel.highestAmputations["R"] then
             local textureR = StaticData.HEALTH_PANEL_TEXTURES[ISHealthPanel.highestAmputations["R"]]
-            self:drawTextureScaled(textureR, self.healthPanel.x/2 - 2, self.healthPanel.y/2, 123, 302, 1, 1, 0, 0)
+            self:drawTexture(textureR, self.healthPanel.x/2 + 2, self.healthPanel.y/2, 1, 1, 0, 0)
         end
     else
         ISHealthPanel.GetHighestAmputation()
     end
-
-
-
-
-
 end
 
 -- We need to override this to force the alpha to 1
