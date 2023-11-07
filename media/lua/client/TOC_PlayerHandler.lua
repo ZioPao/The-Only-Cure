@@ -9,9 +9,15 @@ local PlayerHandler = {}
 ---Setup player modData
 ---@param _ nil
 ---@param playerObj IsoPlayer
-function PlayerHandler.InitializePlayer(_, playerObj)
+---@param isForced boolean?
+function PlayerHandler.InitializePlayer(_, playerObj, isForced)
     PlayerHandler.modDataHandler = ModDataHandler:new(playerObj)
-    PlayerHandler.modDataHandler:setup()
+    PlayerHandler.modDataHandler:setup(isForced)
+
+    -- Since isForced is used to reset an existing player data, we're gonna clean their ISHealthPanel table too
+    if isForced then
+        ISHealthPanel.highestAmputations = {}
+    end
 end
 
 ---Cut a limb for a trait
@@ -90,7 +96,7 @@ function PlayerHandler.CheckInfection(character, damageType, damage)
     
     -- This fucking event barely works. Bleeding seems to be the only thing that triggers it
     if character ~= getPlayer() then return end
-    
+
     local bd = character:getBodyDamage()
 
     for i=1, #StaticData.LIMBS_STRINGS do

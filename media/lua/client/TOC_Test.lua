@@ -10,12 +10,10 @@ TestFramework.registerTestModule("Functionality", "Amputation", function()
     local Tests = {}
 
     function Tests.InitializePlayer()
-        return true
-
         -- TODO This breaks the Test Framework mod for some reason.
-        -- local pl = getPlayer()
-        -- PlayerHandler.InitializePlayer(nil, pl)
-        -- return true
+        local pl = getPlayer()
+        PlayerHandler.InitializePlayer(_, pl, true)
+        return true
     end
 
     function Tests.CutLeftHand()

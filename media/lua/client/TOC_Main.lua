@@ -39,8 +39,6 @@ end
 function Main.Start()
     Main.SetupTraits()
 
-
-
     -- Starts initialization for local client
     Events.OnCreatePlayer.Add(PlayerHandler.InitializePlayer)
 

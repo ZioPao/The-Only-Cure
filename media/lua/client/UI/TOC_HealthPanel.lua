@@ -39,11 +39,11 @@ end
 -- TODO We need male variations
 
 
----@return {partL : string?, partR : string?}
-local function GetHighestAmputation()
+
+function ISHealthPanel.GetHighestAmputation()
     -- TODO Cache this instead of doing it here!
 
-    local tab = {}
+    ISHealthPanel.highestAmputations = {}
     local prevDepSize = {}
     for i=1, #StaticData.LIMBS_STRINGS do
         local limbName = StaticData.LIMBS_STRINGS[i]
@@ -51,20 +51,19 @@ local function GetHighestAmputation()
         if string.find(limbName, "_L") then index = "L" else index = "R" end
         if PlayerHandler.modDataHandler:getIsCut(limbName) then
 
-            if tab[index] ~= nil then
+            if ISHealthPanel.highestAmputations[index] ~= nil then
                 local cDependencySize = #StaticData.LIMBS_DEPENDENCIES[limbName]
                 if cDependencySize > prevDepSize[index] then
-                    tab[index] = limbName
+                    ISHealthPanel.highestAmputations[index] = limbName
                     prevDepSize[index] = StaticData.LIMBS_DEPENDENCIES[limbName]
                 end
             else
-                tab[index] = limbName
+                ISHealthPanel.highestAmputations[index] = limbName
                 prevDepSize[index] = #StaticData.LIMBS_DEPENDENCIES[limbName]
             end
         end
 
     end
-    return tab
 end
 
 
@@ -74,21 +73,25 @@ function ISHealthPanel:render()
 
     -- TODO Handle another player health panel
 
-    local highestAmputations = GetHighestAmputation()
+    if ISHealthPanel.highestAmputations then
+        -- Left Texture
+        if ISHealthPanel.highestAmputations["L"] then
+            local textureL = StaticData.HEALTH_PANEL_TEXTURES[ISHealthPanel.highestAmputations["L"]]
+            self:drawTextureScaled(textureL, self.healthPanel.x/2 - 2, self.healthPanel.y/2, 123, 302, 1, 1, 0, 0)
+        end
 
-    -- Left Texture
-    if highestAmputations["L"] then
-        local textureL = StaticData.HEALTH_PANEL_TEXTURES[highestAmputations["L"]]
-        self:drawTextureScaled(textureL, self.healthPanel.x/2 - 2, self.healthPanel.y/2, 123, 302, 1, 1, 0, 0)
+        -- Right Texture
+        if ISHealthPanel.highestAmputations["R"] then
+            local textureR = StaticData.HEALTH_PANEL_TEXTURES[ISHealthPanel.highestAmputations["R"]]
+            self:drawTextureScaled(textureR, self.healthPanel.x/2 - 2, self.healthPanel.y/2, 123, 302, 1, 1, 0, 0)
+        end
+    else
+        ISHealthPanel.GetHighestAmputation()
     end
 
-    if highestAmputations["R"] then
-        
-    end
 
 
 
-    -- Right Texture
 
 end
 
