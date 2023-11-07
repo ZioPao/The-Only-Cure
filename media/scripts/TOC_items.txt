@@ -1,0 +1,116 @@
+module TOC
+{
+	imports
+	{
+		Base
+	}
+	/****************** Clothing that look like a cut limb ******************/
+    item Amputation_Hand_R
+	{
+		Type = Clothing,
+		DisplayName	= Amputated right hand,
+
+		ClothingItem = Amputation_Hand_R,
+		BodyLocation = TOC_ArmRight,
+
+		Weight = 0,
+		CombatSpeedModifier = 0.9,
+		BloodLocation = Hands;LowerArms,
+
+		Insulation = 1.0,
+		WindResistance = 1.0,
+		WaterResistance = 1.0,
+		Icon = genericAmputation,
+		CanHaveHoles = false,
+	}
+
+    item Amputation_ForeArm_R
+	{
+		Type = Clothing,
+		DisplayName	= Amputated right forearm,
+
+		ClothingItem = Amputation_ForeArm_R,
+		BodyLocation = TOC_ArmRight,
+
+		Weight = 0,
+		CombatSpeedModifier = 0.8,
+		BloodLocation = UpperArms;LowerArms,
+		Insulation = 1.0,
+		WindResistance = 1.0,
+		WaterResistance = 1.0,
+		Icon = genericAmputation,
+		CanHaveHoles = false,
+	}
+
+    item Amputation_UpperArm_R
+	{
+		Type = Clothing,
+		DisplayName	= Amputated entire right arm,
+
+		ClothingItem = Amputation_UpperArm_R,
+		BodyLocation = TOC_ArmRight,
+		BloodLocation = UpperArms;UpperBody,
+		Weight = 0,
+		CombatSpeedModifier = 0.7,
+		Insulation = 1.0,
+		WindResistance = 1.0,
+		WaterResistance = 1.0,
+		Icon = genericAmputation,
+		CanHaveHoles = false,
+	}
+
+    item Amputation_Hand_L
+	{
+		Type = Clothing,
+		DisplayName	= Amputated left hand,
+
+		ClothingItem = Amputation_Hand_L,
+		BodyLocation = TOC_ArmLeft,
+
+		Weight = 0,
+		CombatSpeedModifier = 0.9,
+		BloodLocation = Hands;LowerArms,
+		Insulation = 1.0,
+		
+		WindResistance = 1.0,
+		WaterResistance = 1.0,
+		Icon = genericAmputation,
+		CanHaveHoles = false,
+	}
+
+    item Amputation_ForeArm_L
+	{
+		Type = Clothing,
+		DisplayCategory = Amputation,
+		DisplayName	= Amputated left forearm,
+		ClothingItem = Amputation_ForeArm_L,
+		BodyLocation = TOC_ArmLeft,
+
+		Weight = 0,
+		CombatSpeedModifier = 0.8,
+		BloodLocation = UpperArms;LowerArms,
+		Insulation = 1.0,
+		WindResistance = 1.0,
+		WaterResistance = 1.0,
+		Icon = genericAmputation,
+		CanHaveHoles = false,
+
+	}
+
+    item Amputation_UpperArm_L
+	{
+		Type = Clothing,
+		DisplayName	= Amputated entire left arm,
+		ClothingItem = Amputation_UpperArm_L,
+		BodyLocation = TOC_ArmLeft,
+
+		Weight = 0,
+		CombatSpeedModifier = 0.7,
+		BloodLocation = UpperArms;UpperBody,
+		Insulation = 1.0,
+		WindResistance = 1.0,
+		WaterResistance = 1.0,
+		Icon = genericAmputation,
+		CanHaveHoles = false,
+	}
+}

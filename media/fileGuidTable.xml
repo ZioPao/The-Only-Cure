@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<fileGuidTable>
+    <files>
+        <path>media/clothing/clothingItems/Amputation_Hand_R.xml</path>
+        <guid>f114e53a-b92e-4639-8d8c-2b43ab981885</guid>
+    </files>
+    <files>
+        <path>media/clothing/clothingItems/Amputation_ForeArm_R.xml</path>
+        <guid>e6f80efd-22e5-49e0-8b24-537519d42b37</guid>
+    </files>
+    <files>
+        <path>media/clothing/clothingItems/Amputation_UpperArm_R.xml</path>
+        <guid>db8ccad2-b76f-44bd-93ab-1eefa25beade</guid>
+    </files>
+
+    <files>
+        <path>media/clothing/clothingItems/Amputation_Hand_L.xml</path>
+        <guid>2de93af2-b7a8-4c04-84d1-28d92cce8a0f</guid>
+    </files>
+    <files>
+        <path>media/clothing/clothingItems/Amputation_ForeArm_L.xml</path>
+        <guid>d3816fe0-48e1-4cf5-a8e4-48c72595edb4</guid>
+    </files>
+    <files>
+        <path>media/clothing/clothingItems/Amputation_UpperArm_L.xml</path>
+        <guid>646cafa5-3fa1-41af-9ca0-aa57cca3b36d</guid>
+    </files>
+
+</fileGuidTable>

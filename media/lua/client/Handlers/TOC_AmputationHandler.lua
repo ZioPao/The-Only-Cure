@@ -75,6 +75,8 @@ function AmputationHandler:execute()
     ModDataHandler.GetInstance():setCutLimb(self.limbName, false, false, false, surgeonFactor)
 
     -- Give the player the correct amputation item
+    self:deleteOldAmputationItem()
+    self:spawnAmputationItem()
 end
 
 ---Force the execution of the amputation for a trait
@@ -136,11 +138,10 @@ function AmputationHandler:getAmputationTexturesIndex(isCicatrized)
     return matchedIndex - 1
 end
 
----Spawns and equips the correct amputation item to the player. In case there was another amputation on the same side, it's gonna get deleted
+---Spawns and equips the correct amputation item to the player.
 ---@private
 function AmputationHandler:spawnAmputationItem()
-    -- TODO Check if there are previous amputation clothing items on that side and deletes them
-
+    print("Clothing name " .. StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. self.limbName)
     local clothingItem = self.patient:getInventory():AddItem(StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. self.limbName)
     local texId = self:getAmputationTexturesIndex(false)
 

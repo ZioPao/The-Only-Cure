@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<clothingItem>
+    <m_MaleModel>Amputation_Left_LowerArm_Male</m_MaleModel>
+    <m_FemaleModel>Amputation_Left_LowerArm_Female</m_FemaleModel>
+    <m_GUID>d3816fe0-48e1-4cf5-a8e4-48c72595edb4</m_GUID>
+    <m_Static>false</m_Static>
+    <m_AllowRandomHue>false</m_AllowRandomHue>
+    <m_AllowRandomTint>false</m_AllowRandomTint>
+    <m_Masks>3</m_Masks>
+    <m_Masks>4</m_Masks>
+    <m_MasksFolder>none</m_MasksFolder>
+    
+    <textureChoices>Amputations\Forearm\skin01_b</textureChoices>
+    <textureChoices>Amputations\Forearm\skin02_b</textureChoices>
+    <textureChoices>Amputations\Forearm\skin03_b</textureChoices>
+    <textureChoices>Amputations\Forearm\skin04_b</textureChoices>
+    <textureChoices>Amputations\Forearm\skin05_b</textureChoices>
+
+    <textureChoices>Amputations\Forearm\skin01_hairy_b</textureChoices>
+    <textureChoices>Amputations\Forearm\skin02_hairy_b</textureChoices>
+    <textureChoices>Amputations\Forearm\skin03_hairy_b</textureChoices>
+    <textureChoices>Amputations\Forearm\skin04_hairy_b</textureChoices>
+    <textureChoices>Amputations\Forearm\skin05_hairy_b</textureChoices>
+
+    <textureChoices>Body\MaleBody01</textureChoices>
+    <textureChoices>Body\MaleBody02</textureChoices>
+    <textureChoices>Body\MaleBody03</textureChoices>
+    <textureChoices>Body\MaleBody04</textureChoices>
+    <textureChoices>Body\MaleBody05</textureChoices>
+
+    <textureChoices>Body\MaleBody01a</textureChoices>
+    <textureChoices>Body\MaleBody02a</textureChoices>
+    <textureChoices>Body\MaleBody03a</textureChoices>
+    <textureChoices>Body\MaleBody04</textureChoices>
+    <textureChoices>Body\MaleBody05a</textureChoices>
+
+</clothingItem>
