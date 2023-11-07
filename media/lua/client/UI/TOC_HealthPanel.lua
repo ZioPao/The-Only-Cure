@@ -1,5 +1,6 @@
 local PlayerHandler = require("TOC_PlayerHandler")
 local StaticData = require("TOC_StaticData")
+local CommonMethods = require("TOC_Common")
 
 ---@diagnostic disable: duplicate-set-field
 local CutLimbHandler = require("UI/TOC_CutLimbHandler")
@@ -42,8 +43,7 @@ function ISHealthPanel.GetHighestAmputation()
     ISHealthPanel.highestAmputations = {}
     for i=1, #StaticData.LIMBS_STRINGS do
         local limbName = StaticData.LIMBS_STRINGS[i]
-        local index
-        if string.find(limbName, "_L") then index = "L" else index = "R" end
+        local index = CommonMethods.GetSide(limbName)
         if PlayerHandler.modDataHandler:getIsCut(limbName) and PlayerHandler.modDataHandler:getIsVisible(limbName) then
             ISHealthPanel.highestAmputations[index] = limbName
         end

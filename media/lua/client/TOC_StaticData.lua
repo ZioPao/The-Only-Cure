@@ -70,4 +70,13 @@ StaticData.HEALTH_PANEL_TEXTURES = {
 }
 
 
+-----------------
+-- Visuals and clothing
+
+
+
+
+StaticData.AMPUTATION_CLOTHING_ITEM_BASE = "TOC.Amputation_"
+
+
 return StaticData

@@ -11,11 +11,8 @@ local StaticData = require("TOC_StaticData")
 -- Update current player status (infection checks)
 -- handle stats increase\decrease
 
-
 ---@class PlayerHandler
 local PlayerHandler = {}
-
--- TODO This should be instanceable for a player. Separate handlers not
 
 ---Setup player modData
 ---@param _ nil
