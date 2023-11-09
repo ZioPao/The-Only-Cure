@@ -51,6 +51,16 @@ function ISHealthPanel.GetHighestAmputation()
 end
 
 
+local og_ISHealthPanel_initialise = ISHealthPanel.initialise
+function ISHealthPanel:initialise()
+    if self.character:isFemale() then
+        self.sexPl = "Female"
+    else
+        self.sexPl = "Male"
+    end
+    og_ISHealthPanel_initialise(self)
+end
+
 local og_ISHealthPanel_render = ISHealthPanel.render
 function ISHealthPanel:render()
     og_ISHealthPanel_render(self)
@@ -60,13 +70,13 @@ function ISHealthPanel:render()
     if ISHealthPanel.highestAmputations then
         -- Left Texture
         if ISHealthPanel.highestAmputations["L"] then
-            local textureL = StaticData.HEALTH_PANEL_TEXTURES[ISHealthPanel.highestAmputations["L"]]
+            local textureL = StaticData.HEALTH_PANEL_TEXTURES[self.sexPl][ISHealthPanel.highestAmputations["L"]]
             self:drawTexture(textureL, self.healthPanel.x/2 - 2, self.healthPanel.y/2, 1, 1, 0, 0)
         end
 
         -- Right Texture
         if ISHealthPanel.highestAmputations["R"] then
-            local textureR = StaticData.HEALTH_PANEL_TEXTURES[ISHealthPanel.highestAmputations["R"]]
+            local textureR = StaticData.HEALTH_PANEL_TEXTURES[self.sexPl][ISHealthPanel.highestAmputations["R"]]
             self:drawTexture(textureR, self.healthPanel.x/2 + 2, self.healthPanel.y/2, 1, 1, 0, 0)
         end
     else

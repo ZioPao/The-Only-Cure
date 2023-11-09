@@ -50,9 +50,8 @@ function PlayerHandler.CheckInfection(character)
     
     -- This fucking event barely works. Bleeding seems to be the only thing that triggers it
     if character ~= getPlayer() then return end
-
     local bd = character:getBodyDamage()
-
+    if bd == nil then return end    -- Not sure why sometimes we get no BodyDamage, so just return this for now
     for i=1, #StaticData.LIMBS_STRINGS do
         local limbName = StaticData.LIMBS_STRINGS[i]
         local bptEnum = StaticData.BODYPARTSTYPES_ENUM[limbName]
