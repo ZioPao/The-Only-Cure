@@ -6,9 +6,6 @@ local StaticData = require("TOC_StaticData")
 
 
 -- LIST OF STUFF THAT THIS CLASS NEEDS TO DO
-
--- Main thing, should contain the other handlers when needed
--- Handling Items (as in amputations spawns)
 -- Update current player status (infection checks)
 -- handle stats increase\decrease
 
@@ -77,7 +74,7 @@ function PlayerHandler.CheckInfection(character)
     for i=1, #StaticData.IGNORED_PARTS_STRINGS do
         local bodyPartType = BodyPartType[StaticData.IGNORED_PARTS_STRINGS[i]]
         local bodyPart = bd:getBodyPart(bodyPartType)
-        if bodyPart and bodyPart:bitten() or bodyPart:IsInfected() then
+        if bodyPart and (bodyPart:bitten() or bodyPart:IsInfected()) then
             PlayerHandler.modDataHandler:setIsIgnoredPartInfected(true)
         end
     end
@@ -85,5 +82,22 @@ function PlayerHandler.CheckInfection(character)
 end
 
 Events.OnPlayerGetDamage.Add(PlayerHandler.CheckInfection)
+
+---comment
+---@param player IsoPlayer
+function PlayerHandler.UpdatePerks(player)
+    -- TODO If player has an amputated limb, they're gonna level up them while doing normal stuff, getting better at it dynamically
+    -- TODO We should have a way to check if the player has done any amputation at all instead of having to check manually each time
+
+    -- TODO Should be run when player is doing stuff like picking up objects, not randomly
+    for side, _ in pairs(StaticData.SIDES_STRINGS) do
+        local limbName = "Hand_" .. side
+        if ModDataHandler.GetInstance():getIsCut(limbName) then
+            player:getXp():AddXP(Perks[limbName], 0.1)
+        end
+    end
+end
+
+Events.OnPlayerUpdate.Add(PlayerHandler.UpdatePerks)
 
 return PlayerHandler

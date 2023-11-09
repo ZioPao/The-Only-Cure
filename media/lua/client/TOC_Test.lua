@@ -9,7 +9,6 @@ local AmputationHandler = require("Handlers/TOC_AmputationHandler")
 TestFramework.registerTestModule("Functionality", "PlayerHandler", function()
     local Tests = {}
     function Tests.InitializePlayer()
-        -- TODO This breaks the Test Framework mod for some reason.
         local pl = getPlayer()
         PlayerHandler.InitializePlayer(_, pl, true)
     end
