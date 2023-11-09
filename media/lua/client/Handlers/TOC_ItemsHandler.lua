@@ -1,13 +1,12 @@
 local StaticData = require("TOC_StaticData")
 local CommonMethods = require("TOC_Common")
 
+---------------------------
 
 
 --- Submodule to handle spawning the correct items after certain actions (ie: cutting a hand)
 ---@class ItemsHandler
 local ItemsHandler = {}
-
-
 
 ---Returns the correct index for the textures of the amputation
 ---@param isCicatrized boolean
@@ -47,6 +46,7 @@ end
 function ItemsHandler.RemoveClothingItem(playerObj, clothingItem)
     if clothingItem and instanceof(clothingItem, "InventoryItem") then
         playerObj:removeWornItem(clothingItem)
+
         playerObj:getInventory():Remove(clothingItem)       -- Can be a InventoryItem too.. I guess? todo check it
         print("TOC: found and deleted " .. tostring(clothingItem))
         return true

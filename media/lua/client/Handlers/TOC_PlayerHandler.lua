@@ -49,8 +49,6 @@ end
 
 ---Check if the player has an infected (as in, zombie infection) body part
 ---@param character IsoGameCharacter
----@param damageType string
----@param damage number
 function PlayerHandler.CheckInfection(character)
     
     -- This fucking event barely works. Bleeding seems to be the only thing that triggers it
@@ -79,7 +77,7 @@ function PlayerHandler.CheckInfection(character)
     for i=1, #StaticData.IGNORED_PARTS_STRINGS do
         local bodyPartType = BodyPartType[StaticData.IGNORED_PARTS_STRINGS[i]]
         local bodyPart = bd:getBodyPart(bodyPartType)
-        if bodyPart:bitten() or bodyPart:IsInfected() then
+        if bodyPart and bodyPart:bitten() or bodyPart:IsInfected() then
             PlayerHandler.modDataHandler:setIsIgnoredPartInfected(true)
         end
     end

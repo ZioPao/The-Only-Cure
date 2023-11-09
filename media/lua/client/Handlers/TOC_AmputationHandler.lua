@@ -1,6 +1,5 @@
 local ModDataHandler = require("Handlers/TOC_ModDataHandler")
 local StaticData = require("TOC_StaticData")
-local CommonMethods = require("TOC_Common")
 local ItemsHandler = require("Handlers/TOC_ItemsHandler")
 
 ---------------------------
@@ -54,7 +53,8 @@ end
 function AmputationHandler:execute()
 
     -- TODO Calculate surgeonStats
-    local surgeonFactor = 100
+    -- TODO Cap it to a certain amount, it shouldn't be more than ...?
+    local surgeonFactor = 1
 
 
     local patientStats = self.patient:getStats()

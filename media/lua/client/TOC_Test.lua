@@ -6,51 +6,55 @@ local PlayerHandler = require("Handlers/TOC_PlayerHandler")
 local AmputationHandler = require("Handlers/TOC_AmputationHandler")
 
 
-
-TestFramework.registerTestModule("Functionality", "Amputation", function()
+TestFramework.registerTestModule("Functionality", "PlayerHandler", function()
     local Tests = {}
-
     function Tests.InitializePlayer()
         -- TODO This breaks the Test Framework mod for some reason.
         local pl = getPlayer()
         PlayerHandler.InitializePlayer(_, pl, true)
-        return true
     end
+
+    return Tests
+end)
+
+
+TestFramework.registerTestModule("Functionality", "Amputation", function()
+    local Tests = {}
 
     function Tests.CutLeftHand()
         local handler = AmputationHandler:new("Hand_L")
         handler:execute()
-        return PlayerHandler.modDataHandler:getIsCut("Hand_L")
+        TestUtils.assert(PlayerHandler.modDataHandler:getIsCut("Hand_L"))
     end
 
     function Tests.CutLeftForearm()
         local handler = AmputationHandler:new("ForeArm_L")
         handler:execute()
-        return PlayerHandler.modDataHandler:getIsCut("ForeArm_L") and PlayerHandler.modDataHandler:getIsCut("Hand_L")
+        TestUtils.assert(PlayerHandler.modDataHandler:getIsCut("ForeArm_L") and PlayerHandler.modDataHandler:getIsCut("Hand_L"))
     end
 
     function Tests.CutLeftUpperarm()
         local handler = AmputationHandler:new("UpperArm_L")
         handler:execute()
-        return PlayerHandler.modDataHandler:getIsCut("UpperArm_L") and PlayerHandler.modDataHandler:getIsCut("ForeArm_L") and PlayerHandler.modDataHandler:getIsCut("Hand_L")
+        TestUtils.assert(PlayerHandler.modDataHandler:getIsCut("UpperArm_L") and PlayerHandler.modDataHandler:getIsCut("ForeArm_L") and PlayerHandler.modDataHandler:getIsCut("Hand_L"))
     end
 
     function Tests.CutRightHand()
         local handler = AmputationHandler:new("Hand_R")
         handler:execute()
-        return PlayerHandler.modDataHandler:getIsCut("Hand_R")
+        TestUtils.assert(PlayerHandler.modDataHandler:getIsCut("Hand_R"))
     end
 
     function Tests.CutRightForearm()
         local handler = AmputationHandler:new("ForeArm_R")
         handler:execute()
-        return PlayerHandler.modDataHandler:getIsCut("ForeArm_R") and PlayerHandler.modDataHandler:getIsCut("Hand_R")
+        TestUtils.assert(PlayerHandler.modDataHandler:getIsCut("ForeArm_R") and PlayerHandler.modDataHandler:getIsCut("Hand_R"))
     end
 
     function Tests.CutRightUpperarm()
         local handler = AmputationHandler:new("UpperArm_R")
         handler:execute()
-        return PlayerHandler.modDataHandler:getIsCut("UpperArm_R") and PlayerHandler.modDataHandler:getIsCut("ForeArm_R") and PlayerHandler.modDataHandler:getIsCut("Hand_R")
+        TestUtils.assert(PlayerHandler.modDataHandler:getIsCut("UpperArm_R") and PlayerHandler.modDataHandler:getIsCut("ForeArm_R") and PlayerHandler.modDataHandler:getIsCut("Hand_R"))
     end
 
     return Tests
