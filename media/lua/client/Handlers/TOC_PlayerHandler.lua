@@ -1,5 +1,6 @@
 local ModDataHandler = require("Handlers/TOC_ModDataHandler")
 local AmputationHandler = require("Handlers/TOC_AmputationHandler")
+local ItemsHandler = require("Handlers/TOC_ItemsHandler")
 local StaticData = require("TOC_StaticData")
 -----------
 
@@ -25,10 +26,7 @@ function PlayerHandler.InitializePlayer(_, playerObj, isForced)
     -- Since isForced is used to reset an existing player data, we're gonna clean their ISHealthPanel table too
     if isForced then
         ISHealthPanel.highestAmputations = {}
-        
-        -- TODO Hacky way to check both limbs
-        AmputationHandler.DeleteOldAmputationItem(playerObj, "Hand_L")
-        AmputationHandler.DeleteOldAmputationItem(playerObj, "Hand_R")
+        ItemsHandler.DeleteAllOldAmputationItems(playerObj)
     end
 end
 

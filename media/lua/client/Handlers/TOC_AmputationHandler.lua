@@ -1,6 +1,7 @@
 local ModDataHandler = require("Handlers/TOC_ModDataHandler")
 local StaticData = require("TOC_StaticData")
 local CommonMethods = require("TOC_Common")
+local ItemsHandler = require("Handlers/TOC_ItemsHandler")
 
 ---------------------------
 
@@ -75,8 +76,8 @@ function AmputationHandler:execute()
     ModDataHandler.GetInstance():setCutLimb(self.limbName, false, false, false, surgeonFactor)
 
     -- Give the player the correct amputation item
-    AmputationHandler.DeleteOldAmputationItem(self.patient, self.limbName)
-    self:spawnAmputationItem()
+    ItemsHandler.DeleteOldAmputationItem(self.patient, self.limbName)
+    ItemsHandler.SpawnAmputationItem(self.patient, self.limbName)
 end
 
 ---Force the execution of the amputation for a trait
@@ -88,74 +89,6 @@ end
 function AmputationHandler:close()
     AmputationHandler.instance = nil
 end
-
---* Amputation Items *--
-
----Search and deletes an old amputation clothing item
----@param player IsoPlayer
----@param limbName string
-function AmputationHandler.DeleteOldAmputationItem(player, limbName)
-    local side = CommonMethods.GetSide(limbName)
-    for partName, _ in pairs(StaticData.PARTS_STRINGS) do
-        local othLimbName = partName .. "_" .. side
-        local othClothingItemName = StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. othLimbName
-
-        -- TODO FindAndReturn could return an ArrayList. We need to check for that
-
-        local othClothingItem = player:getInventory():FindAndReturn(othClothingItemName)
-
-        ---@cast othClothingItem InventoryItem
-        if othClothingItem and instanceof(othClothingItem, "InventoryItem") then
-            player:removeWornItem(othClothingItem)
-            player:getInventory():Remove(othClothingItem)       -- Can be a InventoryItem too.. I guess? todo check it
-            print("TOC: found and deleted " .. othClothingItemName)
-            return
-        end
-    end
-end
-
----Returns the correct index for the textures of the amputation
----@param isCicatrized boolean
----@return number
----@private
-function AmputationHandler:getAmputationTexturesIndex(isCicatrized)
-    local textureString = self.patient:getHumanVisual():getSkinTexture()
-    local isHairy = string.find(textureString, "a$")
-    -- Hairy bodies
-    if isHairy then
-        textureString = textureString:sub(1, -2)      -- Removes b at the end to make it compatible
-    end
-
-    local matchedIndex = string.match(textureString, "%d$")
-
-    -- TODO Rework this
-    if isHairy then
-        matchedIndex = matchedIndex + 5
-    end
-
-    if isCicatrized then
-        if isHairy then
-            matchedIndex = matchedIndex + 5           -- to use the cicatrized texture on hairy bodies
-        else
-            matchedIndex = matchedIndex + 10          -- cicatrized texture only, no hairs
-        end
-    end
-
-    return matchedIndex - 1
-end
-
----Spawns and equips the correct amputation item to the player.
----@private
-function AmputationHandler:spawnAmputationItem()
-    print("Clothing name " .. StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. self.limbName)
-    local clothingItem = self.patient:getInventory():AddItem(StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. self.limbName)
-    local texId = self:getAmputationTexturesIndex(false)
-
-    ---@cast clothingItem InventoryItem
-    clothingItem:getVisual():setTextureChoice(texId) -- it counts from 0, so we have to subtract 1
-    self.patient:setWornItem(clothingItem:getBodyLocation(), clothingItem)
-end
-
 
 
 return AmputationHandler
