@@ -48,6 +48,9 @@ function ModDataHandler:createData()
         isAnyLimbCut = false
     }
 
+    -- Set a reference to TOC data in ModData
+    self.tocData = self.playerObj:getModData()[StaticData.MOD_NAME]
+
     ---@type partData
     local defaultParams = {isCut = false, isInfected = false, isOperated = false, isCicatrized = false, isCauterized = false, isVisible = false}
 
@@ -59,7 +62,6 @@ function ModDataHandler:createData()
         self:setLimbParams(StaticData.LIMBS_STRINGS[i], defaultParams, 0)
     end
 
-    self.tocData = self.playerObj:getModData()[StaticData.MOD_NAME]
 end
 
 

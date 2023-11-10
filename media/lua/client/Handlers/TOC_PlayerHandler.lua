@@ -11,6 +11,8 @@ local StaticData = require("TOC_StaticData")
 -- handle stats increase\decrease
 
 ---@class PlayerHandler
+---@field modDataHandler ModDataHandler
+---@field playerObj IsoPlayer
 local PlayerHandler = {}
 
 ---Setup player modData
@@ -20,6 +22,7 @@ local PlayerHandler = {}
 function PlayerHandler.InitializePlayer(_, playerObj, isForced)
     PlayerHandler.modDataHandler = ModDataHandler:new(playerObj)
     PlayerHandler.modDataHandler:setup(isForced)
+    PlayerHandler.playerObj = playerObj
 
     -- Since isForced is used to reset an existing player data, we're gonna clean their ISHealthPanel table too
     if isForced then
@@ -100,6 +103,7 @@ end
 Events.OnPlayerUpdate.Add(PlayerHandler.UpdatePerks)
 
 
+--* Some overrides *--
 
 
 local og_ISBaseTimedAction_adjustMaxTime = ISBaseTimedAction.adjustMaxTime
@@ -111,27 +115,30 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
         for i=1, #StaticData.LIMBS_STRINGS do
             local limbName = StaticData.LIMBS_STRINGS[i]
             if modDataHandler:getIsCut(limbName) then
-                --print("TOC: cut limb " .. limbName)
-                --print("TOC: cTime" .. tostring(time))
                 local perk = Perks["Side_" .. CommonMethods.GetSide(limbName)]
                 local perkLevel = pl:getPerkLevel(perk)
                 local perkLevelScaled
-                if perkLevel ~= 0 then
-                    perkLevelScaled = perkLevel / 10
-                else
-                    perkLevelScaled = 0
-                end
-                --print("TOC: perk level for this side: " .. tonumber(perkLevel))
-                --print("TOC: perk scaling for this side: " .. tonumber(perkLevelScaled))
+                if perkLevel ~= 0 then perkLevelScaled = perkLevel / 10 else perkLevelScaled = 0 end
                 time = time * (StaticData.LIMBS_TIME_MULTIPLIER[limbName] - perkLevelScaled)
             end
         end
-        --print("TOC: new time " .. tostring(time))
     end
     return time
 end
 
+local og_ISBaseTimedAction_perform = ISBaseTimedAction.perform
+function ISBaseTimedAction:perform()
+	og_ISBaseTimedAction_perform(self)
 
+    if PlayerHandler.modDataHandler:getIsAnyLimbCut() then
+        for side, _ in pairs(StaticData.SIDES_STRINGS) do
+            local limbName = "Hand_" .. side
+            if ModDataHandler.GetInstance():getIsCut(limbName) then
+                PlayerHandler.playerObj:getXp():AddXP(Perks["Side_" .. side], 2)       -- TODO Make it dynamic
+            end
+        end
+    end
+end
 
 
 

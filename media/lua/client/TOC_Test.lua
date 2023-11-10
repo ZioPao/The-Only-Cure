@@ -13,6 +13,29 @@ TestFramework.registerTestModule("Functionality", "PlayerHandler", function()
         PlayerHandler.InitializePlayer(_, pl, true)
     end
 
+    function Tests.SetMaxPerks()
+        local pl = getPlayer()
+        for _=0, 10 do
+            pl:LevelPerk(Perks["Side_L"])
+            pl:LevelPerk(Perks["Side_R"])
+            pl:getXp():setXPToLevel(Perks["Side_L"], pl:getPerkLevel(Perks["Side_L"]))
+            pl:getXp():setXPToLevel(Perks["Side_R"], pl:getPerkLevel(Perks["Side_R"]))
+        end
+
+        SyncXp(pl)
+    end
+
+    function Tests.ResetPerks()
+        local pl = getPlayer()
+        for _=0, 10 do
+            pl:LoseLevel(Perks["Side_L"])
+            pl:LoseLevel(Perks["Side_R"])
+            pl:getXp():setXPToLevel(Perks["Side_L"], pl:getPerkLevel(Perks["Side_L"]))
+            pl:getXp():setXPToLevel(Perks["Side_R"], pl:getPerkLevel(Perks["Side_R"]))
+        end
+        SyncXp(pl)
+    end
+
     return Tests
 end)
 
