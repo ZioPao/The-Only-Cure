@@ -1,4 +1,9 @@
 ContextMenu_EN = {
     ContextMenu_Amputate = "Amputate",
+
+
+    ContextMenu_InstallProstRight = "Install prosthesis on right arm",
+    ContextMenu_InstallProstLeft = "Install prosthesis on left arm",
+    
     
 } 

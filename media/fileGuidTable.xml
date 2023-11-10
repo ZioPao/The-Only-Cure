@@ -31,6 +31,9 @@
         <path>media/clothing/clothingItems/Prost_Hook_L.xml</path>
         <guid>05338f5e-e984-49c2-be79-81af9ae8e818</guid>
     </files>
-
+    <files>
+        <path>media/clothing/clothingItems/Prost_Hook_R.xml</path>
+        <guid>8ee7e1bc-2c21-428e-a15d-760d98df973d</guid>
+    </files>
 
 </fileGuidTable>

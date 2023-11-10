@@ -28,7 +28,7 @@ function Main.SetupTraits()
         t:addXPBoost(Perks.Strength, -1)
     end
 
-    TraitFactory.addTrait("Insensitive", getText("UI_trait_Insensitive"), 6, getText("UI_trait_Insensitivedesc"), false, false)
+    TraitFactory.addTrait("Insensitive", getText("UI_trait_Insensitive"), 6, getText("UI_trait_Insensitive_desc"), false, false)
 
     TraitFactory.setMutualExclusive("Amputee_Hand", "Amputee_LowerArm")
     TraitFactory.setMutualExclusive("Amputee_Hand", "Amputee_UpperArm")

@@ -41,8 +41,8 @@ end
 function ISHealthPanel.GetHighestAmputation()
     -- TODO Cache this instead of doing it here!
     ISHealthPanel.highestAmputations = {}
-    for i=1, #StaticData.LIMBS_STRINGS do
-        local limbName = StaticData.LIMBS_STRINGS[i]
+    for i=1, #PlayerHandler.amputatedLimbs do
+        local limbName = PlayerHandler.amputatedLimbs[i]
         local index = CommonMethods.GetSide(limbName)
         if PlayerHandler.modDataHandler:getIsCut(limbName) and PlayerHandler.modDataHandler:getIsVisible(limbName) then
             ISHealthPanel.highestAmputations[index] = limbName

@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <clothingItem>
-  <m_MaleModel>Prosthesis\hookArm_L_F</m_MaleModel>
-  <m_FemaleModel>Prosthesis\hookArm_L_F</m_FemaleModel>
-  <m_GUID>05338f5e-e984-49c2-be79-81af9ae8e818</m_GUID>
+  <m_MaleModel>Prosthesis\hookArm_R_F</m_MaleModel>
+  <m_FemaleModel>Prosthesis\hookArm_R_F</m_FemaleModel>
+  <m_GUID>8ee7e1bc-2c21-428e-a15d-760d98df973d</m_GUID>
 
   <m_Static>false</m_Static>
   <m_AllowRandomTint>false</m_AllowRandomTint>

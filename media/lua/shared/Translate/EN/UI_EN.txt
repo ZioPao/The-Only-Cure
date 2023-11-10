@@ -1,2 +1,13 @@
 UI_EN = {
+    UI_trait_Amputee_Hand = "Amputated Left Hand",
+    UI_trait_Amputee_Hand_desc = "",
+
+    UI_trait_Amputee_LowerArm = "Amputated Left Forearm",
+    UI_trait_Amputee_LowerArm_desc = "",
+
+    UI_trait_Amputee_UpperArm = "Amputated Left Upper arm",
+    UI_trait_Amputee_UpperArm_desc = "",
+
+    UI_trait_Insensitive = "Insensitive",
+    UI_trait_Insensitive_desc = ""
 }
