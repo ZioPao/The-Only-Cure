@@ -8,6 +8,7 @@ module TOC
     item Amputation_Hand_R
 	{
 		Type = Clothing,
+		DisplayCategory = Amputation,
 		DisplayName	= Amputated right hand,
 
 		ClothingItem = Amputation_Hand_R,
@@ -27,6 +28,7 @@ module TOC
     item Amputation_ForeArm_R
 	{
 		Type = Clothing,
+		DisplayCategory = Amputation,
 		DisplayName	= Amputated right forearm,
 
 		ClothingItem = Amputation_ForeArm_R,
@@ -45,6 +47,7 @@ module TOC
     item Amputation_UpperArm_R
 	{
 		Type = Clothing,
+		DisplayCategory = Amputation,
 		DisplayName	= Amputated entire right arm,
 
 		ClothingItem = Amputation_UpperArm_R,
@@ -62,6 +65,7 @@ module TOC
     item Amputation_Hand_L
 	{
 		Type = Clothing,
+		DisplayCategory = Amputation,
 		DisplayName	= Amputated left hand,
 
 		ClothingItem = Amputation_Hand_L,
@@ -100,9 +104,29 @@ module TOC
     item Amputation_UpperArm_L
 	{
 		Type = Clothing,
+		DisplayCategory = Amputation,
 		DisplayName	= Amputated entire left arm,
 		ClothingItem = Amputation_UpperArm_L,
 		BodyLocation = TOC_ArmLeft,
+
+		Weight = 0,
+		CombatSpeedModifier = 0.7,
+		BloodLocation = UpperArms;UpperBody,
+		Insulation = 1.0,
+		WindResistance = 1.0,
+		WaterResistance = 1.0,
+		Icon = genericAmputation,
+		CanHaveHoles = false,
+	}
+	/****************** Clothing that look like a cut limb ******************/
+
+	item Prosthesis_Hook_L
+	{
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName	= Hook Arm Test,
+		ClothingItem = Prost_Hook_L,
+		BodyLocation = TOC_ArmProstLeft,
 
 		Weight = 0,
 		CombatSpeedModifier = 0.7,

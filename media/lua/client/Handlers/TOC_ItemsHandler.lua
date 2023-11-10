@@ -1,9 +1,7 @@
 local StaticData = require("TOC_StaticData")
 local CommonMethods = require("TOC_Common")
-local PlayerHandler = require("Handlers/TOC_PlayerHandler")
 
 ---------------------------
-
 
 --- Submodule to handle spawning the correct items after certain actions (ie: cutting a hand)
 ---@class ItemsHandler
@@ -87,7 +85,6 @@ function ItemsHandler.DeleteAllOldAmputationItems(playerObj)
     end
 end
 
-
 ---Spawns and equips the correct amputation item to the player.
 function ItemsHandler.SpawnAmputationItem(playerObj, limbName)
     print("Clothing name " .. StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. limbName)
@@ -110,6 +107,9 @@ function ISInventoryPane:refreshContainer()
     -- Search into the container and remove the reference to the amputation item
 
     og_ISInventoryPane_refreshContainer(self)
+
+    if TOC_DEBUG.disablePaneMod then return end
+
     for i=1, #self.itemslist do
         local cItem = self.itemslist[i]
         if cItem and cItem.cat == "Amputation" then

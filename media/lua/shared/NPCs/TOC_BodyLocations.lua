@@ -14,3 +14,7 @@ end
 
 AddBodyLocationBefore("TOC_ArmRight", "Shoes")
 AddBodyLocationBefore("TOC_ArmLeft", "Shoes")
+
+AddBodyLocationBefore("TOC_ArmProstRight", "Shoes")
+AddBodyLocationBefore("TOC_ArmProstLeft", "Shoes")
+

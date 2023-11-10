@@ -1,6 +1,6 @@
 <clothingItem>
-    <m_MaleModel>Amputation_Right_Hand_Male</m_MaleModel>
-    <m_FemaleModel>Amputation_Right_Hand_Female</m_FemaleModel>
+    <m_MaleModel>Amputation\Amputation_Right_Hand_Male</m_MaleModel>
+    <m_FemaleModel>Amputation\Amputation_Right_Hand_Female</m_FemaleModel>
     <m_GUID>f114e53a-b92e-4639-8d8c-2b43ab981885</m_GUID>
     <m_Static>false</m_Static>
     <m_AllowRandomHue>false</m_AllowRandomHue>

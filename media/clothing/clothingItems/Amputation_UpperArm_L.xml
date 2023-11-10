@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <clothingItem>
-    <m_MaleModel>Amputation_Left_UpperArm_Male</m_MaleModel>
-    <m_FemaleModel>Amputation_Left_UpperArm_Female</m_FemaleModel>
+    <m_MaleModel>Amputation\Amputation_Left_UpperArm_Male</m_MaleModel>
+    <m_FemaleModel>Amputation\Amputation_Left_UpperArm_Female</m_FemaleModel>
     <m_GUID>646cafa5-3fa1-41af-9ca0-aa57cca3b36d</m_GUID>
     <m_Static>false</m_Static>
     <m_AllowRandomHue>false</m_AllowRandomHue>
