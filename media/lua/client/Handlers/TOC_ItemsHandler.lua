@@ -1,5 +1,6 @@
 local StaticData = require("TOC_StaticData")
 local CommonMethods = require("TOC_Common")
+local PlayerHandler = require("Handlers/TOC_PlayerHandler")
 
 ---------------------------
 
@@ -98,6 +99,27 @@ function ItemsHandler.SpawnAmputationItem(playerObj, limbName)
     playerObj:setWornItem(clothingItem:getBodyLocation(), clothingItem)
 end
 
+--------------------------
+--* Overrides *--
 
+local og_ISInventoryPane_refreshContainer = ISInventoryPane.refreshContainer
+
+---Get the list of items for the container and remove the amputations
+function ISInventoryPane:refreshContainer()
+
+    -- Search into the container and remove the reference to the amputation item
+
+    og_ISInventoryPane_refreshContainer(self)
+    for i=1, #self.itemslist do
+        local cItem = self.itemslist[i]
+        if cItem and cItem.cat == "Amputation" then
+            --print("TOC: current item is an amputation, removing it from the list")
+            table.remove(self.itemslist, i)
+        end
+
+
+    end
+
+end
 
 return ItemsHandler

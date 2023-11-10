@@ -1,12 +1,12 @@
 local ModDataHandler = require("Handlers/TOC_ModDataHandler")
-local AmputationHandler = require("Handlers/TOC_AmputationHandler")
-local ItemsHandler = require("Handlers/TOC_ItemsHandler")
 local CommonMethods = require("TOC_Common")
 local StaticData = require("TOC_StaticData")
 -----------
 
+-- TODO We should instantiate this anyway if we want to keep track of cut limbs here. Doing so, we would be able to handle other players too
 
 -- LIST OF STUFF THAT THIS CLASS NEEDS TO DO
+-- Keep track of cut limbs so that we don't have to loop through all of them all the time
 -- Update current player status (infection checks)
 -- handle stats increase\decrease
 
@@ -24,9 +24,20 @@ function PlayerHandler.InitializePlayer(_, playerObj, isForced)
     PlayerHandler.modDataHandler:setup(isForced)
     PlayerHandler.playerObj = playerObj
 
+    -- Calculate amputated limbs at startup
+    PlayerHandler.amputatedLimbs = {}
+
+    for i=1, #StaticData.LIMBS_STRINGS do
+        local limbName = StaticData.LIMBS_STRINGS[i]
+        if PlayerHandler.modDataHandler:getIsCut(limbName) then
+            PlayerHandler.AddLocalAmputatedLimb(limbName)
+        end
+    end
+
     -- Since isForced is used to reset an existing player data, we're gonna clean their ISHealthPanel table too
     if isForced then
         ISHealthPanel.highestAmputations = {}
+        local ItemsHandler = require("Handlers/TOC_ItemsHandler")
         ItemsHandler.DeleteAllOldAmputationItems(playerObj)
     end
 end
@@ -34,17 +45,30 @@ end
 ---Handles the traits
 ---@param playerObj IsoPlayer
 function PlayerHandler.ManageTraits(playerObj)
+    local AmputationHandler = require("Handlers/TOC_AmputationHandler")
     for k, v in pairs(StaticData.TRAITS_BP) do
         if playerObj:HasTrait(k) then
             -- Once we find one, we should be done.
             local tempHandler = AmputationHandler:new(v)
-            tempHandler:executeForTrait()
+            tempHandler:execute(false)      -- No damage
             tempHandler:close()
             return
         end
     end
 end
 
+
+---Cache the currently amputated limbs
+---@param limbName string
+function PlayerHandler.AddLocalAmputatedLimb(limbName)
+    print("TOC: added " .. limbName .. " to known amputated limbs")
+    table.insert(PlayerHandler.amputatedLimbs, limbName)
+end
+
+--* Getters *--
+function PlayerHandler.GetAmputatedLimbs()
+    return PlayerHandler.amputatedLimbs or {}
+end
 
 --* Events *--
 
@@ -100,20 +124,21 @@ function PlayerHandler.UpdatePerks(player)
     end
 end
 
-Events.OnPlayerUpdate.Add(PlayerHandler.UpdatePerks)
+--Events.OnPlayerUpdate.Add(PlayerHandler.UpdatePerks)
 
 
 --* Some overrides *--
 
-
 local og_ISBaseTimedAction_adjustMaxTime = ISBaseTimedAction.adjustMaxTime
+--- Adjust time
 function ISBaseTimedAction:adjustMaxTime(maxTime)
     local time = og_ISBaseTimedAction_adjustMaxTime(self, maxTime)
     local modDataHandler = ModDataHandler.GetInstance()
     if time ~= -1 and modDataHandler and modDataHandler:getIsAnyLimbCut() then
         local pl = getPlayer()
-        for i=1, #StaticData.LIMBS_STRINGS do
-            local limbName = StaticData.LIMBS_STRINGS[i]
+
+        for i=1, #PlayerHandler.amputatedLimbs do
+            local limbName = PlayerHandler.amputatedLimbs[i]
             if modDataHandler:getIsCut(limbName) then
                 local perk = Perks["Side_" .. CommonMethods.GetSide(limbName)]
                 local perkLevel = pl:getPerkLevel(perk)
@@ -127,6 +152,7 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
 end
 
 local og_ISBaseTimedAction_perform = ISBaseTimedAction.perform
+--- After each action, level up perks
 function ISBaseTimedAction:perform()
 	og_ISBaseTimedAction_perform(self)
 
@@ -139,9 +165,6 @@ function ISBaseTimedAction:perform()
         end
     end
 end
-
-
-
 
 
 
