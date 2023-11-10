@@ -1,6 +1,7 @@
 local ModDataHandler = require("Handlers/TOC_ModDataHandler")
 local AmputationHandler = require("Handlers/TOC_AmputationHandler")
 local ItemsHandler = require("Handlers/TOC_ItemsHandler")
+local CommonMethods = require("TOC_Common")
 local StaticData = require("TOC_StaticData")
 -----------
 
@@ -51,7 +52,6 @@ function PlayerHandler.CheckInfection(character)
     -- This fucking event barely works. Bleeding seems to be the only thing that triggers it
     if character ~= getPlayer() then return end
     local bd = character:getBodyDamage()
-    if bd == nil then return end    -- Not sure why sometimes we get no BodyDamage, so just return this for now
     for i=1, #StaticData.LIMBS_STRINGS do
         local limbName = StaticData.LIMBS_STRINGS[i]
         local bptEnum = StaticData.BODYPARTSTYPES_ENUM[limbName]
@@ -82,7 +82,7 @@ end
 
 Events.OnPlayerGetDamage.Add(PlayerHandler.CheckInfection)
 
----comment
+---Handle perks
 ---@param player IsoPlayer
 function PlayerHandler.UpdatePerks(player)
     -- TODO If player has an amputated limb, they're gonna level up them while doing normal stuff, getting better at it dynamically
@@ -92,11 +92,50 @@ function PlayerHandler.UpdatePerks(player)
     for side, _ in pairs(StaticData.SIDES_STRINGS) do
         local limbName = "Hand_" .. side
         if ModDataHandler.GetInstance():getIsCut(limbName) then
-            player:getXp():AddXP(Perks[limbName], 0.1)
+            player:getXp():AddXP(Perks["Side_" .. side], 0.1)
         end
     end
 end
 
 Events.OnPlayerUpdate.Add(PlayerHandler.UpdatePerks)
+
+
+
+
+local og_ISBaseTimedAction_adjustMaxTime = ISBaseTimedAction.adjustMaxTime
+function ISBaseTimedAction:adjustMaxTime(maxTime)
+    local time = og_ISBaseTimedAction_adjustMaxTime(self, maxTime)
+    local modDataHandler = ModDataHandler.GetInstance()
+    if time ~= -1 and modDataHandler and modDataHandler:getIsAnyLimbCut() then
+        local pl = getPlayer()
+        for i=1, #StaticData.LIMBS_STRINGS do
+            local limbName = StaticData.LIMBS_STRINGS[i]
+            if modDataHandler:getIsCut(limbName) then
+                --print("TOC: cut limb " .. limbName)
+                --print("TOC: cTime" .. tostring(time))
+                local perk = Perks["Side_" .. CommonMethods.GetSide(limbName)]
+                local perkLevel = pl:getPerkLevel(perk)
+                local perkLevelScaled
+                if perkLevel ~= 0 then
+                    perkLevelScaled = perkLevel / 10
+                else
+                    perkLevelScaled = 0
+                end
+                --print("TOC: perk level for this side: " .. tonumber(perkLevel))
+                --print("TOC: perk scaling for this side: " .. tonumber(perkLevelScaled))
+                time = time * (StaticData.LIMBS_TIME_MULTIPLIER[limbName] - perkLevelScaled)
+            end
+        end
+        --print("TOC: new time " .. tostring(time))
+    end
+    return time
+end
+
+
+
+
+
+
+
 
 return PlayerHandler

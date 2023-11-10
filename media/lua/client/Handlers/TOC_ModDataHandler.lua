@@ -2,7 +2,7 @@ local StaticData = require("TOC_StaticData")
 
 ----------------
 ---@alias partData { isCut : boolean?, isInfected : boolean?, isOperated : boolean?, isCicatrized : boolean?, isCauterized : boolean?, isVisible : boolean?, cicatrizationTime : number }
----@alias tocModData {Hand_L : partData, ForeArm_L : partData, UpperArm_L : partData, Hand_R : partData, ForeArm_R : partData, UpperArm_R : partData, isIgnoredPartInfected : boolean}
+---@alias tocModData {Hand_L : partData, ForeArm_L : partData, UpperArm_L : partData, Hand_R : partData, ForeArm_R : partData, UpperArm_R : partData, isIgnoredPartInfected : boolean, isAnyLimbCut : boolean}
 ----------------
 -- TODO This class should handle all the stuff related to the mod data
 
@@ -44,7 +44,8 @@ function ModDataHandler:createData()
     modData[StaticData.MOD_NAME] = {
 
         -- Generic stuff that does not belong anywhere else
-        isIgnoredPartInfected = false
+        isIgnoredPartInfected = false,
+        isAnyLimbCut = false
     }
 
     ---@type partData
@@ -65,7 +66,14 @@ end
 -----------------
 --* Setters *--
 
----Set isCut
+---Set a generic boolean that toggles varies function of the mod
+---@param isAnyLimbCut boolean
+function ModDataHandler:setIsAnyLimbCut(isAnyLimbCut)
+    self.tocData.isAnyLimbCut = true
+end
+
+
+---Set isCut 
 ---@param limbName string
 ---@param isCut boolean
 function ModDataHandler:setIsCut(limbName, isCut)
@@ -87,6 +95,14 @@ end
 
 -----------------
 --* Getters *--
+
+---Set a generic boolean that toggles varies function of the mod
+---@return boolean
+function ModDataHandler:getIsAnyLimbCut()
+    return self.tocData.isAnyLimbCut
+end
+
+
 ---Get isCut
 ---@param limbName string
 ---@return boolean
@@ -133,6 +149,9 @@ function ModDataHandler:setCutLimb(limbName, isOperated, isCicatrized, isCauteri
         -- Same story for cicatrizationTime, which will be 0
         self:setLimbParams(dependedLimbName, {isCut = true, isInfected = false, isVisible = false}, 0)
     end
+
+    -- Set that a limb has been cut, to activate some functions without having to loop through the parts
+    self:setIsAnyLimbCut(true)
 
     -- Set the highest amputation and caches them.
     ISHealthPanel.GetHighestAmputation()

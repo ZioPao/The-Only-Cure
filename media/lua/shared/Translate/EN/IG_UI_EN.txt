@@ -1,7 +1,7 @@
 IG_UI_EN = {
     IGUI_perks_Amputations = "Amputations",
-    IGUI_perks_Hand_R = "Right Hand",
-    IGUI_perks_Hand_L = "Left Hand",
+    IGUI_perks_Side_R = "Right Side",
+    IGUI_perks_Side_L = "Left Side",
 
     IGUI_perks_Prosthesis = "Prosthesis",
     IGUI_perks_ProstFamiliarity= "Familiarity",

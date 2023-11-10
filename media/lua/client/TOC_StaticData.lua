@@ -9,7 +9,8 @@ StaticData.PARTS_STRINGS = {
     UpperArm = "UpperArm"
 }
 
-StaticData.IGNORED_PARTS_STRINGS = { "Foot_L", "Foot_R", "Groin", "Head", "LowerLeg_L", "LowerLeg_R", "MAX", "Neck", "Torso_Lower", "Torso_Upper", "UpperLeg_L", "UpperLeg_R" }
+-- No "MAX" here.
+StaticData.IGNORED_PARTS_STRINGS = { "Foot_L", "Foot_R", "Groin", "Head", "LowerLeg_L", "LowerLeg_R", "Neck", "Torso_Lower", "Torso_Upper", "UpperLeg_L", "UpperLeg_R" }
 
 StaticData.SIDES_STRINGS = {
     R = "R",
@@ -22,6 +23,7 @@ StaticData.BODYPARTSTYPES_ENUM = {}
 StaticData.LIMBS_DEPENDENCIES = {}
 StaticData.LIMBS_CICATRIZATION_TIME = {}
 StaticData.LIMBS_BASE_DAMAGE = {}
+StaticData.LIMBS_TIME_MULTIPLIER = {}
 
 
 -- Link a trait to a specific body part
@@ -30,6 +32,30 @@ StaticData.TRAITS_BP = {
     AmputeeLowerArm = "ForeArm_L",
     AmputeeUpeerArm = "UpperArm_L"
 }
+
+
+local function AssembleHandData(assembledName)
+    StaticData.LIMBS_BASE_DAMAGE[assembledName] = 60
+    StaticData.LIMBS_CICATRIZATION_TIME[assembledName] = 1700
+    StaticData.LIMBS_TIME_MULTIPLIER[assembledName] = 2
+    StaticData.LIMBS_DEPENDENCIES[assembledName] = {}
+end
+
+local function AssembleForearmData(assembledName, side)
+    StaticData.LIMBS_BASE_DAMAGE[assembledName] = 80
+    StaticData.LIMBS_CICATRIZATION_TIME[assembledName] = 1800
+    StaticData.LIMBS_TIME_MULTIPLIER[assembledName] = 3
+    StaticData.LIMBS_DEPENDENCIES[assembledName] = { StaticData.PARTS_STRINGS.Hand .. "_" .. side }
+end
+
+local function AssembleUpperarmData(assembledName, side)
+    StaticData.LIMBS_BASE_DAMAGE[assembledName] = 100
+    StaticData.LIMBS_CICATRIZATION_TIME[assembledName] = 2000
+    StaticData.LIMBS_TIME_MULTIPLIER[assembledName] = 4
+    StaticData.LIMBS_DEPENDENCIES[assembledName] = { StaticData.PARTS_STRINGS.Hand .. "_" .. side,
+        StaticData.PARTS_STRINGS.ForeArm .. "_" .. side }
+end
+
 
 for side, _ in pairs(StaticData.SIDES_STRINGS) do
     for part, _ in pairs(StaticData.PARTS_STRINGS) do
@@ -41,21 +67,20 @@ for side, _ in pairs(StaticData.SIDES_STRINGS) do
 
         -- Dependencies and cicatrization time
         if part == StaticData.PARTS_STRINGS.Hand then
-            StaticData.LIMBS_BASE_DAMAGE[assembledName] = 60
-            StaticData.LIMBS_CICATRIZATION_TIME[assembledName] = 1700
-            StaticData.LIMBS_DEPENDENCIES[assembledName] = {}
+            AssembleHandData(assembledName)
         elseif part == StaticData.PARTS_STRINGS.ForeArm then
-            StaticData.LIMBS_BASE_DAMAGE[assembledName] = 80
-            StaticData.LIMBS_CICATRIZATION_TIME[assembledName] = 1800
-            StaticData.LIMBS_DEPENDENCIES[assembledName] = { StaticData.PARTS_STRINGS.Hand .. "_" .. side, }
+            AssembleForearmData(assembledName, side)
         elseif part == StaticData.PARTS_STRINGS.UpperArm then
-            StaticData.LIMBS_BASE_DAMAGE[assembledName] = 100
-            StaticData.LIMBS_CICATRIZATION_TIME[assembledName] = 2000
-            StaticData.LIMBS_DEPENDENCIES[assembledName] = { StaticData.PARTS_STRINGS.Hand .. "_" .. side, 
-                StaticData.PARTS_STRINGS.ForeArm .. "_" .. side }
+            AssembleUpperarmData(assembledName, side)
         end
     end
 end
+
+
+
+
+-----------------
+-- Visuals and clothing
 
 --- Textures
 -- TODO We need male variations
@@ -72,13 +97,6 @@ StaticData.HEALTH_PANEL_TEXTURES = {
     }
 
 }
-
-
------------------
--- Visuals and clothing
-
-
-
 
 StaticData.AMPUTATION_CLOTHING_ITEM_BASE = "TOC.Amputation_"
 

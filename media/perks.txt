@@ -16,11 +16,11 @@ perk Amputations
 	xp9 = 0,
 	xp10 = 0,
 }
-perk Hand_L
+perk Side_L
 {
 	parent = Amputations,
-	name = Hand_L,
-	translation = Hand_L,
+	name = Side_L,
+	translation = Side_L,
 	passive = false,
 	xp1 = 50,
 	xp2 = 100,
@@ -33,11 +33,11 @@ perk Hand_L
 	xp9 = 7000,
 	xp10 = 9000,
 }
-perk Hand_R
+perk Side_R
 {
 	parent = Amputations,
-	name = Hand_R,
-	translation = Hand_R,
+	name = Side_R,
+	translation = Side_R,
 	passive = false,
 	xp1 = 50,
 	xp2 = 100,
