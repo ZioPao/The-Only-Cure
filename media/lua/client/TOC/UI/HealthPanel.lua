@@ -3,7 +3,7 @@ local StaticData = require("TOC/StaticData")
 local CommonMethods = require("TOC/CommonMethods")
 
 ---@diagnostic disable: duplicate-set-field
-local CutLimbHandler = require("UI/TOC_CutLimbInteractions")
+local CutLimbHandler = require("TOC/UI/CutLimbInteractions")
 
 ---------------------------------
 

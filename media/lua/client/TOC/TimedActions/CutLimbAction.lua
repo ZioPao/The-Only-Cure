@@ -1,5 +1,5 @@
 require "TimedActions/ISBaseTimedAction"
-local AmputationHandler = require("Handlers/TOC_AmputationHandler")
+local AmputationHandler = require("TOC/Handlers/AmputationHandler")
 
 
 -----------------------------

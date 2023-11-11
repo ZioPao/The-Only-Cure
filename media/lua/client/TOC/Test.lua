@@ -3,7 +3,7 @@ local TestFramework = require("TestFramework/TestFramework")
 local TestUtils = require("TestFramework/TestUtils")
 
 local PlayerHandler = require("TOC/Handlers/PlayerHandler")
-local AmputationHandler = require("Handlers/TOC_AmputationHandler")
+local AmputationHandler = require("TOC/Handlers/AmputationHandler")
 
 
 TestFramework.registerTestModule("Functionality", "PlayerHandler", function()

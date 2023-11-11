@@ -1,5 +1,5 @@
-local BaseHandler = require("UI/TOC_HealthPanelBaseHandler")
-local CutLimbAction = require("TimedActions/TOC_CutLimbAction")
+local BaseHandler = require("TOC/UI/HealthPanelBaseHandler")
+local CutLimbAction = require("TOC/TimedActions/CutLimbAction")
 local StaticData = require("TOC/StaticData")
 local ModDataHandler = require("TOC/Handlers/ModDataHandler")
 
