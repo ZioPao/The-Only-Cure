@@ -66,6 +66,9 @@ function PlayerHandler.AddLocalAmputatedLimb(limbName)
 end
 
 --* Getters *--
+
+---Get a table with the strings of the amputated limbs
+---@return table
 function PlayerHandler.GetAmputatedLimbs()
     return PlayerHandler.amputatedLimbs or {}
 end
@@ -75,7 +78,6 @@ end
 ---Check if the player has an infected (as in, zombie infection) body part
 ---@param character IsoGameCharacter
 function PlayerHandler.CheckInfection(character)
-    
     -- This fucking event barely works. Bleeding seems to be the only thing that triggers it
     if character ~= getPlayer() then return end
     local bd = character:getBodyDamage()
@@ -104,30 +106,12 @@ function PlayerHandler.CheckInfection(character)
             PlayerHandler.modDataHandler:setIsIgnoredPartInfected(true)
         end
     end
-
 end
 
 Events.OnPlayerGetDamage.Add(PlayerHandler.CheckInfection)
 
----Handle perks
----@param player IsoPlayer
-function PlayerHandler.UpdatePerks(player)
-    -- TODO If player has an amputated limb, they're gonna level up them while doing normal stuff, getting better at it dynamically
-    -- TODO We should have a way to check if the player has done any amputation at all instead of having to check manually each time
 
-    -- TODO Should be run when player is doing stuff like picking up objects, not randomly
-    for side, _ in pairs(StaticData.SIDES_STRINGS) do
-        local limbName = "Hand_" .. side
-        if ModDataHandler.GetInstance():getIsCut(limbName) then
-            player:getXp():AddXP(Perks["Side_" .. side], 0.1)
-        end
-    end
-end
-
---Events.OnPlayerUpdate.Add(PlayerHandler.UpdatePerks)
-
-
---* Some overrides *--
+--* Overrides *--
 
 local og_ISBaseTimedAction_adjustMaxTime = ISBaseTimedAction.adjustMaxTime
 --- Adjust time
@@ -165,7 +149,6 @@ function ISBaseTimedAction:perform()
         end
     end
 end
-
 
 
 return PlayerHandler

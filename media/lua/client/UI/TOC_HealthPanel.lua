@@ -37,9 +37,7 @@ end
 
 --* Modification to handle visible amputation on the health menu *--
 
-
 function ISHealthPanel.GetHighestAmputation()
-    -- TODO Cache this instead of doing it here!
     ISHealthPanel.highestAmputations = {}
     for i=1, #PlayerHandler.amputatedLimbs do
         local limbName = PlayerHandler.amputatedLimbs[i]

@@ -6,16 +6,23 @@ local ModDataHandler = require("Handlers/TOC_ModDataHandler")
 ---------------------
 
 
----comment
+---Check if the item name corresponds to a compatible saw
 ---@param itemName string
 local function CheckIfSaw(itemName)
     return itemName == "Saw" or itemName == "GardenSaw" or itemName == "Chainsaw"
 end
 
+---Add the action to the queue
+---@param limbName string
+---@param surgeon IsoPlayer
+---@param patient IsoPlayer
 local function PerformAction(limbName, surgeon, patient)
     ISTimedActionQueue.add(CutLimbAction:new(surgeon, patient, limbName))
 end
 
+---Adds the actions to the inventory context menu
+---@param surgeonNum number
+---@param context ISUIElement
 local function AddInventoryAmputationOptions(surgeonNum, context)
     local surgeonObj = getSpecificPlayer(surgeonNum)
     local option = context:addOption(getText("ContextMenu_Amputate"), nil)
@@ -30,8 +37,12 @@ local function AddInventoryAmputationOptions(surgeonNum, context)
     end
 end
 
+---Handler for OnFillInventoryObjectContextMenu
+---@param player number
+---@param context ISUIElement
+---@param items table
 local function AddInventoryAmputationMenu(player, context, items)
-    local item = items[1]
+    local item = items[1]       -- Selected item
     if CheckIfSaw(item.name) then
         AddInventoryAmputationOptions(player, context)
     end

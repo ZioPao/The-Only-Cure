@@ -76,9 +76,6 @@ for side, _ in pairs(StaticData.SIDES_STRINGS) do
     end
 end
 
-
-
-
 -----------------
 -- Visuals and clothing
 

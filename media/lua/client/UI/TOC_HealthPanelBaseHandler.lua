@@ -1,4 +1,4 @@
--- Had to cop and paste this stuff from the base game since this is a local only class. Kinda shit, but eh
+-- Had to copy and paste this stuff from the base game since this is a local only class. Kinda shit, but eh
 
 ---@class BaseHandler : ISBaseObject
 ---@field panel ISUIElement

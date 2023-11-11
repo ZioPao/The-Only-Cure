@@ -34,7 +34,6 @@ function ModDataHandler:setup(force)
         self:createData()
     end
     -- TODO Check compatibility or do we just skip it at this point?
-
 end
 
 function ModDataHandler:createData()
@@ -61,9 +60,7 @@ function ModDataHandler:createData()
         modData[StaticData.MOD_NAME][limbName] = {}
         self:setLimbParams(StaticData.LIMBS_STRINGS[i], defaultParams, 0)
     end
-
 end
-
 
 -----------------
 --* Setters *--
@@ -73,7 +70,6 @@ end
 function ModDataHandler:setIsAnyLimbCut(isAnyLimbCut)
     self.tocData.isAnyLimbCut = true
 end
-
 
 ---Set isCut 
 ---@param limbName string
@@ -104,7 +100,6 @@ function ModDataHandler:getIsAnyLimbCut()
     return self.tocData.isAnyLimbCut
 end
 
-
 ---Get isCut
 ---@param limbName string
 ---@return boolean
@@ -123,8 +118,6 @@ end
 function ModDataHandler:getIsVisible(limbName)
     return self.tocData[limbName].isVisible
 end
-
-
 
 --* Limbs data handling *--
 
@@ -155,9 +148,7 @@ function ModDataHandler:setCutLimb(limbName, isOperated, isCicatrized, isCauteri
     -- Set that a limb has been cut, to activate some functions without having to loop through the parts
     self:setIsAnyLimbCut(true)
 
-
 end
-
 
 ---Internal use only, set a limb data
 ---@param limbName string
@@ -176,8 +167,6 @@ function ModDataHandler:setLimbParams(limbName, ampStatus, cicatrizationTime)
     if cicatrizationTime ~= nil then limbData.cicatrizationTime = cicatrizationTime end
 end
 
-
-
 ---@return ModDataHandler
 function ModDataHandler.GetInstance()
     if ModDataHandler.instance ~= nil then
@@ -186,8 +175,5 @@ function ModDataHandler.GetInstance()
         return ModDataHandler:new(getPlayer())
     end
 end
-
-
-
 
 return ModDataHandler
