@@ -22,7 +22,7 @@ end
 
 ---Adds the actions to the inventory context menu
 ---@param surgeonNum number
----@param context ISUIElement
+---@param context ISContextMenu
 local function AddInventoryAmputationOptions(surgeonNum, context)
     local surgeonObj = getSpecificPlayer(surgeonNum)
     local option = context:addOption(getText("ContextMenu_Amputate"), nil)

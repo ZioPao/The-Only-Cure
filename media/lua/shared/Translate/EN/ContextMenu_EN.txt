@@ -2,6 +2,7 @@ ContextMenu_EN = {
     ContextMenu_Amputate = "Amputate",
 
     ContextMenu_Cauterize = "Cauterize",
+    ContextMenu_Cauterize_TempTooLow_tooltip = "Temperature too low",
     
     ContextMenu_Limb_Hand_L = "Left Hand",
     ContextMenu_Limb_ForeArm_L = "Left forearm",

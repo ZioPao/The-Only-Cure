@@ -1,0 +1,3 @@
+Tooltip_EN = {
+    Tooltip_Surgery_TempTooLow = "Turn on the oven and wait for it to heat up before cauterizing your wound.",
+}
