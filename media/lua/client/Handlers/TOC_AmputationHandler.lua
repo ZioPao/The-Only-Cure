@@ -86,6 +86,8 @@ function AmputationHandler:execute(damagePlayer)
     -- Add it to the list of cut limbs
     PlayerHandler.AddLocalAmputatedLimb(self.limbName)
 
+    -- Set the highest amputation and caches them.
+    ISHealthPanel.GetHighestAmputation()
 end
 
 ---Deletes the instance

@@ -155,8 +155,7 @@ function ModDataHandler:setCutLimb(limbName, isOperated, isCicatrized, isCauteri
     -- Set that a limb has been cut, to activate some functions without having to loop through the parts
     self:setIsAnyLimbCut(true)
 
-    -- Set the highest amputation and caches them.
-    ISHealthPanel.GetHighestAmputation()
+
 end
 
 

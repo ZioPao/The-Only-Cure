@@ -1,5 +1,12 @@
 ContextMenu_EN = {
     ContextMenu_Amputate = "Amputate",
+    
+    ContextMenu_Limb_Hand_L = "Left Hand",
+    ContextMenu_Limb_ForeArm_L = "Left forearm",
+    ContextMenu_Limb_UpperArm_L = "Left UpperArm"
+    ContextMenu_Limb_Hand_R = "Right Hand",
+    ContextMenu_Limb_ForeArm_R = "Right forearm",
+    ContextMenu_Limb_UpperArm_R = "Right UpperArm"
 
 
     ContextMenu_InstallProstRight = "Install prosthesis on right arm",

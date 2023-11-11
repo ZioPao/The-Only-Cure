@@ -4,9 +4,9 @@ local AmputationHandler = require("Handlers/TOC_AmputationHandler")
 
 -----------------------------
 
----@class CutLimbAction
+---@class CutLimbAction : ISBaseTimedAction
 ---@field patient IsoPlayer
----@field surgeon IsoPlayer
+---@field character IsoPlayer
 ---@field limbName string
 local CutLimbAction = ISBaseTimedAction:derive("CutLimbAction")
 
@@ -15,18 +15,21 @@ local CutLimbAction = ISBaseTimedAction:derive("CutLimbAction")
 ---@param surgeon IsoPlayer
 ---@param limbName string
 ---@return CutLimbAction
-function CutLimbAction:new(patient, surgeon, limbName)
+function CutLimbAction:new(surgeon, patient, limbName)
     local o = {}
     setmetatable(o, self)
     self.__index = self
 
+    -- We need to follow ISBaseTimedAction. self.character is gonna be the surgeon
+    o.character = surgeon
     o.patient = patient
-    o.surgeon = surgeon
     o.limbName = limbName
 
     o.stopOnWalk = true
     o.stopOnRun = true
-    if o.surgeon:isTimedActionInstant() then o.maxTime = 1 end
+
+    o.maxTime = 100
+    if o.character:isTimedActionInstant() then o.maxTime = 1 end
 
     return o
 end
@@ -37,7 +40,7 @@ function CutLimbAction:isValid()
 end
 
 function CutLimbAction:start()
-    if self.patient == self.surgeon then
+    if self.patient == self.character then
         -- Self
         self.handler = AmputationHandler:new(self.limbName)
         self.handler:damageDuringAmputation()

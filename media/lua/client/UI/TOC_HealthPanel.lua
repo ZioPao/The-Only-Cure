@@ -3,7 +3,7 @@ local StaticData = require("TOC_StaticData")
 local CommonMethods = require("TOC_Common")
 
 ---@diagnostic disable: duplicate-set-field
-local CutLimbHandler = require("UI/TOC_CutLimbHandler")
+local CutLimbHandler = require("UI/TOC_CutLimbInteractions")
 
 -- TODO Use this to replace the sprites once a limb is cut
 ISHealthBodyPartPanel = ISBodyPartPanel:derive("ISHealthBodyPartPanel")

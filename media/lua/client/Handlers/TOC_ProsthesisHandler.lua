@@ -7,12 +7,12 @@ local PlayerHandler = require("Handlers/TOC_PlayerHandler")
 local ProsthesisHandler = {}
 
 
-
+---Cache the correct texture for the Health Panel for the currently equipped prosthesis
 function ProsthesisHandler.SetHealthPanelTexture()
     -- TODO do it
 end
 
----comment
+---Check if a prosthesis is equippable. It depends whether the player has a cut limb or not on that specific side. There's an exception for Upper arm, obviously
 ---@param bodyLocation string
 ---@return boolean
 function ProsthesisHandler.CheckIfEquippable(bodyLocation)
@@ -33,9 +33,6 @@ end
 
 --* Overrides *--
 
-
-
-
 function ISWearClothing:isValid()
     local bodyLocation = self.item:getBodyLocation()
     if not string.contains(bodyLocation, "TOC_ArmProst") then
@@ -44,7 +41,6 @@ function ISWearClothing:isValid()
         return ProsthesisHandler.CheckIfEquippable(bodyLocation)
     end
 end
-
 
 local og_ISClothingExtraAction_isValid = ISClothingExtraAction.isValid
 function ISClothingExtraAction:isValid()

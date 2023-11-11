@@ -1,5 +1,9 @@
 -- Had to cop and paste this stuff from the base game since this is a local only class. Kinda shit, but eh
 
+---@class BaseHandler : ISBaseObject
+---@field panel ISUIElement
+---@field bodyPart BodyPart
+---@field items table
 local BaseHandler = ISBaseObject:derive("BaseHandler")
 
 function BaseHandler:new(panel, bodyPart)
