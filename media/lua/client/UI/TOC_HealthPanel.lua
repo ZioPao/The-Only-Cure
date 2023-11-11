@@ -5,7 +5,13 @@ local CommonMethods = require("TOC_Common")
 ---@diagnostic disable: duplicate-set-field
 local CutLimbHandler = require("UI/TOC_CutLimbInteractions")
 
--- TODO Use this to replace the sprites once a limb is cut
+---------------------------------
+
+-- We're overriding ISHealthPanel to add custom textures to the body panel.
+-- By doing so we can show the player which limbs have been cut without having to use another menu
+-- We can show prosthesis too this way
+-- We also manage the drag'n drop of items on the body to let the players use the saw this way too
+
 ISHealthBodyPartPanel = ISBodyPartPanel:derive("ISHealthBodyPartPanel")
 
 --* Handling drag n drop of the saw *--
