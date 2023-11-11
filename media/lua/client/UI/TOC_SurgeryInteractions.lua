@@ -39,10 +39,7 @@ local function AddOvenContextMenu(playerNum, context, worldObjects, test)
         end
     end
     if stoveObj == nil then return end
-
-
-
-    --if pl:HasTrait("Brave") or pl:getPerkLevel(Perks.Strength) > 5 then
+    if pl:HasTrait("Brave") or pl:getPerkLevel(Perks.Strength) > 5 then
         local isTempLow = stoveObj:getCurrentTemperature() < 250
         local tempTooltip = ISToolTip:new()
         tempTooltip:initialise()
@@ -52,12 +49,6 @@ local function AddOvenContextMenu(playerNum, context, worldObjects, test)
 
         local optionMain = context:addOption(getText("ContextMenu_Cauterize"), nil)
         local subMenu = context:getNew(context)
-        --subMenu.toolTip = tempTooltip
-        -- if isTempLow then
-        --     print("TOC: show tooltip")
-        --     subMenu:showTooltip(subMenu)   -- Thank you TIS for this awful overriding you did
-        -- end
-
         context:addSubMenu(optionMain, subMenu)
         for i=1, #amputatedLimbs do
             local limbName = amputatedLimbs[i]
@@ -67,7 +58,7 @@ local function AddOvenContextMenu(playerNum, context, worldObjects, test)
                 option.toolTip = tempTooltip
             end
         end
-    --end
+    end
 
 end
 
