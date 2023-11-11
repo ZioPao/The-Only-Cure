@@ -1,5 +1,5 @@
-local StaticData = require("TOC_StaticData")
-local CommonMethods = require("TOC_Common")
+local StaticData = require("TOC/StaticData")
+local CommonMethods = require("TOC/CommonMethods")
 
 ---------------------------
 

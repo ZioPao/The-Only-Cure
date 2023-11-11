@@ -1,6 +1,6 @@
-local PlayerHandler = require("Handlers/TOC_PlayerHandler")
-local StaticData = require("TOC_StaticData")
-local CommonMethods = require("TOC_Common")
+local PlayerHandler = require("TOC/Handlers/PlayerHandler")
+local StaticData = require("TOC/StaticData")
+local CommonMethods = require("TOC/CommonMethods")
 
 ---@diagnostic disable: duplicate-set-field
 local CutLimbHandler = require("UI/TOC_CutLimbInteractions")

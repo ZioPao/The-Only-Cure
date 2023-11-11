@@ -1,5 +1,5 @@
-local CommonMethods = require("TOC_Common")
-local PlayerHandler = require("Handlers/TOC_PlayerHandler")
+local CommonMethods = require("TOC/CommonMethods")
+local PlayerHandler = require("TOC/Handlers/PlayerHandler")
 
 -------------------------
 

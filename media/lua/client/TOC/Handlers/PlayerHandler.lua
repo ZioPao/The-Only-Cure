@@ -1,6 +1,6 @@
-local ModDataHandler = require("Handlers/TOC_ModDataHandler")
-local CommonMethods = require("TOC_Common")
-local StaticData = require("TOC_StaticData")
+local ModDataHandler = require("TOC/Handlers/ModDataHandler")
+local CommonMethods = require("TOC/CommonMethods")
+local StaticData = require("TOC/StaticData")
 -----------
 
 -- TODO We should instantiate this anyway if we want to keep track of cut limbs here. Doing so, we would be able to handle other players too
@@ -20,7 +20,7 @@ local PlayerHandler = {}
 ---@param playerObj IsoPlayer
 ---@param isForced boolean?
 function PlayerHandler.InitializePlayer(_, playerObj, isForced)
-    PlayerHandler.modDataHandler = ModDataHandler:new(playerObj)
+    PlayerHandler.modDataHandler = ModDataHandler:new(playerObj)        -- TODO This isn't gonna work for MP purposes
     PlayerHandler.modDataHandler:setup(isForced)
     PlayerHandler.playerObj = playerObj
 
@@ -37,7 +37,7 @@ function PlayerHandler.InitializePlayer(_, playerObj, isForced)
     -- Since isForced is used to reset an existing player data, we're gonna clean their ISHealthPanel table too
     if isForced then
         ISHealthPanel.highestAmputations = {}
-        local ItemsHandler = require("Handlers/TOC_ItemsHandler")
+        local ItemsHandler = require("TOC/Handlers/ItemsHandler")
         ItemsHandler.DeleteAllOldAmputationItems(playerObj)
     end
 end
@@ -62,12 +62,12 @@ end
 ---@param limbName string
 function PlayerHandler.AddLocalAmputatedLimb(limbName)
     print("TOC: added " .. limbName .. " to known amputated limbs")
-    table.insert(PlayerHandler.amputatedLimbs, limbName)
+    table.insert(PlayerHandler.amputatedLimbs, limbName)        -- TODO This should be player specific, not generic
 end
 
 --* Getters *--
 
----Get a table with the strings of the amputated limbs
+---Get a table with the strings of the cached amputated limbs
 ---@return table
 function PlayerHandler.GetAmputatedLimbs()
     return PlayerHandler.amputatedLimbs or {}

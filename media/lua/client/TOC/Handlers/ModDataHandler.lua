@@ -1,4 +1,4 @@
-local StaticData = require("TOC_StaticData")
+local StaticData = require("TOC/StaticData")
 
 ----------------
 ---@alias partData { isCut : boolean?, isInfected : boolean?, isOperated : boolean?, isCicatrized : boolean?, isCauterized : boolean?, isVisible : boolean?, cicatrizationTime : number }

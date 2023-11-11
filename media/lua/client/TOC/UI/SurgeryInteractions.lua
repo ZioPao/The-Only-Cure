@@ -1,6 +1,5 @@
-local PlayerHandler = require("Handlers/TOC_PlayerHandler")
-local StaticData = require("TOC_StaticData")
-local ModDataHandler = require("Handlers/TOC_ModDataHandler")
+local PlayerHandler = require("TOC/Handlers/PlayerHandler")
+local ModDataHandler = require("TOC/Handlers/ModDataHandler")
 
 ---------------
 

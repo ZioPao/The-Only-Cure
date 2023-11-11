@@ -1,4 +1,4 @@
-local PlayerHandler = require("Handlers/TOC_PlayerHandler")
+local PlayerHandler = require("TOC/Handlers/PlayerHandler")
 
 
 ------------------

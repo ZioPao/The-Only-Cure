@@ -1,8 +1,7 @@
-local ModDataHandler = require("Handlers/TOC_ModDataHandler")
-local StaticData = require("TOC_StaticData")
-local ItemsHandler = require("Handlers/TOC_ItemsHandler")
-local PlayerHandler = require("Handlers/TOC_PlayerHandler")
-
+local ModDataHandler = require("TOC/Handlers/ModDataHandler")
+local ItemsHandler = require("TOC/Handlers/ItemsHandler")
+local PlayerHandler = require("TOC/Handlers/PlayerHandler")
+local StaticData = require("TOC/StaticData")
 ---------------------------
 
 -- TODO Add Bandages, Torniquet, etc.
