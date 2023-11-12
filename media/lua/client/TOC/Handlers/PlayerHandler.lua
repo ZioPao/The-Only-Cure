@@ -15,13 +15,12 @@ local StaticData = require("TOC/StaticData")
 ---@field playerObj IsoPlayer
 local PlayerHandler = {}
 
----Setup player modData
+---Setup the Player Handler and modData
 ---@param _ nil
 ---@param playerObj IsoPlayer
 ---@param isForced boolean?
 function PlayerHandler.InitializePlayer(_, playerObj, isForced)
-    PlayerHandler.modDataHandler = ModDataHandler:new(playerObj)        -- TODO This isn't gonna work for MP purposes
-    PlayerHandler.modDataHandler:setup(isForced)
+    PlayerHandler.SetupModData(playerObj, isForced)
     PlayerHandler.playerObj = playerObj
 
     -- Calculate amputated limbs at startup
@@ -29,7 +28,7 @@ function PlayerHandler.InitializePlayer(_, playerObj, isForced)
 
     for i=1, #StaticData.LIMBS_STRINGS do
         local limbName = StaticData.LIMBS_STRINGS[i]
-        if PlayerHandler.modDataHandler:getIsCut(limbName) then
+        if ModDataHandler.GetInstance():getIsCut(limbName) then
             PlayerHandler.AddLocalAmputatedLimb(limbName)
         end
     end
@@ -39,6 +38,35 @@ function PlayerHandler.InitializePlayer(_, playerObj, isForced)
         ISHealthPanel.highestAmputations = {}
         local ItemsHandler = require("TOC/Handlers/ItemsHandler")
         ItemsHandler.DeleteAllOldAmputationItems(playerObj)
+    end
+end
+
+---Setup TOC mod data to a local client
+---@param playerObj IsoPlayer
+---@param isForced boolean?
+function PlayerHandler.SetupModData(playerObj, isForced)
+    local tocData = playerObj:getModData()[StaticData.MOD_NAME]
+    if isForced or tocData == nil or tocData.Hand_L == nil or tocData.Hand_L.isCut == nil then
+        local modData = playerObj:getModData()
+        modData[StaticData.MOD_NAME] = {
+            -- Generic stuff that does not belong anywhere else
+            isIgnoredPartInfected = false,
+            isAnyLimbCut = false
+        }
+
+        ---@type partData
+        local defaultParams = {isCut = false, isInfected = false, isOperated = false, isCicatrized = false, isCauterized = false, isVisible = false}
+
+        -- We're gonna make a instance of ModDataHandler to setup this player
+        local plUsername = playerObj:getUsername()
+        local dataHandler = ModDataHandler:new(plUsername, modData[StaticData.MOD_NAME])
+
+        -- Initialize limbs
+        for i=1, #StaticData.LIMBS_STRINGS do
+            local limbName = StaticData.LIMBS_STRINGS[i]
+            modData[StaticData.MOD_NAME][limbName] = {}
+            dataHandler:setLimbParams(StaticData.LIMBS_STRINGS[i], defaultParams, 0)
+        end
     end
 end
 
@@ -56,7 +84,6 @@ function PlayerHandler.ManageTraits(playerObj)
         end
     end
 end
-
 
 ---Cache the currently amputated limbs
 ---@param limbName string
@@ -87,23 +114,23 @@ function PlayerHandler.CheckInfection(character)
         local bodyPart = bd:getBodyPart(bptEnum)
 
         if bodyPart:bitten() or bodyPart:IsInfected() then
-            if PlayerHandler.modDataHandler:getIsCut(limbName) then
+            if ModDataHandler.GetInstance():getIsCut(limbName) then
                 bodyPart:SetBitten(false)
             else
-                PlayerHandler.modDataHandler:setIsInfected(limbName, true)
+                ModDataHandler.GetInstance():setIsInfected(limbName, true)
             end
         end
     end
 
     -- Check other body parts that are not included in the mod, if there's a bite there then the player is fucked
     -- We can skip this loop if the player has been infected. The one before we kinda need it to handle correctly the bites in case the player wanna cut stuff off anyway
-    if PlayerHandler.modDataHandler:getIsIgnoredPartInfected() then return end
+    if ModDataHandler.GetInstance():getIsIgnoredPartInfected() then return end
 
     for i=1, #StaticData.IGNORED_PARTS_STRINGS do
         local bodyPartType = BodyPartType[StaticData.IGNORED_PARTS_STRINGS[i]]
         local bodyPart = bd:getBodyPart(bodyPartType)
         if bodyPart and (bodyPart:bitten() or bodyPart:IsInfected()) then
-            PlayerHandler.modDataHandler:setIsIgnoredPartInfected(true)
+            ModDataHandler.GetInstance():setIsIgnoredPartInfected(true)
         end
     end
 end
@@ -140,7 +167,7 @@ local og_ISBaseTimedAction_perform = ISBaseTimedAction.perform
 function ISBaseTimedAction:perform()
 	og_ISBaseTimedAction_perform(self)
 
-    if PlayerHandler.modDataHandler:getIsAnyLimbCut() then
+    if ModDataHandler.GetInstance():getIsAnyLimbCut() then
         for side, _ in pairs(StaticData.SIDES_STRINGS) do
             local limbName = "Hand_" .. side
             if ModDataHandler.GetInstance():getIsCut(limbName) then

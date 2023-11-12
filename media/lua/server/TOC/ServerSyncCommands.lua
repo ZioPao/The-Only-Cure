@@ -4,6 +4,10 @@ local moduleName = CommandsData.modules.TOC_SYNC
 
 ------------------------------
 
+
+-- TODO This is gonna be impossible to manage. We need Global Mod Data to keep track of this kind of stuff at this point
+
+
 ---A client has asked the server to ask another client to send its toc mod data
 ---@param surgeonPl IsoPlayer
 ---@param args {patientNum : number}

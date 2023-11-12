@@ -1,6 +1,7 @@
 local PlayerHandler = require("TOC/Handlers/PlayerHandler")
 local StaticData = require("TOC/StaticData")
 local CommonMethods = require("TOC/CommonMethods")
+local ModDataHandler = require("TOC/Handlers/ModDataHandler")
 
 ---@diagnostic disable: duplicate-set-field
 local CutLimbHandler = require("TOC/UI/CutLimbInteractions")
@@ -43,17 +44,26 @@ end
 
 --* Modification to handle visible amputation on the health menu *--
 
-function ISHealthPanel.GetHighestAmputation()
-    ISHealthPanel.highestAmputations = {}
+
+
+function ISHealthPanel:setHighestAmputation()
+    if self.otherPlayer ~= nil then
+        self.tocUsername = self.otherPlayer:getUsername()
+    else
+        self.tocUsername = self.character:getUsername()
+    end
+
+    ISHealthPanel.highestAmputations[self.tocUsername] = {}
+    local modDataHandler = ModDataHandler.GetInstance(self.tocUsername)
+    if modDataHandler == nil then return end        -- TODO Test this
     for i=1, #PlayerHandler.amputatedLimbs do
         local limbName = PlayerHandler.amputatedLimbs[i]
         local index = CommonMethods.GetSide(limbName)
-        if PlayerHandler.modDataHandler:getIsCut(limbName) and PlayerHandler.modDataHandler:getIsVisible(limbName) then
+        if modDataHandler:getIsCut(limbName) and modDataHandler:getIsVisible(limbName) then
             ISHealthPanel.highestAmputations[index] = limbName
         end
     end
 end
-
 
 local og_ISHealthPanel_initialise = ISHealthPanel.initialise
 function ISHealthPanel:initialise()
@@ -62,8 +72,20 @@ function ISHealthPanel:initialise()
     else
         self.sexPl = "Male"
     end
+
+    self:setHighestAmputation()
+
     og_ISHealthPanel_initialise(self)
 end
+
+local og_ISHealthPanel_setOtherPlayer = ISHealthPanel.setOtherPlayer
+---comment
+---@param playerObj IsoPlayer
+function ISHealthPanel:setOtherPlayer(playerObj)
+    og_ISHealthPanel_setOtherPlayer(self, playerObj)
+    self:setHighestAmputation()
+end
+
 
 local og_ISHealthPanel_render = ISHealthPanel.render
 function ISHealthPanel:render()
@@ -71,20 +93,20 @@ function ISHealthPanel:render()
 
     -- TODO Handle another player health panel
 
-    if ISHealthPanel.highestAmputations then
+    if ISHealthPanel.highestAmputations[self.tocUsername] then
         -- Left Texture
-        if ISHealthPanel.highestAmputations["L"] then
+        if ISHealthPanel.highestAmputations[self.tocUsername]["L"] then
             local textureL = StaticData.HEALTH_PANEL_TEXTURES[self.sexPl][ISHealthPanel.highestAmputations["L"]]
             self:drawTexture(textureL, self.healthPanel.x/2 - 2, self.healthPanel.y/2, 1, 1, 0, 0)
         end
 
         -- Right Texture
-        if ISHealthPanel.highestAmputations["R"] then
+        if ISHealthPanel.highestAmputations[self.tocUsername]["R"] then
             local textureR = StaticData.HEALTH_PANEL_TEXTURES[self.sexPl][ISHealthPanel.highestAmputations["R"]]
             self:drawTexture(textureR, self.healthPanel.x/2 + 2, self.healthPanel.y/2, 1, 1, 0, 0)
         end
     else
-        ISHealthPanel.GetHighestAmputation()
+        ISHealthPanel.GetHighestAmputation(self.tocUsername)
     end
 end
 

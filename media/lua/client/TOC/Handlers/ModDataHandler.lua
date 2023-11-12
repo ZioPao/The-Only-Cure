@@ -1,64 +1,36 @@
 local StaticData = require("TOC/StaticData")
 
 ----------------
---This class should handle all the stuff related to the mod data
 
+--- Handle all mod data related stuff
 ---@class ModDataHandler
 ---@field playerObj IsoPlayer
 ---@field tocData tocModData 
 local ModDataHandler = {}
+ModDataHandler.instances = {}
 
----@param playerObj IsoPlayer
+
+function ModDataHandler.AddExternalTocData(username, tocData)
+
+end
+
+
+---@param username string
+---@param tocData tocModData
 ---@return ModDataHandler
-function ModDataHandler:new(playerObj)
+function ModDataHandler:new(username, tocData)
     local o = {}
     setmetatable(o, self)
     self.__index = self
-    -- TODO Instead of requiring a player, to make it compatible in a MP env, we should require the table containing the modData for the init
+    -- Instead of requiring a player, to make it compatible in a MP env, we should require the table containing the modData for the init
 
-    o.playerObj = playerObj
-    o.tocData = playerObj:getModData()[StaticData.MOD_NAME]
-
-    ModDataHandler.instance = o
+    o.tocData = tocData
+    ModDataHandler.instances[username] = o
 
     return o
 end
 
----Setup a newly instanced ModDataHandler
----@param force boolean?
-function ModDataHandler:setup(force)
-    local tocData = self.playerObj:getModData()[StaticData.MOD_NAME]
-    if force or tocData == nil or tocData.Hand_L == nil or tocData.Hand_L.isCut == nil then
-        self:createData()
-    end
-    -- TODO Check compatibility or do we just skip it at this point?
-end
 
-function ModDataHandler:createData()
-    print("TOC: createData")
-
-    local modData = self.playerObj:getModData()
-    modData[StaticData.MOD_NAME] = {
-
-        -- Generic stuff that does not belong anywhere else
-        isIgnoredPartInfected = false,
-        isAnyLimbCut = false
-    }
-
-    -- Set a reference to TOC data in ModData
-    self.tocData = self.playerObj:getModData()[StaticData.MOD_NAME]
-
-    ---@type partData
-    local defaultParams = {isCut = false, isInfected = false, isOperated = false, isCicatrized = false, isCauterized = false, isVisible = false}
-
-
-    -- Initialize limbs
-    for i=1, #StaticData.LIMBS_STRINGS do
-        local limbName = StaticData.LIMBS_STRINGS[i]
-        modData[StaticData.MOD_NAME][limbName] = {}
-        self:setLimbParams(StaticData.LIMBS_STRINGS[i], defaultParams, 0)
-    end
-end
 
 -----------------
 --* Setters *--
@@ -148,11 +120,10 @@ function ModDataHandler:setCutLimb(limbName, isOperated, isCicatrized, isCauteri
 
 end
 
----Internal use only, set a limb data
+---Set a limb data
 ---@param limbName string
 ---@param ampStatus partData {isCut, isInfected, isOperated, isCicatrized, isCauterized, isVisible}
 ---@param cicatrizationTime integer?
----@private
 function ModDataHandler:setLimbParams(limbName, ampStatus, cicatrizationTime)
     local limbData = self.tocData[limbName]
     if ampStatus.isCut ~= nil then limbData.isCut = ampStatus.isCut end
@@ -165,12 +136,18 @@ function ModDataHandler:setLimbParams(limbName, ampStatus, cicatrizationTime)
     if cicatrizationTime ~= nil then limbData.cicatrizationTime = cicatrizationTime end
 end
 
----@return ModDataHandler
-function ModDataHandler.GetInstance()
-    if ModDataHandler.instance ~= nil then
-        return ModDataHandler.instance
+
+---@param username string?
+---@return ModDataHandler?
+function ModDataHandler.GetInstance(username)
+
+    if username == nil then username = getPlayer():getUsername() end
+
+    if ModDataHandler.instances[username] ~= nil then
+        return ModDataHandler.instances[username]
     else
-        return ModDataHandler:new(getPlayer())
+        return nil      -- TODO This isn't exactly good
+        --return ModDataHandler:new(getPlayer())
     end
 end
 
