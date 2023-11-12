@@ -109,7 +109,7 @@ function ISInventoryPane:refreshContainer()
     for i=1, #self.itemslist do
         local cItem = self.itemslist[i]
         if cItem and cItem.cat == "Amputation" then
-            TOC_DEBUG.print("current item is an amputation, removing it from the list")
+            TOC_DEBUG.print("Refreshing container - current item is an amputation, removing it from the list of the container")
             table.remove(self.itemslist, i)
         end
     end

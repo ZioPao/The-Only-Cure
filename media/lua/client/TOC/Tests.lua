@@ -11,7 +11,7 @@ TestFramework.registerTestModule("Functionality", "PlayerHandler", function()
     local Tests = {}
     function Tests.InitializePlayer()
         local pl = getPlayer()
-        PlayerHandler.InitializePlayer(_, pl, true)
+        PlayerHandler.InitializePlayer(pl, true)
     end
 
     function Tests.SetMaxPerks()

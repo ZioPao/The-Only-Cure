@@ -1,35 +1,67 @@
+local CommandsData = require("TOC/CommandsData")
 local StaticData = require("TOC/StaticData")
 
 ----------------
 
 --- Handle all mod data related stuff
 ---@class ModDataHandler
----@field playerObj IsoPlayer
+---@field username string
 ---@field tocData tocModData 
 local ModDataHandler = {}
 ModDataHandler.instances = {}
 
-
-function ModDataHandler.AddExternalTocData(username, tocData)
-
-end
-
+ -- Instead of requiring a player, to make it compatible in a MP env, we should require the table containing the modData for the init
 
 ---@param username string
----@param tocData tocModData
+---@param isResetForced boolean?
 ---@return ModDataHandler
-function ModDataHandler:new(username, tocData)
+function ModDataHandler:new(username, isResetForced)
     local o = {}
     setmetatable(o, self)
     self.__index = self
-    -- Instead of requiring a player, to make it compatible in a MP env, we should require the table containing the modData for the init
+    o.username = username       
+    local key = CommandsData.GetKey(username)
 
-    o.tocData = tocData
+    ModData.request(key)
+    o.tocData = ModData.get(key)
+
+    if isResetForced or o.tocData == nil or o.tocData.Hand_L == nil or o.tocData.Hand_L.isCut == nil then
+        TOC_DEBUG.print("tocData in ModDataHandler for " .. username .. " is nil, creating it now")
+        self:setup(key)
+    end
+
     ModDataHandler.instances[username] = o
 
     return o
 end
 
+---Setup a new toc mod data data class
+---@param key string
+function ModDataHandler:setup(key)
+
+    ---@type tocModData
+    self.tocData = {
+        -- Generic stuff that does not belong anywhere else
+        isIgnoredPartInfected = false,
+        isAnyLimbCut = false
+    }
+
+    ---@type partData
+    local defaultParams = {isCut = false, isInfected = false, isOperated = false, isCicatrized = false, isCauterized = false, isVisible = false}
+
+    -- Initialize limbs
+    for i=1, #StaticData.LIMBS_STRINGS do
+        local limbName = StaticData.LIMBS_STRINGS[i]
+        self.tocData[limbName] = {}
+        self:setLimbParams(StaticData.LIMBS_STRINGS[i], defaultParams, 0)
+    end
+
+    -- Add it to global mod data
+    ModData.add(key, self.tocData)
+
+    -- Transmit it to the server
+    ModData.transmit(key)
+end
 
 
 -----------------
@@ -137,17 +169,23 @@ function ModDataHandler:setLimbParams(limbName, ampStatus, cicatrizationTime)
 end
 
 
+--* Global Mod Data Apply *--
+
+function ModDataHandler:apply()
+    ModData.transmit(CommandsData.GetKey(self.username))
+end
+
 ---@param username string?
----@return ModDataHandler?
+---@return ModDataHandler
 function ModDataHandler.GetInstance(username)
+    if username == nil then
+        username = getPlayer():getUsername()
+    end
 
-    if username == nil then username = getPlayer():getUsername() end
-
-    if ModDataHandler.instances[username] ~= nil then
-        return ModDataHandler.instances[username]
+    if ModDataHandler.instances[username] == nil then
+        return ModDataHandler:new(username)
     else
-        return nil      -- TODO This isn't exactly good
-        --return ModDataHandler:new(getPlayer())
+        return ModDataHandler.instances[username]
     end
 end
 

@@ -76,7 +76,10 @@ function AmputationHandler:execute(damagePlayer)
 
 
     -- Set the data in modData
-    ModDataHandler.GetInstance():setCutLimb(self.limbName, false, false, false, surgeonFactor)
+    -- TODO This could be run on another player! 
+    local modDataHandler = ModDataHandler.GetInstance()
+    modDataHandler:setCutLimb(self.limbName, false, false, false, surgeonFactor)
+    modDataHandler:apply()
 
     -- Give the player the correct amputation item
     ItemsHandler.DeleteOldAmputationItem(self.patient, self.limbName)
@@ -86,7 +89,7 @@ function AmputationHandler:execute(damagePlayer)
     PlayerHandler.AddLocalAmputatedLimb(self.limbName)
 
     -- Set the highest amputation and caches them.
-    ISHealthPanel.GetHighestAmputation()
+    --ISHealthPanel.GetHighestAmputation()
 end
 
 ---Deletes the instance
@@ -98,7 +101,7 @@ end
 function AmputationHandler.UpdateCicatrization()
     if ModDataHandler.GetInstance():getIsAnyLimbCut() == false then return end
 
-
+    -- TODO Update cicatrization
 end
 
 return AmputationHandler

@@ -1,24 +1,27 @@
 local CommandsData = require("TOC/CommandsData")
+local ModDataHandler = require("TOC/Handlers/ModDataHandler")
+
 local ClientSyncCommands = {}
 local moduleName = CommandsData.modules.TOC_SYNC
 
 ------------------------------
 
 ---Send the toc mod data to the server to relay it to someone else
----@param args {surgeonNum : number}
+---@param args sendPlayerDataParams
 function ClientSyncCommands.SendPlayerData(args)
     -- TODO get moddata and send it
-    sendClientCommand(moduleName, CommandsData.server.Sync.RelayPlayerData, {surgeonNum = args.surgeonNum, tocData = {}})
+
+    ---@type relayPlayerDataParams
+    local params = {surgeonNum = args.surgeonNum, tocData = {}}
+    sendClientCommand(moduleName, CommandsData.server.Sync.RelayPlayerData, params)
 end
 
 ---Receives and store the toc mod data from another player
----@param args {patientNum : number}
+---@param args receivePlayerDataParams
 function ClientSyncCommands.ReceivePlayerData(args)
     local patientPl = getSpecificPlayer(args.patientNum)
     local patientUsername patientPl:getUsername()
-
-
-    -- TODO Save the data somewhere that makes sense.
+    ModDataHandler.AddExternalTocData(patientUsername, args.tocData)
 end
 
 ------------------------------

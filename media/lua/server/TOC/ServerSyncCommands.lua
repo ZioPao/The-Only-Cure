@@ -10,20 +10,25 @@ local moduleName = CommandsData.modules.TOC_SYNC
 
 ---A client has asked the server to ask another client to send its toc mod data
 ---@param surgeonPl IsoPlayer
----@param args {patientNum : number}
+---@param args askPlayerDataParams
 function ServerSyncCommands.AskPlayerData(surgeonPl, args)
     local patientPl = getSpecificPlayer(args.patientNum)
-    local surgeonNum = surgeonPl:getOnlineID()
-    sendServerCommand(patientPl, moduleName, CommandsData.client.Sync.SendPlayerData, {surgeonNum = surgeonNum})
+
+    ---@type sendPlayerDataParams
+    local params = {surgeonNum = surgeonPl:getOnlineID()}
+    sendServerCommand(patientPl, moduleName, CommandsData.client.Sync.SendPlayerData, params)
 end
 
 ---Relay the toc mod data from a certain player to another one
 ---@param patientPl IsoPlayer
----@param args {surgeonNum : number, tocData : tocModData}
+---@param args relayPlayerDataParams
 function ServerSyncCommands.RelayPlayerData(patientPl, args)
     local surgeonPl = getSpecificPlayer(args.surgeonNum)
     local patientNum = patientPl:getOnlineID()
-    sendServerCommand(surgeonPl, moduleName, CommandsData.client.Sync.ReceivePlayerData, {patientNum = patientNum, tocData = args.tocData})
+
+    ---@type receivePlayerDataParams
+    local params = {patientNum = patientNum, tocData = args.tocData}
+    sendServerCommand(surgeonPl, moduleName, CommandsData.client.Sync.ReceivePlayerData, params)
 end
 
 ------------------------------

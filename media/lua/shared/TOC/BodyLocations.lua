@@ -1,4 +1,5 @@
 -- TODO This part is still one of the weakest and we don't have a better solution yet
+require("TOC/Debug")
 
 local function AddBodyLocationBefore(newLocation, moveToLocation)
     local group = BodyLocations.getGroup("Human")

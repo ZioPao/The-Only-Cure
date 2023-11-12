@@ -40,9 +40,16 @@ function Main.Start()
     Main.SetupTraits()
 
     -- Starts initialization for local client
-    Events.OnCreatePlayer.Add(PlayerHandler.InitializePlayer)
+    Events.OnGameStart.Add(Main.Initialize)
 
 end
+
+
+function Main.Initialize()
+    local pl = getPlayer()
+    PlayerHandler.InitializePlayer(pl, false)
+end
+
 
 --* Events *--
 
