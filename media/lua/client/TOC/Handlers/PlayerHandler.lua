@@ -88,7 +88,7 @@ end
 ---Cache the currently amputated limbs
 ---@param limbName string
 function PlayerHandler.AddLocalAmputatedLimb(limbName)
-    print("TOC: added " .. limbName .. " to known amputated limbs")
+    TOC_DEBUG.print("added " .. limbName .. " to known amputated limbs")
     table.insert(PlayerHandler.amputatedLimbs, limbName)        -- TODO This should be player specific, not generic
 end
 

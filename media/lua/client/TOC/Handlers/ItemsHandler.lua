@@ -47,7 +47,7 @@ function ItemsHandler.RemoveClothingItem(playerObj, clothingItem)
         playerObj:removeWornItem(clothingItem)
 
         playerObj:getInventory():Remove(clothingItem)       -- Can be a InventoryItem too.. I guess? todo check it
-        print("TOC: found and deleted " .. tostring(clothingItem))
+        TOC_DEBUG.print("found and deleted" .. tostring(clothingItem))
         return true
     end
     return false
@@ -87,7 +87,7 @@ end
 
 ---Spawns and equips the correct amputation item to the player.
 function ItemsHandler.SpawnAmputationItem(playerObj, limbName)
-    print("Clothing name " .. StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. limbName)
+    TOC_DEBUG.print("clothing name " .. StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. limbName)
     local clothingItem = playerObj:getInventory():AddItem(StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. limbName)
     local texId = ItemsHandler.GetAmputationTexturesIndex(playerObj, false)
 
@@ -108,7 +108,7 @@ function ISInventoryPane:refreshContainer()
     for i=1, #self.itemslist do
         local cItem = self.itemslist[i]
         if cItem and cItem.cat == "Amputation" then
-            --print("TOC: current item is an amputation, removing it from the list")
+            TOC_DEBUG.print("current item is an amputation, removing it from the list")
             table.remove(self.itemslist, i)
         end
     end

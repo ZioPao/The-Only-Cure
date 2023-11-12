@@ -40,7 +40,7 @@ end
 
 ---Starts bleeding from the point where the saw is being used
 function AmputationHandler:damageDuringAmputation()
-    print("TOC: Damage patient")
+    TOC_DEBUG.print("damage patient")
     local bodyDamage = self.patient:getBodyDamage()
     local bodyDamagePart = bodyDamage:getBodyPart(self.bodyPartType)
 

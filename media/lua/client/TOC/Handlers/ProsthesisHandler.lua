@@ -16,7 +16,7 @@ end
 ---@param bodyLocation string
 ---@return boolean
 function ProsthesisHandler.CheckIfEquippable(bodyLocation)
-    print("Current item is a prosthesis")
+    TOC_DEBUG.print("current item is a prosthesis")
     local side = CommonMethods.GetSide(bodyLocation)
 
     for i=1, #PlayerHandler.amputatedLimbs do

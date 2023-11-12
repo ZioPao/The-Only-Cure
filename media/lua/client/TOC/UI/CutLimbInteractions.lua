@@ -106,7 +106,7 @@ function CutLimbHandler:isValid(itemType)
 end
 
 function CutLimbHandler:perform(previousAction, itemType)
-    print("perform cutlimbhandler")
+    TOC_DEBUG.print("perform CutLimbHandler")
     local item = self:getItemOfType(self.items.ITEMS, itemType)
     previousAction = self:toPlayerInventory(item, previousAction)
 
