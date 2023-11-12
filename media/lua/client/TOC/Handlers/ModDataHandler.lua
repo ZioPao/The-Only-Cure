@@ -1,10 +1,7 @@
 local StaticData = require("TOC/StaticData")
 
 ----------------
----@alias partData { isCut : boolean?, isInfected : boolean?, isOperated : boolean?, isCicatrized : boolean?, isCauterized : boolean?, isVisible : boolean?, cicatrizationTime : number }
----@alias tocModData {Hand_L : partData, ForeArm_L : partData, UpperArm_L : partData, Hand_R : partData, ForeArm_R : partData, UpperArm_R : partData, isIgnoredPartInfected : boolean, isAnyLimbCut : boolean}
-----------------
--- TODO This class should handle all the stuff related to the mod data
+--This class should handle all the stuff related to the mod data
 
 ---@class ModDataHandler
 ---@field playerObj IsoPlayer
@@ -17,6 +14,7 @@ function ModDataHandler:new(playerObj)
     local o = {}
     setmetatable(o, self)
     self.__index = self
+    -- TODO Instead of requiring a player, to make it compatible in a MP env, we should require the table containing the modData for the init
 
     o.playerObj = playerObj
     o.tocData = playerObj:getModData()[StaticData.MOD_NAME]
@@ -68,7 +66,7 @@ end
 ---Set a generic boolean that toggles varies function of the mod
 ---@param isAnyLimbCut boolean
 function ModDataHandler:setIsAnyLimbCut(isAnyLimbCut)
-    self.tocData.isAnyLimbCut = true
+    self.tocData.isAnyLimbCut = isAnyLimbCut
 end
 
 ---Set isCut 

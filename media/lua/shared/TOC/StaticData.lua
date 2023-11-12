@@ -1,3 +1,7 @@
+---@alias partData { isCut : boolean?, isInfected : boolean?, isOperated : boolean?, isCicatrized : boolean?, isCauterized : boolean?, isVisible : boolean?, cicatrizationTime : number }
+---@alias tocModData {Hand_L : partData, ForeArm_L : partData, UpperArm_L : partData, Hand_R : partData, ForeArm_R : partData, UpperArm_R : partData, isIgnoredPartInfected : boolean, isAnyLimbCut : boolean}
+
+
 local StaticData = {}
 
 StaticData.MOD_NAME = "TOC"
