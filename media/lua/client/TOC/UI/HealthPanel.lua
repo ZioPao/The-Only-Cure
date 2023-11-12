@@ -79,10 +79,13 @@ function ISHealthPanel:initialise()
 end
 
 local og_ISHealthPanel_setOtherPlayer = ISHealthPanel.setOtherPlayer
----comment
+
+
 ---@param playerObj IsoPlayer
 function ISHealthPanel:setOtherPlayer(playerObj)
     og_ISHealthPanel_setOtherPlayer(self, playerObj)
+
+    -- Since setOtherPlayer may be run after initialise (or always), we need to recheck it after.
     self:setHighestAmputation()
 end
 

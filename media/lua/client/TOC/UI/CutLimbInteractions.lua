@@ -28,21 +28,21 @@ local function AddInventoryAmputationOptions(surgeonNum, context)
     local option = context:addOption(getText("ContextMenu_Amputate"), nil)
     local subMenu = context:getNew(context)
     context:addSubMenu(option, subMenu)
-    for i=1, #StaticData.LIMBS_STRINGS do
+    for i = 1, #StaticData.LIMBS_STRINGS do
         local limbName = StaticData.LIMBS_STRINGS[i]
         if not ModDataHandler.GetInstance():getIsCut(limbName) then
             local limbTranslatedName = getText("ContextMenu_Limb_" .. limbName)
-            subMenu:addOption(limbTranslatedName, limbName, PerformAction, surgeonObj, surgeonObj)    -- TODO Should be patient, not surgeon
+            subMenu:addOption(limbTranslatedName, limbName, PerformAction, surgeonObj, surgeonObj) -- TODO Should be patient, not surgeon
         end
     end
 end
 
 ---Handler for OnFillInventoryObjectContextMenu
 ---@param player number
----@param context ISUIElement
+---@param context ISContextMenu
 ---@param items table
 local function AddInventoryAmputationMenu(player, context, items)
-    local item = items[1]       -- Selected item
+    local item = items[1] -- Selected item
     if CheckIfSaw(item.name) then
         AddInventoryAmputationOptions(player, context)
     end
@@ -58,8 +58,8 @@ local CutLimbHandler = BaseHandler:derive("CutLimbHandler")
 
 
 ---Creates new CutLimbHandler
----@param panel any
----@param bodyPart any
+---@param panel ISUIElement
+---@param bodyPart BodyPart
 ---@return CutLimbHandler
 function CutLimbHandler:new(panel, bodyPart)
     local o = BaseHandler.new(self, panel, bodyPart)
@@ -67,6 +67,7 @@ function CutLimbHandler:new(panel, bodyPart)
     return o
 end
 
+---@param item InventoryItem
 function CutLimbHandler:checkItem(item)
     local itemType = item:getType()
     if CheckIfSaw(itemType) then
@@ -74,13 +75,14 @@ function CutLimbHandler:checkItem(item)
     end
 end
 
+---@param context ISContextMenu
 function CutLimbHandler:addToMenu(context)
     --local types = self:getAllItemTypes(self.items.ITEMS)
     --if #types > 0 then
     local option = context:addOption(getText("ContextMenu_Amputate"), nil)
     local subMenu = context:getNew(context)
     context:addSubMenu(option, subMenu)
-    for i=1, #StaticData.LIMBS_STRINGS do
+    for i = 1, #StaticData.LIMBS_STRINGS do
         local limbName = StaticData.LIMBS_STRINGS[i]
         if not ModDataHandler.GetInstance():getIsCut(limbName) then
             local limbTranslatedName = getText("ContextMenu_Limb_" .. limbName)
@@ -108,7 +110,8 @@ function CutLimbHandler:perform(previousAction, itemType)
     local item = self:getItemOfType(self.items.ITEMS, itemType)
     previousAction = self:toPlayerInventory(item, previousAction)
 
-    local action = CutLimbAction:new(self:getPatient(), self:getDoctor(), self.bodyPart)
+    local limbName = BodyPartType.getDisplayName(self.bodyPart:getType()) -- TODO Test this
+    local action = CutLimbAction:new(self:getPatient(), self:getDoctor(), limbName)
     ISTimedActionQueue.addAfter(previousAction, action)
 end
 

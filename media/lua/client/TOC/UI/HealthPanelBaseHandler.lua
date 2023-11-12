@@ -6,6 +6,9 @@
 ---@field items table
 local BaseHandler = ISBaseObject:derive("BaseHandler")
 
+---@param panel ISUIElement
+---@param bodyPart BodyPart
+---@return table
 function BaseHandler:new(panel, bodyPart)
     local o = {}
     setmetatable(o, self)
@@ -52,7 +55,8 @@ function BaseHandler:checkContainerItems(container, childContainers)
                 table.insert(childContainers, item:getInventory())
             end
         else
-            self:checkItem(item)
+            ---@diagnostic disable-next-line: undefined-field
+            self:checkItem(item)        -- This is in inherited classes, we never use this class by itself
         end
     end
 end
