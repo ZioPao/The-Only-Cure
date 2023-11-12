@@ -33,6 +33,7 @@ end
 
 --* Overrides *--
 
+---@diagnostic disable-next-line: duplicate-set-field
 function ISWearClothing:isValid()
     local bodyLocation = self.item:getBodyLocation()
     if not string.contains(bodyLocation, "TOC_ArmProst") then
@@ -43,6 +44,7 @@ function ISWearClothing:isValid()
 end
 
 local og_ISClothingExtraAction_isValid = ISClothingExtraAction.isValid
+---@diagnostic disable-next-line: duplicate-set-field
 function ISClothingExtraAction:isValid()
     local bodyLocation = self.item:getBodyLocation()
 

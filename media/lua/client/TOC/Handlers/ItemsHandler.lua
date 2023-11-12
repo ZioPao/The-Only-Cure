@@ -102,6 +102,7 @@ end
 local og_ISInventoryPane_refreshContainer = ISInventoryPane.refreshContainer
 
 ---Get the list of items for the container and remove the reference to the amputation items
+---@diagnostic disable-next-line: duplicate-set-field
 function ISInventoryPane:refreshContainer()
     og_ISInventoryPane_refreshContainer(self)
     if TOC_DEBUG.disablePaneMod then return end

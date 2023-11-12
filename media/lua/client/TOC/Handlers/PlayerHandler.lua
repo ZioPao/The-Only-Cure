@@ -142,6 +142,7 @@ Events.OnPlayerGetDamage.Add(PlayerHandler.CheckInfection)
 
 local og_ISBaseTimedAction_adjustMaxTime = ISBaseTimedAction.adjustMaxTime
 --- Adjust time
+---@diagnostic disable-next-line: duplicate-set-field
 function ISBaseTimedAction:adjustMaxTime(maxTime)
     local time = og_ISBaseTimedAction_adjustMaxTime(self, maxTime)
     local modDataHandler = ModDataHandler.GetInstance()
@@ -164,6 +165,7 @@ end
 
 local og_ISBaseTimedAction_perform = ISBaseTimedAction.perform
 --- After each action, level up perks
+---@diagnostic disable-next-line: duplicate-set-field
 function ISBaseTimedAction:perform()
 	og_ISBaseTimedAction_perform(self)
 
