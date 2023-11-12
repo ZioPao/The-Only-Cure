@@ -4,7 +4,8 @@ local CommandsData = {}
 
 
 CommandsData.modules = {
-    TOC_SYNC = "TOC_SYNC"
+    TOC_SYNC = "TOC_SYNC",
+    TOC_DEBUG = "TOC_DEBUG"
 }
 
 
@@ -19,6 +20,10 @@ CommandsData.server = {
     Sync = {
         AskPlayerData = "AskPlayerData",            ---@alias askPlayerDataParams {patientNum : number}
         RelayPlayerData = "RelayPlayerData"         ---@alias relayPlayerDataParams {surgeonNum : number, tocData : tocModData}
+    },
+
+    Debug = {
+        PrintTocData = "PrintTocData"               ---@alias printTocDataParams {username : string}
     }
 }
 
