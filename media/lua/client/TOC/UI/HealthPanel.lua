@@ -47,18 +47,19 @@ end
 
 function ISHealthPanel:setHighestAmputation()
 
-    --TOC_DEBUG.print("setHighestAmputation")
-
-    if PlayerHandler.amputatedLimbs == nil or PlayerHandler.amputatedLimbs[self.tocUsername] then
-        TOC_DEBUG.print("PlayerHandler.amputatedLimbs is still nil or wasn't initialized for that player")
-        return
-    end
+    --TOC_DEBUG.print("setHighestAmputation for " .. self.tocUsername)
 
     if self.otherPlayer ~= nil then
         self.tocUsername = self.otherPlayer:getUsername()
     else
         self.tocUsername = self.character:getUsername()
     end
+
+    if PlayerHandler.amputatedLimbs == nil or PlayerHandler.amputatedLimbs[self.tocUsername] == nil then
+        TOC_DEBUG.print("PlayerHandler.amputatedLimbs is still nil or wasn't initialized for that player")
+        return
+    end
+    local amputatedLimbs = PlayerHandler.amputatedLimbs[self.tocUsername]
 
     self.highestAmputations[self.tocUsername] = {}
     TOC_DEBUG.print("Searching highest amputations for " .. self.tocUsername)
@@ -68,8 +69,8 @@ function ISHealthPanel:setHighestAmputation()
         return
     end
 
-    for i=1, #PlayerHandler.amputatedLimbs do
-        local limbName = PlayerHandler.amputatedLimbs[i]
+    for i=1, #amputatedLimbs do
+        local limbName = amputatedLimbs[i]
         local index = CommonMethods.GetSide(limbName)
         if modDataHandler:getIsCut(limbName) and modDataHandler:getIsVisible(limbName) then
             TOC_DEBUG.print("found high amputation " .. limbName)
@@ -103,10 +104,6 @@ function ISHealthPanel:setOtherPlayer(playerObj)
     self:setHighestAmputation()
 
     -- TODO Request from server!
-
-    -----@type askPlayerDataParams
-    --local params = {patientNum = playerObj:getOnlineID()}
-    --sendClientCommand(CommandsData.modules.TOC_SYNC, CommandsData.server.Sync.AskPlayerData, params)
 end
 
 
@@ -114,7 +111,6 @@ local og_ISHealthPanel_render = ISHealthPanel.render
 function ISHealthPanel:render()
     og_ISHealthPanel_render(self)
 
-    -- TODO Handle another player health panel
 
     if self.highestAmputations ~= nil and self.highestAmputations[self.tocUsername] ~= nil then
         -- Left Texture
@@ -130,7 +126,6 @@ function ISHealthPanel:render()
         end
     else
         self:setHighestAmputation()
-        --ISHealthPanel.GetHighestAmputation(self.tocUsername)
     end
 end
 
