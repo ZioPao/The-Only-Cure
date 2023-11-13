@@ -1,7 +1,6 @@
-local PlayerHandler = require("TOC/Handlers/PlayerHandler")
 local StaticData = require("TOC/StaticData")
-local CommonMethods = require("TOC/CommonMethods")
 local ModDataHandler = require("TOC/Handlers/ModDataHandler")
+local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
 
 ---@diagnostic disable: duplicate-set-field
 local CutLimbHandler = require("TOC/UI/CutLimbInteractions")
@@ -44,37 +43,6 @@ end
 
 --* Modifications to handle visible amputation on the health menu *--
 
-function ISHealthPanel:setHighestAmputation()
-
-    --TOC_DEBUG.print("setHighestAmputation for " .. self.tocUsername)
-    
-    -- character is always the patient.
-    self.tocUsername = self.character:getUsername()
-
-    if PlayerHandler.amputatedLimbs == nil or PlayerHandler.amputatedLimbs[self.tocUsername] == nil then
-        TOC_DEBUG.print("PlayerHandler.amputatedLimbs is still nil or wasn't initialized for " .. self.tocUsername)
-        return
-    end
-    local amputatedLimbs = PlayerHandler.amputatedLimbs[self.tocUsername]
-
-    self.highestAmputations[self.tocUsername] = {}
-    TOC_DEBUG.print("Searching highest amputations for " .. self.tocUsername)
-    local modDataHandler = ModDataHandler.GetInstance(self.tocUsername)
-    if modDataHandler == nil then
-        TOC_DEBUG.print("ModDataHandler not found for " .. self.tocUsername)
-        return
-    end
-
-    for i=1, #amputatedLimbs do
-        local limbName = amputatedLimbs[i]
-        local index = CommonMethods.GetSide(limbName)
-        if modDataHandler:getIsCut(limbName) and modDataHandler:getIsVisible(limbName) then
-            TOC_DEBUG.print("found high amputation " .. limbName)
-            self.highestAmputations[self.tocUsername][index] = limbName
-        end
-    end
-end
-
 local og_ISHealthPanel_initialise = ISHealthPanel.initialise
 function ISHealthPanel:initialise()
     if self.character:isFemale() then
@@ -83,9 +51,7 @@ function ISHealthPanel:initialise()
         self.sexPl = "Male"
     end
 
-    self.highestAmputations = {}
-    self:setHighestAmputation()
-
+    self.highestAmputations = CachedDataHandler.GetAmputatedLimbs(self.character:getUsername())
     og_ISHealthPanel_initialise(self)
 end
 
@@ -104,20 +70,16 @@ end
 local og_ISHealthPanel_render = ISHealthPanel.render
 function ISHealthPanel:render()
     og_ISHealthPanel_render(self)
-
-    --print("Rendering ISHealthPanel")
-
-
-    if self.highestAmputations ~= nil and self.highestAmputations[self.tocUsername] ~= nil then
+    if self.highestAmputations ~= nil  then
         -- Left Texture
-        if self.highestAmputations[self.tocUsername]["L"] then
-            local textureL = StaticData.HEALTH_PANEL_TEXTURES[self.sexPl][self.highestAmputations[self.tocUsername]["L"]]
+        if self.highestAmputations["L"] then
+            local textureL = StaticData.HEALTH_PANEL_TEXTURES[self.sexPl][self.highestAmputations["L"]]
             self:drawTexture(textureL, self.healthPanel.x/2 - 2, self.healthPanel.y/2, 1, 1, 0, 0)
         end
 
         -- Right Texture
         if self.highestAmputations["R"] then
-            local textureR = StaticData.HEALTH_PANEL_TEXTURES[self.sexPl][self.highestAmputations[self.tocUsername]["R"]]
+            local textureR = StaticData.HEALTH_PANEL_TEXTURES[self.sexPl][self.highestAmputations["R"]]
             self:drawTexture(textureR, self.healthPanel.x/2 + 2, self.healthPanel.y/2, 1, 1, 0, 0)
         end
     else
@@ -166,6 +128,6 @@ function ISMedicalCheckAction:perform()
     ModDataHandler.GetInstance(username)
 
     -- We need to recalculate them here before we can create the highest amputations point
-    PlayerHandler.CacheAmputatedLimbs(username)
+    CachedDataHandler.CalculateAmputatedLimbs(username)
     og_ISMedicalCheckAction_perform(self)
 end

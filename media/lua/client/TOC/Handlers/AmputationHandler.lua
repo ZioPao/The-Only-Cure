@@ -1,6 +1,6 @@
 local ModDataHandler = require("TOC/Handlers/ModDataHandler")
 local ItemsHandler = require("TOC/Handlers/ItemsHandler")
-local PlayerHandler = require("TOC/Handlers/PlayerHandler")
+local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
 local StaticData = require("TOC/StaticData")
 ---------------------------
 
@@ -89,7 +89,7 @@ function AmputationHandler:execute(damagePlayer)
         -- TODO Send server command to manage items and spawn on another player
     end
     -- Add it to the list of cut limbs on this local client
-    PlayerHandler.AddLocalAmputatedLimb(self.patientPl:getUsername(), self.limbName)
+    CachedDataHandler.AddAmputatedLimb(self.patientPl:getUsername(), self.limbName)
 end
 
 ---Deletes the instance
@@ -98,6 +98,7 @@ function AmputationHandler:close()
 end
 
 --* Events *--
+---Updates the cicatrization process, run when a limb has been cut
 function AmputationHandler.UpdateCicatrization()
     if ModDataHandler.GetInstance():getIsAnyLimbCut() == false then return end
 

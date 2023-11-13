@@ -176,7 +176,6 @@ function ModDataHandler:apply()
     ModData.transmit(CommandsData.GetKey(self.username))
 end
 
-
 function ModDataHandler.ReceiveData(key, table)
     TOC_DEBUG.print("receive data for " .. key)
     if table == {} or table == nil then
@@ -189,6 +188,7 @@ function ModDataHandler.ReceiveData(key, table)
 end
 Events.OnReceiveGlobalModData.Add(ModDataHandler.ReceiveData)
 
+-------------------
 
 ---@param username string?
 ---@return ModDataHandler

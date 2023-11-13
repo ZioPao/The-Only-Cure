@@ -1,5 +1,5 @@
 local CommonMethods = require("TOC/CommonMethods")
-local PlayerHandler = require("TOC/Handlers/PlayerHandler")
+local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
 
 -------------------------
 
@@ -19,8 +19,9 @@ function ProsthesisHandler.CheckIfEquippable(bodyLocation)
     TOC_DEBUG.print("current item is a prosthesis")
     local side = CommonMethods.GetSide(bodyLocation)
 
-    for i=1, #PlayerHandler.amputatedLimbs do
-        local limbName = PlayerHandler.amputatedLimbs[i]
+    local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(getPlayer():getUsername())
+    for i=1, #amputatedLimbs do
+        local limbName = amputatedLimbs[i]
         if string.contains(limbName, side) and not string.contains(limbName, "UpperArm") then
             return true
         end

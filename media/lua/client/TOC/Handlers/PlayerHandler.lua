@@ -1,9 +1,15 @@
 local ModDataHandler = require("TOC/Handlers/ModDataHandler")
 local CommonMethods = require("TOC/CommonMethods")
+local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
+
 local StaticData = require("TOC/StaticData")
 -----------
 
 -- TODO We should instantiate this anyway if we want to keep track of cut limbs here. Doing so, we would be able to handle other players too
+
+
+-- TODO THIS SHOULD BE LOCAL ONLY! WE'RE MANAGING EVENTS AND INITIALIZATION STUFF! MOVE ONLINE STUFF AWAY!
+
 
 -- LIST OF STUFF THAT THIS CLASS NEEDS TO DO
 -- Keep track of cut limbs so that we don't have to loop through all of them all the time
@@ -11,7 +17,6 @@ local StaticData = require("TOC/StaticData")
 -- handle stats increase\decrease
 
 ---@class PlayerHandler
----@field modDataHandler ModDataHandler
 ---@field playerObj IsoPlayer
 local PlayerHandler = {}
 
@@ -22,14 +27,13 @@ PlayerHandler.amputatedLimbs = {}
 ---@param playerObj IsoPlayer
 ---@param isForced boolean?
 function PlayerHandler.InitializePlayer(playerObj, isForced)
-
     local username = playerObj:getUsername()
-    TOC_DEBUG.print("initializing " .. username)
-    local modDataHandler = ModDataHandler:new(username, isForced)
+    TOC_DEBUG.print("initializing local player: " .. username)
+    ModDataHandler:new(username, isForced)
     PlayerHandler.playerObj = playerObj
 
     -- Calculate amputated limbs at startup
-    PlayerHandler.CacheAmputatedLimbs(username)
+    CachedDataHandler.CalculateAmputatedLimbs(username)
 
     -- Since isForced is used to reset an existing player data, we're gonna clean their ISHealthPanel table too
     if isForced then
@@ -54,34 +58,34 @@ function PlayerHandler.ManageTraits(playerObj)
     end
 end
 
----Cycle through all the limbs and caches the ones that the player cut off
----@param username string
-function PlayerHandler.CacheAmputatedLimbs(username)
-    PlayerHandler.amputatedLimbs[username] = {}
-    local modDataHandler = ModDataHandler.GetInstance(username)
-    for i=1, #StaticData.LIMBS_STRINGS do
-        local limbName = StaticData.LIMBS_STRINGS[i]
-        if modDataHandler:getIsCut(limbName) then
-            PlayerHandler.AddLocalAmputatedLimb(username, limbName)
-        end
-    end
-end
+-- ---Cycle through all the limbs and caches the ones that the player cut off
+-- ---@param username string
+-- function PlayerHandler.CacheAmputatedLimbs(username)
+--     PlayerHandler.amputatedLimbs[username] = {}
+--     local modDataHandler = ModDataHandler.GetInstance(username)
+--     for i=1, #StaticData.LIMBS_STRINGS do
+--         local limbName = StaticData.LIMBS_STRINGS[i]
+--         if modDataHandler:getIsCut(limbName) then
+--             PlayerHandler.AddLocalAmputatedLimb(username, limbName)
+--         end
+--     end
+-- end
 
 
----Cache the currently amputated limbs
----@param limbName string
-function PlayerHandler.AddLocalAmputatedLimb(username, limbName)
-    TOC_DEBUG.print("added " .. limbName .. " to known amputated limbs for " .. username)
-    table.insert(PlayerHandler.amputatedLimbs[username], limbName)        -- TODO This should be player specific, not generic
-end
+-- ---Cache the currently amputated limbs
+-- ---@param limbName string
+-- function PlayerHandler.AddLocalAmputatedLimb(username, limbName)
+--     TOC_DEBUG.print("added " .. limbName .. " to known amputated limbs for " .. username)
+--     table.insert(PlayerHandler.amputatedLimbs[username], limbName)        -- TODO This should be player specific, not generic
+-- end
 
---* Getters *--
+-- --* Getters *--
 
----Get a table with the strings of the cached amputated limbs
----@return table
-function PlayerHandler.GetAmputatedLimbs()
-    return PlayerHandler.amputatedLimbs or {}
-end
+-- ---Get a table with the strings of the cached amputated limbs
+-- ---@return table
+-- function PlayerHandler.GetAmputatedLimbs()
+--     return PlayerHandler.amputatedLimbs or {}
+-- end
 
 --* Events *--
 
