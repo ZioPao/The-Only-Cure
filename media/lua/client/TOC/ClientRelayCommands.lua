@@ -31,7 +31,7 @@ end
 -------------------------
 
 local function OnServerRelayCommand(module, command, args)
-    if module == CommandsData.modules.TOC_ACTION and ClientRelayCommands[command] then
+    if module == CommandsData.modules.TOC_RELAY and ClientRelayCommands[command] then
         ClientRelayCommands[command](args)
     end
 end

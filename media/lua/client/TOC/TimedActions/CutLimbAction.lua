@@ -45,14 +45,25 @@ function CutLimbAction:start()
         self.handler:damageDuringAmputation()
     else
         -- Other player
-        ---@type relayDamageDuringAmputationParams
+        ----@type relayDamageDuringAmputationParams
+
+
         local params = {patientNum = self.patient:getOnlineID(), limbName = self.limbName}
         sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayDamageDuringAmputation, params )
     end
 end
 
 function CutLimbAction:perform()
-    self.handler:execute()
+    if self.patient == self.character then
+        TOC_DEBUG.print("patient and surgeon are the same, executing on the client")
+        self.handler:execute(true)
+    else
+        TOC_DEBUG.print("patient and surgeon not the same, sending relay to server")
+        -- Other player
+        ---@type relayExecuteAmputationActionParams
+        local params = {patientNum = self.patient:getOnlineID(), limbName = self.limbName}
+        sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayExecuteAmputationAction, params )
+    end
     ISBaseTimedAction.perform(self)
 end
 

@@ -41,3 +41,9 @@ end
 function TOC_DEBUG.printAllServerModData()
     sendClientCommand(CommandsData.modules.TOC_DEBUG, CommandsData.server.Debug.PrintAllTocData, {})
 end
+
+function TOC_DEBUG.testRelayDamage()
+    ---@type relayDamageDuringAmputationParams
+    local params = {limbName = "Hand_R", patientNum = getPlayer():getOnlineID()}
+    sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayDamageDuringAmputation, params)
+end

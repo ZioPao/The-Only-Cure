@@ -103,10 +103,10 @@ end
 function CutLimbHandler:perform(previousAction, itemType)
     --local item = self:getItemOfType(self.items.ITEMS, itemType)
     --previousAction = self:toPlayerInventory(item, previousAction)
-
+    -- TODO This is broken like this!
     local limbName = BodyPartType.ToString(self.bodyPart:getType())
     TOC_DEBUG.print("perform CutLimbHandler on " .. limbName)
-    local action = CutLimbAction:new(self:getPatient(), self:getDoctor(), limbName)
+    local action = CutLimbAction:new(self:getDoctor(),self:getPatient(), limbName)
     ISTimedActionQueue.add(action)
 end
 
