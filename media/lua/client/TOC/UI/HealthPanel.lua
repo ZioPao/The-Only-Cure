@@ -1,7 +1,6 @@
 local StaticData = require("TOC/StaticData")
 local ModDataHandler = require("TOC/Handlers/ModDataHandler")
 local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
----@diagnostic disable: duplicate-set-field
 local CutLimbHandler = require("TOC/UI/CutLimbInteractions")
 ---------------------------------
 
@@ -9,6 +8,7 @@ local CutLimbHandler = require("TOC/UI/CutLimbInteractions")
 -- By doing so we can show the player which limbs have been cut without having to use another menu
 -- We can show prosthesis too this way
 -- We also manage the drag'n drop of items on the body to let the players use the saw this way too
+---@diagnostic disable: duplicate-set-field
 
 ISHealthBodyPartPanel = ISBodyPartPanel:derive("ISHealthBodyPartPanel")
 
@@ -42,27 +42,6 @@ function ISHealthPanel:doBodyPartContextMenu(bodyPart, x, y)
 
     cutLimbHandler:addToMenu(context)
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 --* Modifications to handle visible amputation on the health menu *--

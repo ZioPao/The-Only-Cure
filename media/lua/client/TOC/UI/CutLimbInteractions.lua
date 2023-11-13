@@ -55,6 +55,7 @@ Events.OnFillInventoryObjectContextMenu.Add(AddInventoryAmputationMenu)
 
 ---@class CutLimbHandler : BaseHandler
 ---@field items table
+---@field limbName string
 local CutLimbHandler = BaseHandler:derive("CutLimbHandler")
 
 
@@ -65,6 +66,7 @@ local CutLimbHandler = BaseHandler:derive("CutLimbHandler")
 function CutLimbHandler:new(panel, bodyPart)
     local o = BaseHandler.new(self, panel, bodyPart)
     o.items.ITEMS = {}
+    o.limbName = BodyPartType.ToString(self.bodyPart:getType())
     TOC_DEBUG.print("init CutLimbHandler")
     return o
 end
@@ -80,10 +82,9 @@ end
 ---@param context ISContextMenu
 function CutLimbHandler:addToMenu(context)
     local types = self:getAllItemTypes(self.items.ITEMS)
-    local limbName = BodyPartType.ToString(self.bodyPart:getType())
-    if #types > 0 and StaticData.BODYPARTSTYPES_ENUM[limbName] then
+    if #types > 0 and StaticData.BODYPARTSTYPES_ENUM[self.limbName] then
         TOC_DEBUG.print("addToMenu, types > 0")
-        if not ModDataHandler.GetInstance():getIsCut(limbName) then
+        if not ModDataHandler.GetInstance():getIsCut(self.limbName) then
             context:addOption(getText("ContextMenu_Amputate"), self, self.onMenuOptionSelected)
         end
     end
@@ -91,8 +92,7 @@ end
 
 function CutLimbHandler:dropItems(items)
     local types = self:getAllItemTypes(items)
-    local limbName = BodyPartType.ToString(self.bodyPart:getType())
-    if #self.items.ITEMS > 0 and #types == 1 and StaticData.BODYPARTSTYPES_ENUM[limbName] then
+    if #self.items.ITEMS > 0 and #types == 1 and StaticData.BODYPARTSTYPES_ENUM[self.limbName] then
         self:onMenuOptionSelected(types[1])
         return true
     end
@@ -100,16 +100,14 @@ function CutLimbHandler:dropItems(items)
 end
 
 function CutLimbHandler:isValid(itemType)
-    local limbName = BodyPartType.ToString(self.bodyPart:getType())
-    return (not ModDataHandler.GetInstance():getIsCut(limbName)) and self:getItemOfType(self.items.ITEMS, itemType)
+    return (not ModDataHandler.GetInstance():getIsCut(self.limbName)) and self:getItemOfType(self.items.ITEMS, itemType)
 end
 
 function CutLimbHandler:perform(previousAction, itemType)
     local item = self:getItemOfType(self.items.ITEMS, itemType)
     previousAction = self:toPlayerInventory(item, previousAction)
-    local limbName = BodyPartType.ToString(self.bodyPart:getType())
-    TOC_DEBUG.print("perform CutLimbHandler on " .. limbName)
-    local action = CutLimbAction:new(self:getDoctor(),self:getPatient(), limbName, item)
+    TOC_DEBUG.print("perform CutLimbHandler on " .. self.limbName)
+    local action = CutLimbAction:new(self:getDoctor(),self:getPatient(), self.limbName, item)
     ISTimedActionQueue.addAfter(previousAction, action)
 end
 
