@@ -46,37 +46,37 @@ TestFramework.registerTestModule("Functionality", "Amputation", function()
 
     function Tests.CutLeftHand()
         local handler = AmputationHandler:new("Hand_L")
-        handler:execute()
+        handler:execute(true)
         TestUtils.assert(ModDataHandler.GetInstance():getIsCut("Hand_L"))
     end
 
     function Tests.CutLeftForearm()
         local handler = AmputationHandler:new("ForeArm_L")
-        handler:execute()
+        handler:execute(true)
         TestUtils.assert(ModDataHandler.GetInstance():getIsCut("ForeArm_L") and ModDataHandler.GetInstance():getIsCut("Hand_L"))
     end
 
     function Tests.CutLeftUpperarm()
         local handler = AmputationHandler:new("UpperArm_L")
-        handler:execute()
+        handler:execute(true)
         TestUtils.assert(ModDataHandler.GetInstance():getIsCut("UpperArm_L") and ModDataHandler.GetInstance():getIsCut("ForeArm_L") and ModDataHandler.GetInstance():getIsCut("Hand_L"))
     end
 
     function Tests.CutRightHand()
         local handler = AmputationHandler:new("Hand_R")
-        handler:execute()
+        handler:execute(true)
         TestUtils.assert(ModDataHandler.GetInstance():getIsCut("Hand_R"))
     end
 
     function Tests.CutRightForearm()
         local handler = AmputationHandler:new("ForeArm_R")
-        handler:execute()
+        handler:execute(true)
         TestUtils.assert(ModDataHandler.GetInstance():getIsCut("ForeArm_R") and ModDataHandler.GetInstance():getIsCut("Hand_R"))
     end
 
     function Tests.CutRightUpperarm()
         local handler = AmputationHandler:new("UpperArm_R")
-        handler:execute()
+        handler:execute(true)
         TestUtils.assert(ModDataHandler.GetInstance():getIsCut("UpperArm_R") and ModDataHandler.GetInstance():getIsCut("ForeArm_R") and ModDataHandler.GetInstance():getIsCut("Hand_R"))
     end
 

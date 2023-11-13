@@ -4,7 +4,7 @@ local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
 local StaticData = require("TOC/StaticData")
 -----------
 
--- TODO THIS SHOULD BE LOCAL ONLY! WE'RE MANAGING EVENTS AND INITIALIZATION STUFF! MOVE ONLINE STUFF AWAY!
+-- THIS SHOULD BE LOCAL ONLY! WE'RE MANAGING EVENTS AND INITIALIZATION STUFF!
 
 -- LIST OF STUFF THAT THIS CLASS NEEDS TO DO
 -- Keep track of cut limbs so that we don't have to loop through all of them all the time
@@ -53,35 +53,7 @@ function PlayerHandler.ManageTraits(playerObj)
     end
 end
 
--- ---Cycle through all the limbs and caches the ones that the player cut off
--- ---@param username string
--- function PlayerHandler.CacheAmputatedLimbs(username)
---     PlayerHandler.amputatedLimbs[username] = {}
---     local modDataHandler = ModDataHandler.GetInstance(username)
---     for i=1, #StaticData.LIMBS_STRINGS do
---         local limbName = StaticData.LIMBS_STRINGS[i]
---         if modDataHandler:getIsCut(limbName) then
---             PlayerHandler.AddLocalAmputatedLimb(username, limbName)
---         end
---     end
--- end
-
-
--- ---Cache the currently amputated limbs
--- ---@param limbName string
--- function PlayerHandler.AddLocalAmputatedLimb(username, limbName)
---     TOC_DEBUG.print("added " .. limbName .. " to known amputated limbs for " .. username)
---     table.insert(PlayerHandler.amputatedLimbs[username], limbName)        -- TODO This should be player specific, not generic
--- end
-
--- --* Getters *--
-
--- ---Get a table with the strings of the cached amputated limbs
--- ---@return table
--- function PlayerHandler.GetAmputatedLimbs()
---     return PlayerHandler.amputatedLimbs or {}
--- end
-
+-------------------------
 --* Events *--
 
 ---Check if the player has an infected (as in, zombie infection) body part
@@ -120,6 +92,16 @@ function PlayerHandler.CheckInfection(character)
 end
 
 Events.OnPlayerGetDamage.Add(PlayerHandler.CheckInfection)
+
+
+--* Events *--
+---Updates the cicatrization process, run when a limb has been cut
+function PlayerHandler.UpdateCicatrization()
+    if ModDataHandler.GetInstance():getIsAnyLimbCut() == false then return end
+
+    -- TODO Update cicatrization
+end
+
 
 
 --* Overrides *--
@@ -163,5 +145,6 @@ function ISBaseTimedAction:perform()
     end
 end
 
+-- TODO Limit 2 hands weapons and stuff like that
 
 return PlayerHandler

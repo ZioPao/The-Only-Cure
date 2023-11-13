@@ -42,6 +42,7 @@ end
 
 --* Main methods *--
 
+---Damage the player part during the amputation process
 function AmputationHandler:damageDuringAmputation()
     local bodyDamage = self.patientPl:getBodyDamage()
     local bodyDamagePart = bodyDamage:getBodyPart(self.bodyPartType)
@@ -52,31 +53,34 @@ function AmputationHandler:damageDuringAmputation()
     bodyDamagePart:setBleedingTime(ZombRand(10, 20))
 end
 
+---Set the damage to the amputated area
+---@param surgeonFactor number
+function AmputationHandler:damageAfterAmputation(surgeonFactor)
+    local patientStats = self.patientPl:getStats()
+    local bd = self.patientPl:getBodyDamage()
+    local bodyPart = bd:getBodyPart(self.bodyPartType)
+    local baseDamage = StaticData.LIMBS_BASE_DAMAGE[self.limbName]
+
+    bodyPart:AddDamage(baseDamage - surgeonFactor)
+    bodyPart:setAdditionalPain(baseDamage - surgeonFactor)
+    bodyPart:setBleeding(true)
+    bodyPart:setBleedingTime(baseDamage - surgeonFactor)
+    bodyPart:setDeepWounded(true)
+    bodyPart:setDeepWoundTime(baseDamage - surgeonFactor)
+    patientStats:setEndurance(surgeonFactor)
+    patientStats:setStress(baseDamage - surgeonFactor)
+end
+
 ---Execute the amputation
----@param damagePlayer boolean?
+---@param damagePlayer boolean
 function AmputationHandler:execute(damagePlayer)
 
     -- TODO Calculate surgeonStats
     -- TODO Cap it to a certain amount, it shouldn't be more than ...?
     local surgeonFactor = 1
-    if damagePlayer == nil then damagePlayer = true end     -- Default at true
     if damagePlayer then
-        local patientStats = self.patientPl:getStats()
-        local bd = self.patientPl:getBodyDamage()
-        local bodyPart = bd:getBodyPart(self.bodyPartType)
-        local baseDamage = StaticData.LIMBS_BASE_DAMAGE[self.limbName]
-
-        -- Set the bleeding and all the damage stuff in that part
-        bodyPart:AddDamage(baseDamage - surgeonFactor)
-        bodyPart:setAdditionalPain(baseDamage - surgeonFactor)
-        bodyPart:setBleeding(true)
-        bodyPart:setBleedingTime(baseDamage - surgeonFactor)
-        bodyPart:setDeepWounded(true)
-        bodyPart:setDeepWoundTime(baseDamage - surgeonFactor)
-        patientStats:setEndurance(surgeonFactor)
-        patientStats:setStress(baseDamage - surgeonFactor)
+        self:damageAfterAmputation(surgeonFactor)
     end
-
 
     -- Set the data in modData
     local modDataHandler = ModDataHandler.GetInstance()
@@ -96,14 +100,6 @@ end
 ---Deletes the instance
 function AmputationHandler:close()
     AmputationHandler.instance = nil
-end
-
---* Events *--
----Updates the cicatrization process, run when a limb has been cut
-function AmputationHandler.UpdateCicatrization()
-    if ModDataHandler.GetInstance():getIsAnyLimbCut() == false then return end
-
-    -- TODO Update cicatrization
 end
 
 return AmputationHandler
