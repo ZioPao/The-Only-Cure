@@ -1,8 +1,4 @@
-if isClient() then return end
-
-
-
-
+if isClient() then return end       -- The event makes this necessary to prevent clients from running this file
 
 local ServerDataHandler = {}
 ServerDataHandler.modData = {}
@@ -14,7 +10,9 @@ function ServerDataHandler.GetTable(key)
     return ServerDataHandler.modData[key]
 end
 
-
+---Add table to the ModData and a local table
+---@param key string
+---@param table tocModData
 function ServerDataHandler.AddTable(key, table)
     ModData.add(key, table)     -- Add it to the server mod data
     ServerDataHandler.modData[key] = table

@@ -60,7 +60,6 @@ local function AssembleUpperarmData(assembledName, side)
         StaticData.PARTS_STRINGS.ForeArm .. "_" .. side }
 end
 
-
 for side, _ in pairs(StaticData.SIDES_STRINGS) do
     for part, _ in pairs(StaticData.PARTS_STRINGS) do
         local assembledName = part .. "_" .. side

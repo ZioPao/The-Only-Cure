@@ -5,9 +5,9 @@ local StaticData = require("TOC/StaticData")
 ---------------------------
 
 -- TODO Add Bandages, Torniquet, etc.
---- This will be run EXCLUSIVELY on the client which is getting the amputation
+--- Manages an amputation. Could be run on either clients
 ---@class AmputationHandler
----@field patient IsoPlayer
+---@field patientPl IsoPlayer
 ---@field limbName string
 ---@field bodyPartType BodyPartType
 ---@field surgeonPl IsoPlayer?
@@ -22,13 +22,13 @@ function AmputationHandler:new(limbName, surgeonPl)
     setmetatable(o, self)
     self.__index = self
 
-    o.patient = getPlayer()
+    o.patientPl = getPlayer()     -- TODO This isn't necessarily true anymore.
     o.limbName = limbName
     o.bodyPartType = BodyPartType[self.limbName]
     if surgeonPl then
         o.surgeonPl = surgeonPl
     else
-        o.surgeonPl = o.patient
+        o.surgeonPl = o.patientPl
     end
 
     AmputationHandler.instance = o
@@ -41,7 +41,7 @@ end
 ---Starts bleeding from the point where the saw is being used
 function AmputationHandler:damageDuringAmputation()
     TOC_DEBUG.print("damage patient")
-    local bodyDamage = self.patient:getBodyDamage()
+    local bodyDamage = self.patientPl:getBodyDamage()
     local bodyDamagePart = bodyDamage:getBodyPart(self.bodyPartType)
 
     bodyDamagePart:setBleeding(true)
@@ -58,8 +58,8 @@ function AmputationHandler:execute(damagePlayer)
     local surgeonFactor = 1
     if damagePlayer == nil then damagePlayer = true end     -- Default at true
     if damagePlayer then
-        local patientStats = self.patient:getStats()
-        local bd = self.patient:getBodyDamage()
+        local patientStats = self.patientPl:getStats()
+        local bd = self.patientPl:getBodyDamage()
         local bodyPart = bd:getBodyPart(self.bodyPartType)
         local baseDamage = StaticData.LIMBS_BASE_DAMAGE[self.limbName]
 
@@ -76,20 +76,20 @@ function AmputationHandler:execute(damagePlayer)
 
 
     -- Set the data in modData
-    -- TODO This could be run on another player! 
     local modDataHandler = ModDataHandler.GetInstance()
     modDataHandler:setCutLimb(self.limbName, false, false, false, surgeonFactor)
-    modDataHandler:apply()
+    modDataHandler:apply()      -- This will force rechecking the cached amputated limbs on the other client
 
     -- Give the player the correct amputation item
-    ItemsHandler.DeleteOldAmputationItem(self.patient, self.limbName)
-    ItemsHandler.SpawnAmputationItem(self.patient, self.limbName)
-
-    -- Add it to the list of cut limbs
-    PlayerHandler.AddLocalAmputatedLimb(self.patient:getUsername(), self.limbName)
-
-    -- Set the highest amputation and caches them.
-    --ISHealthPanel.GetHighestAmputation()
+    -- TODO We need to consider where this will be ran. 
+    if self.patientPl == self.surgeonPl then
+        ItemsHandler.DeleteOldAmputationItem(self.patientPl, self.limbName)
+        ItemsHandler.SpawnAmputationItem(self.patientPl, self.limbName)
+    else
+        -- TODO Send server command to manage items and spawn on another player
+    end
+    -- Add it to the list of cut limbs on this local client
+    PlayerHandler.AddLocalAmputatedLimb(self.patientPl:getUsername(), self.limbName)
 end
 
 ---Deletes the instance

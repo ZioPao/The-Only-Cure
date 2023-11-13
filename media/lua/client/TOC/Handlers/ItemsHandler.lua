@@ -3,7 +3,7 @@ local CommonMethods = require("TOC/CommonMethods")
 
 ---------------------------
 
---- Submodule to handle spawning the correct items after certain actions (ie: cutting a hand)
+--- Submodule to handle spawning the correct items after certain actions (ie: cutting a hand). LOCAL ONLY!
 ---@class ItemsHandler
 local ItemsHandler = {}
 

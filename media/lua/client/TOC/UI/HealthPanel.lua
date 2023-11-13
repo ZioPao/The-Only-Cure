@@ -42,7 +42,7 @@ function ISHealthPanel:doBodyPartContextMenu(bodyPart, x, y)
 end
 
 
---* Modification to handle visible amputation on the health menu *--
+--* Modifications to handle visible amputation on the health menu *--
 
 function ISHealthPanel:setHighestAmputation()
 
@@ -90,8 +90,6 @@ function ISHealthPanel:initialise()
 end
 
 local og_ISHealthPanel_setOtherPlayer = ISHealthPanel.setOtherPlayer
-
-
 ---@param playerObj IsoPlayer
 function ISHealthPanel:setOtherPlayer(playerObj)
     og_ISHealthPanel_setOtherPlayer(self, playerObj)
@@ -141,10 +139,13 @@ function ISHealthPanel:prerender()
     self.backgroundColor.a = 1
 end
 
-
 --- The medical check wrap the health panel into this. We need to override its color
 local overrideBackgroundColor = true
 local og_ISUIElement_wrapInCollapsableWindow = ISUIElement.wrapInCollapsableWindow
+---@param title string
+---@param resizable any
+---@param subClass any
+---@return any
 function ISUIElement:wrapInCollapsableWindow(title, resizable, subClass)
     local panel = og_ISUIElement_wrapInCollapsableWindow(self, title, resizable, subClass)
 
@@ -156,12 +157,6 @@ function ISUIElement:wrapInCollapsableWindow(title, resizable, subClass)
 
     return panel
 end
-
-
-
-
-
-
 
 -- This is run when a player is trying the Medical Check action on another player
 local og_ISMedicalCheckAction_perform = ISMedicalCheckAction.perform
