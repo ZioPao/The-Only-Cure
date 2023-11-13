@@ -76,19 +76,15 @@ end
 
 ---@param context ISContextMenu
 function CutLimbHandler:addToMenu(context)
-    --local types = self:getAllItemTypes(self.items.ITEMS)
-    --if #types > 0 then
-    local option = context:addOption(getText("ContextMenu_Amputate"), nil)
-    local subMenu = context:getNew(context)
-    context:addSubMenu(option, subMenu)
-    for i = 1, #StaticData.LIMBS_STRINGS do
-        local limbName = StaticData.LIMBS_STRINGS[i]
+
+    --TOC_DEBUG.print("addToMenu running")
+    local limbName = BodyPartType.ToString(self.bodyPart:getType())
+    --TOC_DEBUG.print(limbName)
+    if StaticData.BODYPARTSTYPES_ENUM[limbName] then
         if not ModDataHandler.GetInstance():getIsCut(limbName) then
-            local limbTranslatedName = getText("ContextMenu_Limb_" .. limbName)
-            subMenu:addOption(limbTranslatedName, self.onMenuOptionSelected, nil)
+            context:addOption(getText("ContextMenu_Amputate"), self, self.onMenuOptionSelected)
         end
     end
-    --end
 end
 
 function CutLimbHandler:dropItems(items)
@@ -101,17 +97,17 @@ function CutLimbHandler:dropItems(items)
 end
 
 function CutLimbHandler:isValid(itemType)
-    return self:getItemOfType(self.items.ITEMS, itemType)
+    return true     -- TODO Workaround for now
 end
 
 function CutLimbHandler:perform(previousAction, itemType)
-    TOC_DEBUG.print("perform CutLimbHandler")
-    local item = self:getItemOfType(self.items.ITEMS, itemType)
-    previousAction = self:toPlayerInventory(item, previousAction)
+    --local item = self:getItemOfType(self.items.ITEMS, itemType)
+    --previousAction = self:toPlayerInventory(item, previousAction)
 
-    local limbName = BodyPartType.getDisplayName(self.bodyPart:getType()) -- TODO Test this
+    local limbName = BodyPartType.ToString(self.bodyPart:getType())
+    TOC_DEBUG.print("perform CutLimbHandler on " .. limbName)
     local action = CutLimbAction:new(self:getPatient(), self:getDoctor(), limbName)
-    ISTimedActionQueue.addAfter(previousAction, action)
+    ISTimedActionQueue.add(action)
 end
 
 return CutLimbHandler

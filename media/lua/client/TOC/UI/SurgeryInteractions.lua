@@ -1,4 +1,4 @@
-local PlayerHandler = require("TOC/Handlers/PlayerHandler")
+local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
 local ModDataHandler = require("TOC/Handlers/ModDataHandler")
 ---------------
 
@@ -27,7 +27,7 @@ local function AddOvenContextMenu(playerNum, context, worldObjects, test)
     local pl = getSpecificPlayer(playerNum)
 
     if not ModDataHandler.GetInstance():getIsAnyLimbCut() then return end
-    local amputatedLimbs = PlayerHandler.GetAmputatedLimbs()
+    local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(pl:getUsername())
 
     local stoveObj = nil
     for _, obj in pairs(worldObjects) do

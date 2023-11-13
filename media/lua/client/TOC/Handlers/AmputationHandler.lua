@@ -24,7 +24,11 @@ function AmputationHandler:new(limbName, surgeonPl)
 
     o.patientPl = getPlayer()
     o.limbName = limbName
-    o.bodyPartType = BodyPartType[self.limbName]
+    o.bodyPartType = BodyPartType[limbName]
+
+    -- TOC_DEBUG.print("limbName = " .. o.limbName)
+    -- TOC_DEBUG.print("bodyPartType = " .. tostring(o.bodyPartType))
+
     if surgeonPl then
         o.surgeonPl = surgeonPl
     else
@@ -38,26 +42,10 @@ end
 
 --* Main methods *--
 
----Starts bleeding from the point where the saw is being used. Static since this could be used for online 
----comment
----@param patientPl IsoPlayer
----@param bodyPartType BodyPartType
-function AmputationHandler.DamageDuringAmputation(patientPl, bodyPartType)
-    TOC_DEBUG.print("damage patient")
-    local bodyDamage = patientPl:getBodyDamage()
-    local bodyDamagePart = bodyDamage:getBodyPart(bodyPartType)
-
-    bodyDamagePart:setBleeding(true)
-    bodyDamagePart:setCut(true)
-    bodyDamagePart:setBleedingTime(ZombRand(10, 20))
-
-
-
-end
 function AmputationHandler:damageDuringAmputation()
-    TOC_DEBUG.print("damage patient")
     local bodyDamage = self.patientPl:getBodyDamage()
     local bodyDamagePart = bodyDamage:getBodyPart(self.bodyPartType)
+    TOC_DEBUG.print("damage patient - " .. tostring(self.bodyPartType))
 
     bodyDamagePart:setBleeding(true)
     bodyDamagePart:setCut(true)

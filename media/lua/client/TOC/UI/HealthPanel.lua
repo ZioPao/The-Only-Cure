@@ -33,7 +33,7 @@ function ISHealthPanel:doBodyPartContextMenu(bodyPart, x, y)
     local playerNum = self.otherPlayer and self.otherPlayer:getPlayerNum() or self.character:getPlayerNum()
 
     -- To not recreate it but reuse the one that has been created in the original method
-    local context = getPlayerContextMenu(playerNum) 
+    local context = getPlayerContextMenu(playerNum)
     local cutLimbHandler = CutLimbHandler:new(self, bodyPart)
     cutLimbHandler:addToMenu(context)
 end
