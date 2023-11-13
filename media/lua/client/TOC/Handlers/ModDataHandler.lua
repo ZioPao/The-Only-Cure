@@ -17,7 +17,8 @@ function ModDataHandler:new(username, isResetForced)
     local o = {}
     setmetatable(o, self)
     self.__index = self
-    o.username = username       
+
+    o.username = username
     local key = CommandsData.GetKey(username)
 
     ModData.request(key)
@@ -27,6 +28,9 @@ function ModDataHandler:new(username, isResetForced)
         TOC_DEBUG.print("tocData in ModDataHandler for " .. username .. " is nil, creating it now")
         self:setup(key)
     end
+
+    TOC_DEBUG.print("initialized ModDataHandler for " .. username)
+
     -- Transmit it to the server
     ModData.transmit(key)
 
@@ -175,6 +179,12 @@ function ModDataHandler:apply()
 end
 
 function ModDataHandler.ReceiveData(key, table)
+    if not isClient() then
+        TOC_DEBUG.print("SP, skipping ModDataHandler.ReceiveData")
+    end
+
+    if key == "TOC_Bob" then return end     -- TODO Fix this
+
     TOC_DEBUG.print("receive data for " .. key)
     if table == {} or table == nil then
         TOC_DEBUG.print("table is nil... returning")
@@ -191,7 +201,7 @@ Events.OnReceiveGlobalModData.Add(ModDataHandler.ReceiveData)
 ---@param username string?
 ---@return ModDataHandler
 function ModDataHandler.GetInstance(username)
-    if username == nil then
+    if username == nil or username == "Bob" then
         username = getPlayer():getUsername()
     end
 

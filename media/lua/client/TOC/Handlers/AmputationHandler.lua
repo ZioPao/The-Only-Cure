@@ -88,8 +88,11 @@ function AmputationHandler:execute(damagePlayer)
     else
         -- TODO Send server command to manage items and spawn on another player
     end
+
     -- Add it to the list of cut limbs on this local client
-    CachedDataHandler.AddAmputatedLimb(self.patientPl:getUsername(), self.limbName)
+    local username = self.patientPl:getUsername()
+    CachedDataHandler.AddAmputatedLimb(username, self.limbName)
+    CachedDataHandler.CalculateHighestAmputatedLimbs(username)
 end
 
 ---Deletes the instance

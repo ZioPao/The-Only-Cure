@@ -34,6 +34,7 @@ function Main.SetupTraits()
 end
 
 function Main.Start()
+    TOC_DEBUG.print("running Start method")
     Main.SetupTraits()
 
     -- Starts initialization for local client
@@ -42,8 +43,20 @@ function Main.Start()
 end
 
 function Main.Initialize()
-    local pl = getPlayer()
-    PlayerHandler.InitializePlayer(pl, false)
+
+    local function TryToInitialize()
+        local pl = getPlayer()
+        TOC_DEBUG.print("Current username in TryToInitialize: " .. pl:getUsername())
+        if pl:getUsername() == "Bob" then
+            TOC_DEBUG.print("Username is still Bob, waiting")
+            return
+        end
+
+        PlayerHandler.InitializePlayer(pl, false)
+        Events.OnTick.Remove(TryToInitialize)
+    end
+
+    Events.OnTick.Add(TryToInitialize)
 end
 
 

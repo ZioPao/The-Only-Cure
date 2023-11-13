@@ -6,6 +6,12 @@ local CommonMethods = require("TOC/CommonMethods")
 ---@class CachedDataHandler
 local CachedDataHandler = {}
 
+---comment
+---@param username string
+function CachedDataHandler.Reset(username)
+    CachedDataHandler.amputatedLimbs[username] = {}
+    CachedDataHandler.highestAmputatedLimbs[username] = {}
+end
 
 --* Amputated Limbs caching *--
 CachedDataHandler.amputatedLimbs = {}
@@ -13,6 +19,7 @@ CachedDataHandler.amputatedLimbs = {}
 ---Calcualte the currently amputated limbs for a certain player
 ---@param username string
 function CachedDataHandler.CalculateAmputatedLimbs(username)
+    CachedDataHandler.amputatedLimbs[username] = {}
     local modDataHandler = ModDataHandler.GetInstance(username)
     for i=1, #StaticData.LIMBS_STRINGS do
         local limbName = StaticData.LIMBS_STRINGS[i]
@@ -44,14 +51,18 @@ CachedDataHandler.highestAmputatedLimbs = {}
 ---@param username string
 function CachedDataHandler.CalculateHighestAmputatedLimbs(username)
     if CachedDataHandler.amputatedLimbs == nil or CachedDataHandler.amputatedLimbs[username] == nil then
+        --- This function gets ran pretty early, we need to account for the Bob stuff
+        if username == "Bob" then
+            TOC_DEBUG.print("skip, Bob is default char")
+            return
+        end
+
         TOC_DEBUG.print("Amputated limbs weren't calculated. Trying to calculate them now for " .. username)
         CachedDataHandler.CalculateAmputatedLimbs(username)
-        return
     end
-
     local amputatedLimbs = CachedDataHandler.amputatedLimbs[username]
     CachedDataHandler.highestAmputatedLimbs[username] = {}
-    TOC_DEBUG.print("Searching highest amputations for " .. username)
+    --TOC_DEBUG.print("Searching highest amputations for " .. username)
     local modDataHandler = ModDataHandler.GetInstance(username)
     if modDataHandler == nil then
         TOC_DEBUG.print("ModDataHandler not found for " .. username)

@@ -49,7 +49,9 @@ function ISHealthPanel:initialise()
         self.sexPl = "Male"
     end
 
-    self.highestAmputations = CachedDataHandler.GetAmputatedLimbs(self.character:getUsername())
+    local username = self.character:getUsername()
+    CachedDataHandler.CalculateHighestAmputatedLimbs(username)
+    self.highestAmputations = CachedDataHandler.GetHighestAmputatedLimbs(username)
     og_ISHealthPanel_initialise(self)
 end
 
@@ -57,18 +59,19 @@ local og_ISHealthPanel_setOtherPlayer = ISHealthPanel.setOtherPlayer
 ---@param playerObj IsoPlayer
 function ISHealthPanel:setOtherPlayer(playerObj)
     og_ISHealthPanel_setOtherPlayer(self, playerObj)
-
-    -- Since setOtherPlayer may be run after initialise (or always), we need to recheck it after.
-    self:setHighestAmputation()
-
-    -- TODO Request from server!
+    --CachedDataHandler.CalculateAmputatedLimbs(self.character:getUsername())
 end
 
 
 local og_ISHealthPanel_render = ISHealthPanel.render
 function ISHealthPanel:render()
     og_ISHealthPanel_render(self)
-    if self.highestAmputations ~= nil  then
+    local username = self.character:getUsername()
+
+    --CachedDataHandler.CalculateHighestAmputatedLimbs(username)
+    self.highestAmputations = CachedDataHandler.GetHighestAmputatedLimbs(username)
+
+    if self.highestAmputations ~= nil then
         -- Left Texture
         if self.highestAmputations["L"] then
             local textureL = StaticData.HEALTH_PANEL_TEXTURES[self.sexPl][self.highestAmputations["L"]]
@@ -81,7 +84,9 @@ function ISHealthPanel:render()
             self:drawTexture(textureR, self.healthPanel.x/2 + 2, self.healthPanel.y/2, 1, 1, 0, 0)
         end
     else
-        self:setHighestAmputation()
+        -- Request caching data
+        TOC_DEBUG.print("highest amputated limbs was nil, calculating and getting it now for" .. username)
+        CachedDataHandler.CalculateHighestAmputatedLimbs(username)
     end
 end
 

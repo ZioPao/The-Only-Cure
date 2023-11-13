@@ -21,17 +21,20 @@ local PlayerHandler = {}
 function PlayerHandler.InitializePlayer(playerObj, isForced)
     local username = playerObj:getUsername()
     TOC_DEBUG.print("initializing local player: " .. username)
+
     ModDataHandler:new(username, isForced)
     PlayerHandler.playerObj = playerObj
 
-    -- Calculate amputated limbs at startup
+    -- Calculate amputated limbs and highest point of amputations at startup
     CachedDataHandler.CalculateAmputatedLimbs(username)
+    CachedDataHandler.CalculateHighestAmputatedLimbs(username)
 
     -- Since isForced is used to reset an existing player data, we're gonna clean their ISHealthPanel table too
     if isForced then
         --ISHealthPanel.highestAmputations = {}
         local ItemsHandler = require("TOC/Handlers/ItemsHandler")
         ItemsHandler.DeleteAllOldAmputationItems(playerObj)
+        CachedDataHandler.Reset(username)
     end
 end
 
