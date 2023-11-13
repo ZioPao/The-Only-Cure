@@ -1,10 +1,8 @@
 local PlayerHandler = require("TOC/Handlers/PlayerHandler")
-
-
 ------------------
+
 ---@class Main
 local Main = {}
-
 
 ---Setups the custom traits
 function Main.SetupTraits()
@@ -35,7 +33,6 @@ function Main.SetupTraits()
     TraitFactory.setMutualExclusive("Amputee_LowerArm", "Amputee_UpperArm")
 end
 
-
 function Main.Start()
     Main.SetupTraits()
 
@@ -43,7 +40,6 @@ function Main.Start()
     Events.OnGameStart.Add(Main.Initialize)
 
 end
-
 
 function Main.Initialize()
     local pl = getPlayer()

@@ -1,5 +1,4 @@
 local StaticData = require("TOC/StaticData")
-
 ------------------------
 
 local CommandsData = {}
@@ -8,8 +7,9 @@ CommandsData.modules = {
     TOC_DEBUG = "TOC_DEBUG"
 }
 
+CommandsData.client = {
 
-CommandsData.client = {}
+}
 
 CommandsData.server = {
     Debug = {

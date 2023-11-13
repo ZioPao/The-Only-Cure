@@ -1,15 +1,10 @@
 local ModDataHandler = require("TOC/Handlers/ModDataHandler")
 local CommonMethods = require("TOC/CommonMethods")
 local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
-
 local StaticData = require("TOC/StaticData")
 -----------
 
--- TODO We should instantiate this anyway if we want to keep track of cut limbs here. Doing so, we would be able to handle other players too
-
-
 -- TODO THIS SHOULD BE LOCAL ONLY! WE'RE MANAGING EVENTS AND INITIALIZATION STUFF! MOVE ONLINE STUFF AWAY!
-
 
 -- LIST OF STUFF THAT THIS CLASS NEEDS TO DO
 -- Keep track of cut limbs so that we don't have to loop through all of them all the time
@@ -19,9 +14,6 @@ local StaticData = require("TOC/StaticData")
 ---@class PlayerHandler
 ---@field playerObj IsoPlayer
 local PlayerHandler = {}
-
-PlayerHandler.amputatedLimbs = {}
-
 
 ---Setup the Player Handler and modData, only for local client
 ---@param playerObj IsoPlayer
@@ -137,9 +129,9 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
     local modDataHandler = ModDataHandler.GetInstance()
     if time ~= -1 and modDataHandler and modDataHandler:getIsAnyLimbCut() then
         local pl = getPlayer()
-
-        for i=1, #PlayerHandler.amputatedLimbs do
-            local limbName = PlayerHandler.amputatedLimbs[i]
+        local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(pl:getUsername())
+        for i=1, #amputatedLimbs do
+            local limbName = amputatedLimbs[i]
             if modDataHandler:getIsCut(limbName) then
                 local perk = Perks["Side_" .. CommonMethods.GetSide(limbName)]
                 local perkLevel = pl:getPerkLevel(perk)

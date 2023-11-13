@@ -1,7 +1,5 @@
 require "TimedActions/ISBaseTimedAction"
 local AmputationHandler = require("TOC/Handlers/AmputationHandler")
-
-
 -----------------------------
 
 ---@class CutLimbAction : ISBaseTimedAction

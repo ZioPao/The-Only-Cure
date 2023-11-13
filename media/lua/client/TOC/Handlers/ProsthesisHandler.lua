@@ -1,11 +1,9 @@
 local CommonMethods = require("TOC/CommonMethods")
 local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
-
 -------------------------
 
 ---@class ProsthesisHandler
 local ProsthesisHandler = {}
-
 
 ---Cache the correct texture for the Health Panel for the currently equipped prosthesis
 function ProsthesisHandler.SetHealthPanelTexture()

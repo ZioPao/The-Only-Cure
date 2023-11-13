@@ -1,6 +1,5 @@
 local CommandsData = require("TOC/CommandsData")
 local StaticData = require("TOC/StaticData")
-
 ----------------
 
 --- Handle all mod data related stuff
@@ -10,8 +9,7 @@ local StaticData = require("TOC/StaticData")
 local ModDataHandler = {}
 ModDataHandler.instances = {}
 
- -- Instead of requiring a player, to make it compatible in a MP env, we should require the table containing the modData for the init
-
+---Setup a new Mod Data Handler
 ---@param username string
 ---@param isResetForced boolean?
 ---@return ModDataHandler

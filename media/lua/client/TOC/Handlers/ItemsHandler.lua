@@ -1,6 +1,5 @@
 local StaticData = require("TOC/StaticData")
 local CommonMethods = require("TOC/CommonMethods")
-
 ---------------------------
 
 --- Submodule to handle spawning the correct items after certain actions (ie: cutting a hand). LOCAL ONLY!

@@ -1,10 +1,8 @@
 local StaticData = require("TOC/StaticData")
 local ModDataHandler = require("TOC/Handlers/ModDataHandler")
 local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
-
 ---@diagnostic disable: duplicate-set-field
 local CutLimbHandler = require("TOC/UI/CutLimbInteractions")
-
 ---------------------------------
 
 -- We're overriding ISHealthPanel to add custom textures to the body panel.

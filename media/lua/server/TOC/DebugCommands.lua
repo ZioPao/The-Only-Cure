@@ -1,6 +1,5 @@
 local CommandsData = require("TOC/CommandsData")
 local ServerDataHandler = require("TOC/ServerDataHandler")
-
 ----------------------------
 
 local DebugCommands = {}
