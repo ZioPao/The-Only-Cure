@@ -17,6 +17,8 @@ ISHealthBodyPartPanel = ISBodyPartPanel:derive("ISHealthBodyPartPanel")
 local og_ISHealthPanel_dropItemsOnBodyPart = ISHealthPanel.dropItemsOnBodyPart
 function ISHealthPanel:dropItemsOnBodyPart(bodyPart, items)
     og_ISHealthPanel_dropItemsOnBodyPart(self, bodyPart, items)
+
+    TOC_DEBUG.print("override to dropItemsOnBodyPart running")
     local cutLimbHandler = CutLimbHandler:new(self, bodyPart)
     for _,item in ipairs(items) do
         cutLimbHandler:checkItem(item)
@@ -35,8 +37,32 @@ function ISHealthPanel:doBodyPartContextMenu(bodyPart, x, y)
     -- To not recreate it but reuse the one that has been created in the original method
     local context = getPlayerContextMenu(playerNum)
     local cutLimbHandler = CutLimbHandler:new(self, bodyPart)
+
+    self:checkItems({cutLimbHandler})
+
     cutLimbHandler:addToMenu(context)
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 --* Modifications to handle visible amputation on the health menu *--

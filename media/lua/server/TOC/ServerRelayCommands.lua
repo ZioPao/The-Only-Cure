@@ -6,19 +6,17 @@ local ServerRelayCommands = {}
 
 -- TODO We can easily make this a lot more simple without having functions 
 
----comment
----@param surgeonPl IsoPlayer
+---Relay DamageDuringAmputation to another client
 ---@param args relayDamageDuringAmputationParams
-function ServerRelayCommands.RelayDamageDuringAmputation(surgeonPl, args)
+function ServerRelayCommands.RelayDamageDuringAmputation(_, args)
     local patientPl = getPlayerByOnlineID(args.patientNum)
-    local surgeonNum = surgeonPl:getOnlineID()
 
     ---@type receiveDamageDuringAmputationParams
-    local params = {surgeonNum = surgeonNum, limbName = args.limbName}
+    local params = {limbName = args.limbName}
     sendServerCommand(patientPl, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveDamageDuringAmputation, params)
 end
 
----comment
+---Relay ExecuteAmputationAction to another client
 ---@param surgeonPl IsoPlayer
 ---@param args relayExecuteAmputationActionParams
 function ServerRelayCommands.RelayExecuteAmputationAction(surgeonPl, args)
@@ -36,6 +34,7 @@ end
 
 local function OnClientRelayCommand(module, command, playerObj, args)
     if module == CommandsData.modules.TOC_RELAY and ServerRelayCommands[command] then
+        TOC_DEBUG.print("Received Client Relay command - " .. tostring(command))
         ServerRelayCommands[command](playerObj, args)
     end
 end

@@ -40,7 +40,24 @@ function AmputationHandler:new(limbName, surgeonPl)
 end
 
 
+--* Static methods *--
+
+---comment
+---@param player IsoPlayer
+---@param limbName string
+function AmputationHandler.ApplyDamageDuringAmputation(player, limbName)
+    local bodyDamage = player:getBodyDamage()
+    local bodyPartType = BodyPartType[limbName]
+    local bodyDamagePart = bodyDamage:getBodyPart(bodyPartType)
+    TOC_DEBUG.print("damage patient - " .. tostring(bodyPartType))
+
+    bodyDamagePart:setBleeding(true)
+    bodyDamagePart:setCut(true)
+    bodyDamagePart:setBleedingTime(ZombRand(10, 20))
+end
+
 --* Main methods *--
+
 
 ---Damage the player part during the amputation process
 function AmputationHandler:damageDuringAmputation()

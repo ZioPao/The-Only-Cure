@@ -16,13 +16,13 @@ local function InitAmputationHandler(limbName, surgeonNum)
     return handler
 end
 
----comment
+---Receive the damage from another player during the amputation
 ---@param args receiveDamageDuringAmputationParams
 function ClientRelayCommands.ReceiveDamageDuringAmputation(args)
-    local handler = InitAmputationHandler(args.limbName, args.surgeonNum)
-    handler:damageDuringAmputation()
+    AmputationHandler.ApplyDamageDuringAmputation(getPlayer(), args.limbName)
 end
 
+---Creates a new handler and execute the amputation function on this client
 ---@param args receiveExecuteAmputationActionParams
 function ClientRelayCommands.ReceiveExecuteAmputationAction(args)
     local handler = InitAmputationHandler(args.limbName, args.surgeonNum)
@@ -32,6 +32,7 @@ end
 
 local function OnServerRelayCommand(module, command, args)
     if module == CommandsData.modules.TOC_RELAY and ClientRelayCommands[command] then
+        TOC_DEBUG.print("Received Server Relay command - " .. tostring(command))
         ClientRelayCommands[command](args)
     end
 end

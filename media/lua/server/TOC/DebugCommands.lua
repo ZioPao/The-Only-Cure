@@ -11,9 +11,7 @@ function DebugCommands.PrintAllTocData(playerObj, args)
     TOC_DEBUG.printTable(ServerDataHandler.modData)
 end
 
-
-
----comment
+---Print ALL TOC data
 ---@param playerObj IsoPlayer
 ---@param args printTocDataParams
 function DebugCommands.PrintTocData(playerObj, args)

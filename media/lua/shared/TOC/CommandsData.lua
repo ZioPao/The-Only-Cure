@@ -10,7 +10,7 @@ CommandsData.modules = {
 
 CommandsData.client = {
     Relay = {
-        ReceiveDamageDuringAmputation = "ReceiveDamageDuringAmputation",            ---@alias receiveDamageDuringAmputationParams {surgeonNum : number, limbName : string}
+        ReceiveDamageDuringAmputation = "ReceiveDamageDuringAmputation",            ---@alias receiveDamageDuringAmputationParams { limbName : string}
         ReceiveExecuteAmputationAction = "ReceiveExecuteAmputationAction"       ---@alias receiveExecuteAmputationActionParams {surgeonNum : number, limbName : string}
     }
 }
