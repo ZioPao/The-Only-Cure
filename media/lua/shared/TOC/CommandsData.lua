@@ -23,7 +23,8 @@ CommandsData.server = {
     },
 
     Debug = {
-        PrintTocData = "PrintTocData"               ---@alias printTocDataParams {username : string}
+        PrintTocData = "PrintTocData",              ---@alias printTocDataParams {username : string}
+        PrintAllTocData = "PrintAllTocData"
     }
 }
 
@@ -33,5 +34,14 @@ CommandsData.server = {
 function CommandsData.GetKey(username)
     return StaticData.MOD_NAME .. "_" .. username
 end
+
+-- ---comment
+-- ---@param key string
+-- ---@return string
+-- function CommandsData.GetUsernameFromKey(key)
+--     local subSize = #StaticData.MOD_NAME + 1
+--     local username = key:sub(subSize)
+--     return username
+-- end
 
 return CommandsData

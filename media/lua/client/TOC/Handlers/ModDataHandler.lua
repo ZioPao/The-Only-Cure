@@ -29,6 +29,8 @@ function ModDataHandler:new(username, isResetForced)
         TOC_DEBUG.print("tocData in ModDataHandler for " .. username .. " is nil, creating it now")
         self:setup(key)
     end
+    -- Transmit it to the server
+    ModData.transmit(key)
 
     ModDataHandler.instances[username] = o
 
@@ -59,8 +61,7 @@ function ModDataHandler:setup(key)
     -- Add it to global mod data
     ModData.add(key, self.tocData)
 
-    -- Transmit it to the server
-    ModData.transmit(key)
+
 end
 
 
@@ -169,11 +170,25 @@ function ModDataHandler:setLimbParams(limbName, ampStatus, cicatrizationTime)
 end
 
 
---* Global Mod Data Apply *--
+--* Global Mod Data Handling *--
 
 function ModDataHandler:apply()
     ModData.transmit(CommandsData.GetKey(self.username))
 end
+
+
+function ModDataHandler.ReceiveData(key, table)
+    TOC_DEBUG.print("receive data for " .. key)
+    if table == {} or table == nil then
+        TOC_DEBUG.print("table is nil... returning")
+        return
+    end
+    ModData.add(key, table)     -- Add it to the client mod data (not sure)
+    local username = key:sub(5)
+    ModDataHandler.GetInstance(username)
+end
+Events.OnReceiveGlobalModData.Add(ModDataHandler.ReceiveData)
+
 
 ---@param username string?
 ---@return ModDataHandler

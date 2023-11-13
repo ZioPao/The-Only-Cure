@@ -2,7 +2,6 @@ local PlayerHandler = require("TOC/Handlers/PlayerHandler")
 local StaticData = require("TOC/StaticData")
 local CommonMethods = require("TOC/CommonMethods")
 local ModDataHandler = require("TOC/Handlers/ModDataHandler")
-local CommandsData = require("TOC/CommandsData")
 
 ---@diagnostic disable: duplicate-set-field
 local CutLimbHandler = require("TOC/UI/CutLimbInteractions")
@@ -48,15 +47,12 @@ end
 function ISHealthPanel:setHighestAmputation()
 
     --TOC_DEBUG.print("setHighestAmputation for " .. self.tocUsername)
-
-    if self.otherPlayer ~= nil then
-        self.tocUsername = self.otherPlayer:getUsername()
-    else
-        self.tocUsername = self.character:getUsername()
-    end
+    
+    -- character is always the patient.
+    self.tocUsername = self.character:getUsername()
 
     if PlayerHandler.amputatedLimbs == nil or PlayerHandler.amputatedLimbs[self.tocUsername] == nil then
-        TOC_DEBUG.print("PlayerHandler.amputatedLimbs is still nil or wasn't initialized for that player")
+        TOC_DEBUG.print("PlayerHandler.amputatedLimbs is still nil or wasn't initialized for " .. self.tocUsername)
         return
     end
     local amputatedLimbs = PlayerHandler.amputatedLimbs[self.tocUsername]
@@ -111,6 +107,8 @@ local og_ISHealthPanel_render = ISHealthPanel.render
 function ISHealthPanel:render()
     og_ISHealthPanel_render(self)
 
+    --print("Rendering ISHealthPanel")
+
 
     if self.highestAmputations ~= nil and self.highestAmputations[self.tocUsername] ~= nil then
         -- Left Texture
@@ -134,4 +132,45 @@ local og_ISCharacterInfoWindow_render = ISCharacterInfoWindow.prerender
 function ISCharacterInfoWindow:prerender()
     og_ISCharacterInfoWindow_render(self)
     self.backgroundColor.a = 1
+end
+
+-- We need to override this to force the alpha to 1 for the Medical Check in particular
+local og_ISHealthPanel_prerender = ISHealthPanel.prerender
+function ISHealthPanel:prerender()
+    og_ISHealthPanel_prerender(self)
+    self.backgroundColor.a = 1
+end
+
+
+--- The medical check wrap the health panel into this. We need to override its color
+local overrideBackgroundColor = true
+local og_ISUIElement_wrapInCollapsableWindow = ISUIElement.wrapInCollapsableWindow
+function ISUIElement:wrapInCollapsableWindow(title, resizable, subClass)
+    local panel = og_ISUIElement_wrapInCollapsableWindow(self, title, resizable, subClass)
+
+    if overrideBackgroundColor then
+        TOC_DEBUG.print("Overriding color for panel - " .. title)
+        self.backgroundColor.a = 1
+        panel.backgroundColor.a = 1
+    end
+
+    return panel
+end
+
+
+
+
+
+
+
+-- This is run when a player is trying the Medical Check action on another player
+local og_ISMedicalCheckAction_perform = ISMedicalCheckAction.perform
+function ISMedicalCheckAction:perform()
+    local username = self.otherPlayer:getUsername()
+    TOC_DEBUG.print("creating instance for " .. username )
+    ModDataHandler.GetInstance(username)
+
+    -- We need to recalculate them here before we can create the highest amputations point
+    PlayerHandler.CacheAmputatedLimbs(username)
+    og_ISMedicalCheckAction_perform(self)
 end

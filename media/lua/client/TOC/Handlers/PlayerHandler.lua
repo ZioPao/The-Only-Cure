@@ -18,7 +18,7 @@ local PlayerHandler = {}
 PlayerHandler.amputatedLimbs = {}
 
 
----Setup the Player Handler and modData
+---Setup the Player Handler and modData, only for local client
 ---@param playerObj IsoPlayer
 ---@param isForced boolean?
 function PlayerHandler.InitializePlayer(playerObj, isForced)
@@ -27,15 +27,9 @@ function PlayerHandler.InitializePlayer(playerObj, isForced)
     TOC_DEBUG.print("initializing " .. username)
     local modDataHandler = ModDataHandler:new(username, isForced)
     PlayerHandler.playerObj = playerObj
-    -- Calculate amputated limbs at startup
-    PlayerHandler.amputatedLimbs[username] = {}
 
-    for i=1, #StaticData.LIMBS_STRINGS do
-        local limbName = StaticData.LIMBS_STRINGS[i]
-        if modDataHandler:getIsCut(limbName) then
-            PlayerHandler.AddLocalAmputatedLimb(username, limbName)
-        end
-    end
+    -- Calculate amputated limbs at startup
+    PlayerHandler.CacheAmputatedLimbs(username)
 
     -- Since isForced is used to reset an existing player data, we're gonna clean their ISHealthPanel table too
     if isForced then
@@ -60,8 +54,23 @@ function PlayerHandler.ManageTraits(playerObj)
     end
 end
 
+---Cycle through all the limbs and caches the ones that the player cut off
+---@param username string
+function PlayerHandler.CacheAmputatedLimbs(username)
+    PlayerHandler.amputatedLimbs[username] = {}
+    local modDataHandler = ModDataHandler.GetInstance(username)
+    for i=1, #StaticData.LIMBS_STRINGS do
+        local limbName = StaticData.LIMBS_STRINGS[i]
+        if modDataHandler:getIsCut(limbName) then
+            PlayerHandler.AddLocalAmputatedLimb(username, limbName)
+        end
+    end
+end
+
+
 ---Cache the currently amputated limbs
 ---@param limbName string
+---@private
 function PlayerHandler.AddLocalAmputatedLimb(username, limbName)
     TOC_DEBUG.print("added " .. limbName .. " to known amputated limbs for " .. username)
     table.insert(PlayerHandler.amputatedLimbs[username], limbName)        -- TODO This should be player specific, not generic

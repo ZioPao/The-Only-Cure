@@ -28,10 +28,16 @@ function TOC_DEBUG.printTable(table, indent)
     end
 end
 
-function TOC_DEBUG.printGlobalModDataServer(username)
-    local CommandsData = require("TOC/CommandsData")
 
-    ---@type printTocDataParams
-    local params = {username = username}
-    sendClientCommand(CommandsData.modules.TOC_DEBUG, CommandsData.server.Debug.PrintTocData, params)
+
+--* Debug server commands *--
+
+local CommandsData = require("TOC/CommandsData")
+
+function TOC_DEBUG.printPlayerServerModData(username)
+    sendClientCommand(CommandsData.modules.TOC_DEBUG, CommandsData.server.Debug.PrintTocData, {username = username})
+end
+
+function TOC_DEBUG.printAllServerModData()
+    sendClientCommand(CommandsData.modules.TOC_DEBUG, CommandsData.server.Debug.PrintAllTocData, {})
 end

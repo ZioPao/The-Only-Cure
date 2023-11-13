@@ -1,15 +1,26 @@
 local CommandsData = require("TOC/CommandsData")
+local ServerDataHandler = require("TOC/ServerDataHandler")
+
+----------------------------
 
 local DebugCommands = {}
+
+---comment
+---@param playerObj IsoPlayer
+---@param args table
+function DebugCommands.PrintAllTocData(playerObj, args)
+    TOC_DEBUG.printTable(ServerDataHandler.modData)
+end
 
 
 
 ---comment
 ---@param playerObj IsoPlayer
----@param args {username : string}
+---@param args printTocDataParams
 function DebugCommands.PrintTocData(playerObj, args)
-    local data = ModData.get(CommandsData.GetKey(args.username))
-    TOC_DEBUG.printTable(data)
+    local key = CommandsData.GetKey(args.username)
+    local tocData = ServerDataHandler.GetTable(key)
+    TOC_DEBUG.printTable(tocData)
 end
 
 --------------------
