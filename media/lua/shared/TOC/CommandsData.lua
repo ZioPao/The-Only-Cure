@@ -4,17 +4,27 @@ local StaticData = require("TOC/StaticData")
 local CommandsData = {}
 
 CommandsData.modules = {
-    TOC_DEBUG = "TOC_DEBUG"
+    TOC_DEBUG = "TOC_DEBUG",
+    TOC_RELAY = "TOC_RELAY"
 }
 
 CommandsData.client = {
-
+    Relay = {
+        ReceiveDamageDuringAmputation = "ReceiveDamageDuringAmputation",            ---@alias receiveDamageDuringAmputationParams {surgeonNum : number, limbName : string}
+        ReceiveExecuteAmputationAction = "ReceiveExecuteAmputationAction"       ---@alias receiveExecuteAmputationActionParams {surgeonNum : number, limbName : string}
+    }
 }
 
 CommandsData.server = {
     Debug = {
-        PrintTocData = "PrintTocData",              ---@alias printTocDataParams {username : string}
+        PrintTocData = "PrintTocData",                                  ---@alias printTocDataParams {username : string}
         PrintAllTocData = "PrintAllTocData"
+    },
+
+    Relay = {
+        RelayDamageDuringAmputation = "RelayDamageDuringAmputation",                ---@alias relayDamageDuringAmputationParams {patientNum : number, limbName : string}
+        RelayExecuteAmputationAction = "RelayExecuteAmputationAction"         ---@alias relayExecuteAmputationActionParams {patientNum : number, limbName : string}
+
     }
 }
 

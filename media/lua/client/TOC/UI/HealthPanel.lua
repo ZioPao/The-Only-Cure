@@ -50,8 +50,11 @@ function ISHealthPanel:initialise()
     end
 
     local username = self.character:getUsername()
-    CachedDataHandler.CalculateHighestAmputatedLimbs(username)
-    self.highestAmputations = CachedDataHandler.GetHighestAmputatedLimbs(username)
+    if username ~= "Bob" then
+        CachedDataHandler.CalculateHighestAmputatedLimbs(username)
+        self.highestAmputations = CachedDataHandler.GetHighestAmputatedLimbs(username) 
+    end
+
     og_ISHealthPanel_initialise(self)
 end
 

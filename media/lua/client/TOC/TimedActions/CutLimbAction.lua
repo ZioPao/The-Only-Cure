@@ -1,5 +1,6 @@
 require "TimedActions/ISBaseTimedAction"
 local AmputationHandler = require("TOC/Handlers/AmputationHandler")
+local CommandsData = require("TOC/CommandsData")
 -----------------------------
 
 ---@class CutLimbAction : ISBaseTimedAction
@@ -44,7 +45,9 @@ function CutLimbAction:start()
         self.handler:damageDuringAmputation()
     else
         -- Other player
-        -- TODO Send Damage
+        ---@type relayDamageDuringAmputationParams
+        local params = {patientNum = self.patient:getOnlineID(), limbName = self.limbName}
+        sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayDamageDuringAmputation, params )
     end
 end
 

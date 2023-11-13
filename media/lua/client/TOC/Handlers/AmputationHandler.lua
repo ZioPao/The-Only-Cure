@@ -5,7 +5,7 @@ local StaticData = require("TOC/StaticData")
 ---------------------------
 
 -- TODO Add Bandages, Torniquet, etc.
---- Manages an amputation. Could be run on either clients
+--- Manages an amputation. Will be run on the patient client
 ---@class AmputationHandler
 ---@field patientPl IsoPlayer
 ---@field limbName string
@@ -22,7 +22,7 @@ function AmputationHandler:new(limbName, surgeonPl)
     setmetatable(o, self)
     self.__index = self
 
-    o.patientPl = getPlayer()     -- TODO This isn't necessarily true anymore.
+    o.patientPl = getPlayer()
     o.limbName = limbName
     o.bodyPartType = BodyPartType[self.limbName]
     if surgeonPl then
@@ -38,7 +38,22 @@ end
 
 --* Main methods *--
 
----Starts bleeding from the point where the saw is being used
+---Starts bleeding from the point where the saw is being used. Static since this could be used for online 
+---comment
+---@param patientPl IsoPlayer
+---@param bodyPartType BodyPartType
+function AmputationHandler.DamageDuringAmputation(patientPl, bodyPartType)
+    TOC_DEBUG.print("damage patient")
+    local bodyDamage = patientPl:getBodyDamage()
+    local bodyDamagePart = bodyDamage:getBodyPart(bodyPartType)
+
+    bodyDamagePart:setBleeding(true)
+    bodyDamagePart:setCut(true)
+    bodyDamagePart:setBleedingTime(ZombRand(10, 20))
+
+
+
+end
 function AmputationHandler:damageDuringAmputation()
     TOC_DEBUG.print("damage patient")
     local bodyDamage = self.patientPl:getBodyDamage()
@@ -81,13 +96,8 @@ function AmputationHandler:execute(damagePlayer)
     modDataHandler:apply()      -- This will force rechecking the cached amputated limbs on the other client
 
     -- Give the player the correct amputation item
-    -- TODO We need to consider where this will be ran. 
-    if self.patientPl == self.surgeonPl then
-        ItemsHandler.DeleteOldAmputationItem(self.patientPl, self.limbName)
-        ItemsHandler.SpawnAmputationItem(self.patientPl, self.limbName)
-    else
-        -- TODO Send server command to manage items and spawn on another player
-    end
+    ItemsHandler.DeleteOldAmputationItem(self.patientPl, self.limbName)
+    ItemsHandler.SpawnAmputationItem(self.patientPl, self.limbName)
 
     -- Add it to the list of cut limbs on this local client
     local username = self.patientPl:getUsername()

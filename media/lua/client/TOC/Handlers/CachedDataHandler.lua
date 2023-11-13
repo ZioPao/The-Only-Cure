@@ -52,10 +52,10 @@ CachedDataHandler.highestAmputatedLimbs = {}
 function CachedDataHandler.CalculateHighestAmputatedLimbs(username)
     if CachedDataHandler.amputatedLimbs == nil or CachedDataHandler.amputatedLimbs[username] == nil then
         --- This function gets ran pretty early, we need to account for the Bob stuff
-        if username == "Bob" then
-            TOC_DEBUG.print("skip, Bob is default char")
-            return
-        end
+        -- if username == "Bob" then
+        --     TOC_DEBUG.print("skip, Bob is default char")
+        --     return
+        -- end
 
         TOC_DEBUG.print("Amputated limbs weren't calculated. Trying to calculate them now for " .. username)
         CachedDataHandler.CalculateAmputatedLimbs(username)
