@@ -103,8 +103,10 @@ function PlayerHandler.UpdateCicatrization()
 end
 
 
+------------------------------------------
+--* OVERRIDES *--
 
---* Overrides *--
+--* Time to perform actions overrides *--
 
 local og_ISBaseTimedAction_adjustMaxTime = ISBaseTimedAction.adjustMaxTime
 --- Adjust time
@@ -144,6 +146,113 @@ function ISBaseTimedAction:perform()
         end
     end
 end
+
+--* Equipping items overrides *--
+
+local og_ISEquipWeaponAction_isValid = ISEquipWeaponAction.isValid
+---Add a condition to check the feasibility of having 2 handed weapons or if both arms are cut off
+---@return boolean
+function ISEquipWeaponAction:isValid()
+    local isValid = og_ISEquipWeaponAction_isValid(self)
+    local modDataHandler = ModDataHandler.GetInstance(self.character:getUsername())
+    if isValid and modDataHandler:getIsAnyLimbCut() then
+
+        -- TODO We need to consider amputating legs, this won't be correct anymore
+        -- TODO Consider prosthesis
+        -- TODO Maybe isValid isn't the right choice, we want them to be able to equip weapons nonetheless but one handed
+        if modDataHandler:getIsCut("Hand_L") and modDataHandler:getIsCut("Hand_R") then
+            isValid = false
+        end
+    end
+    return isValid
+end
+
+
+---@class ISEquipWeaponAction
+---@field character IsoPlayer
+
+---comment
+---@param modDataHandler ModDataHandler
+function ISEquipWeaponAction:performWithAmputation(modDataHandler)
+    local hand = nil
+    local otherHand = nil
+    local getMethodFirst = nil
+    local setMethodFirst = nil
+
+    local getMethodSecond = nil
+    local setMethodSecond = nil
+
+    if self.primary then
+        hand = "Hand_R"
+        otherHand = "Hand_L"
+        getMethodFirst = self.character.getSecondaryHandItem
+        setMethodFirst = self.character.setSecondaryHandItem
+        getMethodSecond = self.character.getPrimaryHandItem
+        setMethodSecond = self.character.setPrimaryHandItem
+    else
+        hand = "Hand_L"
+        otherHand = "Hand_R"
+        getMethodFirst = self.character.getPrimaryHandItem
+        setMethodFirst = self.character.setPrimaryHandItem
+        getMethodSecond = self.character.getSecondaryHandItem
+        setMethodSecond = self.character.setSecondaryHandItem
+    end
+
+
+    if not self.twoHands then
+        if getMethodFirst(self.character) and getMethodFirst(self.character):isRequiresEquippedBothHands() then
+            setMethodFirst(self.character, nil)
+        end
+        -- if this weapon is already equiped in the 2nd hand, we remove it
+        if(getMethodFirst(self.character) == self.item or getMethodFirst(self.character) == getMethodSecond(self.character)) then
+            setMethodFirst(self.character, nil)
+        end
+        -- if we are equipping a handgun and there is a weapon in the secondary hand we remove it
+        if instanceof(self.item, "HandWeapon") and self.item:getSwingAnim() and self.item:getSwingAnim() == "Handgun" then
+            if getMethodFirst(self.character) and instanceof(getMethodFirst(self.character), "HandWeapon") then
+                setMethodFirst(self.character, nil)
+            end
+        end
+        if not getMethodSecond(self.character) or getMethodSecond(self.character) ~= self.item then
+            setMethodSecond(self.character, nil)
+
+            -- TODO We should use the CachedData indexable instead of modDataHandler
+
+            if not modDataHandler:getIsCut(hand) then
+                setMethodSecond(self.character, self.item)
+            else
+                setMethodFirst(self.character, self.item)
+            end
+        end
+    else
+        setMethodFirst(self.character, nil)
+        setMethodSecond(self.character, nil)
+
+        if not modDataHandler:getIsCut(hand) then
+            setMethodSecond(self.character, self.item)
+        end
+
+        if not modDataHandler:getIsCut(otherHand) then
+            setMethodFirst(self.character, self.item)
+        end
+    end
+    
+end
+
+local og_ISEquipWeaponAction_perform = ISEquipWeaponAction.perform
+function ISEquipWeaponAction:perform()
+    og_ISEquipWeaponAction_perform(self)
+
+    -- TODO Can we do it earlier?
+    local modDataHandler = ModDataHandler.GetInstance(self.character:getUsername())
+
+    -- Just check it any limb has been cut. If not, we can just return from here
+    if modDataHandler:getIsAnyLimbCut() == true then
+        self:performWithAmputation(modDataHandler)
+    end
+end
+
+
 
 -- TODO Limit 2 hands weapons and stuff like that
 

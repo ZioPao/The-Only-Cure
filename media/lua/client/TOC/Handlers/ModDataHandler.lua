@@ -26,7 +26,7 @@ function ModDataHandler:new(username, isResetForced)
 
     if isResetForced or o.tocData == nil or o.tocData.Hand_L == nil or o.tocData.Hand_L.isCut == nil then
         TOC_DEBUG.print("tocData in ModDataHandler for " .. username .. " is nil, creating it now")
-        self:setup(key)
+        o:setup(key)
     end
 
     TOC_DEBUG.print("initialized ModDataHandler for " .. username)

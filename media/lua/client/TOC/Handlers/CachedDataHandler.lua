@@ -15,6 +15,7 @@ end
 
 --* Amputated Limbs caching *--
 CachedDataHandler.amputatedLimbs = {}
+-- TODO Add an indexable table too!
 
 ---Calcualte the currently amputated limbs for a certain player
 ---@param username string
