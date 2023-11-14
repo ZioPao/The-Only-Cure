@@ -1,5 +1,8 @@
 ---@alias partData { isCut : boolean?, isInfected : boolean?, isOperated : boolean?, isCicatrized : boolean?, isCauterized : boolean?, isVisible : boolean?, cicatrizationTime : number, isProstEquipped : boolean, prostFactor : number}
----@alias tocModData {Hand_L : partData, ForeArm_L : partData, UpperArm_L : partData, Hand_R : partData, ForeArm_R : partData, UpperArm_R : partData, isIgnoredPartInfected : boolean, isAnyLimbCut : boolean}
+---@alias limbsTable {Hand_L : partData, ForeArm_L : partData, UpperArm_L : partData, Hand_R : partData, ForeArm_R : partData, UpperArm_R : partData,}
+---@alias prosthesisData {isEquipped : boolean, prostFactor : number}
+---@alias prosthesesTable {top : table, bottom : table}
+---@alias tocModData { limbs : limbsTable, prostheses : prosthesesTable, isIgnoredPartInfected : boolean, isAnyLimbCut : boolean}
 ---------------------------
 
 local StaticData = {}

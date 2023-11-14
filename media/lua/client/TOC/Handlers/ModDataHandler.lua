@@ -48,11 +48,8 @@ function ModDataHandler:setup(key)
         -- Generic stuff that does not belong anywhere else
         isIgnoredPartInfected = false,
         isAnyLimbCut = false,
-
-        prosthesis = {
-            top = {},
-            bottom = {}
-        }
+        limbs = {},
+        prostheses = {}
     }
 
     ---@type partData
@@ -62,14 +59,22 @@ function ModDataHandler:setup(key)
     }
 
 
-    -- TODO Set this up for legs crap
     -- Initialize limbs
-    --self.tocData.limbs = {}
 
     for i=1, #StaticData.LIMBS_STRINGS do
         local limbName = StaticData.LIMBS_STRINGS[i]
-        self.tocData[limbName] = {}
+        self.tocData.limbs[limbName] = {}
         self:setLimbParams(StaticData.LIMBS_STRINGS[i], defaultParams, 0)
+    end
+
+    local prosthesesGroups = {"top", "bottom"}
+    for i=1, #prosthesesGroups do
+        local group = prosthesesGroups[i]
+        self.tocData.prostheses[group] = {
+            isEquipped = false,
+            prostFactor = 0
+        }
+        -- TODO Make this more modular instead of this crap
     end
 
     -- Add it to global mod data
@@ -98,28 +103,28 @@ end
 ---@param limbName string
 ---@param isCut boolean
 function ModDataHandler:setIsCut(limbName, isCut)
-    self.tocData[limbName].isCut = isCut
+    self.tocData.limbs[limbName].isCut = isCut
 end
 
 ---Set isInfected
 ---@param limbName string
 ---@param isInfected boolean
 function ModDataHandler:setIsInfected(limbName, isInfected)
-    self.tocData[limbName].isInfected = isInfected
+    self.tocData.limbs[limbName].isInfected = isInfected
 end
 
 ---Set isProstEquipped
----@param limbName string
+---@param group string
 ---@param isProstEquipped boolean
-function ModDataHandler:setIsProstEquipped(limbName, isProstEquipped)
-    self.tocData[limbName].isProstEquipped = isProstEquipped
+function ModDataHandler:setIsProstEquipped(group, isProstEquipped)
+    self.tocData.prostheses[group].isProstEquipped = isProstEquipped
 end
 
 ---Set prostFactor
----@param limbName string
+---@param group string
 ---@param prostFactor number
-function ModDataHandler:setProstFactor(limbName, prostFactor)
-    self.tocData[limbName].prostFactor = prostFactor
+function ModDataHandler:setProstFactor(group, prostFactor)
+    self.tocData.prostheses[group].prostFactor = prostFactor
 end
 
 -----------------
@@ -141,28 +146,28 @@ end
 ---@param limbName string
 ---@return boolean
 function ModDataHandler:getIsCut(limbName)
-    return self.tocData[limbName].isCut
+    return self.tocData.limbs[limbName].isCut
 end
 
 ---Get isVisible
 ---@param limbName string
 ---@return boolean
 function ModDataHandler:getIsVisible(limbName)
-    return self.tocData[limbName].isVisible
+    return self.tocData.limbs[limbName].isVisible
 end
 
 ---Get isProstEquipped
----@param limbName string
+---@param group string
 ---@return boolean
-function ModDataHandler:getIsProstEquipped(limbName)
-    return self.tocData[limbName].isProstEquipped
+function ModDataHandler:getIsProstEquipped(group)
+    return self.tocData.prostheses[group].isProstEquipped
 end
 
 ---Get prostFactor
----@param limbName string
+---@param group string
 ---@return number
-function ModDataHandler:getProstFactor(limbName)
-    return self.tocData[limbName].getProstFactor
+function ModDataHandler:getProstFactor(group)
+    return self.tocData.prostheses[group].getProstFactor
 end
 
 --* Limbs data handling *--
@@ -201,7 +206,7 @@ end
 ---@param ampStatus partData {isCut, isInfected, isOperated, isCicatrized, isCauterized, isVisible}
 ---@param cicatrizationTime integer?
 function ModDataHandler:setLimbParams(limbName, ampStatus, cicatrizationTime)
-    local limbData = self.tocData[limbName]
+    local limbData = self.tocData.limbs[limbName]
     if ampStatus.isCut ~= nil then limbData.isCut = ampStatus.isCut end
     if ampStatus.isInfected ~= nil then limbData.isInfected = ampStatus.isInfected end
     if ampStatus.isOperated ~= nil then limbData.isOperated = ampStatus.isOperated end
