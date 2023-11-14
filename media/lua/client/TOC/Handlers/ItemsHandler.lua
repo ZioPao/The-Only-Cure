@@ -25,6 +25,7 @@ function ItemsHandler.GetAmputationTexturesIndex(playerObj, isCicatrized)
         matchedIndex = matchedIndex + 5
     end
 
+
     if isCicatrized then
         if isHairy then
             matchedIndex = matchedIndex + 5           -- to use the cicatrized texture on hairy bodies

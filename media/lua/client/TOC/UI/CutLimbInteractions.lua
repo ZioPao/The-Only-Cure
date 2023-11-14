@@ -66,7 +66,7 @@ local CutLimbHandler = BaseHandler:derive("CutLimbHandler")
 function CutLimbHandler:new(panel, bodyPart)
     local o = BaseHandler.new(self, panel, bodyPart)
     o.items.ITEMS = {}
-    o.limbName = BodyPartType.ToString(self.bodyPart:getType())
+    o.limbName = BodyPartType.ToString(bodyPart:getType())
     TOC_DEBUG.print("init CutLimbHandler")
     return o
 end

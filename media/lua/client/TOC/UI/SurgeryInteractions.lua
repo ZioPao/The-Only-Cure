@@ -24,6 +24,8 @@ end
 ---@param worldObjects any
 ---@param test any
 local function AddOvenContextMenu(playerNum, context, worldObjects, test)
+    if test then return true end
+
     local pl = getSpecificPlayer(playerNum)
 
     if not ModDataHandler.GetInstance():getIsAnyLimbCut() then return end

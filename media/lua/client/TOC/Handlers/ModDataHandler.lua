@@ -51,7 +51,10 @@ function ModDataHandler:setup(key)
     }
 
     ---@type partData
-    local defaultParams = {isCut = false, isInfected = false, isOperated = false, isCicatrized = false, isCauterized = false, isVisible = false}
+    local defaultParams = {
+        isCut = false, isInfected = false, isOperated = false, isCicatrized = false,
+        isCauterized = false, isVisible = false, isProstEquipped = false, prostFactor = 0
+    }
 
     -- Initialize limbs
     for i=1, #StaticData.LIMBS_STRINGS do
@@ -76,6 +79,12 @@ function ModDataHandler:setIsAnyLimbCut(isAnyLimbCut)
     self.tocData.isAnyLimbCut = isAnyLimbCut
 end
 
+---Set isIgnoredPartInfected
+---@param isIgnoredPartInfected boolean
+function ModDataHandler:setIsIgnoredPartInfected(isIgnoredPartInfected)
+    self.tocData.isIgnoredPartInfected = isIgnoredPartInfected
+end
+
 ---Set isCut 
 ---@param limbName string
 ---@param isCut boolean
@@ -90,10 +99,18 @@ function ModDataHandler:setIsInfected(limbName, isInfected)
     self.tocData[limbName].isInfected = isInfected
 end
 
----Set isIgnoredPartInfected
----@param isIgnoredPartInfected boolean
-function ModDataHandler:setIsIgnoredPartInfected(isIgnoredPartInfected)
-    self.tocData.isIgnoredPartInfected = isIgnoredPartInfected
+---Set isProstEquipped
+---@param limbName string
+---@param isProstEquipped boolean
+function ModDataHandler:setIsProstEquipped(limbName, isProstEquipped)
+    self.tocData[limbName].isProstEquipped = isProstEquipped
+end
+
+---Set prostFactor
+---@param limbName string
+---@param prostFactor number
+function ModDataHandler:setProstFactor(limbName, prostFactor)
+    self.tocData[limbName].prostFactor = prostFactor
 end
 
 -----------------
@@ -105,6 +122,12 @@ function ModDataHandler:getIsAnyLimbCut()
     return self.tocData.isAnyLimbCut
 end
 
+---Get isIgnoredPartInfected
+---@return boolean
+function ModDataHandler:getIsIgnoredPartInfected()
+    return self.tocData.isIgnoredPartInfected
+end
+
 ---Get isCut
 ---@param limbName string
 ---@return boolean
@@ -112,16 +135,25 @@ function ModDataHandler:getIsCut(limbName)
     return self.tocData[limbName].isCut
 end
 
----Get isIgnoredPartInfected
----@return boolean
-function ModDataHandler:getIsIgnoredPartInfected()
-    return self.tocData.isIgnoredPartInfected
-end
-
 ---Get isVisible
+---@param limbName string
 ---@return boolean
 function ModDataHandler:getIsVisible(limbName)
     return self.tocData[limbName].isVisible
+end
+
+---Get isProstEquipped
+---@param limbName string
+---@return boolean
+function ModDataHandler:getIsProstEquipped(limbName)
+    return self.tocData[limbName].isProstEquipped
+end
+
+---Get prostFactor
+---@param limbName string
+---@return number
+function ModDataHandler:getProstFactor(limbName)
+    return self.tocData[limbName].getProstFactor
 end
 
 --* Limbs data handling *--
@@ -167,6 +199,8 @@ function ModDataHandler:setLimbParams(limbName, ampStatus, cicatrizationTime)
     if ampStatus.isCicatrized ~= nil then limbData.isCicatrized = ampStatus.isCicatrized end
     if ampStatus.isCauterized ~= nil then limbData.isCauterized = ampStatus.isCauterized end
     if ampStatus.isVisible ~= nil then limbData.isVisible = ampStatus.isVisible end
+    if ampStatus.isProstEquipped ~= nil then limbData.isProstEquipped = ampStatus.isProstEquipped end
+    if ampStatus.prostFactor ~= nil then limbData.prostFactor = ampStatus.prostFactor end
 
     if cicatrizationTime ~= nil then limbData.cicatrizationTime = cicatrizationTime end
 end

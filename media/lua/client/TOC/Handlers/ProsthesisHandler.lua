@@ -46,13 +46,14 @@ local og_ISClothingExtraAction_isValid = ISClothingExtraAction.isValid
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISClothingExtraAction:isValid()
     local bodyLocation = self.item:getBodyLocation()
-
+    local isEquippable = false
     if og_ISClothingExtraAction_isValid(self) and not string.contains(bodyLocation, "TOC_ArmProst") then
-        return true
+        isEquippable = true
     else
-        return ProsthesisHandler.CheckIfEquippable(bodyLocation)
-
+        isEquippable = ProsthesisHandler.CheckIfEquippable(bodyLocation)
     end
+
+    return isEquippable
 end
 
 

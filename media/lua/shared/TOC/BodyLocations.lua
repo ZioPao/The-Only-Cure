@@ -13,9 +13,9 @@ local function AddBodyLocationBefore(newLocation, moveToLocation)
 end
 
 
-AddBodyLocationBefore("TOC_ArmRight", "Shoes")
-AddBodyLocationBefore("TOC_ArmLeft", "Shoes")
+AddBodyLocationBefore("TOC_Arm_R", "Shoes")
+AddBodyLocationBefore("TOC_Arm_L", "Shoes")
 
-AddBodyLocationBefore("TOC_ArmProstRight", "Shoes")
-AddBodyLocationBefore("TOC_ArmProstLeft", "Shoes")
+AddBodyLocationBefore("TOC_ArmProst_R", "Shoes")
+AddBodyLocationBefore("TOC_ArmProst_L", "Shoes")
 

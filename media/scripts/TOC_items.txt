@@ -12,7 +12,7 @@ module TOC
 		DisplayName	= Amputated right hand,
 
 		ClothingItem = Amputation_Hand_R,
-		BodyLocation = TOC_ArmRight,
+		BodyLocation = TOC_Arm_R,
 
 		Weight = 0,
 		CombatSpeedModifier = 0.9,
@@ -32,7 +32,7 @@ module TOC
 		DisplayName	= Amputated right forearm,
 
 		ClothingItem = Amputation_ForeArm_R,
-		BodyLocation = TOC_ArmRight,
+		BodyLocation = TOC_Arm_R,
 
 		Weight = 0,
 		CombatSpeedModifier = 0.8,
@@ -51,7 +51,7 @@ module TOC
 		DisplayName	= Amputated entire right arm,
 
 		ClothingItem = Amputation_UpperArm_R,
-		BodyLocation = TOC_ArmRight,
+		BodyLocation = TOC_Arm_R,
 		BloodLocation = UpperArms;UpperBody,
 		Weight = 0,
 		CombatSpeedModifier = 0.7,
@@ -69,7 +69,7 @@ module TOC
 		DisplayName	= Amputated left hand,
 
 		ClothingItem = Amputation_Hand_L,
-		BodyLocation = TOC_ArmLeft,
+		BodyLocation = TOC_Arm_L,
 
 		Weight = 0,
 		CombatSpeedModifier = 0.9,
@@ -88,7 +88,7 @@ module TOC
 		DisplayCategory = Amputation,
 		DisplayName	= Amputated left forearm,
 		ClothingItem = Amputation_ForeArm_L,
-		BodyLocation = TOC_ArmLeft,
+		BodyLocation = TOC_Arm_L,
 
 		Weight = 0,
 		CombatSpeedModifier = 0.8,
@@ -107,7 +107,7 @@ module TOC
 		DisplayCategory = Amputation,
 		DisplayName	= Amputated entire left arm,
 		ClothingItem = Amputation_UpperArm_L,
-		BodyLocation = TOC_ArmLeft,
+		BodyLocation = TOC_Arm_L,
 
 		Weight = 0,
 		CombatSpeedModifier = 0.7,
@@ -129,7 +129,7 @@ module TOC
 		ClothingItemExtra = Prost_Hook_R,
 		ClothingItemExtraOption = InstallProstRight,
 		clothingExtraSubmenu = InstallProstLeft,
-		BodyLocation = TOC_ArmProstLeft,
+		BodyLocation = TOC_ArmProst_L,
 		Weight = 0,
 		CombatSpeedModifier = 0.7,
 		BloodLocation = UpperArms;UpperBody,
@@ -149,7 +149,7 @@ module TOC
 		ClothingItemExtra = Prost_Hook_L,
 		ClothingItemExtraOption = InstallProstLeft,
 		clothingExtraSubmenu = InstallProstRight,
-		BodyLocation = TOC_ArmProstRight,
+		BodyLocation = TOC_ArmProst_R,
 
 		Weight = 0,
 		CombatSpeedModifier = 0.7,
