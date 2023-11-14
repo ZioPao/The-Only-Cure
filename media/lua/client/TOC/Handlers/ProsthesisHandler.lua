@@ -12,9 +12,20 @@ local bodyLocArmProst = StaticData.MOD_BODYLOCS_BASE_IND_STR.TOC_ArmProst
 ---comment
 ---@param item InventoryItem
 function ProsthesisHandler.CheckIfProst(item)
+    -- TODO Won't be correct when prost for legs are gonna be in
     return item:getBodyLocation():contains(bodyLocArmProst)
 end
 
+---Get the grouping for the prosthesis
+---@param item InventoryItem
+---@return string
+function ProsthesisHandler.GetGroup(item)
+    if item:getBodyLocation():contains(bodyLocArmProst) then
+        return StaticData.PROSTHESES_GROUPS.top
+    else
+        return StaticData.PROSTHESES_GROUPS.bottom
+    end
+end
 
 ---Cache the correct texture for the Health Panel for the currently equipped prosthesis
 function ProsthesisHandler.SetHealthPanelTexture()
@@ -79,10 +90,12 @@ function ISClothingExtraAction:perform()
     og_ISClothingExtraAction_perform(self)
 
     if ProsthesisHandler.CheckIfProst(self.item) then
+        local group = ProsthesisHandler.GetGroup(self.item)
+        TOC_DEBUG.print("applying prosthesis stuff for " .. group)
         local modDataHandler = ModDataHandler.GetInstance()
-        --modDataHandler:setIsProstEquipped
+        modDataHandler:setIsProstEquipped(group, true)
+        modDataHandler:apply()
     end
-    
 end
 
 

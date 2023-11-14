@@ -24,7 +24,7 @@ function ModDataHandler:new(username, isResetForced)
     ModData.request(key)
     o.tocData = ModData.get(key)
 
-    if isResetForced or o.tocData == nil or o.tocData.Hand_L == nil or o.tocData.Hand_L.isCut == nil then
+    if isResetForced or o.tocData == nil or o.tocData.limbs.Hand_L == nil or o.tocData.limbs.Hand_L.isCut == nil then
         TOC_DEBUG.print("tocData in ModDataHandler for " .. username .. " is nil, creating it now")
         o:setup(key)
     end
