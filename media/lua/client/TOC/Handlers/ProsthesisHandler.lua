@@ -7,7 +7,7 @@ local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
 ---@class ProsthesisHandler
 local ProsthesisHandler = {}
 
-local bodyLocArmProst = StaticData.BODYLOCATIONS_BASE_STRINGS.TOC_ArmProst
+local bodyLocArmProst = StaticData.MOD_BODYLOCS_BASE_IND_STR.TOC_ArmProst
 
 ---comment
 ---@param item InventoryItem

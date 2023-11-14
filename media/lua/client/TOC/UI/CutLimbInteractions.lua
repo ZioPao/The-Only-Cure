@@ -28,8 +28,8 @@ local function AddInventoryAmputationOptions(surgeonNum, context, item)
     local option = context:addOption(getText("ContextMenu_Amputate"), nil)
     local subMenu = context:getNew(context)
     context:addSubMenu(option, subMenu)
-    for i = 1, #StaticData.LIMBS_STRINGS do
-        local limbName = StaticData.LIMBS_STRINGS[i]
+    for i = 1, #StaticData.LIMBS_STR do
+        local limbName = StaticData.LIMBS_STR[i]
         if not ModDataHandler.GetInstance():getIsCut(limbName) then
             local limbTranslatedName = getText("ContextMenu_Limb_" .. limbName)
             subMenu:addOption(limbTranslatedName, surgeonObj, PerformAction, surgeonObj, limbName, item) -- TODO Should be patient, not surgeon
@@ -82,7 +82,7 @@ end
 ---@param context ISContextMenu
 function CutLimbHandler:addToMenu(context)
     local types = self:getAllItemTypes(self.items.ITEMS)
-    if #types > 0 and StaticData.BODYPARTSTYPES_ENUM[self.limbName] then
+    if #types > 0 and StaticData.BODYLOCS_IND_BPT[self.limbName] then
         TOC_DEBUG.print("addToMenu, types > 0")
         if not ModDataHandler.GetInstance():getIsCut(self.limbName) then
             context:addOption(getText("ContextMenu_Amputate"), self, self.onMenuOptionSelected)
@@ -92,7 +92,7 @@ end
 
 function CutLimbHandler:dropItems(items)
     local types = self:getAllItemTypes(items)
-    if #self.items.ITEMS > 0 and #types == 1 and StaticData.BODYPARTSTYPES_ENUM[self.limbName] then
+    if #self.items.ITEMS > 0 and #types == 1 and StaticData.BODYLOCS_IND_BPT[self.limbName] then
         self:onMenuOptionSelected(types[1])
         return true
     end

@@ -64,9 +64,9 @@ function PlayerHandler.CheckInfection(character)
     local bd = character:getBodyDamage()
     local modDataHandler = ModDataHandler.GetInstance()
 
-    for i=1, #StaticData.LIMBS_STRINGS do
-        local limbName = StaticData.LIMBS_STRINGS[i]
-        local bptEnum = StaticData.BODYPARTSTYPES_ENUM[limbName]
+    for i=1, #StaticData.LIMBS_STR do
+        local limbName = StaticData.LIMBS_STR[i]
+        local bptEnum = StaticData.BODYLOCS_IND_BPT[limbName]
         local bodyPart = bd:getBodyPart(bptEnum)
 
         if bodyPart:bitten() or bodyPart:IsInfected() then
@@ -82,8 +82,8 @@ function PlayerHandler.CheckInfection(character)
     -- We can skip this loop if the player has been infected. The one before we kinda need it to handle correctly the bites in case the player wanna cut stuff off anyway
     if ModDataHandler.GetInstance():getIsIgnoredPartInfected() then return end
 
-    for i=1, #StaticData.IGNORED_PARTS_STRINGS do
-        local bodyPartType = BodyPartType[StaticData.IGNORED_PARTS_STRINGS[i]]
+    for i=1, #StaticData.IGNORED_BODYLOCS_IND_BPT do
+        local bodyPartType = StaticData.IGNORED_BODYLOCS_IND_BPT[i]
         local bodyPart = bd:getBodyPart(bodyPartType)
         if bodyPart and (bodyPart:bitten() or bodyPart:IsInfected()) then
             ModDataHandler.GetInstance():setIsIgnoredPartInfected(true)
@@ -124,7 +124,7 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
                 local perkLevel = pl:getPerkLevel(perk)
                 local perkLevelScaled
                 if perkLevel ~= 0 then perkLevelScaled = perkLevel / 10 else perkLevelScaled = 0 end
-                time = time * (StaticData.LIMBS_TIME_MULTIPLIER[limbName] - perkLevelScaled)
+                time = time * (StaticData.LIMBS_TIME_MULTIPLIER_IND_NUM[limbName] - perkLevelScaled)
             end
         end
     end
@@ -138,7 +138,7 @@ function ISBaseTimedAction:perform()
 	og_ISBaseTimedAction_perform(self)
 
     if ModDataHandler.GetInstance():getIsAnyLimbCut() then
-        for side, _ in pairs(StaticData.SIDES_STRINGS) do
+        for side, _ in pairs(StaticData.SIDES_IND_STR) do
             local limbName = "Hand_" .. side
             if ModDataHandler.GetInstance():getIsCut(limbName) then
                 PlayerHandler.playerObj:getXp():AddXP(Perks["Side_" .. side], 2)       -- TODO Make it dynamic

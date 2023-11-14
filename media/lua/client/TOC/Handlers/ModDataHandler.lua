@@ -61,15 +61,15 @@ function ModDataHandler:setup(key)
 
     -- Initialize limbs
 
-    for i=1, #StaticData.LIMBS_STRINGS do
-        local limbName = StaticData.LIMBS_STRINGS[i]
+    for i=1, #StaticData.LIMBS_STR do
+        local limbName = StaticData.LIMBS_STR[i]
         self.tocData.limbs[limbName] = {}
-        self:setLimbParams(StaticData.LIMBS_STRINGS[i], defaultParams, 0)
+        self:setLimbParams(StaticData.LIMBS_STR[i], defaultParams, 0)
     end
 
-    local prosthesesGroups = {"top", "bottom"}
-    for i=1, #prosthesesGroups do
-        local group = prosthesesGroups[i]
+    -- Initialize prostheses stuff
+    for i=1, #StaticData.PROSTHESES_GROUPS do
+        local group = StaticData.PROSTHESES_GROUPS[i]
         self.tocData.prostheses[group] = {
             isEquipped = false,
             prostFactor = 0
@@ -181,15 +181,15 @@ end
 function ModDataHandler:setCutLimb(limbName, isOperated, isCicatrized, isCauterized, surgeonFactor)
     local cicatrizationTime = 0
     if isCicatrized == false or isCauterized == false then
-        cicatrizationTime = StaticData.LIMBS_CICATRIZATION_TIME[limbName] - surgeonFactor
+        cicatrizationTime = StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM[limbName] - surgeonFactor
     end
 
     ---@type partData
     local params = {isCut = true, isInfected = false, isOperated = isOperated, isCicatrized = isCicatrized, isCauterized = isCauterized, isVisible = true}
     self:setLimbParams(limbName, params, cicatrizationTime)
 
-    for i=1, #StaticData.LIMBS_DEPENDENCIES[limbName] do
-        local dependedLimbName = StaticData.LIMBS_DEPENDENCIES[limbName][i]
+    for i=1, #StaticData.LIMBS_DEPENDENCIES_IND_STR[limbName] do
+        local dependedLimbName = StaticData.LIMBS_DEPENDENCIES_IND_STR[limbName][i]
 
         -- We don't care about isOperated, isCicatrized, isCauterized since this is depending on another limb
         -- Same story for cicatrizationTime, which will be 0
@@ -213,8 +213,6 @@ function ModDataHandler:setLimbParams(limbName, ampStatus, cicatrizationTime)
     if ampStatus.isCicatrized ~= nil then limbData.isCicatrized = ampStatus.isCicatrized end
     if ampStatus.isCauterized ~= nil then limbData.isCauterized = ampStatus.isCauterized end
     if ampStatus.isVisible ~= nil then limbData.isVisible = ampStatus.isVisible end
-    if ampStatus.isProstEquipped ~= nil then limbData.isProstEquipped = ampStatus.isProstEquipped end
-    if ampStatus.prostFactor ~= nil then limbData.prostFactor = ampStatus.prostFactor end
 
     if cicatrizationTime ~= nil then limbData.cicatrizationTime = cicatrizationTime end
 end

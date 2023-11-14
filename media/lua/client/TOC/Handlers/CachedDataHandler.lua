@@ -22,8 +22,8 @@ CachedDataHandler.amputatedLimbs = {}
 function CachedDataHandler.CalculateAmputatedLimbs(username)
     CachedDataHandler.amputatedLimbs[username] = {}
     local modDataHandler = ModDataHandler.GetInstance(username)
-    for i=1, #StaticData.LIMBS_STRINGS do
-        local limbName = StaticData.LIMBS_STRINGS[i]
+    for i=1, #StaticData.LIMBS_STR do
+        local limbName = StaticData.LIMBS_STR[i]
         if modDataHandler:getIsCut(limbName) then
             CachedDataHandler.AddAmputatedLimb(username, limbName)
         end

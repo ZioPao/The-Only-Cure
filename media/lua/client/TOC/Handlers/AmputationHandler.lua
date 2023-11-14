@@ -76,7 +76,7 @@ function AmputationHandler:damageAfterAmputation(surgeonFactor)
     local patientStats = self.patientPl:getStats()
     local bd = self.patientPl:getBodyDamage()
     local bodyPart = bd:getBodyPart(self.bodyPartType)
-    local baseDamage = StaticData.LIMBS_BASE_DAMAGE[self.limbName]
+    local baseDamage = StaticData.LIMBS_BASE_DAMAGE_IND_NUM[self.limbName]
 
     bodyPart:AddDamage(baseDamage - surgeonFactor)
     bodyPart:setAdditionalPain(baseDamage - surgeonFactor)

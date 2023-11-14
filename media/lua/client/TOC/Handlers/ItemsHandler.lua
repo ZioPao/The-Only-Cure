@@ -58,7 +58,7 @@ end
 ---@param limbName string
 function ItemsHandler.DeleteOldAmputationItem(playerObj, limbName)
     local side = CommonMethods.GetSide(limbName)
-    for partName, _ in pairs(StaticData.PARTS_STRINGS) do
+    for partName, _ in pairs(StaticData.PARTS_IND_STR) do
         local othLimbName = partName .. "_" .. side
         local othClothingItemName = StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. othLimbName
 
@@ -76,8 +76,8 @@ end
 ---@param playerObj IsoPlayer
 function ItemsHandler.DeleteAllOldAmputationItems(playerObj)
 
-    for i=1, #StaticData.LIMBS_STRINGS do
-        local limbName = StaticData.LIMBS_STRINGS[i]
+    for i=1, #StaticData.LIMBS_STR do
+        local limbName = StaticData.LIMBS_STR[i]
         local clothItemName = StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. limbName
         local clothItem = playerObj:getInventory():FindAndReturn(clothItemName)
         ---@cast clothItem InventoryItem
