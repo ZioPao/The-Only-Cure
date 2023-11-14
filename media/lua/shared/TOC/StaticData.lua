@@ -13,6 +13,11 @@ StaticData.PARTS_STRINGS = {
     UpperArm = "UpperArm"
 }
 
+StaticData.BODYLOCATIONS_BASE_STRINGS = {
+    TOC_ArmProst = "TOC_ArmProst",
+    TOC_Arm = "TOC_Arm",
+}
+
 -- No "MAX" here.
 StaticData.IGNORED_PARTS_STRINGS = { "Foot_L", "Foot_R", "Groin", "Head", "LowerLeg_L", "LowerLeg_R", "Neck", "Torso_Lower", "Torso_Upper", "UpperLeg_L", "UpperLeg_R" }
 

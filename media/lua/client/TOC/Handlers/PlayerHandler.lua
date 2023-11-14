@@ -94,13 +94,13 @@ end
 Events.OnPlayerGetDamage.Add(PlayerHandler.CheckInfection)
 
 
---* Events *--
 ---Updates the cicatrization process, run when a limb has been cut
 function PlayerHandler.UpdateCicatrization()
     if ModDataHandler.GetInstance():getIsAnyLimbCut() == false then return end
 
     -- TODO Update cicatrization
 end
+
 
 
 ------------------------------------------

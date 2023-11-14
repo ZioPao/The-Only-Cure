@@ -47,16 +47,25 @@ function ModDataHandler:setup(key)
     self.tocData = {
         -- Generic stuff that does not belong anywhere else
         isIgnoredPartInfected = false,
-        isAnyLimbCut = false
+        isAnyLimbCut = false,
+
+        prosthesis = {
+            top = {},
+            bottom = {}
+        }
     }
 
     ---@type partData
     local defaultParams = {
         isCut = false, isInfected = false, isOperated = false, isCicatrized = false,
-        isCauterized = false, isVisible = false, isProstEquipped = false, prostFactor = 0
+        isCauterized = false, isVisible = false
     }
 
+
+    -- TODO Set this up for legs crap
     -- Initialize limbs
+    --self.tocData.limbs = {}
+
     for i=1, #StaticData.LIMBS_STRINGS do
         local limbName = StaticData.LIMBS_STRINGS[i]
         self.tocData[limbName] = {}
