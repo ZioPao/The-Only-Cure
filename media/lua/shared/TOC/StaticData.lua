@@ -48,6 +48,7 @@ StaticData.IGNORED_BODYLOCS_BPT = {
 
 -- Assembled BodyParts string
 StaticData.LIMBS_STR = {}
+StaticData.LIMBS_IND_STR = {}
 StaticData.LIMBS_DEPENDENCIES_IND_STR = {}
 StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM = {}
 StaticData.LIMBS_BASE_DAMAGE_IND_NUM = {}
@@ -82,6 +83,7 @@ for side, _ in pairs(StaticData.SIDES_IND_STR) do
 
         -- Assembled strings
         table.insert(StaticData.LIMBS_STR, assembledName)   -- We need a table like this to cycle through it easily
+        StaticData.LIMBS_IND_STR[assembledName] = assembledName
         StaticData.BODYLOCS_IND_BPT[assembledName] = BodyPartType[assembledName]
 
         -- Dependencies and cicatrization time
@@ -98,7 +100,7 @@ end
 -----------------
 --* Prostheses
 
-StaticData.PROSTHESE_GROUPS_BASE_IND_STR = {
+StaticData.PROSTHESES_GROUPS_BASE_IND_STR = {
     Top = "Top",
     Bottom = "Bottom"
 }
@@ -107,7 +109,7 @@ StaticData.PROSTHESES_GROUPS_IND_STR = {}
 StaticData.PROSTHESES_GROUPS_STR = {}
 
 for side, _ in pairs(StaticData.SIDES_IND_STR) do
-    for group, _ in pairs(StaticData.PROSTHESE_GROUPS_BASE_IND_STR) do
+    for group, _ in pairs(StaticData.PROSTHESES_GROUPS_BASE_IND_STR) do
         local sidedGroup = group .. "_" .. side
         StaticData.PROSTHESES_GROUPS_IND_STR[sidedGroup] = sidedGroup
         table.insert(StaticData.PROSTHESES_GROUPS_STR, sidedGroup)

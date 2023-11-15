@@ -214,24 +214,23 @@ function ISEquipWeaponAction:performWithAmputation(modDataHandler)
     local otherProstGroup = nil
     local getMethodFirst = nil
     local setMethodFirst = nil
-
     local getMethodSecond = nil
     local setMethodSecond = nil
 
     if self.primary then
-        hand = "Hand_R"
-        prostGroup = "Top_R"
-        otherHand = "Hand_L"
-        otherProstGroup = "Top_L"
+        hand = StaticData.LIMBS_IND_STR.Hand_R
+        prostGroup = StaticData.PROSTHESES_GROUPS_IND_STR.Top_R
+        otherHand = StaticData.LIMBS_IND_STR.Hand_L
+        otherProstGroup = StaticData.PROSTHESES_GROUPS_IND_STR.Top_L
         getMethodFirst = self.character.getSecondaryHandItem
         setMethodFirst = self.character.setSecondaryHandItem
         getMethodSecond = self.character.getPrimaryHandItem
         setMethodSecond = self.character.setPrimaryHandItem
     else
-        hand = "Hand_L"
-        prostGroup = "Top_L"
-        otherHand = "Hand_R"
-        otherProstGroup = "Top_R"
+        hand = StaticData.LIMBS_IND_STR.Hand_L
+        prostGroup = StaticData.PROSTHESES_GROUPS_IND_STR.Top_L
+        otherHand = StaticData.LIMBS_IND_STR.Hand_R
+        otherProstGroup = StaticData.PROSTHESES_GROUPS_IND_STR.Top_R
         getMethodFirst = self.character.getPrimaryHandItem
         setMethodFirst = self.character.setPrimaryHandItem
         getMethodSecond = self.character.getSecondaryHandItem
