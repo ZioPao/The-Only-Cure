@@ -57,9 +57,6 @@ function AmputationHandler.ApplyDamageDuringAmputation(player, limbName)
 end
 
 function AmputationHandler.HandleBandages(prevAction, limbName, surgeonPl, patientPl, bandageItem)
-
-    -- TODO Will it work? Can we get bodyDamage for another player from here?
-
     local bptEnum = StaticData.BODYLOCS_IND_BPT[limbName]
     local bd = patientPl:getBodyDamage()
     local bodyPart = bd:getBodyPart(bptEnum)

@@ -159,4 +159,21 @@ StaticData.HEALTH_PANEL_TEXTURES = {
 StaticData.AMPUTATION_CLOTHING_ITEM_BASE = "TOC.Amputation_"
 
 
+------------------
+--* Items check
+
+local sawObj = InventoryItemFactory.CreateItem("Base.Saw")
+local gardenSawObj = InventoryItemFactory.CreateItem("Base.GardenSaw")
+
+StaticData.SAWS_NAMES_IND_STR = {
+    saw = sawObj:getName(),
+    gardenSaw = gardenSawObj:getName()
+}
+
+StaticData.SAWS_TYPES_IND_STR = {
+    saw = sawObj:getType(),
+    gardenSaw = gardenSawObj:getType()
+}
+
+
 return StaticData

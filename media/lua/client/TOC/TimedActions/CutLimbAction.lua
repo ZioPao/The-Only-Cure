@@ -55,11 +55,15 @@ function CutLimbAction:start()
 
 
     -- TODO Check bandages, if there are init a bandage process
-    local bandageItem = ""
+
+    --AmputationHandler.HandleBandages(self, self.limbName, self.character, self.patient, )
+    local bandageItem = InventoryItemFactory.CreateItem("Base.Bandage")
+    self.character:getInventory():addItem(bandageItem)
+
     local bptEnum = StaticData.BODYLOCS_IND_BPT[self.limbName]
     local bd = self.character:getBodyDamage()
     local bodyPart = bd:getBodyPart(bptEnum)
-    local bandageAction = ISApplyBandage:new(self.character, self.patient, bandageItem, bodyPart, true)
+    local bandageAction = ISApplyBandage:new(self.character, self.patient, bandageItem, bodyPart, 100)
     ISTimedActionQueue.addAfter(self, bandageAction)
 
 

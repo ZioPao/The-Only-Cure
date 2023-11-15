@@ -5,11 +5,14 @@ local ModDataHandler = require("TOC/Handlers/ModDataHandler")
 ---------------------
 
 
----Check if the item name corresponds to a compatible saw
----@param itemName string
-local function CheckIfSaw(itemName)
-    return itemName == "Saw" or itemName == "GardenSaw" or itemName == "Chainsaw"
+
+
+---Check if the item type corresponds to a compatible saw
+---@param itemType string
+local function CheckIfSaw(itemType)
+    return itemType:contains(StaticData.SAWS_TYPES_IND_STR.saw) or itemType:contains(StaticData.SAWS_TYPES_IND_STR.gardenSaw)
 end
+
 
 ---Add the action to the queue
 ---@param limbName string
@@ -42,8 +45,19 @@ end
 ---@param context ISContextMenu
 ---@param items table
 local function AddInventoryAmputationMenu(player, context, items)
-    local item = items[1] -- Selected item
-    if CheckIfSaw(item.name) then
+    local item
+
+    -- We can't access the item if we don't create the loop and start ipairs.
+    for _, v in ipairs(items) do
+        item = v
+        if not instanceof(v, "InventoryItem") then
+            item = v.items[1]
+        end
+        break
+    end
+
+    local itemType = item:getType()
+    if CheckIfSaw(itemType) then
         AddInventoryAmputationOptions(player, context, item)
     end
 end
@@ -74,7 +88,9 @@ end
 ---@param item InventoryItem
 function CutLimbHandler:checkItem(item)
     local itemType = item:getType()
-    if string.contains(itemType, "Saw") then
+    TOC_DEBUG.print("checkItem: " .. tostring(itemType))
+
+    if CheckIfSaw(itemType) then
         self:addItem(self.items.ITEMS, item)
     end
 end

@@ -50,7 +50,24 @@ function TOC_DEBUG.TestBodyDamage(id)
     end
 end
 
+function TOC_DEBUG.TestBloodDrop()
+    local pl = getPlayer()
 
+    --IsoZombieGiblets.GibletType.A
+    --local giblets = IsoZombieGiblets.new(getCell())
+
+    local sq = pl:getSquare()
+    local t = IsoZombieGiblets.class.GibletType
+
+    print(t)
+    --IsoBall.new(getCell(), pl:getX(), pl:)
+    addBloodSplat(sq, 100)
+
+
+    --pl:getChunk():addBloodSplat(pl:getX(), pl:getY(), pl:getZ(), 100)
+    --IsoZombieGiblets.new(x, getCell(), pl:getX(), pl:getY(), pl:getZ(), 100, 1)
+
+end
 ---------------------------------
 --* Debug server commands *--
 
