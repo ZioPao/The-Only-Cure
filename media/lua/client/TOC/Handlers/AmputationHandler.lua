@@ -105,8 +105,8 @@ function AmputationHandler:execute(damagePlayer)
     modDataHandler:apply()      -- This will force rechecking the cached amputated limbs on the other client
 
     -- Give the player the correct amputation item
-    ItemsHandler.DeleteOldAmputationItem(self.patientPl, self.limbName)
-    ItemsHandler.SpawnAmputationItem(self.patientPl, self.limbName)
+    ItemsHandler.Player.DeleteOldAmputationItem(self.patientPl, self.limbName)
+    ItemsHandler.Player.SpawnAmputationItem(self.patientPl, self.limbName)
 
     -- Add it to the list of cut limbs on this local client
     local username = self.patientPl:getUsername()

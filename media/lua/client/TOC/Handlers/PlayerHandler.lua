@@ -33,7 +33,7 @@ function PlayerHandler.InitializePlayer(playerObj, isForced)
     if isForced then
         --ISHealthPanel.highestAmputations = {}
         local ItemsHandler = require("TOC/Handlers/ItemsHandler")
-        ItemsHandler.DeleteAllOldAmputationItems(playerObj)
+        ItemsHandler.Player.DeleteAllOldAmputationItems(playerObj)
         CachedDataHandler.Reset(username)
     end
 end
@@ -149,9 +149,16 @@ end
 
 --* Equipping items overrides *--
 
+local equipPrimaryText = getText("ContextMenu_Equip_Primary")
+local equipSecondaryText = getText("ContextMenu_Equip_Secondary")
+
+local primaryHand = StaticData.PARTS_IND_STR.Hand .. "_" .. StaticData.SIDES_IND_STR.R
+local secondaryHand = StaticData.PARTS_IND_STR.Hand .. "_" .. StaticData.SIDES_IND_STR.L
+
 local og_ISEquipWeaponAction_isValid = ISEquipWeaponAction.isValid
 ---Add a condition to check the feasibility of having 2 handed weapons or if both arms are cut off
 ---@return boolean
+---@diagnostic disable-next-line: duplicate-set-field
 function ISEquipWeaponAction:isValid()
     local isValid = og_ISEquipWeaponAction_isValid(self)
     local modDataHandler = ModDataHandler.GetInstance(self.character:getUsername())
@@ -159,9 +166,22 @@ function ISEquipWeaponAction:isValid()
 
         -- TODO We need to consider amputating legs, this won't be correct anymore
         -- TODO Consider prosthesis
-        -- TODO Maybe isValid isn't the right choice, we want them to be able to equip weapons nonetheless but one handed
-        if modDataHandler:getIsCut("Hand_L") and modDataHandler:getIsCut("Hand_R") then
-            isValid = false
+
+        -- Both hands are cut off 
+        if modDataHandler:getIsCut(primaryHand) and modDataHandler:getIsCut(secondaryHand) then
+            return false
+        end
+
+        -- Equip primary and no right hand
+        if self.jobType:contains(equipPrimaryText) and modDataHandler:getIsCut(primaryHand) then
+            TOC_DEBUG.print("Equip primary, no right hand, not valid")
+            return false
+        end
+
+        -- Equip secondary and no left hand
+        if self.jobType:contains(equipSecondaryText) and modDataHandler:getIsCut(secondaryHand) then
+            TOC_DEBUG.print("Equip secondary, no left hand, not valid")
+            return false
         end
     end
     return isValid
@@ -171,7 +191,7 @@ end
 ---@class ISEquipWeaponAction
 ---@field character IsoPlayer
 
----comment
+---A recreation of the original method, but with amputations in mind
 ---@param modDataHandler ModDataHandler
 function ISEquipWeaponAction:performWithAmputation(modDataHandler)
     local hand = nil
@@ -236,10 +256,10 @@ function ISEquipWeaponAction:performWithAmputation(modDataHandler)
             setMethodFirst(self.character, self.item)
         end
     end
-    
 end
 
 local og_ISEquipWeaponAction_perform = ISEquipWeaponAction.perform
+---@diagnostic disable-next-line: duplicate-set-field
 function ISEquipWeaponAction:perform()
     og_ISEquipWeaponAction_perform(self)
 
@@ -252,8 +272,5 @@ function ISEquipWeaponAction:perform()
     end
 end
 
-
-
--- TODO Limit 2 hands weapons and stuff like that
 
 return PlayerHandler

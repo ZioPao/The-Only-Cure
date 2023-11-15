@@ -6,11 +6,18 @@ local CommonMethods = require("TOC/CommonMethods")
 ---@class ItemsHandler
 local ItemsHandler = {}
 
+
+
+--* Player Methods *--
+---@class ItemsHandler.Player
+ItemsHandler.Player = {}
+
 ---Returns the correct index for the textures of the amputation
+---@param playerObj IsoPlayer
 ---@param isCicatrized boolean
 ---@return number
 ---@private
-function ItemsHandler.GetAmputationTexturesIndex(playerObj, isCicatrized)
+function ItemsHandler.Player.GetAmputationTexturesIndex(playerObj, isCicatrized)
     local textureString = playerObj:getHumanVisual():getSkinTexture()
     local isHairy = string.find(textureString, "a$")
     -- Hairy bodies
@@ -42,7 +49,7 @@ end
 ---@param clothingItem InventoryItem?
 ---@return boolean
 ---@private
-function ItemsHandler.RemoveClothingItem(playerObj, clothingItem)
+function ItemsHandler.Player.RemoveClothingItem(playerObj, clothingItem)
     if clothingItem and instanceof(clothingItem, "InventoryItem") then
         playerObj:removeWornItem(clothingItem)
 
@@ -56,7 +63,7 @@ end
 ---Search and deletes an old amputation clothing item on the same side
 ---@param playerObj IsoPlayer
 ---@param limbName string
-function ItemsHandler.DeleteOldAmputationItem(playerObj, limbName)
+function ItemsHandler.Player.DeleteOldAmputationItem(playerObj, limbName)
     local side = CommonMethods.GetSide(limbName)
     for partName, _ in pairs(StaticData.PARTS_IND_STR) do
         local othLimbName = partName .. "_" .. side
@@ -74,7 +81,7 @@ end
 
 ---Deletes all the old amputation items, used for resets
 ---@param playerObj IsoPlayer
-function ItemsHandler.DeleteAllOldAmputationItems(playerObj)
+function ItemsHandler.Player.DeleteAllOldAmputationItems(playerObj)
 
     for i=1, #StaticData.LIMBS_STR do
         local limbName = StaticData.LIMBS_STR[i]
@@ -86,7 +93,9 @@ function ItemsHandler.DeleteAllOldAmputationItems(playerObj)
 end
 
 ---Spawns and equips the correct amputation item to the player.
-function ItemsHandler.SpawnAmputationItem(playerObj, limbName)
+---@param playerObj IsoPlayer
+---@param limbName string
+function ItemsHandler.Player.SpawnAmputationItem(playerObj, limbName)
     TOC_DEBUG.print("clothing name " .. StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. limbName)
     local clothingItem = playerObj:getInventory():AddItem(StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. limbName)
     local texId = ItemsHandler.GetAmputationTexturesIndex(playerObj, false)
@@ -95,6 +104,56 @@ function ItemsHandler.SpawnAmputationItem(playerObj, limbName)
     clothingItem:getVisual():setTextureChoice(texId) -- it counts from 0, so we have to subtract 1
     playerObj:setWornItem(clothingItem:getBodyLocation(), clothingItem)
 end
+
+
+
+--* Zombie Methods *--
+---@class ItemsHandler.Zombie
+ItemsHandler.Zombie = {}
+
+---comment
+---@param zombie IsoZombie
+function ItemsHandler.Zombie.SpawnAmputationItem(zombie)
+    -- TODO Set texture ID
+    local itemVisualsList = zombie:getItemVisuals()
+    local ignoredLimbs = {}
+
+    if itemVisualsList == nil then return end
+
+    for i=0, itemVisualsList:size() - 1 do
+        local itemVisual = itemVisualsList:get(i)
+
+        -- TODO Check body location of item and deletes potential amputation to apply
+        local clothingName = itemVisual:getClothingItemName()
+        print(clothingName)
+
+        if clothingName and luautils.stringStarts(clothingName, StaticData.AMPUTATION_CLOTHING_ITEM_BASE) then
+            TOC_DEBUG.print("added " .. clothingName .. " to ignoredLimbs")
+            ignoredLimbs[clothingName] = clothingName
+        end
+
+    end
+
+    -- TODO COnsider highest amputation
+    local usableClothingAmputations = {}
+
+    for i=1, #StaticData.LIMBS_STR do
+        local limbName = StaticData.LIMBS_STR[i]
+        local clothingName = StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. limbName
+        if ignoredLimbs[clothingName] == nil then
+            table.insert(usableClothingAmputations, clothingName)
+        end
+    end
+
+    -- TODO Random index
+    local index = ZombRand(1, #usableClothingAmputations)
+
+    local itemVisual = ItemVisual:new()
+    itemVisual:setItemType(usableClothingAmputations[index])
+    zombie:getItemVisuals():add(itemVisual)
+    zombie:resetModelNextFrame()
+end
+
 
 --------------------------
 --* Overrides *--
