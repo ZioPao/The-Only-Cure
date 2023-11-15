@@ -56,6 +56,16 @@ function AmputationHandler.ApplyDamageDuringAmputation(player, limbName)
     bodyDamagePart:setBleedingTime(ZombRand(10, 20))
 end
 
+function AmputationHandler.HandleBandages(prevAction, limbName, surgeonPl, patientPl, bandageItem)
+
+    -- TODO Will it work? Can we get bodyDamage for another player from here?
+
+    local bptEnum = StaticData.BODYLOCS_IND_BPT[limbName]
+    local bd = patientPl:getBodyDamage()
+    local bodyPart = bd:getBodyPart(bptEnum)
+    local bandageAction = ISApplyBandage:new(surgeonPl, patientPl, bandageItem, bodyPart, true)
+    ISTimedActionQueue.addAfter(prevAction, bandageAction)
+end
 --* Main methods *--
 
 
@@ -73,6 +83,7 @@ end
 ---Set the damage to the amputated area
 ---@param surgeonFactor number
 function AmputationHandler:damageAfterAmputation(surgeonFactor)
+    -- TODO Torniquet should reduce the damage in total, less blood loss
     local patientStats = self.patientPl:getStats()
     local bd = self.patientPl:getBodyDamage()
     local bodyPart = bd:getBodyPart(self.bodyPartType)
@@ -95,9 +106,6 @@ function AmputationHandler:execute(damagePlayer)
     -- TODO Calculate surgeonStats
     -- TODO Cap it to a certain amount, it shouldn't be more than ...?
     local surgeonFactor = 1
-    if damagePlayer then
-        self:damageAfterAmputation(surgeonFactor)
-    end
 
     -- Set the data in modData
     local modDataHandler = ModDataHandler.GetInstance()
@@ -112,6 +120,11 @@ function AmputationHandler:execute(damagePlayer)
     local username = self.patientPl:getUsername()
     CachedDataHandler.AddAmputatedLimb(username, self.limbName)
     CachedDataHandler.CalculateHighestAmputatedLimbs(username)
+
+    -- The last part is to handle the damage that the player will receive after the amputation
+    if not damagePlayer then return end
+
+    self:damageAfterAmputation(surgeonFactor)
 end
 
 ---Deletes the instance

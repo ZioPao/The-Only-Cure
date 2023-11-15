@@ -28,8 +28,30 @@ function TOC_DEBUG.printTable(table, indent)
     end
 end
 
+---------------------------------
+--* Random debug commands *--
+
+function TOC_DEBUG.TestBodyDamage(id)
+    local StaticData = require("TOC/StaticData")
+
+    local pl = getPlayerByOnlineID(id)
+    local bd = pl:getBodyDamage()
+
+    TOC_DEBUG.print(tostring(bd))
+
+    if bd then
+        TOC_DEBUG.print("bd for " .. pl:getUsername() .. " exists")
+        local bptEnum = StaticData.BODYLOCS_IND_BPT["Hand_L"]
+        local bodyPart = bd:getBodyPart(bptEnum)
+
+        bodyPart:setBleeding(true)
+        bodyPart:setCut(true)
+        TOC_DEBUG.print(tostring(bodyPart))
+    end
+end
 
 
+---------------------------------
 --* Debug server commands *--
 
 local CommandsData = require("TOC/CommandsData")

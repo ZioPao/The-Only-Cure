@@ -1,6 +1,7 @@
 require "TimedActions/ISBaseTimedAction"
 local AmputationHandler = require("TOC/Handlers/AmputationHandler")
 local CommandsData = require("TOC/CommandsData")
+local StaticData = require("TOC/StaticData")
 -----------------------------
 
 ---@class CutLimbAction : ISBaseTimedAction
@@ -52,21 +53,19 @@ function CutLimbAction:start()
         sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayDamageDuringAmputation, params )
     end
 
+
+    -- TODO Check bandages, if there are init a bandage process
+    local bandageItem = ""
+    local bptEnum = StaticData.BODYLOCS_IND_BPT[self.limbName]
+    local bd = self.character:getBodyDamage()
+    local bodyPart = bd:getBodyPart(bptEnum)
+    local bandageAction = ISApplyBandage:new(self.character, self.patient, bandageItem, bodyPart, true)
+    ISTimedActionQueue.addAfter(self, bandageAction)
+
+
     -- Setup cosmetic stuff
     self:setActionAnim("SawLog")
     self:setOverrideHandModels(self.item:getStaticModel())
-    -- if self.character:getPrimaryHandItem() then
-    --     ISTimedActionQueue.add(ISUnequipAction:new(self.character, self.character:getPrimaryHandItem(), 2))
-    -- end
-    -- if self.character:getSecondaryHandItem() and self.character:getSecondaryHandItem() ~= self.character:getPrimaryHandItem() then
-    --     ISTimedActionQueue.add(ISUnequipAction:new(self.character, self.surgeon:getSecondaryHandItem(), 2))
-    -- end
-
-    -- if sawItem then
-    --     self:setOverrideHandModels(sawItem:getStaticModel(), nil)
-
-    -- end
-
 
 end
 
@@ -90,6 +89,8 @@ function CutLimbAction:perform()
         local params = {patientNum = self.patient:getOnlineID(), limbName = self.limbName}
         sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayExecuteAmputationAction, params )
     end
+
+    
     ISBaseTimedAction.perform(self)
 end
 

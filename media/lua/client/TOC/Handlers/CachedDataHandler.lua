@@ -6,7 +6,7 @@ local CommonMethods = require("TOC/CommonMethods")
 ---@class CachedDataHandler
 local CachedDataHandler = {}
 
----comment
+---Reset everything cache related for that specific user
 ---@param username string
 function CachedDataHandler.Reset(username)
     CachedDataHandler.amputatedLimbs[username] = {}
@@ -17,7 +17,7 @@ end
 CachedDataHandler.amputatedLimbs = {}
 -- TODO Add an indexable table too!
 
----Calcualte the currently amputated limbs for a certain player
+---Calculate the currently amputated limbs for a certain player
 ---@param username string
 function CachedDataHandler.CalculateAmputatedLimbs(username)
     CachedDataHandler.amputatedLimbs[username] = {}
@@ -30,7 +30,7 @@ function CachedDataHandler.CalculateAmputatedLimbs(username)
     end
 end
 
----Add an amputated limb to the cached list
+---Add an amputated limb to the cached list for that user
 ---@param username string
 ---@param limbName string
 function CachedDataHandler.AddAmputatedLimb(username, limbName)
