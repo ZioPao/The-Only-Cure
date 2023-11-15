@@ -56,12 +56,38 @@ function AmputationHandler.ApplyDamageDuringAmputation(player, limbName)
     bodyDamagePart:setBleedingTime(ZombRand(10, 20))
 end
 
-function AmputationHandler.HandleBandages(prevAction, limbName, surgeonPl, patientPl, bandageItem)
+---comment
+---@param prevAction ISBaseTimedAction
+---@param limbName string
+---@param surgeonPl IsoPlayer
+---@param patientPl IsoPlayer
+---@param stitchesItem InventoryItem
+---@return ISStitch
+function AmputationHandler.PrepareStitchesAction(prevAction, limbName, surgeonPl, patientPl, stitchesItem)
+    local bptEnum = StaticData.BODYLOCS_IND_BPT[limbName]
+    local bd = patientPl:getBodyDamage()
+    local bodyPart = bd:getBodyPart(bptEnum)
+    local stitchesAction = ISStitch:new(surgeonPl, patientPl, stitchesItem, bodyPart, true)
+    ISTimedActionQueue.addAfter(prevAction, stitchesAction)
+
+    return stitchesAction
+end
+
+---Setup the ISApplyBandage action that will trigger after the amputation
+---@param prevAction ISBaseTimedAction
+---@param limbName string
+---@param surgeonPl IsoPlayer
+---@param patientPl IsoPlayer
+---@param bandageItem InventoryItem
+---@return ISApplyBandage
+function AmputationHandler.PrepareBandagesAction(prevAction, limbName, surgeonPl, patientPl, bandageItem)
     local bptEnum = StaticData.BODYLOCS_IND_BPT[limbName]
     local bd = patientPl:getBodyDamage()
     local bodyPart = bd:getBodyPart(bptEnum)
     local bandageAction = ISApplyBandage:new(surgeonPl, patientPl, bandageItem, bodyPart, true)
     ISTimedActionQueue.addAfter(prevAction, bandageAction)
+
+    return bandageAction
 end
 --* Main methods *--
 

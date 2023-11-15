@@ -4,8 +4,10 @@ local StaticData = require("TOC/StaticData")
 local ModDataHandler = require("TOC/Handlers/ModDataHandler")
 ---------------------
 
+-- TODO Add interaction to cut and bandage!
 
 
+--* Various functions to help during these pesky checks
 
 ---Check if the item type corresponds to a compatible saw
 ---@param itemType string
@@ -14,37 +16,96 @@ local function CheckIfSaw(itemType)
 end
 
 
+---Return a compatible bandage
+---@param player IsoPlayer
+---@return InventoryItem?
+local function GetBandageItem(player)
+    local plInv = player:getInventory()
+    -- TODO Add other options, like ripped sheets and such items
+    local bandageItem = plInv:FindAndReturn("Base.Bandage") or plInv:FindAndReturn("Base.RippedSheets")
+    return bandageItem      -- TODO check this warning
+end
+
+---Return a suture needle or thread (only if the player has a needle too)
+---@param player IsoPlayer
+---@return InventoryItem?
+local function GetStitchesItem(player)
+    -- TODO Search for thread
+    local plInv = player:getInventory()
+    local needleItem = plInv:FindAndReturn("Base.SutureNeedle")
+    if needleItem ~= nil then return needleItem end
+
+    -- Didn't find the suture one, so let's search for the normal one + thread
+
+    needleItem = plInv:FindAndReturn("Base.Needle")
+
+    if needleItem == nil then return nil end
+
+    -- Found the normal one, searching for thread
+
+    local threadItem = plInv:FindAndReturn("Base.Thread")
+
+    if threadItem then return threadItem end
+
+end
+
+
 ---Add the action to the queue
 ---@param limbName string
 ---@param surgeon IsoPlayer
 ---@param patient IsoPlayer
-local function PerformAction(surgeon, patient, limbName, item)
-    ISTimedActionQueue.add(CutLimbAction:new(surgeon, patient, limbName, item))
+---@param sawItem InventoryItem
+---@param stitchesItem InventoryItem?
+---@param bandageItem InventoryItem?
+local function PerformAction(surgeon, patient, limbName, sawItem, stitchesItem, bandageItem)
+    ISTimedActionQueue.add(CutLimbAction:new(surgeon, patient, limbName, sawItem, stitchesItem, bandageItem))
 end
 
+
+local textAmp = getText("ContextMenu_Amputate")
+local textAmpBandage = getText("ContextMenu_Amputate_Bandage")
+local textAmpStitch = getText("ContextMenu_Amputate_Stitch")
+local textAmpStitchBandage = getText("ContextMenu_Amputate_Stitch_Bandage")
+
 ---Adds the actions to the inventory context menu
----@param surgeonNum number
+---@param player IsoPlayer
 ---@param context ISContextMenu
----@param item InventoryItem
-local function AddInventoryAmputationOptions(surgeonNum, context, item)
-    local surgeonObj = getSpecificPlayer(surgeonNum)
-    local option = context:addOption(getText("ContextMenu_Amputate"), nil)
+---@param sawItem InventoryItem
+---@param stitchesItem InventoryItem?
+---@param bandageItem InventoryItem?
+local function AddInvAmputationOptions(player, context, sawItem, stitchesItem, bandageItem)
+    local text
+
+    -- Set the correct text option
+    if stitchesItem and bandageItem then
+        text = textAmpStitchBandage
+    elseif stitchesItem and not bandageItem then
+        text = textAmpStitch
+    elseif bandageItem and not stitchesItem then
+        text = textAmpBandage
+    else
+        text = textAmp
+    end
+
+    local option = context:addOption(text, nil)
     local subMenu = context:getNew(context)
     context:addSubMenu(option, subMenu)
+
     for i = 1, #StaticData.LIMBS_STR do
         local limbName = StaticData.LIMBS_STR[i]
         if not ModDataHandler.GetInstance():getIsCut(limbName) then
             local limbTranslatedName = getText("ContextMenu_Limb_" .. limbName)
-            subMenu:addOption(limbTranslatedName, surgeonObj, PerformAction, surgeonObj, limbName, item) -- TODO Should be patient, not surgeon
+            subMenu:addOption(limbTranslatedName, player, PerformAction, player, limbName, sawItem, stitchesItem, bandageItem) -- TODO Should be patient, not surgeon
         end
     end
 end
 
+
 ---Handler for OnFillInventoryObjectContextMenu
----@param player number
+---@param playerNum number
 ---@param context ISContextMenu
 ---@param items table
-local function AddInventoryAmputationMenu(player, context, items)
+local function AddInventoryAmputationMenu(playerNum, context, items)
     local item
 
     -- We can't access the item if we don't create the loop and start ipairs.
@@ -58,7 +119,17 @@ local function AddInventoryAmputationMenu(player, context, items)
 
     local itemType = item:getType()
     if CheckIfSaw(itemType) then
-        AddInventoryAmputationOptions(player, context, item)
+        local player = getSpecificPlayer(playerNum)
+        local sawItem = item
+        --AddInvAmputationOptions(player, context, sawItem)
+
+        local stitchesItem = GetStitchesItem(player)
+        local bandageItem = GetBandageItem(player)
+        --if bandageItem then
+        AddInvAmputationOptions(player, context, sawItem, stitchesItem, bandageItem)
+        --end
+
+        -- TODO Add stitches option and mixes
     end
 end
 

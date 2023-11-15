@@ -8,4 +8,5 @@ function CommonMethods.GetSide(name)
 end
 
 
+
 return CommonMethods

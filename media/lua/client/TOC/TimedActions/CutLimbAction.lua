@@ -1,7 +1,8 @@
 require "TimedActions/ISBaseTimedAction"
 local AmputationHandler = require("TOC/Handlers/AmputationHandler")
 local CommandsData = require("TOC/CommandsData")
-local StaticData = require("TOC/StaticData")
+local CommonMethods = require("TOC/CommonMethods")
+
 -----------------------------
 
 ---@class CutLimbAction : ISBaseTimedAction
@@ -9,15 +10,19 @@ local StaticData = require("TOC/StaticData")
 ---@field character IsoPlayer
 ---@field limbName string
 ---@field item InventoryItem
+---@field stitchesItem InventoryItem?
+---@field bandageItem InventoryItem?
 local CutLimbAction = ISBaseTimedAction:derive("CutLimbAction")
 
 ---Starts CutLimbAction
----@param patient IsoPlayer
----@param surgeon IsoPlayer
+---@param surgeon IsoPlayer This is gonna be self.character to have working animations
+---@param patient IsoPlayer 
 ---@param limbName string
----@param item InventoryItem
+---@param item InventoryItem This is gonna be the saw, following ISBaseTimedAction
+---@param stitchesItem InventoryItem?
+---@param bandageItem InventoryItem?
 ---@return CutLimbAction
-function CutLimbAction:new(surgeon, patient, limbName, item)
+function CutLimbAction:new(surgeon, patient, limbName, item, stitchesItem, bandageItem)
     local o = {}
     setmetatable(o, self)
     self.__index = self
@@ -27,6 +32,9 @@ function CutLimbAction:new(surgeon, patient, limbName, item)
     o.patient = patient
     o.limbName = limbName
     o.item = item
+
+    o.stitchesItem = stitchesItem or nil
+    o.bandageItem = bandageItem or nil
 
     o.stopOnWalk = true
     o.stopOnRun = true
@@ -53,19 +61,19 @@ function CutLimbAction:start()
         sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayDamageDuringAmputation, params )
     end
 
+    ---@type ISBaseTimedAction
+    local prevAction = self
 
-    -- TODO Check bandages, if there are init a bandage process
+    -- Handle stitching
+    if self.stitchesItem then
+        TOC_DEBUG.print("Stitches...")
+        prevAction = AmputationHandler.PrepareStitchesAction(prevAction, self.limbName, self.character, self.patient, self.stitchesItem)
+    end
 
-    --AmputationHandler.HandleBandages(self, self.limbName, self.character, self.patient, )
-    local bandageItem = InventoryItemFactory.CreateItem("Base.Bandage")
-    self.character:getInventory():addItem(bandageItem)
-
-    local bptEnum = StaticData.BODYLOCS_IND_BPT[self.limbName]
-    local bd = self.character:getBodyDamage()
-    local bodyPart = bd:getBodyPart(bptEnum)
-    local bandageAction = ISApplyBandage:new(self.character, self.patient, bandageItem, bodyPart, 100)
-    ISTimedActionQueue.addAfter(self, bandageAction)
-
+    -- Handle bandages
+    if self.bandageItem then
+        prevAction = AmputationHandler.PrepareBandagesAction(prevAction, self.limbName, self.character, self.patient, self.bandageItem)
+    end
 
     -- Setup cosmetic stuff
     self:setActionAnim("SawLog")
@@ -79,6 +87,16 @@ function CutLimbAction:waitToStart()
     end
     self.character:faceThisObject(self.patient)
     return self.character:shouldBeTurning()
+end
+
+function CutLimbAction:update()
+    self.character:setMetabolicTarget(Metabolics.HeavyWork)
+
+    -- TODO Apply it too on the patient! check if it works online
+    if self.character ~= self.patient then
+        self.patient:setMetabolicTarget(Metabolics.HeavyWork)
+    end
+
 end
 
 function CutLimbAction:perform()
