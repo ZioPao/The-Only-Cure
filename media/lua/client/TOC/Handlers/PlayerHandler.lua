@@ -180,22 +180,26 @@ function ISEquipWeaponAction:isValid()
 
 
         -- Both hands are cut off 
-        if not(isPrimaryHandValid and isSecondaryHandValid) then
-            return false
+        if not isPrimaryHandValid and not isSecondaryHandValid then
+            TOC_DEBUG.print("Both hands invalid")
+            isValid = false
         end
 
         -- Equip primary and no right hand (with no prost)
         if self.jobType:contains(equipPrimaryText) and not isPrimaryHandValid then
             TOC_DEBUG.print("Equip primary, no right hand, not valid")
-            return false
+            isValid = false
         end
 
         -- Equip secondary and no left hand (with no prost)
         if self.jobType:contains(equipSecondaryText) and not isSecondaryHandValid then
             TOC_DEBUG.print("Equip secondary, no left hand, not valid")
-            return false
+            isValid = false
         end
     end
+
+    TOC_DEBUG.print("isValid to return -> " .. tostring(isValid))
+    --print("_________________________________")
     return isValid
 end
 
@@ -270,7 +274,14 @@ function ISEquipWeaponAction:performWithAmputation(modDataHandler)
 
         local isFirstValid = not modDataHandler:getIsCut(hand) or modDataHandler:getIsProstEquipped(prostGroup)
         local isSecondValid = not modDataHandler:getIsCut(otherHand) or modDataHandler:getIsProstEquipped(otherProstGroup)
-       
+        TOC_DEBUG.print("First Hand: " .. tostring(hand))
+        TOC_DEBUG.print("Prost Group: " .. tostring(prostGroup))
+        TOC_DEBUG.print("Other Hand: " .. tostring(otherHand))
+        TOC_DEBUG.print("Other Prost Group: " .. tostring(otherProstGroup))
+
+        TOC_DEBUG.print("isPrimaryHandValid: " .. tostring(isFirstValid))
+        TOC_DEBUG.print("isSecondaryHandValid: " .. tostring(isSecondValid))
+
 
         if isFirstValid then
             setMethodSecond(self.character, self.item)

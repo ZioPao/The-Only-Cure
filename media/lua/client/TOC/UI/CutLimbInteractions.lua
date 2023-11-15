@@ -78,15 +78,19 @@ local function AddInvAmputationOptions(player, context, sawItem, stitchesItem, b
 
     -- Set the correct text option
     if stitchesItem and bandageItem then
+        TOC_DEBUG.print("stitches and bandage")
         text = textAmpStitchBandage
-    elseif stitchesItem and not bandageItem then
+    elseif not bandageItem and stitchesItem then
+        TOC_DEBUG.print("only stitches")
         text = textAmpStitch
-    elseif bandageItem and not stitchesItem then
+    elseif not stitchesItem and bandageItem then
+        TOC_DEBUG.print("only bandages")
         text = textAmpBandage
     else
         text = textAmp
     end
 
+    TOC_DEBUG.print("Current text " .. tostring(text))
     local option = context:addOption(text, nil)
     local subMenu = context:getNew(context)
     context:addSubMenu(option, subMenu)
@@ -125,6 +129,11 @@ local function AddInventoryAmputationMenu(playerNum, context, items)
 
         local stitchesItem = GetStitchesItem(player)
         local bandageItem = GetBandageItem(player)
+
+        TOC_DEBUG.print("Stitches item: " .. tostring(stitchesItem))
+        TOC_DEBUG.print("Bandage item: " .. tostring(bandageItem))
+        
+
         --if bandageItem then
         AddInvAmputationOptions(player, context, sawItem, stitchesItem, bandageItem)
         --end

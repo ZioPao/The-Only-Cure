@@ -1,7 +1,7 @@
 ContextMenu_EN = {
     ContextMenu_Amputate = "Amputate",
     ContextMenu_Amputate_Bandage = "Amputate and bandage",
-    ContextMenu_Amputate_Stitch_Bandage = "Amputate and stitches",
+    ContextMenu_Amputate_Stitch = "Amputate and stitches",
     ContextMenu_Amputate_Stitch_Bandage = "Amputate, stitches and bandage",
 
     ContextMenu_Cauterize = "Cauterize",
