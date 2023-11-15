@@ -1,7 +1,7 @@
 ---@alias partData { isCut : boolean?, isInfected : boolean?, isOperated : boolean?, isCicatrized : boolean?, isCauterized : boolean?, isVisible : boolean?, cicatrizationTime : number }
 ---@alias limbsTable {Hand_L : partData, ForeArm_L : partData, UpperArm_L : partData, Hand_R : partData, ForeArm_R : partData, UpperArm_R : partData }
 ---@alias prosthesisData {isEquipped : boolean, prostFactor : number }
----@alias prosthesesTable {top : table, bottom : table }
+---@alias prosthesesTable {top : prosthesisData, bottom : prosthesisData }
 ---@alias tocModData { limbs : limbsTable, prostheses : prosthesesTable, isIgnoredPartInfected : boolean, isAnyLimbCut : boolean }
 ---------------------------
 

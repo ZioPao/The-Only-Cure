@@ -67,12 +67,14 @@ function ModDataHandler:setup(key)
     end
 
     -- Initialize prostheses stuff
-    for group, _ in ipairs(StaticData.PROSTHESES_GROUPS) do
+    -- TODO This is shit
+    local groups = {"top", "bottom"}
+    for i=1, #groups do
+        local group = groups[i]
         self.tocData.prostheses[group] = {
             isEquipped = false,
-            prostFactor = 0
+            prostFactor = 0,
         }
-        -- TODO Make this more modular instead of this crap
     end
 
     -- Add it to global mod data
@@ -113,9 +115,9 @@ end
 
 ---Set isProstEquipped
 ---@param group string
----@param isProstEquipped boolean
-function ModDataHandler:setIsProstEquipped(group, isProstEquipped)
-    self.tocData.prostheses[group].isProstEquipped = isProstEquipped
+---@param isEquipped boolean
+function ModDataHandler:setIsProstEquipped(group, isEquipped)
+    self.tocData.prostheses[group].isEquipped = isEquipped
 end
 
 ---Set prostFactor
