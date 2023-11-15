@@ -75,7 +75,7 @@ function ItemsHandler.Player.DeleteOldAmputationItem(playerObj, limbName)
 
         -- If we manage to find and remove an item, then we should stop this function.
         ---@cast othClothingItem InventoryItem
-        if ItemsHandler.RemoveClothingItem(playerObj, othClothingItem) then return end
+        if ItemsHandler.Player.RemoveClothingItem(playerObj, othClothingItem) then return end
     end
 end
 
@@ -88,7 +88,7 @@ function ItemsHandler.Player.DeleteAllOldAmputationItems(playerObj)
         local clothItemName = StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. limbName
         local clothItem = playerObj:getInventory():FindAndReturn(clothItemName)
         ---@cast clothItem InventoryItem
-        ItemsHandler.RemoveClothingItem(playerObj, clothItem)
+        ItemsHandler.Player.RemoveClothingItem(playerObj, clothItem)
     end
 end
 
@@ -98,7 +98,7 @@ end
 function ItemsHandler.Player.SpawnAmputationItem(playerObj, limbName)
     TOC_DEBUG.print("clothing name " .. StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. limbName)
     local clothingItem = playerObj:getInventory():AddItem(StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. limbName)
-    local texId = ItemsHandler.GetAmputationTexturesIndex(playerObj, false)
+    local texId = ItemsHandler.Player.GetAmputationTexturesIndex(playerObj, false)
 
     ---@cast clothingItem InventoryItem
     clothingItem:getVisual():setTextureChoice(texId) -- it counts from 0, so we have to subtract 1

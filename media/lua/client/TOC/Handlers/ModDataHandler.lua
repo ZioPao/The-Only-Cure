@@ -60,7 +60,6 @@ function ModDataHandler:setup(key)
 
 
     -- Initialize limbs
-
     for i=1, #StaticData.LIMBS_STR do
         local limbName = StaticData.LIMBS_STR[i]
         self.tocData.limbs[limbName] = {}
@@ -68,8 +67,7 @@ function ModDataHandler:setup(key)
     end
 
     -- Initialize prostheses stuff
-    for i=1, #StaticData.PROSTHESES_GROUPS do
-        local group = StaticData.PROSTHESES_GROUPS[i]
+    for group, _ in ipairs(StaticData.PROSTHESES_GROUPS) do
         self.tocData.prostheses[group] = {
             isEquipped = false,
             prostFactor = 0
