@@ -1,21 +1,18 @@
 -- TODO This part is still one of the weakest and we don't have a better solution yet
 require("TOC/Debug")
 
-local function AddBodyLocationBefore(newLocation, moveToLocation)
-    local group = BodyLocations.getGroup("Human")
-    local list = getClassFieldVal(group, getClassField(group, 1))
-    group:getOrCreateLocation(newLocation)
-    local newItem = list:get(list:size()-1)
-    TOC_DEBUG.print("created new body location" .. newItem:getId())
-    list:remove(newItem)   -- We can't use the Index, it works if we pass the item though!
-    local i = group:indexOf(moveToLocation)
-    list:add(i, newItem)
-end
+-- AddBodyLocationBefore("TOC_Arm_R", "Shoes")
+-- AddBodyLocationBefore("TOC_Arm_L", "Shoes")
 
+-- AddBodyLocationBefore("TOC_ArmProst_R", "TOC_Arm_R")
+-- AddBodyLocationBefore("TOC_ArmProst_L", "TOC_Arm_L")
 
-AddBodyLocationBefore("TOC_Arm_R", "Shoes")
-AddBodyLocationBefore("TOC_Arm_L", "Shoes")
+-- Locations must be declared in render-order.
+-- Location IDs must match BodyLocation= and CanBeEquipped= values in items.txt.
+local group = BodyLocations.getGroup("Human")
 
-AddBodyLocationBefore("TOC_ArmProst_R", "Shoes")
-AddBodyLocationBefore("TOC_ArmProst_L", "Shoes")
+group:getOrCreateLocation("TOC_Arm_R")
+group:getOrCreateLocation("TOC_ArmProst_R")
 
+group:getOrCreateLocation("TOC_Arm_L")
+group:getOrCreateLocation("TOC_ArmProst_L")

@@ -1,6 +1,6 @@
 ---@alias partData { isCut : boolean?, isInfected : boolean?, isOperated : boolean?, isCicatrized : boolean?, isCauterized : boolean?, isVisible : boolean?, cicatrizationTime : number }
 ---@alias limbsTable {Hand_L : partData, ForeArm_L : partData, UpperArm_L : partData, Hand_R : partData, ForeArm_R : partData, UpperArm_R : partData }
----@alias prosthesisData {isEquipped : boolean, prostFactor : number }
+---@alias prosthesisData {isProstEquipped : boolean, prostFactor : number }
 ---@alias prosthesesTable {top : prosthesisData, bottom : prosthesisData }
 ---@alias tocModData { limbs : limbsTable, prostheses : prosthesesTable, isIgnoredPartInfected : boolean, isAnyLimbCut : boolean }
 ---------------------------
@@ -39,7 +39,7 @@ StaticData.MOD_BODYLOCS_BASE_IND_STR = {
 }
 
 -- No "MAX" here.
-StaticData.IGNORED_BODYLOCS_IND_BPT = {
+StaticData.IGNORED_BODYLOCS_BPT = {
     BodyPartType.Foot_L, BodyPartType.Foot_R, BodyPartType.Groin, BodyPartType.Head, 
     BodyPartType.LowerLeg_L, BodyPartType.LowerLeg_R, BodyPartType.Neck, BodyPartType.Torso_Lower, 
     BodyPartType.Torso_Upper, BodyPartType.UpperLeg_L, BodyPartType.UpperLeg_R
@@ -98,10 +98,21 @@ end
 -----------------
 --* Prostheses
 
-StaticData.PROSTHESES_GROUPS = {
-    top = "top",
-    bottom = "bottom"
+StaticData.PROSTHESE_GROUPS_BASE_IND_STR = {
+    Top = "Top",
+    Bottom = "Bottom"
 }
+
+StaticData.PROSTHESES_GROUPS_IND_STR = {}
+StaticData.PROSTHESES_GROUPS_STR = {}
+
+for side, _ in pairs(StaticData.SIDES_IND_STR) do
+    for group, _ in pairs(StaticData.PROSTHESE_GROUPS_BASE_IND_STR) do
+        local sidedGroup = group .. "_" .. side
+        StaticData.PROSTHESES_GROUPS_IND_STR[sidedGroup] = sidedGroup
+        table.insert(StaticData.PROSTHESES_GROUPS_STR, sidedGroup)
+    end
+end
 
 
 -----------------

@@ -58,7 +58,6 @@ function ModDataHandler:setup(key)
         isCauterized = false, isVisible = false
     }
 
-
     -- Initialize limbs
     for i=1, #StaticData.LIMBS_STR do
         local limbName = StaticData.LIMBS_STR[i]
@@ -67,19 +66,16 @@ function ModDataHandler:setup(key)
     end
 
     -- Initialize prostheses stuff
-    -- TODO This is shit
-    local groups = {"top", "bottom"}
-    for i=1, #groups do
-        local group = groups[i]
+    for i=1, #StaticData.PROSTHESES_GROUPS_STR do
+        local group = StaticData.PROSTHESES_GROUPS_STR[i]
         self.tocData.prostheses[group] = {
-            isEquipped = false,
+            isProstEquipped = false,
             prostFactor = 0,
         }
     end
 
     -- Add it to global mod data
     ModData.add(key, self.tocData)
-
 
 end
 
@@ -115,9 +111,9 @@ end
 
 ---Set isProstEquipped
 ---@param group string
----@param isEquipped boolean
-function ModDataHandler:setIsProstEquipped(group, isEquipped)
-    self.tocData.prostheses[group].isEquipped = isEquipped
+---@param isProstEquipped boolean
+function ModDataHandler:setIsProstEquipped(group, isProstEquipped)
+    self.tocData.prostheses[group].isProstEquipped = isProstEquipped
 end
 
 ---Set prostFactor
@@ -167,7 +163,7 @@ end
 ---@param group string
 ---@return number
 function ModDataHandler:getProstFactor(group)
-    return self.tocData.prostheses[group].getProstFactor
+    return self.tocData.prostheses[group].prostFactor
 end
 
 --* Limbs data handling *--

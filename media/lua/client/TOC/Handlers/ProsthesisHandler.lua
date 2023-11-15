@@ -20,11 +20,19 @@ end
 ---@param item InventoryItem
 ---@return string
 function ProsthesisHandler.GetGroup(item)
-    if item:getBodyLocation():contains(bodyLocArmProst) then
-        return StaticData.PROSTHESES_GROUPS.top
+
+    local bodyLocation = item:getBodyLocation()
+    local side = CommonMethods.GetSide(bodyLocation)
+    local index
+
+    if bodyLocation:contains(bodyLocArmProst) then
+        index = "Top_" .. side
     else
-        return StaticData.PROSTHESES_GROUPS.bottom
+        index = "Bottom_" .. side
     end
+
+    local group = StaticData.PROSTHESES_GROUPS_IND_STR[index]
+    return group
 end
 
 ---Cache the correct texture for the Health Panel for the currently equipped prosthesis
@@ -38,11 +46,13 @@ end
 function ProsthesisHandler.CheckIfEquippable(bodyLocation)
     TOC_DEBUG.print("current item is a prosthesis")
     local side = CommonMethods.GetSide(bodyLocation)
+    TOC_DEBUG.print("checking side: " .. tostring(side))
 
     local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(getPlayer():getUsername())
     for i = 1, #amputatedLimbs do
         local limbName = amputatedLimbs[i]
         if string.contains(limbName, side) and not string.contains(limbName, "UpperArm") then
+            TOC_DEBUG.print("found acceptable limb to use prosthesis")
             return true
         end
     end
@@ -62,6 +72,7 @@ end
 
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISWearClothing:isValid()
+    TOC_DEBUG.print("ISWearClothing:isValid")
     local bodyLocation = self.item:getBodyLocation()
     if not string.contains(bodyLocation, bodyLocArmProst) then
         return true
@@ -73,9 +84,13 @@ end
 local og_ISClothingExtraAction_isValid = ISClothingExtraAction.isValid
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISClothingExtraAction:isValid()
-    local bodyLocation = self.item:getBodyLocation()
-    local isEquippable = false
-    if og_ISClothingExtraAction_isValid(self) and not string.contains(bodyLocation, bodyLocArmProst) then
+
+    --the item that we gets is the OG one, so if we're coming from the left one and wanna switch to the right one we're still gonna get the Left bodylocation
+    -- TODO Figure out why it runs 2 times
+    local testItem = InventoryItemFactory.CreateItem(self.extra)
+    local bodyLocation = testItem:getBodyLocation()
+    local isEquippable = og_ISClothingExtraAction_isValid(self)
+    if isEquippable and not string.contains(bodyLocation, bodyLocArmProst) then
         isEquippable = true
     else
         isEquippable = ProsthesisHandler.CheckIfEquippable(bodyLocation)

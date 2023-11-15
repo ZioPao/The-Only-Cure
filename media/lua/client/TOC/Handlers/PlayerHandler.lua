@@ -82,8 +82,8 @@ function PlayerHandler.CheckInfection(character)
     -- We can skip this loop if the player has been infected. The one before we kinda need it to handle correctly the bites in case the player wanna cut stuff off anyway
     if ModDataHandler.GetInstance():getIsIgnoredPartInfected() then return end
 
-    for i=1, #StaticData.IGNORED_BODYLOCS_IND_BPT do
-        local bodyPartType = StaticData.IGNORED_BODYLOCS_IND_BPT[i]
+    for i=1, #StaticData.IGNORED_BODYLOCS_BPT do
+        local bodyPartType = StaticData.IGNORED_BODYLOCS_BPT[i]
         local bodyPart = bd:getBodyPart(bodyPartType)
         if bodyPart and (bodyPart:bitten() or bodyPart:IsInfected()) then
             ModDataHandler.GetInstance():setIsIgnoredPartInfected(true)
@@ -155,6 +155,9 @@ local equipSecondaryText = getText("ContextMenu_Equip_Secondary")
 local primaryHand = StaticData.PARTS_IND_STR.Hand .. "_" .. StaticData.SIDES_IND_STR.R
 local secondaryHand = StaticData.PARTS_IND_STR.Hand .. "_" .. StaticData.SIDES_IND_STR.L
 
+local prostTopR = StaticData.PROSTHESES_GROUPS_IND_STR.Top_R
+local prostTopL = StaticData.PROSTHESES_GROUPS_IND_STR.Top_L
+
 local og_ISEquipWeaponAction_isValid = ISEquipWeaponAction.isValid
 ---Add a condition to check the feasibility of having 2 handed weapons or if both arms are cut off
 ---@return boolean
@@ -165,21 +168,30 @@ function ISEquipWeaponAction:isValid()
     if isValid and modDataHandler:getIsAnyLimbCut() then
 
         -- TODO We need to consider amputating legs, this won't be correct anymore
-        -- TODO Consider prosthesis
+        -- TODO Cache this!
+        local isPrimaryHandValid = not modDataHandler:getIsCut(primaryHand) or modDataHandler:getIsProstEquipped(prostTopR)
+        local isSecondaryHandValid = not modDataHandler:getIsCut(secondaryHand) or modDataHandler:getIsProstEquipped(prostTopL)
+        -- Check prosthesis before anything else. If we have them, then we're gucci
+        --if modDataHandler:getIsProstEquipped(StaticData.PROSTHESES_GROUPS.top)
+
+
+        TOC_DEBUG.print("isPrimaryHandValid: " .. tostring(isPrimaryHandValid))
+        TOC_DEBUG.print("isSecondaryHandValid: " .. tostring(isSecondaryHandValid))
+
 
         -- Both hands are cut off 
-        if modDataHandler:getIsCut(primaryHand) and modDataHandler:getIsCut(secondaryHand) then
+        if not(isPrimaryHandValid and isSecondaryHandValid) then
             return false
         end
 
-        -- Equip primary and no right hand
-        if self.jobType:contains(equipPrimaryText) and modDataHandler:getIsCut(primaryHand) then
+        -- Equip primary and no right hand (with no prost)
+        if self.jobType:contains(equipPrimaryText) and not isPrimaryHandValid then
             TOC_DEBUG.print("Equip primary, no right hand, not valid")
             return false
         end
 
-        -- Equip secondary and no left hand
-        if self.jobType:contains(equipSecondaryText) and modDataHandler:getIsCut(secondaryHand) then
+        -- Equip secondary and no left hand (with no prost)
+        if self.jobType:contains(equipSecondaryText) and not isSecondaryHandValid then
             TOC_DEBUG.print("Equip secondary, no left hand, not valid")
             return false
         end
@@ -194,8 +206,12 @@ end
 ---A recreation of the original method, but with amputations in mind
 ---@param modDataHandler ModDataHandler
 function ISEquipWeaponAction:performWithAmputation(modDataHandler)
+
+    -- TODO Simplify this
     local hand = nil
+    local prostGroup = nil
     local otherHand = nil
+    local otherProstGroup = nil
     local getMethodFirst = nil
     local setMethodFirst = nil
 
@@ -204,14 +220,18 @@ function ISEquipWeaponAction:performWithAmputation(modDataHandler)
 
     if self.primary then
         hand = "Hand_R"
+        prostGroup = "Top_R"
         otherHand = "Hand_L"
+        otherProstGroup = "Top_L"
         getMethodFirst = self.character.getSecondaryHandItem
         setMethodFirst = self.character.setSecondaryHandItem
         getMethodSecond = self.character.getPrimaryHandItem
         setMethodSecond = self.character.setPrimaryHandItem
     else
         hand = "Hand_L"
+        prostGroup = "Top_L"
         otherHand = "Hand_R"
+        otherProstGroup = "Top_R"
         getMethodFirst = self.character.getPrimaryHandItem
         setMethodFirst = self.character.setPrimaryHandItem
         getMethodSecond = self.character.getSecondaryHandItem
@@ -248,11 +268,16 @@ function ISEquipWeaponAction:performWithAmputation(modDataHandler)
         setMethodFirst(self.character, nil)
         setMethodSecond(self.character, nil)
 
-        if not modDataHandler:getIsCut(hand) then
+
+        local isFirstValid = not modDataHandler:getIsCut(hand) or modDataHandler:getIsProstEquipped(prostGroup)
+        local isSecondValid = not modDataHandler:getIsCut(otherHand) or modDataHandler:getIsProstEquipped(otherProstGroup)
+       
+
+        if isFirstValid then
             setMethodSecond(self.character, self.item)
         end
 
-        if not modDataHandler:getIsCut(otherHand) then
+        if isSecondValid then
             setMethodFirst(self.character, self.item)
         end
     end
