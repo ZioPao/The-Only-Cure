@@ -1,0 +1,90 @@
+module TOC
+{
+	imports
+	{
+		Base
+	}
+
+	/****************** TOP ******************/
+
+	item Prost_HookArm_L
+	{
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName	= ProstArmHook,
+		ClothingItem = Prost_HookArm_L,
+		ClothingItemExtra = Prost_HookArm_R,
+		ClothingItemExtraOption = InstallProstRight,
+		clothingExtraSubmenu = InstallProstLeft,
+		BodyLocation = TOC_ArmProst_L,
+		Weight = 0,
+		CombatSpeedModifier = 0.7,
+		BloodLocation = UpperArms;UpperBody,
+		Insulation = 1.0,
+		WindResistance = 1.0,
+		WaterResistance = 1.0,
+		Icon = genericAmputation,
+		CanHaveHoles = false,
+	}
+	item Prost_HookArm_R
+	{
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName	= ProstArmHook,
+		ClothingItem = Prost_HookArm_R,
+		ClothingItemExtra = Prost_HookArm_L,
+		ClothingItemExtraOption = InstallProstLeft,
+		clothingExtraSubmenu = InstallProstRight,
+		BodyLocation = TOC_ArmProst_R,
+
+		Weight = 0,
+		CombatSpeedModifier = 0.7,
+		BloodLocation = UpperArms;UpperBody,
+		Insulation = 1.0,
+		WindResistance = 1.0,
+		WaterResistance = 1.0,
+		Icon = genericAmputation,
+		CanHaveHoles = false,
+	}
+
+	item Prost_NormalArm_L
+	{
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName	= ProstArmHook,
+		ClothingItem = Prost_NormalArm_L,
+		ClothingItemExtra = Prost_NormalArm_R,
+		ClothingItemExtraOption = InstallProstRight,
+		clothingExtraSubmenu = InstallProstLeft,
+		BodyLocation = TOC_ArmProst_L,
+		Weight = 0,
+		CombatSpeedModifier = 0.7,
+		BloodLocation = UpperArms;UpperBody,
+		Insulation = 1.0,
+		WindResistance = 1.0,
+		WaterResistance = 1.0,
+		Icon = genericAmputation,
+		CanHaveHoles = false,
+	}
+	item Prost_NormalArm_R
+	{
+		Type = Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName	= ProstArmHook,
+		ClothingItem = Prost_NormalArm_R,
+		ClothingItemExtra = Prost_NormalArm_L,
+		ClothingItemExtraOption = InstallProstLeft,
+		clothingExtraSubmenu = InstallProstRight,
+		BodyLocation = TOC_ArmProst_R,
+
+		Weight = 0,
+		CombatSpeedModifier = 0.7,
+		BloodLocation = UpperArms;UpperBody,
+		Insulation = 1.0,
+		WindResistance = 1.0,
+		WaterResistance = 1.0,
+		Icon = genericAmputation,
+		CanHaveHoles = false,
+	}
+	
+}

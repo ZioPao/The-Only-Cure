@@ -125,7 +125,7 @@ function ItemsHandler.Zombie.SpawnAmputationItem(zombie)
 
         -- TODO Check body location of item and deletes potential amputation to apply
         local clothingName = itemVisual:getClothingItemName()
-        print(clothingName)
+        --print(clothingName)
 
         if clothingName and luautils.stringStarts(clothingName, StaticData.AMPUTATION_CLOTHING_ITEM_BASE) then
             TOC_DEBUG.print("added " .. clothingName .. " to ignoredLimbs")

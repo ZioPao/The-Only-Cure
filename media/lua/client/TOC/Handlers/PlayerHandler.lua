@@ -58,8 +58,14 @@ end
 
 ---Check if the player has an infected (as in, zombie infection) body part
 ---@param character IsoGameCharacter
-function PlayerHandler.CheckInfection(character)
-    -- This fucking event barely works. Bleeding seems to be the only thing that triggers it
+---@param damageType string
+---@param damageAmount number
+function PlayerHandler.CheckInfection(character, damageType, damageAmount)
+
+    -- TODO  This fucking event barely works. Bleeding seems to be the only thing that triggers it. use this to trigger something else and then do not let it keep going
+
+    -- TOC_DEBUG.print("Player got hit!")
+    -- TOC_DEBUG.print(damageType)
     if character ~= getPlayer() then return end
     local bd = character:getBodyDamage()
     local modDataHandler = ModDataHandler.GetInstance()
@@ -171,34 +177,30 @@ function ISEquipWeaponAction:isValid()
         -- TODO Cache this!
         local isPrimaryHandValid = not modDataHandler:getIsCut(primaryHand) or modDataHandler:getIsProstEquipped(prostTopR)
         local isSecondaryHandValid = not modDataHandler:getIsCut(secondaryHand) or modDataHandler:getIsProstEquipped(prostTopL)
-        -- Check prosthesis before anything else. If we have them, then we're gucci
-        --if modDataHandler:getIsProstEquipped(StaticData.PROSTHESES_GROUPS.top)
 
-
-        TOC_DEBUG.print("isPrimaryHandValid: " .. tostring(isPrimaryHandValid))
-        TOC_DEBUG.print("isSecondaryHandValid: " .. tostring(isSecondaryHandValid))
-
+        --TOC_DEBUG.print("isPrimaryHandValid: " .. tostring(isPrimaryHandValid))
+        --TOC_DEBUG.print("isSecondaryHandValid: " .. tostring(isSecondaryHandValid))
 
         -- Both hands are cut off 
         if not isPrimaryHandValid and not isSecondaryHandValid then
-            TOC_DEBUG.print("Both hands invalid")
+            --TOC_DEBUG.print("Both hands invalid")
             isValid = false
         end
 
         -- Equip primary and no right hand (with no prost)
         if self.jobType:contains(equipPrimaryText) and not isPrimaryHandValid then
-            TOC_DEBUG.print("Equip primary, no right hand, not valid")
+            --TOC_DEBUG.print("Equip primary, no right hand, not valid")
             isValid = false
         end
 
         -- Equip secondary and no left hand (with no prost)
         if self.jobType:contains(equipSecondaryText) and not isSecondaryHandValid then
-            TOC_DEBUG.print("Equip secondary, no left hand, not valid")
+            --TOC_DEBUG.print("Equip secondary, no left hand, not valid")
             isValid = false
         end
     end
 
-    TOC_DEBUG.print("isValid to return -> " .. tostring(isValid))
+    --TOC_DEBUG.print("isValid to return -> " .. tostring(isValid))
     --print("_________________________________")
     return isValid
 end
@@ -274,13 +276,13 @@ function ISEquipWeaponAction:performWithAmputation(modDataHandler)
 
         local isFirstValid = not modDataHandler:getIsCut(hand) or modDataHandler:getIsProstEquipped(prostGroup)
         local isSecondValid = not modDataHandler:getIsCut(otherHand) or modDataHandler:getIsProstEquipped(otherProstGroup)
-        TOC_DEBUG.print("First Hand: " .. tostring(hand))
-        TOC_DEBUG.print("Prost Group: " .. tostring(prostGroup))
-        TOC_DEBUG.print("Other Hand: " .. tostring(otherHand))
-        TOC_DEBUG.print("Other Prost Group: " .. tostring(otherProstGroup))
+        -- TOC_DEBUG.print("First Hand: " .. tostring(hand))
+        -- TOC_DEBUG.print("Prost Group: " .. tostring(prostGroup))
+        -- TOC_DEBUG.print("Other Hand: " .. tostring(otherHand))
+        -- TOC_DEBUG.print("Other Prost Group: " .. tostring(otherProstGroup))
 
-        TOC_DEBUG.print("isPrimaryHandValid: " .. tostring(isFirstValid))
-        TOC_DEBUG.print("isSecondaryHandValid: " .. tostring(isSecondValid))
+        -- TOC_DEBUG.print("isPrimaryHandValid: " .. tostring(isFirstValid))
+        -- TOC_DEBUG.print("isSecondaryHandValid: " .. tostring(isSecondValid))
 
 
         if isFirstValid then

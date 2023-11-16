@@ -11,8 +11,9 @@ require("TOC/Debug")
 -- Location IDs must match BodyLocation= and CanBeEquipped= values in items.txt.
 local group = BodyLocations.getGroup("Human")
 
+-- TODO Breaks if both arms are cut with one prost!!!
 group:getOrCreateLocation("TOC_Arm_R")
-group:getOrCreateLocation("TOC_ArmProst_R")
-
 group:getOrCreateLocation("TOC_Arm_L")
+
+group:getOrCreateLocation("TOC_ArmProst_R")
 group:getOrCreateLocation("TOC_ArmProst_L")

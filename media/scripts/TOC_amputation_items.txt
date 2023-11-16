@@ -124,7 +124,7 @@ module TOC
 	{
 		Type = Clothing,
 		DisplayCategory = Prosthesis,
-		DisplayName	= Hook Arm Test Left,
+		DisplayName	= ProstArmHook,
 		ClothingItem = Prost_Hook_L,
 		ClothingItemExtra = Prost_Hook_R,
 		ClothingItemExtraOption = InstallProstRight,
@@ -144,7 +144,7 @@ module TOC
 	{
 		Type = Clothing,
 		DisplayCategory = Prosthesis,
-		DisplayName	= Hook Arm Test Right,
+		DisplayName	= ProstArmHook,
 		ClothingItem = Prost_Hook_R,
 		ClothingItemExtra = Prost_Hook_L,
 		ClothingItemExtraOption = InstallProstLeft,

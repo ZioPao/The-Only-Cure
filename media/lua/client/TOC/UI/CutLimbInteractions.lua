@@ -15,7 +15,6 @@ local function CheckIfSaw(itemType)
     return itemType:contains(StaticData.SAWS_TYPES_IND_STR.saw) or itemType:contains(StaticData.SAWS_TYPES_IND_STR.gardenSaw)
 end
 
-
 ---Return a compatible bandage
 ---@param player IsoPlayer
 ---@return InventoryItem?
@@ -78,13 +77,13 @@ local function AddInvAmputationOptions(player, context, sawItem, stitchesItem, b
 
     -- Set the correct text option
     if stitchesItem and bandageItem then
-        TOC_DEBUG.print("stitches and bandage")
+        --TOC_DEBUG.print("stitches and bandage")
         text = textAmpStitchBandage
     elseif not bandageItem and stitchesItem then
-        TOC_DEBUG.print("only stitches")
+        --TOC_DEBUG.print("only stitches")
         text = textAmpStitch
     elseif not stitchesItem and bandageItem then
-        TOC_DEBUG.print("only bandages")
+        --TOC_DEBUG.print("only bandages")
         text = textAmpBandage
     else
         text = textAmp
@@ -99,7 +98,7 @@ local function AddInvAmputationOptions(player, context, sawItem, stitchesItem, b
         local limbName = StaticData.LIMBS_STR[i]
         if not ModDataHandler.GetInstance():getIsCut(limbName) then
             local limbTranslatedName = getText("ContextMenu_Limb_" .. limbName)
-            subMenu:addOption(limbTranslatedName, player, PerformAction, player, limbName, sawItem, stitchesItem, bandageItem) -- TODO Should be patient, not surgeon
+            subMenu:addOption(limbTranslatedName, player, PerformAction, player, limbName, sawItem, stitchesItem, bandageItem)
         end
     end
 end
@@ -125,18 +124,13 @@ local function AddInventoryAmputationMenu(playerNum, context, items)
     if CheckIfSaw(itemType) then
         local player = getSpecificPlayer(playerNum)
         local sawItem = item
-        --AddInvAmputationOptions(player, context, sawItem)
-
         local stitchesItem = GetStitchesItem(player)
         local bandageItem = GetBandageItem(player)
 
         TOC_DEBUG.print("Stitches item: " .. tostring(stitchesItem))
         TOC_DEBUG.print("Bandage item: " .. tostring(bandageItem))
-        
 
-        --if bandageItem then
         AddInvAmputationOptions(player, context, sawItem, stitchesItem, bandageItem)
-        --end
 
         -- TODO Add stitches option and mixes
     end

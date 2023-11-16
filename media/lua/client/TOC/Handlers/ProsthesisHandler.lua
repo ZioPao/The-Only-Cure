@@ -58,7 +58,6 @@ function ProsthesisHandler.CheckIfEquippable(bodyLocation)
     end
 
     -- No acceptable cut limbs
-    getPlayer():Say("I can't equip this")
     return false
 end
 -------------------------
@@ -70,23 +69,23 @@ end
 -------------------------
 --* Overrides *--
 
----@diagnostic disable-next-line: duplicate-set-field
-function ISWearClothing:isValid()
-    TOC_DEBUG.print("ISWearClothing:isValid")
-    local bodyLocation = self.item:getBodyLocation()
-    if not string.contains(bodyLocation, bodyLocArmProst) then
-        return true
-    else
-        return ProsthesisHandler.CheckIfEquippable(bodyLocation)
-    end
-end
+-- ---@diagnostic disable-next-line: duplicate-set-field
+-- function ISWearClothing:isValid()
+--     TOC_DEBUG.print("ISWearClothing:isValid")
+--     local bodyLocation = self.item:getBodyLocation()
+--     if not string.contains(bodyLocation, bodyLocArmProst) then
+--         return true
+--     else
+--         return ProsthesisHandler.CheckIfEquippable(bodyLocation)
+--     end
+-- end
 
 local og_ISClothingExtraAction_isValid = ISClothingExtraAction.isValid
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISClothingExtraAction:isValid()
 
     --the item that we gets is the OG one, so if we're coming from the left one and wanna switch to the right one we're still gonna get the Left bodylocation
-    -- TODO Figure out why it runs 2 times
+    -- TODO isValid can be run multiple times, for some reason. 
     local testItem = InventoryItemFactory.CreateItem(self.extra)
     local bodyLocation = testItem:getBodyLocation()
     local isEquippable = og_ISClothingExtraAction_isValid(self)
@@ -99,11 +98,17 @@ function ISClothingExtraAction:isValid()
     return isEquippable
 end
 
+local og_ISClothingExtraAction_stop = ISClothingExtraAction.stop
+function ISClothingExtraAction:stop()
+    og_ISClothingExtraAction_stop(self)
+    if ProsthesisHandler.CheckIfProst(self.item) then
+        getPlayer():Say(getText("UI_Say_CantEquip"))
+
+    end
+end
 
 local og_ISClothingExtraAction_perform = ISClothingExtraAction.perform
 function ISClothingExtraAction:perform()
-    og_ISClothingExtraAction_perform(self)
-
     if ProsthesisHandler.CheckIfProst(self.item) then
         local group = ProsthesisHandler.GetGroup(self.item)
         TOC_DEBUG.print("applying prosthesis stuff for " .. group)
@@ -111,6 +116,8 @@ function ISClothingExtraAction:perform()
         modDataHandler:setIsProstEquipped(group, true)
         modDataHandler:apply()
     end
+
+    og_ISClothingExtraAction_perform(self)
 end
 
 

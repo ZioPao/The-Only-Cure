@@ -1,0 +1,7 @@
+ItemName_EN = {
+    ItemName_TOC.Prost_NormalArm_L = "Prosthetic Arm",
+    ItemName_TOC.Prost_NormalArm_R = "Prosthetic Arm",
+
+    ItemName_TOC.Prost_HookArm_L = "Prosthetic Arm - Hook",
+    ItemName_TOC.Prost_HookArm_R = "Prosthetic Arm - Hook",
+}

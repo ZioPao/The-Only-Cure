@@ -28,12 +28,20 @@
 
 
     <files>
-        <path>media/clothing/clothingItems/Prost_Hook_L.xml</path>
+        <path>media/clothing/clothingItems/Prost_HookArm_L.xml</path>
         <guid>05338f5e-e984-49c2-be79-81af9ae8e818</guid>
     </files>
     <files>
-        <path>media/clothing/clothingItems/Prost_Hook_R.xml</path>
+        <path>media/clothing/clothingItems/Prost_HookArm_R.xml</path>
         <guid>8ee7e1bc-2c21-428e-a15d-760d98df973d</guid>
     </files>
 
+    <files>
+        <path>media/clothing/clothingItems/Prost_NormalArm_L.xml</path>
+        <guid>689318c7-5045-4876-a7e1-360de4aedf89</guid>
+    </files>
+    <files>
+        <path>media/clothing/clothingItems/Prost_NormalArm_R.xml</path>
+        <guid>0e24eb76-4745-46af-9147-ba21e0ebbb2e</guid>
+    </files>
 </fileGuidTable>

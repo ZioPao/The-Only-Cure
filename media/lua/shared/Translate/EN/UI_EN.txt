@@ -9,5 +9,8 @@ UI_EN = {
     UI_trait_Amputee_UpperArm_desc = "",
 
     UI_trait_Insensitive = "Insensitive",
-    UI_trait_Insensitive_desc = ""
+    UI_trait_Insensitive_desc = "",
+
+
+    UI_Say_CantEquip = "I can't equip it like this..."
 }
