@@ -55,9 +55,11 @@ StaticData.LIMBS_BASE_DAMAGE_IND_NUM = {}
 StaticData.LIMBS_TIME_MULTIPLIER_IND_NUM = {}
 StaticData.BODYLOCS_IND_BPT = {}
 
+-- CicatrizationBaseTime should be mod 60 since we're using EveryHours to update the cicatrizationTime
+
 local function AssembleHandData(assembledName)
     StaticData.LIMBS_BASE_DAMAGE_IND_NUM[assembledName] = 60
-    StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM[assembledName] = 1700
+    StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM[assembledName] = 1200
     StaticData.LIMBS_TIME_MULTIPLIER_IND_NUM[assembledName] = 2
     StaticData.LIMBS_DEPENDENCIES_IND_STR[assembledName] = {}
 end
@@ -71,7 +73,7 @@ end
 
 local function AssembleUpperarmData(assembledName, side)
     StaticData.LIMBS_BASE_DAMAGE_IND_NUM[assembledName] = 100
-    StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM[assembledName] = 2000
+    StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM[assembledName] = 1800
     StaticData.LIMBS_TIME_MULTIPLIER_IND_NUM[assembledName] = 4
     StaticData.LIMBS_DEPENDENCIES_IND_STR[assembledName] = { StaticData.PARTS_IND_STR.Hand .. "_" .. side,
         StaticData.PARTS_IND_STR.ForeArm .. "_" .. side }

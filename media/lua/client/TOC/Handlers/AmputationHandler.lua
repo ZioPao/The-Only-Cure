@@ -5,6 +5,13 @@ local PlayerHandler = require("TOC/Handlers/PlayerHandler")
 local StaticData = require("TOC/StaticData")
 ---------------------------
 
+--Triggered when a limb has been amputated
+---@class Events
+---@field OnAmputatedLimb any
+LuaEventManager.AddEvent("OnAmputatedLimb")
+
+--------------
+
 -- TODO Add Bandages, Torniquet, etc.
 --- Manages an amputation. Will be run on the patient client
 ---@class AmputationHandler
@@ -150,15 +157,17 @@ function AmputationHandler:execute(damagePlayer)
     CachedDataHandler.AddAmputatedLimb(username, self.limbName)
     CachedDataHandler.CalculateHighestAmputatedLimbs(username)
 
-    -- TODO Check infection level!
-    -- If the part was actually infected, heal the player, if they were in time
-    if bodyPart:IsInfected() and not modDataHandler:getIsIgnoredPartInfected() then
+    -- If the part was actually infected, heal the player, if they were in time (infectionLevel < 20)
+    if bd:getInfectionLevel() < 20 and bodyPart:IsInfected() and not modDataHandler:getIsIgnoredPartInfected() then
         PlayerHandler.HealZombieInfection(bd, bodyPart, self.limbName, modDataHandler)
     end
 
     -- The last part is to handle the damage that the player will receive after the amputation
     if not damagePlayer then return end
     self:damageAfterAmputation(surgeonFactor)
+
+    -- Trigger this event
+    triggerEvent("OnAmputatedLimb")
 end
 
 ---Deletes the instance

@@ -1,4 +1,5 @@
 local PlayerHandler = require("TOC/Handlers/PlayerHandler")
+local CommonMethods = require("TOC/CommonMethods")
 ------------------
 
 ---@class Main
@@ -44,6 +45,7 @@ end
 
 function Main.Initialize()
 
+    ---Looop until we've successfully initialized the mod
     local function TryToInitialize()
         local pl = getPlayer()
         TOC_DEBUG.print("Current username in TryToInitialize: " .. pl:getUsername())
@@ -55,8 +57,7 @@ function Main.Initialize()
         PlayerHandler.InitializePlayer(pl, false)
         Events.OnTick.Remove(TryToInitialize)
     end
-
-    Events.OnTick.Add(TryToInitialize)
+    CommonMethods.SafeStartEvent("OnTick", TryToInitialize)
 end
 
 

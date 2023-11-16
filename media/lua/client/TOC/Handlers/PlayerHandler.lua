@@ -29,6 +29,11 @@ function PlayerHandler.InitializePlayer(playerObj, isForced)
     CachedDataHandler.CalculateAmputatedLimbs(username)
     CachedDataHandler.CalculateHighestAmputatedLimbs(username)
 
+    -- TODO Check if there are cut limbs and that needs cicatrization. If yes, then enable the loop
+    if ModDataHandler.GetInstance(username):getIsAnyLimbCut() then
+        CommonMethods.SafeStartEvent("EveryHours", PlayerHandler.UpdateCicatrization)
+    end
+
     -- Since isForced is used to reset an existing player data, we're gonna clean their ISHealthPanel table too
     if isForced then
         --ISHealthPanel.highestAmputations = {}
@@ -149,13 +154,49 @@ end
 
 Events.OnPlayerGetDamage.Add(PlayerHandler.CheckDamage)
 
-
----Updates the cicatrization process, run when a limb has been cut
+---Updates the cicatrization process, run when a limb has been cut. Run it every 1 hour
 function PlayerHandler.UpdateCicatrization()
-    if ModDataHandler.GetInstance():getIsAnyLimbCut() == false then return end
+    local modDataHandler = ModDataHandler.GetInstance()
+    if modDataHandler:getIsAnyLimbCut() == false then
+        Events.EveryHours.Remove(PlayerHandler.UpdateCicatrization)
+    end
 
-    -- TODO Update cicatrization
+    local pl = PlayerHandler.playerObj
+    local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(pl:getUsername())
+    local needsUpdate = false
+
+    for i=1, #amputatedLimbs do
+        local limbName = amputatedLimbs[i]
+        local isCicatrized = modDataHandler:getIsCicatrized(limbName)
+        if not isCicatrized then
+            needsUpdate = true
+            local cicTime = modDataHandler:getCicatrizationTime(limbName)
+
+            if cicTime > 0 then
+                cicTime = cicTime - 60      -- 1 per minute, each cicatrizationTime is divisible by 60
+                modDataHandler:setCicatrizationTime(limbName, cicTime)
+                if cicTime < 0 then
+                    modDataHandler:setIsCicatrized(limbName, true)
+                end
+            end
+        end
+    end
+
+    if needsUpdate then
+        modDataHandler:apply()      -- TODO This is gonna be heavy. Not entirely sure
+    else
+        Events.EveryHours.Remove(PlayerHandler.UpdateCicatrization)     -- We can remove it safely, no cicatrization happening here boys
+    end
+    TOC_DEBUG.print("updating cicatrization!")
+
 end
+
+---Starts safely the loop to update cicatrzation
+function PlayerHandler.ToggleCicatrizationUpdate()
+    CommonMethods.SafeStartEvent("EveryHours", PlayerHandler.UpdateCicatrization)
+end
+
+Events.OnAmputatedLimb.Add(PlayerHandler.ToggleCicatrizationUpdate)
 
 
 
@@ -181,13 +222,13 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
         local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(pl:getUsername())
         for i=1, #amputatedLimbs do
             local limbName = amputatedLimbs[i]
-            if modDataHandler:getIsCut(limbName) then
-                local perk = Perks["Side_" .. CommonMethods.GetSide(limbName)]
-                local perkLevel = pl:getPerkLevel(perk)
-                local perkLevelScaled
-                if perkLevel ~= 0 then perkLevelScaled = perkLevel / 10 else perkLevelScaled = 0 end
-                time = time * (StaticData.LIMBS_TIME_MULTIPLIER_IND_NUM[limbName] - perkLevelScaled)
-            end
+            --if modDataHandler:getIsCut(limbName) then
+            local perk = Perks["Side_" .. CommonMethods.GetSide(limbName)]
+            local perkLevel = pl:getPerkLevel(perk)
+            local perkLevelScaled
+            if perkLevel ~= 0 then perkLevelScaled = perkLevel / 10 else perkLevelScaled = 0 end
+            time = time * (StaticData.LIMBS_TIME_MULTIPLIER_IND_NUM[limbName] - perkLevelScaled)
+            --end
         end
     end
     return time

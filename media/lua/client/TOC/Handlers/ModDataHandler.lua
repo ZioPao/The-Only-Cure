@@ -109,6 +109,20 @@ function ModDataHandler:setIsInfected(limbName, isInfected)
     self.tocData.limbs[limbName].isInfected = isInfected
 end
 
+---Set isCicatrized
+---@param limbName string
+---@param isCicatrized boolean
+function ModDataHandler:setIsCicatrized(limbName, isCicatrized)
+    self.tocData.limbs[limbName].isCicatrized = isCicatrized
+end
+
+---Set cicatrizationTime
+---@param limbName string
+---@param cicatrizationTime number
+function ModDataHandler:setCicatrizationTime(limbName, cicatrizationTime)
+    self.tocData.limbs[limbName].cicatrizationTime = cicatrizationTime
+end
+
 ---Set isProstEquipped
 ---@param group string
 ---@param isProstEquipped boolean
@@ -150,6 +164,20 @@ end
 ---@return boolean
 function ModDataHandler:getIsVisible(limbName)
     return self.tocData.limbs[limbName].isVisible
+end
+
+---Get isCicatrized
+---@param limbName string
+---@return boolean
+function ModDataHandler:getIsCicatrized(limbName)
+    return self.tocData.limbs[limbName].isCicatrized
+end
+
+---Get cicatrizationTime
+---@param limbName string
+---@return number
+function ModDataHandler:getCicatrizationTime(limbName)
+    return self.tocData.limbs[limbName].cicatrizationTime
 end
 
 ---Get isProstEquipped
@@ -213,6 +241,13 @@ function ModDataHandler:setLimbParams(limbName, ampStatus, cicatrizationTime)
     if cicatrizationTime ~= nil then limbData.cicatrizationTime = cicatrizationTime end
 end
 
+--* Update statuses of a limb *--
+
+---Decreases the cicatrization time
+---@param limbName string
+function ModDataHandler:decreaseCicatrizationTime(limbName)
+    self.tocData.limbs[limbName].cicatrizationTime = self.tocData.limbs[limbName].cicatrizationTime - 1
+end
 
 --* Global Mod Data Handling *--
 
