@@ -103,8 +103,17 @@ end
 ---@param character IsoPlayer
 ---@param limbName string
 function PlayerHandler.TryRandomBleed(character, limbName)
+    -- Chance should be determined by the cicatrization time
+    local cicTime = ModDataHandler.GetInstance():getCicatrizationTime(limbName)
+    if cicTime == 0 then return end
+    -- TODO Sometimes we get cicTime = 0... Shouldn't really do it
+
+    local normCicTime = CommonMethods.Normalize(cicTime, 0, 100)
+    TOC_DEBUG.print("OG cicTime: " .. tostring(cicTime))
+    TOC_DEBUG.print("Normalized cic time : " .. tostring(normCicTime))
+
     local chance = ZombRand(0,100)
-    if chance > 50 then
+    if chance > normCicTime then
         TOC_DEBUG.print("Triggered bleeding from non cicatrized wound")
         local adjacentBodyPartType = BodyPartType[StaticData.LIMBS_ADJACENT_IND_STR[limbName]]
         character:getBodyDamage():getBodyPart(adjacentBodyPartType):setBleeding(true)
@@ -292,6 +301,7 @@ function ISBaseTimedAction:perform()
             local prostGroup = StaticData.LIMBS_TO_PROST_GROUP_MATCH_IND_STR[limbName]
             if not modDataHandler:getIsCicatrized(limbName) and modDataHandler:getIsProstEquipped(prostGroup) then
                 TOC_DEBUG.print("Trying for bleed, player met the criteria")
+                -- TODO If we have cut a forearm, it will try to check the hand too, with cicatrization time = 0. We should skip this
                 PlayerHandler.TryRandomBleed(self.character, limbName)
             end
         end

@@ -1,5 +1,15 @@
 local CommonMethods = {}
 
+---comment
+---@param val number
+---@param min number
+---@param max number
+function CommonMethods.Normalize(val, min, max)
+    if (max - min) == 0 then return 1 end
+    return (val - min)/(max-min)
+
+end
+
 ---Returns the side for a certain limb or prosthesis
 ---@param name string
 ---@return string "L" or "R"
