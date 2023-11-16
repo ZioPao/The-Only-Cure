@@ -9,8 +9,9 @@ local ProsthesisHandler = {}
 
 local bodyLocArmProst = StaticData.MOD_BODYLOCS_BASE_IND_STR.TOC_ArmProst
 
----comment
+---Check if the following item is a prosthesis or not
 ---@param item InventoryItem
+---@return boolean
 function ProsthesisHandler.CheckIfProst(item)
     -- TODO Won't be correct when prost for legs are gonna be in
     return item:getBodyLocation():contains(bodyLocArmProst)

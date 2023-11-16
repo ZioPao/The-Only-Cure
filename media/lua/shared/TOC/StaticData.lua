@@ -1,7 +1,7 @@
 ---@alias partData { isCut : boolean?, isInfected : boolean?, isOperated : boolean?, isCicatrized : boolean?, isCauterized : boolean?, isVisible : boolean?, cicatrizationTime : number }
 ---@alias limbsTable {Hand_L : partData, ForeArm_L : partData, UpperArm_L : partData, Hand_R : partData, ForeArm_R : partData, UpperArm_R : partData }
 ---@alias prosthesisData {isProstEquipped : boolean, prostFactor : number }
----@alias prosthesesTable {top : prosthesisData, bottom : prosthesisData }
+---@alias prosthesesTable {Top_L : prosthesisData, Top_R : prosthesisData }     -- TODO add Bottom_L and Bottom_R
 ---@alias tocModData { limbs : limbsTable, prostheses : prosthesesTable, isIgnoredPartInfected : boolean, isAnyLimbCut : boolean }
 ---------------------------
 
@@ -56,6 +56,8 @@ StaticData.LIMBS_BASE_DAMAGE_IND_NUM = {}
 StaticData.LIMBS_TIME_MULTIPLIER_IND_NUM = {}
 StaticData.BODYLOCS_IND_BPT = {}
 
+
+-- FIXME You weren't considering surgeonFactor, which decreases that base time. Fuck mod 60
 -- CicatrizationBaseTime should be mod 60 since we're using EveryHours to update the cicatrizationTime
 
 ---@param assembledName string
@@ -127,6 +129,35 @@ for side, _ in pairs(StaticData.SIDES_IND_STR) do
         table.insert(StaticData.PROSTHESES_GROUPS_STR, sidedGroup)
     end
 end
+
+
+-- TODO We can do this in one pass if we do it before
+
+StaticData.PROST_TO_LIMBS_GROUP_MATCH_IND_STR = {}  -- THis is probably unnecessary
+StaticData.LIMBS_TO_PROST_GROUP_MATCH_IND_STR = {}
+
+for side, _ in pairs(StaticData.SIDES_IND_STR) do
+    for part, _ in pairs(StaticData.PARTS_IND_STR) do
+        local limbName = part .. "_" .. side
+        local group
+        if part == StaticData.PARTS_IND_STR.Hand or part == StaticData.PARTS_IND_STR.ForeArm or part == StaticData.PARTS_IND_STR.UpperArm then
+            group = StaticData.PROSTHESES_GROUPS_BASE_IND_STR.Top
+        else
+            group = StaticData.PROSTHESES_GROUPS_BASE_IND_STR.Bottom
+        end
+
+        local sidedGroup = group .. "_" .. side
+        if StaticData.PROST_TO_LIMBS_GROUP_MATCH_IND_STR[sidedGroup] == nil then
+            StaticData.PROST_TO_LIMBS_GROUP_MATCH_IND_STR[sidedGroup] = {}
+        end
+        table.insert(StaticData.PROST_TO_LIMBS_GROUP_MATCH_IND_STR[sidedGroup], limbName)
+
+        StaticData.LIMBS_TO_PROST_GROUP_MATCH_IND_STR[limbName] = sidedGroup
+
+    end
+end
+
+
 
 
 -----------------

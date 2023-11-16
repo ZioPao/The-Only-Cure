@@ -13,6 +13,7 @@ local StaticData = require("TOC/StaticData")
 
 ---@class PlayerHandler
 ---@field playerObj IsoPlayer
+---@field username string
 ---@field hasBeenDamaged boolean
 local PlayerHandler = {}
 
@@ -25,6 +26,7 @@ function PlayerHandler.InitializePlayer(playerObj, isForced)
 
     ModDataHandler:new(username, isForced)
     PlayerHandler.playerObj = playerObj
+    PlayerHandler.username = username
 
     -- Calculate amputated limbs and highest point of amputations at startup
     CachedDataHandler.CalculateAmputatedLimbs(username)
@@ -56,6 +58,8 @@ function PlayerHandler.ManageTraits(playerObj)
         end
     end
 end
+
+--* Health management *--
 
 ---Used to heal an area that has been cut previously. There's an exception for bites, those are managed differently
 ---@param bodyPart BodyPart
@@ -95,6 +99,18 @@ function PlayerHandler.HealZombieInfection(bodyDamage, bodyPart, limbName, modDa
     modDataHandler:apply()
 end
 
+---comment
+---@param character IsoPlayer
+---@param limbName string
+function PlayerHandler.TryRandomBleed(character, limbName)
+    local chance = ZombRand(0,100)
+    if chance > 50 then
+        TOC_DEBUG.print("Triggered bleeding from non cicatrized wound")
+        local adjacentBodyPartType = BodyPartType[StaticData.LIMBS_ADJACENT_IND_STR[limbName]]
+        character:getBodyDamage():getBodyPart(adjacentBodyPartType):setBleeding(true)
+        character:getBodyDamage():getBodyPart(adjacentBodyPartType):setBleedingTime(20)
+    end
+end
 -------------------------
 --* Events *--
 --- Locks OnPlayerGetDamage event, to prevent it from getting spammed constantly
@@ -256,18 +272,26 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
     return time
 end
 
+
+--* Random bleeding during cicatrization + Perks leveling override *--
 local og_ISBaseTimedAction_perform = ISBaseTimedAction.perform
 --- After each action, level up perks
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISBaseTimedAction:perform()
 	og_ISBaseTimedAction_perform(self)
 
+    local modDataHandler = ModDataHandler.GetInstance()
+    if not modDataHandler:getIsAnyLimbCut() then return end
 
-    if ModDataHandler.GetInstance():getIsAnyLimbCut() then
-        for side, _ in pairs(StaticData.SIDES_IND_STR) do
-            local limbName = "Hand_" .. side
-            if ModDataHandler.GetInstance():getIsCut(limbName) then
-                PlayerHandler.playerObj:getXp():AddXP(Perks["Side_" .. side], 2)       -- TODO Make it dynamic
+    local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(PlayerHandler.username)
+    for i=1, #amputatedLimbs do
+        local limbName = amputatedLimbs[i]
+        if modDataHandler:getIsCut(limbName) then
+            local side = CommonMethods.GetSide(limbName)
+            PlayerHandler.playerObj:getXp():AddXP(Perks["Side_" .. side], 1)       -- TODO Make it dynamic
+            local prostGroup = StaticData.LIMBS_TO_PROST_GROUP_MATCH_IND_STR[limbName]
+            if not modDataHandler:getIsCicatrized(limbName) and modDataHandler:getIsProstEquipped(prostGroup) then
+                PlayerHandler.TryRandomBleed(self.character, limbName)
             end
         end
     end
@@ -428,6 +452,7 @@ function ISEquipWeaponAction:perform()
         self:performWithAmputation(modDataHandler)
     end
 end
+
 
 
 return PlayerHandler

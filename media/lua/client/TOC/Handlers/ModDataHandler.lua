@@ -116,6 +116,13 @@ function ModDataHandler:setIsCicatrized(limbName, isCicatrized)
     self.tocData.limbs[limbName].isCicatrized = isCicatrized
 end
 
+---Set isCauterized
+---@param limbName string
+---@param isCauterized boolean
+function ModDataHandler:setIsCauterized(limbName, isCauterized)
+    self.tocData.limbs[limbName].isCauterized = isCauterized
+end
+
 ---Set cicatrizationTime
 ---@param limbName string
 ---@param cicatrizationTime number
@@ -171,6 +178,13 @@ end
 ---@return boolean
 function ModDataHandler:getIsCicatrized(limbName)
     return self.tocData.limbs[limbName].isCicatrized
+end
+
+---Get isCauterized
+---@param limbName string
+---@return boolean
+function ModDataHandler:getIsCauterized(limbName)
+    return self.tocData.limbs[limbName].isCauterized
 end
 
 ---Get cicatrizationTime
