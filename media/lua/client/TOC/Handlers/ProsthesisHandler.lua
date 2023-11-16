@@ -61,6 +61,23 @@ function ProsthesisHandler.CheckIfEquippable(bodyLocation)
     -- No acceptable cut limbs
     return false
 end
+
+
+---Handle equipping or unequipping prosthetics
+---@param item InventoryItem
+---@param isEquipping boolean
+function ProsthesisHandler.SearchAndSetupProsthesis(item, isEquipping)
+    if not ProsthesisHandler.CheckIfProst(item) then return end
+
+    local group = ProsthesisHandler.GetGroup(item)
+    TOC_DEBUG.print("applying prosthesis stuff for " .. group)
+    local modDataHandler = ModDataHandler.GetInstance()
+    modDataHandler:setIsProstEquipped(group, isEquipping)
+    modDataHandler:apply()
+    
+end
+
+
 -------------------------
 --* Events *--
 
@@ -70,29 +87,41 @@ end
 -------------------------
 --* Overrides *--
 
--- ---@diagnostic disable-next-line: duplicate-set-field
--- function ISWearClothing:isValid()
---     TOC_DEBUG.print("ISWearClothing:isValid")
---     local bodyLocation = self.item:getBodyLocation()
---     if not string.contains(bodyLocation, bodyLocArmProst) then
---         return true
---     else
---         return ProsthesisHandler.CheckIfEquippable(bodyLocation)
---     end
--- end
+---@diagnostic disable-next-line: duplicate-set-field
+local og_ISWearClothing_isValid = ISWearClothing.isValid
+function ISWearClothing:isValid()
+    local isEquippable = og_ISWearClothing_isValid(self)
+    local isProst = ProsthesisHandler.CheckIfProst(self.item)
+
+    if not isProst then return isEquippable end
+
+    --the item that we gets is the OG one, so if we're coming from the left one and wanna switch to the right one we're still gonna get the Left bodylocation
+    local bodyLocation = self.item:getBodyLocation()
+    if isEquippable and string.contains(bodyLocation, bodyLocArmProst) then
+        isEquippable = ProsthesisHandler.CheckIfEquippable(bodyLocation)
+    end
+
+    return isEquippable
+end
+
+local og_ISWearClothing_perform = ISWearClothing.perform
+function ISWearClothing:perform()
+    og_ISWearClothing_perform(self)
+    ProsthesisHandler.SearchAndSetupProsthesis(self.item, true)
+end
 
 local og_ISClothingExtraAction_isValid = ISClothingExtraAction.isValid
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISClothingExtraAction:isValid()
+    local isEquippable = og_ISClothingExtraAction_isValid(self)
+    local isProst = ProsthesisHandler.CheckIfProst(self.itemExtra)
+
+    if not isProst then return isEquippable end
 
     --the item that we gets is the OG one, so if we're coming from the left one and wanna switch to the right one we're still gonna get the Left bodylocation
-    -- TODO isValid can be run multiple times, for some reason. 
     local testItem = InventoryItemFactory.CreateItem(self.extra)
     local bodyLocation = testItem:getBodyLocation()
-    local isEquippable = og_ISClothingExtraAction_isValid(self)
-    if isEquippable and not string.contains(bodyLocation, bodyLocArmProst) then
-        isEquippable = true
-    else
+    if isEquippable and string.contains(bodyLocation, bodyLocArmProst) then
         isEquippable = ProsthesisHandler.CheckIfEquippable(bodyLocation)
     end
 
@@ -104,21 +133,19 @@ function ISClothingExtraAction:stop()
     og_ISClothingExtraAction_stop(self)
     if ProsthesisHandler.CheckIfProst(self.item) then
         getPlayer():Say(getText("UI_Say_CantEquip"))
-
     end
 end
 
 local og_ISClothingExtraAction_perform = ISClothingExtraAction.perform
 function ISClothingExtraAction:perform()
-    if ProsthesisHandler.CheckIfProst(self.item) then
-        local group = ProsthesisHandler.GetGroup(self.item)
-        TOC_DEBUG.print("applying prosthesis stuff for " .. group)
-        local modDataHandler = ModDataHandler.GetInstance()
-        modDataHandler:setIsProstEquipped(group, true)
-        modDataHandler:apply()
-    end
-
     og_ISClothingExtraAction_perform(self)
+    ProsthesisHandler.SearchAndSetupProsthesis(self.item, true)
+end
+
+local og_ISUnequipAction_perform = ISUnequipAction.perform
+function ISUnequipAction:perform()
+    og_ISUnequipAction_perform(self)
+    ProsthesisHandler.SearchAndSetupProsthesis(self.item, false)
 end
 
 

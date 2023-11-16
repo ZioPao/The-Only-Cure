@@ -1,5 +1,6 @@
 local PlayerHandler = require("TOC/Handlers/PlayerHandler")
 local CommonMethods = require("TOC/CommonMethods")
+local CommandsData = require("TOC/CommandsData")
 ------------------
 
 
@@ -51,6 +52,9 @@ end
 
 function Main.Initialize()
 
+
+    -- TODO In SP we should clean Global Mod Data when a player dies!
+
     ---Looop until we've successfully initialized the mod
     local function TryToInitialize()
         local pl = getPlayer()
@@ -66,7 +70,18 @@ function Main.Initialize()
     CommonMethods.SafeStartEvent("OnTick", TryToInitialize)
 end
 
+---Clean the TOC table for that SP player, to prevent from clogging it up
+---@param player IsoPlayer
+function Main.WipeSinglePlayerData(player)
+    local key = CommandsData.GetKey(player:getUsername())
+    ModData.remove(key)
+    ModData.transmit(key)
+end
 
 --* Events *--
 
 Events.OnGameBoot.Add(Main.Start)
+
+if not isClient() and not isServer() then
+    Events.OnPlayerDeath.Add(Main.WipeSinglePlayerData)
+end

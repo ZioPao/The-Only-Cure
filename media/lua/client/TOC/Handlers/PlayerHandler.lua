@@ -291,6 +291,7 @@ function ISBaseTimedAction:perform()
             PlayerHandler.playerObj:getXp():AddXP(Perks["Side_" .. side], 1)       -- TODO Make it dynamic
             local prostGroup = StaticData.LIMBS_TO_PROST_GROUP_MATCH_IND_STR[limbName]
             if not modDataHandler:getIsCicatrized(limbName) and modDataHandler:getIsProstEquipped(prostGroup) then
+                TOC_DEBUG.print("Trying for bleed, player met the criteria")
                 PlayerHandler.TryRandomBleed(self.character, limbName)
             end
         end
