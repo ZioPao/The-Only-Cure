@@ -165,6 +165,7 @@ function CutLimbHandler:checkItem(item)
     TOC_DEBUG.print("checkItem: " .. tostring(itemType))
 
     if CheckIfSaw(itemType) then
+        TOC_DEBUG.print("added to list -> " .. itemType)
         self:addItem(self.items.ITEMS, item)
     end
 end

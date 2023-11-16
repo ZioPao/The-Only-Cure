@@ -7,6 +7,4 @@ function CommonMethods.GetSide(name)
     if string.find(name, "_L") then return "L" else return "R" end
 end
 
-
-
 return CommonMethods

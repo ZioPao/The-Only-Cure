@@ -1,6 +1,7 @@
 local ModDataHandler = require("TOC/Handlers/ModDataHandler")
 local ItemsHandler = require("TOC/Handlers/ItemsHandler")
 local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
+local PlayerHandler = require("TOC/Handlers/PlayerHandler")
 local StaticData = require("TOC/StaticData")
 ---------------------------
 
@@ -135,6 +136,11 @@ function AmputationHandler:execute(damagePlayer)
     modDataHandler:setCutLimb(self.limbName, false, false, false, surgeonFactor)
     modDataHandler:apply()      -- This will force rechecking the cached amputated limbs on the other client
 
+    -- Heal the area, we're gonna re-set the damage after (if it's enabled)
+    local bd = self.patientPl:getBodyDamage()
+    local bodyPart = bd:getBodyPart(self.bodyPartType)
+    PlayerHandler.HealArea(bodyPart)
+
     -- Give the player the correct amputation item
     ItemsHandler.Player.DeleteOldAmputationItem(self.patientPl, self.limbName)
     ItemsHandler.Player.SpawnAmputationItem(self.patientPl, self.limbName)
@@ -144,9 +150,13 @@ function AmputationHandler:execute(damagePlayer)
     CachedDataHandler.AddAmputatedLimb(username, self.limbName)
     CachedDataHandler.CalculateHighestAmputatedLimbs(username)
 
+    -- If the part was actually infected, heal the player
+    if bodyPart:IsInfected() and not modDataHandler:getIsIgnoredPartInfected() then
+        PlayerHandler.HealZombieInfection(bd, bodyPart, self.limbName, modDataHandler)
+    end
+
     -- The last part is to handle the damage that the player will receive after the amputation
     if not damagePlayer then return end
-
     self:damageAfterAmputation(surgeonFactor)
 end
 

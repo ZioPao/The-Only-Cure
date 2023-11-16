@@ -53,14 +53,52 @@ function PlayerHandler.ManageTraits(playerObj)
     end
 end
 
+---Used to heal an area that has been cut previously. There's an exception for bites, those are managed differently
+---@param bodyPart BodyPart
+function PlayerHandler.HealArea(bodyPart)
+    bodyPart:setBleeding(false)
+    bodyPart:setBleedingTime(0)
+
+    bodyPart:SetBitten(false)
+    bodyPart:setBiteTime(0)
+
+    bodyPart:setCut(false)
+    bodyPart:setCutTime(0)
+
+    bodyPart:setDeepWounded(false)
+    bodyPart:setDeepWoundTime(0)
+
+    bodyPart:setHaveBullet(false, 0)
+    bodyPart:setHaveGlass(false)
+    bodyPart:setSplint(false, 0)
+end
+
+---comment
+---@param bodyDamage BodyDamage
+---@param bodyPart BodyPart
+---@param limbName string
+---@param modDataHandler ModDataHandler
+function PlayerHandler.HealZombieInfection(bodyDamage, bodyPart, limbName, modDataHandler)
+    if bodyDamage:isInfected() == false then return end
+    
+    bodyDamage:setInfected(false)
+    bodyDamage:setInfectionMortalityDuration(0)
+    bodyDamage:setInfectionTime(0)
+    bodyDamage:setInfectionLevel(0)
+    bodyPart:SetInfected(false)
+
+    modDataHandler:setIsInfected(limbName, false)
+    modDataHandler:apply()
+end
+
 -------------------------
 --* Events *--
 
----Check if the player has an infected (as in, zombie infection) body part
+---Check if the player has in infected body part or if they have been hit in a cut area
 ---@param character IsoGameCharacter
 ---@param damageType string
 ---@param damageAmount number
-function PlayerHandler.CheckInfection(character, damageType, damageAmount)
+function PlayerHandler.CheckDamage(character, damageType, damageAmount)
 
     -- TODO  This fucking event barely works. Bleeding seems to be the only thing that triggers it. use this to trigger something else and then do not let it keep going
 
@@ -69,17 +107,27 @@ function PlayerHandler.CheckInfection(character, damageType, damageAmount)
     if character ~= getPlayer() then return end
     local bd = character:getBodyDamage()
     local modDataHandler = ModDataHandler.GetInstance()
-
     for i=1, #StaticData.LIMBS_STR do
         local limbName = StaticData.LIMBS_STR[i]
         local bptEnum = StaticData.BODYLOCS_IND_BPT[limbName]
         local bodyPart = bd:getBodyPart(bptEnum)
 
-        if bodyPart:bitten() or bodyPart:IsInfected() then
-            if modDataHandler:getIsCut(limbName) then
-                bodyPart:SetBitten(false)
-            else
+        if modDataHandler:getIsCut(limbName) then
+
+            -- Generic injury, let's heal it since they already cut the limb off
+            if bodyPart:HasInjury() then
+                PlayerHandler.HealArea(bodyPart)
+            end
+
+            -- Special case for bites\zombie infections
+            if bodyPart:IsInfected() then
+                TOC_DEBUG.print("Healed from zombie infection " .. tostring(bodyPart))
+                PlayerHandler.HealZombieInfection(bd, bodyPart, limbName, modDataHandler)
+            end
+        else
+            if bodyPart:bitten() or bodyPart:IsInfected() then
                 modDataHandler:setIsInfected(limbName, true)
+                modDataHandler:apply()
             end
         end
     end
@@ -95,9 +143,11 @@ function PlayerHandler.CheckInfection(character, damageType, damageAmount)
             ModDataHandler.GetInstance():setIsIgnoredPartInfected(true)
         end
     end
+
+    -- TODO in theory we should sync modData, but it's gonna be expensive as fuck. Figure it out
 end
 
-Events.OnPlayerGetDamage.Add(PlayerHandler.CheckInfection)
+Events.OnPlayerGetDamage.Add(PlayerHandler.CheckDamage)
 
 
 ---Updates the cicatrization process, run when a limb has been cut
