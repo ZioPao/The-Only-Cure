@@ -2,6 +2,7 @@ local PlayerHandler = require("TOC/Handlers/PlayerHandler")
 local CommonMethods = require("TOC/CommonMethods")
 ------------------
 
+
 ---@class Main
 local Main = {}
 
@@ -37,10 +38,15 @@ end
 function Main.Start()
     TOC_DEBUG.print("running Start method")
     Main.SetupTraits()
-
+    Main.SetupEvents()
     -- Starts initialization for local client
     Events.OnGameStart.Add(Main.Initialize)
 
+end
+
+function Main.SetupEvents()
+    --Triggered when a limb has been amputated
+    LuaEventManager.AddEvent("OnAmputatedLimb")
 end
 
 function Main.Initialize()

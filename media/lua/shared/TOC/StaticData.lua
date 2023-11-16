@@ -50,6 +50,7 @@ StaticData.IGNORED_BODYLOCS_BPT = {
 StaticData.LIMBS_STR = {}
 StaticData.LIMBS_IND_STR = {}
 StaticData.LIMBS_DEPENDENCIES_IND_STR = {}
+StaticData.LIMBS_ADJACENT_IND_STR = {}
 StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM = {}
 StaticData.LIMBS_BASE_DAMAGE_IND_NUM = {}
 StaticData.LIMBS_TIME_MULTIPLIER_IND_NUM = {}
@@ -57,26 +58,35 @@ StaticData.BODYLOCS_IND_BPT = {}
 
 -- CicatrizationBaseTime should be mod 60 since we're using EveryHours to update the cicatrizationTime
 
-local function AssembleHandData(assembledName)
+---@param assembledName string
+---@param side string
+local function AssembleHandData(assembledName, side)
     StaticData.LIMBS_BASE_DAMAGE_IND_NUM[assembledName] = 60
     StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM[assembledName] = 1200
     StaticData.LIMBS_TIME_MULTIPLIER_IND_NUM[assembledName] = 2
     StaticData.LIMBS_DEPENDENCIES_IND_STR[assembledName] = {}
+    StaticData.LIMBS_ADJACENT_IND_STR[assembledName] = StaticData.PARTS_IND_STR.ForeArm .. "_" .. side
 end
 
+---@param assembledName string
+---@param side string
 local function AssembleForearmData(assembledName, side)
     StaticData.LIMBS_BASE_DAMAGE_IND_NUM[assembledName] = 80
     StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM[assembledName] = 1800
     StaticData.LIMBS_TIME_MULTIPLIER_IND_NUM[assembledName] = 3
     StaticData.LIMBS_DEPENDENCIES_IND_STR[assembledName] = { StaticData.PARTS_IND_STR.Hand .. "_" .. side }
+    StaticData.LIMBS_ADJACENT_IND_STR[assembledName] = StaticData.PARTS_IND_STR.UpperArm .. "_" .. side
 end
 
+---@param assembledName string
+---@param side string
 local function AssembleUpperarmData(assembledName, side)
     StaticData.LIMBS_BASE_DAMAGE_IND_NUM[assembledName] = 100
     StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM[assembledName] = 1800
     StaticData.LIMBS_TIME_MULTIPLIER_IND_NUM[assembledName] = 4
     StaticData.LIMBS_DEPENDENCIES_IND_STR[assembledName] = { StaticData.PARTS_IND_STR.Hand .. "_" .. side,
         StaticData.PARTS_IND_STR.ForeArm .. "_" .. side }
+    StaticData.LIMBS_ADJACENT_IND_STR[assembledName] = "Torso_Upper"
 end
 
 for side, _ in pairs(StaticData.SIDES_IND_STR) do
@@ -90,7 +100,7 @@ for side, _ in pairs(StaticData.SIDES_IND_STR) do
 
         -- Dependencies and cicatrization time
         if part == StaticData.PARTS_IND_STR.Hand then
-            AssembleHandData(assembledName)
+            AssembleHandData(assembledName, side)
         elseif part == StaticData.PARTS_IND_STR.ForeArm then
             AssembleForearmData(assembledName, side)
         elseif part == StaticData.PARTS_IND_STR.UpperArm then

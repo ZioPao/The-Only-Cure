@@ -5,13 +5,6 @@ local PlayerHandler = require("TOC/Handlers/PlayerHandler")
 local StaticData = require("TOC/StaticData")
 ---------------------------
 
---Triggered when a limb has been amputated
----@class Events
----@field OnAmputatedLimb any
-LuaEventManager.AddEvent("OnAmputatedLimb")
-
---------------
-
 -- TODO Add Bandages, Torniquet, etc.
 --- Manages an amputation. Will be run on the patient client
 ---@class AmputationHandler
@@ -111,13 +104,17 @@ function AmputationHandler:damageDuringAmputation()
     bodyDamagePart:setBleedingTime(ZombRand(10, 20))
 end
 
----Set the damage to the amputated area
+---Set the damage to the adjacent part of the cut area
 ---@param surgeonFactor number
 function AmputationHandler:damageAfterAmputation(surgeonFactor)
     -- TODO Torniquet should reduce the damage in total, less blood loss
+
+    TOC_DEBUG.print("Applying damage after amputation")
     local patientStats = self.patientPl:getStats()
     local bd = self.patientPl:getBodyDamage()
-    local bodyPart = bd:getBodyPart(self.bodyPartType)
+
+    local adjacentLimb = StaticData.LIMBS_ADJACENT_IND_STR[self.limbName]
+    local bodyPart = bd:getBodyPart(BodyPartType[adjacentLimb])
     local baseDamage = StaticData.LIMBS_BASE_DAMAGE_IND_NUM[self.limbName]
 
     bodyPart:AddDamage(baseDamage - surgeonFactor)

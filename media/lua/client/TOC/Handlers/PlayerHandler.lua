@@ -29,10 +29,8 @@ function PlayerHandler.InitializePlayer(playerObj, isForced)
     CachedDataHandler.CalculateAmputatedLimbs(username)
     CachedDataHandler.CalculateHighestAmputatedLimbs(username)
 
-    -- TODO Check if there are cut limbs and that needs cicatrization. If yes, then enable the loop
-    if ModDataHandler.GetInstance(username):getIsAnyLimbCut() then
-        CommonMethods.SafeStartEvent("EveryHours", PlayerHandler.UpdateCicatrization)
-    end
+    --Setup the CicatrizationUpdate event
+    Events.OnAmputatedLimb.Add(PlayerHandler.ToggleCicatrizationUpdate)
 
     -- Since isForced is used to reset an existing player data, we're gonna clean their ISHealthPanel table too
     if isForced then
@@ -120,6 +118,7 @@ function PlayerHandler.CheckDamage(character, damageType, damageAmount)
         if modDataHandler:getIsCut(limbName) then
 
             -- Generic injury, let's heal it since they already cut the limb off
+            --FIXME conflicts with the other thing... Ah fuck wait I'm retarded
             if bodyPart:HasInjury() then
                 PlayerHandler.HealArea(bodyPart)
             end
@@ -171,10 +170,12 @@ function PlayerHandler.UpdateCicatrization()
         if not isCicatrized then
             needsUpdate = true
             local cicTime = modDataHandler:getCicatrizationTime(limbName)
+            TOC_DEBUG.print("updating cicatrization for " .. tostring(limbName))
 
             if cicTime > 0 then
                 cicTime = cicTime - 60      -- 1 per minute, each cicatrizationTime is divisible by 60
                 modDataHandler:setCicatrizationTime(limbName, cicTime)
+                TOC_DEBUG.print("new cicatrization time: " .. tostring(cicTime))
                 if cicTime < 0 then
                     modDataHandler:setIsCicatrized(limbName, true)
                 end
@@ -193,11 +194,9 @@ end
 
 ---Starts safely the loop to update cicatrzation
 function PlayerHandler.ToggleCicatrizationUpdate()
+    TOC_DEBUG.print("activating cicatrization loop (if it wasn't active before)")
     CommonMethods.SafeStartEvent("EveryHours", PlayerHandler.UpdateCicatrization)
 end
-
-Events.OnAmputatedLimb.Add(PlayerHandler.ToggleCicatrizationUpdate)
-
 
 
 ------------------------------------------
