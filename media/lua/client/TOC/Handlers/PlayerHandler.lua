@@ -172,8 +172,9 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
 
     -- Exceptions handling, if we find that parameter then we just use the original time
     local queue = ISTimedActionQueue.getTimedActionQueue(getPlayer())
-    if queue.current.skipTOC then return time end
+    if queue and queue.current and queue.current.skipTOC then return time end
 
+    -- Action is valid, check if we have any cut limb and then modify maxTime
     local modDataHandler = ModDataHandler.GetInstance()
     if time ~= -1 and modDataHandler and modDataHandler:getIsAnyLimbCut() then
         local pl = getPlayer()
