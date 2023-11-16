@@ -10,7 +10,7 @@ end
 ---@param string string
 function TOC_DEBUG.print(string)
     if isDebugEnabled() then
-        print("TOC: " .. string)
+        print("TOC: " .. tostring(string))
     end
 end
 

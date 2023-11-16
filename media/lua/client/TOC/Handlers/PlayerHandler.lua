@@ -169,6 +169,11 @@ local og_ISBaseTimedAction_adjustMaxTime = ISBaseTimedAction.adjustMaxTime
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISBaseTimedAction:adjustMaxTime(maxTime)
     local time = og_ISBaseTimedAction_adjustMaxTime(self, maxTime)
+
+    -- Exceptions handling, if we find that parameter then we just use the original time
+    local queue = ISTimedActionQueue.getTimedActionQueue(getPlayer())
+    if queue.current.skipTOC then return time end
+
     local modDataHandler = ModDataHandler.GetInstance()
     if time ~= -1 and modDataHandler and modDataHandler:getIsAnyLimbCut() then
         local pl = getPlayer()
@@ -192,6 +197,7 @@ local og_ISBaseTimedAction_perform = ISBaseTimedAction.perform
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISBaseTimedAction:perform()
 	og_ISBaseTimedAction_perform(self)
+
 
     if ModDataHandler.GetInstance():getIsAnyLimbCut() then
         for side, _ in pairs(StaticData.SIDES_IND_STR) do
