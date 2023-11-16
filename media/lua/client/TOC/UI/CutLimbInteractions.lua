@@ -144,6 +144,7 @@ Events.OnFillInventoryObjectContextMenu.Add(AddInventoryAmputationMenu)
 ---@class CutLimbHandler : BaseHandler
 ---@field items table
 ---@field limbName string
+---@field itemType string temporary
 local CutLimbHandler = BaseHandler:derive("CutLimbHandler")
 
 
@@ -155,14 +156,16 @@ function CutLimbHandler:new(panel, bodyPart)
     local o = BaseHandler.new(self, panel, bodyPart)
     o.items.ITEMS = {}
     o.limbName = BodyPartType.ToString(bodyPart:getType())
+    o.itemType = "Saw"
     TOC_DEBUG.print("init CutLimbHandler")
     return o
 end
 
 ---@param item InventoryItem
 function CutLimbHandler:checkItem(item)
+    TOC_DEBUG.print("CutLimbHandler checkItem")
     local itemType = item:getType()
-    TOC_DEBUG.print("checkItem: " .. tostring(itemType))
+    --TOC_DEBUG.print("checkItem: " .. tostring(itemType))
 
     if CheckIfSaw(itemType) then
         TOC_DEBUG.print("added to list -> " .. itemType)
@@ -172,11 +175,12 @@ end
 
 ---@param context ISContextMenu
 function CutLimbHandler:addToMenu(context)
+    TOC_DEBUG.print("CutLimbHandler addToMenu")
     local types = self:getAllItemTypes(self.items.ITEMS)
-    if #types > 0 and StaticData.BODYLOCS_IND_BPT[self.limbName] then
+    if #types > 0 and StaticData.BODYLOCS_IND_BPT[self.limbName] and not ModDataHandler.GetInstance():getIsCut(self.limbName) then
         TOC_DEBUG.print("addToMenu, types > 0")
-        if not ModDataHandler.GetInstance():getIsCut(self.limbName) then
-            context:addOption(getText("ContextMenu_Amputate"), self, self.onMenuOptionSelected)
+        for i=1, #types do
+            context:addOption(getText("ContextMenu_Amputate"), self, self.onMenuOptionSelected, types[i])
         end
     end
 end
@@ -190,8 +194,12 @@ function CutLimbHandler:dropItems(items)
     return false
 end
 
-function CutLimbHandler:isValid(itemType)
-    return (not ModDataHandler.GetInstance():getIsCut(self.limbName)) and self:getItemOfType(self.items.ITEMS, itemType)
+---Check if CutLimbHandler is valid, the limb must not be cut to be valid
+---@return boolean
+function CutLimbHandler:isValid()
+    TOC_DEBUG.print("CutLimbHandler isValid")
+    self:checkItems()
+    return not ModDataHandler.GetInstance():getIsCut(self.limbName)
 end
 
 function CutLimbHandler:perform(previousAction, itemType)

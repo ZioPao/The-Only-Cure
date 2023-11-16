@@ -13,6 +13,7 @@ local StaticData = require("TOC/StaticData")
 
 ---@class PlayerHandler
 ---@field playerObj IsoPlayer
+---@field hasBeenDamaged boolean
 local PlayerHandler = {}
 
 ---Setup the Player Handler and modData, only for local client
@@ -96,29 +97,26 @@ end
 
 -------------------------
 --* Events *--
+--- Locks OnPlayerGetDamage event, to prevent it from getting spammed constantly
+PlayerHandler.hasBeenDamaged = false
+
 
 ---Check if the player has in infected body part or if they have been hit in a cut area
----@param character IsoGameCharacter
----@param damageType string
----@param damageAmount number
-function PlayerHandler.CheckDamage(character, damageType, damageAmount)
-
-    -- TODO  This fucking event barely works. Bleeding seems to be the only thing that triggers it. use this to trigger something else and then do not let it keep going
-
+---@param character IsoPlayer
+function PlayerHandler.HandleDamage(character)
     -- TOC_DEBUG.print("Player got hit!")
     -- TOC_DEBUG.print(damageType)
     if character ~= getPlayer() then return end
     local bd = character:getBodyDamage()
     local modDataHandler = ModDataHandler.GetInstance()
+    local modDataNeedsUpdate = false
     for i=1, #StaticData.LIMBS_STR do
         local limbName = StaticData.LIMBS_STR[i]
         local bptEnum = StaticData.BODYLOCS_IND_BPT[limbName]
         local bodyPart = bd:getBodyPart(bptEnum)
-
         if modDataHandler:getIsCut(limbName) then
 
             -- Generic injury, let's heal it since they already cut the limb off
-            --FIXME conflicts with the other thing... Ah fuck wait I'm retarded
             if bodyPart:HasInjury() then
                 PlayerHandler.HealArea(bodyPart)
             end
@@ -131,27 +129,52 @@ function PlayerHandler.CheckDamage(character, damageType, damageAmount)
         else
             if bodyPart:bitten() or bodyPart:IsInfected() then
                 modDataHandler:setIsInfected(limbName, true)
-                modDataHandler:apply()
+                modDataNeedsUpdate = true
             end
         end
     end
 
     -- Check other body parts that are not included in the mod, if there's a bite there then the player is fucked
     -- We can skip this loop if the player has been infected. The one before we kinda need it to handle correctly the bites in case the player wanna cut stuff off anyway
-    if ModDataHandler.GetInstance():getIsIgnoredPartInfected() then return end
+    if modDataHandler:getIsIgnoredPartInfected() then return end
 
     for i=1, #StaticData.IGNORED_BODYLOCS_BPT do
         local bodyPartType = StaticData.IGNORED_BODYLOCS_BPT[i]
         local bodyPart = bd:getBodyPart(bodyPartType)
         if bodyPart and (bodyPart:bitten() or bodyPart:IsInfected()) then
-            ModDataHandler.GetInstance():setIsIgnoredPartInfected(true)
+            modDataHandler:setIsIgnoredPartInfected(true)
+            modDataNeedsUpdate = true
         end
     end
 
-    -- TODO in theory we should sync modData, but it's gonna be expensive as fuck. Figure it out
+    -- TODO in theory  should sync modData, but it's gonna be expensive as fuck. Figure it out
+    if modDataNeedsUpdate then
+        modDataHandler:apply()
+    end
+
+    -- Disable the lock
+    PlayerHandler.hasBeenDamaged = false
+
 end
 
-Events.OnPlayerGetDamage.Add(PlayerHandler.CheckDamage)
+---Setup HandleDamage, triggered by OnPlayerGetDamage
+---@param character IsoGameCharacter
+---@param damageType string
+---@param damageAmount number
+function PlayerHandler.OnGetDamage(character, damageType, damageAmount)
+
+    -- TODO Check if other players in the online triggers this
+
+    if PlayerHandler.hasBeenDamaged == false then
+        -- Start checks
+
+        -- TODO Add a timer before we can re-enable this bool?
+        PlayerHandler.hasBeenDamaged = true
+        PlayerHandler.HandleDamage(character)
+    end
+end
+
+Events.OnPlayerGetDamage.Add(PlayerHandler.OnGetDamage)
 
 ---Updates the cicatrization process, run when a limb has been cut. Run it every 1 hour
 function PlayerHandler.UpdateCicatrization()
