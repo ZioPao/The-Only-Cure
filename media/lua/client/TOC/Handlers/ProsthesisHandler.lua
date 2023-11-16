@@ -10,10 +10,11 @@ local ProsthesisHandler = {}
 local bodyLocArmProst = StaticData.MOD_BODYLOCS_BASE_IND_STR.TOC_ArmProst
 
 ---Check if the following item is a prosthesis or not
----@param item InventoryItem
+---@param item InventoryItem?
 ---@return boolean
 function ProsthesisHandler.CheckIfProst(item)
     -- TODO Won't be correct when prost for legs are gonna be in
+    if item == nil then return false end
     return item:getBodyLocation():contains(bodyLocArmProst)
 end
 
@@ -87,6 +88,7 @@ end
 -------------------------
 --* Overrides *--
 
+
 ---@diagnostic disable-next-line: duplicate-set-field
 local og_ISWearClothing_isValid = ISWearClothing.isValid
 function ISWearClothing:isValid()
@@ -106,8 +108,8 @@ end
 
 local og_ISWearClothing_perform = ISWearClothing.perform
 function ISWearClothing:perform()
-    og_ISWearClothing_perform(self)
     ProsthesisHandler.SearchAndSetupProsthesis(self.item, true)
+    og_ISWearClothing_perform(self)
 end
 
 local og_ISClothingExtraAction_isValid = ISClothingExtraAction.isValid
