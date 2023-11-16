@@ -150,7 +150,8 @@ function AmputationHandler:execute(damagePlayer)
     CachedDataHandler.AddAmputatedLimb(username, self.limbName)
     CachedDataHandler.CalculateHighestAmputatedLimbs(username)
 
-    -- If the part was actually infected, heal the player
+    -- TODO Check infection level!
+    -- If the part was actually infected, heal the player, if they were in time
     if bodyPart:IsInfected() and not modDataHandler:getIsIgnoredPartInfected() then
         PlayerHandler.HealZombieInfection(bd, bodyPart, self.limbName, modDataHandler)
     end

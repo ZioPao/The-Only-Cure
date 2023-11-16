@@ -80,11 +80,11 @@ end
 ---@param modDataHandler ModDataHandler
 function PlayerHandler.HealZombieInfection(bodyDamage, bodyPart, limbName, modDataHandler)
     if bodyDamage:isInfected() == false then return end
-    
+
     bodyDamage:setInfected(false)
-    bodyDamage:setInfectionMortalityDuration(0)
-    bodyDamage:setInfectionTime(0)
-    bodyDamage:setInfectionLevel(0)
+    bodyDamage:setInfectionMortalityDuration(-1)
+    bodyDamage:setInfectionTime(-1)
+    bodyDamage:setInfectionLevel(-1)
     bodyPart:SetInfected(false)
 
     modDataHandler:setIsInfected(limbName, false)
