@@ -110,3 +110,15 @@ TestFramework.registerTestModule("AmputationHandler", "Top Right", function()
 
     return Tests
 end)
+
+
+--------------------------------------------------------------------------------------
+
+if not getActivatedMods():contains("PerfTestFramework") or not isDebugEnabled() then return end
+local PerfTest = require("PerfTest/main")
+local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
+
+PerfTest.Init()
+PerfTest.RegisterMethod("PlayerHandler", PlayerHandler, "UpdateCicatrization")
+PerfTest.RegisterMethod("CachedDataHandler", CachedDataHandler, "CalculateHighestAmputatedLimbs")
+PerfTest.RegisterMethod("ISHealthPanel", ISHealthPanel, "render")
