@@ -44,7 +44,7 @@ function ISHealthPanel:doBodyPartContextMenu(bodyPart, x, y)
 end
 
 
---* Modifications to handle visible amputation on the health menu *--
+--* Modifications and additional methods to handle visible amputation on the health menu *--
 
 local og_ISHealthPanel_initialise = ISHealthPanel.initialise
 function ISHealthPanel:initialise()
@@ -70,27 +70,37 @@ function ISHealthPanel:setOtherPlayer(playerObj)
     --CachedDataHandler.CalculateAmputatedLimbs(self.character:getUsername())
 end
 
+---Get a value between 1 and 0.1 for the cicatrization time
+---@param cicTime integer
+---@return integer
+local function GetScaledCicatrizationTime(cicTime)
+    return math.max(math.min(cicTime/100, 1), 0.1)
+end
+
+---Try to draw the highest amputation in the health panel, based on the cicatrization time
+---@param side string L or R
+---@param username string
+function ISHealthPanel:tryDrawHighestAmputation(side, username)
+    if self.highestAmputations[side] == nil then return end
+
+    local cicTime = ModDataHandler.GetInstance(username):getCicatrizationTime(self.highestAmputations[side])
+    local scaledCicTIme = GetScaledCicatrizationTime(cicTime)
+    local texture = StaticData.HEALTH_PANEL_TEXTURES[self.sexPl][self.highestAmputations[side]]
+    self:drawTexture(texture, self.healthPanel.x/2 - 2, self.healthPanel.y/2, 1, scaledCicTIme, 1, 1)
+end
 
 local og_ISHealthPanel_render = ISHealthPanel.render
 function ISHealthPanel:render()
     og_ISHealthPanel_render(self)
     local username = self.character:getUsername()
-
-    --CachedDataHandler.CalculateHighestAmputatedLimbs(username)
     self.highestAmputations = CachedDataHandler.GetHighestAmputatedLimbs(username)
 
     if self.highestAmputations ~= nil then
         -- Left Texture
-        if self.highestAmputations["L"] then
-            local textureL = StaticData.HEALTH_PANEL_TEXTURES[self.sexPl][self.highestAmputations["L"]]
-            self:drawTexture(textureL, self.healthPanel.x/2 - 2, self.healthPanel.y/2, 1, 1, 0, 0)
-        end
+        self:tryDrawHighestAmputation("L", username)
 
         -- Right Texture
-        if self.highestAmputations["R"] then
-            local textureR = StaticData.HEALTH_PANEL_TEXTURES[self.sexPl][self.highestAmputations["R"]]
-            self:drawTexture(textureR, self.healthPanel.x/2 + 2, self.healthPanel.y/2, 1, 1, 0, 0)
-        end
+        self:tryDrawHighestAmputation("R", username)
     else
         -- Request caching data
         TOC_DEBUG.print("highest amputated limbs was nil, calculating and getting it now for" .. username)

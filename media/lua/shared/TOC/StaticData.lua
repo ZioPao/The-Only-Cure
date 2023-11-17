@@ -64,7 +64,7 @@ StaticData.BODYLOCS_IND_BPT = {}
 ---@param side string
 local function AssembleHandData(assembledName, side)
     StaticData.LIMBS_BASE_DAMAGE_IND_NUM[assembledName] = 60
-    StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM[assembledName] = 1200
+    StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM[assembledName] = 120
     StaticData.LIMBS_TIME_MULTIPLIER_IND_NUM[assembledName] = 2
     StaticData.LIMBS_DEPENDENCIES_IND_STR[assembledName] = {}
     StaticData.LIMBS_ADJACENT_IND_STR[assembledName] = StaticData.PARTS_IND_STR.ForeArm .. "_" .. side
@@ -74,7 +74,7 @@ end
 ---@param side string
 local function AssembleForearmData(assembledName, side)
     StaticData.LIMBS_BASE_DAMAGE_IND_NUM[assembledName] = 80
-    StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM[assembledName] = 1800
+    StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM[assembledName] = 144
     StaticData.LIMBS_TIME_MULTIPLIER_IND_NUM[assembledName] = 3
     StaticData.LIMBS_DEPENDENCIES_IND_STR[assembledName] = { StaticData.PARTS_IND_STR.Hand .. "_" .. side }
     StaticData.LIMBS_ADJACENT_IND_STR[assembledName] = StaticData.PARTS_IND_STR.UpperArm .. "_" .. side
@@ -84,7 +84,7 @@ end
 ---@param side string
 local function AssembleUpperarmData(assembledName, side)
     StaticData.LIMBS_BASE_DAMAGE_IND_NUM[assembledName] = 100
-    StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM[assembledName] = 1800
+    StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM[assembledName] = 192
     StaticData.LIMBS_TIME_MULTIPLIER_IND_NUM[assembledName] = 4
     StaticData.LIMBS_DEPENDENCIES_IND_STR[assembledName] = { StaticData.PARTS_IND_STR.Hand .. "_" .. side,
         StaticData.PARTS_IND_STR.ForeArm .. "_" .. side }
@@ -178,23 +178,23 @@ StaticData.TRAITS_BP = {
 StaticData.HEALTH_PANEL_TEXTURES = {
 
     Female = {
-        Hand_L = getTexture("media/ui/Hand_L.png"),
-        ForeArm_L = getTexture("media/ui/ForeArm_L.png"),
-        UpperArm_L = getTexture("media/ui/UpperArm_L.png"),
+        Hand_L = getTexture("media/ui/Female/Hand_L.png"),
+        ForeArm_L = getTexture("media/ui/Female/ForeArm_L.png"),
+        UpperArm_L = getTexture("media/ui/Female/UpperArm_L.png"),
 
-        Hand_R = getTexture("media/ui/Hand_R.png"),
-        ForeArm_R = getTexture("media/ui/ForeArm_R.png"),
-        UpperArm_R = getTexture("media/ui/UpperArm_R.png")
+        Hand_R = getTexture("media/ui/Female/Hand_R.png"),
+        ForeArm_R = getTexture("media/ui/Female/ForeArm_R.png"),
+        UpperArm_R = getTexture("media/ui/Female/UpperArm_R.png")
     },
 
     Male = {
-        Hand_L = getTexture("media/ui/Hand_L.png"),
-        ForeArm_L = getTexture("media/ui/ForeArm_L.png"),
-        UpperArm_L = getTexture("media/ui/UpperArm_L.png"),
+        Hand_L = getTexture("media/ui/Male/Hand_L.png"),
+        ForeArm_L = getTexture("media/ui/Male/ForeArm_L.png"),
+        UpperArm_L = getTexture("media/ui/Male/UpperArm_L.png"),
 
-        Hand_R = getTexture("media/ui/Hand_R.png"),
-        ForeArm_R = getTexture("media/ui/ForeArm_R.png"),
-        UpperArm_R = getTexture("media/ui/UpperArm_R.png")
+        Hand_R = getTexture("media/ui/Male/Hand_R.png"),
+        ForeArm_R = getTexture("media/ui/Male/ForeArm_R.png"),
+        UpperArm_R = getTexture("media/ui/Male/UpperArm_R.png")
     }
 
 }

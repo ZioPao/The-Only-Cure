@@ -221,7 +221,7 @@ function PlayerHandler.UpdateCicatrization()
             TOC_DEBUG.print("updating cicatrization for " .. tostring(limbName))
 
             if cicTime > 0 then
-                cicTime = cicTime - 60      -- 1 per minute, each cicatrizationTime is divisible by 60
+                cicTime = cicTime - 1
                 modDataHandler:setCicatrizationTime(limbName, cicTime)
                 TOC_DEBUG.print("new cicatrization time: " .. tostring(cicTime))
                 if cicTime < 0 then
