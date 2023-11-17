@@ -32,12 +32,12 @@ function PlayerHandler.InitializePlayer(playerObj, isForced)
     CachedDataHandler.CalculateAmputatedLimbs(username)
     CachedDataHandler.CalculateHighestAmputatedLimbs(username)
 
-    --Setup the CicatrizationUpdate event
+    --Setup the CicatrizationUpdate event and triggers it once
     Events.OnAmputatedLimb.Add(PlayerHandler.ToggleCicatrizationUpdate)
+    PlayerHandler.ToggleCicatrizationUpdate()
 
     -- Since isForced is used to reset an existing player data, we're gonna clean their ISHealthPanel table too
     if isForced then
-        --ISHealthPanel.highestAmputations = {}
         local ItemsHandler = require("TOC/Handlers/ItemsHandler")
         ItemsHandler.Player.DeleteAllOldAmputationItems(playerObj)
         CachedDataHandler.Reset(username)

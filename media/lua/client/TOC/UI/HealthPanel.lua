@@ -73,8 +73,10 @@ end
 ---Get a value between 1 and 0.1 for the cicatrization time
 ---@param cicTime integer
 ---@return integer
-local function GetColorFromCicatrizationTime(cicTime)
-    return math.max(math.min(cicTime/100, 1), 0.1)
+local function GetColorFromCicatrizationTime(cicTime, limbName)
+    local defaultTime = StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM[limbName]
+    local delta = cicTime/defaultTime
+    return math.max(0.15, math.min(delta, 1))
 end
 
 ---Try to draw the highest amputation in the health panel, based on the cicatrization time
@@ -89,10 +91,11 @@ function ISHealthPanel:tryDrawHighestAmputation(side, username)
         texture = getTexture("media/ui/test_pattern.png")
     else
         if self.highestAmputations[side] == nil then return end
+        local limbName = self.highestAmputations[side]
 
-        local cicTime = ModDataHandler.GetInstance(username):getCicatrizationTime(self.highestAmputations[side])
-        redColor = GetColorFromCicatrizationTime(cicTime)
-        texture = StaticData.HEALTH_PANEL_TEXTURES[self.sexPl][self.highestAmputations[side]]
+        local cicTime = ModDataHandler.GetInstance(username):getCicatrizationTime(limbName)
+        redColor = GetColorFromCicatrizationTime(cicTime, limbName)
+        texture = StaticData.HEALTH_PANEL_TEXTURES[self.sexPl][limbName]
     end
 
     self:drawTexture(texture, self.healthPanel.x, self.healthPanel.y, 1, redColor, 0, 0)
