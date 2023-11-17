@@ -14,7 +14,10 @@ end
 ---@param key string
 ---@param table tocModData
 function ServerDataHandler.AddTable(key, table)
-    TOC_DEBUG.print("Adding table with key: " .. tostring(key))
+    print("TOC: received ModData => " .. key)
+    
+    TOC_DEBUG.printTable(table)
+    --TOC_DEBUG.print("Adding table with key: " .. tostring(key))
     ModData.add(key, table)     -- Add it to the server mod data
     ServerDataHandler.modData[key] = table
 end

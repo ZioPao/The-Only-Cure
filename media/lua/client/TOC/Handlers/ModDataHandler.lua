@@ -21,22 +21,30 @@ function ModDataHandler:new(username, isResetForced)
     o.username = username
     local key = CommandsData.GetKey(username)
 
-    ModData.request(key)
-    o.tocData = ModData.get(key)
+    -- We don't want to request ModData if we're in SP, or if we're forcing a reset
+    if isClient() and not isResetForced then
+        ModData.request(key)
+    end
+
+    o.tocData = ModData.get(key)        -- TODO This is working like a placeholder at the moment, it's gonna get replaced later in reapplyTocData
 
     if isResetForced or o.tocData == nil or o.tocData.limbs == nil or o.tocData.limbs.Hand_L == nil or o.tocData.limbs.Hand_L.isCut == nil then
         TOC_DEBUG.print("tocData in ModDataHandler for " .. username .. " is nil, creating it now")
         o:setup(key)
     end
 
-    TOC_DEBUG.print("initialized ModDataHandler for " .. username)
 
     -- Transmit it to the server
     ModData.transmit(key)
+    TOC_DEBUG.print("initialized ModDataHandler for " .. username)
 
     ModDataHandler.instances[username] = o
 
     return o
+end
+
+function ModDataHandler:initialize()
+
 end
 
 ---Setup a new toc mod data data class
@@ -79,6 +87,13 @@ function ModDataHandler:setup(key)
 
 end
 
+---In case of desync between the table on ModData and the table here
+---@param key string
+---@param tocData tocModData
+function ModDataHandler:reapplyTocData(key, tocData)
+    ModData.add(key, tocData)
+    self.tocData = ModData.get(key)
+end
 
 -----------------
 --* Setters *--
@@ -273,6 +288,7 @@ function ModDataHandler.ReceiveData(key, table)
     if not isClient() then
         TOC_DEBUG.print("SP, skipping ModDataHandler.ReceiveData")
     end
+    TOC_DEBUG.print("receiving data from server")
 
     if key == "TOC_Bob" then return end     -- TODO Fix this
 
@@ -281,9 +297,10 @@ function ModDataHandler.ReceiveData(key, table)
         TOC_DEBUG.print("table is nil... returning")
         return
     end
-    ModData.add(key, table)     -- Add it to the client mod data (not sure)
+
+    -- Create ModDataHandler instance if there was none for that user and reapply the correct ModData table as a reference
     local username = key:sub(5)
-    ModDataHandler.GetInstance(username)
+    ModDataHandler.GetInstance(username):reapplyTocData(key, table) --tocData = table        -- TODO Ugly, use a setter
 end
 Events.OnReceiveGlobalModData.Add(ModDataHandler.ReceiveData)
 
