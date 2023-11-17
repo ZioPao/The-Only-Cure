@@ -1,9 +1,13 @@
 TOC_DEBUG = {}
 TOC_DEBUG.disablePaneMod = false
+TOC_DEBUG.enableHealthPanelDebug = false
 
-
-function TOC_DEBUG.togglePaneMod()
+function TOC_DEBUG.TogglePaneMod()
     TOC_DEBUG.disablePaneMod = not TOC_DEBUG.disablePaneMod
+end
+
+function TOC_DEBUG.ToggleHealthPanelDebug()
+    TOC_DEBUG.enableHealthPanelDebug = not TOC_DEBUG.enableHealthPanelDebug 
 end
 
 ---Print debug

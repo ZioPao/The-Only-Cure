@@ -1,0 +1,5 @@
+Sandbox_EN = {
+    Sandbox_TOC = "The Only Cure",
+    Sandbox_TOC_CicatrizationSpeed = "Cicatrization Speed",
+
+}
