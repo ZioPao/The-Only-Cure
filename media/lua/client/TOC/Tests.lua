@@ -5,14 +5,20 @@ local TestUtils = require("TestFramework/TestUtils")
 local PlayerHandler = require("TOC/Handlers/PlayerHandler")
 local AmputationHandler = require("TOC/Handlers/AmputationHandler")
 local ModDataHandler = require("TOC/Handlers/ModDataHandler")
+local StaticData = require("TOC/StaticData")
 
 
-TestFramework.registerTestModule("Functionality", "PlayerHandler", function()
+TestFramework.registerTestModule("PlayerHandler", "Setup", function()
     local Tests = {}
     function Tests.InitializePlayer()
         local pl = getPlayer()
         PlayerHandler.InitializePlayer(pl, true)
     end
+    return Tests
+end)
+
+TestFramework.registerTestModule("PlayerHandler", "Perks", function()
+    local Tests = {}
 
     function Tests.SetMaxPerks()
         local pl = getPlayer()
@@ -40,8 +46,24 @@ TestFramework.registerTestModule("Functionality", "PlayerHandler", function()
     return Tests
 end)
 
+TestFramework.registerTestModule("PlayerHandler", "Cicatrization", function()
+    local Tests = {}
 
-TestFramework.registerTestModule("Functionality", "Amputation", function()
+    function Tests.SetCicatrizationTimeToOne()
+        for i=1, #StaticData.LIMBS_STR do
+            local limbName = StaticData.LIMBS_STR[i]
+            ModDataHandler.GetInstance():setCicatrizationTime(limbName, 1)
+            TestUtils.assert(ModDataHandler.GetInstance():getCicatrizationTime(limbName) == 1)
+        end
+        ModDataHandler.GetInstance():apply()
+        TestUtils.assert(ModDataHandler.GetInstance():getIsCut("Hand_L"))
+    end
+
+    return Tests
+end)
+
+
+TestFramework.registerTestModule("AmputationHandler", "Top Left", function()
     local Tests = {}
 
     function Tests.CutLeftHand()
@@ -62,18 +84,24 @@ TestFramework.registerTestModule("Functionality", "Amputation", function()
         TestUtils.assert(ModDataHandler.GetInstance():getIsCut("UpperArm_L") and ModDataHandler.GetInstance():getIsCut("ForeArm_L") and ModDataHandler.GetInstance():getIsCut("Hand_L"))
     end
 
+    return Tests
+end)
+
+TestFramework.registerTestModule("AmputationHandler", "Top Right", function()
+    local Tests = {}
+
     function Tests.CutRightHand()
         local handler = AmputationHandler:new("Hand_R")
         handler:execute(true)
         TestUtils.assert(ModDataHandler.GetInstance():getIsCut("Hand_R"))
     end
-
+    
     function Tests.CutRightForearm()
         local handler = AmputationHandler:new("ForeArm_R")
         handler:execute(true)
         TestUtils.assert(ModDataHandler.GetInstance():getIsCut("ForeArm_R") and ModDataHandler.GetInstance():getIsCut("Hand_R"))
     end
-
+    
     function Tests.CutRightUpperarm()
         local handler = AmputationHandler:new("UpperArm_R")
         handler:execute(true)
@@ -81,5 +109,4 @@ TestFramework.registerTestModule("Functionality", "Amputation", function()
     end
 
     return Tests
-
 end)
