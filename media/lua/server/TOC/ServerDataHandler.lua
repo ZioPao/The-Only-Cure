@@ -1,7 +1,10 @@
 if isClient() then return end       -- The event makes this necessary to prevent clients from running this file
+local StaticData = require("TOC/StaticData")
+------------------------
 
 local ServerDataHandler = {}
 ServerDataHandler.modData = {}
+
 
 ---Get the server mod data table containing that player TOC data
 ---@param key string
@@ -14,10 +17,10 @@ end
 ---@param key string
 ---@param table tocModData
 function ServerDataHandler.AddTable(key, table)
-    print("TOC: received ModData => " .. key)
-    
-    TOC_DEBUG.printTable(table)
-    --TOC_DEBUG.print("Adding table with key: " .. tostring(key))
+    -- Check if key is valid
+    if not luautils.stringStarts(key, StaticData.MOD_NAME .. "_") then return end
+
+    TOC_DEBUG.print("received TOC ModData: " .. tostring(key))
     ModData.add(key, table)     -- Add it to the server mod data
     ServerDataHandler.modData[key] = table
 end

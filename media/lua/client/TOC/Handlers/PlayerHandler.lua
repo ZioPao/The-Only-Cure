@@ -108,11 +108,12 @@ function PlayerHandler.TryRandomBleed(character, limbName)
     if cicTime == 0 then return end
     -- TODO Sometimes we get cicTime = 0... Shouldn't really do it
 
-    local normCicTime = CommonMethods.Normalize(cicTime, 0, 100)
+    -- TODO This is just a placeholder, we need to figure out a better way to calculate this chance
+    local normCicTime = CommonMethods.Normalize(cicTime, 0, StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM[limbName])/2
     TOC_DEBUG.print("OG cicTime: " .. tostring(cicTime))
     TOC_DEBUG.print("Normalized cic time : " .. tostring(normCicTime))
 
-    local chance = ZombRand(0,100)
+    local chance = ZombRandFloat(0.0, 1.0)
     if chance > normCicTime then
         TOC_DEBUG.print("Triggered bleeding from non cicatrized wound")
         local adjacentBodyPartType = BodyPartType[StaticData.LIMBS_ADJACENT_IND_STR[limbName]]
