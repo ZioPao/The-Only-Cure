@@ -118,9 +118,8 @@ if not getActivatedMods():contains("PerfTestFramework") or not isDebugEnabled() 
 local PerfTest = require("PerfTest/main")       -- SHould be global anyway
 local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
 
+PerfTest.RegisterMethod("PlayerHandler", PlayerHandler, "UpdateCicatrization")
+PerfTest.RegisterMethod("CachedDataHandler", CachedDataHandler, "CalculateHighestAmputatedLimbs")
+PerfTest.RegisterMethod("ISHealthPanel", ISHealthPanel, "render")
+
 PerfTest.Init()
-
-
---PerfTest.RegisterMethod("PlayerHandler", PlayerHandler, "UpdateCicatrization")
---PerfTest.RegisterMethod("CachedDataHandler", CachedDataHandler, "CalculateHighestAmputatedLimbs")
---PerfTest.RegisterMethod("ISHealthPanel", ISHealthPanel, "render")
