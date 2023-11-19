@@ -95,13 +95,13 @@ TestFramework.registerTestModule("AmputationHandler", "Top Right", function()
         handler:execute(true)
         TestUtils.assert(ModDataHandler.GetInstance():getIsCut("Hand_R"))
     end
-    
+
     function Tests.CutRightForearm()
         local handler = AmputationHandler:new("ForeArm_R")
         handler:execute(true)
         TestUtils.assert(ModDataHandler.GetInstance():getIsCut("ForeArm_R") and ModDataHandler.GetInstance():getIsCut("Hand_R"))
     end
-    
+
     function Tests.CutRightUpperarm()
         local handler = AmputationHandler:new("UpperArm_R")
         handler:execute(true)
@@ -113,11 +113,11 @@ end)
 
 
 --------------------------------------------------------------------------------------
-
 if not getActivatedMods():contains("PerfTestFramework") or not isDebugEnabled() then return end
 local PerfTest = require("PerfTest/main")       -- SHould be global anyway
 local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
 
+PerfTest.RegisterMethod("PlayerHandler", PlayerHandler, "InitializePlayer")
 PerfTest.RegisterMethod("PlayerHandler", PlayerHandler, "UpdateCicatrization")
 PerfTest.RegisterMethod("CachedDataHandler", CachedDataHandler, "CalculateHighestAmputatedLimbs")
 PerfTest.RegisterMethod("ISHealthPanel", ISHealthPanel, "render")
