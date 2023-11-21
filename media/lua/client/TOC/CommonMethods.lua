@@ -1,6 +1,5 @@
 local CommonMethods = {}
 
----TODO This is useless
 ---@param val number
 ---@param min number
 ---@param max number

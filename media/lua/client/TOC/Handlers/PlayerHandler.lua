@@ -222,7 +222,7 @@ function PlayerHandler.UpdateCicatrization()
             TOC_DEBUG.print("updating cicatrization for " .. tostring(limbName))
 
             if cicTime > 0 then
-                cicTime = cicTime - (SandboxVars.TOC.CicatrizationSpeed)
+                cicTime = cicTime - SandboxVars.TOC.CicatrizationSpeed
                 modDataHandler:setCicatrizationTime(limbName, cicTime)
                 TOC_DEBUG.print("new cicatrization time: " .. tostring(cicTime))
                 if cicTime < 0 then

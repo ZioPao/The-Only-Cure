@@ -130,10 +130,7 @@ end
 ---Execute the amputation
 ---@param damagePlayer boolean
 function AmputationHandler:execute(damagePlayer)
-
-    -- TODO Calculate surgeonStats
-    -- TODO Cap it to a certain amount, it shouldn't be more than ...?
-    local surgeonFactor = 1
+    local surgeonFactor = self.surgeonPl:getPerkLevel(Perks.Doctor) * SandboxVars.TOC.SurgeonAbilityImportance
 
     -- Set the data in modData
     local modDataHandler = ModDataHandler.GetInstance()

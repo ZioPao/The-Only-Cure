@@ -4,7 +4,7 @@ local AmputationHandler = require("TOC/Handlers/AmputationHandler")
 
 local ClientRelayCommands = {}
 
----comment
+---Initialize Amputation Handler
 ---@param limbName any
 ---@param surgeonNum any
 ---@return AmputationHandler
