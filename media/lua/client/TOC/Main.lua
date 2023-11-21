@@ -51,10 +51,6 @@ function Main.SetupEvents()
 end
 
 function Main.Initialize()
-
-
-    -- TODO In SP we should clean Global Mod Data when a player dies!
-
     ---Looop until we've successfully initialized the mod
     local function TryToInitialize()
         local pl = getPlayer()

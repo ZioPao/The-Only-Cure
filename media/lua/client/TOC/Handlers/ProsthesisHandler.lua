@@ -37,11 +37,6 @@ function ProsthesisHandler.GetGroup(item)
     return group
 end
 
----Cache the correct texture for the Health Panel for the currently equipped prosthesis
-function ProsthesisHandler.SetHealthPanelTexture()
-    -- TODO do it
-end
-
 ---Check if a prosthesis is equippable. It depends whether the player has a cut limb or not on that specific side. There's an exception for Upper arm, obviously
 ---@param bodyLocation string
 ---@return boolean

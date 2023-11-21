@@ -1,0 +1,13 @@
+module base {
+
+    sound Amputation_Sound {
+        category = Player, 
+        loop = true,
+        is3D = true,
+        clip { 
+          file = media/sound/Cut_sound.ogg, 
+          distanceMax = 3,
+          volume = 1.0,
+        }
+    }
+}

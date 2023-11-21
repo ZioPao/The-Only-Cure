@@ -101,7 +101,7 @@ end
 ---@class ItemsHandler.Zombie
 ItemsHandler.Zombie = {}
 
----comment
+---Set an amputation to a zombie
 ---@param zombie IsoZombie
 function ItemsHandler.Zombie.SpawnAmputationItem(zombie)
     -- TODO Set texture ID
@@ -124,7 +124,7 @@ function ItemsHandler.Zombie.SpawnAmputationItem(zombie)
 
     end
 
-    -- TODO COnsider highest amputation
+    -- TODO Consider highest amputation
     local usableClothingAmputations = {}
 
     for i=1, #StaticData.LIMBS_STR do

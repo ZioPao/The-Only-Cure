@@ -26,8 +26,8 @@ function ModDataHandler:new(username, isResetForced)
         ModData.request(key)
     end
 
-    o.tocData = ModData.get(key)        -- TODO This is working like a placeholder at the moment, it's gonna get replaced later in reapplyTocData
-
+    -- FIXME This is working like a placeholder at the moment, it's gonna get replaced later in reapplyTocData
+    o.tocData = ModData.get(key)
     if isResetForced or o.tocData == nil or o.tocData.limbs == nil or o.tocData.limbs.Hand_L == nil or o.tocData.limbs.Hand_L.isCut == nil then
         TOC_DEBUG.print("tocData in ModDataHandler for " .. username .. " is nil, creating it now")
         o:setup(key)
@@ -290,7 +290,8 @@ function ModDataHandler.ReceiveData(key, table)
     end
     TOC_DEBUG.print("receiving data from server")
 
-    if key == "TOC_Bob" then return end     -- TODO Fix this
+    -- During startup the game can return Bob as the player username, adding a useless ModData table
+    if key == "TOC_Bob" then return end
 
     TOC_DEBUG.print("receive data for " .. key)
     if table == {} or table == nil then
@@ -300,7 +301,7 @@ function ModDataHandler.ReceiveData(key, table)
 
     -- Create ModDataHandler instance if there was none for that user and reapply the correct ModData table as a reference
     local username = key:sub(5)
-    ModDataHandler.GetInstance(username):reapplyTocData(key, table) --tocData = table        -- TODO Ugly, use a setter
+    ModDataHandler.GetInstance(username):reapplyTocData(key, table)
 end
 Events.OnReceiveGlobalModData.Add(ModDataHandler.ReceiveData)
 

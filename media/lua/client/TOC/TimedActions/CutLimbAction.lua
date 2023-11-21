@@ -39,7 +39,7 @@ function CutLimbAction:new(surgeon, patient, limbName, item, stitchesItem, banda
     o.stopOnWalk = true
     o.stopOnRun = true
 
-    o.maxTime = 100
+    o.maxTime = 1000 - (surgeon:getPerkLevel(Perks.Doctor) * 50)
     if o.character:isTimedActionInstant() then o.maxTime = 1 end
 
     return o
@@ -79,6 +79,11 @@ function CutLimbAction:start()
     self:setActionAnim("SawLog")
     self:setOverrideHandModels(self.item:getStaticModel())
 
+    -- Setup audio
+    self.sound = self.character:getEmitter():playSound("Amputation_Sound")
+    local radius = 5
+    addSound(self.character, self.character:getX(), self.character:getY(), self.character:getZ(), radius, radius)
+
 end
 
 function CutLimbAction:waitToStart()
@@ -93,13 +98,30 @@ function CutLimbAction:update()
     self.character:setMetabolicTarget(Metabolics.HeavyWork)
 
     -- TODO Apply it too on the patient! check if it works online
+    -- TODO Add sound
     if self.character ~= self.patient then
         self.patient:setMetabolicTarget(Metabolics.HeavyWork)
     end
 
 end
 
+function CutLimbAction:stopSound()
+    if self.sound then
+        self.character:getEmitter():stopSound(self.sound)
+        self.sound = nil
+    end
+end
+
+function CutLimbAction:stop()
+	self:stopSound()
+    ISBaseTimedAction.stop(self)
+end
+
 function CutLimbAction:perform()
+
+    -- Stop the sound
+    self:stopSound()
+
     if self.patient == self.character then
         TOC_DEBUG.print("patient and surgeon are the same, executing on the client")
         local handler = AmputationHandler:new(self.limbName)

@@ -329,9 +329,6 @@ function ISEquipWeaponAction:isValid()
     local isValid = og_ISEquipWeaponAction_isValid(self)
     local modDataHandler = ModDataHandler.GetInstance(self.character:getUsername())
     if isValid and modDataHandler:getIsAnyLimbCut() then
-
-        -- TODO We need to consider amputating legs, this won't be correct anymore
-        -- TODO Cache this!
         local isPrimaryHandValid = not modDataHandler:getIsCut(primaryHand) or modDataHandler:getIsProstEquipped(prostTopR)
         local isSecondaryHandValid = not modDataHandler:getIsCut(secondaryHand) or modDataHandler:getIsProstEquipped(prostTopL)
 
