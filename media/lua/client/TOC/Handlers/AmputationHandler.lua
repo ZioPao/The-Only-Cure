@@ -5,7 +5,6 @@ local PlayerHandler = require("TOC/Handlers/PlayerHandler")
 local StaticData = require("TOC/StaticData")
 ---------------------------
 
--- TODO Add Bandages, Torniquet, etc.
 --- Manages an amputation. Will be run on the patient client
 ---@class AmputationHandler
 ---@field patientPl IsoPlayer

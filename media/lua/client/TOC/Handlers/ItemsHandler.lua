@@ -19,26 +19,16 @@ ItemsHandler.Player = {}
 ---@private
 function ItemsHandler.Player.GetAmputationTexturesIndex(playerObj, isCicatrized)
     local textureString = playerObj:getHumanVisual():getSkinTexture()
-    local isHairy = string.find(textureString, "a$")
-    -- Hairy bodies
-    if isHairy then
-        textureString = textureString:sub(1, -2)      -- Removes b at the end to make it compatible
-    end
+    local isHairy = textureString:sub(-1) == "a"
 
-    local matchedIndex = string.match(textureString, "%d$")
+    local matchedIndex = tonumber(textureString:match("%d$")) or 0
 
-    -- TODO Rework this
     if isHairy then
         matchedIndex = matchedIndex + 5
     end
 
-
     if isCicatrized then
-        if isHairy then
-            matchedIndex = matchedIndex + 5           -- to use the cicatrized texture on hairy bodies
-        else
-            matchedIndex = matchedIndex + 10          -- cicatrized texture only, no hairs
-        end
+        matchedIndex = matchedIndex + (isHairy and 5 or 10) -- We add 5 is it's the texture texture, else 10
     end
 
     return matchedIndex - 1
