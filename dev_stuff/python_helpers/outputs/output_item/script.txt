@@ -97,3 +97,102 @@ item LeatherBase_MetalHand
 		CanHaveHoles = false,
 		WorldStaticModel = TOC.MetalHook,
 	}
+item WoodenBase_WoodenHook
+	{
+		Weight = 0.90,
+		Type = Normal,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Wooden Base and Wooden Hook,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+		WorldStaticModel = TOC.MetalHook,
+	}
+item WoodenBase_MetalHook
+	{
+		Weight = 1.20,
+		Type = Normal,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Wooden Base and Metal Hook,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+		WorldStaticModel = TOC.MetalHook,
+	}
+item WoodenBase_MetalHand
+	{
+		Weight = 1.40,
+		Type = Normal,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Wooden Base and Metal Hand,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+		WorldStaticModel = TOC.MetalHook,
+	}
+item MetalBase_WoodenHook
+	{
+		Weight = 1.40,
+		Type = Normal,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Metal Base and Wooden Hook,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+		WorldStaticModel = TOC.MetalHook,
+	}
+item MetalBase_MetalHook
+	{
+		Weight = 1.70,
+		Type = Normal,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Metal Base and Metal Hook,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+		WorldStaticModel = TOC.MetalHook,
+	}
+item MetalBase_MetalHand
+	{
+		Weight = 1.90,
+		Type = Normal,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Metal Base and Metal Hand,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+		WorldStaticModel = TOC.MetalHook,
+	}
+item LeatherBase_WoodenHook
+	{
+		Weight = 1.20,
+		Type = Normal,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Leather Base and Wooden Hook,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+		WorldStaticModel = TOC.MetalHook,
+	}
+item LeatherBase_MetalHook
+	{
+		Weight = 1.50,
+		Type = Normal,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Leather Base and Metal Hook,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+		WorldStaticModel = TOC.MetalHook,
+	}
+item LeatherBase_MetalHand
+	{
+		Weight = 1.70,
+		Type = Normal,
+		DisplayCategory = Prosthesis,
+		DisplayName = Prosthesis - Leather Base and Metal Hand,
+		Icon = metalLeg,
+		Tooltip = TempTooltip,
+		CanHaveHoles = false,
+		WorldStaticModel = TOC.MetalHook,
+	}

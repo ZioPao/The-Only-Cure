@@ -1,0 +1,39 @@
+module TOC
+{
+	imports
+	{
+		Base
+	}
+	/*************Craft Prosthetics*******************/
+	recipe Craft Prosthetic Arm
+	{
+		ProstPart_WoodenBase,
+		ProstPart_WoodenHook,
+
+		Time: 10.0,
+		Result: Prost_NormalArm_L,
+		NeedToBeLearn: true,
+		CanBeDoneFromFloor: false,
+		OnGiveXP: NoXP_OnGiveXP,
+		SkillRequired: FirstAid=2,
+		Category: Surgeon,
+		OnCreate:ProsthesisRecipes.OnCreateProsthesis,
+		Tooltip: Recipe_Tooltip_AssembleProsthesis,
+	}
+
+	recipe Craft Prosthetic Hook
+	{
+		ProstPart_WoodenBase,
+		ProstPart_WoodenHook,
+
+		Time: 10.0,
+		Result: Prost_HookArm_L,
+		NeedToBeLearn: true,
+		CanBeDoneFromFloor: false,
+		OnGiveXP: NoXP_OnGiveXP,
+		SkillRequired: FirstAid=2,
+		Category: Surgeon,
+		OnCreate:ProsthesisRecipes.OnCreateProsthesis,
+		Tooltip: Recipe_Tooltip_AssembleProsthesis,
+	}
+}

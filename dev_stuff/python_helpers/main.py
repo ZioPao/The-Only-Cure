@@ -5,6 +5,11 @@ import openpyxl
 import os
 
 
+
+#### ITEMS FORMAT SHOULD BE
+
+# Prost_Something_HookArm_L
+
 os.chdir(os.getcwd() + "\\dev_stuff\\python_helpers\\")
 
 
