@@ -23,7 +23,7 @@ module TOC
 		Insulation = 1.0,
 		WindResistance = 1.0,
 		WaterResistance = 1.0,
-		Icon = genericAmputation,
+		Icon = armProsthetic,
 		CanHaveHoles = false,
 	}
 	item Prost_HookArm_R
@@ -42,7 +42,7 @@ module TOC
 		Insulation = 1.0,
 		WindResistance = 1.0,
 		WaterResistance = 1.0,
-		Icon = genericAmputation,
+		Icon = armProsthetic,
 		CanHaveHoles = false,
 	}
 
@@ -62,7 +62,8 @@ module TOC
 		Insulation = 1.0,
 		WindResistance = 1.0,
 		WaterResistance = 1.0,
-		Icon = genericAmputation,
+		Icon = armProsthetic,
+        WorldStaticModel = prostheticArm,
 		CanHaveHoles = false,
 	}
 	item Prost_NormalArm_R
@@ -81,7 +82,8 @@ module TOC
 		Insulation = 1.0,
 		WindResistance = 1.0,
 		WaterResistance = 1.0,
-		Icon = genericAmputation,
+		Icon = armProsthetic,
+        WorldStaticModel = prostheticArm,
 		CanHaveHoles = false,
 	}
 	

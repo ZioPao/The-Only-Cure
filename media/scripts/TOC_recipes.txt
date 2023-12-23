@@ -15,7 +15,7 @@ module TOC
        Time:150.0,
        Category:Welding,
        OnGiveXP:Recipe.OnGiveXP.MetalWelding10,
-       NeedToBeLearn:true,
+       NeedToBeLearn:false,
 	}
 
 	recipe Craft Prosthetic Hook

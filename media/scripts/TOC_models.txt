@@ -1,0 +1,16 @@
+module Prosthesis
+{
+    imports
+    {
+        Base
+    }
+
+    model prostheticArm
+	{
+		mesh = Prosthesis/normalArm_Ground,
+		texture = Prosthetesis\normalArm,
+	}
+
+    
+    
+}

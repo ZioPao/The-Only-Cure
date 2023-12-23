@@ -236,6 +236,7 @@ function PlayerHandler.UpdateCicatrization()
         TOC_DEBUG.print("updating modData from cicatrization loop")
         modDataHandler:apply()      -- TODO This is gonna be heavy. Not entirely sure
     else
+        TOC_DEBUG.print("Removing UpdateCicatrizationF")
         Events.EveryHours.Remove(PlayerHandler.UpdateCicatrization)     -- We can remove it safely, no cicatrization happening here boys
     end
     TOC_DEBUG.print("updating cicatrization!")
