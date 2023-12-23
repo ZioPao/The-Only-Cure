@@ -8,7 +8,7 @@ module Prosthesis
     model prostheticArm
 	{
 		mesh = Prosthesis/normalArm_Ground,
-		texture = Prosthetesis\normalArm,
+		texture = Prosthesis\normalArm,
 	}
 
     
