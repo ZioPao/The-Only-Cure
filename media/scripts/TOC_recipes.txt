@@ -7,33 +7,27 @@ module TOC
 	/*************Craft Prosthetics*******************/
 	recipe Craft Prosthetic Arm
 	{
-		ProstPart_WoodenBase,
-		ProstPart_WoodenHook,
+       MetalPipe=4,
+       Plank=2,
+       keep [Recipe.GetItemTypes.WeldingMask],
 
-		Time: 10.0,
-		Result: Prost_NormalArm_L,
-		NeedToBeLearn: true,
-		CanBeDoneFromFloor: false,
-		OnGiveXP: NoXP_OnGiveXP,
-		SkillRequired: FirstAid=2,
-		Category: Surgeon,
-		OnCreate:ProsthesisRecipes.OnCreateProsthesis,
-		Tooltip: Recipe_Tooltip_AssembleProsthesis,
+       Result:Prost_NormalArm_L,
+       Time:150.0,
+       Category:Welding,
+       OnGiveXP:Recipe.OnGiveXP.MetalWelding10,
+       NeedToBeLearn:true,
 	}
 
 	recipe Craft Prosthetic Hook
 	{
-		ProstPart_WoodenBase,
-		ProstPart_WoodenHook,
+       MetalPipe=2,
+       Plank=2,
+       keep [Recipe.GetItemTypes.WeldingMask],
 
-		Time: 10.0,
-		Result: Prost_HookArm_L,
-		NeedToBeLearn: true,
-		CanBeDoneFromFloor: false,
-		OnGiveXP: NoXP_OnGiveXP,
-		SkillRequired: FirstAid=2,
-		Category: Surgeon,
-		OnCreate:ProsthesisRecipes.OnCreateProsthesis,
-		Tooltip: Recipe_Tooltip_AssembleProsthesis,
+       Result:Prost_HookArm_L,
+       Time:150.0,
+       Category:Welding,
+       OnGiveXP:Recipe.OnGiveXP.MetalWelding10,
+       NeedToBeLearn:false,
 	}
 }

@@ -118,46 +118,5 @@ module TOC
 		Icon = genericAmputation,
 		CanHaveHoles = false,
 	}
-	/****************** Clothing that look like a cut limb ******************/
 
-	item Prost_Hook_L
-	{
-		Type = Clothing,
-		DisplayCategory = Prosthesis,
-		DisplayName	= ProstArmHook,
-		ClothingItem = Prost_Hook_L,
-		ClothingItemExtra = Prost_Hook_R,
-		ClothingItemExtraOption = InstallProstRight,
-		clothingExtraSubmenu = InstallProstLeft,
-		BodyLocation = TOC_ArmProst_L,
-		Weight = 0,
-		CombatSpeedModifier = 0.7,
-		BloodLocation = UpperArms;UpperBody,
-		Insulation = 1.0,
-		WindResistance = 1.0,
-		WaterResistance = 1.0,
-		Icon = genericAmputation,
-		CanHaveHoles = false,
-	}
-
-	item Prost_Hook_R
-	{
-		Type = Clothing,
-		DisplayCategory = Prosthesis,
-		DisplayName	= ProstArmHook,
-		ClothingItem = Prost_Hook_R,
-		ClothingItemExtra = Prost_Hook_L,
-		ClothingItemExtraOption = InstallProstLeft,
-		clothingExtraSubmenu = InstallProstRight,
-		BodyLocation = TOC_ArmProst_R,
-
-		Weight = 0,
-		CombatSpeedModifier = 0.7,
-		BloodLocation = UpperArms;UpperBody,
-		Insulation = 1.0,
-		WindResistance = 1.0,
-		WaterResistance = 1.0,
-		Icon = genericAmputation,
-		CanHaveHoles = false,
-	}
 }
