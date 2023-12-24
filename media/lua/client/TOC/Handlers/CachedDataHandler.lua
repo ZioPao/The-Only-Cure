@@ -10,14 +10,11 @@ local CachedDataHandler = {}
 ---@param username string
 function CachedDataHandler.Reset(username)
     CachedDataHandler.amputatedLimbs[username] = {}
-    CachedDataHandler.indexedAmputatedLimbs[username] = {}
-
     CachedDataHandler.highestAmputatedLimbs[username] = {}
 end
 
 --* Amputated Limbs caching *--
 CachedDataHandler.amputatedLimbs = {}
-CachedDataHandler.indexedAmputatedLimbs = {}
 -- TODO Add an indexable table too!
 
 ---Calculate the currently amputated limbs for a certain player
@@ -41,9 +38,6 @@ function CachedDataHandler.AddAmputatedLimb(username, limbName)
 
     -- Add it to the generic list
     table.insert(CachedDataHandler.amputatedLimbs[username], limbName)
-
-    -- Add it to the indexable list
-    CachedDataHandler.indexedAmputatedLimbs[username][limbName] = limbName
 end
 
 ---Returns a table containing the cached amputated limbs
@@ -51,12 +45,6 @@ end
 ---@return table
 function CachedDataHandler.GetAmputatedLimbs(username)
     return CachedDataHandler.amputatedLimbs[username]
-end
-
----@param username string
----@return table
-function CachedDataHandler.GetIndexedAmputatedLimbs(username)
-    return CachedDataHandler.indexedAmputatedLimbs[username]
 end
 
 --* Highest amputated limb per side caching *--
