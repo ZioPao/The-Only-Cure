@@ -40,8 +40,8 @@ StaticData.MOD_BODYLOCS_BASE_IND_STR = {
 
 -- No "MAX" here.
 StaticData.IGNORED_BODYLOCS_BPT = {
-    BodyPartType.Foot_L, BodyPartType.Foot_R, BodyPartType.Groin, BodyPartType.Head, 
-    BodyPartType.LowerLeg_L, BodyPartType.LowerLeg_R, BodyPartType.Neck, BodyPartType.Torso_Lower, 
+    BodyPartType.Foot_L, BodyPartType.Foot_R, BodyPartType.Groin, BodyPartType.Head,
+    BodyPartType.LowerLeg_L, BodyPartType.LowerLeg_R, BodyPartType.Neck, BodyPartType.Torso_Lower,
     BodyPartType.Torso_Upper, BodyPartType.UpperLeg_L, BodyPartType.UpperLeg_R
 }
 

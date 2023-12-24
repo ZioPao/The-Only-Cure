@@ -10,7 +10,7 @@ local CutLimbHandler = require("TOC/UI/CutLimbInteractions")
 -- We also manage the drag'n drop of items on the body to let the players use the saw this way too
 ---@diagnostic disable: duplicate-set-field
 
-ISHealthBodyPartPanel = ISBodyPartPanel:derive("ISHealthBodyPartPanel")
+--ISHealthBodyPartPanel = ISBodyPartPanel:derive("ISHealthBodyPartPanel")
 
 --* Handling drag n drop of the saw *--
 
@@ -163,4 +163,35 @@ function ISMedicalCheckAction:perform()
     -- We need to recalculate them here before we can create the highest amputations point
     CachedDataHandler.CalculateAmputatedLimbs(username)
     og_ISMedicalCheckAction_perform(self)
+end
+
+local og_ISHealthBodyPartListBox_doDrawItem = ISHealthBodyPartListBox.doDrawItem
+function ISHealthBodyPartListBox:doDrawItem(y, item, alt)
+    y = og_ISHealthBodyPartListBox_doDrawItem(self, y, item, alt)
+    y = y - 5
+    local x = 15
+    local fontHgt = getTextManager():getFontHeight(UIFont.Small)
+
+    -- TODO Get username of the correct player
+    local username = getPlayer():getUsername()
+    --local amputatedLimbs = CachedDataHandler.GetIndexedAmputatedLimbs(username)
+
+    ---@type BodyPart
+    local bodyPart = item.item.bodyPart
+
+    local bodyPartTypeStr = BodyPartType.ToString(bodyPart:getType())
+    local limbName = StaticData.LIMBS_IND_STR[bodyPartTypeStr]
+    if limbName then
+        local modDataHandler = ModDataHandler.GetInstance(username)
+        if modDataHandler:getIsCut(limbName) and modDataHandler:getIsVisible(limbName) then
+            local cicaTime = modDataHandler:getCicatrizationTime(limbName)
+            self:drawText("- " .. "Cicatrization " .. tostring(cicaTime), x, y, 0.89, 0.28, 0.28, 1, UIFont.Small)
+            y = y + fontHgt;
+
+        end
+
+    end
+
+    y = y + 5
+    return y
 end

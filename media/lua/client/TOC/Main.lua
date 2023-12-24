@@ -11,17 +11,15 @@ local Main = {}
 function Main.SetupTraits()
     -- Perks.Left_Hand is defined in perks.txt
 
-    local traitsTable = {}
-    local trait1 = TraitFactory.addTrait("Amputee_Hand", getText("UI_trait_Amputee_Hand"), -8, getText("UI_trait_Amputee_Hand_desc"), false, false)
-    traitsTable[1] = trait1
-
-    local trait2 = TraitFactory.addTrait("Amputee_LowerArm", getText("UI_trait_Amputee_LowerArm"), -10, getText("UI_trait_Amputee_LowerArm_desc"), false, false)
-    traitsTable[2] = trait2
-
-    local trait3 = TraitFactory.addTrait("Amputee_UpperArm", getText("UI_trait_Amputee_UpperArm"), -20, getText("UI_trait_Amputee_UpperArm_desc"), false, false)
-    traitsTable[2] = trait3
+    local traitsTable = {
+        [1] = TraitFactory.addTrait("Amputee_Hand", getText("UI_trait_Amputee_Hand"), -8, getText("UI_trait_Amputee_Hand_desc"), false, false),
+        [2] = TraitFactory.addTrait("Amputee_LowerArm", getText("UI_trait_Amputee_LowerArm"), -10, getText("UI_trait_Amputee_LowerArm_desc"), false, false),
+        [3] = TraitFactory.addTrait("Amputee_UpperArm", getText("UI_trait_Amputee_UpperArm"), -20, getText("UI_trait_Amputee_UpperArm_desc"), false, false)
+    }
 
     for i=1, #traitsTable do
+
+        ---@type Trait
         local t = traitsTable[i]
         ---@diagnostic disable-next-line: undefined-field
         t:addXPBoost(Perks.Left_Hand, 4)
