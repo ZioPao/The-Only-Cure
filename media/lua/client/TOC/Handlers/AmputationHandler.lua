@@ -148,6 +148,13 @@ function AmputationHandler:execute(damagePlayer)
     -- Add it to the list of cut limbs on this local client
     local username = self.patientPl:getUsername()
     CachedDataHandler.AddAmputatedLimb(username, self.limbName)
+
+    -- TODO Not optimal, we're already cycling through this when using setCutLimb
+    for i=1, #StaticData.LIMBS_DEPENDENCIES_IND_STR[self.limbName] do
+        local dependedLimbName = StaticData.LIMBS_DEPENDENCIES_IND_STR[self.limbName][i]
+        CachedDataHandler.AddAmputatedLimb(username, dependedLimbName)
+    end
+
     CachedDataHandler.CalculateHighestAmputatedLimbs(username)
 
     -- If the part was actually infected, heal the player, if they were in time (infectionLevel < 20)

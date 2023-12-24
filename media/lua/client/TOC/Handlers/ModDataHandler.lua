@@ -246,12 +246,14 @@ function ModDataHandler:setCutLimb(limbName, isOperated, isCicatrized, isCauteri
 
         -- We don't care about isOperated, isCicatrized, isCauterized since this is depending on another limb
         -- Same story for cicatrizationTime, which will be 0
-        self:setLimbParams(dependedLimbName, {isCut = true, isInfected = false, isVisible = false}, 0)
+        -- isCicatized is to true to prevent it from doing the cicatrization process
+        self:setLimbParams(dependedLimbName, {isCut = true, isInfected = false, isVisible = false, isCicatrized = true}, 0)
     end
 
     -- Set that a limb has been cut, to activate some functions without having to loop through the parts
     self:setIsAnyLimbCut(true)
 
+    -- TODO IN theory we should cache data from here, not AMputationHandler
 end
 
 ---Set a limb data

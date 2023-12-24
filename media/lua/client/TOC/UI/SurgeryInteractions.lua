@@ -50,8 +50,8 @@ local function AddOvenContextMenu(playerNum, context, worldObjects, test)
         local optionMain = context:addOption(getText("ContextMenu_Cauterize"), nil)
         local subMenu = context:getNew(context)
         context:addSubMenu(optionMain, subMenu)
-        for i=1, #amputatedLimbs do
-            local limbName = amputatedLimbs[i]
+        for k, _ in pairs(amputatedLimbs) do
+            local limbName = k
             local option = subMenu:addOption(getText("ContextMenu_Limb_" .. limbName), limbName, Cauterize)
             option.notAvailable = isTempLow
             if isTempLow then

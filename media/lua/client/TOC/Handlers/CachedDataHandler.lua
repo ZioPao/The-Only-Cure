@@ -37,7 +37,10 @@ function CachedDataHandler.AddAmputatedLimb(username, limbName)
     TOC_DEBUG.print("added " .. limbName .. " to known amputated limbs for " .. username)
 
     -- Add it to the generic list
-    table.insert(CachedDataHandler.amputatedLimbs[username], limbName)
+    -- TODO this is wrong
+
+    CachedDataHandler.amputatedLimbs[username][limbName] = limbName
+    --table.insert(CachedDataHandler.amputatedLimbs[username], limbName)
 end
 
 ---Returns a table containing the cached amputated limbs
@@ -63,6 +66,7 @@ function CachedDataHandler.CalculateHighestAmputatedLimbs(username)
         TOC_DEBUG.print("Amputated limbs weren't calculated. Trying to calculate them now for " .. username)
         CachedDataHandler.CalculateAmputatedLimbs(username)
     end
+
     local amputatedLimbs = CachedDataHandler.amputatedLimbs[username]
     CachedDataHandler.highestAmputatedLimbs[username] = {}
     --TOC_DEBUG.print("Searching highest amputations for " .. username)
@@ -72,8 +76,8 @@ function CachedDataHandler.CalculateHighestAmputatedLimbs(username)
         return
     end
 
-    for i=1, #amputatedLimbs do
-        local limbName = amputatedLimbs[i]
+    for k, _ in pairs(amputatedLimbs) do
+        local limbName = k
         local index = CommonMethods.GetSide(limbName)
         if modDataHandler:getIsCut(limbName) and modDataHandler:getIsVisible(limbName) then
             TOC_DEBUG.print("found high amputation " .. limbName)

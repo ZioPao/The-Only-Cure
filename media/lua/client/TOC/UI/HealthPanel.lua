@@ -173,7 +173,7 @@ function ISHealthBodyPartListBox:doDrawItem(y, item, alt)
     local fontHgt = getTextManager():getFontHeight(UIFont.Small)
 
     -- TODO Get username of the correct player
-    local username = getPlayer():getUsername()
+    local username = self.parent.character:getUsername()
     --local amputatedLimbs = CachedDataHandler.GetIndexedAmputatedLimbs(username)
 
     ---@type BodyPart
@@ -185,8 +185,13 @@ function ISHealthBodyPartListBox:doDrawItem(y, item, alt)
         local modDataHandler = ModDataHandler.GetInstance(username)
         if modDataHandler:getIsCut(limbName) and modDataHandler:getIsVisible(limbName) then
             local cicaTime = modDataHandler:getCicatrizationTime(limbName)
-            self:drawText("- " .. "Cicatrization " .. tostring(cicaTime), x, y, 0.89, 0.28, 0.28, 1, UIFont.Small)
-            y = y + fontHgt;
+
+            -- Show it in percentage
+            local maxCicaTime = StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM[limbName]
+            local percentage = (1 - cicaTime/maxCicaTime) * 100
+
+            self:drawText("- " .. string.format("Cicatrization %.2f", percentage) .. "%", x, y, 0.89, 0.28, 0.28, 1, UIFont.Small)
+            y = y + fontHgt
 
         end
 

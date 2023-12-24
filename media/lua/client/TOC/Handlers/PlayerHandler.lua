@@ -213,22 +213,23 @@ function PlayerHandler.UpdateCicatrization()
     local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(pl:getUsername())
     local needsUpdate = false
 
-    for i=1, #amputatedLimbs do
-        local limbName = amputatedLimbs[i]
+    for k, _ in pairs(amputatedLimbs) do
+        local limbName = k
         local isCicatrized = modDataHandler:getIsCicatrized(limbName)
+
         if not isCicatrized then
             needsUpdate = true
             local cicTime = modDataHandler:getCicatrizationTime(limbName)
             TOC_DEBUG.print("updating cicatrization for " .. tostring(limbName))
 
-            if cicTime > 0 then
-                cicTime = cicTime - SandboxVars.TOC.CicatrizationSpeed
-                modDataHandler:setCicatrizationTime(limbName, cicTime)
-                TOC_DEBUG.print("new cicatrization time: " .. tostring(cicTime))
-                if cicTime < 0 then
-                    modDataHandler:setIsCicatrized(limbName, true)
-                end
+            cicTime = cicTime - SandboxVars.TOC.CicatrizationSpeed
+            modDataHandler:setCicatrizationTime(limbName, cicTime)
+            TOC_DEBUG.print("new cicatrization time: " .. tostring(cicTime))
+            if cicTime <= 0 then
+                TOC_DEBUG.print(tostring(limbName) .. " is cicatrized")
+                modDataHandler:setIsCicatrized(limbName, true)
             end
+            
         end
     end
 
@@ -270,8 +271,9 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
     if time ~= -1 and modDataHandler and modDataHandler:getIsAnyLimbCut() then
         local pl = getPlayer()
         local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(pl:getUsername())
-        for i=1, #amputatedLimbs do
-            local limbName = amputatedLimbs[i]
+
+        for k, _ in pairs(amputatedLimbs) do
+            local limbName = k
             --if modDataHandler:getIsCut(limbName) then
             local perk = Perks["Side_" .. CommonMethods.GetSide(limbName)]
             local perkLevel = pl:getPerkLevel(perk)
@@ -296,8 +298,8 @@ function ISBaseTimedAction:perform()
     if not modDataHandler:getIsAnyLimbCut() then return end
 
     local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(PlayerHandler.username)
-    for i=1, #amputatedLimbs do
-        local limbName = amputatedLimbs[i]
+    for k, _ in pairs(amputatedLimbs) do
+        local limbName = k
         if modDataHandler:getIsCut(limbName) then
             local side = CommonMethods.GetSide(limbName)
             PlayerHandler.playerObj:getXp():AddXP(Perks["Side_" .. side], 1)       -- TODO Make it dynamic

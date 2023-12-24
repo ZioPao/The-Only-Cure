@@ -46,8 +46,8 @@ function ProsthesisHandler.CheckIfEquippable(bodyLocation)
     TOC_DEBUG.print("checking side: " .. tostring(side))
 
     local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(getPlayer():getUsername())
-    for i = 1, #amputatedLimbs do
-        local limbName = amputatedLimbs[i]
+    for k, _ in pairs(amputatedLimbs) do
+        local limbName = k
         if string.contains(limbName, side) and not string.contains(limbName, "UpperArm") then
             TOC_DEBUG.print("found acceptable limb to use prosthesis")
             return true
