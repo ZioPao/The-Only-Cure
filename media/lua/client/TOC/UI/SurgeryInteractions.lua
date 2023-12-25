@@ -51,18 +51,26 @@ local function AddOvenContextMenu(playerNum, context, worldObjects, test)
         local isTempLow = stoveObj:getCurrentTemperature() < 250
         local tempTooltip = ISToolTip:new()
         tempTooltip:initialise()
-        tempTooltip:setName("ContextMenu_Cauterize_TempTooLow_tooltip")
+        tempTooltip:setName(getText("ContextMenu_Cauterize_TempTooLow_tooltip"))
         tempTooltip.description = getText("Tooltip_Surgery_TempTooLow")
         tempTooltip:setVisible(false)
 
-        local optionMain = context:addOption(getText("ContextMenu_Cauterize"), nil)
-        local subMenu = context:getNew(context)
-        context:addSubMenu(optionMain, subMenu)
+        local addMainOption = false
+        local subMenu
+
         for k, _ in pairs(amputatedLimbs) do
 
             -- We need to let the player cauterize ONLY the visible one!
             local limbName = k
-            if modDataHandler:getIsVisible(limbName) then
+            if modDataHandler:getIsVisible(limbName) and not modDataHandler:getIsCicatrized(limbName) then
+                if addMainOption == false then
+                    -- Adds the cauterize option ONLY when it's needed
+                    local optionMain = context:addOption(getText("ContextMenu_Cauterize"), nil)
+                    subMenu = context:getNew(context)
+                    context:addSubMenu(optionMain, subMenu)
+                    addMainOption = true
+                end
+                
                 local option = subMenu:addOption(getText("ContextMenu_Limb_" .. limbName), limbName, Cauterize)
                 option.notAvailable = isTempLow
                 if isTempLow then
