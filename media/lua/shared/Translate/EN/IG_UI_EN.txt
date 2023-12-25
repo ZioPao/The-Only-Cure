@@ -7,4 +7,9 @@ IG_UI_EN = {
 
     IGUI_ItemCat_Prosthesis = "Prosthesis",
     IGUI_ItemCat_Amputation = "Amputation"
+
+    IGUI_HealthPanel_Cicatrization = "Cicatrization",
+    IGUI_HealthPanel_Cicatrized = "Cicatrized",
+    IGUI_HealthPanel_Cauterized = "Cauterized",
+
 }

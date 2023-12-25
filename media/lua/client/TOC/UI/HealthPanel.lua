@@ -172,7 +172,6 @@ function ISHealthBodyPartListBox:doDrawItem(y, item, alt)
     local x = 15
     local fontHgt = getTextManager():getFontHeight(UIFont.Small)
 
-    -- TODO Get username of the correct player
     local username = self.parent.character:getUsername()
     --local amputatedLimbs = CachedDataHandler.GetIndexedAmputatedLimbs(username)
 
@@ -184,13 +183,22 @@ function ISHealthBodyPartListBox:doDrawItem(y, item, alt)
     if limbName then
         local modDataHandler = ModDataHandler.GetInstance(username)
         if modDataHandler:getIsCut(limbName) and modDataHandler:getIsVisible(limbName) then
-            local cicaTime = modDataHandler:getCicatrizationTime(limbName)
 
-            -- Show it in percentage
-            local maxCicaTime = StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM[limbName]
-            local percentage = (1 - cicaTime/maxCicaTime) * 100
+            if modDataHandler:getIsCicatrized(limbName) then
+                if modDataHandler:getIsCauterized(limbName) then
+                    self:drawText("- " .. getText("IGUI_HealthPanel_Cauterized"), x, y,  0.58, 0.75, 0.28, 1, UIFont.Small)
+                else
+                    self:drawText("- " .. getText("IGUI_HealthPanel_Cicatrized"), x, y,  0.28, 0.89, 0.28, 1, UIFont.Small)
+                end
+                
+            else
+                local cicaTime = modDataHandler:getCicatrizationTime(limbName)
 
-            self:drawText("- " .. string.format("Cicatrization %.2f", percentage) .. "%", x, y, 0.89, 0.28, 0.28, 1, UIFont.Small)
+                -- Show it in percentage
+                local maxCicaTime = StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM[limbName]
+                local percentage = (1 - cicaTime/maxCicaTime) * 100
+                self:drawText("- " .. getText("IGUI_HealthPanel_Cicatrization") .. string.format(" %.2f", percentage) .. "%", x, y, 0.89, 0.28, 0.28, 1, UIFont.Small)
+            end
             y = y + fontHgt
 
         end
@@ -199,4 +207,39 @@ function ISHealthBodyPartListBox:doDrawItem(y, item, alt)
 
     y = y + 5
     return y
+end
+
+local og_ISHealthPanel_getDamagedParts = ISHealthPanel.getDamagedParts
+function ISHealthPanel:getDamagedParts()
+
+    -- TODO Overriding it is a lot easier, but ew
+    -- local result = og_ISHealthPanel_getDamagedParts(self)
+    -- local bodyParts = self:getPatient():getBodyDamage():getBodyParts()
+    -- if isClient() and not self:getPatient():isLocalPlayer() then
+    --     bodyParts = self:getPatient():getBodyDamageRemote():getBodyParts()
+    -- end
+    -- for i=1,bodyParts:size() do
+    --     local bodyPart = bodyParts:get(i-1)
+    --     table.insert(result, bodyPart)
+
+    -- end
+
+
+    -- return result
+    local result = {}
+    local bodyParts = self:getPatient():getBodyDamage():getBodyParts()
+    if isClient() and not self:getPatient():isLocalPlayer() then
+        bodyParts = self:getPatient():getBodyDamageRemote():getBodyParts()
+    end
+    for i=1,bodyParts:size() do
+        local bodyPart = bodyParts:get(i-1)
+        local bodyPartTypeStr = BodyPartType.ToString(bodyPart:getType())
+        local limbName = StaticData.LIMBS_IND_STR[bodyPartTypeStr]
+
+        local bodyPartAction = self.bodyPartAction and self.bodyPartAction[bodyPart]
+        if ISHealthPanel.cheat or bodyPart:HasInjury() or bodyPart:bandaged() or bodyPart:stitched() or bodyPart:getSplintFactor() > 0 or bodyPart:getAdditionalPain() > 10 or bodyPart:getStiffness() > 5 or ModDataHandler.GetInstance(self:getPatient():getUsername()):getIsCut(limbName) then
+            table.insert(result, bodyPart)
+        end
+    end
+    return result
 end

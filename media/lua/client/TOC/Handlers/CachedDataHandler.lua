@@ -15,7 +15,6 @@ end
 
 --* Amputated Limbs caching *--
 CachedDataHandler.amputatedLimbs = {}
--- TODO Add an indexable table too!
 
 ---Calculate the currently amputated limbs for a certain player
 ---@param username string
@@ -37,10 +36,7 @@ function CachedDataHandler.AddAmputatedLimb(username, limbName)
     TOC_DEBUG.print("added " .. limbName .. " to known amputated limbs for " .. username)
 
     -- Add it to the generic list
-    -- TODO this is wrong
-
     CachedDataHandler.amputatedLimbs[username][limbName] = limbName
-    --table.insert(CachedDataHandler.amputatedLimbs[username], limbName)
 end
 
 ---Returns a table containing the cached amputated limbs

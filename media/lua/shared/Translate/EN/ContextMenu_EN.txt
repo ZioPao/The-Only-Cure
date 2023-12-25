@@ -8,10 +8,10 @@ ContextMenu_EN = {
     ContextMenu_Cauterize_TempTooLow_tooltip = "Temperature too low",
     
     ContextMenu_Limb_Hand_L = "Left Hand",
-    ContextMenu_Limb_ForeArm_L = "Left forearm",
+    ContextMenu_Limb_ForeArm_L = "Left Forearm",
     ContextMenu_Limb_UpperArm_L = "Left UpperArm"
     ContextMenu_Limb_Hand_R = "Right Hand",
-    ContextMenu_Limb_ForeArm_R = "Right forearm",
+    ContextMenu_Limb_ForeArm_R = "Right Forearm",
     ContextMenu_Limb_UpperArm_R = "Right UpperArm"
 
 

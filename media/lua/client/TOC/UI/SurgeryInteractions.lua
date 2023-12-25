@@ -1,4 +1,5 @@
 local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
+local StaticData = require("TOC/StaticData")
 local ModDataHandler = require("TOC/Handlers/ModDataHandler")
 ---------------
 
@@ -15,11 +16,17 @@ Events.OnFillInventoryObjectContextMenu.Add(AddInventorySurgeryMenu)
 
 -- TODO We need a class to handle operations, this is just a placeholder
 local function Cauterize(limbName)
-    
+    local modDataHandler = ModDataHandler.GetInstance()
+    modDataHandler:setCicatrizationTime(limbName, 0)
+    modDataHandler:setIsCicatrized(limbName, true)
+    modDataHandler:setIsCauterized(limbName, true)
+
+    -- we don't care bout the depended limbs, since they're alread "cicatrized"
+
+    modDataHandler:apply()
 end
 
----comment
----@param playerNum any
+---@param playerNum number
 ---@param context ISContextMenu
 ---@param worldObjects any
 ---@param test any
@@ -28,7 +35,8 @@ local function AddOvenContextMenu(playerNum, context, worldObjects, test)
 
     local pl = getSpecificPlayer(playerNum)
 
-    if not ModDataHandler.GetInstance():getIsAnyLimbCut() then return end
+    local modDataHandler = ModDataHandler.GetInstance()
+    if not modDataHandler:getIsAnyLimbCut() then return end
     local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(pl:getUsername())
 
     local stoveObj = nil
@@ -51,12 +59,17 @@ local function AddOvenContextMenu(playerNum, context, worldObjects, test)
         local subMenu = context:getNew(context)
         context:addSubMenu(optionMain, subMenu)
         for k, _ in pairs(amputatedLimbs) do
+
+            -- We need to let the player cauterize ONLY the visible one!
             local limbName = k
-            local option = subMenu:addOption(getText("ContextMenu_Limb_" .. limbName), limbName, Cauterize)
-            option.notAvailable = isTempLow
-            if isTempLow then
-                option.toolTip = tempTooltip
+            if modDataHandler:getIsVisible(limbName) then
+                local option = subMenu:addOption(getText("ContextMenu_Limb_" .. limbName), limbName, Cauterize)
+                option.notAvailable = isTempLow
+                if isTempLow then
+                    option.toolTip = tempTooltip
+                end
             end
+
         end
     end
 
