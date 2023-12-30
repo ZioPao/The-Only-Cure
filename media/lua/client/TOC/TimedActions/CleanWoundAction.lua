@@ -61,15 +61,26 @@ function CleanWoundAction:perform()
     --self.bodyPart:setNeedBurnWash(false)
     self.bandage:Use()
 
+    -- TODO Use Water too
+
     if isClient() then
-        local limbName = CommonMethods.GetLimbNameFromBodyPart(self.bodyPart)
-
-        -- TODO CHeck if correct in MP
-        local modDataHandler = ModDataHandler.GetInstance(self.character:getUsername())
-
-        modDataHandler:setWoundDirtyness(limbName, 0)
         --sendCleanBurn(self.character, self.otherPlayer, self.bodyPart, self.bandage)
     end
+
+    local limbName = CommonMethods.GetLimbNameFromBodyPart(self.bodyPart)
+
+    -- TODO CHeck if correct in MP
+    local modDataHandler = ModDataHandler.GetInstance(self.otherPlayer:getUsername())
+    modDataHandler:setWoundDirtyness(limbName, 0)
+
+
+    -- Clean visual
+    local bbptEnum = BloodBodyPartType[limbName]
+
+    ---@type HumanVisual
+    local visual = self.otherPlayer:getHumanVisual()
+    visual:setDirt(bbptEnum, 0)
+    visual:setBlood(bbptEnum, 0)
 
     ISHealthPanel.setBodyPartActionForPlayer(self.otherPlayer, self.bodyPart, nil, nil, nil)
 end

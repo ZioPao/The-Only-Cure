@@ -200,6 +200,10 @@ function ISHealthBodyPartListBox:doDrawItem(y, item, alt)
                 local maxCicaTime = StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM[limbName]
                 local percentage = (1 - cicaTime/maxCicaTime) * 100
                 self:drawText("- " .. getText("IGUI_HealthPanel_Cicatrization") .. string.format(" %.2f", percentage) .. "%", x, y, 0.89, 0.28, 0.28, 1, UIFont.Small)
+                y = y + fontHgt
+
+                local scaledDirtyness = math.floor(modDataHandler:getWoundDirtyness(limbName) * 100)
+                self:drawText("- " .. getText("IGUI_HealthPanel_WoundDirtyness") .. string.format(" %d", scaledDirtyness) .. "%", x, y, 0.89, 0.28, 0.28, 1, UIFont.Small)
             end
             y = y + fontHgt
 

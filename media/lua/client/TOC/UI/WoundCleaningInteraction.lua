@@ -22,7 +22,6 @@ function WoundCleaningHandler:new(panel, bodyPart, username)
 
     o.limbName = CommonMethods.GetLimbNameFromBodyPart(bodyPart)
 
-
     return o
 end
 
@@ -72,7 +71,7 @@ end
 function WoundCleaningHandler:perform(previousAction, itemType)
     local item = self:getItemOfType(self.items.ITEMS, itemType)
     previousAction = self:toPlayerInventory(item, previousAction)
-    local action = CleanWoundAction :new(self:getDoctor(), self:getPatient(), item, self.bodyPart)
+    local action = CleanWoundAction:new(self:getDoctor(), self:getPatient(), item, self.bodyPart)
     ISTimedActionQueue.addAfter(previousAction, action)
 end
 
