@@ -62,8 +62,9 @@ function ModDataHandler:setup(key)
 
     ---@type partData
     local defaultParams = {
-        isCut = false, isInfected = false, isOperated = false, isCicatrized = false,
-        isCauterized = false, isVisible = false
+        isCut = false, isInfected = false, isOperated = false, isCicatrized = false, isCauterized = false,
+        woundDirtyness = -1, cicatrizationTime = -1,
+        isVisible = false
     }
 
     -- Initialize limbs
@@ -138,6 +139,14 @@ function ModDataHandler:setIsCauterized(limbName, isCauterized)
     self.tocData.limbs[limbName].isCauterized = isCauterized
 end
 
+---Set woundDirtyness
+---@param limbName string
+---@param woundDirtyness number
+function ModDataHandler:setWoundDirtyness(limbName, woundDirtyness)
+    self.tocData.limbs[limbName].woundDirtyness = woundDirtyness
+end
+
+
 ---Set cicatrizationTime
 ---@param limbName string
 ---@param cicatrizationTime number
@@ -206,6 +215,14 @@ function ModDataHandler:getIsCauterized(limbName)
     return self.tocData.limbs[limbName].isCauterized
 end
 
+---Get woundDirtyness
+---@param limbName string
+---@return number
+function ModDataHandler:getWoundDirtyness(limbName)
+    return self.tocData.limbs[limbName].woundDirtyness
+end
+
+
 ---Get cicatrizationTime
 ---@param limbName string
 ---@return number
@@ -241,8 +258,10 @@ function ModDataHandler:setCutLimb(limbName, isOperated, isCicatrized, isCauteri
         cicatrizationTime = StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM[limbName] - surgeonFactor
     end
 
+    -- TODO Set WoundDirtyness here! For now it's just 0 
+
     ---@type partData
-    local params = {isCut = true, isInfected = false, isOperated = isOperated, isCicatrized = isCicatrized, isCauterized = isCauterized, isVisible = true}
+    local params = {isCut = true, isInfected = false, isOperated = isOperated, isCicatrized = isCicatrized, isCauterized = isCauterized, woundDirtyness = 0, isVisible = true}
     self:setLimbParams(limbName, params, cicatrizationTime)
 
     for i=1, #StaticData.LIMBS_DEPENDENCIES_IND_STR[limbName] do
@@ -271,6 +290,7 @@ function ModDataHandler:setLimbParams(limbName, ampStatus, cicatrizationTime)
     if ampStatus.isOperated ~= nil then limbData.isOperated = ampStatus.isOperated end
     if ampStatus.isCicatrized ~= nil then limbData.isCicatrized = ampStatus.isCicatrized end
     if ampStatus.isCauterized ~= nil then limbData.isCauterized = ampStatus.isCauterized end
+    if ampStatus.woundDirtyness ~= nil then limbData.woundDirtyness = ampStatus.woundDirtyness end
     if ampStatus.isVisible ~= nil then limbData.isVisible = ampStatus.isVisible end
 
     if cicatrizationTime ~= nil then limbData.cicatrizationTime = cicatrizationTime end

@@ -210,6 +210,8 @@ function PlayerHandler.UpdateCicatrization()
     end
 
     local pl = PlayerHandler.playerObj
+    local bd = pl:getBodyDamage()
+    local visual = pl:getHumanVisual()
     local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(pl:getUsername())
     local needsUpdate = false
 
@@ -221,6 +223,24 @@ function PlayerHandler.UpdateCicatrization()
             needsUpdate = true
             local cicTime = modDataHandler:getCicatrizationTime(limbName)
             TOC_DEBUG.print("updating cicatrization for " .. tostring(limbName))
+
+            -- TODO Check if bandaged, sutured, whatever
+
+            -- TODO Clean 
+
+            -- TODO Check dirtyness of zone and add to it
+
+            --local bptEnum = StaticData.BODYLOCS_IND_BPT[limbName]
+
+            -- TODO Workaround
+            local bbptEnum = BloodBodyPartType[limbName]
+            --local bodyPart = bd:getBodyPart(bptEnum)
+
+            local dirtyness = visual:getDirt(bbptEnum) + visual:getBlood(bbptEnum) + modDataHandler:getWoundDirtyness(limbName)
+            modDataHandler:setWoundDirtyness(limbName, dirtyness)
+
+            TOC_DEBUG.print("dirtyness for this zone: " .. tostring(dirtyness))
+
 
             cicTime = cicTime - SandboxVars.TOC.CicatrizationSpeed
             modDataHandler:setCicatrizationTime(limbName, cicTime)

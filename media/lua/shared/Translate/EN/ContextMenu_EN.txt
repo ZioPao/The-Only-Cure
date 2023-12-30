@@ -17,6 +17,8 @@ ContextMenu_EN = {
 
     ContextMenu_InstallProstRight = "Install prosthesis on right arm",
     ContextMenu_InstallProstLeft = "Install prosthesis on left arm",
+
+    ContextMenu_CleanWound = "Clean Wound",
     
     
 } 

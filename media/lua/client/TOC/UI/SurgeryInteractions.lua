@@ -1,7 +1,8 @@
 local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
-local StaticData = require("TOC/StaticData")
 local ModDataHandler = require("TOC/Handlers/ModDataHandler")
 ---------------
+
+
 
 -- TODO Surgery Kits
 

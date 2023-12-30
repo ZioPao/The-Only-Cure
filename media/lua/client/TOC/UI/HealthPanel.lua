@@ -2,6 +2,7 @@ local StaticData = require("TOC/StaticData")
 local ModDataHandler = require("TOC/Handlers/ModDataHandler")
 local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
 local CutLimbHandler = require("TOC/UI/CutLimbInteractions")
+local WoundCleaningHandler = require("TOC/UI/WoundCleaningInteraction")
 ---------------------------------
 
 -- We're overriding ISHealthPanel to add custom textures to the body panel.
@@ -36,11 +37,14 @@ function ISHealthPanel:doBodyPartContextMenu(bodyPart, x, y)
 
     -- To not recreate it but reuse the one that has been created in the original method
     local context = getPlayerContextMenu(playerNum)
+
     local cutLimbHandler = CutLimbHandler:new(self, bodyPart)
-
     self:checkItems({cutLimbHandler})
-
     cutLimbHandler:addToMenu(context)
+
+    local woundCleaningHandler = WoundCleaningHandler:new(self, bodyPart, self.character:getUsername())
+    self:checkItems({woundCleaningHandler})
+    woundCleaningHandler:addToMenu(context)
 end
 
 
@@ -183,14 +187,12 @@ function ISHealthBodyPartListBox:doDrawItem(y, item, alt)
     if limbName then
         local modDataHandler = ModDataHandler.GetInstance(username)
         if modDataHandler:getIsCut(limbName) and modDataHandler:getIsVisible(limbName) then
-
             if modDataHandler:getIsCicatrized(limbName) then
                 if modDataHandler:getIsCauterized(limbName) then
                     self:drawText("- " .. getText("IGUI_HealthPanel_Cauterized"), x, y,  0.58, 0.75, 0.28, 1, UIFont.Small)
                 else
                     self:drawText("- " .. getText("IGUI_HealthPanel_Cicatrized"), x, y,  0.28, 0.89, 0.28, 1, UIFont.Small)
                 end
-                
             else
                 local cicaTime = modDataHandler:getCicatrizationTime(limbName)
 
