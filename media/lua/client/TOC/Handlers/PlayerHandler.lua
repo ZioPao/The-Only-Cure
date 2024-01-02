@@ -33,8 +33,8 @@ function PlayerHandler.InitializePlayer(playerObj, isForced)
     CachedDataHandler.CalculateHighestAmputatedLimbs(username)
 
     --Setup the CicatrizationUpdate event and triggers it once
-    Events.OnAmputatedLimb.Add(PlayerHandler.ToggleCicatrizationUpdate)
-    PlayerHandler.ToggleCicatrizationUpdate()
+    Events.OnAmputatedLimb.Add(PlayerHandler.ToggleUpdateAmputations)
+    PlayerHandler.ToggleUpdateAmputations()
 
     -- Since isForced is used to reset an existing player data, we're gonna clean their ISHealthPanel table too
     if isForced then
@@ -203,10 +203,10 @@ end
 Events.OnPlayerGetDamage.Add(PlayerHandler.OnGetDamage)
 
 ---Updates the cicatrization process, run when a limb has been cut. Run it every 1 hour
-function PlayerHandler.UpdateCicatrization()
+function PlayerHandler.UpdateAmputations()
     local modDataHandler = ModDataHandler.GetInstance()
     if modDataHandler:getIsAnyLimbCut() == false then
-        Events.EveryHours.Remove(PlayerHandler.UpdateCicatrization)
+        Events.EveryHours.Remove(PlayerHandler.UpdateAmputations)
     end
 
     local pl = PlayerHandler.playerObj
@@ -234,7 +234,8 @@ function PlayerHandler.UpdateCicatrization()
             local bbptEnum = BloodBodyPartType[limbName]
             --local bodyPart = bd:getBodyPart(bptEnum)
 
-            local dirtyness = visual:getDirt(bbptEnum) + visual:getBlood(bbptEnum) + modDataHandler:getWoundDirtyness(limbName) + 0.01      -- TODO Make it customizable
+            local modifier = 0.01 * SandboxVars.TOC.WoundDirtynessMultiplier
+            local dirtyness = visual:getDirt(bbptEnum) + visual:getBlood(bbptEnum) + modDataHandler:getWoundDirtyness(limbName) + modifier
 
             if dirtyness > 1 then
                 dirtyness = 1
@@ -258,17 +259,17 @@ function PlayerHandler.UpdateCicatrization()
         TOC_DEBUG.print("updating modData from cicatrization loop")
         modDataHandler:apply()      -- TODO This is gonna be heavy. Not entirely sure
     else
-        TOC_DEBUG.print("Removing UpdateCicatrizationF")
-        Events.EveryHours.Remove(PlayerHandler.UpdateCicatrization)     -- We can remove it safely, no cicatrization happening here boys
+        TOC_DEBUG.print("Removing UpdateAmputations")
+        Events.EveryHours.Remove(PlayerHandler.UpdateAmputations)     -- We can remove it safely, no cicatrization happening here boys
     end
-    TOC_DEBUG.print("updating cicatrization!")
+    TOC_DEBUG.print("updating cicatrization and wound dirtyness!")
 
 end
 
 ---Starts safely the loop to update cicatrzation
-function PlayerHandler.ToggleCicatrizationUpdate()
-    TOC_DEBUG.print("activating cicatrization loop (if it wasn't active before)")
-    CommonMethods.SafeStartEvent("EveryHours", PlayerHandler.UpdateCicatrization)
+function PlayerHandler.ToggleUpdateAmputations()
+    TOC_DEBUG.print("activating amputation handling loop (if it wasn't active before)")
+    CommonMethods.SafeStartEvent("EveryHours", PlayerHandler.UpdateAmputations)
 end
 
 

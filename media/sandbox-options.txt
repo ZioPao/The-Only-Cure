@@ -9,6 +9,15 @@ option TOC.CicatrizationSpeed
     translation = TOC_CicatrizationSpeed,
 }
 
+option TOC.WoundDirtynessMultiplier
+{
+    type = integer,
+    min = 0,
+    max = 5,
+    default = 1,
+    page = TOC,
+    translation = TOC_WoundDirtynessMultiplier,
+}
 option TOC.SurgeonAbilityImportance
 {
     type = integer,
@@ -18,3 +27,4 @@ option TOC.SurgeonAbilityImportance
     page = TOC,
     translation = TOC_SurgeonAbilityImportance,
 }
+

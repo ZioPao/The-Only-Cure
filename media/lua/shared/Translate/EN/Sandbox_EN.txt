@@ -1,6 +1,7 @@
 Sandbox_EN = {
     Sandbox_TOC = "The Only Cure",
     Sandbox_TOC_CicatrizationSpeed = "Cicatrization Speed",
+    Sandbox_TOC_WoundDirtynessMultiplier = "Wound Dirtyness Multiplier",
     Sandbox_TOC_SurgeonAbilityImportance = "Relevance of surgeon doctor ability",
 
 }
