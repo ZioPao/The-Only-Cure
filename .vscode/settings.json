@@ -2,7 +2,7 @@
     "todo-tree.tree.scanMode": "workspace",
     "zomboid_user_folder": "C:/Users/picch/Zomboid",
     "zomboid_folder": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\ProjectZomboid",
-    "zomboid_server_folder": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Project Zomboid Dedicated Server",
+    "zomboid_server_folder": "E:\\Steam\\steamapps\\common\\Project Zomboid Dedicated Server",
     "Lua.diagnostics.globals": [
         "ModOptions",
         "zombie",
