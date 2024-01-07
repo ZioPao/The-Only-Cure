@@ -44,8 +44,8 @@ function PlayerHandler.InitializePlayer(playerObj, isForced)
         CachedDataHandler.Reset(username)
     end
 
-    -- Overrides various functions on the Health Panel ONLY after we're done initializing the player
-    OverrideHealthPanelForTOC()
+    -- Set a bool to use an overriding GetDamagedParts
+    SetHealthPanelTOC()
 
 end
 

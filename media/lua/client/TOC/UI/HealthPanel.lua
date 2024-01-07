@@ -4,8 +4,13 @@ local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
 local CutLimbHandler = require("TOC/UI/CutLimbInteractions")
 local WoundCleaningHandler = require("TOC/UI/WoundCleaningInteraction")
 
+local isReady = false
 
-function OverrideHealthPanelForTOC()
+function SetHealthPanelTOC()
+    isReady = true
+end
+
+--function OverrideHealthPanelForTOC()
 
     -- We're overriding ISHealthPanel to add custom textures to the body panel.
     -- By doing so we can show the player which limbs have been cut without having to use another menu
@@ -98,7 +103,7 @@ function OverrideHealthPanelForTOC()
         else
             if highestAmputations[side] == nil then return end
             local limbName = highestAmputations[side]
-            --TOC_DEBUG.print("Drawing " .. tostring(limbName) .. " for " .. username)
+            TOC_DEBUG.print("Drawing " .. tostring(limbName) .. " for " .. username)
 
             local cicTime = ModDataHandler.GetInstance(username):getCicatrizationTime(limbName)
             redColor = GetColorFromCicatrizationTime(cicTime, limbName)
@@ -176,7 +181,7 @@ function OverrideHealthPanelForTOC()
     local og_ISMedicalCheckAction_perform = ISMedicalCheckAction.perform
     function ISMedicalCheckAction:perform()
         local username = self.otherPlayer:getUsername()
-        TOC_DEBUG.print("Medical Action on " .. username )
+        TOC_DEBUG.print("[HealthPanel] Medical Action on " .. username )
 
         -- We need to recalculate them here before we can create the highest amputations point
         CachedDataHandler.CalculateAmputatedLimbs(username)
@@ -233,24 +238,30 @@ function OverrideHealthPanelForTOC()
     function ISHealthPanel:getDamagedParts()
         -- TODO Overriding it is a lot easier, but ew
 
-        local result = {}
-        local bodyParts = self:getPatient():getBodyDamage():getBodyParts()
-        if isClient() and not self:getPatient():isLocalPlayer() then
-            bodyParts = self:getPatient():getBodyDamageRemote():getBodyParts()
-        end
+        if isReady then
 
-        local patientUsername = self:getPatient():getUsername()
-        local mdh = ModDataHandler.GetInstance(patientUsername)
-        for i=1,bodyParts:size() do
-            local bodyPart = bodyParts:get(i-1)
-            local bodyPartTypeStr = BodyPartType.ToString(bodyPart:getType())
-            local limbName = StaticData.LIMBS_IND_STR[bodyPartTypeStr]
-
-            if ISHealthPanel.cheat or bodyPart:HasInjury() or bodyPart:bandaged() or bodyPart:stitched() or bodyPart:getSplintFactor() > 0 or bodyPart:getAdditionalPain() > 10 or bodyPart:getStiffness() > 5 or (mdh:getIsCut(limbName) and mdh:getIsVisible(limbName)) then
-                table.insert(result, bodyPart)
+            local result = {}
+            local bodyParts = self:getPatient():getBodyDamage():getBodyParts()
+            if isClient() and not self:getPatient():isLocalPlayer() then
+                bodyParts = self:getPatient():getBodyDamageRemote():getBodyParts()
             end
+
+            local patientUsername = self:getPatient():getUsername()
+            local mdh = ModDataHandler.GetInstance(patientUsername)
+            for i=1,bodyParts:size() do
+                local bodyPart = bodyParts:get(i-1)
+                local bodyPartTypeStr = BodyPartType.ToString(bodyPart:getType())
+                local limbName = StaticData.LIMBS_IND_STR[bodyPartTypeStr]
+
+                if ISHealthPanel.cheat or bodyPart:HasInjury() or bodyPart:bandaged() or bodyPart:stitched() or bodyPart:getSplintFactor() > 0 or bodyPart:getAdditionalPain() > 10 or bodyPart:getStiffness() > 5 or (mdh:getIsCut(limbName) and mdh:getIsVisible(limbName)) then
+                    table.insert(result, bodyPart)
+                end
+            end
+            return result
+
+        else
+            return og_ISHealthPanel_getDamagedParts(self)
         end
-        return result
     end
 
-end
+--end

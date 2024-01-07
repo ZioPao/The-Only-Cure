@@ -38,7 +38,7 @@ end
 ---@param username string
 ---@param limbName string
 function CachedDataHandler.AddAmputatedLimb(username, limbName)
-    TOC_DEBUG.print("added " .. limbName .. " to known amputated limbs for " .. username)
+    TOC_DEBUG.print("[CachedDataHandler] Added " .. limbName .. " to known amputated limbs for " .. username)
 
     -- Add it to the generic list
     CachedDataHandler.amputatedLimbs[username][limbName] = limbName
@@ -64,16 +64,17 @@ function CachedDataHandler.CalculateHighestAmputatedLimbs(username)
         return
     end
 
-    if CachedDataHandler.amputatedLimbs == nil or CachedDataHandler.amputatedLimbs[username] == nil then
-        --- This function gets ran pretty early, we need to account for the Bob stuff
-        -- if username == "Bob" then
-        --     TOC_DEBUG.print("skip, Bob is default char")
-        --     return
-        -- end
+    -- if CachedDataHandler.amputatedLimbs == nil or CachedDataHandler.amputatedLimbs[username] == nil then
+    --     --- This function gets ran pretty early, we need to account for the Bob stuff
+    --     -- if username == "Bob" then
+    --     --     TOC_DEBUG.print("skip, Bob is default char")
+    --     --     return
+    --     -- end
 
-        TOC_DEBUG.print("Amputated limbs weren't calculated. Trying to calculate them now for " .. username)
-        CachedDataHandler.CalculateAmputatedLimbs(username)
-    end
+    --     TOC_DEBUG.print("Amputated limbs weren't calculated. Trying to calculate them now for " .. username)
+    --     CachedDataHandler.CalculateAmputatedLimbs(username)
+    -- end
+    CachedDataHandler.CalculateAmputatedLimbs(username)
 
     local amputatedLimbs = CachedDataHandler.amputatedLimbs[username]
     CachedDataHandler.highestAmputatedLimbs[username] = {}
@@ -83,7 +84,7 @@ function CachedDataHandler.CalculateHighestAmputatedLimbs(username)
         local limbName = k
         local index = CommonMethods.GetSide(limbName)
         if modDataHandler:getIsCut(limbName) and modDataHandler:getIsVisible(limbName) then
-            TOC_DEBUG.print("found high amputation " .. limbName)
+            TOC_DEBUG.print("[CachedDataHandler] Added Highest Amputation: " .. limbName)
             CachedDataHandler.highestAmputatedLimbs[username][index] = limbName
         end
     end
