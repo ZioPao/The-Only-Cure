@@ -22,15 +22,16 @@ local PlayerHandler = {}
 ---@param isForced boolean?
 function PlayerHandler.InitializePlayer(playerObj, isForced)
     local username = playerObj:getUsername()
-    TOC_DEBUG.print("initializing local player: " .. username)
+
+    TOC_DEBUG.print("[PlayerHandler] Initializing local player: " .. username)
 
     ModDataHandler:new(username, isForced)
     PlayerHandler.playerObj = playerObj
     PlayerHandler.username = username
 
     -- Calculate amputated limbs and highest point of amputations at startup
-    CachedDataHandler.CalculateAmputatedLimbs(username)
-    CachedDataHandler.CalculateHighestAmputatedLimbs(username)
+    --CachedDataHandler.CalculateAmputatedLimbs(username)
+    --CachedDataHandler.CalculateHighestAmputatedLimbs(username)
 
     --Setup the CicatrizationUpdate event and triggers it once
     Events.OnAmputatedLimb.Add(PlayerHandler.ToggleUpdateAmputations)
@@ -42,6 +43,10 @@ function PlayerHandler.InitializePlayer(playerObj, isForced)
         ItemsHandler.Player.DeleteAllOldAmputationItems(playerObj)
         CachedDataHandler.Reset(username)
     end
+
+    -- Overrides various functions on the Health Panel ONLY after we're done initializing the player
+    OverrideHealthPanelForTOC()
+
 end
 
 ---Handles the traits
@@ -235,7 +240,15 @@ function PlayerHandler.UpdateAmputations()
             --local bodyPart = bd:getBodyPart(bptEnum)
 
             local modifier = 0.01 * SandboxVars.TOC.WoundDirtynessMultiplier
-            local dirtyness = visual:getDirt(bbptEnum) + visual:getBlood(bbptEnum) + modDataHandler:getWoundDirtyness(limbName) + modifier
+
+            --------------
+            -- TEST SECTION
+
+            local dirtynessVis = visual:getDirt(bbptEnum) + visual:getBlood(bbptEnum)
+            local dirtynessWound = modDataHandler:getWoundDirtyness(limbName) + modifier
+            --------------
+
+            local dirtyness = dirtynessVis + dirtynessWound
 
             if dirtyness > 1 then
                 dirtyness = 1
@@ -268,7 +281,7 @@ end
 
 ---Starts safely the loop to update cicatrzation
 function PlayerHandler.ToggleUpdateAmputations()
-    TOC_DEBUG.print("activating amputation handling loop (if it wasn't active before)")
+    TOC_DEBUG.print("[PlayerHandler] Activating amputation handling loop (if it wasn't active before)")
     CommonMethods.SafeStartEvent("EveryHours", PlayerHandler.UpdateAmputations)
 end
 

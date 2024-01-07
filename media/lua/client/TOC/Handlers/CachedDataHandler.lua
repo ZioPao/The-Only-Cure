@@ -19,8 +19,11 @@ CachedDataHandler.amputatedLimbs = {}
 ---Calculate the currently amputated limbs for a certain player
 ---@param username string
 function CachedDataHandler.CalculateAmputatedLimbs(username)
+    TOC_DEBUG.print("[CachedDataHandler] Calculating amputated limbs for " .. username)
     CachedDataHandler.amputatedLimbs[username] = {}
     local modDataHandler = ModDataHandler.GetInstance(username)
+
+    -- TODO If the data hasn't arrived, this won't work
     for i=1, #StaticData.LIMBS_STR do
         local limbName = StaticData.LIMBS_STR[i]
         if modDataHandler:getIsCut(limbName) then
@@ -28,6 +31,8 @@ function CachedDataHandler.CalculateAmputatedLimbs(username)
         end
     end
 end
+
+
 
 ---Add an amputated limb to the cached list for that user
 ---@param username string
@@ -52,6 +57,13 @@ CachedDataHandler.highestAmputatedLimbs = {}
 ---Calcualate the highest point of amputations achieved by the player
 ---@param username string
 function CachedDataHandler.CalculateHighestAmputatedLimbs(username)
+    TOC_DEBUG.print("[CachedDataHandler] Triggered CalculateHighestAmputatedLimbs")
+    local modDataHandler = ModDataHandler.GetInstance(username)
+    if modDataHandler == nil then
+        TOC_DEBUG.print("ModDataHandler not found for " .. username)
+        return
+    end
+
     if CachedDataHandler.amputatedLimbs == nil or CachedDataHandler.amputatedLimbs[username] == nil then
         --- This function gets ran pretty early, we need to account for the Bob stuff
         -- if username == "Bob" then
@@ -66,11 +78,6 @@ function CachedDataHandler.CalculateHighestAmputatedLimbs(username)
     local amputatedLimbs = CachedDataHandler.amputatedLimbs[username]
     CachedDataHandler.highestAmputatedLimbs[username] = {}
     --TOC_DEBUG.print("Searching highest amputations for " .. username)
-    local modDataHandler = ModDataHandler.GetInstance(username)
-    if modDataHandler == nil then
-        TOC_DEBUG.print("ModDataHandler not found for " .. username)
-        return
-    end
 
     for k, _ in pairs(amputatedLimbs) do
         local limbName = k
@@ -81,6 +88,7 @@ function CachedDataHandler.CalculateHighestAmputatedLimbs(username)
         end
     end
 end
+
 
 ---Get the cached highest point of amputation for each side
 ---@param username string

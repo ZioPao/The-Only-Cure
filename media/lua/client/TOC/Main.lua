@@ -46,13 +46,19 @@ end
 function Main.SetupEvents()
     --Triggered when a limb has been amputated
     LuaEventManager.AddEvent("OnAmputatedLimb")
+
+    -- Triggered when data is ready
+    LuaEventManager.AddEvent("OnReceivedTocData")
+    local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
+    Events.OnReceivedTocData.Add(CachedDataHandler.CalculateHighestAmputatedLimbs)
+
 end
 
 function Main.Initialize()
     ---Looop until we've successfully initialized the mod
     local function TryToInitialize()
         local pl = getPlayer()
-        TOC_DEBUG.print("Current username in TryToInitialize: " .. pl:getUsername())
+        TOC_DEBUG.print("[Main] Current username in TryToInitialize: " .. pl:getUsername())
         if pl:getUsername() == "Bob" then
             TOC_DEBUG.print("Username is still Bob, waiting")
             return

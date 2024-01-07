@@ -5,7 +5,9 @@ local StaticData = require("TOC/StaticData")
 --- Handle all mod data related stuff
 ---@class ModDataHandler
 ---@field username string
----@field tocData tocModData 
+---@field tocData tocModData
+---@field isDataReady boolean
+---@field isResetForced boolean
 local ModDataHandler = {}
 ModDataHandler.instances = {}
 
@@ -14,6 +16,8 @@ ModDataHandler.instances = {}
 ---@param isResetForced boolean?
 ---@return ModDataHandler
 function ModDataHandler:new(username, isResetForced)
+    TOC_DEBUG.print("[ModDataHandler] NEW for " .. username)
+    --error("TEST TRIGGER")
     local o = {}
     setmetatable(o, self)
     self.__index = self
@@ -24,32 +28,23 @@ function ModDataHandler:new(username, isResetForced)
     -- We don't want to request ModData if we're in SP, or if we're forcing a reset
     if isClient() and not isResetForced then
         ModData.request(key)
+        o.isResetForced = isResetForced
+        o.isDataReady = false
+    elseif isResetForced then
+        self:setup(key)
+        o.isResetForced = false
+        o.isDataReady = true
     end
-
-    -- FIXME This is working like a placeholder at the moment, it's gonna get replaced later in reapplyTocData
-    o.tocData = ModData.get(key)
-    if isResetForced or o.tocData == nil or o.tocData.limbs == nil or o.tocData.limbs.Hand_L == nil or o.tocData.limbs.Hand_L.isCut == nil then
-        TOC_DEBUG.print("tocData in ModDataHandler for " .. username .. " is nil, creating it now")
-        o:setup(key)
-    end
-
-
-    -- Transmit it to the server
-    ModData.transmit(key)
-    TOC_DEBUG.print("initialized ModDataHandler for " .. username)
 
     ModDataHandler.instances[username] = o
 
     return o
 end
 
-function ModDataHandler:initialize()
-
-end
-
 ---Setup a new toc mod data data class
 ---@param key string
 function ModDataHandler:setup(key)
+    TOC_DEBUG.print("[ModDataHandler] Running setup")
 
     ---@type tocModData
     self.tocData = {
@@ -89,15 +84,19 @@ function ModDataHandler:setup(key)
 end
 
 ---In case of desync between the table on ModData and the table here
----@param key string
 ---@param tocData tocModData
-function ModDataHandler:reapplyTocData(key, tocData)
+function ModDataHandler:reapplyTocData(tocData)
+    local key = CommandsData.GetKey(self.username)
     ModData.add(key, tocData)
     self.tocData = ModData.get(key)
 end
 
 -----------------
 --* Setters *--
+
+function ModDataHandler:setIsDataReady(isDataReady)
+    self.isDataReady = isDataReady
+end
 
 ---Set a generic boolean that toggles varies function of the mod
 ---@param isAnyLimbCut boolean
@@ -171,6 +170,11 @@ end
 -----------------
 --* Getters *--
 
+---comment
+---@return boolean
+function ModDataHandler:getIsDataReady()
+    return self.isDataReady
+end
 ---Set a generic boolean that toggles varies function of the mod
 ---@return boolean
 function ModDataHandler:getIsAnyLimbCut()
@@ -187,6 +191,8 @@ end
 ---@param limbName string
 ---@return boolean
 function ModDataHandler:getIsCut(limbName)
+    if not self.isDataReady then return false end
+
     if self.tocData.limbs[limbName] then
         return self.tocData.limbs[limbName].isCut
     else
@@ -198,6 +204,8 @@ end
 ---@param limbName string
 ---@return boolean
 function ModDataHandler:getIsVisible(limbName)
+    if not self.isDataReady then return false end
+
     return self.tocData.limbs[limbName].isVisible
 end
 
@@ -314,12 +322,10 @@ function ModDataHandler.ReceiveData(key, table)
     if not isClient() then
         TOC_DEBUG.print("SP, skipping ModDataHandler.ReceiveData")
     end
-    TOC_DEBUG.print("receiving data from server")
-
     -- During startup the game can return Bob as the player username, adding a useless ModData table
     if key == "TOC_Bob" then return end
 
-    TOC_DEBUG.print("receive data for " .. key)
+    TOC_DEBUG.print("[ModDataHandler] ReceiveData for " .. key)
     if table == {} or table == nil then
         TOC_DEBUG.print("table is nil... returning")
         return
@@ -327,8 +333,39 @@ function ModDataHandler.ReceiveData(key, table)
 
     -- Create ModDataHandler instance if there was none for that user and reapply the correct ModData table as a reference
     local username = key:sub(5)
-    ModDataHandler.GetInstance(username):reapplyTocData(key, table)
+
+    -- FIXME Triggers an error at startup during initialization
+
+    local handler = ModDataHandler.GetInstance(username)
+
+    if handler.isResetForced then
+        handler:setup(key)
+        handler.isResetForced = false
+    else
+        handler:reapplyTocData(table)
+    end
+
+
+    -- if handler.isResetForced or handler.tocData == nil or handler.tocData.limbs == nil or handler.tocData.limbs.Hand_L == nil or handler.tocData.limbs.Hand_L.isCut == nil then
+    --     TOC_DEBUG.print("tocData in ModDataHandler for " .. handler.username .. " is nil, creating it now")
+    --     handler:setup(key)
+    --     handler.isResetForced = false
+    -- elseif table then
+    --     TOC_DEBUG.print("Reapply toc data for " .. handler.username)
+    --     handler:reapplyTocData(table)
+    -- end
+
+    handler:setIsDataReady(true)
+
+    -- Event
+    triggerEvent("OnReceivedTocData", handler.username)
+
+    -- Transmit it to the server
+    ModData.transmit(key)
+    TOC_DEBUG.print("[ModDataHandler] Transmitting data after receiving it for: " .. handler.username)
+
 end
+
 Events.OnReceiveGlobalModData.Add(ModDataHandler.ReceiveData)
 
 -------------------
@@ -341,6 +378,7 @@ function ModDataHandler.GetInstance(username)
     end
 
     if ModDataHandler.instances[username] == nil then
+        TOC_DEBUG.print("[ModDataHandler] Creating NEW instance for " .. username)
         return ModDataHandler:new(username)
     else
         return ModDataHandler.instances[username]
