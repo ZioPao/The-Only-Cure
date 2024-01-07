@@ -98,7 +98,7 @@ function OverrideHealthPanelForTOC()
         else
             if highestAmputations[side] == nil then return end
             local limbName = highestAmputations[side]
-            TOC_DEBUG.print("Drawing " .. tostring(limbName) .. " for " .. username)
+            --TOC_DEBUG.print("Drawing " .. tostring(limbName) .. " for " .. username)
 
             local cicTime = ModDataHandler.GetInstance(username):getCicatrizationTime(limbName)
             redColor = GetColorFromCicatrizationTime(cicTime, limbName)

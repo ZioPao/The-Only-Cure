@@ -178,6 +178,7 @@ end
 ---Set a generic boolean that toggles varies function of the mod
 ---@return boolean
 function ModDataHandler:getIsAnyLimbCut()
+    --if self.isDataReady == false then return false end
     return self.tocData.isAnyLimbCut
 end
 
@@ -318,7 +319,7 @@ function ModDataHandler:apply()
     ModData.transmit(CommandsData.GetKey(self.username))
 end
 
-function ModDataHandler.ReceiveData(key, table)
+function ModDataHandler.ReceiveData(key, data)
     if not isClient() then
         TOC_DEBUG.print("SP, skipping ModDataHandler.ReceiveData")
     end
@@ -326,23 +327,21 @@ function ModDataHandler.ReceiveData(key, table)
     if key == "TOC_Bob" then return end
 
     TOC_DEBUG.print("[ModDataHandler] ReceiveData for " .. key)
-    if table == {} or table == nil then
+    if data == {} or data == nil then
         TOC_DEBUG.print("table is nil... returning")
         return
     end
 
-    -- Create ModDataHandler instance if there was none for that user and reapply the correct ModData table as a reference
+    -- Get ModDataHandler instance if there was none for that user and reapply the correct ModData table as a reference
     local username = key:sub(5)
-
-    -- FIXME Triggers an error at startup during initialization
-
     local handler = ModDataHandler.GetInstance(username)
-
-    if handler.isResetForced then
+    if handler.isResetForced or data == nil or data == {} or data == false then
+        TOC_DEBUG.print("[ModDataHandler] Setup")
         handler:setup(key)
         handler.isResetForced = false
     else
-        handler:reapplyTocData(table)
+        TOC_DEBUG.print("[ModDataHandler] Reapply")
+        handler:reapplyTocData(data)
     end
 
 

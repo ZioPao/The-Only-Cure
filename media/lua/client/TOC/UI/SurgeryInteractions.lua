@@ -71,7 +71,7 @@ local function AddOvenContextMenu(playerNum, context, worldObjects, test)
                     context:addSubMenu(optionMain, subMenu)
                     addMainOption = true
                 end
-                
+
                 local option = subMenu:addOption(getText("ContextMenu_Limb_" .. limbName), limbName, Cauterize)
                 option.notAvailable = isTempLow
                 if isTempLow then
