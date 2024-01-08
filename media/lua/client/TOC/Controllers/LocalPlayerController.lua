@@ -18,12 +18,12 @@ local StaticData = require("TOC/StaticData")
 local LocalPlayerController = {}
 
 ---Setup the Player Handler and modData, only for local client
----@param playerObj IsoPlayer
 ---@param isForced boolean?
-function LocalPlayerController.InitializePlayer(playerObj, isForced)
+function LocalPlayerController.InitializePlayer(isForced)
+    local playerObj = getPlayer()
     local username = playerObj:getUsername()
 
-    TOC_DEBUG.print("[PlayerHandler] Initializing local player: " .. username)
+    TOC_DEBUG.print("[LocalPlayerController] Initializing local player: " .. username)
 
     DataController:new(username, isForced)
     LocalPlayerController.playerObj = playerObj
@@ -281,7 +281,7 @@ end
 
 ---Starts safely the loop to update cicatrzation
 function LocalPlayerController.ToggleUpdateAmputations()
-    TOC_DEBUG.print("[PlayerHandler] Activating amputation handling loop (if it wasn't active before)")
+    TOC_DEBUG.print("[LocalPlayerController] Activating amputation handling loop (if it wasn't active before)")
     CommonMethods.SafeStartEvent("EveryHours", LocalPlayerController.UpdateAmputations)
 end
 

@@ -139,7 +139,7 @@ function AmputationHandler:execute(damagePlayer)
     -- Heal the area, we're gonna re-set the damage after (if it's enabled)
     local bd = self.patientPl:getBodyDamage()
     local bodyPart = bd:getBodyPart(self.bodyPartType)
-    PlayerHandler.HealArea(bodyPart)
+    LocalPlayerController.HealArea(bodyPart)
 
     -- Give the player the correct amputation item
     ItemsController.Player.DeleteOldAmputationItem(self.patientPl, self.limbName)
@@ -159,7 +159,7 @@ function AmputationHandler:execute(damagePlayer)
 
     -- If the part was actually infected, heal the player, if they were in time (infectionLevel < 20)
     if bd:getInfectionLevel() < 20 and bodyPart:IsInfected() and not dcInst:getIsIgnoredPartInfected() then
-        PlayerHandler.HealZombieInfection(bd, bodyPart, self.limbName, dcInst)
+        LocalPlayerController.HealZombieInfection(bd, bodyPart, self.limbName, dcInst)
     end
 
     -- The last part is to handle the damage that the player will receive after the amputation

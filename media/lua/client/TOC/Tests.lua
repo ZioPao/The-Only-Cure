@@ -8,16 +8,16 @@ local DataController = require("TOC/Controllers/DataController")
 local StaticData = require("TOC/StaticData")
 
 
-TestFramework.registerTestModule("PlayerHandler", "Setup", function()
+TestFramework.registerTestModule("LocalPlayerController", "Setup", function()
     local Tests = {}
     function Tests.InitializePlayer()
         local pl = getPlayer()
-        PlayerHandler.InitializePlayer(pl, true)
+        LocalPlayerController.InitializePlayer(true)
     end
     return Tests
 end)
 
-TestFramework.registerTestModule("PlayerHandler", "Perks", function()
+TestFramework.registerTestModule("LocalPlayerController", "Perks", function()
     local Tests = {}
 
     function Tests.SetMaxPerks()
@@ -46,7 +46,7 @@ TestFramework.registerTestModule("PlayerHandler", "Perks", function()
     return Tests
 end)
 
-TestFramework.registerTestModule("PlayerHandler", "Cicatrization", function()
+TestFramework.registerTestModule("LocalPlayerController", "Cicatrization", function()
     local Tests = {}
 
     function Tests.SetCicatrizationTimeToOne()
@@ -117,8 +117,8 @@ if not getActivatedMods():contains("PerfTestFramework") or not isDebugEnabled() 
 local PerfTest = require("PerfTest/main")       -- SHould be global anyway
 local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
 
-PerfTest.RegisterMethod("PlayerHandler", PlayerHandler, "InitializePlayer")
-PerfTest.RegisterMethod("PlayerHandler", PlayerHandler, "UpdateAmputations")
+PerfTest.RegisterMethod("LocalPlayerController", LocalPlayerController, "InitializePlayer")
+PerfTest.RegisterMethod("LocalPlayerController", LocalPlayerController, "UpdateAmputations")
 PerfTest.RegisterMethod("CachedDataHandler", CachedDataHandler, "CalculateHighestAmputatedLimbs")
 PerfTest.RegisterMethod("ISHealthPanel", ISHealthPanel, "render")
 

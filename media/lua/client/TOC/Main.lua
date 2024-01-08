@@ -64,7 +64,7 @@ function Main.Initialize()
             return
         end
 
-        PlayerHandler.InitializePlayer(pl, false)
+        LocalPlayerController.InitializePlayer(false)
         Events.OnTick.Remove(TryToInitialize)
     end
     CommonMethods.SafeStartEvent("OnTick", TryToInitialize)
