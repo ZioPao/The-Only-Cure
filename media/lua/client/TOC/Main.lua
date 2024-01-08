@@ -58,7 +58,7 @@ function Main.Initialize()
     ---Looop until we've successfully initialized the mod
     local function TryToInitialize()
         local pl = getPlayer()
-        TOC_DEBUG.print("[Main] Current username in TryToInitialize: " .. pl:getUsername())
+        TOC_DEBUG.print("Current username in TryToInitialize: " .. pl:getUsername())
         if pl:getUsername() == "Bob" then
             TOC_DEBUG.print("Username is still Bob, waiting")
             return

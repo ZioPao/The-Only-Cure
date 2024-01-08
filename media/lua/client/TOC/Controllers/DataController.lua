@@ -47,7 +47,7 @@ end
 ---Setup a new toc mod data data class
 ---@param key string
 function DataController:setup(key)
-    TOC_DEBUG.print("[DataController] Running setup")
+    TOC_DEBUG.print("Running setup")
 
     ---@type tocModDataType
     self.tocData = {
@@ -329,7 +329,7 @@ function DataController.ReceiveData(key, data)
     -- During startup the game can return Bob as the player username, adding a useless ModData table
     if key == "TOC_Bob" then return end
 
-    TOC_DEBUG.print("[DataController] ReceiveData for " .. key)
+    TOC_DEBUG.print("ReceiveData for " .. key)
     if data == {} or data == nil then
         TOC_DEBUG.print("table is nil... returning")
         return
@@ -339,11 +339,11 @@ function DataController.ReceiveData(key, data)
     local username = key:sub(5)
     local handler = DataController.GetInstance(username)
     if handler.isResetForced or data == nil or data == {} or data == false then
-        TOC_DEBUG.print("[DataController] Setup")
+        TOC_DEBUG.print("Setup")
         handler:setup(key)
         handler.isResetForced = false
     else
-        TOC_DEBUG.print("[DataController] Reapply")
+        TOC_DEBUG.print("Reapply")
         handler:reapplyTocData(data)
     end
 
@@ -364,7 +364,7 @@ function DataController.ReceiveData(key, data)
 
     -- Transmit it to the server
     ModData.transmit(key)
-    TOC_DEBUG.print("[DataController] Transmitting data after receiving it for: " .. handler.username)
+    TOC_DEBUG.print("Transmitting data after receiving it for: " .. handler.username)
 
 end
 
@@ -380,7 +380,7 @@ function DataController.GetInstance(username)
     end
 
     if DataController.instances[username] == nil then
-        TOC_DEBUG.print("[DataController] Creating NEW instance for " .. username)
+        TOC_DEBUG.print("Creating NEW instance for " .. username)
         return DataController:new(username)
     else
         return DataController.instances[username]

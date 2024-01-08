@@ -19,7 +19,7 @@ CachedDataHandler.amputatedLimbs = {}
 ---Calculate the currently amputated limbs for a certain player
 ---@param username string
 function CachedDataHandler.CalculateAmputatedLimbs(username)
-    TOC_DEBUG.print("[CachedDataHandler] Calculating amputated limbs for " .. username)
+    TOC_DEBUG.print("Calculating amputated limbs for " .. username)
     CachedDataHandler.amputatedLimbs[username] = {}
     local dcInst = DataController.GetInstance(username)
 
@@ -38,7 +38,7 @@ end
 ---@param username string
 ---@param limbName string
 function CachedDataHandler.AddAmputatedLimb(username, limbName)
-    TOC_DEBUG.print("[CachedDataHandler] Added " .. limbName .. " to known amputated limbs for " .. username)
+    TOC_DEBUG.print("Added " .. limbName .. " to known amputated limbs for " .. username)
 
     -- Add it to the generic list
     CachedDataHandler.amputatedLimbs[username][limbName] = limbName
@@ -57,7 +57,7 @@ CachedDataHandler.highestAmputatedLimbs = {}
 ---Calcualate the highest point of amputations achieved by the player
 ---@param username string
 function CachedDataHandler.CalculateHighestAmputatedLimbs(username)
-    TOC_DEBUG.print("[CachedDataHandler] Triggered CalculateHighestAmputatedLimbs")
+    TOC_DEBUG.print("Triggered CalculateHighestAmputatedLimbs")
     local dcInst = DataController.GetInstance(username)
     if dcInst == nil then
         TOC_DEBUG.print("DataController not found for " .. username)
@@ -84,7 +84,7 @@ function CachedDataHandler.CalculateHighestAmputatedLimbs(username)
         local limbName = k
         local index = CommonMethods.GetSide(limbName)
         if dcInst:getIsCut(limbName) and dcInst:getIsVisible(limbName) then
-            TOC_DEBUG.print("[CachedDataHandler] Added Highest Amputation: " .. limbName)
+            TOC_DEBUG.print("Added Highest Amputation: " .. limbName)
             CachedDataHandler.highestAmputatedLimbs[username][index] = limbName
         end
     end

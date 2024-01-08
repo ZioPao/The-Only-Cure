@@ -23,7 +23,7 @@ function LocalPlayerController.InitializePlayer(isForced)
     local playerObj = getPlayer()
     local username = playerObj:getUsername()
 
-    TOC_DEBUG.print("[LocalPlayerController] Initializing local player: " .. username)
+    TOC_DEBUG.print("Initializing local player: " .. username)
 
     DataController:new(username, isForced)
     LocalPlayerController.playerObj = playerObj
@@ -281,7 +281,7 @@ end
 
 ---Starts safely the loop to update cicatrzation
 function LocalPlayerController.ToggleUpdateAmputations()
-    TOC_DEBUG.print("[LocalPlayerController] Activating amputation handling loop (if it wasn't active before)")
+    TOC_DEBUG.print("Activating amputation handling loop (if it wasn't active before)")
     CommonMethods.SafeStartEvent("EveryHours", LocalPlayerController.UpdateAmputations)
 end
 

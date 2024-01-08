@@ -107,7 +107,7 @@ end
         else
             if highestAmputations[side] == nil then return end
             local limbName = highestAmputations[side]
-            TOC_DEBUG.print("Drawing " .. tostring(limbName) .. " for " .. username)
+            --TOC_DEBUG.print("Drawing " .. tostring(limbName) .. " for " .. username)
 
             local cicTime = DataController.GetInstance(username):getCicatrizationTime(limbName)
             redColor = GetColorFromCicatrizationTime(cicTime, limbName)
@@ -185,7 +185,7 @@ end
     local og_ISMedicalCheckAction_perform = ISMedicalCheckAction.perform
     function ISMedicalCheckAction:perform()
         local username = self.otherPlayer:getUsername()
-        TOC_DEBUG.print("[HealthPanel] Medical Action on " .. username )
+        TOC_DEBUG.print("Medical Action on " .. username )
 
         -- We need to recalculate them here before we can create the highest amputations point
         CachedDataHandler.CalculateAmputatedLimbs(username)

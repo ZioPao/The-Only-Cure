@@ -14,8 +14,26 @@ end
 ---@param string string
 function TOC_DEBUG.print(string)
     if isDebugEnabled() then
-        print("TOC: " .. tostring(string))
+        local runningFile = TOC_DEBUG.getRunningFile()
+        print("TOC: " .. "[" .. runningFile .. "] " .. tostring(string))
     end
+end
+
+---Horrendous but I don't really care about performance for this
+---@return string
+function TOC_DEBUG.getRunningFile()
+    local coroutine = getCurrentCoroutine()
+
+    local o = getCoroutineObjStack(coroutine, 0)
+    if o then
+        local s = KahluaUtil.rawTostring2(o)
+        local match = string.match(s, "file: (%w+)%.lua")
+        if match then return match end
+
+    end
+
+    return ""
+
 end
 
 function TOC_DEBUG.printTable(table, indent)
