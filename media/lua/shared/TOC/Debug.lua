@@ -15,7 +15,7 @@ end
 function TOC_DEBUG.print(string)
     if isDebugEnabled() then
         local runningFile = TOC_DEBUG.getRunningFile()
-        print("TOC: " .. "[" .. runningFile .. "] " .. tostring(string))
+        print("[TOC]" .. "[" .. runningFile .. "] " .. tostring(string))
     end
 end
 

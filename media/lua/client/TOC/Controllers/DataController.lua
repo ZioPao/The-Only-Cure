@@ -19,8 +19,7 @@ DataController.instances = {}
 ---@param isResetForced boolean?
 ---@return DataController
 function DataController:new(username, isResetForced)
-    TOC_DEBUG.print("[DataController] NEW for " .. username)
-    --error("TEST TRIGGER")
+    TOC_DEBUG.print("Creating new DataController instance for " .. username)
     local o = {}
     setmetatable(o, self)
     self.__index = self
