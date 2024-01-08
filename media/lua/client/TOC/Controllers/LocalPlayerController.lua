@@ -407,8 +407,6 @@ end
 ---A recreation of the original method, but with amputations in mind
 ---@param dcInst DataController
 function ISEquipWeaponAction:performWithAmputation(dcInst)
-
-    -- TODO Simplify this
     local hand = nil
     local otherHand = nil
     local getMethodFirst = nil
