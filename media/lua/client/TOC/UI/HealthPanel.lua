@@ -2,8 +2,8 @@ local StaticData = require("TOC/StaticData")
 local DataController = require("TOC/Controllers/DataController")
 local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
 
-local CutLimbHandler = require("TOC/UI/Interactions/CutLimbHandler")
-local WoundCleaningHandler = require("TOC/UI/Interactions/WoundCleaningHandler")
+local CutLimbInteractionHandler = require("TOC/UI/Interactions/CutLimbInteractionHandler")
+local WoundCleaningInteractionHandler = require("TOC/UI/Interactions/WoundCleaningInteractionHandler")
 ------------------------
 
 
@@ -30,11 +30,14 @@ function ISHealthPanel:dropItemsOnBodyPart(bodyPart, items)
     og_ISHealthPanel_dropItemsOnBodyPart(self, bodyPart, items)
 
     TOC_DEBUG.print("override to dropItemsOnBodyPart running")
-    local cutLimbHandler = CutLimbHandler:new(self, bodyPart)
+    local cutLimbInteraction = CutLimbInteractionHandler:new(self, bodyPart)
+    local woundCleaningInteraction = WoundCleaningInteractionHandler:new(self, bodyPart, self.character:getUsername())
+
     for _,item in ipairs(items) do
-        cutLimbHandler:checkItem(item)
+        cutLimbInteraction:checkItem(item)
+        woundCleaningInteraction:checkItem(item)
     end
-    if cutLimbHandler:dropItems(items) then
+    if cutLimbInteraction:dropItems(items) or woundCleaningInteraction:dropItems(items) then
         return
     end
 
@@ -48,13 +51,13 @@ function ISHealthPanel:doBodyPartContextMenu(bodyPart, x, y)
     -- To not recreate it but reuse the one that has been created in the original method
     local context = getPlayerContextMenu(playerNum)
 
-    local cutLimbHandler = CutLimbHandler:new(self, bodyPart)
-    self:checkItems({cutLimbHandler})
-    cutLimbHandler:addToMenu(context)
+    local cutLimbInteraction = CutLimbInteractionHandler:new(self, bodyPart)
+    self:checkItems({cutLimbInteraction})
+    cutLimbInteraction:addToMenu(context)
 
-    local woundCleaningHandler = WoundCleaningHandler:new(self, bodyPart, self.character:getUsername())
-    self:checkItems({woundCleaningHandler})
-    woundCleaningHandler:addToMenu(context)
+    local woundCleaningInteraction = WoundCleaningInteractionHandler:new(self, bodyPart, self.character:getUsername())
+    self:checkItems({woundCleaningInteraction})
+    woundCleaningInteraction:addToMenu(context)
 end
 
 

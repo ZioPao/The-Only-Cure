@@ -215,7 +215,6 @@ function LocalPlayerController.UpdateAmputations()
     end
 
     local pl = LocalPlayerController.playerObj
-    local bd = pl:getBodyDamage()
     local visual = pl:getHumanVisual()
     local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(pl:getUsername())
     local needsUpdate = false
@@ -227,26 +226,16 @@ function LocalPlayerController.UpdateAmputations()
         if not isCicatrized then
             needsUpdate = true
             local cicTime = dcInst:getCicatrizationTime(limbName)
-            TOC_DEBUG.print("updating cicatrization for " .. tostring(limbName))
+            TOC_DEBUG.print("Updating cicatrization for " .. tostring(limbName))
 
-            -- TODO Check if bandaged, sutured, whatever
-            -- TODO Clean 
-            -- TODO Check dirtyness of zone and add to it
+            --* Dirtyness of the wound
 
-            --local bptEnum = StaticData.BODYLOCS_IND_BPT[limbName]
-
-            -- TODO Workaround
+            -- We need to get the BloodBodyPartType to find out how dirty the zone is
             local bbptEnum = BloodBodyPartType[limbName]
-            --local bodyPart = bd:getBodyPart(bptEnum)
-
             local modifier = 0.01 * SandboxVars.TOC.WoundDirtynessMultiplier
-
-            --------------
-            -- TEST SECTION
-
+            
             local dirtynessVis = visual:getDirt(bbptEnum) + visual:getBlood(bbptEnum)
             local dirtynessWound = dcInst:getWoundDirtyness(limbName) + modifier
-            --------------
 
             local dirtyness = dirtynessVis + dirtynessWound
 
@@ -255,12 +244,17 @@ function LocalPlayerController.UpdateAmputations()
             end
 
             dcInst:setWoundDirtyness(limbName, dirtyness)
+            TOC_DEBUG.print("Dirtyness for this zone: " .. tostring(dirtyness))
 
-            TOC_DEBUG.print("dirtyness for this zone: " .. tostring(dirtyness))
+            --* Cicatrization
 
-            cicTime = cicTime - SandboxVars.TOC.CicatrizationSpeed
+            local cicDec = SandboxVars.TOC.CicatrizationSpeed - dirtyness
+            if cicDec <= 0 then cicDec = 0.1 end
+            cicTime = cicTime - cicDec
+
+
             dcInst:setCicatrizationTime(limbName, cicTime)
-            TOC_DEBUG.print("new cicatrization time: " .. tostring(cicTime))
+            TOC_DEBUG.print("New cicatrization time: " .. tostring(cicTime))
             if cicTime <= 0 then
                 TOC_DEBUG.print(tostring(limbName) .. " is cicatrized")
                 dcInst:setIsCicatrized(limbName, true)

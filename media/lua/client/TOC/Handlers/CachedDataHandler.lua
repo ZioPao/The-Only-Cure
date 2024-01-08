@@ -1,5 +1,6 @@
-local StaticData = require("TOC/StaticData")
 local DataController = require("TOC/Controllers/DataController")
+
+local StaticData = require("TOC/StaticData")
 local CommonMethods = require("TOC/CommonMethods")
 ---------------------------
 
@@ -23,7 +24,6 @@ function CachedDataHandler.CalculateAmputatedLimbs(username)
     CachedDataHandler.amputatedLimbs[username] = {}
     local dcInst = DataController.GetInstance(username)
 
-    -- TODO If the data hasn't arrived, this won't work
     for i=1, #StaticData.LIMBS_STR do
         local limbName = StaticData.LIMBS_STR[i]
         if dcInst:getIsCut(limbName) then

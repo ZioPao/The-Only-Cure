@@ -142,31 +142,30 @@ Events.OnFillInventoryObjectContextMenu.Add(AddInventoryAmputationMenu)
 
 -------------------------------------
 
----@class CutLimbHandler : BaseHandler
+---@class CutLimbInteractionHandler : BaseHandler
 ---@field items table
 ---@field limbName string
 ---@field itemType string temporary
-local CutLimbHandler = BaseHandler:derive("CutLimbHandler")
+local CutLimbInteractionHandler = BaseHandler:derive("CutLimbInteractionHandler")
 
 
----Creates new CutLimbHandler
+---Creates new CutLimbInteractionHandler
 ---@param panel ISUIElement
 ---@param bodyPart BodyPart
----@return CutLimbHandler
-function CutLimbHandler:new(panel, bodyPart)
+---@return CutLimbInteractionHandler
+function CutLimbInteractionHandler:new(panel, bodyPart)
     local o = BaseHandler.new(self, panel, bodyPart)
     o.items.ITEMS = {}
     o.limbName = BodyPartType.ToString(bodyPart:getType())
     o.itemType = "Saw"
-    TOC_DEBUG.print("init CutLimbHandler")
+    --TOC_DEBUG.print("init CutLimbInteractionHandler")
     return o
 end
 
 ---@param item InventoryItem
-function CutLimbHandler:checkItem(item)
-    TOC_DEBUG.print("CutLimbHandler checkItem")
+function CutLimbInteractionHandler:checkItem(item)
+    --TOC_DEBUG.print("CutLimbInteractionHandler checkItem")
     local itemType = item:getType()
-    --TOC_DEBUG.print("checkItem: " .. tostring(itemType))
 
     if CheckIfSaw(itemType) then
         TOC_DEBUG.print("added to list -> " .. itemType)
@@ -175,8 +174,8 @@ function CutLimbHandler:checkItem(item)
 end
 
 ---@param context ISContextMenu
-function CutLimbHandler:addToMenu(context)
-    TOC_DEBUG.print("CutLimbHandler addToMenu")
+function CutLimbInteractionHandler:addToMenu(context)
+    --TOC_DEBUG.print("CutLimbInteractionHandler addToMenu")
     local types = self:getAllItemTypes(self.items.ITEMS)
     if #types > 0 and StaticData.BODYLOCS_IND_BPT[self.limbName] and not DataController.GetInstance():getIsCut(self.limbName) then
         TOC_DEBUG.print("addToMenu, types > 0")
@@ -186,7 +185,7 @@ function CutLimbHandler:addToMenu(context)
     end
 end
 
-function CutLimbHandler:dropItems(items)
+function CutLimbInteractionHandler:dropItems(items)
     local types = self:getAllItemTypes(items)
     if #self.items.ITEMS > 0 and #types == 1 and StaticData.BODYLOCS_IND_BPT[self.limbName] then
         self:onMenuOptionSelected(types[1])
@@ -195,20 +194,20 @@ function CutLimbHandler:dropItems(items)
     return false
 end
 
----Check if CutLimbHandler is valid, the limb must not be cut to be valid
+---Check if CutLimbInteractionHandler is valid, the limb must not be cut to be valid
 ---@return boolean
-function CutLimbHandler:isValid()
-    TOC_DEBUG.print("CutLimbHandler isValid")
+function CutLimbInteractionHandler:isValid()
+    --TOC_DEBUG.print("CutLimbInteractionHandler isValid")
     self:checkItems()
     return not DataController.GetInstance():getIsCut(self.limbName)
 end
 
-function CutLimbHandler:perform(previousAction, itemType)
+function CutLimbInteractionHandler:perform(previousAction, itemType)
     local item = self:getItemOfType(self.items.ITEMS, itemType)
     previousAction = self:toPlayerInventory(item, previousAction)
-    TOC_DEBUG.print("perform CutLimbHandler on " .. self.limbName)
+    TOC_DEBUG.print("Perform CutLimbInteractionHandler on " .. self.limbName)
     local action = CutLimbAction:new(self:getDoctor(),self:getPatient(), self.limbName, item)
     ISTimedActionQueue.addAfter(previousAction, action)
 end
 
-return CutLimbHandler
+return CutLimbInteractionHandler

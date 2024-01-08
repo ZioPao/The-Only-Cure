@@ -22,17 +22,9 @@ end
 ---@param item InventoryItem
 ---@return string
 function ProsthesisHandler.GetGroup(item)
-
     local bodyLocation = item:getBodyLocation()
     local side = CommonMethods.GetSide(bodyLocation)
-    local index
-
-    if bodyLocation:contains(bodyLocArmProst) then
-        index = "Top_" .. side
-    else
-        index = "Bottom_" .. side
-    end
-
+    local index = bodyLocation:contains(bodyLocArmProst) and "Top_" .. side or "Bottom_" .. side
     local group = StaticData.PROSTHESES_GROUPS_IND_STR[index]
     return group
 end
@@ -41,15 +33,15 @@ end
 ---@param bodyLocation string
 ---@return boolean
 function ProsthesisHandler.CheckIfEquippable(bodyLocation)
-    TOC_DEBUG.print("current item is a prosthesis")
+    TOC_DEBUG.print("Current item is a prosthesis")
     local side = CommonMethods.GetSide(bodyLocation)
-    TOC_DEBUG.print("checking side: " .. tostring(side))
+    TOC_DEBUG.print("Checking side: " .. tostring(side))
 
     local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(getPlayer():getUsername())
     for k, _ in pairs(amputatedLimbs) do
         local limbName = k
         if string.contains(limbName, side) and not string.contains(limbName, "UpperArm") then
-            TOC_DEBUG.print("found acceptable limb to use prosthesis")
+            TOC_DEBUG.print("Found acceptable limb to use prosthesis")
             return true
         end
     end
@@ -66,19 +58,11 @@ function ProsthesisHandler.SearchAndSetupProsthesis(item, isEquipping)
     if not ProsthesisHandler.CheckIfProst(item) then return end
 
     local group = ProsthesisHandler.GetGroup(item)
-    TOC_DEBUG.print("applying prosthesis stuff for " .. group)
+    TOC_DEBUG.print("Applying prosthesis stuff for " .. group)
     local dcInst = DataController.GetInstance()
     dcInst:setIsProstEquipped(group, isEquipping)
     dcInst:apply()
-    
 end
-
-
--------------------------
---* Events *--
-
-
-
 
 -------------------------
 --* Overrides *--
@@ -136,7 +120,6 @@ function ISClothingExtraAction:isValid()
     return isEquippable
 end
 
-
 local og_ISClothingExtraAction_perform = ISClothingExtraAction.perform
 function ISClothingExtraAction:perform()
     og_ISClothingExtraAction_perform(self)
@@ -148,7 +131,6 @@ function ISUnequipAction:perform()
     og_ISUnequipAction_perform(self)
     ProsthesisHandler.SearchAndSetupProsthesis(self.item, false)
 end
-
 
 
 return ProsthesisHandler

@@ -5,17 +5,16 @@ local DataController = require("TOC/Controllers/DataController")
 
 local CleanWoundAction = require("TOC/TimedActions/CleanWoundAction")
 -------------------------
----@class WoundCleaningHandler : BaseHandler
+---@class WoundCleaningInteractionHandler : BaseHandler
 ---@field username string
 ---@field limbName string
-local WoundCleaningHandler = BaseHandler:derive("WoundCleaningHandler")
+local WoundCleaningInteractionHandler = BaseHandler:derive("WoundCleaningInteractionHandler")
 
----comment
 ---@param panel any
 ---@param bodyPart any
 ---@param username string
 ---@return table
-function WoundCleaningHandler:new(panel, bodyPart, username)
+function WoundCleaningInteractionHandler:new(panel, bodyPart, username)
     local o = BaseHandler.new(self, panel, bodyPart)
     o.items.ITEMS = {}
     o.username = username
@@ -25,26 +24,32 @@ function WoundCleaningHandler:new(panel, bodyPart, username)
     return o
 end
 
-function WoundCleaningHandler:checkItem(item)
-    if item:getBandagePower() >= 2 then
+function WoundCleaningInteractionHandler:checkItem(item)
+    -- Disinfected rag or bandage
+    --TOC_DEBUG.print("WoundCleaningInteractionHandler checkItem")
+    if item:getBandagePower() >=2 and item:isAlcoholic() then
+        --TOC_DEBUG.print("Adding " .. item:getName())
         self:addItem(self.items.ITEMS, item)
     end
 end
 
-function WoundCleaningHandler:addToMenu(context)
+function WoundCleaningInteractionHandler:addToMenu(context)
+    --TOC_DEBUG.print("WoundCleaningInteraction addToMenu")
     local types = self:getAllItemTypes(self.items.ITEMS)
     if #types > 0 and self:isValid() then
-        local option = context:addOption("Clean Wound", nil)
+        --TOC_DEBUG.print("WoundCleaningInteraction inside addToMenu")
+        local option = context:addOption(getText("ContextMenu_CleanWound"), nil)
         local subMenu = context:getNew(context)
         context:addSubMenu(option, subMenu)
-        for i=1,#types do
+        for i=1, #types do
             local item = self:getItemOfType(self.items.ITEMS, types[i])
+            --TOC_DEBUG.print(item:getName())
             subMenu:addOption(item:getName(), self, self.onMenuOptionSelected, item:getFullType())
         end
     end
 end
 
-function WoundCleaningHandler:dropItems(items)
+function WoundCleaningInteractionHandler:dropItems(items)
     local types = self:getAllItemTypes(items)
     if #self.items.ITEMS > 0 and #types == 1 and self:isInjured() and self.bodyPart:isNeedBurnWash() then
         -- FIXME: A bandage can be used to clean a burn or bandage it
@@ -54,7 +59,7 @@ function WoundCleaningHandler:dropItems(items)
     return false
 end
 
-function WoundCleaningHandler:isValid()
+function WoundCleaningInteractionHandler:isValid()
     -- TODO Check if cut and not cicatrized and dirty
 
     -- todo get username 
@@ -63,12 +68,13 @@ function WoundCleaningHandler:isValid()
     local dcInst = DataController.GetInstance(self.username)
 
     --and dcInst:getWoundDirtyness(self.limbName) > 0.1
-
-    return dcInst:getIsCut(self.limbName) and not dcInst:getIsCicatrized(self.limbName)
+    local check = dcInst:getIsCut(self.limbName) and not dcInst:getIsCicatrized(self.limbName) and dcInst:getWoundDirtyness(self.limbName) > 0
+    --TOC_DEBUG.print("WoundCleaningInteraction isValid: " .. tostring(check))
+    return check
     --return self:getItemOfType(self.items.ITEMS, itemType)
 end
 
-function WoundCleaningHandler:perform(previousAction, itemType)
+function WoundCleaningInteractionHandler:perform(previousAction, itemType)
     local item = self:getItemOfType(self.items.ITEMS, itemType)
     previousAction = self:toPlayerInventory(item, previousAction)
     local action = CleanWoundAction:new(self:getDoctor(), self:getPatient(), item, self.bodyPart)
@@ -76,4 +82,4 @@ function WoundCleaningHandler:perform(previousAction, itemType)
 end
 
 
-return WoundCleaningHandler
+return WoundCleaningInteractionHandler
