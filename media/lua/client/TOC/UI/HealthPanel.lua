@@ -49,7 +49,12 @@ function ISHealthPanel:doBodyPartContextMenu(bodyPart, x, y)
     local playerNum = self.otherPlayer and self.otherPlayer:getPlayerNum() or self.character:getPlayerNum()
 
     -- To not recreate it but reuse the one that has been created in the original method
+
+    -- TODO This will work ONLY when an addOption has been already done in the og method.
     local context = getPlayerContextMenu(playerNum)
+    context:bringToTop()
+    context:setVisible(true)
+
 
     local cutLimbInteraction = CutLimbInteractionHandler:new(self, bodyPart)
     self:checkItems({cutLimbInteraction})
@@ -222,7 +227,7 @@ function ISHealthPanel:getDamagedParts()
             local limbName = StaticData.LIMBS_IND_STR[bodyPartTypeStr]
 
             if ISHealthPanel.cheat or bodyPart:HasInjury() or bodyPart:bandaged() or bodyPart:stitched() or bodyPart:getSplintFactor() > 0 or bodyPart:getAdditionalPain() > 10 or bodyPart:getStiffness() > 5 or (mdh:getIsCut(limbName) and mdh:getIsVisible(limbName)) then
-                table.insert(result, bodyPart)
+               table.insert(result, bodyPart)
             end
         end
         return result

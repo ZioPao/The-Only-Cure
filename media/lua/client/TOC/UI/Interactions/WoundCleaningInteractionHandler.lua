@@ -37,22 +37,22 @@ function WoundCleaningInteractionHandler:addToMenu(context)
     --TOC_DEBUG.print("WoundCleaningInteraction addToMenu")
     local types = self:getAllItemTypes(self.items.ITEMS)
     if #types > 0 and self:isValid() then
-        --TOC_DEBUG.print("WoundCleaningInteraction inside addToMenu")
+        TOC_DEBUG.print("WoundCleaningInteraction inside addToMenu")
         local option = context:addOption(getText("ContextMenu_CleanWound"), nil)
         local subMenu = context:getNew(context)
         context:addSubMenu(option, subMenu)
         for i=1, #types do
             local item = self:getItemOfType(self.items.ITEMS, types[i])
-            --TOC_DEBUG.print(item:getName())
             subMenu:addOption(item:getName(), self, self.onMenuOptionSelected, item:getFullType())
+            TOC_DEBUG.print(item:getName())
+
         end
     end
 end
 
 function WoundCleaningInteractionHandler:dropItems(items)
     local types = self:getAllItemTypes(items)
-    if #self.items.ITEMS > 0 and #types == 1 and self:isInjured() and self.bodyPart:isNeedBurnWash() then
-        -- FIXME: A bandage can be used to clean a burn or bandage it
+    if #self.items.ITEMS > 0 and #types == 1 and self:isActionValid() then
         self:onMenuOptionSelected(types[1])
         return true
     end
@@ -60,18 +60,16 @@ function WoundCleaningInteractionHandler:dropItems(items)
 end
 
 function WoundCleaningInteractionHandler:isValid()
-    -- TODO Check if cut and not cicatrized and dirty
+    self:checkItems()
+    return self:isActionValid()
+end
 
-    -- todo get username 
+function WoundCleaningInteractionHandler:isActionValid()
     if self.limbName == nil then return false end
-
     local dcInst = DataController.GetInstance(self.username)
-
-    --and dcInst:getWoundDirtyness(self.limbName) > 0.1
     local check = dcInst:getIsCut(self.limbName) and not dcInst:getIsCicatrized(self.limbName) and dcInst:getWoundDirtyness(self.limbName) > 0
     --TOC_DEBUG.print("WoundCleaningInteraction isValid: " .. tostring(check))
     return check
-    --return self:getItemOfType(self.items.ITEMS, itemType)
 end
 
 function WoundCleaningInteractionHandler:perform(previousAction, itemType)

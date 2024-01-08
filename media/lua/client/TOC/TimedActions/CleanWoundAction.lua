@@ -91,9 +91,9 @@ function CleanWoundAction:perform()
     self.bodyPart:setAdditionalPain(self.bodyPart:getAdditionalPain() + addPain)
     self.bandage:Use()
 
-    local limbName = CommonMethods.GetLimbNameFromBodyPart(self.bodyPart)
+    -- TOC Data handling
 
-    -- TODO CHeck if correct in MP
+    local limbName = CommonMethods.GetLimbNameFromBodyPart(self.bodyPart)
     local dcInst = DataController.GetInstance(self.otherPlayer:getUsername())
 
     local currentWoundDirtyness = dcInst:getWoundDirtyness(limbName)
@@ -102,6 +102,7 @@ function CleanWoundAction:perform()
 
     dcInst:setWoundDirtyness(limbName, newWoundDirtyness)
 
+    dcInst:apply()
 
     -- Clean visual
     local bbptEnum = BloodBodyPartType[limbName]

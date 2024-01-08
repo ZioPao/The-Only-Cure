@@ -20,6 +20,7 @@ function BaseHandler:new(panel, bodyPart)
 end
 
 function BaseHandler:isInjured()
+    TOC_DEBUG.print("Running isInjured")
     local bodyPart = self.bodyPart
     return (bodyPart:HasInjury() or bodyPart:stitched() or bodyPart:getSplintFactor() > 0) and not bodyPart:bandaged()
 end

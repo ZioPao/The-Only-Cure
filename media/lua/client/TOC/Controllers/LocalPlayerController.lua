@@ -69,6 +69,12 @@ end
 ---Used to heal an area that has been cut previously. There's an exception for bites, those are managed differently
 ---@param bodyPart BodyPart
 function LocalPlayerController.HealArea(bodyPart)
+
+    bodyPart:setFractureTime(0)
+
+    bodyPart:setScratched(false, true)
+    bodyPart:setScratchTime(0)
+
     bodyPart:setBleeding(false)
     bodyPart:setBleedingTime(0)
 
@@ -149,12 +155,13 @@ function LocalPlayerController.HandleDamage(character)
 
             -- Generic injury, let's heal it since they already cut the limb off
             if bodyPart:HasInjury() then
+                TOC_DEBUG.print("Healing area - " .. limbName)
                 LocalPlayerController.HealArea(bodyPart)
             end
 
             -- Special case for bites\zombie infections
             if bodyPart:IsInfected() then
-                TOC_DEBUG.print("Healed from zombie infection " .. tostring(bodyPart))
+                TOC_DEBUG.print("Healed from zombie infection - " .. limbName)
                 LocalPlayerController.HealZombieInfection(bd, bodyPart, limbName, dcInst)
             end
         else
@@ -233,7 +240,7 @@ function LocalPlayerController.UpdateAmputations()
             -- We need to get the BloodBodyPartType to find out how dirty the zone is
             local bbptEnum = BloodBodyPartType[limbName]
             local modifier = 0.01 * SandboxVars.TOC.WoundDirtynessMultiplier
-            
+
             local dirtynessVis = visual:getDirt(bbptEnum) + visual:getBlood(bbptEnum)
             local dirtynessWound = dcInst:getWoundDirtyness(limbName) + modifier
 
