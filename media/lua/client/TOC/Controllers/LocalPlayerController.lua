@@ -39,7 +39,7 @@ function LocalPlayerController.InitializePlayer(isForced)
 
     -- Since isForced is used to reset an existing player data, we're gonna clean their ISHealthPanel table too
     if isForced then
-        local ItemsController = require("TOC/Handlers/ItemsController")
+        local ItemsController = require("TOC/Controllers/ItemsController")
         ItemsController.Player.DeleteAllOldAmputationItems(playerObj)
         CachedDataHandler.Reset(username)
     end

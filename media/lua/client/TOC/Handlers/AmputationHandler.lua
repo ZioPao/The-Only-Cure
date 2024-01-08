@@ -1,5 +1,5 @@
 local DataController = require("TOC/Controllers/DataController")
-local ItemsController = require("TOC/Handlers/ItemsController")
+local ItemsController = require("TOC/Controllers/ItemsController")
 local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
 local LocalPlayerController = require("TOC/Controllers/LocalPlayerController")
 local StaticData = require("TOC/StaticData")

@@ -1,4 +1,4 @@
-local ItemsController = require("TOC/Handlers/ItemsController")
+local ItemsController = require("TOC/Controllers/ItemsController")
 
 --------------------
 
