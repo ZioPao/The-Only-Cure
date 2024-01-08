@@ -8,14 +8,14 @@ ServerDataHandler.modData = {}
 
 ---Get the server mod data table containing that player TOC data
 ---@param key string
----@return tocModData
+---@return tocModDataType
 function ServerDataHandler.GetTable(key)
     return ServerDataHandler.modData[key]
 end
 
 ---Add table to the ModData and a local table
 ---@param key string
----@param table tocModData
+---@param table tocModDataType
 function ServerDataHandler.AddTable(key, table)
     -- Check if key is valid
     if not luautils.stringStarts(key, StaticData.MOD_NAME .. "_") then return end

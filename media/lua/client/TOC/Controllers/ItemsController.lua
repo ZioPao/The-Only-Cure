@@ -3,21 +3,21 @@ local CommonMethods = require("TOC/CommonMethods")
 ---------------------------
 
 --- Submodule to handle spawning the correct items after certain actions (ie: cutting a hand). LOCAL ONLY!
----@class ItemsHandler
-local ItemsHandler = {}
+---@class ItemsController
+local ItemsController = {}
 
 
 
 --* Player Methods *--
----@class ItemsHandler.Player
-ItemsHandler.Player = {}
+---@class ItemsController.Player
+ItemsController.Player = {}
 
 ---Returns the correct index for the textures of the amputation
 ---@param playerObj IsoPlayer
 ---@param isCicatrized boolean
 ---@return number
 ---@private
-function ItemsHandler.Player.GetAmputationTexturesIndex(playerObj, isCicatrized)
+function ItemsController.Player.GetAmputationTexturesIndex(playerObj, isCicatrized)
     local textureString = playerObj:getHumanVisual():getSkinTexture()
     local isHairy = textureString:sub(-1) == "a"
 
@@ -39,7 +39,7 @@ end
 ---@param clothingItem InventoryItem?
 ---@return boolean
 ---@private
-function ItemsHandler.Player.RemoveClothingItem(playerObj, clothingItem)
+function ItemsController.Player.RemoveClothingItem(playerObj, clothingItem)
     if clothingItem and instanceof(clothingItem, "InventoryItem") then
         playerObj:removeWornItem(clothingItem)
 
@@ -53,7 +53,7 @@ end
 ---Search and deletes an old amputation clothing item on the same side
 ---@param playerObj IsoPlayer
 ---@param limbName string
-function ItemsHandler.Player.DeleteOldAmputationItem(playerObj, limbName)
+function ItemsController.Player.DeleteOldAmputationItem(playerObj, limbName)
     local side = CommonMethods.GetSide(limbName)
     for partName, _ in pairs(StaticData.PARTS_IND_STR) do
         local othLimbName = partName .. "_" .. side
@@ -65,30 +65,30 @@ function ItemsHandler.Player.DeleteOldAmputationItem(playerObj, limbName)
 
         -- If we manage to find and remove an item, then we should stop this function.
         ---@cast othClothingItem InventoryItem
-        if ItemsHandler.Player.RemoveClothingItem(playerObj, othClothingItem) then return end
+        if ItemsController.Player.RemoveClothingItem(playerObj, othClothingItem) then return end
     end
 end
 
 ---Deletes all the old amputation items, used for resets
 ---@param playerObj IsoPlayer
-function ItemsHandler.Player.DeleteAllOldAmputationItems(playerObj)
+function ItemsController.Player.DeleteAllOldAmputationItems(playerObj)
 
     for i=1, #StaticData.LIMBS_STR do
         local limbName = StaticData.LIMBS_STR[i]
         local clothItemName = StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. limbName
         local clothItem = playerObj:getInventory():FindAndReturn(clothItemName)
         ---@cast clothItem InventoryItem
-        ItemsHandler.Player.RemoveClothingItem(playerObj, clothItem)
+        ItemsController.Player.RemoveClothingItem(playerObj, clothItem)
     end
 end
 
 ---Spawns and equips the correct amputation item to the player.
 ---@param playerObj IsoPlayer
 ---@param limbName string
-function ItemsHandler.Player.SpawnAmputationItem(playerObj, limbName)
+function ItemsController.Player.SpawnAmputationItem(playerObj, limbName)
     TOC_DEBUG.print("clothing name " .. StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. limbName)
     local clothingItem = playerObj:getInventory():AddItem(StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. limbName)
-    local texId = ItemsHandler.Player.GetAmputationTexturesIndex(playerObj, false)
+    local texId = ItemsController.Player.GetAmputationTexturesIndex(playerObj, false)
 
     ---@cast clothingItem InventoryItem
     clothingItem:getVisual():setTextureChoice(texId) -- it counts from 0, so we have to subtract 1
@@ -98,12 +98,12 @@ end
 
 
 --* Zombie Methods *--
----@class ItemsHandler.Zombie
-ItemsHandler.Zombie = {}
+---@class ItemsController.Zombie
+ItemsController.Zombie = {}
 
 ---Set an amputation to a zombie
 ---@param zombie IsoZombie
-function ItemsHandler.Zombie.SpawnAmputationItem(zombie)
+function ItemsController.Zombie.SpawnAmputationItem(zombie)
     -- TODO Set texture ID
     local itemVisualsList = zombie:getItemVisuals()
     local ignoredLimbs = {}
@@ -164,4 +164,4 @@ function ISInventoryPane:refreshContainer()
     end
 end
 
-return ItemsHandler
+return ItemsController

@@ -1,4 +1,4 @@
-local ItemsHandler = require("TOC/Handlers/ItemsHandler")
+local ItemsController = require("TOC/Handlers/ItemsController")
 
 --------------------
 
@@ -8,7 +8,7 @@ local ItemsHandler = require("TOC/Handlers/ItemsHandler")
 -------------------
 
 local function test(zombie, character, bodyPartType, handWeapon)
-    --ItemsHandler.Zombie.SpawnAmputationItem(zombie)
+    --ItemsController.Zombie.SpawnAmputationItem(zombie)
 end
 
 Events.OnHitZombie.Add(test)

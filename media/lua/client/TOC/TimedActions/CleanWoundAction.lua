@@ -1,4 +1,4 @@
-local ModDataHandler = require("TOC/Handlers/ModDataHandler")
+local DataController = require("TOC/Controllers/DataController")
 local CommonMethods = require("TOC/CommonMethods")
 ----
 
@@ -70,8 +70,8 @@ function CleanWoundAction:perform()
     local limbName = CommonMethods.GetLimbNameFromBodyPart(self.bodyPart)
 
     -- TODO CHeck if correct in MP
-    local modDataHandler = ModDataHandler.GetInstance(self.otherPlayer:getUsername())
-    modDataHandler:setWoundDirtyness(limbName, 0)
+    local dcInst = DataController.GetInstance(self.otherPlayer:getUsername())
+    dcInst:setWoundDirtyness(limbName, 0)
 
 
     -- Clean visual

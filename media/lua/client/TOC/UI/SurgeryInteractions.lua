@@ -1,5 +1,5 @@
 local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
-local ModDataHandler = require("TOC/Handlers/ModDataHandler")
+local DataController = require("TOC/Controllers/DataController")
 ---------------
 
 
@@ -17,14 +17,14 @@ Events.OnFillInventoryObjectContextMenu.Add(AddInventorySurgeryMenu)
 
 -- TODO We need a class to handle operations, this is just a placeholder
 local function Cauterize(limbName)
-    local modDataHandler = ModDataHandler.GetInstance()
-    modDataHandler:setCicatrizationTime(limbName, 0)
-    modDataHandler:setIsCicatrized(limbName, true)
-    modDataHandler:setIsCauterized(limbName, true)
+    local dcInst = DataController.GetInstance()
+    dcInst:setCicatrizationTime(limbName, 0)
+    dcInst:setIsCicatrized(limbName, true)
+    dcInst:setIsCauterized(limbName, true)
 
     -- we don't care bout the depended limbs, since they're alread "cicatrized"
 
-    modDataHandler:apply()
+    dcInst:apply()
 end
 
 ---@param playerNum number
@@ -36,8 +36,8 @@ local function AddOvenContextMenu(playerNum, context, worldObjects, test)
 
     local pl = getSpecificPlayer(playerNum)
 
-    local modDataHandler = ModDataHandler.GetInstance()
-    if not modDataHandler:getIsAnyLimbCut() then return end
+    local dcInst = DataController.GetInstance()
+    if not dcInst:getIsAnyLimbCut() then return end
     local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(pl:getUsername())
 
     local stoveObj = nil
@@ -63,7 +63,7 @@ local function AddOvenContextMenu(playerNum, context, worldObjects, test)
 
             -- We need to let the player cauterize ONLY the visible one!
             local limbName = k
-            if modDataHandler:getIsVisible(limbName) and not modDataHandler:getIsCicatrized(limbName) then
+            if dcInst:getIsVisible(limbName) and not dcInst:getIsCicatrized(limbName) then
                 if addMainOption == false then
                     -- Adds the cauterize option ONLY when it's needed
                     local optionMain = context:addOption(getText("ContextMenu_Cauterize"), nil)

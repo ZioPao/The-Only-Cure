@@ -1,8 +1,12 @@
 local StaticData = require("TOC/StaticData")
-local ModDataHandler = require("TOC/Handlers/ModDataHandler")
+local DataController = require("TOC/Controllers/DataController")
 local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
-local CutLimbHandler = require("TOC/UI/CutLimbInteractions")
-local WoundCleaningHandler = require("TOC/UI/WoundCleaningInteraction")
+
+local CutLimbHandler = require("TOC/UI/Interactions/CutLimbHandler")
+local WoundCleaningHandler = require("TOC/UI/Interactions/WoundCleaningHandler")
+------------------------
+
+
 
 local isReady = false
 
@@ -105,7 +109,7 @@ end
             local limbName = highestAmputations[side]
             TOC_DEBUG.print("Drawing " .. tostring(limbName) .. " for " .. username)
 
-            local cicTime = ModDataHandler.GetInstance(username):getCicatrizationTime(limbName)
+            local cicTime = DataController.GetInstance(username):getCicatrizationTime(limbName)
             redColor = GetColorFromCicatrizationTime(cicTime, limbName)
 
             local sexPl
@@ -204,16 +208,16 @@ end
         local bodyPartTypeStr = BodyPartType.ToString(bodyPart:getType())
         local limbName = StaticData.LIMBS_IND_STR[bodyPartTypeStr]
         if limbName then
-            local modDataHandler = ModDataHandler.GetInstance(username)
-            if modDataHandler:getIsCut(limbName) and modDataHandler:getIsVisible(limbName) then
-                if modDataHandler:getIsCicatrized(limbName) then
-                    if modDataHandler:getIsCauterized(limbName) then
+            local dcInst = DataController.GetInstance(username)
+            if dcInst:getIsCut(limbName) and dcInst:getIsVisible(limbName) then
+                if dcInst:getIsCicatrized(limbName) then
+                    if dcInst:getIsCauterized(limbName) then
                         self:drawText("- " .. getText("IGUI_HealthPanel_Cauterized"), x, y,  0.58, 0.75, 0.28, 1, UIFont.Small)
                     else
                         self:drawText("- " .. getText("IGUI_HealthPanel_Cicatrized"), x, y,  0.28, 0.89, 0.28, 1, UIFont.Small)
                     end
                 else
-                    local cicaTime = modDataHandler:getCicatrizationTime(limbName)
+                    local cicaTime = dcInst:getCicatrizationTime(limbName)
 
                     -- Show it in percentage
                     local maxCicaTime = StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM[limbName]
@@ -221,7 +225,7 @@ end
                     self:drawText("- " .. getText("IGUI_HealthPanel_Cicatrization") .. string.format(" %.2f", percentage) .. "%", x, y, 0.89, 0.28, 0.28, 1, UIFont.Small)
                     y = y + fontHgt
 
-                    local scaledDirtyness = math.floor(modDataHandler:getWoundDirtyness(limbName) * 100)
+                    local scaledDirtyness = math.floor(dcInst:getWoundDirtyness(limbName) * 100)
                     self:drawText("- " .. getText("IGUI_HealthPanel_WoundDirtyness") .. string.format(" %d", scaledDirtyness) .. "%", x, y, 0.89, 0.28, 0.28, 1, UIFont.Small)
                 end
                 y = y + fontHgt
@@ -247,7 +251,7 @@ end
             end
 
             local patientUsername = self:getPatient():getUsername()
-            local mdh = ModDataHandler.GetInstance(patientUsername)
+            local mdh = DataController.GetInstance(patientUsername)
             for i=1,bodyParts:size() do
                 local bodyPart = bodyParts:get(i-1)
                 local bodyPartTypeStr = BodyPartType.ToString(bodyPart:getType())

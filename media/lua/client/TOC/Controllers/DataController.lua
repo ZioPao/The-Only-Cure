@@ -2,21 +2,24 @@ local CommandsData = require("TOC/CommandsData")
 local StaticData = require("TOC/StaticData")
 ----------------
 
---- Handle all mod data related stuff
----@class ModDataHandler
+--- An instance will be abbreviated with dcInst
+
+
+--- Handle all TOC mod data related stuff
+---@class DataController
 ---@field username string
----@field tocData tocModData
+---@field tocData tocModDataType
 ---@field isDataReady boolean
 ---@field isResetForced boolean
-local ModDataHandler = {}
-ModDataHandler.instances = {}
+local DataController = {}
+DataController.instances = {}
 
 ---Setup a new Mod Data Handler
 ---@param username string
 ---@param isResetForced boolean?
----@return ModDataHandler
-function ModDataHandler:new(username, isResetForced)
-    TOC_DEBUG.print("[ModDataHandler] NEW for " .. username)
+---@return DataController
+function DataController:new(username, isResetForced)
+    TOC_DEBUG.print("[DataController] NEW for " .. username)
     --error("TEST TRIGGER")
     local o = {}
     setmetatable(o, self)
@@ -36,17 +39,17 @@ function ModDataHandler:new(username, isResetForced)
         o.isDataReady = true
     end
 
-    ModDataHandler.instances[username] = o
+    DataController.instances[username] = o
 
     return o
 end
 
 ---Setup a new toc mod data data class
 ---@param key string
-function ModDataHandler:setup(key)
-    TOC_DEBUG.print("[ModDataHandler] Running setup")
+function DataController:setup(key)
+    TOC_DEBUG.print("[DataController] Running setup")
 
-    ---@type tocModData
+    ---@type tocModDataType
     self.tocData = {
         -- Generic stuff that does not belong anywhere else
         isIgnoredPartInfected = false,
@@ -84,8 +87,8 @@ function ModDataHandler:setup(key)
 end
 
 ---In case of desync between the table on ModData and the table here
----@param tocData tocModData
-function ModDataHandler:reapplyTocData(tocData)
+---@param tocData tocModDataType
+function DataController:reapplyTocData(tocData)
     local key = CommandsData.GetKey(self.username)
     ModData.add(key, tocData)
     self.tocData = ModData.get(key)
@@ -94,54 +97,54 @@ end
 -----------------
 --* Setters *--
 
-function ModDataHandler:setIsDataReady(isDataReady)
+function DataController:setIsDataReady(isDataReady)
     self.isDataReady = isDataReady
 end
 
 ---Set a generic boolean that toggles varies function of the mod
 ---@param isAnyLimbCut boolean
-function ModDataHandler:setIsAnyLimbCut(isAnyLimbCut)
+function DataController:setIsAnyLimbCut(isAnyLimbCut)
     self.tocData.isAnyLimbCut = isAnyLimbCut
 end
 
 ---Set isIgnoredPartInfected
 ---@param isIgnoredPartInfected boolean
-function ModDataHandler:setIsIgnoredPartInfected(isIgnoredPartInfected)
+function DataController:setIsIgnoredPartInfected(isIgnoredPartInfected)
     self.tocData.isIgnoredPartInfected = isIgnoredPartInfected
 end
 
 ---Set isCut 
 ---@param limbName string
 ---@param isCut boolean
-function ModDataHandler:setIsCut(limbName, isCut)
+function DataController:setIsCut(limbName, isCut)
     self.tocData.limbs[limbName].isCut = isCut
 end
 
 ---Set isInfected
 ---@param limbName string
 ---@param isInfected boolean
-function ModDataHandler:setIsInfected(limbName, isInfected)
+function DataController:setIsInfected(limbName, isInfected)
     self.tocData.limbs[limbName].isInfected = isInfected
 end
 
 ---Set isCicatrized
 ---@param limbName string
 ---@param isCicatrized boolean
-function ModDataHandler:setIsCicatrized(limbName, isCicatrized)
+function DataController:setIsCicatrized(limbName, isCicatrized)
     self.tocData.limbs[limbName].isCicatrized = isCicatrized
 end
 
 ---Set isCauterized
 ---@param limbName string
 ---@param isCauterized boolean
-function ModDataHandler:setIsCauterized(limbName, isCauterized)
+function DataController:setIsCauterized(limbName, isCauterized)
     self.tocData.limbs[limbName].isCauterized = isCauterized
 end
 
 ---Set woundDirtyness
 ---@param limbName string
 ---@param woundDirtyness number
-function ModDataHandler:setWoundDirtyness(limbName, woundDirtyness)
+function DataController:setWoundDirtyness(limbName, woundDirtyness)
     self.tocData.limbs[limbName].woundDirtyness = woundDirtyness
 end
 
@@ -149,21 +152,21 @@ end
 ---Set cicatrizationTime
 ---@param limbName string
 ---@param cicatrizationTime number
-function ModDataHandler:setCicatrizationTime(limbName, cicatrizationTime)
+function DataController:setCicatrizationTime(limbName, cicatrizationTime)
     self.tocData.limbs[limbName].cicatrizationTime = cicatrizationTime
 end
 
 ---Set isProstEquipped
 ---@param group string
 ---@param isProstEquipped boolean
-function ModDataHandler:setIsProstEquipped(group, isProstEquipped)
+function DataController:setIsProstEquipped(group, isProstEquipped)
     self.tocData.prostheses[group].isProstEquipped = isProstEquipped
 end
 
 ---Set prostFactor
 ---@param group string
 ---@param prostFactor number
-function ModDataHandler:setProstFactor(group, prostFactor)
+function DataController:setProstFactor(group, prostFactor)
     self.tocData.prostheses[group].prostFactor = prostFactor
 end
 
@@ -172,26 +175,26 @@ end
 
 ---comment
 ---@return boolean
-function ModDataHandler:getIsDataReady()
+function DataController:getIsDataReady()
     return self.isDataReady
 end
 ---Set a generic boolean that toggles varies function of the mod
 ---@return boolean
-function ModDataHandler:getIsAnyLimbCut()
+function DataController:getIsAnyLimbCut()
     --if self.isDataReady == false then return false end
     return self.tocData.isAnyLimbCut
 end
 
 ---Get isIgnoredPartInfected
 ---@return boolean
-function ModDataHandler:getIsIgnoredPartInfected()
+function DataController:getIsIgnoredPartInfected()
     return self.tocData.isIgnoredPartInfected
 end
 
 ---Get isCut
 ---@param limbName string
 ---@return boolean
-function ModDataHandler:getIsCut(limbName)
+function DataController:getIsCut(limbName)
     if not self.isDataReady then return false end
 
     if self.tocData.limbs[limbName] then
@@ -204,7 +207,7 @@ end
 ---Get isVisible
 ---@param limbName string
 ---@return boolean
-function ModDataHandler:getIsVisible(limbName)
+function DataController:getIsVisible(limbName)
     if not self.isDataReady then return false end
 
     return self.tocData.limbs[limbName].isVisible
@@ -213,21 +216,21 @@ end
 ---Get isCicatrized
 ---@param limbName string
 ---@return boolean
-function ModDataHandler:getIsCicatrized(limbName)
+function DataController:getIsCicatrized(limbName)
     return self.tocData.limbs[limbName].isCicatrized
 end
 
 ---Get isCauterized
 ---@param limbName string
 ---@return boolean
-function ModDataHandler:getIsCauterized(limbName)
+function DataController:getIsCauterized(limbName)
     return self.tocData.limbs[limbName].isCauterized
 end
 
 ---Get woundDirtyness
 ---@param limbName string
 ---@return number
-function ModDataHandler:getWoundDirtyness(limbName)
+function DataController:getWoundDirtyness(limbName)
     return self.tocData.limbs[limbName].woundDirtyness
 end
 
@@ -235,21 +238,21 @@ end
 ---Get cicatrizationTime
 ---@param limbName string
 ---@return number
-function ModDataHandler:getCicatrizationTime(limbName)
+function DataController:getCicatrizationTime(limbName)
     return self.tocData.limbs[limbName].cicatrizationTime
 end
 
 ---Get isProstEquipped
 ---@param group string
 ---@return boolean
-function ModDataHandler:getIsProstEquipped(group)
+function DataController:getIsProstEquipped(group)
     return self.tocData.prostheses[group].isProstEquipped
 end
 
 ---Get prostFactor
 ---@param group string
 ---@return number
-function ModDataHandler:getProstFactor(group)
+function DataController:getProstFactor(group)
     return self.tocData.prostheses[group].prostFactor
 end
 
@@ -261,7 +264,7 @@ end
 ---@param isCicatrized boolean
 ---@param isCauterized boolean
 ---@param surgeonFactor number?
-function ModDataHandler:setCutLimb(limbName, isOperated, isCicatrized, isCauterized, surgeonFactor)
+function DataController:setCutLimb(limbName, isOperated, isCicatrized, isCauterized, surgeonFactor)
     local cicatrizationTime = 0
     if isCicatrized == false or isCauterized == false then
         cicatrizationTime = StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM[limbName] - surgeonFactor
@@ -292,7 +295,7 @@ end
 ---@param limbName string
 ---@param ampStatus partData {isCut, isInfected, isOperated, isCicatrized, isCauterized, isVisible}
 ---@param cicatrizationTime integer?
-function ModDataHandler:setLimbParams(limbName, ampStatus, cicatrizationTime)
+function DataController:setLimbParams(limbName, ampStatus, cicatrizationTime)
     local limbData = self.tocData.limbs[limbName]
     if ampStatus.isCut ~= nil then limbData.isCut = ampStatus.isCut end
     if ampStatus.isInfected ~= nil then limbData.isInfected = ampStatus.isInfected end
@@ -309,44 +312,44 @@ end
 
 ---Decreases the cicatrization time
 ---@param limbName string
-function ModDataHandler:decreaseCicatrizationTime(limbName)
+function DataController:decreaseCicatrizationTime(limbName)
     self.tocData.limbs[limbName].cicatrizationTime = self.tocData.limbs[limbName].cicatrizationTime - 1
 end
 
 --* Global Mod Data Handling *--
 
-function ModDataHandler:apply()
+function DataController:apply()
     ModData.transmit(CommandsData.GetKey(self.username))
 end
 
-function ModDataHandler.ReceiveData(key, data)
+function DataController.ReceiveData(key, data)
     if not isClient() then
-        TOC_DEBUG.print("SP, skipping ModDataHandler.ReceiveData")
+        TOC_DEBUG.print("SP, skipping DataController.ReceiveData")
     end
     -- During startup the game can return Bob as the player username, adding a useless ModData table
     if key == "TOC_Bob" then return end
 
-    TOC_DEBUG.print("[ModDataHandler] ReceiveData for " .. key)
+    TOC_DEBUG.print("[DataController] ReceiveData for " .. key)
     if data == {} or data == nil then
         TOC_DEBUG.print("table is nil... returning")
         return
     end
 
-    -- Get ModDataHandler instance if there was none for that user and reapply the correct ModData table as a reference
+    -- Get DataController instance if there was none for that user and reapply the correct ModData table as a reference
     local username = key:sub(5)
-    local handler = ModDataHandler.GetInstance(username)
+    local handler = DataController.GetInstance(username)
     if handler.isResetForced or data == nil or data == {} or data == false then
-        TOC_DEBUG.print("[ModDataHandler] Setup")
+        TOC_DEBUG.print("[DataController] Setup")
         handler:setup(key)
         handler.isResetForced = false
     else
-        TOC_DEBUG.print("[ModDataHandler] Reapply")
+        TOC_DEBUG.print("[DataController] Reapply")
         handler:reapplyTocData(data)
     end
 
 
     -- if handler.isResetForced or handler.tocData == nil or handler.tocData.limbs == nil or handler.tocData.limbs.Hand_L == nil or handler.tocData.limbs.Hand_L.isCut == nil then
-    --     TOC_DEBUG.print("tocData in ModDataHandler for " .. handler.username .. " is nil, creating it now")
+    --     TOC_DEBUG.print("tocData in DataController for " .. handler.username .. " is nil, creating it now")
     --     handler:setup(key)
     --     handler.isResetForced = false
     -- elseif table then
@@ -361,27 +364,27 @@ function ModDataHandler.ReceiveData(key, data)
 
     -- Transmit it to the server
     ModData.transmit(key)
-    TOC_DEBUG.print("[ModDataHandler] Transmitting data after receiving it for: " .. handler.username)
+    TOC_DEBUG.print("[DataController] Transmitting data after receiving it for: " .. handler.username)
 
 end
 
-Events.OnReceiveGlobalModData.Add(ModDataHandler.ReceiveData)
+Events.OnReceiveGlobalModData.Add(DataController.ReceiveData)
 
 -------------------
 
 ---@param username string?
----@return ModDataHandler
-function ModDataHandler.GetInstance(username)
+---@return DataController
+function DataController.GetInstance(username)
     if username == nil or username == "Bob" then
         username = getPlayer():getUsername()
     end
 
-    if ModDataHandler.instances[username] == nil then
-        TOC_DEBUG.print("[ModDataHandler] Creating NEW instance for " .. username)
-        return ModDataHandler:new(username)
+    if DataController.instances[username] == nil then
+        TOC_DEBUG.print("[DataController] Creating NEW instance for " .. username)
+        return DataController:new(username)
     else
-        return ModDataHandler.instances[username]
+        return DataController.instances[username]
     end
 end
 
-return ModDataHandler
+return DataController

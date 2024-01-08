@@ -1,7 +1,8 @@
-local BaseHandler = require("TOC/UI/HealthPanelBaseHandler")
-local CutLimbAction = require("TOC/TimedActions/CutLimbAction")
+local BaseHandler = require("TOC/UI/Interactions/HealthPanelBaseHandler")
 local StaticData = require("TOC/StaticData")
-local ModDataHandler = require("TOC/Handlers/ModDataHandler")
+local DataController = require("TOC/Controllers/DataController")
+
+local CutLimbAction = require("TOC/TimedActions/CutLimbAction")
 ---------------------
 
 -- TODO Add interaction to cut and bandage!
@@ -96,7 +97,7 @@ local function AddInvAmputationOptions(player, context, sawItem, stitchesItem, b
 
     for i = 1, #StaticData.LIMBS_STR do
         local limbName = StaticData.LIMBS_STR[i]
-        if not ModDataHandler.GetInstance():getIsCut(limbName) then
+        if not DataController.GetInstance():getIsCut(limbName) then
             local limbTranslatedName = getText("ContextMenu_Limb_" .. limbName)
             subMenu:addOption(limbTranslatedName, player, PerformAction, player, limbName, sawItem, stitchesItem, bandageItem)
         end
@@ -177,7 +178,7 @@ end
 function CutLimbHandler:addToMenu(context)
     TOC_DEBUG.print("CutLimbHandler addToMenu")
     local types = self:getAllItemTypes(self.items.ITEMS)
-    if #types > 0 and StaticData.BODYLOCS_IND_BPT[self.limbName] and not ModDataHandler.GetInstance():getIsCut(self.limbName) then
+    if #types > 0 and StaticData.BODYLOCS_IND_BPT[self.limbName] and not DataController.GetInstance():getIsCut(self.limbName) then
         TOC_DEBUG.print("addToMenu, types > 0")
         for i=1, #types do
             context:addOption(getText("ContextMenu_Amputate"), self, self.onMenuOptionSelected, types[i])
@@ -199,7 +200,7 @@ end
 function CutLimbHandler:isValid()
     TOC_DEBUG.print("CutLimbHandler isValid")
     self:checkItems()
-    return not ModDataHandler.GetInstance():getIsCut(self.limbName)
+    return not DataController.GetInstance():getIsCut(self.limbName)
 end
 
 function CutLimbHandler:perform(previousAction, itemType)

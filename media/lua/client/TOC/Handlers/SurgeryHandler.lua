@@ -1,4 +1,4 @@
-local ModDataHandler = require("TOC/Handlers/ModDataHandler")
+local DataController = require("TOC/Controllers/DataController")
 
 ---@class SurgeryHandler
 ---@field type string
@@ -28,7 +28,7 @@ function SurgeryHandler:execute()
 
 
     if self.type == "oven" then
-        ModDataHandler.GetInstance():setIsCauterized(self.limbName, true)
+        DataController.GetInstance():setIsCauterized(self.limbName, true)
     end
 end
 

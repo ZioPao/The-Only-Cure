@@ -2,9 +2,9 @@ if not getActivatedMods():contains("TEST_FRAMEWORK") or not isDebugEnabled() the
 local TestFramework = require("TestFramework/TestFramework")
 local TestUtils = require("TestFramework/TestUtils")
 
-local PlayerHandler = require("TOC/Handlers/PlayerHandler")
+local LocalPlayerController = require("TOC/Controllers/LocalPlayerController")
 local AmputationHandler = require("TOC/Handlers/AmputationHandler")
-local ModDataHandler = require("TOC/Handlers/ModDataHandler")
+local DataController = require("TOC/Controllers/DataController")
 local StaticData = require("TOC/StaticData")
 
 
@@ -52,11 +52,11 @@ TestFramework.registerTestModule("PlayerHandler", "Cicatrization", function()
     function Tests.SetCicatrizationTimeToOne()
         for i=1, #StaticData.LIMBS_STR do
             local limbName = StaticData.LIMBS_STR[i]
-            ModDataHandler.GetInstance():setCicatrizationTime(limbName, 1)
-            TestUtils.assert(ModDataHandler.GetInstance():getCicatrizationTime(limbName) == 1)
+            DataController.GetInstance():setCicatrizationTime(limbName, 1)
+            TestUtils.assert(DataController.GetInstance():getCicatrizationTime(limbName) == 1)
         end
-        ModDataHandler.GetInstance():apply()
-        TestUtils.assert(ModDataHandler.GetInstance():getIsCut("Hand_L"))
+        DataController.GetInstance():apply()
+        TestUtils.assert(DataController.GetInstance():getIsCut("Hand_L"))
     end
 
     return Tests
@@ -69,19 +69,19 @@ TestFramework.registerTestModule("AmputationHandler", "Top Left", function()
     function Tests.CutLeftHand()
         local handler = AmputationHandler:new("Hand_L")
         handler:execute(true)
-        TestUtils.assert(ModDataHandler.GetInstance():getIsCut("Hand_L"))
+        TestUtils.assert(DataController.GetInstance():getIsCut("Hand_L"))
     end
 
     function Tests.CutLeftForearm()
         local handler = AmputationHandler:new("ForeArm_L")
         handler:execute(true)
-        TestUtils.assert(ModDataHandler.GetInstance():getIsCut("ForeArm_L") and ModDataHandler.GetInstance():getIsCut("Hand_L"))
+        TestUtils.assert(DataController.GetInstance():getIsCut("ForeArm_L") and DataController.GetInstance():getIsCut("Hand_L"))
     end
 
     function Tests.CutLeftUpperarm()
         local handler = AmputationHandler:new("UpperArm_L")
         handler:execute(true)
-        TestUtils.assert(ModDataHandler.GetInstance():getIsCut("UpperArm_L") and ModDataHandler.GetInstance():getIsCut("ForeArm_L") and ModDataHandler.GetInstance():getIsCut("Hand_L"))
+        TestUtils.assert(DataController.GetInstance():getIsCut("UpperArm_L") and DataController.GetInstance():getIsCut("ForeArm_L") and DataController.GetInstance():getIsCut("Hand_L"))
     end
 
     return Tests
@@ -93,19 +93,19 @@ TestFramework.registerTestModule("AmputationHandler", "Top Right", function()
     function Tests.CutRightHand()
         local handler = AmputationHandler:new("Hand_R")
         handler:execute(true)
-        TestUtils.assert(ModDataHandler.GetInstance():getIsCut("Hand_R"))
+        TestUtils.assert(DataController.GetInstance():getIsCut("Hand_R"))
     end
 
     function Tests.CutRightForearm()
         local handler = AmputationHandler:new("ForeArm_R")
         handler:execute(true)
-        TestUtils.assert(ModDataHandler.GetInstance():getIsCut("ForeArm_R") and ModDataHandler.GetInstance():getIsCut("Hand_R"))
+        TestUtils.assert(DataController.GetInstance():getIsCut("ForeArm_R") and DataController.GetInstance():getIsCut("Hand_R"))
     end
 
     function Tests.CutRightUpperarm()
         local handler = AmputationHandler:new("UpperArm_R")
         handler:execute(true)
-        TestUtils.assert(ModDataHandler.GetInstance():getIsCut("UpperArm_R") and ModDataHandler.GetInstance():getIsCut("ForeArm_R") and ModDataHandler.GetInstance():getIsCut("Hand_R"))
+        TestUtils.assert(DataController.GetInstance():getIsCut("UpperArm_R") and DataController.GetInstance():getIsCut("ForeArm_R") and DataController.GetInstance():getIsCut("Hand_R"))
     end
 
     return Tests

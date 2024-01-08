@@ -1,5 +1,5 @@
 local StaticData = require("TOC/StaticData")
-local ModDataHandler = require("TOC/Handlers/ModDataHandler")
+local DataController = require("TOC/Controllers/DataController")
 local CommonMethods = require("TOC/CommonMethods")
 ---------------------------
 
@@ -21,12 +21,12 @@ CachedDataHandler.amputatedLimbs = {}
 function CachedDataHandler.CalculateAmputatedLimbs(username)
     TOC_DEBUG.print("[CachedDataHandler] Calculating amputated limbs for " .. username)
     CachedDataHandler.amputatedLimbs[username] = {}
-    local modDataHandler = ModDataHandler.GetInstance(username)
+    local dcInst = DataController.GetInstance(username)
 
     -- TODO If the data hasn't arrived, this won't work
     for i=1, #StaticData.LIMBS_STR do
         local limbName = StaticData.LIMBS_STR[i]
-        if modDataHandler:getIsCut(limbName) then
+        if dcInst:getIsCut(limbName) then
             CachedDataHandler.AddAmputatedLimb(username, limbName)
         end
     end
@@ -58,9 +58,9 @@ CachedDataHandler.highestAmputatedLimbs = {}
 ---@param username string
 function CachedDataHandler.CalculateHighestAmputatedLimbs(username)
     TOC_DEBUG.print("[CachedDataHandler] Triggered CalculateHighestAmputatedLimbs")
-    local modDataHandler = ModDataHandler.GetInstance(username)
-    if modDataHandler == nil then
-        TOC_DEBUG.print("ModDataHandler not found for " .. username)
+    local dcInst = DataController.GetInstance(username)
+    if dcInst == nil then
+        TOC_DEBUG.print("DataController not found for " .. username)
         return
     end
 
@@ -83,7 +83,7 @@ function CachedDataHandler.CalculateHighestAmputatedLimbs(username)
     for k, _ in pairs(amputatedLimbs) do
         local limbName = k
         local index = CommonMethods.GetSide(limbName)
-        if modDataHandler:getIsCut(limbName) and modDataHandler:getIsVisible(limbName) then
+        if dcInst:getIsCut(limbName) and dcInst:getIsVisible(limbName) then
             TOC_DEBUG.print("[CachedDataHandler] Added Highest Amputation: " .. limbName)
             CachedDataHandler.highestAmputatedLimbs[username][index] = limbName
         end

@@ -1,6 +1,6 @@
 local CommonMethods = require("TOC/CommonMethods")
 local StaticData = require("TOC/StaticData")
-local ModDataHandler = require("TOC/Handlers/ModDataHandler")
+local DataController = require("TOC/Controllers/DataController")
 local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
 -------------------------
 
@@ -67,9 +67,9 @@ function ProsthesisHandler.SearchAndSetupProsthesis(item, isEquipping)
 
     local group = ProsthesisHandler.GetGroup(item)
     TOC_DEBUG.print("applying prosthesis stuff for " .. group)
-    local modDataHandler = ModDataHandler.GetInstance()
-    modDataHandler:setIsProstEquipped(group, isEquipping)
-    modDataHandler:apply()
+    local dcInst = DataController.GetInstance()
+    dcInst:setIsProstEquipped(group, isEquipping)
+    dcInst:apply()
     
 end
 

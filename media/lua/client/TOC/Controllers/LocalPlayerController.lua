@@ -1,4 +1,4 @@
-local ModDataHandler = require("TOC/Handlers/ModDataHandler")
+local DataController = require("TOC/Controllers/DataController")
 local CommonMethods = require("TOC/CommonMethods")
 local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
 local StaticData = require("TOC/StaticData")
@@ -11,36 +11,36 @@ local StaticData = require("TOC/StaticData")
 -- Update current player status (infection checks)
 -- handle stats increase\decrease
 
----@class PlayerHandler
+---@class LocalPlayerController
 ---@field playerObj IsoPlayer
 ---@field username string
 ---@field hasBeenDamaged boolean
-local PlayerHandler = {}
+local LocalPlayerController = {}
 
 ---Setup the Player Handler and modData, only for local client
 ---@param playerObj IsoPlayer
 ---@param isForced boolean?
-function PlayerHandler.InitializePlayer(playerObj, isForced)
+function LocalPlayerController.InitializePlayer(playerObj, isForced)
     local username = playerObj:getUsername()
 
     TOC_DEBUG.print("[PlayerHandler] Initializing local player: " .. username)
 
-    ModDataHandler:new(username, isForced)
-    PlayerHandler.playerObj = playerObj
-    PlayerHandler.username = username
+    DataController:new(username, isForced)
+    LocalPlayerController.playerObj = playerObj
+    LocalPlayerController.username = username
 
     -- Calculate amputated limbs and highest point of amputations at startup
     --CachedDataHandler.CalculateAmputatedLimbs(username)
     --CachedDataHandler.CalculateHighestAmputatedLimbs(username)
 
     --Setup the CicatrizationUpdate event and triggers it once
-    Events.OnAmputatedLimb.Add(PlayerHandler.ToggleUpdateAmputations)
-    PlayerHandler.ToggleUpdateAmputations()
+    Events.OnAmputatedLimb.Add(LocalPlayerController.ToggleUpdateAmputations)
+    LocalPlayerController.ToggleUpdateAmputations()
 
     -- Since isForced is used to reset an existing player data, we're gonna clean their ISHealthPanel table too
     if isForced then
-        local ItemsHandler = require("TOC/Handlers/ItemsHandler")
-        ItemsHandler.Player.DeleteAllOldAmputationItems(playerObj)
+        local ItemsController = require("TOC/Handlers/ItemsController")
+        ItemsController.Player.DeleteAllOldAmputationItems(playerObj)
         CachedDataHandler.Reset(username)
     end
 
@@ -51,7 +51,7 @@ end
 
 ---Handles the traits
 ---@param playerObj IsoPlayer
-function PlayerHandler.ManageTraits(playerObj)
+function LocalPlayerController.ManageTraits(playerObj)
     local AmputationHandler = require("Handlers/TOC_AmputationHandler")
     for k, v in pairs(StaticData.TRAITS_BP) do
         if playerObj:HasTrait(k) then
@@ -68,7 +68,7 @@ end
 
 ---Used to heal an area that has been cut previously. There's an exception for bites, those are managed differently
 ---@param bodyPart BodyPart
-function PlayerHandler.HealArea(bodyPart)
+function LocalPlayerController.HealArea(bodyPart)
     bodyPart:setBleeding(false)
     bodyPart:setBleedingTime(0)
 
@@ -90,8 +90,8 @@ end
 ---@param bodyDamage BodyDamage
 ---@param bodyPart BodyPart
 ---@param limbName string
----@param modDataHandler ModDataHandler
-function PlayerHandler.HealZombieInfection(bodyDamage, bodyPart, limbName, modDataHandler)
+---@param dcInst DataController
+function LocalPlayerController.HealZombieInfection(bodyDamage, bodyPart, limbName, dcInst)
     if bodyDamage:isInfected() == false then return end
 
     bodyDamage:setInfected(false)
@@ -100,16 +100,16 @@ function PlayerHandler.HealZombieInfection(bodyDamage, bodyPart, limbName, modDa
     bodyDamage:setInfectionLevel(-1)
     bodyPart:SetInfected(false)
 
-    modDataHandler:setIsInfected(limbName, false)
-    modDataHandler:apply()
+    dcInst:setIsInfected(limbName, false)
+    dcInst:apply()
 end
 
 ---comment
 ---@param character IsoPlayer
 ---@param limbName string
-function PlayerHandler.TryRandomBleed(character, limbName)
+function LocalPlayerController.TryRandomBleed(character, limbName)
     -- Chance should be determined by the cicatrization time
-    local cicTime = ModDataHandler.GetInstance():getCicatrizationTime(limbName)
+    local cicTime = DataController.GetInstance():getCicatrizationTime(limbName)
     if cicTime == 0 then return end
     -- TODO Sometimes we get cicTime = 0... Shouldn't really do it
 
@@ -129,37 +129,37 @@ end
 -------------------------
 --* Events *--
 --- Locks OnPlayerGetDamage event, to prevent it from getting spammed constantly
-PlayerHandler.hasBeenDamaged = false
+LocalPlayerController.hasBeenDamaged = false
 
 
 ---Check if the player has in infected body part or if they have been hit in a cut area
 ---@param character IsoPlayer
-function PlayerHandler.HandleDamage(character)
+function LocalPlayerController.HandleDamage(character)
     -- TOC_DEBUG.print("Player got hit!")
     -- TOC_DEBUG.print(damageType)
     if character ~= getPlayer() then return end
     local bd = character:getBodyDamage()
-    local modDataHandler = ModDataHandler.GetInstance()
+    local dcInst = DataController.GetInstance()
     local modDataNeedsUpdate = false
     for i=1, #StaticData.LIMBS_STR do
         local limbName = StaticData.LIMBS_STR[i]
         local bptEnum = StaticData.BODYLOCS_IND_BPT[limbName]
         local bodyPart = bd:getBodyPart(bptEnum)
-        if modDataHandler:getIsCut(limbName) then
+        if dcInst:getIsCut(limbName) then
 
             -- Generic injury, let's heal it since they already cut the limb off
             if bodyPart:HasInjury() then
-                PlayerHandler.HealArea(bodyPart)
+                LocalPlayerController.HealArea(bodyPart)
             end
 
             -- Special case for bites\zombie infections
             if bodyPart:IsInfected() then
                 TOC_DEBUG.print("Healed from zombie infection " .. tostring(bodyPart))
-                PlayerHandler.HealZombieInfection(bd, bodyPart, limbName, modDataHandler)
+                LocalPlayerController.HealZombieInfection(bd, bodyPart, limbName, dcInst)
             end
         else
             if bodyPart:bitten() or bodyPart:IsInfected() then
-                modDataHandler:setIsInfected(limbName, true)
+                dcInst:setIsInfected(limbName, true)
                 modDataNeedsUpdate = true
             end
         end
@@ -167,24 +167,24 @@ function PlayerHandler.HandleDamage(character)
 
     -- Check other body parts that are not included in the mod, if there's a bite there then the player is fucked
     -- We can skip this loop if the player has been infected. The one before we kinda need it to handle correctly the bites in case the player wanna cut stuff off anyway
-    if modDataHandler:getIsIgnoredPartInfected() then return end
+    if dcInst:getIsIgnoredPartInfected() then return end
 
     for i=1, #StaticData.IGNORED_BODYLOCS_BPT do
         local bodyPartType = StaticData.IGNORED_BODYLOCS_BPT[i]
         local bodyPart = bd:getBodyPart(bodyPartType)
         if bodyPart and (bodyPart:bitten() or bodyPart:IsInfected()) then
-            modDataHandler:setIsIgnoredPartInfected(true)
+            dcInst:setIsIgnoredPartInfected(true)
             modDataNeedsUpdate = true
         end
     end
 
     -- TODO in theory  should sync modData, but it's gonna be expensive as fuck. Figure it out
     if modDataNeedsUpdate then
-        modDataHandler:apply()
+        dcInst:apply()
     end
 
     -- Disable the lock
-    PlayerHandler.hasBeenDamaged = false
+    LocalPlayerController.hasBeenDamaged = false
 
 end
 
@@ -192,29 +192,29 @@ end
 ---@param character IsoGameCharacter
 ---@param damageType string
 ---@param damageAmount number
-function PlayerHandler.OnGetDamage(character, damageType, damageAmount)
+function LocalPlayerController.OnGetDamage(character, damageType, damageAmount)
 
     -- TODO Check if other players in the online triggers this
 
-    if PlayerHandler.hasBeenDamaged == false then
+    if LocalPlayerController.hasBeenDamaged == false then
         -- Start checks
 
         -- TODO Add a timer before we can re-enable this bool?
-        PlayerHandler.hasBeenDamaged = true
-        PlayerHandler.HandleDamage(character)
+        LocalPlayerController.hasBeenDamaged = true
+        LocalPlayerController.HandleDamage(character)
     end
 end
 
-Events.OnPlayerGetDamage.Add(PlayerHandler.OnGetDamage)
+Events.OnPlayerGetDamage.Add(LocalPlayerController.OnGetDamage)
 
 ---Updates the cicatrization process, run when a limb has been cut. Run it every 1 hour
-function PlayerHandler.UpdateAmputations()
-    local modDataHandler = ModDataHandler.GetInstance()
-    if modDataHandler:getIsAnyLimbCut() == false then
-        Events.EveryHours.Remove(PlayerHandler.UpdateAmputations)
+function LocalPlayerController.UpdateAmputations()
+    local dcInst = DataController.GetInstance()
+    if dcInst:getIsAnyLimbCut() == false then
+        Events.EveryHours.Remove(LocalPlayerController.UpdateAmputations)
     end
 
-    local pl = PlayerHandler.playerObj
+    local pl = LocalPlayerController.playerObj
     local bd = pl:getBodyDamage()
     local visual = pl:getHumanVisual()
     local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(pl:getUsername())
@@ -222,11 +222,11 @@ function PlayerHandler.UpdateAmputations()
 
     for k, _ in pairs(amputatedLimbs) do
         local limbName = k
-        local isCicatrized = modDataHandler:getIsCicatrized(limbName)
+        local isCicatrized = dcInst:getIsCicatrized(limbName)
 
         if not isCicatrized then
             needsUpdate = true
-            local cicTime = modDataHandler:getCicatrizationTime(limbName)
+            local cicTime = dcInst:getCicatrizationTime(limbName)
             TOC_DEBUG.print("updating cicatrization for " .. tostring(limbName))
 
             -- TODO Check if bandaged, sutured, whatever
@@ -245,7 +245,7 @@ function PlayerHandler.UpdateAmputations()
             -- TEST SECTION
 
             local dirtynessVis = visual:getDirt(bbptEnum) + visual:getBlood(bbptEnum)
-            local dirtynessWound = modDataHandler:getWoundDirtyness(limbName) + modifier
+            local dirtynessWound = dcInst:getWoundDirtyness(limbName) + modifier
             --------------
 
             local dirtyness = dirtynessVis + dirtynessWound
@@ -254,44 +254,44 @@ function PlayerHandler.UpdateAmputations()
                 dirtyness = 1
             end
 
-            modDataHandler:setWoundDirtyness(limbName, dirtyness)
+            dcInst:setWoundDirtyness(limbName, dirtyness)
 
             TOC_DEBUG.print("dirtyness for this zone: " .. tostring(dirtyness))
 
             cicTime = cicTime - SandboxVars.TOC.CicatrizationSpeed
-            modDataHandler:setCicatrizationTime(limbName, cicTime)
+            dcInst:setCicatrizationTime(limbName, cicTime)
             TOC_DEBUG.print("new cicatrization time: " .. tostring(cicTime))
             if cicTime <= 0 then
                 TOC_DEBUG.print(tostring(limbName) .. " is cicatrized")
-                modDataHandler:setIsCicatrized(limbName, true)
+                dcInst:setIsCicatrized(limbName, true)
             end
         end
     end
 
     if needsUpdate then
         TOC_DEBUG.print("updating modData from cicatrization loop")
-        modDataHandler:apply()      -- TODO This is gonna be heavy. Not entirely sure
+        dcInst:apply()      -- TODO This is gonna be heavy. Not entirely sure
     else
         TOC_DEBUG.print("Removing UpdateAmputations")
-        Events.EveryHours.Remove(PlayerHandler.UpdateAmputations)     -- We can remove it safely, no cicatrization happening here boys
+        Events.EveryHours.Remove(LocalPlayerController.UpdateAmputations)     -- We can remove it safely, no cicatrization happening here boys
     end
     TOC_DEBUG.print("updating cicatrization and wound dirtyness!")
 
 end
 
 ---Starts safely the loop to update cicatrzation
-function PlayerHandler.ToggleUpdateAmputations()
+function LocalPlayerController.ToggleUpdateAmputations()
     TOC_DEBUG.print("[PlayerHandler] Activating amputation handling loop (if it wasn't active before)")
-    CommonMethods.SafeStartEvent("EveryHours", PlayerHandler.UpdateAmputations)
+    CommonMethods.SafeStartEvent("EveryHours", LocalPlayerController.UpdateAmputations)
 end
 
 
 --* Helper functions for overrides *--
 
 local function CheckHandFeasibility(limbName)
-    local modDataHandler = ModDataHandler.GetInstance()
+    local dcInst = DataController.GetInstance()
 
-    return not modDataHandler:getIsCut(limbName) or modDataHandler:getIsProstEquipped(StaticData.LIMBS_TO_PROST_GROUP_MATCH_IND_STR[limbName])
+    return not dcInst:getIsCut(limbName) or dcInst:getIsProstEquipped(StaticData.LIMBS_TO_PROST_GROUP_MATCH_IND_STR[limbName])
 end
 
 ------------------------------------------
@@ -310,14 +310,14 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
     if queue and queue.current and queue.current.skipTOC then return time end
 
     -- Action is valid, check if we have any cut limb and then modify maxTime
-    local modDataHandler = ModDataHandler.GetInstance()
-    if time ~= -1 and modDataHandler and modDataHandler:getIsAnyLimbCut() then
+    local dcInst = DataController.GetInstance()
+    if time ~= -1 and dcInst and dcInst:getIsAnyLimbCut() then
         local pl = getPlayer()
         local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(pl:getUsername())
 
         for k, _ in pairs(amputatedLimbs) do
             local limbName = k
-            --if modDataHandler:getIsCut(limbName) then
+            --if dcInst:getIsCut(limbName) then
             local perk = Perks["Side_" .. CommonMethods.GetSide(limbName)]
             local perkLevel = pl:getPerkLevel(perk)
             local perkLevelScaled
@@ -337,20 +337,20 @@ local og_ISBaseTimedAction_perform = ISBaseTimedAction.perform
 function ISBaseTimedAction:perform()
 	og_ISBaseTimedAction_perform(self)
 
-    local modDataHandler = ModDataHandler.GetInstance()
-    if not modDataHandler:getIsAnyLimbCut() then return end
+    local dcInst = DataController.GetInstance()
+    if not dcInst:getIsAnyLimbCut() then return end
 
-    local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(PlayerHandler.username)
+    local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(LocalPlayerController.username)
     for k, _ in pairs(amputatedLimbs) do
         local limbName = k
-        if modDataHandler:getIsCut(limbName) then
+        if dcInst:getIsCut(limbName) then
             local side = CommonMethods.GetSide(limbName)
-            PlayerHandler.playerObj:getXp():AddXP(Perks["Side_" .. side], 1)       -- TODO Make it dynamic
+            LocalPlayerController.playerObj:getXp():AddXP(Perks["Side_" .. side], 1)       -- TODO Make it dynamic
             local prostGroup = StaticData.LIMBS_TO_PROST_GROUP_MATCH_IND_STR[limbName]
-            if not modDataHandler:getIsCicatrized(limbName) and modDataHandler:getIsProstEquipped(prostGroup) then
+            if not dcInst:getIsCicatrized(limbName) and dcInst:getIsProstEquipped(prostGroup) then
                 TOC_DEBUG.print("Trying for bleed, player met the criteria")
                 -- TODO If we have cut a forearm, it will try to check the hand too, with cicatrization time = 0. We should skip this
-                PlayerHandler.TryRandomBleed(self.character, limbName)
+                LocalPlayerController.TryRandomBleed(self.character, limbName)
             end
         end
     end
@@ -368,8 +368,8 @@ local og_ISEquipWeaponAction_isValid = ISEquipWeaponAction.isValid
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISEquipWeaponAction:isValid()
     local isValid = og_ISEquipWeaponAction_isValid(self)
-    local modDataHandler = ModDataHandler.GetInstance(self.character:getUsername())
-    if isValid and modDataHandler:getIsAnyLimbCut() then
+    local dcInst = DataController.GetInstance(self.character:getUsername())
+    if isValid and dcInst:getIsAnyLimbCut() then
         local isPrimaryHandValid = CheckHandFeasibility(primaryHand)
         local isSecondaryHandValid = CheckHandFeasibility(secondaryHand)
 
@@ -405,8 +405,8 @@ end
 ---@field character IsoPlayer
 
 ---A recreation of the original method, but with amputations in mind
----@param modDataHandler ModDataHandler
-function ISEquipWeaponAction:performWithAmputation(modDataHandler)
+---@param dcInst DataController
+function ISEquipWeaponAction:performWithAmputation(dcInst)
 
     -- TODO Simplify this
     local hand = nil
@@ -446,12 +446,12 @@ function ISEquipWeaponAction:performWithAmputation(modDataHandler)
             end
         else
             setMethodSecond(self.character, nil)
-            -- TODO We should use the CachedData indexable instead of modDataHandler
+            -- TODO We should use the CachedData indexable instead of dcInst
 
-            if not modDataHandler:getIsCut(hand) then
+            if not dcInst:getIsCut(hand) then
                 setMethodSecond(self.character, self.item)
                 -- Check other HAND!
-            elseif not modDataHandler:getIsCut(otherHand) then
+            elseif not dcInst:getIsCut(otherHand) then
                 setMethodFirst(self.character, self.item)
             end
         end
@@ -489,10 +489,10 @@ function ISEquipWeaponAction:perform()
     og_ISEquipWeaponAction_perform(self)
 
     -- TODO Can we do it earlier?
-    local modDataHandler = ModDataHandler.GetInstance(self.character:getUsername())
+    local dcInst = DataController.GetInstance(self.character:getUsername())
     -- Just check it any limb has been cut. If not, we can just return from here
-    if modDataHandler:getIsAnyLimbCut() == true then
-        self:performWithAmputation(modDataHandler)
+    if dcInst:getIsAnyLimbCut() == true then
+        self:performWithAmputation(dcInst)
     end
 end
 
@@ -531,4 +531,4 @@ function ISInventoryPaneContextMenu.doEquipOption(context, playerObj, isWeapon, 
 end
 
 
-return PlayerHandler
+return LocalPlayerController

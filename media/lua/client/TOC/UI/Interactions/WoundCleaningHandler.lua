@@ -1,7 +1,7 @@
 
-local BaseHandler = require("TOC/UI/HealthPanelBaseHandler")
+local BaseHandler = require("TOC/UI/Interactions/HealthPanelBaseHandler")
 local CommonMethods = require("TOC/CommonMethods")
-local ModDataHandler = require("TOC/Handlers/ModDataHandler")
+local DataController = require("TOC/Controllers/DataController")
 
 local CleanWoundAction = require("TOC/TimedActions/CleanWoundAction")
 -------------------------
@@ -60,11 +60,11 @@ function WoundCleaningHandler:isValid()
     -- todo get username 
     if self.limbName == nil then return false end
 
-    local modDataHandler = ModDataHandler.GetInstance(self.username)
+    local dcInst = DataController.GetInstance(self.username)
 
-    --and modDataHandler:getWoundDirtyness(self.limbName) > 0.1
+    --and dcInst:getWoundDirtyness(self.limbName) > 0.1
 
-    return modDataHandler:getIsCut(self.limbName) and not modDataHandler:getIsCicatrized(self.limbName)
+    return dcInst:getIsCut(self.limbName) and not dcInst:getIsCicatrized(self.limbName)
     --return self:getItemOfType(self.items.ITEMS, itemType)
 end
 
