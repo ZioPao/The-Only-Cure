@@ -6,6 +6,7 @@ IG_UI_EN = {
     IGUI_perks_ProstFamiliarity= "Familiarity",
 
     IGUI_ItemCat_Prosthesis = "Prosthesis",
+    IGUI_ItemCat_Prosthesis = "Surgery",
     IGUI_ItemCat_Amputation = "Amputation"
 
     IGUI_HealthPanel_Cicatrization = "Cicatrization",

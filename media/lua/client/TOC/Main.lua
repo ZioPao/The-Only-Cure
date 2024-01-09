@@ -1,8 +1,8 @@
 local LocalPlayerController = require("TOC/Controllers/LocalPlayerController")
 local CommonMethods = require("TOC/CommonMethods")
 local CommandsData = require("TOC/CommandsData")
+require("TOC/Events")
 ------------------
-
 
 ---@class Main
 local Main = {}
@@ -44,14 +44,8 @@ function Main.Start()
 end
 
 function Main.SetupEvents()
-    --Triggered when a limb has been amputated
-    LuaEventManager.AddEvent("OnAmputatedLimb")
-
-    -- Triggered when data is ready
-    LuaEventManager.AddEvent("OnReceivedTocData")
     local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
     Events.OnReceivedTocData.Add(CachedDataHandler.CalculateHighestAmputatedLimbs)
-
 end
 
 function Main.Initialize()
