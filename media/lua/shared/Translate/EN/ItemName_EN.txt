@@ -1,4 +1,8 @@
 ItemName_EN = {
+
+    ItemName_TOC.Surg_Arm_Tourniquet_L = "Tourniquet",
+    ItemName_TOC.Surg_Arm_Tourniquet_R = "Tourniquet",
+
     ItemName_TOC.Prost_NormalArm_L = "Prosthetic Arm",
     ItemName_TOC.Prost_NormalArm_R = "Prosthetic Arm",
 

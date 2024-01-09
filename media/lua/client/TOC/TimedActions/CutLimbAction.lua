@@ -1,7 +1,6 @@
 require "TimedActions/ISBaseTimedAction"
 local AmputationHandler = require("TOC/Handlers/AmputationHandler")
 local CommandsData = require("TOC/CommandsData")
-local CommonMethods = require("TOC/CommonMethods")
 
 -----------------------------
 
@@ -46,8 +45,7 @@ function CutLimbAction:new(surgeon, patient, limbName, item, stitchesItem, banda
 end
 
 function CutLimbAction:isValid()
-    -- TODO Surgeon should be close to patient
-    return true
+    return not ISHealthPanel.DidPatientMove(self.patient, self.character, self.patient:getX(), self.patient:getY())
 end
 
 function CutLimbAction:start()

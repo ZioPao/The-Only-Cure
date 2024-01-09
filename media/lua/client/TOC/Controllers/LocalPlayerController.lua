@@ -117,7 +117,6 @@ function LocalPlayerController.TryRandomBleed(character, limbName)
     -- Chance should be determined by the cicatrization time
     local cicTime = DataController.GetInstance():getCicatrizationTime(limbName)
     if cicTime == 0 then return end
-    -- TODO Sometimes we get cicTime = 0... Shouldn't really do it
 
     -- TODO This is just a placeholder, we need to figure out a better way to calculate this chance
     local normCicTime = CommonMethods.Normalize(cicTime, 0, StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM[limbName])/2

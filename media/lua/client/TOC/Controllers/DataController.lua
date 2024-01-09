@@ -57,7 +57,7 @@ function DataController:setup(key)
         prostheses = {}
     }
 
-    ---@type partData
+    ---@type partDataType
     local defaultParams = {
         isCut = false, isInfected = false, isOperated = false, isCicatrized = false, isCauterized = false,
         woundDirtyness = -1, cicatrizationTime = -1,
@@ -269,9 +269,7 @@ function DataController:setCutLimb(limbName, isOperated, isCicatrized, isCauteri
         cicatrizationTime = StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM[limbName] - surgeonFactor
     end
 
-    -- TODO Set WoundDirtyness here! For now it's just 0 
-
-    ---@type partData
+    ---@type partDataType
     local params = {isCut = true, isInfected = false, isOperated = isOperated, isCicatrized = isCicatrized, isCauterized = isCauterized, woundDirtyness = 0, isVisible = true}
     self:setLimbParams(limbName, params, cicatrizationTime)
 
@@ -292,7 +290,7 @@ end
 
 ---Set a limb data
 ---@param limbName string
----@param ampStatus partData {isCut, isInfected, isOperated, isCicatrized, isCauterized, isVisible}
+---@param ampStatus partDataType {isCut, isInfected, isOperated, isCicatrized, isCauterized, isVisible}
 ---@param cicatrizationTime integer?
 function DataController:setLimbParams(limbName, ampStatus, cicatrizationTime)
     local limbData = self.tocData.limbs[limbName]
