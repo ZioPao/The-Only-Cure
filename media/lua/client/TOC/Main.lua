@@ -74,7 +74,7 @@ end
 
 --* Events *--
 
-Events.OnGameBoot.Add(Main.Start)
+Events.OnGameBoot.Add(Main.Start)       -- TODO Does this apply after death?
 
 if not isClient() and not isServer() then
     Events.OnPlayerDeath.Add(Main.WipeSinglePlayerData)

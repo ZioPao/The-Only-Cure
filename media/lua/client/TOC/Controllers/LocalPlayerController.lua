@@ -5,21 +5,17 @@ local StaticData = require("TOC/StaticData")
 require("TOC/Events")
 -----------
 
--- TODO Separate this in more classes, it's getting too big
 
-
--- THIS SHOULD BE LOCAL ONLY! WE'RE MANAGING EVENTS AND INITIALIZATION STUFF!
-
--- LIST OF STUFF THAT THIS CLASS NEEDS TO DO
--- Keep track of cut limbs so that we don't have to loop through all of them all the time
--- Update current player status (infection checks)
--- handle stats increase\decrease
+-- Handle ONLY stuff for the local client
 
 ---@class LocalPlayerController
 ---@field playerObj IsoPlayer
 ---@field username string
 ---@field hasBeenDamaged boolean
 local LocalPlayerController = {}
+
+
+--* Initialization
 
 ---Setup the Player Handler and modData, only for local client
 ---@param isForced boolean?
@@ -32,10 +28,6 @@ function LocalPlayerController.InitializePlayer(isForced)
     DataController:new(username, isForced)
     LocalPlayerController.playerObj = playerObj
     LocalPlayerController.username = username
-
-    -- Calculate amputated limbs and highest point of amputations at startup
-    --CachedDataHandler.CalculateAmputatedLimbs(username)
-    --CachedDataHandler.CalculateHighestAmputatedLimbs(username)
 
     --Setup the CicatrizationUpdate event and triggers it once
     Events.OnAmputatedLimb.Add(LocalPlayerController.ToggleUpdateAmputations)
@@ -68,7 +60,9 @@ function LocalPlayerController.ManageTraits(playerObj)
     end
 end
 
---* Health management *--
+----------------------------------------------------------
+
+--* Health *--
 
 ---Used to heal an area that has been cut previously. There's an exception for bites, those are managed differently
 ---@param bodyPart BodyPart
@@ -96,7 +90,6 @@ function LocalPlayerController.HealArea(bodyPart)
     bodyPart:setSplint(false, 0)
 end
 
----comment
 ---@param bodyDamage BodyDamage
 ---@param bodyPart BodyPart
 ---@param limbName string
@@ -114,7 +107,6 @@ function LocalPlayerController.HealZombieInfection(bodyDamage, bodyPart, limbNam
     dcInst:apply()
 end
 
----comment
 ---@param character IsoPlayer
 ---@param limbName string
 function LocalPlayerController.TryRandomBleed(character, limbName)
@@ -135,6 +127,8 @@ function LocalPlayerController.TryRandomBleed(character, limbName)
         character:getBodyDamage():getBodyPart(adjacentBodyPartType):setBleedingTime(20)
     end
 end
+
+
 -------------------------
 --* Damage handling  *--
 --- Locks OnPlayerGetDamage event, to prevent it from getting spammed constantly
@@ -291,15 +285,12 @@ function LocalPlayerController.ToggleUpdateAmputations()
     CommonMethods.SafeStartEvent("EveryHours", LocalPlayerController.UpdateAmputations)
 end
 
-
-
 --* Tourniquet handling
 function LocalPlayerController.HandleTourniquet()
     print("test")
 end
 
 Events.OnPuttingTourniquet.Add(LocalPlayerController.HandleTourniquet)
-
 
 
 return LocalPlayerController

@@ -1,20 +1,26 @@
+local LocalPlayerController = require("TOC/Controllers/LocalPlayerController")
 local DataController = require("TOC/Controllers/DataController")
+
 local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
 local CommonMethods = require("TOC/CommonMethods")
 local StaticData = require("TOC/StaticData")
 
 -----------------
 
+
+--* TIMED ACTIONS *--
+-- We want to be able to modify how long actions are gonna take, 
+-- depending on amputation status and kind of action. Also, when the
+-- player has not completely cicatrized their own wounds, and try to do any action with
+-- a prosthesis on, that can trigger random bleeds.
+
 local function CheckHandFeasibility(limbName)
     local dcInst = DataController.GetInstance()
-
     return not dcInst:getIsCut(limbName) or dcInst:getIsProstEquipped(StaticData.LIMBS_TO_PROST_GROUP_MATCH_IND_STR[limbName])
 end
 
 
-
 --* Time to perform actions overrides *--
-
 local og_ISBaseTimedAction_adjustMaxTime = ISBaseTimedAction.adjustMaxTime
 --- Adjust time
 ---@diagnostic disable-next-line: duplicate-set-field
@@ -71,12 +77,17 @@ function ISBaseTimedAction:perform()
     end
 end
 
---* Equipping items overrides *--
+--* EQUIPPING ITEMS *--
+-- Check wheter the player can equip items or not, for example dual wielding when you only have one
+-- hand (and no prosthesis) should be disabled. Same thing for some werable items, like watches.
+
+---@class ISEquipWeaponAction
+---@field character IsoPlayer
 
 local primaryHand = StaticData.PARTS_IND_STR.Hand .. "_" .. StaticData.SIDES_IND_STR.R
 local secondaryHand = StaticData.PARTS_IND_STR.Hand .. "_" .. StaticData.SIDES_IND_STR.L
 
-
+--* Equipping items overrides *--
 local og_ISEquipWeaponAction_isValid = ISEquipWeaponAction.isValid
 ---Add a condition to check the feasibility of having 2 handed weapons or if both arms are cut off
 ---@return boolean
@@ -94,9 +105,6 @@ function ISEquipWeaponAction:isValid()
     end
     return isValid
 end
-
----@class ISEquipWeaponAction
----@field character IsoPlayer
 
 ---A recreation of the original method, but with amputations in mind
 ---@param dcInst DataController
@@ -173,7 +181,6 @@ function ISEquipWeaponAction:performWithAmputation(dcInst)
     end
 end
 
-
 local og_ISEquipWeaponAction_perform = ISEquipWeaponAction.perform
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISEquipWeaponAction:perform()
@@ -187,7 +194,6 @@ function ISEquipWeaponAction:perform()
         self:performWithAmputation(dcInst)
     end
 end
-
 
 function ISInventoryPaneContextMenu.doEquipOption(context, playerObj, isWeapon, items, player)
     -- check if hands if not heavy damaged

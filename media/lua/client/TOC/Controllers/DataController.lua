@@ -25,23 +25,17 @@ function DataController:new(username, isResetForced)
     self.__index = self
 
     o.username = username
-    local key = CommandsData.GetKey(username)
+    o.isResetForced = isResetForced
+    o.isDataReady = false
 
-    -- We don't want to request ModData if we're in SP, or if we're forcing a reset
-    if isClient() and not isResetForced then
-        ModData.request(key)
-        o.isResetForced = isResetForced
-        o.isDataReady = false
-    elseif isResetForced then
-        self:setup(key)
-        o.isResetForced = false
-        o.isDataReady = true
-    end
+    local key = CommandsData.GetKey(username)
+    ModData.request(key)
 
     DataController.instances[username] = o
 
     return o
 end
+
 
 ---Setup a new toc mod data data class
 ---@param key string
@@ -87,17 +81,32 @@ end
 
 ---In case of desync between the table on ModData and the table here
 ---@param tocData tocModDataType
-function DataController:reapplyTocData(tocData)
+function DataController:applyOnlineData(tocData)
     local key = CommandsData.GetKey(self.username)
     ModData.add(key, tocData)
     self.tocData = ModData.get(key)
 end
 
+---@param key string
+function DataController:loadLocalData(key)
+    self.tocData = ModData.get(key)
+    if self.tocData ~= nil and self.tocData ~= {} then
+        TOC_DEBUG.print("Found and loaded local data")
+    else
+        error("Local data failed to load!")
+    end
+end
 -----------------
 --* Setters *--
 
+---@param isDataReady boolean
 function DataController:setIsDataReady(isDataReady)
     self.isDataReady = isDataReady
+end
+
+---@param isResetForced boolean
+function DataController:setIsResetForced(isResetForced)
+    self.isResetForced = isResetForced
 end
 
 ---Set a generic boolean that toggles varies function of the mod
@@ -320,9 +329,6 @@ function DataController:apply()
 end
 
 function DataController.ReceiveData(key, data)
-    if not isClient() then
-        TOC_DEBUG.print("SP, skipping DataController.ReceiveData")
-    end
     -- During startup the game can return Bob as the player username, adding a useless ModData table
     if key == "TOC_Bob" then return end
 
@@ -335,31 +341,30 @@ function DataController.ReceiveData(key, data)
     -- Get DataController instance if there was none for that user and reapply the correct ModData table as a reference
     local username = key:sub(5)
     local handler = DataController.GetInstance(username)
-    if handler.isResetForced or data == nil or data == {} or data == false then
-        TOC_DEBUG.print("Setup")
-        handler:setup(key)
-        handler.isResetForced = false
+
+    -- Bit of a workaround, but in a perfect world, I'd use the server to get the data and that would be it.
+    -- but Zomboid Mod Data handling is too finnicky at best to be that reliable, in case of an unwanted disconnection and what not,
+    -- so for now, I'm gonna assume that the local data (for the local client) is the
+    -- most recent (and correct) one instead of trying to fetch it from the server every single time
+    if isClient() then
+        if handler.isResetForced or data == nil or data == {} or data == false then
+            handler:setup(key)
+        elseif username == getPlayer():getUsername() then
+            handler:loadLocalData(key)
+        else
+            handler:applyOnlineData(data)
+        end
     else
-        TOC_DEBUG.print("Reapply")
-        handler:reapplyTocData(data)
+        handler:loadLocalData(key)
     end
 
-
-    -- if handler.isResetForced or handler.tocData == nil or handler.tocData.limbs == nil or handler.tocData.limbs.Hand_L == nil or handler.tocData.limbs.Hand_L.isCut == nil then
-    --     TOC_DEBUG.print("tocData in DataController for " .. handler.username .. " is nil, creating it now")
-    --     handler:setup(key)
-    --     handler.isResetForced = false
-    -- elseif table then
-    --     TOC_DEBUG.print("Reapply toc data for " .. handler.username)
-    --     handler:reapplyTocData(table)
-    -- end
-
+    handler.isResetForced = false   -- TODO Add a setter
     handler:setIsDataReady(true)
 
     -- Event
     triggerEvent("OnReceivedTocData", handler.username)
 
-    -- Transmit it to the server
+    -- Transmit it back to the server
     ModData.transmit(key)
     TOC_DEBUG.print("Transmitting data after receiving it for: " .. handler.username)
 
