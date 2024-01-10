@@ -1,11 +1,22 @@
 module base {
 
-    sound Amputation_Sound {
+    sound Amputation {
         category = Player, 
         loop = true,
         is3D = true,
         clip { 
-          file = media/sound/Cut_sound.ogg, 
+          file = media/sound/Amputation.ogg, 
+          distanceMax = 3,
+          volume = 1.0,
+        }
+    }
+
+    sound Cauterization {
+        category = Player, 
+        loop = false,
+        is3D = true,
+        clip { 
+          file = media/sound/Cauterization.ogg, 
           distanceMax = 3,
           volume = 1.0,
         }

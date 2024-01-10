@@ -78,7 +78,7 @@ function CutLimbAction:start()
     self:setOverrideHandModels(self.item:getStaticModel())
 
     -- Setup audio
-    self.sound = self.character:getEmitter():playSound("Amputation_Sound")
+    self.sound = self.character:getEmitter():playSound("Amputation")
     local radius = 5
     addSound(self.character, self.character:getX(), self.character:getY(), self.character:getZ(), radius, radius)
 
@@ -94,13 +94,9 @@ end
 
 function CutLimbAction:update()
     self.character:setMetabolicTarget(Metabolics.HeavyWork)
-
-    -- TODO Apply it too on the patient! check if it works online
-    -- TODO Add sound
     if self.character ~= self.patient then
         self.patient:setMetabolicTarget(Metabolics.HeavyWork)
     end
-
 end
 
 function CutLimbAction:stopSound()
@@ -116,7 +112,6 @@ function CutLimbAction:stop()
 end
 
 function CutLimbAction:perform()
-
     -- Stop the sound
     self:stopSound()
 
@@ -132,7 +127,6 @@ function CutLimbAction:perform()
         sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayExecuteAmputationAction, params )
     end
 
-    
     ISBaseTimedAction.perform(self)
 end
 
