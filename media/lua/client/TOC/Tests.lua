@@ -111,6 +111,37 @@ TestFramework.registerTestModule("AmputationHandler", "Top Right", function()
     return Tests
 end)
 
+TestFramework.registerTestModule("TimedActions", "CauterizeAction", function()
+    local Tests = {}
+    local CauterizeAction = require("TOC/TimedActions/CauterizeAction")
+
+    function Tests.CauterizeLeftHand()
+        ISTimedActionQueue.add(CauterizeAction:new(getPlayer(), "Hand_L", getPlayer()))
+    end
+
+    function Tests.CauterizeLefForeArm()
+        ISTimedActionQueue.add(CauterizeAction:new(getPlayer(), "ForeArm_L", getPlayer()))
+    end
+
+    function Tests.CauterizeLeftUpperArm()
+        ISTimedActionQueue.add(CauterizeAction:new(getPlayer(), "UpperArm_L", getPlayer()))
+    end
+
+    function Tests.CauterizeRightHand()
+        ISTimedActionQueue.add(CauterizeAction:new(getPlayer(), "Hand_R", getPlayer()))
+    end
+
+    function Tests.CauterizeRightForeArm()
+        ISTimedActionQueue.add(CauterizeAction:new(getPlayer(), "ForeArm_R", getPlayer()))
+    end
+
+    function Tests.CauterizeRightUpperArm()
+        ISTimedActionQueue.add(CauterizeAction:new(getPlayer(), "UpperArm_R", getPlayer()))
+    end
+
+    return Tests
+
+end)
 
 --------------------------------------------------------------------------------------
 if not getActivatedMods():contains("PerfTestFramework") or not isDebugEnabled() then return end

@@ -9,7 +9,7 @@ local CachedDataHandler = {}
 
 ---Reset everything cache related for that specific user
 ---@param username string
-function CachedDataHandler.Reset(username)
+function CachedDataHandler.Setup(username)
     CachedDataHandler.amputatedLimbs[username] = {}
     CachedDataHandler.highestAmputatedLimbs[username] = {}
 end
@@ -41,6 +41,9 @@ function CachedDataHandler.AddAmputatedLimb(username, limbName)
     TOC_DEBUG.print("Added " .. limbName .. " to known amputated limbs for " .. username)
 
     -- Add it to the generic list
+    if CachedDataHandler.amputatedLimbs[username] == nil then
+        CachedDataHandler.amputatedLimbs[username] = {}
+    end
     CachedDataHandler.amputatedLimbs[username][limbName] = limbName
 end
 

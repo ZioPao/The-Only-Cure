@@ -13,7 +13,6 @@ local StaticData = require("TOC/StaticData")
 ---@field surgeonPl IsoPlayer?
 local AmputationHandler = {}
 
-
 ---@param limbName string
 ---@param surgeonPl IsoPlayer?
 ---@return AmputationHandler

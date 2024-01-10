@@ -28,10 +28,16 @@ function DataController:new(username, isResetForced)
     o.isResetForced = isResetForced
     o.isDataReady = false
 
-    local key = CommandsData.GetKey(username)
-    ModData.request(key)
-
+    -- We're gonna set it already from here, to prevent it from looping in SP (in case we need to fetch this instance)
     DataController.instances[username] = o
+
+    local key = CommandsData.GetKey(username)
+
+    if isClient() then
+        ModData.request(key)
+    else
+        o:initSinglePlayer(key)
+    end
 
     return o
 end
@@ -91,9 +97,10 @@ end
 function DataController:loadLocalData(key)
     self.tocData = ModData.get(key)
     if self.tocData ~= nil and self.tocData ~= {} then
+        TOC_DEBUG.printTable(self.tocData)
         TOC_DEBUG.print("Found and loaded local data")
     else
-        error("Local data failed to load!")
+        TOC_DEBUG.print("Local data failed to load!")
     end
 end
 -----------------
@@ -329,14 +336,16 @@ function DataController:apply()
     ModData.transmit(CommandsData.GetKey(self.username))
 end
 
+---Online only, Global Mod Data doesn't trigger this in SP
+---@param key any
+---@param data any
 function DataController.ReceiveData(key, data)
     -- During startup the game can return Bob as the player username, adding a useless ModData table
     if key == "TOC_Bob" then return end
 
     TOC_DEBUG.print("ReceiveData for " .. key)
     if data == {} or data == nil then
-        TOC_DEBUG.print("table is nil... returning")
-        return
+        error("Data is nil, something is very wrong")
     end
 
     -- Get DataController instance if there was none for that user and reapply the correct ModData table as a reference
@@ -347,22 +356,20 @@ function DataController.ReceiveData(key, data)
     -- but Zomboid Mod Data handling is too finnicky at best to be that reliable, in case of an unwanted disconnection and what not,
     -- so for now, I'm gonna assume that the local data (for the local client) is the
     -- most recent (and correct) one instead of trying to fetch it from the server every single time
-    if isClient() then
-        if handler.isResetForced or data == nil or data == {} or data == false then
-            handler:setup(key)
-        elseif username == getPlayer():getUsername() then
-            handler:loadLocalData(key)
-        else
-            handler:applyOnlineData(data)
-        end
-    else
+
+    if handler.isResetForced or data == nil or data == {} or data == false then
+        handler:setup(key)
+    elseif username == getPlayer():getUsername() then
         handler:loadLocalData(key)
+    else
+        handler:applyOnlineData(data)
     end
 
-    handler.isResetForced = false   -- TODO Add a setter
+
+    handler:setIsResetForced(false)
     handler:setIsDataReady(true)
 
-    -- Event
+    -- Event, triggers caching
     triggerEvent("OnReceivedTocData", handler.username)
 
     -- Transmit it back to the server
@@ -373,6 +380,20 @@ end
 
 Events.OnReceiveGlobalModData.Add(DataController.ReceiveData)
 
+
+--* SP Only initialization
+function DataController:initSinglePlayer(key)
+    self:loadLocalData(key)
+    if self.tocData == nil or self.isResetForced then
+        self:setup(key)
+    end
+
+    self:setIsDataReady(true)
+    self:setIsResetForced(false)
+
+    -- Event, triggers caching
+    triggerEvent("OnReceivedTocData", self.username)
+end
 -------------------
 
 ---@param username string?

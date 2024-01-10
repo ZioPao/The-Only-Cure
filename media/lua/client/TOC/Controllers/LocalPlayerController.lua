@@ -37,7 +37,7 @@ function LocalPlayerController.InitializePlayer(isForced)
     if isForced then
         local ItemsController = require("TOC/Controllers/ItemsController")
         ItemsController.Player.DeleteAllOldAmputationItems(playerObj)
-        CachedDataHandler.Reset(username)
+        CachedDataHandler.Setup(username)
     end
 
     -- Set a bool to use an overriding GetDamagedParts

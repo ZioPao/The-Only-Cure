@@ -19,14 +19,14 @@ function CauterizeAction:new(character, limbName, stoveObj)
 
     -- We need to follow ISBaseTimedAction. self.character is gonna be the surgeon
     o.character = character
-    o.ovenObj = stoveObj
+    o.stoveObj = stoveObj
     o.limbName = limbName
 
     o.stopOnWalk = true
     o.stopOnRun = true
 
     -- Max time depends on the strength
-    o.maxTime = 100
+    o.maxTime = 20
     if o.character:isTimedActionInstant() then o.maxTime = 1 end
 
     return o
