@@ -12,5 +12,11 @@ module Prosthesis
 	}
 
     
+    model prostheticArmHook
+	{
+		mesh = Prosthesis/hookArm_Ground,
+		texture = Prosthesis\hookArm,
+	}
+    
     
 }

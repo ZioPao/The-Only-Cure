@@ -58,19 +58,22 @@ local og_ISBaseTimedAction_perform = ISBaseTimedAction.perform
 function ISBaseTimedAction:perform()
 	og_ISBaseTimedAction_perform(self)
 
+    TOC_DEBUG.print("Running ISBaseTimedAction.perform override")
+
     local dcInst = DataController.GetInstance()
     if not dcInst:getIsAnyLimbCut() then return end
 
     local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(LocalPlayerController.username)
     for k, _ in pairs(amputatedLimbs) do
         local limbName = k
-        if dcInst:getIsCut(limbName) then
+
+        -- We're checking for only "visible" amputations to prevent from having bleeds everywhere
+        if dcInst:getIsCut(limbName) and dcInst:getIsVisible(limbName) then
             local side = CommonMethods.GetSide(limbName)
             LocalPlayerController.playerObj:getXp():AddXP(Perks["Side_" .. side], 1)       -- TODO Make it dynamic
             local prostGroup = StaticData.LIMBS_TO_PROST_GROUP_MATCH_IND_STR[limbName]
             if not dcInst:getIsCicatrized(limbName) and dcInst:getIsProstEquipped(prostGroup) then
                 TOC_DEBUG.print("Trying for bleed, player met the criteria")
-                -- TODO If we have cut a forearm, it will try to check the hand too, with cicatrization time = 0. We should skip this
                 LocalPlayerController.TryRandomBleed(self.character, limbName)
             end
         end
