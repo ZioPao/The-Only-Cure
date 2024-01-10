@@ -251,10 +251,11 @@ function DataController:getCicatrizationTime(limbName)
 end
 
 ---Get isProstEquipped
----@param group string
+---@param limbName string
 ---@return boolean
-function DataController:getIsProstEquipped(group)
-    return self.tocData.prostheses[group].isProstEquipped
+function DataController:getIsProstEquipped(limbName)
+    local prostGroup = StaticData.LIMBS_TO_PROST_GROUP_MATCH_IND_STR[limbName]
+    return self.tocData.prostheses[prostGroup].isProstEquipped
 end
 
 ---Get prostFactor

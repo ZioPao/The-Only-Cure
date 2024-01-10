@@ -13,5 +13,6 @@ IG_UI_EN = {
     IGUI_HealthPanel_Cicatrized = "Cicatrized",
     IGUI_HealthPanel_Cauterized = "Cauterized",
     IGUI_HealthPanel_WoundDirtyness = "Wound Dirtyness",
+    IGUI_HealthPanel_ProstEquipped = "Prosthesis Equipped",
 
 }

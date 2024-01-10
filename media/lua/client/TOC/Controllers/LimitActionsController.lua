@@ -16,7 +16,7 @@ local StaticData = require("TOC/StaticData")
 
 local function CheckHandFeasibility(limbName)
     local dcInst = DataController.GetInstance()
-    return not dcInst:getIsCut(limbName) or dcInst:getIsProstEquipped(StaticData.LIMBS_TO_PROST_GROUP_MATCH_IND_STR[limbName])
+    return not dcInst:getIsCut(limbName) or dcInst:getIsProstEquipped(limbName)
 end
 
 
@@ -71,8 +71,7 @@ function ISBaseTimedAction:perform()
         if dcInst:getIsCut(limbName) and dcInst:getIsVisible(limbName) then
             local side = CommonMethods.GetSide(limbName)
             LocalPlayerController.playerObj:getXp():AddXP(Perks["Side_" .. side], 1)       -- TODO Make it dynamic
-            local prostGroup = StaticData.LIMBS_TO_PROST_GROUP_MATCH_IND_STR[limbName]
-            if not dcInst:getIsCicatrized(limbName) and dcInst:getIsProstEquipped(prostGroup) then
+            if not dcInst:getIsCicatrized(limbName) and dcInst:getIsProstEquipped(limbName) then
                 TOC_DEBUG.print("Trying for bleed, player met the criteria")
                 LocalPlayerController.TryRandomBleed(self.character, limbName)
             end
