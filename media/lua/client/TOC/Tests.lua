@@ -143,6 +143,15 @@ TestFramework.registerTestModule("TimedActions", "CauterizeAction", function()
 
 end)
 
+TestFramework.registerTestModule("Various", "Player", function()
+    local Tests = {}
+
+    function Tests.Kill()
+        getPlayer():Kill(getPlayer())
+    end
+
+    return Tests
+end)
 --------------------------------------------------------------------------------------
 if not getActivatedMods():contains("PerfTestFramework") or not isDebugEnabled() then return end
 local PerfTest = require("PerfTest/main")       -- SHould be global anyway

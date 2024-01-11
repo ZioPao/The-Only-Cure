@@ -38,9 +38,6 @@ function Main.Start()
     TOC_DEBUG.print("running Start method")
     Main.SetupTraits()
     Main.SetupEvents()
-    -- Starts initialization for local client
-    Events.OnGameStart.Add(Main.Initialize)
-
 end
 
 function Main.SetupEvents()
@@ -48,7 +45,7 @@ function Main.SetupEvents()
     Events.OnReceivedTocData.Add(CachedDataHandler.CalculateHighestAmputatedLimbs)
 end
 
-function Main.Initialize()
+function Main.InitializePlayer()
     ---Looop until we've successfully initialized the mod
     local function TryToInitialize()
         local pl = getPlayer()
@@ -66,16 +63,30 @@ end
 
 ---Clean the TOC table for that SP player, to prevent from clogging it up
 ---@param player IsoPlayer
-function Main.WipeSinglePlayerData(player)
+function Main.WipeData(player)
+    TOC_DEBUG.print("Wiping data after death")
     local key = CommandsData.GetKey(player:getUsername())
-    ModData.remove(key)
-    ModData.transmit(key)
+
+    --ModData.remove(key)
+
+
+
+    if not isClient() then
+        -- For SP, it's enough just removing the data this way
+        ModData.remove(key)
+    else
+        -- Different story for MP, we're gonna 'force' it to reload it
+        -- at the next character by passing an empty mod data
+        ModData.add(key, {})
+        ModData.transmit(key)
+    end
 end
 
 --* Events *--
 
-Events.OnGameBoot.Add(Main.Start)       -- TODO Does this apply after death?
+Events.OnGameStart.Add(Main.Start)
+Events.OnCreatePlayer.Add(Main.InitializePlayer)
+Events.OnPlayerDeath.Add(Main.WipeData)
 
-if not isClient() and not isServer() then
-    Events.OnPlayerDeath.Add(Main.WipeSinglePlayerData)
-end
+-- TODO Disable windows interaction when no hands
+

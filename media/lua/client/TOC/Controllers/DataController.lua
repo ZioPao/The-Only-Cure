@@ -96,11 +96,14 @@ end
 ---@param key string
 function DataController:loadLocalData(key)
     self.tocData = ModData.get(key)
-    if self.tocData ~= nil and self.tocData ~= {} then
-        TOC_DEBUG.printTable(self.tocData)
+
+    TOC_DEBUG.printTable(self.tocData)
+
+    if self.tocData and self.tocData.limbs then
         TOC_DEBUG.print("Found and loaded local data")
     else
-        TOC_DEBUG.print("Local data failed to load!")
+        TOC_DEBUG.print("Local data failed to load! Running setup")
+        self:setup(key)
     end
 end
 -----------------
@@ -196,13 +199,14 @@ end
 ---Set a generic boolean that toggles varies function of the mod
 ---@return boolean
 function DataController:getIsAnyLimbCut()
-    --if self.isDataReady == false then return false end
+    if not self.isDataReady then return false end
     return self.tocData.isAnyLimbCut
 end
 
 ---Get isIgnoredPartInfected
 ---@return boolean
 function DataController:getIsIgnoredPartInfected()
+    if not self.isDataReady then return false end
     return self.tocData.isIgnoredPartInfected
 end
 
@@ -211,7 +215,6 @@ end
 ---@return boolean
 function DataController:getIsCut(limbName)
     if not self.isDataReady then return false end
-
     if self.tocData.limbs[limbName] then
         return self.tocData.limbs[limbName].isCut
     else
@@ -224,7 +227,6 @@ end
 ---@return boolean
 function DataController:getIsVisible(limbName)
     if not self.isDataReady then return false end
-
     return self.tocData.limbs[limbName].isVisible
 end
 
@@ -232,6 +234,7 @@ end
 ---@param limbName string
 ---@return boolean
 function DataController:getIsCicatrized(limbName)
+    if not self.isDataReady then return false end
     return self.tocData.limbs[limbName].isCicatrized
 end
 
@@ -239,6 +242,7 @@ end
 ---@param limbName string
 ---@return boolean
 function DataController:getIsCauterized(limbName)
+    if not self.isDataReady then return false end
     return self.tocData.limbs[limbName].isCauterized
 end
 
@@ -246,6 +250,7 @@ end
 ---@param limbName string
 ---@return number
 function DataController:getWoundDirtyness(limbName)
+    if not self.isDataReady then return -1 end
     return self.tocData.limbs[limbName].woundDirtyness
 end
 
@@ -254,6 +259,7 @@ end
 ---@param limbName string
 ---@return number
 function DataController:getCicatrizationTime(limbName)
+    if not self.isDataReady then return -1 end
     return self.tocData.limbs[limbName].cicatrizationTime
 end
 
@@ -345,7 +351,7 @@ function DataController.ReceiveData(key, data)
 
     TOC_DEBUG.print("ReceiveData for " .. key)
     if data == {} or data == nil then
-        error("Data is nil, something is very wrong")
+        error("Data is nil, new character or something is wrong")
     end
 
     -- Get DataController instance if there was none for that user and reapply the correct ModData table as a reference
@@ -357,10 +363,11 @@ function DataController.ReceiveData(key, data)
     -- so for now, I'm gonna assume that the local data (for the local client) is the
     -- most recent (and correct) one instead of trying to fetch it from the server every single time
 
-    if handler.isResetForced or data == nil or data == {} or data == false then
-        handler:setup(key)
-    elseif username == getPlayer():getUsername() then
+    if username == getPlayer():getUsername() and not handler.isResetForced then
         handler:loadLocalData(key)
+    elseif handler.isResetForced or data == nil or #data == 0 then
+        TOC_DEBUG.print("Data is nil or empty!")
+        handler:setup(key)
     else
         handler:applyOnlineData(data)
     end
