@@ -365,10 +365,11 @@ function DataController.ReceiveData(key, data)
 
     if username == getPlayer():getUsername() and not handler.isResetForced then
         handler:loadLocalData(key)
-    elseif handler.isResetForced or data == nil or #data == 0 then
-        TOC_DEBUG.print("Data is nil or empty!")
+    elseif handler.isResetForced or data == nil then
+        TOC_DEBUG.print("Data is nil or empty!?")
+        TOC_DEBUG.printTable(data)
         handler:setup(key)
-    else
+    elseif data and data.limbs then
         handler:applyOnlineData(data)
     end
 
