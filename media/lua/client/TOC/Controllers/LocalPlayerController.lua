@@ -216,7 +216,11 @@ Events.OnPlayerGetDamage.Add(LocalPlayerController.OnGetDamage)
 ---Updates the cicatrization process, run when a limb has been cut. Run it every 1 hour
 function LocalPlayerController.UpdateAmputations()
     local dcInst = DataController.GetInstance()
-    if dcInst:getIsAnyLimbCut() == false then
+    if not dcInst:getIsDataReady() then
+        TOC_DEBUG.print("Data not ready for UpdateAmputations, waiting next loop")
+        return
+    end
+    if not dcInst:getIsAnyLimbCut() then
         Events.EveryHours.Remove(LocalPlayerController.UpdateAmputations)
     end
 

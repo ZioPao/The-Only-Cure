@@ -20,12 +20,14 @@ DataController.instances = {}
 ---@return DataController
 function DataController:new(username, isResetForced)
     TOC_DEBUG.print("Creating new DataController instance for " .. username)
+    ---@type DataController
+    ---@diagnostic disable-next-line: missing-fields
     local o = {}
     setmetatable(o, self)
     self.__index = self
 
     o.username = username
-    o.isResetForced = isResetForced
+    o.isResetForced = isResetForced or false
     o.isDataReady = false
 
     -- We're gonna set it already from here, to prevent it from looping in SP (in case we need to fetch this instance)
@@ -34,8 +36,10 @@ function DataController:new(username, isResetForced)
     local key = CommandsData.GetKey(username)
 
     if isClient() then
+        -- In MP, we request the data from the server to trigger DataController.ReceiveData
         ModData.request(key)
     else
+        -- In SP, we handle it with another function which will reference the saved instance in DataController.instances
         o:initSinglePlayer(key)
     end
 
@@ -373,7 +377,6 @@ function DataController.ReceiveData(key, data)
         handler:applyOnlineData(data)
     end
 
-
     handler:setIsResetForced(false)
     handler:setIsDataReady(true)
 
@@ -389,7 +392,9 @@ end
 Events.OnReceiveGlobalModData.Add(DataController.ReceiveData)
 
 
---* SP Only initialization
+
+--- SP Only initialization
+---@param key string
 function DataController:initSinglePlayer(key)
     self:loadLocalData(key)
     if self.tocData == nil or self.isResetForced then
