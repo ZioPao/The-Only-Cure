@@ -139,8 +139,26 @@ function ItemsController.Zombie.SpawnAmputationItem(zombie)
 
     local itemVisual = ItemVisual:new()
     itemVisual:setItemType(usableClothingAmputations[index])
+
+    local texId = ItemsController.Zombie.GetAmputationTexturesIndex(zombie)
+    itemVisual:setTextureChoice(texId)
     zombie:getItemVisuals():add(itemVisual)
     zombie:resetModelNextFrame()
+end
+
+function ItemsController.Zombie.GetAmputationTexturesIndex(zombie)
+    local x = zombie:getHumanVisual():getSkinTexture()
+
+    -- Starting ID for zombies = 10
+    -- 3 levels
+    local matchedIndex = tonumber(x:match("ZedBody0(%d)")) - 1
+    matchedIndex = matchedIndex * 3
+
+    local level = tonumber(x:match("%d$")) - 1  -- it's from 1 to 3, but we're using it like 0 indexed arrays
+
+    local finalId = 10 + matchedIndex + level
+    print("Zombie texture index: " .. tostring(finalId))
+    return finalId
 end
 
 

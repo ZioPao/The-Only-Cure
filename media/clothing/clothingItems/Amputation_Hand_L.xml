@@ -9,27 +9,16 @@
     <m_Masks>4</m_Masks>
     <m_MasksFolder>none</m_MasksFolder>
     
-    <textureChoices>Amputations\Forearm\skin01_b</textureChoices>
-    <textureChoices>Amputations\Forearm\skin02_b</textureChoices>
-    <textureChoices>Amputations\Forearm\skin03_b</textureChoices>
-    <textureChoices>Amputations\Forearm\skin04_b</textureChoices>
-    <textureChoices>Amputations\Forearm\skin05_b</textureChoices>
+    <!-- HUMAN -->
+    <textureChoices>Amputations\Human\Forearm\skin01_b</textureChoices>
+    <textureChoices>Amputations\Human\Forearm\skin02_b</textureChoices>
+    <textureChoices>Amputations\Human\Forearm\skin03_b</textureChoices>
+    <textureChoices>Amputations\Human\Forearm\skin04_b</textureChoices>
+    <textureChoices>Amputations\Human\Forearm\skin05_b</textureChoices>
 
-    <textureChoices>Amputations\Forearm\skin01_hairy_b</textureChoices>
-    <textureChoices>Amputations\Forearm\skin02_hairy_b</textureChoices>
-    <textureChoices>Amputations\Forearm\skin03_hairy_b</textureChoices>
-    <textureChoices>Amputations\Forearm\skin04_hairy_b</textureChoices>
-    <textureChoices>Amputations\Forearm\skin05_hairy_b</textureChoices>
-
-    <textureChoices>Body\MaleBody01</textureChoices>
-    <textureChoices>Body\MaleBody02</textureChoices>
-    <textureChoices>Body\MaleBody03</textureChoices>
-    <textureChoices>Body\MaleBody04</textureChoices>
-    <textureChoices>Body\MaleBody05</textureChoices>
-
-    <textureChoices>Body\MaleBody01a</textureChoices>
-    <textureChoices>Body\MaleBody02a</textureChoices>
-    <textureChoices>Body\MaleBody03a</textureChoices>
-    <textureChoices>Body\MaleBody04</textureChoices>
-    <textureChoices>Body\MaleBody05a</textureChoices>
+    <textureChoices>Amputations\Human\Forearm\skin01_hairy_b</textureChoices>
+    <textureChoices>Amputations\Human\Forearm\skin02_hairy_b</textureChoices>
+    <textureChoices>Amputations\Human\Forearm\skin03_hairy_b</textureChoices>
+    <textureChoices>Amputations\Human\Forearm\skin04_hairy_b</textureChoices>
+    <textureChoices>Amputations\Human\Forearm\skin05_hairy_b</textureChoices>
 </clothingItem>

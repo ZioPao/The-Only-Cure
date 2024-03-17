@@ -8,7 +8,16 @@ local ItemsController = require("TOC/Controllers/ItemsController")
 -------------------
 
 local function test(zombie, character, bodyPartType, handWeapon)
-    --ItemsController.Zombie.SpawnAmputationItem(zombie)
+
+    -- LOCAL ONLY!!!
+    if character ~= getPlayer() then return end
+
+
+    -- TODO Check damage and weapon type
+
+
+    --ItemsController.Zombie.GetAmputationTexturesIndex(zombie)
+    ItemsController.Zombie.SpawnAmputationItem(zombie)
 end
 
 Events.OnHitZombie.Add(test)
