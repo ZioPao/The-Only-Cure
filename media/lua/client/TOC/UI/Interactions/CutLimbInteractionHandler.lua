@@ -21,31 +21,42 @@ end
 ---@return InventoryItem?
 local function GetBandageItem(player)
     local plInv = player:getInventory()
-    -- TODO Add other options, like ripped sheets and such items
     local bandageItem = plInv:FindAndReturn("Base.Bandage") or plInv:FindAndReturn("Base.RippedSheets")
-    return bandageItem      -- TODO check this warning
+
+    ---@cast bandageItem InventoryItem
+
+    return bandageItem
 end
 
 ---Return a suture needle or thread (only if the player has a needle too)
 ---@param player IsoPlayer
 ---@return InventoryItem?
-local function GetStitchesItem(player)
-    -- TODO Search for thread
+local function GetStitchesConsumableItem(player)
     local plInv = player:getInventory()
-    local needleItem = plInv:FindAndReturn("Base.SutureNeedle")
-    if needleItem ~= nil then return needleItem end
 
-    -- Didn't find the suture one, so let's search for the normal one + thread
+    -- Suture needle has priority
 
-    needleItem = plInv:FindAndReturn("Base.Needle")
+    local sutureNeedle = plInv:FindAndReturn("Base.SutureNeedle")
+    ---@cast sutureNeedle DrainableComboItem
 
-    if needleItem == nil then return nil end
+    if sutureNeedle and sutureNeedle:getUsedDelta() > 0 then
+        return sutureNeedle
+    else
+        -- Didn't find the suture one, so let's search for the normal one + thread
 
-    -- Found the normal one, searching for thread
+        local needleItem = plInv:FindAndReturn("Base.Needle")
 
-    local threadItem = plInv:FindAndReturn("Base.Thread")
+        if needleItem == nil then return nil end
 
-    if threadItem then return threadItem end
+        -- Found the normal one, searching for thread
+
+        local threadItem = plInv:FindAndReturn("Base.Thread")
+        ---@cast threadItem DrainableComboItem
+
+        if threadItem and threadItem:getUsedDelta() > 0 then
+            return threadItem
+        end
+    end
 
 end
 
@@ -125,7 +136,7 @@ local function AddInventoryAmputationMenu(playerNum, context, items)
     if CheckIfSaw(itemType) then
         local player = getSpecificPlayer(playerNum)
         local sawItem = item
-        local stitchesItem = GetStitchesItem(player)
+        local stitchesItem = GetStitchesConsumableItem(player)
         local bandageItem = GetBandageItem(player)
 
         TOC_DEBUG.print("Stitches item: " .. tostring(stitchesItem))
