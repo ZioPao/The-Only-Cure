@@ -85,10 +85,10 @@ function CachedDataHandler.CalculateHighestAmputatedLimbs(username)
 
     for k, _ in pairs(amputatedLimbs) do
         local limbName = k
-        local index = CommonMethods.GetSide(limbName)
+        local side = CommonMethods.GetSide(limbName)
         if dcInst:getIsCut(limbName) and dcInst:getIsVisible(limbName) then
             TOC_DEBUG.print("Added Highest Amputation: " .. limbName)
-            CachedDataHandler.highestAmputatedLimbs[username][index] = limbName
+            CachedDataHandler.highestAmputatedLimbs[username][side] = limbName
         end
     end
 end

@@ -102,46 +102,15 @@ ItemsController.Zombie = {}
 
 ---Set an amputation to a zombie
 ---@param zombie IsoZombie
-function ItemsController.Zombie.SpawnAmputationItem(zombie)
-    -- TODO Set texture ID
-    local itemVisualsList = zombie:getItemVisuals()
-    local ignoredLimbs = {}
-
-    if itemVisualsList == nil then return end
-
-    for i=0, itemVisualsList:size() - 1 do
-        local itemVisual = itemVisualsList:get(i)
-
-        -- TODO Check body location of item and deletes potential amputation to apply
-        local clothingName = itemVisual:getClothingItemName()
-        --print(clothingName)
-
-        if clothingName and luautils.stringStarts(clothingName, StaticData.AMPUTATION_CLOTHING_ITEM_BASE) then
-            TOC_DEBUG.print("added " .. clothingName .. " to ignoredLimbs")
-            ignoredLimbs[clothingName] = clothingName
-        end
-
-    end
-
-    -- TODO Consider highest amputation
-    local usableClothingAmputations = {}
-
-    for i=1, #StaticData.LIMBS_STR do
-        local limbName = StaticData.LIMBS_STR[i]
-        local clothingName = StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. limbName
-        if ignoredLimbs[clothingName] == nil then
-            table.insert(usableClothingAmputations, clothingName)
-        end
-    end
-
-    -- TODO Random index
-    local index = ZombRand(1, #usableClothingAmputations)
-
-    local itemVisual = ItemVisual:new()
-    itemVisual:setItemType(usableClothingAmputations[index])
-
+---@param amputationFullType string Full Type
+function ItemsController.Zombie.SpawnAmputationItem(zombie, amputationFullType)
     local texId = ItemsController.Zombie.GetAmputationTexturesIndex(zombie)
+    local itemVisual = ItemVisual:new()
+    itemVisual:setItemType(amputationFullType)
     itemVisual:setTextureChoice(texId)
+
+    local clothingItem = zombie:getInventory():AddItem(amputationFullType)
+    zombie:setWornItem(clothingItem:getBodyLocation(), clothingItem)
     zombie:getItemVisuals():add(itemVisual)
     zombie:resetModelNextFrame()
 end

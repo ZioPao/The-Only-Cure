@@ -174,7 +174,6 @@ StaticData.TRAITS_BP = {
 --* Visuals and clothing
 
 --- Textures
--- TODO We need male variations
 StaticData.HEALTH_PANEL_TEXTURES = {
 
     Female = {
