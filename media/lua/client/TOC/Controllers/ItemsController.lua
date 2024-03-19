@@ -105,14 +105,16 @@ ItemsController.Zombie = {}
 ---@param amputationFullType string Full Type
 function ItemsController.Zombie.SpawnAmputationItem(zombie, amputationFullType)
     local texId = ItemsController.Zombie.GetAmputationTexturesIndex(zombie)
+    local zombieVisuals = zombie:getItemVisuals()
     local itemVisual = ItemVisual:new()
     itemVisual:setItemType(amputationFullType)
     itemVisual:setTextureChoice(texId)
-
-    local clothingItem = zombie:getInventory():AddItem(amputationFullType)
-    zombie:setWornItem(clothingItem:getBodyLocation(), clothingItem)
-    zombie:getItemVisuals():add(itemVisual)
+    zombieVisuals:add(itemVisual)
     zombie:resetModelNextFrame()
+
+    -- Spawn the item too in the inventory to keep track of stuff this way. It's gonna get deleted when we reload the game
+    local zombieInv = zombie:getInventory()
+    zombieInv:AddItem(amputationFullType)
 end
 
 function ItemsController.Zombie.GetAmputationTexturesIndex(zombie)
