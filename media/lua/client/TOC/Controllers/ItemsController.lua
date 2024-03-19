@@ -44,6 +44,10 @@ function ItemsController.Player.RemoveClothingItem(playerObj, clothingItem)
 
         playerObj:getInventory():Remove(clothingItem)       -- Can be a InventoryItem too.. I guess? todo check it
         TOC_DEBUG.print("found and deleted" .. tostring(clothingItem))
+
+        -- Reset model
+        playerObj:resetModelNextFrame()
+
         return true
     end
     return false
