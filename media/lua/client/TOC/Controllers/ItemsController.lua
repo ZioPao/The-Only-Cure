@@ -83,6 +83,9 @@ function ItemsController.Player.DeleteAllOldAmputationItems(playerObj)
         ---@cast clothItem InventoryItem
         ItemsController.Player.RemoveClothingItem(playerObj, clothItem)
     end
+
+    -- Reset model just in case
+    playerObj:resetModelNextFrame()
 end
 
 ---Spawns and equips the correct amputation item to the player.
