@@ -9,7 +9,6 @@ module TOC
 	{
 		Type = Clothing,
 		DisplayCategory = Amputation,
-		DisplayName	= Amputated right hand,
 
 		ClothingItem = Amputation_Hand_R,
 		BodyLocation = TOC_Arm_R,
@@ -29,7 +28,6 @@ module TOC
 	{
 		Type = Clothing,
 		DisplayCategory = Amputation,
-		DisplayName	= Amputated right forearm,
 
 		ClothingItem = Amputation_ForeArm_R,
 		BodyLocation = TOC_Arm_R,
@@ -48,7 +46,6 @@ module TOC
 	{
 		Type = Clothing,
 		DisplayCategory = Amputation,
-		DisplayName	= Amputated entire right arm,
 
 		ClothingItem = Amputation_UpperArm_R,
 		BodyLocation = TOC_Arm_R,
@@ -66,7 +63,6 @@ module TOC
 	{
 		Type = Clothing,
 		DisplayCategory = Amputation,
-		DisplayName	= Amputated left hand,
 
 		ClothingItem = Amputation_Hand_L,
 		BodyLocation = TOC_Arm_L,
@@ -86,7 +82,7 @@ module TOC
 	{
 		Type = Clothing,
 		DisplayCategory = Amputation,
-		DisplayName	= Amputated left forearm,
+
 		ClothingItem = Amputation_ForeArm_L,
 		BodyLocation = TOC_Arm_L,
 
@@ -105,7 +101,7 @@ module TOC
 	{
 		Type = Clothing,
 		DisplayCategory = Amputation,
-		DisplayName	= Amputated entire left arm,
+
 		ClothingItem = Amputation_UpperArm_L,
 		BodyLocation = TOC_Arm_L,
 
