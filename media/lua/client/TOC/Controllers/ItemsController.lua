@@ -126,7 +126,7 @@ function ItemsController.Zombie.GetAmputationTexturesIndex(zombie)
     local level = tonumber(x:match("%d$")) - 1  -- it's from 1 to 3, but we're using it like 0 indexed arrays
 
     local finalId = 10 + matchedIndex + level
-    print("Zombie texture index: " .. tostring(finalId))
+    --print("Zombie texture index: " .. tostring(finalId))
     return finalId
 end
 

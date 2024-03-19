@@ -35,5 +35,9 @@ function CommandsData.GetKey(username)
     return StaticData.MOD_NAME .. "_" .. username
 end
 
+function CommandsData.GetZombieKey()
+    return StaticData.MOD_NAME .. "_ZOMBIES"
+end
+
 
 return CommandsData

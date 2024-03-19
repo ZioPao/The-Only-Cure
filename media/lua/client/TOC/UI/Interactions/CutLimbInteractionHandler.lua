@@ -143,8 +143,6 @@ local function AddInventoryAmputationMenu(playerNum, context, items)
         TOC_DEBUG.print("Bandage item: " .. tostring(bandageItem))
 
         AddInvAmputationOptions(player, context, sawItem, stitchesItem, bandageItem)
-
-        -- TODO Add stitches option and mixes
     end
 end
 
