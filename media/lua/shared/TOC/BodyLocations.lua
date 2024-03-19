@@ -12,6 +12,7 @@ require("TOC/Debug")
 local group = BodyLocations.getGroup("Human")
 
 -- TODO Breaks if both arms are cut with one prost!!!
+-- TODO Breaks even if you have both amputations in general. We need a way to fix this piece of shit before realising
 group:getOrCreateLocation("TOC_Arm_R")
 group:getOrCreateLocation("TOC_Arm_L")
 

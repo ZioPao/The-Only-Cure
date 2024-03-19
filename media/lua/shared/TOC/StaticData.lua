@@ -24,6 +24,7 @@ StaticData.MOD_NAME = "TOC"
 -------------------------
 --* Base
 
+
 StaticData.SIDES_IND_STR = {
     R = "R",
     L = "L"
@@ -33,6 +34,13 @@ StaticData.PARTS_IND_STR = {
     ForeArm = "ForeArm",
     UpperArm = "UpperArm"
 }
+StaticData.PARTS_STR = {
+    "Hand",
+    "ForeArm",
+    "UpperArm"
+}
+
+
 StaticData.MOD_BODYLOCS_BASE_IND_STR = {
     TOC_ArmProst = "TOC_ArmProst",
     TOC_Arm = "TOC_Arm",

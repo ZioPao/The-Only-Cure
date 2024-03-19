@@ -9,6 +9,15 @@ local function PredicateAmputationItems(item)
 end
 
 
+
+local function PredicateAmputationItemLeft(item)
+    return item:getType():contains("Amputation_") and item:getType():contains("_L")
+end
+
+local function PredicateAmputationItemRight(item)
+    return item:getType():contains("Amputation_") and item:getType():contains("_R")
+end
+
 ---@param zombie IsoZombie|IsoGameCharacter|IsoMovingObject|IsoObject
 ---@return integer trueID
 local function GetZombieID(zombie)
@@ -25,69 +34,105 @@ local function GetZombieID(zombie)
     return trueID
 end
 
--------------------------------
 
 ---@param zombie IsoZombie
-function HandleZombiesAmputations(zombie, character, bodyPartType, handWeapon)
+local function SpawnAmputation(zombie, side)
+    local index = ZombRand(1, #StaticData.PARTS_STR)
+    local limb = StaticData.PARTS_STR[index] .. "_" .. side
+    local amputationFullType = StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. limb
+
+
+    ItemsController.Zombie.SpawnAmputationItem(zombie, amputationFullType)
+
+
+    -- Add reference and transmit it to server
+    local pID = GetZombieID(zombie)
+    local zombieKey = CommandsData.GetZombieKey()
+    local zombiesMD = ModData.getOrCreate(zombieKey)
+    if zombiesMD[pID] == nil then zombiesMD[pID] = {} end
+    zombiesMD[pID][side] = amputationFullType
+    ModData.add(zombieKey, zombiesMD)
+    ModData.transmit(zombieKey)
+end
+
+-------------------------------
+
+---@param player IsoGameCharacter
+---@param zombie IsoZombie
+function HandleZombiesAmputations(player, zombie, handWeapon, damage)
+    if not instanceof(zombie, "IsoZombie") or not instanceof(player, "IsoPlayer") then return end
+    if player ~= getPlayer() then return end
+    if damage < 3 or ZombRand(0,100) < 25 then return end
+
     local zombieInv = zombie:getInventory()
-    local foundItem = zombieInv:containsEvalRecurse(PredicateAmputationItems)
 
-    if foundItem then
-        print("Item already in")
+    -- Check left or right
+    local leftItem = zombieInv:containsEval(PredicateAmputationItemLeft)
+
+    if not leftItem then
+        SpawnAmputation(zombie, "L")
         return
-    else
-
-        local clothingItemFullTypes = {}
-        -- Common function?
-        for i=1, #StaticData.LIMBS_STR do
-            local limbName = StaticData.LIMBS_STR[i]
-            local clothingName = StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. limbName
-            table.insert(clothingItemFullTypes, clothingName)
-        end
-
-        local index = ZombRand(1, #clothingItemFullTypes)
-        local amputationFullType = clothingItemFullTypes[index]
+    end
 
 
-        ItemsController.Zombie.SpawnAmputationItem(zombie, amputationFullType)
-
-
-        -- TODO Add reference and transmit it to server
-        local pID = GetZombieID(zombie)
-        local zombieKey = CommandsData.GetZombieKey()
-        local zombiesMD = ModData.getOrCreate(zombieKey)
-        zombiesMD[pID] = amputationFullType
-        ModData.add(zombieKey, zombiesMD)
-        ModData.transmit(zombieKey)
+    local rightItem = zombieInv:containsEval(PredicateAmputationItemRight)
+    if not rightItem then
+        SpawnAmputation(zombie, "R")
+        return
     end
 end
 
 
-Events.OnHitZombie.Add(HandleZombiesAmputations)
+Events.OnWeaponHitCharacter.Add(HandleZombiesAmputations)
 
 -----------------------------
+
+local localOnlyZombiesMD
+
+local function SetupZombiesModData()
+    local zombieKey = CommandsData.GetZombieKey()
+    localOnlyZombiesMD = ModData.getOrCreate(zombieKey)
+
+end
+
+Events.OnInitGlobalModData.Add(SetupZombiesModData)
+
+
 
 
 ---@param zombie IsoZombie
 local function ReapplyAmputation(zombie)
-    local zombieKey = CommandsData.GetZombieKey()
-    local zombiesMD = ModData.getOrCreate(zombieKey)
     local pID = GetZombieID(zombie)
 
     -- TODO Remove already checked zombies
-    if zombiesMD[pID] ~= nil then
+    if localOnlyZombiesMD[pID] ~= nil then
         -- check if zombie has amputation
-        local fullType = zombiesMD[pID]
+        local zombiesAmpData = localOnlyZombiesMD[pID]
         local zombieInv =  zombie:getInventory()
         local foundItem = zombieInv:containsEvalRecurse(PredicateAmputationItems)
 
         if foundItem then
             return
         else
-            AddZombieAmp(zombie, fullType)
+            local leftAmp = zombiesAmpData['L']
+            if leftAmp then
+                ItemsController.Zombie.SpawnAmputationItem(zombie, leftAmp)
+            end
 
+            local rightAmp = zombiesAmpData['R']
+            if rightAmp then
+                ItemsController.Zombie.SpawnAmputationItem(zombie, rightAmp)
+            end
+
+            -- Removes reference, local only
+            localOnlyZombiesMD[pID] = nil
         end
     end
 end
 
 Events.OnZombieUpdate.Add(ReapplyAmputation)
+
+
+
+
+
