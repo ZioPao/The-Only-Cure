@@ -132,44 +132,4 @@ function ItemsController.Zombie.GetAmputationTexturesIndex(zombie)
     return finalId
 end
 
-
---------------------------
---* Overrides *--
-
-local og_ISInventoryPane_refreshContainer = ISInventoryPane.refreshContainer
-
----Get the list of items for the container and remove the reference to the amputation items
----@diagnostic disable-next-line: duplicate-set-field
-function ISInventoryPane:refreshContainer()
-    og_ISInventoryPane_refreshContainer(self)
-    if TOC_DEBUG.disablePaneMod then return end
-
-
-    
-
-
-    for k, v in ipairs(self.itemslist) do
-        if v and v.cat == "Amputation" then
-            TOC_DEBUG.print("Refreshing container - current item is an amputation, removing it from the list of the container")
-            TOC_DEBUG.print("Current Item: " .. v.name)
-            TOC_DEBUG.print("Index: " .. tostring(k))
-            
-            
-        end
-    end
-
-    self.inventory:setDrawDirty(true)
-    -- for i=1, #self.itemslist do
-    --     local cItem = self.itemslist[i]
-    --     if cItem and cItem.cat == "Amputation" then
-    --         TOC_DEBUG.print("Refreshing container - current item is an amputation, removing it from the list of the container")
-    --         TOC_DEBUG.print("Current Item: " .. cItem.name)
-    --         --self.itemsList[i] = nil
-    --         --table.remove(self.itemslist, i)
-    --     end
-    -- end
-
-
-end
-
 return ItemsController
