@@ -2,18 +2,8 @@
 --      Compatibility Handler by Dhert
 ------------------------------------------
 
--- TODO Connect this with TOC logic instead of hardcoding it here
-local parts = {
-    "Right_Hand",
-    "Left_Hand",
-    "Right_LowerArm",
-    "Left_LowerArm"
-}
--- TODO Connect this with TOC logic instead of hardcoding it here
-local vars = {
-    "isCut",
-    "isProsthesisEquipped"
-}
+local DataController = require("TOC/Controllers/DataController")
+local StaticData = require("TOC/StaticData")
 
 
 local TOC_Compat = {}
@@ -22,47 +12,38 @@ local TOC_Compat = {}
 --- @param player IsoPlayer
 --- @param part string
 --- @return boolean
-TOC_Compat.hasArmPart = function(player, part)
+function TOC_Compat.hasPart(player, part)
     if not player or not part then return false end
-    local data = (player:getModData().TOC and player:getModData().TOC.Limbs) or nil
-    return not data or not data[part] or (data[part][vars[1]] and data[part][vars[2]]) or not data[part][vars[1]]
+    local dc = DataController.GetInstance(player:getUsername())
+    if not dc then return false end
+    return (dc:getIsCut(part) and dc:getIsProstEquipped(part)) or not dc:getIsCut(part)
 end
 
--- Raw access, must pass valid parts. Will check for 2 parts (arm and hand)
---- @param player IsoPlayer
---- @param part string
---- @param part2 string
---- @return boolean
-TOC_Compat.hasArm = function(player, part, part2)
-    if not player or not part then return false end
-    local data = (player:getModData().TOC and player:getModData().TOC.Limbs) or nil
-    return not data or (not data[part] or (data[part][vars[1]] and data[part][vars[2]]) or not data[part][vars[1]]) or (not data[part] or (data[part2][vars[1]] and data[part2][vars[2]]) or not data[part2][vars[1]])
+--- Check if hand is available
+---@param player IsoPlayer
+---@param left boolean Optional
+---@return boolean
+function TOC_Compat.hasHand(player, left)
+    return TOC_Compat.hasPart(player, ((left and StaticData.LIMBS_IND_STR.Hand_L) or StaticData.LIMBS_IND_STR.Hand_R))
 end
 
--- Check if hand is available
---- @param player IsoPlayer
---- @param left boolean?
---- @return boolean
-TOC_Compat.hasHand = function(player, left)
-    return TOC_Compat.hasArm(player, ((left and parts[2]) or parts[1]), ((left and parts[4]) or parts[3]))
+--- Check if both hands are available
+---@param player IsoPlayer
+---@return boolean
+function TOC_Compat.hasBothHands(player)
+    return TOC_Compat.hasHand(player, false) and TOC_Compat.hasHand(player, true)
 end
 
--- Check if both hands are available
---- @param player IsoPlayer
---- @return boolean
-TOC_Compat.hasBothHands = function(player)
-    return TOC_Compat.hasArm(player, parts[1], parts[3]) and TOC_Compat.hasArm(player, parts[2], parts[4])
-end
 
 -- This returns a number for the hands that you have
 ----- 11 == both hands
 ----- 10 == left hand
 ----- 01 (1) == right hand
 ----- 00 (0) == no hands
---- @param player IsoPlayer
---- @return integer
-TOC_Compat.getHands = function(player)
-    return ((TOC_Compat.hasArm(player, parts[1], parts[3]) and 1) or 0) + ((TOC_Compat.hasArm(player, parts[2], parts[4]) and 10) or 0)
+---@param player any
+---@return integer
+function TOC_Compat.getHands(player)
+    return ((TOC_Compat.hasHand(player, false) and 1) or 0) + ((TOC_Compat.hasHand(player, true) and 10) or 0)
 end
 
 
