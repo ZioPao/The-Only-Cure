@@ -142,7 +142,12 @@ TestFramework.registerTestModule("TimedActions", "CauterizeAction", function()
     return Tests
 
 end)
+-- TestFramework.registerTestModule("API", "All", function()
+--     local Tests = {}
 
+--     return Tests
+
+-- end)
 TestFramework.registerTestModule("Various", "Player", function()
     local Tests = {}
 
@@ -152,6 +157,9 @@ TestFramework.registerTestModule("Various", "Player", function()
 
     return Tests
 end)
+
+
+
 --------------------------------------------------------------------------------------
 if not getActivatedMods():contains("PerfTestFramework") or not isDebugEnabled() then return end
 local PerfTest = require("PerfTest/main")       -- SHould be global anyway

@@ -11,7 +11,7 @@ module TOC
 		DisplayCategory = Amputation,
 
 		ClothingItem = Amputation_Hand_R,
-		BodyLocation = TOC_Arm_R,
+		BodyLocation = TOC_Arm,
 
 		Weight = 0,
 		CombatSpeedModifier = 0.9,
@@ -48,7 +48,7 @@ module TOC
 		DisplayCategory = Amputation,
 
 		ClothingItem = Amputation_UpperArm_R,
-		BodyLocation = TOC_Arm_R,
+		BodyLocation = TOC_Arm,
 		BloodLocation = UpperArms;UpperBody,
 		Weight = 0,
 		CombatSpeedModifier = 0.7,

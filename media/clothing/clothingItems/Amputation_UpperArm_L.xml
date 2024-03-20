@@ -8,7 +8,6 @@
     <m_AllowRandomTint>false</m_AllowRandomTint>
     <m_Masks>3</m_Masks>
     <m_Masks>4</m_Masks>
-    <m_MasksFolder>none</m_MasksFolder>
     
     <!-- HUMAN -->
     <textureChoices>Amputations\Human\Upperarm\skin01_b</textureChoices>
