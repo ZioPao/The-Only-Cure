@@ -226,3 +226,6 @@ function ISInventoryPaneContextMenu.doEquipOption(context, playerObj, isWeapon, 
         end
     end
 end
+
+
+-- TODO IMPORTANT!!!! ADD LIMIT FOR UPPER ARM AND WHEN YOU DON'T HAVE AMPUTATIONS FOR PROSTHETITCS

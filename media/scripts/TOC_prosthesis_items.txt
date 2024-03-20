@@ -72,6 +72,7 @@ module TOC
 		Icon = armProsthetic,
         WorldStaticModel = prostheticArm,
 	}
+
 	item Prost_NormalArm_R
 	{
 		Type = Clothing,
