@@ -14,7 +14,12 @@ local bodyLocArmProst = StaticData.MOD_BODYLOCS_BASE_IND_STR.TOC_ArmProst
 ---@return boolean
 function ProsthesisHandler.CheckIfProst(item)
     -- TODO Won't be correct when prost for legs are gonna be in
-    if item == nil then return false end
+    TOC_DEBUG.print("Checking if item is prost")
+    if item == nil then
+        TOC_DEBUG.print("Not prost")
+
+        return false
+    end
     return item:getBodyLocation():contains(bodyLocArmProst)
 end
 
@@ -30,18 +35,19 @@ function ProsthesisHandler.GetGroup(item)
 end
 
 ---Check if a prosthesis is equippable. It depends whether the player has a cut limb or not on that specific side. There's an exception for Upper arm, obviously
----@param bodyLocation string
+---@param name string
 ---@return boolean
-function ProsthesisHandler.CheckIfEquippable(bodyLocation)
+function ProsthesisHandler.CheckIfEquippable(name)
     TOC_DEBUG.print("Current item is a prosthesis")
-    local side = CommonMethods.GetSide(bodyLocation)
+    local side = CommonMethods.GetSide(name)
     TOC_DEBUG.print("Checking side: " .. tostring(side))
 
-    local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(getPlayer():getUsername())
-    for k, _ in pairs(amputatedLimbs) do
-        local limbName = k
-        if string.contains(limbName, side) and not string.contains(limbName, "UpperArm") then
-            TOC_DEBUG.print("Found acceptable limb to use prosthesis")
+    local highestAmputatedLimbs = CachedDataHandler.GetHighestAmputatedLimbs(getPlayer():getUsername())
+
+    if highestAmputatedLimbs then
+        local hal = highestAmputatedLimbs[side]
+        if not string.contains(hal, "UpperArm") then
+            TOC_DEBUG.print("Found acceptable limb to use prosthesis => " .. tostring(hal))
             return true
         end
     end
@@ -58,7 +64,7 @@ function ProsthesisHandler.SearchAndSetupProsthesis(item, isEquipping)
     if not ProsthesisHandler.CheckIfProst(item) then return end
 
     local group = ProsthesisHandler.GetGroup(item)
-    TOC_DEBUG.print("Applying prosthesis stuff for " .. group)
+    TOC_DEBUG.print("Setup Prosthesis => " .. group .. " - is equipping? " .. tostring(isEquipping))
     local dcInst = DataController.GetInstance()
     dcInst:setIsProstEquipped(group, isEquipping)
     dcInst:apply()
@@ -68,23 +74,32 @@ end
 --* Overrides *--
 
 
+---@param item InventoryItem
+---@param isEquippable boolean
+---@return unknown
+local function HandleProsthesisValidation(item, isEquippable)
+    local isProst = ProsthesisHandler.CheckIfProst(item)
+    if not isProst then return isEquippable end
+
+    local itemName = item:getName()        -- use name for side
+    if isEquippable then
+        isEquippable = ProsthesisHandler.CheckIfEquippable(itemName)
+    end
+
+
+    if not isEquippable then
+        getPlayer():Say(getText("UI_Say_CantEquip"))
+    end
+
+    return isEquippable
+end
+
+
 ---@diagnostic disable-next-line: duplicate-set-field
 local og_ISWearClothing_isValid = ISWearClothing.isValid
 function ISWearClothing:isValid()
     local isEquippable = og_ISWearClothing_isValid(self)
-
-    -- TODO Do we actually need this?
-    local isProst = ProsthesisHandler.CheckIfProst(self.item)
-
-    if not isProst then return isEquippable end
-
-    --the item that we gets is the OG one, so if we're coming from the left one and wanna switch to the right one we're still gonna get the Left bodylocation
-    local bodyLocation = self.item:getBodyLocation()
-    if isEquippable and string.contains(bodyLocation, bodyLocArmProst) then
-        isEquippable = ProsthesisHandler.CheckIfEquippable(bodyLocation)
-    end
-
-    return isEquippable
+    return HandleProsthesisValidation(self.item, isEquippable)
 end
 
 local og_ISWearClothing_perform = ISWearClothing.perform
@@ -97,27 +112,7 @@ local og_ISClothingExtraAction_isValid = ISClothingExtraAction.isValid
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISClothingExtraAction:isValid()
     local isEquippable = og_ISClothingExtraAction_isValid(self)
-
-     --the item that we gets is the OG one, so if we're coming from the left one and wanna switch to the right one we're still gonna get the Left bodylocation
-    local testItem = InventoryItemFactory.CreateItem(self.extra)
-    local isProst = ProsthesisHandler.CheckIfProst(testItem)
-
-    -- Early exit if it's not a prostheesis
-    if not isProst then return isEquippable end
-
-    if isEquippable and isProst then 
-        local bodyLocation = testItem:getBodyLocation()
-        isEquippable = ProsthesisHandler.CheckIfEquippable(bodyLocation)
-
-        -- Just to let the player know
-        if not isEquippable then
-            -- TODO if its in here then it's gonna run at least 2 times
-            getPlayer():Say(getText("UI_Say_CantEquip"))
-        end
-
-    end
-
-    return isEquippable
+    return HandleProsthesisValidation(self.item, isEquippable)
 end
 
 local og_ISClothingExtraAction_perform = ISClothingExtraAction.perform

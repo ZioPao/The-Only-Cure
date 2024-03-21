@@ -228,4 +228,34 @@ function ISInventoryPaneContextMenu.doEquipOption(context, playerObj, isWeapon, 
 end
 
 
--- TODO IMPORTANT!!!! ADD LIMIT FOR UPPER ARM AND WHEN YOU DON'T HAVE AMPUTATIONS FOR PROSTHETITCS
+-- local og_ISInventoryPaneContextMenu_doClothingItemExtraMenu = ISInventoryPaneContextMenu.doClothingItemExtraMenu
+
+-- ---@param context ISContextMenu
+-- ---@param clothingItemExtra any
+-- ---@param playerObj IsoPlayer
+-- function ISInventoryPaneContextMenu.doClothingItemExtraMenu(context, clothingItemExtra, playerObj)
+--     og_ISInventoryPaneContextMenu_doClothingItemExtraMenu(context, clothingItemExtra, playerObj)
+
+--     -- local dc = DataController.GetInstance(playerObj:getUsername())
+--     -- local text = getText("ContextMenu_InstallProstRight")
+--     -- local rightOpt = context:getOptionFromName(text)
+
+--     -- if rightOpt then
+--     --     -- check if can be equipped
+--     --     rightOpt.notAvailable = dc:getIsAnyLimbCut() and not dc:getIsCut("UpperArm_R")
+--     -- end
+
+
+--     -- text = getText("ContextMenu_InstallProstLeft")
+--     -- local leftOpt = context:getOptionFromName(text)
+
+--     -- if leftOpt then
+--     --     leftOpt.notAvailable = dc:getIsAnyLimbCut() and not dc:getIsCut("UpperArm_L")
+--     -- end
+
+
+
+
+--     -- Check if in context there are the options for the prosts
+-- end
+-- -- TODO IMPORTANT!!!! ADD LIMIT FOR UPPER ARM AND WHEN YOU DON'T HAVE AMPUTATIONS FOR PROSTHETITCSmhh

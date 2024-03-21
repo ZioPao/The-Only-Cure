@@ -96,7 +96,7 @@ end
 
 ---Get the cached highest point of amputation for each side
 ---@param username string
----@return table
+---@return table<string, string>
 function CachedDataHandler.GetHighestAmputatedLimbs(username)
     return CachedDataHandler.highestAmputatedLimbs[username]
 end
