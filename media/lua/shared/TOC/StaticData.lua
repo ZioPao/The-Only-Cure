@@ -202,6 +202,11 @@ StaticData.HEALTH_PANEL_TEXTURES = {
         Hand_R = getTexture("media/ui/Male/Hand_R.png"),
         ForeArm_R = getTexture("media/ui/Male/ForeArm_R.png"),
         UpperArm_R = getTexture("media/ui/Male/UpperArm_R.png")
+    },
+
+    ProstArm = {
+        L = getTexture("media/ui/ProstArm_L.png"),
+        R = getTexture("media/ui/ProstArm_R.png")
     }
 
 }

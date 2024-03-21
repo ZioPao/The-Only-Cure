@@ -80,7 +80,7 @@ end
 ---Try to draw the highest amputation in the health panel, based on the cicatrization time
 ---@param side string L or R
 ---@param username string
-function ISHealthPanel:tryDrawHighestAmputation(highestAmputations, side, username)
+function ISHealthPanel:tryDrawAmputation(highestAmputations, side, username)
     local redColor
     local texture
 
@@ -101,6 +101,13 @@ function ISHealthPanel:tryDrawHighestAmputation(highestAmputations, side, userna
 
     self:drawTexture(texture, self.healthPanel.x, self.healthPanel.y, 1, redColor, 0, 0)
 end
+function ISHealthPanel:tryDrawProsthesis(highestAmputations, side, username)
+    local dc = DataController.GetInstance(username)     -- TODO CACHE PROSTHESIS!!! Don't use DC here
+    local limbName = highestAmputations[side]
+    if limbName and dc:getIsProstEquipped(limbName) then
+        self:drawTexture(StaticData.HEALTH_PANEL_TEXTURES.ProstArm[side], self.healthPanel.x, self.healthPanel.y, 1, 1, 1, 1)
+    end
+end
 
 local og_ISHealthPanel_render = ISHealthPanel.render
 function ISHealthPanel:render()
@@ -109,12 +116,21 @@ function ISHealthPanel:render()
     local highestAmputations = CachedDataHandler.GetHighestAmputatedLimbs(username)
 
     if highestAmputations ~= nil then
+
         -- Left Texture
-        self:tryDrawHighestAmputation(highestAmputations, "L", username)
+        self:tryDrawAmputation(highestAmputations, "L", username)
+        self:tryDrawProsthesis(highestAmputations, "L", username)
 
         -- Right Texture
-        self:tryDrawHighestAmputation(highestAmputations, "R", username)
+        self:tryDrawAmputation(highestAmputations, "R", username)
+        self:tryDrawProsthesis(highestAmputations, "R", username)
     end
+
+
+
+
+
+
 end
 
 -- We need to override this to force the alpha to 1

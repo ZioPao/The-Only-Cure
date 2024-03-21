@@ -62,7 +62,6 @@ function ItemsController.Player.DeleteOldAmputationItem(playerObj, limbName)
         local othLimbName = partName .. "_" .. side
         local othClothingItemName = StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. othLimbName
 
-        -- TODO FindAndReturn could return an ArrayList. We need to check for that
         local othClothingItem = playerObj:getInventory():FindAndReturn(othClothingItemName)
 
 

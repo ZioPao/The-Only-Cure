@@ -104,7 +104,6 @@ Events.OnInitGlobalModData.Add(SetupZombiesModData)
 local function ReapplyAmputation(zombie)
     local pID = GetZombieID(zombie)
 
-    -- TODO Remove already checked zombies
     if localOnlyZombiesMD[pID] ~= nil then
         -- check if zombie has amputation
         local zombiesAmpData = localOnlyZombiesMD[pID]
