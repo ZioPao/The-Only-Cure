@@ -43,6 +43,7 @@ StaticData.PARTS_STR = {
 
 StaticData.MOD_BODYLOCS_BASE_IND_STR = {
     TOC_ArmProst = "TOC_ArmProst",
+    TOC_LegProst = "TOC_LegProst",
     TOC_Arm = "TOC_Arm",
 }
 

@@ -86,9 +86,6 @@ end
 ---@class ISEquipWeaponAction
 ---@field character IsoPlayer
 
-local primaryHand = StaticData.PARTS_IND_STR.Hand .. "_" .. StaticData.SIDES_IND_STR.R
-local secondaryHand = StaticData.PARTS_IND_STR.Hand .. "_" .. StaticData.SIDES_IND_STR.L
-
 --* Equipping items overrides *--
 local og_ISEquipWeaponAction_isValid = ISEquipWeaponAction.isValid
 ---Add a condition to check the feasibility of having 2 handed weapons or if both arms are cut off

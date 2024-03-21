@@ -8,15 +8,16 @@ local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
 local ProsthesisHandler = {}
 
 local bodyLocArmProst = StaticData.MOD_BODYLOCS_BASE_IND_STR.TOC_ArmProst
+local bodyLocLegProst = StaticData.MOD_BODYLOCS_BASE_IND_STR.TOC_LegProst
 
 ---Check if the following item is a prosthesis or not
 ---@param item InventoryItem?
 ---@return boolean
 function ProsthesisHandler.CheckIfProst(item)
     -- TODO Won't be correct when prost for legs are gonna be in
-    TOC_DEBUG.print("Checking if item is prost")
+    --TOC_DEBUG.print("Checking if item is prost")
     if item == nil then
-        TOC_DEBUG.print("Not prost")
+        --TOC_DEBUG.print("Not prost")
 
         return false
     end
@@ -27,9 +28,22 @@ end
 ---@param item InventoryItem
 ---@return string
 function ProsthesisHandler.GetGroup(item)
+    local fullType = item:getFullType()
+    local side = CommonMethods.GetSide(fullType)
+
+
     local bodyLocation = item:getBodyLocation()
-    local side = CommonMethods.GetSide(bodyLocation)
-    local index = bodyLocation:contains(bodyLocArmProst) and "Top_" .. side or "Bottom_" .. side
+    local position
+    if bodyLocation == bodyLocArmProst then
+        position = "Top_"
+    elseif bodyLocation == bodyLocLegProst then
+        position = "Bottom_"
+    else
+        TOC_DEBUG.print("Something is wrong, no position in this item")
+        position = nil
+    end
+
+    local index = position .. side
     local group = StaticData.PROSTHESES_GROUPS_IND_STR[index]
     return group
 end
@@ -38,16 +52,16 @@ end
 ---@param fullType string
 ---@return boolean
 function ProsthesisHandler.CheckIfEquippable(fullType)
-    TOC_DEBUG.print("Current item is a prosthesis")
+    --TOC_DEBUG.print("Current item is a prosthesis")
     local side = CommonMethods.GetSide(fullType)
-    TOC_DEBUG.print("Checking side: " .. tostring(side))
+    --TOC_DEBUG.print("Checking side: " .. tostring(side))
 
     local highestAmputatedLimbs = CachedDataHandler.GetHighestAmputatedLimbs(getPlayer():getUsername())
 
     if highestAmputatedLimbs then
         local hal = highestAmputatedLimbs[side]
         if hal and not string.contains(hal, "UpperArm") then
-            TOC_DEBUG.print("Found acceptable limb to use prosthesis => " .. tostring(hal))
+            --TOC_DEBUG.print("Found acceptable limb to use prosthesis => " .. tostring(hal))
             return true
         end
     end
@@ -60,8 +74,9 @@ end
 ---Handle equipping or unequipping prosthetics
 ---@param item InventoryItem
 ---@param isEquipping boolean
+---@return boolean 
 function ProsthesisHandler.SearchAndSetupProsthesis(item, isEquipping)
-    if not ProsthesisHandler.CheckIfProst(item) then return end
+    if not ProsthesisHandler.CheckIfProst(item) then return false end
 
     local group = ProsthesisHandler.GetGroup(item)
     TOC_DEBUG.print("Setup Prosthesis => " .. group .. " - is equipping? " .. tostring(isEquipping))
@@ -71,6 +86,7 @@ function ProsthesisHandler.SearchAndSetupProsthesis(item, isEquipping)
 
     -- Calculates hands feasibility once again
     CachedDataHandler.CalculateBothHandsFeasibility()
+    return true
 end
 
 -------------------------
@@ -135,18 +151,35 @@ end
 
 local og_ISClothingExtraAction_perform = ISClothingExtraAction.perform
 function ISClothingExtraAction:perform()
+    --local extraItem = InventoryItemFactory.CreateItem(self.extra)
+    local isProst = ProsthesisHandler.SearchAndSetupProsthesis(self.item, true)
+    local group
+    if isProst then
+        group = BodyLocations.getGroup("Human")
+        group:setMultiItem("TOC_ArmProst", false)
+    end
+
     og_ISClothingExtraAction_perform(self)
-    ProsthesisHandler.SearchAndSetupProsthesis(self.item, true)
+
+    if isProst then
+        group:setMultiItem("TOC_ArmProst", true)
+    end
+
 end
 
 local og_ISUnequipAction_perform = ISUnequipAction.perform
 function ISUnequipAction:perform()
-    ProsthesisHandler.SearchAndSetupProsthesis(self.item, false)
-    local group = BodyLocations.getGroup("Human")
-    group:setMultiItem("TOC_ArmProst", false)
+    local isProst = ProsthesisHandler.SearchAndSetupProsthesis(self.item, false)
+    local group
+    if isProst then
+        group = BodyLocations.getGroup("Human")
+        group:setMultiItem("TOC_ArmProst", false)
+    end
     og_ISUnequipAction_perform(self)
-    group:setMultiItem("TOC_ArmProst", true)
 
+    if isProst then
+        group:setMultiItem("TOC_ArmProst", true)
+    end
 end
 
 
