@@ -103,10 +103,7 @@ local function HandleProsthesisValidation(item, isEquippable)
     local fullType = item:getFullType()        -- use fulltype for side
     if isEquippable then
         isEquippable = ProsthesisHandler.CheckIfEquippable(fullType)
-    end
-
-
-    if not isEquippable then
+    else
         getPlayer():Say(getText("UI_Say_CantEquip"))
     end
 
