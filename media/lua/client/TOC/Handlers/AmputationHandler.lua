@@ -154,7 +154,8 @@ function AmputationHandler:execute(damagePlayer)
         CachedDataHandler.AddAmputatedLimb(username, dependedLimbName)
     end
 
-    CachedDataHandler.CalculateHighestAmputatedLimbs(username)
+    -- Cache highest amputation and hand feasibility
+    CachedDataHandler.CalculateCacheableValues(username)
 
     -- If the part was actually infected, heal the player, if they were in time (infectionLevel < 20)
     if bd:getInfectionLevel() < 20 and bodyPart:IsInfected() and not dcInst:getIsIgnoredPartInfected() then

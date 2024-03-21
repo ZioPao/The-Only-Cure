@@ -11,8 +11,22 @@ local CachedDataHandler = {}
 ---@param username string
 function CachedDataHandler.Setup(username)
     CachedDataHandler.amputatedLimbs[username] = {}
+    -- username -> side
     CachedDataHandler.highestAmputatedLimbs[username] = {}
+
+
+    -- Local only, doesn't matter for Health Panel
+    CachedDataHandler.handFeasibility = {}
 end
+
+---Will calculate all the values that we need
+function CachedDataHandler.CalculateCacheableValues(username)
+    CachedDataHandler.CalculateHighestAmputatedLimbs(username)
+    CachedDataHandler.CalculateBothHandsFeasibility()
+end
+
+
+
 
 --* Amputated Limbs caching *--
 CachedDataHandler.amputatedLimbs = {}
@@ -67,16 +81,6 @@ function CachedDataHandler.CalculateHighestAmputatedLimbs(username)
         return
     end
 
-    -- if CachedDataHandler.amputatedLimbs == nil or CachedDataHandler.amputatedLimbs[username] == nil then
-    --     --- This function gets ran pretty early, we need to account for the Bob stuff
-    --     -- if username == "Bob" then
-    --     --     TOC_DEBUG.print("skip, Bob is default char")
-    --     --     return
-    --     -- end
-
-    --     TOC_DEBUG.print("Amputated limbs weren't calculated. Trying to calculate them now for " .. username)
-    --     CachedDataHandler.CalculateAmputatedLimbs(username)
-    -- end
     CachedDataHandler.CalculateAmputatedLimbs(username)
 
     local amputatedLimbs = CachedDataHandler.amputatedLimbs[username]
@@ -102,5 +106,39 @@ function CachedDataHandler.GetHighestAmputatedLimbs(username)
 end
 
 
+
+--* Hand feasibility caching *--
+CachedDataHandler.handFeasibility = {}
+
+---@param limbName string
+function CachedDataHandler.CalculateHandFeasibility(limbName)
+    local dcInst = DataController.GetInstance()
+    local side = CommonMethods.GetSide(limbName)
+    CachedDataHandler.handFeasibility[side] = not dcInst:getIsCut(limbName) or dcInst:getIsProstEquipped(limbName)
+end
+
+
+function CachedDataHandler.GetHandFeasibility(side)
+    return CachedDataHandler.handFeasibility[side]
+end
+
+
+function CachedDataHandler.CalculateBothHandsFeasibility()
+    CachedDataHandler.CalculateHandFeasibility("Hand_L")
+    CachedDataHandler.CalculateHandFeasibility("Hand_R")
+
+    if not CachedDataHandler.GetBothHandsFeasibility() then
+        TOC_DEBUG.print("Disabling interact key")
+        getCore():addKeyBinding("Interact", Keyboard.KEY_NONE)
+    else
+        -- FIX DEFAULT ONE!!!!!!!
+        TOC_DEBUG.print("Re-enabling interact key")
+        getCore():addKeyBinding("Interact", Keyboard.KEY_E)
+    end
+end
+
+function CachedDataHandler.GetBothHandsFeasibility()
+    return CachedDataHandler.handFeasibility["L"] or CachedDataHandler.handFeasibility["R"]
+end
 
 return CachedDataHandler

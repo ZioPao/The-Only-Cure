@@ -68,6 +68,9 @@ function ProsthesisHandler.SearchAndSetupProsthesis(item, isEquipping)
     local dcInst = DataController.GetInstance()
     dcInst:setIsProstEquipped(group, isEquipping)
     dcInst:apply()
+
+    -- Calculates hands feasibility once again
+    CachedDataHandler.CalculateBothHandsFeasibility()
 end
 
 -------------------------

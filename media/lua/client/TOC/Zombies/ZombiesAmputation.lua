@@ -23,6 +23,7 @@ end
 local function GetZombieID(zombie)
 
     -- Big love to Chuck and Sir Doggy Jvla for this code
+---@diagnostic disable-next-line: param-type-mismatch
     local pID = zombie:getPersistentOutfitID()
     local bits = string.split(string.reverse(Long.toUnsignedString(pID, 2)), "")
     while #bits < 16 do bits[#bits+1] = 0 end

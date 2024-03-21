@@ -42,7 +42,7 @@ end
 
 function Main.SetupEvents()
     local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
-    Events.OnReceivedTocData.Add(CachedDataHandler.CalculateHighestAmputatedLimbs)
+    Events.OnReceivedTocData.Add(CachedDataHandler.CalculateCacheableValues)
 end
 
 function Main.InitializePlayer()

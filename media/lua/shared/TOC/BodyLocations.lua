@@ -46,7 +46,7 @@ function TestBodyLocations()
 
 end
 
--- TODO MultiItem causes a ton of issues... fucking hell
+-- MultiItem causes a ton of issues... fucking hell
 
 BodyLocationsAPI.MoveOrCreateBeforeOrAfter("TOC_Arm", "FullTop", true)
 group:setMultiItem("TOC_Arm", true)

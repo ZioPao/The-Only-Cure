@@ -9,7 +9,7 @@ local StaticData = require("TOC/StaticData")
 
 
 --* TIMED ACTIONS *--
--- We want to be able to modify how long actions are gonna take, 
+-- We want to be able to modify how long actions are gonna take,
 -- depending on amputation status and kind of action. Also, when the
 -- player has not completely cicatrized their own wounds, and try to do any action with
 -- a prosthesis on, that can trigger random bleeds.
@@ -56,7 +56,7 @@ local og_ISBaseTimedAction_perform = ISBaseTimedAction.perform
 --- After each action, level up perks
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISBaseTimedAction:perform()
-	og_ISBaseTimedAction_perform(self)
+    og_ISBaseTimedAction_perform(self)
 
     TOC_DEBUG.print("Running ISBaseTimedAction.perform override")
 
@@ -70,7 +70,7 @@ function ISBaseTimedAction:perform()
         -- We're checking for only "visible" amputations to prevent from having bleeds everywhere
         if dcInst:getIsCut(limbName) and dcInst:getIsVisible(limbName) then
             local side = CommonMethods.GetSide(limbName)
-            LocalPlayerController.playerObj:getXp():AddXP(Perks["Side_" .. side], 1)       -- TODO Make it dynamic
+            LocalPlayerController.playerObj:getXp():AddXP(Perks["Side_" .. side], 1) -- TODO Make it dynamic
             if not dcInst:getIsCicatrized(limbName) and dcInst:getIsProstEquipped(limbName) then
                 TOC_DEBUG.print("Trying for bleed, player met the criteria")
                 LocalPlayerController.TryRandomBleed(self.character, limbName)
@@ -96,10 +96,9 @@ local og_ISEquipWeaponAction_isValid = ISEquipWeaponAction.isValid
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISEquipWeaponAction:isValid()
     local isValid = og_ISEquipWeaponAction_isValid(self)
-    local dcInst = DataController.GetInstance(self.character:getUsername())
-    if isValid and dcInst:getIsAnyLimbCut() then
-        local isPrimaryHandValid = CheckHandFeasibility(primaryHand)
-        local isSecondaryHandValid = CheckHandFeasibility(secondaryHand)
+    if isValid then
+        local isPrimaryHandValid = CachedDataHandler.GetHandFeasibility(StaticData.SIDES_IND_STR.R)
+        local isSecondaryHandValid = CachedDataHandler.GetHandFeasibility(StaticData.SIDES_IND_STR.L)
         -- Both hands are cut off, so it's impossible to equip in any way
         if not isPrimaryHandValid and not isSecondaryHandValid then
             isValid = false
@@ -137,10 +136,10 @@ function ISEquipWeaponAction:performWithAmputation(dcInst)
     if not self.twoHands then
         if getMethodFirst(self.character) and getMethodFirst(self.character):isRequiresEquippedBothHands() then
             setMethodFirst(self.character, nil)
-        -- if this weapon is already equiped in the 2nd hand, we remove it
+            -- if this weapon is already equiped in the 2nd hand, we remove it
         elseif (getMethodFirst(self.character) == self.item or getMethodFirst(self.character) == getMethodSecond(self.character)) then
             setMethodFirst(self.character, nil)
-        -- if we are equipping a handgun and there is a weapon in the secondary hand we remove it
+            -- if we are equipping a handgun and there is a weapon in the secondary hand we remove it
         elseif instanceof(self.item, "HandWeapon") and self.item:getSwingAnim() and self.item:getSwingAnim() == "Handgun" then
             if getMethodFirst(self.character) and instanceof(getMethodFirst(self.character), "HandWeapon") then
                 setMethodFirst(self.character, nil)
@@ -156,7 +155,6 @@ function ISEquipWeaponAction:performWithAmputation(dcInst)
                 setMethodFirst(self.character, self.item)
             end
         end
-
     else
         setMethodFirst(self.character, nil)
         setMethodSecond(self.character, nil)
@@ -186,7 +184,6 @@ end
 local og_ISEquipWeaponAction_perform = ISEquipWeaponAction.perform
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISEquipWeaponAction:perform()
-
     og_ISEquipWeaponAction_perform(self)
 
     -- TODO Can we do it earlier?
@@ -199,18 +196,17 @@ end
 
 function ISInventoryPaneContextMenu.doEquipOption(context, playerObj, isWeapon, items, player)
     -- check if hands if not heavy damaged
-    if (not playerObj:isPrimaryHandItem(isWeapon) or (playerObj:isPrimaryHandItem(isWeapon) and playerObj:isSecondaryHandItem(isWeapon))) and not getSpecificPlayer(player):getBodyDamage():getBodyPart(BodyPartType.Hand_R):isDeepWounded() and (getSpecificPlayer(player):getBodyDamage():getBodyPart(BodyPartType.Hand_R):getFractureTime() == 0 or getSpecificPlayer(player):getBodyDamage():getBodyPart(BodyPartType.Hand_R):getSplintFactor() > 0)  then
+    if (not playerObj:isPrimaryHandItem(isWeapon) or (playerObj:isPrimaryHandItem(isWeapon) and playerObj:isSecondaryHandItem(isWeapon))) and not getSpecificPlayer(player):getBodyDamage():getBodyPart(BodyPartType.Hand_R):isDeepWounded() and (getSpecificPlayer(player):getBodyDamage():getBodyPart(BodyPartType.Hand_R):getFractureTime() == 0 or getSpecificPlayer(player):getBodyDamage():getBodyPart(BodyPartType.Hand_R):getSplintFactor() > 0) then
         -- forbid reequipping skinned items to avoid multiple problems for now
         local add = true
         if playerObj:getSecondaryHandItem() == isWeapon and isWeapon:getScriptItem():getReplaceWhenUnequip() then
             add = false
         end
         if add then
-            local equipOption = context:addOption(getText("ContextMenu_Equip_Primary"), items, ISInventoryPaneContextMenu.OnPrimaryWeapon, player)
+            local equipOption = context:addOption(getText("ContextMenu_Equip_Primary"), items,
+                ISInventoryPaneContextMenu.OnPrimaryWeapon, player)
             equipOption.notAvailable = not CheckHandFeasibility(StaticData.LIMBS_IND_STR.Hand_R)
         end
-
-
     end
     if (not playerObj:isSecondaryHandItem(isWeapon) or (playerObj:isPrimaryHandItem(isWeapon) and playerObj:isSecondaryHandItem(isWeapon))) and not getSpecificPlayer(player):getBodyDamage():getBodyPart(BodyPartType.Hand_L):isDeepWounded() and (getSpecificPlayer(player):getBodyDamage():getBodyPart(BodyPartType.Hand_L):getFractureTime() == 0 or getSpecificPlayer(player):getBodyDamage():getBodyPart(BodyPartType.Hand_L):getSplintFactor() > 0) then
         -- forbid reequipping skinned items to avoid multiple problems for now
@@ -219,10 +215,65 @@ function ISInventoryPaneContextMenu.doEquipOption(context, playerObj, isWeapon, 
             add = false
         end
         if add then
-            local equipOption = context:addOption(getText("ContextMenu_Equip_Secondary"), items, ISInventoryPaneContextMenu.OnSecondWeapon, player)
+            local equipOption = context:addOption(getText("ContextMenu_Equip_Secondary"), items,
+                ISInventoryPaneContextMenu.OnSecondWeapon, player)
 
             equipOption.notAvailable = not CheckHandFeasibility(StaticData.LIMBS_IND_STR.Hand_L)
-
         end
+    end
+end
+
+local noHandsImpossibleActions = {
+    getText("ContextMenu_Add_escape_rope_sheet"),
+    getText("ContextMenu_Add_escape_rope"),
+    getText("ContextMenu_Remove_escape_rope"),
+    getText("ContextMenu_Barricade"),
+    getText("ContextMenu_Unbarricade"),
+    getText("ContextMenu_MetalBarricade"),
+    getText("ContextMenu_MetalBarBarricade"),
+    getText("ContextMenu_Open_window"),
+    getText("ContextMenu_Close_window"),
+    getText("ContextMenu_PickupBrokenGlass"),
+    getText("ContextMenu_Open_door"),
+    getText("ContextMenu_Close_door"),
+
+}
+
+
+local og_ISWorldObjectContextMenu_createMenu = ISWorldObjectContextMenu.createMenu
+
+---@param player integer
+---@param worldobjects any
+---@param x any
+---@param y any
+---@param test any
+function ISWorldObjectContextMenu.createMenu(player, worldobjects, x, y, test)
+    ---@type ISContextMenu
+    local ogContext = og_ISWorldObjectContextMenu_createMenu(player, worldobjects, x, y, test)
+
+    -- check if no hands, disable various interactions
+    if not CachedDataHandler.GetBothHandsFeasibility() then
+        TOC_DEBUG.print("NO hands :((")
+        for i = 1, #noHandsImpossibleActions do
+            local optionName = noHandsImpossibleActions[i]
+            local option = ogContext:getOptionFromName(optionName)
+            if option then
+                option.notAvailable = true
+            end
+        end
+    end
+    return ogContext
+end
+
+
+local og_ISOpenCloseDoor_perform = ISOpenCloseDoor.perform
+function ISOpenCloseDoor:perform()
+
+    if CachedDataHandler.GetBothHandsFeasibility() then
+        og_ISOpenCloseDoor_perform(self)
+    else
+        --getCore():getKey("Interact")
+        
+        ISBaseTimedAction.perform(self)
     end
 end

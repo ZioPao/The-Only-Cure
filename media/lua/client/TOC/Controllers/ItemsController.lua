@@ -42,6 +42,7 @@ function ItemsController.Player.RemoveClothingItem(playerObj, clothingItem)
     if clothingItem and instanceof(clothingItem, "InventoryItem") then
         playerObj:removeWornItem(clothingItem)
 
+        ---@diagnostic disable-next-line: param-type-mismatch
         playerObj:getInventory():Remove(clothingItem)       -- Umbrella is wrong, can be an InventoryItem too
         TOC_DEBUG.print("found and deleted" .. tostring(clothingItem))
 
@@ -123,7 +124,7 @@ function ItemsController.Zombie.SpawnAmputationItem(zombie, amputationFullType)
     local itemVisual = ItemVisual:new()
     itemVisual:setItemType(amputationFullType)
     itemVisual:setTextureChoice(texId)
-    zombieVisuals:add(itemVisual)
+    if zombieVisuals then zombieVisuals:add(itemVisual) end
     zombie:resetModelNextFrame()
 
     -- Spawn the item too in the inventory to keep track of stuff this way. It's gonna get deleted when we reload the game
