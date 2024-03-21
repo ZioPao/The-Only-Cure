@@ -35,14 +35,14 @@ end
 
 ---Main function to delete a clothing item
 ---@param playerObj IsoPlayer
----@param clothingItem InventoryItem?
+---@param clothingItem InventoryItem
 ---@return boolean
 ---@private
 function ItemsController.Player.RemoveClothingItem(playerObj, clothingItem)
     if clothingItem and instanceof(clothingItem, "InventoryItem") then
         playerObj:removeWornItem(clothingItem)
 
-        playerObj:getInventory():Remove(clothingItem)       -- Can be a InventoryItem too.. I guess? todo check it
+        playerObj:getInventory():Remove(clothingItem)       -- Umbrella is wrong, can be an InventoryItem too
         TOC_DEBUG.print("found and deleted" .. tostring(clothingItem))
 
         -- Reset model
@@ -76,6 +76,12 @@ end
 ---@param playerObj IsoPlayer
 function ItemsController.Player.DeleteAllOldAmputationItems(playerObj)
 
+    -- This part is a workaround for a pretty shitty implementation on the java side. Check ProsthesisHandler for more infos
+    -- FIX This doesn't really help in this case.
+    local group = BodyLocations.getGroup("Human")
+    group:setMultiItem("TOC_Arm", false)
+    group:setMultiItem("TOC_ArmProst", false)
+
     for i=1, #StaticData.LIMBS_STR do
         local limbName = StaticData.LIMBS_STR[i]
         local clothItemName = StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. limbName
@@ -84,6 +90,8 @@ function ItemsController.Player.DeleteAllOldAmputationItems(playerObj)
         ItemsController.Player.RemoveClothingItem(playerObj, clothItem)
     end
 
+    group:setMultiItem("TOC_Arm", true)
+    group:setMultiItem("TOC_ArmProst", true)
     -- Reset model just in case
     playerObj:resetModelNextFrame()
 end

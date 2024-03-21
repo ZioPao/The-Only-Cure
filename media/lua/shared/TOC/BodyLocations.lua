@@ -46,9 +46,10 @@ function TestBodyLocations()
 
 end
 
-local locationArm = BodyLocationsAPI.MoveOrCreateBeforeOrAfter("TOC_Arm", "FullTop", true)
-locationArm:setMultiItem(true)
+-- TODO MultiItem causes a ton of issues... fucking hell
 
+BodyLocationsAPI.MoveOrCreateBeforeOrAfter("TOC_Arm", "FullTop", true)
+group:setMultiItem("TOC_Arm", true)
 
-local locationArmProst = BodyLocationsAPI.MoveOrCreateBeforeOrAfter("TOC_ArmProst", "TOC_Arm", true)
-locationArmProst:setMultiItem(true)
+BodyLocationsAPI.MoveOrCreateBeforeOrAfter("TOC_ArmProst", "TOC_Arm", true)
+group:setMultiItem("TOC_ArmProst", true)

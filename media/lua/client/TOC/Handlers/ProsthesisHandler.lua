@@ -35,18 +35,18 @@ function ProsthesisHandler.GetGroup(item)
 end
 
 ---Check if a prosthesis is equippable. It depends whether the player has a cut limb or not on that specific side. There's an exception for Upper arm, obviously
----@param name string
+---@param fullType string
 ---@return boolean
-function ProsthesisHandler.CheckIfEquippable(name)
+function ProsthesisHandler.CheckIfEquippable(fullType)
     TOC_DEBUG.print("Current item is a prosthesis")
-    local side = CommonMethods.GetSide(name)
+    local side = CommonMethods.GetSide(fullType)
     TOC_DEBUG.print("Checking side: " .. tostring(side))
 
     local highestAmputatedLimbs = CachedDataHandler.GetHighestAmputatedLimbs(getPlayer():getUsername())
 
     if highestAmputatedLimbs then
         local hal = highestAmputatedLimbs[side]
-        if not string.contains(hal, "UpperArm") then
+        if hal and not string.contains(hal, "UpperArm") then
             TOC_DEBUG.print("Found acceptable limb to use prosthesis => " .. tostring(hal))
             return true
         end
@@ -81,9 +81,9 @@ local function HandleProsthesisValidation(item, isEquippable)
     local isProst = ProsthesisHandler.CheckIfProst(item)
     if not isProst then return isEquippable end
 
-    local itemName = item:getName()        -- use name for side
+    local fullType = item:getFullType()        -- use fulltype for side
     if isEquippable then
-        isEquippable = ProsthesisHandler.CheckIfEquippable(itemName)
+        isEquippable = ProsthesisHandler.CheckIfEquippable(fullType)
     end
 
 
@@ -112,8 +112,23 @@ local og_ISClothingExtraAction_isValid = ISClothingExtraAction.isValid
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISClothingExtraAction:isValid()
     local isEquippable = og_ISClothingExtraAction_isValid(self)
-    return HandleProsthesisValidation(self.item, isEquippable)
+    -- self.extra is a string, not the item
+    local testItem = InventoryItemFactory.CreateItem(self.extra)
+    return HandleProsthesisValidation(testItem, isEquippable)
 end
+
+
+
+--[[
+    Horrendous workaround
+
+    To unequp items, the java side uses WornItems.setItem, which has
+    a check for multiItem. Basically, if it's active, it won't actually remove the item,
+    fucking things up. So, to be 100% sure that we're removing the items, we're gonna
+    disable and re-enable the multi-item bool for the Unequip Action.
+]]
+
+
 
 local og_ISClothingExtraAction_perform = ISClothingExtraAction.perform
 function ISClothingExtraAction:perform()
@@ -123,8 +138,12 @@ end
 
 local og_ISUnequipAction_perform = ISUnequipAction.perform
 function ISUnequipAction:perform()
-    og_ISUnequipAction_perform(self)
     ProsthesisHandler.SearchAndSetupProsthesis(self.item, false)
+    local group = BodyLocations.getGroup("Human")
+    group:setMultiItem("TOC_ArmProst", false)
+    og_ISUnequipAction_perform(self)
+    group:setMultiItem("TOC_ArmProst", true)
+
 end
 
 
