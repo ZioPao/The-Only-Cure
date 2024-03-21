@@ -1,7 +1,16 @@
-function ISObjectClickHandler.doClickCurtain(object, playerNum, playerObj)
-    TOC_DEBUG.print("Opening door")
+local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
 
-    if not object:canInteractWith(playerObj) then return false end
-    object:ToggleDoor(playerObj)
-    return true
+
+
+local og_ISObjectClickHandler_doClickSpecificObject = ISObjectClickHandler.doClickSpecificObject
+
+---@param object IsoObject
+---@param playerNum any
+---@param playerObj IsoPlayer
+function ISObjectClickHandler.doClickSpecificObject(object, playerNum, playerObj)
+    if CachedDataHandler.GetBothHandsFeasibility() then
+        og_ISObjectClickHandler_doClickSpecificObject(object, playerNum, playerObj)
+    end
+
+    return false
 end

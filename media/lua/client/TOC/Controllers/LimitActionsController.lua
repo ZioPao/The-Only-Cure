@@ -266,14 +266,3 @@ function ISWorldObjectContextMenu.createMenu(player, worldobjects, x, y, test)
 end
 
 
-local og_ISOpenCloseDoor_perform = ISOpenCloseDoor.perform
-function ISOpenCloseDoor:perform()
-
-    if CachedDataHandler.GetBothHandsFeasibility() then
-        og_ISOpenCloseDoor_perform(self)
-    else
-        --getCore():getKey("Interact")
-        
-        ISBaseTimedAction.perform(self)
-    end
-end
