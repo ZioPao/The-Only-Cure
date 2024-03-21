@@ -77,7 +77,6 @@ end
 function ItemsController.Player.DeleteAllOldAmputationItems(playerObj)
 
     -- This part is a workaround for a pretty shitty implementation on the java side. Check ProsthesisHandler for more infos
-    -- FIX This doesn't really help in this case.
     local group = BodyLocations.getGroup("Human")
     group:setMultiItem("TOC_Arm", false)
     group:setMultiItem("TOC_ArmProst", false)
@@ -89,11 +88,12 @@ function ItemsController.Player.DeleteAllOldAmputationItems(playerObj)
         ---@cast clothItem InventoryItem
         ItemsController.Player.RemoveClothingItem(playerObj, clothItem)
     end
+    -- Reset model just in case
+    playerObj:resetModel()
 
     group:setMultiItem("TOC_Arm", true)
     group:setMultiItem("TOC_ArmProst", true)
-    -- Reset model just in case
-    playerObj:resetModelNextFrame()
+
 end
 
 ---Spawns and equips the correct amputation item to the player.
