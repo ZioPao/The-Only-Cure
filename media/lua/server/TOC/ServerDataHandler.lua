@@ -21,6 +21,8 @@ function ServerDataHandler.AddTable(key, table)
     if not luautils.stringStarts(key, StaticData.MOD_NAME .. "_") then return end
 
     TOC_DEBUG.print("Received TOC ModData: " .. tostring(key))
+    TOC_DEBUG.printTable(table)
+
     ModData.add(key, table)     -- Add it to the server mod data
     ServerDataHandler.modData[key] = table
 end

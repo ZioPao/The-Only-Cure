@@ -1,3 +1,5 @@
+if isServer() then return end
+
 local CommandsData = require("TOC/CommandsData")
 local StaticData = require("TOC/StaticData")
 ----------------
@@ -345,6 +347,7 @@ end
 function DataController:apply()
     ModData.transmit(CommandsData.GetKey(self.username))
 end
+
 
 ---Online only, Global Mod Data doesn't trigger this in SP
 ---@param key any

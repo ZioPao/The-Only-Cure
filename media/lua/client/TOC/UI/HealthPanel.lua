@@ -1,11 +1,11 @@
 local StaticData = require("TOC/StaticData")
+local CommandsData = require("TOC/CommandsData")
 local DataController = require("TOC/Controllers/DataController")
 local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
 
 local CutLimbInteractionHandler = require("TOC/UI/Interactions/CutLimbInteractionHandler")
 local WoundCleaningInteractionHandler = require("TOC/UI/Interactions/WoundCleaningInteractionHandler")
 ------------------------
-
 
 
 local isReady = false
@@ -125,13 +125,26 @@ function ISHealthPanel:render()
         self:tryDrawAmputation(highestAmputations, "R", username)
         self:tryDrawProsthesis(highestAmputations, "R", username)
     end
-
-
-
-
-
-
 end
+
+
+local og_ISHealthPanel_update = ISHealthPanel.update
+function ISHealthPanel:update()
+    og_ISHealthPanel_update(self)
+    -- TODO Listen for changes on other player side instead of looping this
+
+    if self.character then
+        local locPlUsername = getPlayer():getUsername()
+        local remPlUsername = self.character:getUsername()
+        if locPlUsername ~= remPlUsername and self:isReallyVisible() then
+            -- Request update for TOC DATA?
+            local key = CommandsData.GetKey(remPlUsername)
+            ModData.request(key)
+        end
+    end
+end
+
+
 
 -- We need to override this to force the alpha to 1
 local og_ISCharacterInfoWindow_render = ISCharacterInfoWindow.prerender
@@ -192,6 +205,9 @@ function ISHealthBodyPartListBox:doDrawItem(y, item, alt)
 
     local bodyPartTypeStr = BodyPartType.ToString(bodyPart:getType())
     local limbName = StaticData.LIMBS_IND_STR[bodyPartTypeStr]
+
+
+    -- We should cache a lot of other stuff to have this working with CacheDataHandler :(
     if limbName then
         local dcInst = DataController.GetInstance(username)
         if dcInst:getIsCut(limbName) and dcInst:getIsVisible(limbName) then

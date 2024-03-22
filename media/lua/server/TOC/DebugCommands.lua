@@ -29,3 +29,4 @@ local function OnClientDebugCommand(module, command, playerObj, args)
 end
 
 Events.OnClientCommand.Add(OnClientDebugCommand)
+
