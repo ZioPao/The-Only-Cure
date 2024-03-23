@@ -1,0 +1,15 @@
+IG_UI_DE = {
+    IGUI_perks_Amputations = "Amputationen",
+    IGUI_perks_Side_R = "Rechte Seite",
+    IGUI_perks_Side_L = "Linke Seite",
+    IGUI_perks_Prosthesis = "Prothese",
+    IGUI_perks_ProstFamiliarity= "Vertrautheit",
+    IGUI_ItemCat_Prosthesis = "Prothese",
+    IGUI_ItemCat_Surgery = "Operation",
+    IGUI_ItemCat_Amputation = "Amputation"
+    IGUI_HealthPanel_Cicatrization = "Vernarbung",
+    IGUI_HealthPanel_Cicatrized = "Vernarbt",
+    IGUI_HealthPanel_Cauterized = "Kauterisiert",
+    IGUI_HealthPanel_WoundDirtyness = "Wundverschmutzung",
+    IGUI_HealthPanel_ProstEquipped = "Prothese angelegt",
+}
