@@ -50,6 +50,15 @@
             "problemMatcher": [
                 "$eslint-stylish"
             ]
+        },
+        {
+            "label": "Run Zomboid Test Server 2",
+            "options": {"statusbar": {"label": "$(run) Zomboid Server (TOC+FH+BH)"}},
+            "type": "shell",
+            "command":"\"${config:zomboid_server_folder}\\StartServer64_nosteam_custom.bat\" TOC_FH_BH",
+            "problemMatcher": [
+                "$eslint-stylish"
+            ]
         }
     ]
 }
