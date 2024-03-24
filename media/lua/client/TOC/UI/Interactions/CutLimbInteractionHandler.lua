@@ -106,9 +106,31 @@ local function AddInvAmputationOptions(player, context, sawItem, stitchesItem, b
     local subMenu = context:getNew(context)
     context:addSubMenu(option, subMenu)
 
+
+
+    -- TODO Separate into groups
+
+
+    -- Amputate -> Top/Bottom - > Left/Right - > Limb
+    -- for i=1, #StaticData.PROSTHESES_GROUPS_STR do
+    --     local group = StaticData.PROSTHESES_GROUPS_STR[i]
+
+    --     for j=1, #StaticData.SIDES_IND_STR do
+
+    --     end
+
+    -- end
+
+    -- for k,v in pairs(StaticData.LIMBS_TO_PROST_GROUP_MATCH_IND_STR) do
+    --     TOC_DEBUG.print(k)
+
+    -- end
+
+
+    local dc = DataController.GetInstance()
     for i = 1, #StaticData.LIMBS_STR do
         local limbName = StaticData.LIMBS_STR[i]
-        if not DataController.GetInstance():getIsCut(limbName) then
+        if not dc:getIsCut(limbName) then
             local limbTranslatedName = getText("ContextMenu_Limb_" .. limbName)
             subMenu:addOption(limbTranslatedName, player, PerformAction, player, limbName, sawItem, stitchesItem, bandageItem)
         end

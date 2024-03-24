@@ -29,6 +29,9 @@ StaticData.SIDES_IND_STR = {
     R = "R",
     L = "L"
 }
+StaticData.SIDES_STR = {
+    "R", "L"
+}
 StaticData.PARTS_IND_STR = {
     Hand = "Hand",
     ForeArm = "ForeArm",
