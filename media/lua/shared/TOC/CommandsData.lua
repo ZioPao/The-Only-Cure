@@ -11,7 +11,11 @@ CommandsData.modules = {
 CommandsData.client = {
     Relay = {
         ReceiveDamageDuringAmputation = "ReceiveDamageDuringAmputation",            ---@alias receiveDamageDuringAmputationParams { limbName : string}
-        ReceiveExecuteAmputationAction = "ReceiveExecuteAmputationAction"       ---@alias receiveExecuteAmputationActionParams {surgeonNum : number, limbName : string}
+        ReceiveExecuteAmputationAction = "ReceiveExecuteAmputationAction",       ---@alias receiveExecuteAmputationActionParams {surgeonNum : number, limbName : string}
+
+        --* ADMIN ONLY --*
+        ReceiveExecuteInitialization = "ReceiveExecuteInitialization"
+
     }
 }
 
@@ -23,8 +27,11 @@ CommandsData.server = {
 
     Relay = {
         RelayDamageDuringAmputation = "RelayDamageDuringAmputation",                ---@alias relayDamageDuringAmputationParams {patientNum : number, limbName : string}
-        RelayExecuteAmputationAction = "RelayExecuteAmputationAction"         ---@alias relayExecuteAmputationActionParams {patientNum : number, limbName : string}
+        RelayExecuteAmputationAction = "RelayExecuteAmputationAction",              ---@alias relayExecuteAmputationActionParams {patientNum : number, limbName : string}
 
+
+        --* ADMIN ONLY *--
+        RelayExecuteInitialization = "RelayExecuteInitialization"                                 ---@alias relayExecuteInitializationParams {patientNum : number}
     }
 }
 

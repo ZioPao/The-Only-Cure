@@ -29,6 +29,17 @@ function ServerRelayCommands.RelayExecuteAmputationAction(surgeonPl, args)
 end
 
 
+--* ADMIN ONLY *--
+---Relay a local init from another client
+---@param adminObj IsoPlayer
+---@param args relayExecuteInitializationParams
+function ServerRelayCommands.RelayExecuteInitialization(adminObj, args)
+    local patientPl = getPlayerByOnlineID(args.patientNum)
+    sendServerCommand(patientPl, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveExecuteInitialization, {})
+
+end
+
+
 
 -------------------------
 

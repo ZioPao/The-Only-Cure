@@ -89,6 +89,3 @@ end
 Events.OnGameStart.Add(Main.Start)
 Events.OnCreatePlayer.Add(Main.InitializePlayer)
 Events.OnPlayerDeath.Add(Main.WipeData)
-
--- TODO Disable windows interaction when no hands
-

@@ -136,7 +136,7 @@ LocalPlayerController.hasBeenDamaged = false
 
 
 ---Check if the player has in infected body part or if they have been hit in a cut area
----@param character IsoPlayer
+---@param character IsoPlayer|IsoGameCharacter
 function LocalPlayerController.HandleDamage(character)
     -- TOC_DEBUG.print("Player got hit!")
     -- TOC_DEBUG.print(damageType)
@@ -193,7 +193,7 @@ function LocalPlayerController.HandleDamage(character)
 end
 
 ---Setup HandleDamage, triggered by OnPlayerGetDamage
----@param character IsoGameCharacter
+---@param character IsoPlayer|IsoGameCharacter
 ---@param damageType string
 ---@param damageAmount number
 function LocalPlayerController.OnGetDamage(character, damageType, damageAmount)
@@ -291,7 +291,7 @@ end
 
 --* Tourniquet handling
 function LocalPlayerController.HandleTourniquet()
-    print("test")
+    -- TODO Add it!!!
 end
 
 Events.OnPuttingTourniquet.Add(LocalPlayerController.HandleTourniquet)

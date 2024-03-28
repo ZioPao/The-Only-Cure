@@ -28,6 +28,16 @@ function ClientRelayCommands.ReceiveExecuteAmputationAction(args)
     local handler = InitAmputationHandler(args.limbName, args.surgeonNum)
     handler:execute(true)
 end
+
+
+
+--* TRIGGERED BY ADMINS *--
+
+function ClientRelayCommands.ReceiveExecuteInitialization()
+    local LocalPlayerController = require("TOC/Controllers/LocalPlayerController")
+    LocalPlayerController.InitializePlayer(true)
+end
+
 -------------------------
 
 local function OnServerRelayCommand(module, command, args)
