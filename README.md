@@ -24,6 +24,7 @@ Guide here with some more info
 
 ## Amputation
 Get a saw, click on it, amputate stuff
+Keep in mind that if you amputate your upper arm, you won't be able to equip any prosthesis.
 
 ## Cicatrization
 Check cicatrization from medical check.

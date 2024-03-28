@@ -5,7 +5,9 @@ require("TOC/Events")
 ------------------
 
 ---@class Main
-local Main = {}
+local Main = {
+    _version = 2.0
+}
 
 ---Setups the custom traits
 function Main.SetupTraits()
