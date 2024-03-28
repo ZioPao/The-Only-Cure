@@ -126,14 +126,16 @@ end
 function CachedDataHandler.CalculateBothHandsFeasibility()
     CachedDataHandler.CalculateHandFeasibility("Hand_L")
     CachedDataHandler.CalculateHandFeasibility("Hand_R")
-
+    local interactStr = "Interact"
     if not CachedDataHandler.GetBothHandsFeasibility() then
         TOC_DEBUG.print("Disabling interact key")
-        getCore():addKeyBinding("Interact", Keyboard.KEY_NONE)
+
+        -- Cache the current key
+        CachedDataHandler.interactKey = getCore():getKey(interactStr)
+        getCore():addKeyBinding(interactStr, Keyboard.KEY_NONE)
     else
-        -- FIX DEFAULT ONE!!!!!!!
         TOC_DEBUG.print("Re-enabling interact key")
-        getCore():addKeyBinding("Interact", Keyboard.KEY_E)
+        getCore():addKeyBinding(interactStr, CachedDataHandler.interactKey)
     end
 end
 
