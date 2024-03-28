@@ -2,19 +2,23 @@
 
 local function HandleModCompatibility()
 
-    --* BRUTAL HANDS -- *
-    --[[
-        Brutal hands has a TOC_COMPAT but its check is wrong and uses an old API.
-    ]]
+
 
     local activatedMods = getActivatedMods()
     TOC_DEBUG.print("Checking for mods compatibility")
 
+    --[[
+        Brutal hands has a TOC_COMPAT but its check is wrong and uses an old API.
+    ]]
     if activatedMods:contains('BrutalHandwork') then
         TOC_DEBUG.print("found BrutalHandwork, activating compat module")
         BrutalHands = BrutalHands or {}
         BrutalHands.TOC = require("TOC/API")
     end
+
+    --[[
+        Was handled inside old TOC
+    ]]
     if activatedMods:contains('FancyHandwork') then
         TOC_DEBUG.print("found FancyHandwork, activating compat module")
 
@@ -28,11 +32,7 @@ local function HandleModCompatibility()
                 return false
             end
         end
-
-
-
     end
-
 end
 
 Events.OnGameStart.Add(HandleModCompatibility)
