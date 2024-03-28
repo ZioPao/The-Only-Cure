@@ -17,7 +17,7 @@ local function AddAdminTocOptions(playerNum, context, items)
         local subMenu = ISContextMenu:getNew(context)
         context:addSubMenu(option, subMenu)
 
-        subMenu:addOption(getText("ContextMenu_Admin_ResetTOC"), items, function()
+        subMenu:addOption(getText("ContextMenu_Admin_ResetTOC") .. " - " .. clickedPlayer:getUsername(), items, function()
             sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayExecuteInitialization, {patientNum=clickedPlayerNum} )
         end)
 

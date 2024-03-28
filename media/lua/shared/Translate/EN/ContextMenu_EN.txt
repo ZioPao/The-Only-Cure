@@ -26,7 +26,7 @@ ContextMenu_EN = {
 
 
 
-    ContextMenu_Admin_TOC = "TOC - Admin",
+    ContextMenu_Admin_TOC = "TOC",
     ContextMenu_Admin_ResetTOC = "Reset Amputations",
     ContextMenu_Admin_ForceAmputation = "Force Amputation",
     
