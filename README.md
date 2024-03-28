@@ -3,7 +3,7 @@
 </p>
 
 <p align='center'>
-<a href='https://steamcommunity.com/sharedfiles/filedetails/?id=3161952259&tscn=1709688905'>
+<a href='https://steamcommunity.com/'>
   <img src='https://img.shields.io/badge/Steam-000000?style=for-the-badge&logo=steam&logoColor=white' />        
 </a>
 </p>
