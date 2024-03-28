@@ -142,12 +142,7 @@ TestFramework.registerTestModule("TimedActions", "CauterizeAction", function()
     return Tests
 
 end)
--- TestFramework.registerTestModule("API", "All", function()
---     local Tests = {}
 
---     return Tests
-
--- end)
 TestFramework.registerTestModule("Various", "Player", function()
     local Tests = {}
 
