@@ -22,7 +22,11 @@ end
 ---Will calculate all the values that we need
 function CachedDataHandler.CalculateCacheableValues(username)
     CachedDataHandler.CalculateHighestAmputatedLimbs(username)
-    CachedDataHandler.CalculateBothHandsFeasibility()
+
+    -- FIX This should be run ONLY on the actual client, never on other clients. Just a placeholder fix for now
+    if getPlayer():getUsername() == username then
+        CachedDataHandler.CalculateBothHandsFeasibility()
+    end
 end
 
 

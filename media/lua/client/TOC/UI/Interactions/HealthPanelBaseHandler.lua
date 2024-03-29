@@ -126,10 +126,12 @@ function BaseHandler:toPlayerInventory(item, previousAction)
     return previousAction
 end
 
+---@return IsoPlayer
 function BaseHandler:getDoctor()
     return self.panel.otherPlayer or self.panel.character
 end
 
+---@return IsoPlayer
 function BaseHandler:getPatient()
     return self.panel.character
 end

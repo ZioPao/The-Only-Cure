@@ -7,6 +7,8 @@ local CommandsData = require("TOC/CommandsData")
 ---@class CutLimbAction : ISBaseTimedAction
 ---@field patient IsoPlayer
 ---@field character IsoPlayer
+---@field patientX number
+---@field patientY number
 ---@field limbName string
 ---@field item InventoryItem
 ---@field stitchesItem InventoryItem?
@@ -32,6 +34,9 @@ function CutLimbAction:new(surgeon, patient, limbName, item, stitchesItem, banda
     o.limbName = limbName
     o.item = item
 
+    o.patientX = patient:getX()
+    o.patientY = patient:getY()
+
     o.stitchesItem = stitchesItem or nil
     o.bandageItem = bandageItem or nil
 
@@ -45,7 +50,7 @@ function CutLimbAction:new(surgeon, patient, limbName, item, stitchesItem, banda
 end
 
 function CutLimbAction:isValid()
-    return not ISHealthPanel.DidPatientMove(self.patient, self.character, self.patient:getX(), self.patient:getY())
+    return not ISHealthPanel.DidPatientMove(self.character,self.patient, self.patientX, self.patientY)
 end
 
 function CutLimbAction:start()

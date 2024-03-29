@@ -208,7 +208,8 @@ end
 function CutLimbInteractionHandler:addToMenu(context)
     --TOC_DEBUG.print("CutLimbInteractionHandler addToMenu")
     local types = self:getAllItemTypes(self.items.ITEMS)
-    if #types > 0 and StaticData.BODYLOCS_IND_BPT[self.limbName] and not DataController.GetInstance():getIsCut(self.limbName) then
+    local patientUsername = self:getPatient():getUsername()
+    if #types > 0 and StaticData.BODYLOCS_IND_BPT[self.limbName] and not DataController.GetInstance(patientUsername):getIsCut(self.limbName) then
         TOC_DEBUG.print("addToMenu, types > 0")
         for i=1, #types do
             context:addOption(getText("ContextMenu_Amputate"), self, self.onMenuOptionSelected, types[i])
@@ -230,7 +231,8 @@ end
 function CutLimbInteractionHandler:isValid()
     --TOC_DEBUG.print("CutLimbInteractionHandler isValid")
     self:checkItems()
-    return not DataController.GetInstance():getIsCut(self.limbName)
+    local patientUsername = self:getPatient():getUsername()
+    return not DataController.GetInstance(patientUsername):getIsCut(self.limbName)
 end
 
 function CutLimbInteractionHandler:perform(previousAction, itemType)

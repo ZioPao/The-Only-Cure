@@ -78,8 +78,8 @@ function DataController:setup(key)
     end
 
     -- Initialize prostheses stuff
-    for i=1, #StaticData.PROSTHESES_GROUPS_STR do
-        local group = StaticData.PROSTHESES_GROUPS_STR[i]
+    for i=1, #StaticData.AMP_GROUPS_STR do
+        local group = StaticData.AMP_GROUPS_STR[i]
         self.tocData.prostheses[group] = {
             isProstEquipped = false,
             prostFactor = 0,
@@ -103,7 +103,7 @@ end
 function DataController:loadLocalData(key)
     self.tocData = ModData.get(key)
 
-    TOC_DEBUG.printTable(self.tocData)
+    --TOC_DEBUG.printTable(self.tocData)
 
     if self.tocData and self.tocData.limbs then
         TOC_DEBUG.print("Found and loaded local data")
@@ -345,13 +345,19 @@ end
 --* Global Mod Data Handling *--
 
 function DataController:apply()
+    TOC_DEBUG.print("Applying data for " .. self.username)
     ModData.transmit(CommandsData.GetKey(self.username))
+    
+    -- if getPlayer():getUsername() ~= self.username then
+    --     sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayApplyFromOtherClient, {patientUsername = self.username} )
+    --     -- force request from the server for that other client...
+    -- end
 end
 
 
 ---Online only, Global Mod Data doesn't trigger this in SP
----@param key any
----@param data any
+---@param key string
+---@param data tocModDataType
 function DataController.ReceiveData(key, data)
     -- During startup the game can return Bob as the player username, adding a useless ModData table
     if key == "TOC_Bob" then return end
@@ -370,25 +376,47 @@ function DataController.ReceiveData(key, data)
     -- so for now, I'm gonna assume that the local data (for the local client) is the
     -- most recent (and correct) one instead of trying to fetch it from the server every single time
 
-    if username == getPlayer():getUsername() and not handler.isResetForced then
-        handler:loadLocalData(key)
-    elseif handler.isResetForced or data == nil then
-        TOC_DEBUG.print("Data is nil or empty!?")
-        TOC_DEBUG.printTable(data)
+
+    -- TODO Add update from server scenario
+
+    if handler.isResetForced then
         handler:setup(key)
-    elseif data and data.limbs then
+    elseif data then
+        if data.isUpdateFromServer then
+            TOC_DEBUG.print("Update from the server")
+        end
         handler:applyOnlineData(data)
+    elseif username == getPlayer():getUsername() then
+        handler:loadLocalData(key)
     end
+
 
     handler:setIsResetForced(false)
     handler:setIsDataReady(true)
 
-    -- Event, triggers caching
     triggerEvent("OnReceivedTocData", handler.username)
 
+
+
+    -- if username == getPlayer():getUsername() and not handler.isResetForced then
+    --     handler:loadLocalData(key)
+    -- elseif handler.isResetForced or data == nil then
+    --     TOC_DEBUG.print("Data is nil or empty!?")
+    --     TOC_DEBUG.printTable(data)
+    --     handler:setup(key)
+    -- elseif data and data.limbs then
+    --     handler:applyOnlineData(data)
+    -- end
+
+    -- handler:setIsResetForced(false)
+    -- handler:setIsDataReady(true)
+
+    -- -- Event, triggers caching
+    -- triggerEvent("OnReceivedTocData", handler.username)
+
     -- Transmit it back to the server
-    ModData.transmit(key)
-    TOC_DEBUG.print("Transmitting data after receiving it for: " .. handler.username)
+    --ModData.transmit(key)
+    --TOC_DEBUG.print("Transmitting data after receiving it for: " .. handler.username)
 
 end
 

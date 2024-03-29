@@ -30,6 +30,14 @@ function ClientRelayCommands.ReceiveExecuteAmputationAction(args)
 end
 
 
+--* APPLY RELAY *--
+
+function ClientRelayCommands.ReceiveApplyFromServer()
+    TOC_DEBUG.print("Received forced re-apply from server")
+    local key = CommandsData.GetKey(getPlayer():getUsername())
+    ModData.request(key)
+end
+
 
 --* TRIGGERED BY ADMINS *--
 

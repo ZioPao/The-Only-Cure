@@ -13,6 +13,9 @@ CommandsData.client = {
         ReceiveDamageDuringAmputation = "ReceiveDamageDuringAmputation",            ---@alias receiveDamageDuringAmputationParams { limbName : string}
         ReceiveExecuteAmputationAction = "ReceiveExecuteAmputationAction",       ---@alias receiveExecuteAmputationActionParams {surgeonNum : number, limbName : string}
 
+        --* APPLY *--
+        ReceiveApplyFromServer = "ReceiveApplyFromServer",
+
         --* ADMIN ONLY --*
         ReceiveExecuteInitialization = "ReceiveExecuteInitialization"
 
@@ -28,8 +31,6 @@ CommandsData.server = {
     Relay = {
         RelayDamageDuringAmputation = "RelayDamageDuringAmputation",                ---@alias relayDamageDuringAmputationParams {patientNum : number, limbName : string}
         RelayExecuteAmputationAction = "RelayExecuteAmputationAction",              ---@alias relayExecuteAmputationActionParams {patientNum : number, limbName : string}
-
-
         --* ADMIN ONLY *--
         RelayExecuteInitialization = "RelayExecuteInitialization"                                 ---@alias relayExecuteInitializationParams {patientNum : number}
     }
@@ -40,6 +41,10 @@ CommandsData.server = {
 ---@return string
 function CommandsData.GetKey(username)
     return StaticData.MOD_NAME .. "_" .. username
+end
+
+function CommandsData.GetUsername(key)
+    return string.sub(key, #StaticData.MOD_NAME + 2, #key)      -- Not sure why +2... Something with kahlua, it should be +1
 end
 
 function CommandsData.GetZombieKey()

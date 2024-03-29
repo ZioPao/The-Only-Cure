@@ -25,8 +25,10 @@ function CleanWoundAction:new(doctor, otherPlayer, bandage, bodyPart)
     o.bandage = bandage
 	o.stopOnWalk = true
 	o.stopOnRun = true
+
     o.bandagedPlayerX = otherPlayer:getX()
     o.bandagedPlayerY = otherPlayer:getY()
+
     o.maxTime = 250 - (o.doctorLevel * 6)
     if doctor:isTimedActionInstant() then
         o.maxTime = 1
@@ -79,8 +81,8 @@ function CleanWoundAction:stop()
 end
 
 function CleanWoundAction:perform()
-    -- needed to remove from queue / start next.
-    ISBaseTimedAction.perform(self)
+
+    TOC_DEBUG.print("CleanWound for " .. self.otherPlayer:getUsername())
 
     if self.character:HasTrait("Hemophobic") then
         self.character:getStats():setPanic(self.character:getStats():getPanic() + 15)
@@ -113,6 +115,9 @@ function CleanWoundAction:perform()
     visual:setBlood(bbptEnum, 0)
 
     ISHealthPanel.setBodyPartActionForPlayer(self.otherPlayer, self.bodyPart, nil, nil, nil)
+
+    -- needed to remove from queue / start next.
+    ISBaseTimedAction.perform(self)
 end
 
 return CleanWoundAction

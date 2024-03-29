@@ -35,6 +35,7 @@ end
 
 function WoundCleaningInteractionHandler:addToMenu(context)
     --TOC_DEBUG.print("WoundCleaningInteraction addToMenu")
+
     local types = self:getAllItemTypes(self.items.ITEMS)
     if #types > 0 and self:isValid() then
         TOC_DEBUG.print("WoundCleaningInteraction inside addToMenu")

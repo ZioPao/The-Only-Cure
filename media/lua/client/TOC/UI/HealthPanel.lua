@@ -133,13 +133,15 @@ function ISHealthPanel:update()
     og_ISHealthPanel_update(self)
     -- TODO Listen for changes on other player side instead of looping this
 
+
+    -- FIX Re-enable it, just for test
     if self.character then
         local locPlUsername = getPlayer():getUsername()
         local remPlUsername = self.character:getUsername()
         if locPlUsername ~= remPlUsername and self:isReallyVisible() then
-            -- Request update for TOC DATA?
+            -- Request update for TOC DATA
             local key = CommandsData.GetKey(remPlUsername)
-            ModData.request(key)
+            --ModData.request(key)
         end
     end
 end

@@ -2,7 +2,7 @@
 ---@alias limbsTable {Hand_L : partDataType, ForeArm_L : partDataType, UpperArm_L : partDataType, Hand_R : partDataType, ForeArm_R : partDataType, UpperArm_R : partDataType }
 ---@alias prosthesisData {isProstEquipped : boolean, prostFactor : number }
 ---@alias prosthesesTable {Top_L : prosthesisData, Top_R : prosthesisData }     -- TODO add Bottom_L and Bottom_R
----@alias tocModDataType { limbs : limbsTable, prostheses : prosthesesTable, isIgnoredPartInfected : boolean, isAnyLimbCut : boolean }
+---@alias tocModDataType { limbs : limbsTable, prostheses : prosthesesTable, isIgnoredPartInfected : boolean, isAnyLimbCut : boolean, isUpdateFromServer : boolean }
 ---------------------------
 
 
@@ -174,7 +174,7 @@ end
 
 StaticData.TOURNIQUET_BODYLOCS_TO_GROUPS_IND_STR = {
     ["HandsLeft"] = StaticData.AMP_GROUPS_IND_STR.Top_L,
-    ["HandsRight"] = StaticData.AMP_GROUPS.IND_STR.Top_R
+    ["HandsRight"] = StaticData.AMP_GROUPS_IND_STR.Top_R
 }
 
 
