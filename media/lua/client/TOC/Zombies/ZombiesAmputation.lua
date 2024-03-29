@@ -67,6 +67,8 @@ function HandleZombiesAmputations(player, zombie, handWeapon, damage)
     
     -- TODO Check type of weapon. No hands, only knifes or such
 
+    
+
     if damage < 3 or ZombRand(0,100) < 25 then return end
 
     TOC_DEBUG.print(handWeapon:getName())

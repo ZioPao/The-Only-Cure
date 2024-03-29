@@ -44,7 +44,7 @@ function ProsthesisHandler.GetGroup(item)
     end
 
     local index = position .. side
-    local group = StaticData.PROSTHESES_GROUPS_IND_STR[index]
+    local group = StaticData.AMP_GROUPS_IND_STR[index]
     return group
 end
 

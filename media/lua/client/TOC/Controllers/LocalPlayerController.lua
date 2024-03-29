@@ -292,6 +292,40 @@ end
 --* Tourniquet handling
 function LocalPlayerController.HandleTourniquet()
     -- TODO Add it!!!
+
+    -- TODO Triggered at startup or when Clothing Updates.
+
+
+
+    -- local playerObj = getPlayer()
+
+
+    -- for bl, ampGroup in pairs(StaticData.TOURNIQUET_BODYLOCS_TO_GROUPS_IND_STR) do
+    --     local item = playerObj:getWornItem(bl)
+
+    --     if item then
+    --         -- TODO Set to DataControlle
+    --         local cicTime = DataController.GetInstance():setTourniquet
+
+    --     end
+
+    -- end
+
+    -- for i=1, #tourniquetBodyLocations do
+    --     local bl = tourniquetBodyLocations[i]
+
+
+    --     if item and item:getFullType():contains("Surg_Arm_Tourniquet_")
+
+    -- end
+    -- local item = playerObj:getWornItem(bodyLocation)
+
+    -- local wornItems = playerObj:getWornItems()
+    -- for j=1,wornItems:size() do
+    --     local wornItem = wornItems:get(j-1)
+        
+    -- end
+
 end
 
 Events.OnPuttingTourniquet.Add(LocalPlayerController.HandleTourniquet)

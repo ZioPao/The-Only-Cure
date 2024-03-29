@@ -15,13 +15,12 @@ module TOC
         ClothingItemExtra = Surg_Arm_Tourniquet_R,
         ClothingItemExtraOption = PutTourniquetArmRight,
         clothingExtraSubmenu = PutTourniquetArmLeft,
-        BodyLocation = Hands,
+        BodyLocation = HandsLeft,
 		BloodLocation = UpperArms;UpperBody,
 
         Weight = 1,
 
         Icon = tourniquet,
-        Tooltip = Test,
         CanHaveHoles = false,
     }
 
@@ -35,13 +34,12 @@ module TOC
         ClothingItemExtra = Surg_Arm_Tourniquet_L,
         ClothingItemExtraOption = PutTourniquetArmLeft,
         clothingExtraSubmenu = PutTourniquetArmRight,
-        BodyLocation = Hands,
+        BodyLocation = HandsRight,
 		BloodLocation = UpperArms;UpperBody,
 
         Weight = 1,
 
         Icon = tourniquet,
-        Tooltip = Test,
         CanHaveHoles = false,
     }
 

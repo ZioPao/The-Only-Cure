@@ -41,10 +41,27 @@ end
 
 --* Static methods *--
 
----comment
 ---@param player IsoPlayer
 ---@param limbName string
 function AmputationHandler.ApplyDamageDuringAmputation(player, limbName)
+
+
+    local ampGroup = StaticData.LIMBS_TO_AMP_GROUPS_MATCH_IND_STR[limbName]
+    local isTourniquetEquipped = false
+
+    -- Check if tourniquet is applied on the zone
+    for bl, tournAmpGroup in pairs(StaticData.TOURNIQUET_BODYLOCS_TO_GROUPS_IND_STR) do
+        local item = player:getWornItem(bl)
+
+        -- LimbName -> Group -> BodyLoc
+        if item and tournAmpGroup == ampGroup then
+            TOC_DEBUG.print("tourniquet is equipped")
+            isTourniquetEquipped = true
+            break
+        end
+    end
+
+
     local bodyDamage = player:getBodyDamage()
     local bodyPartType = BodyPartType[limbName]
     local bodyDamagePart = bodyDamage:getBodyPart(bodyPartType)
@@ -52,10 +69,18 @@ function AmputationHandler.ApplyDamageDuringAmputation(player, limbName)
 
     bodyDamagePart:setBleeding(true)
     bodyDamagePart:setCut(true)
-    bodyDamagePart:setBleedingTime(ZombRand(10, 20))
+
+    local bleedingTime
+    if isTourniquetEquipped then
+        bleedingTime = ZombRand(1,5)
+    else
+        bleedingTime = ZombRand(10, 20)
+    end
+
+    bodyDamagePart:setBleedingTime(bleedingTime)
 end
 
----comment
+
 ---@param prevAction ISBaseTimedAction
 ---@param limbName string
 ---@param surgeonPl IsoPlayer
@@ -88,19 +113,9 @@ function AmputationHandler.PrepareBandagesAction(prevAction, limbName, surgeonPl
 
     return bandageAction
 end
+
+
 --* Main methods *--
-
-
----Damage the player part during the amputation process
-function AmputationHandler:damageDuringAmputation()
-    local bodyDamage = self.patientPl:getBodyDamage()
-    local bodyDamagePart = bodyDamage:getBodyPart(self.bodyPartType)
-    TOC_DEBUG.print("damage patient - " .. tostring(self.bodyPartType))
-
-    bodyDamagePart:setBleeding(true)
-    bodyDamagePart:setCut(true)
-    bodyDamagePart:setBleedingTime(ZombRand(10, 20))
-end
 
 ---Set the damage to the adjacent part of the cut area
 ---@param surgeonFactor number
