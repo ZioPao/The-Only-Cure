@@ -60,12 +60,20 @@ end
 
 ---@param player IsoGameCharacter
 ---@param zombie IsoZombie
+---@param handWeapon HandWeapon
 function HandleZombiesAmputations(player, zombie, handWeapon, damage)
     if not instanceof(zombie, "IsoZombie") or not instanceof(player, "IsoPlayer") then return end
     if player ~= getPlayer() then return end
+    
+    -- TODO Check type of weapon. No hands, only knifes or such
+
     if damage < 3 or ZombRand(0,100) < 25 then return end
 
+    TOC_DEBUG.print(handWeapon:getName())
+
+
     local zombieInv = zombie:getInventory()
+
 
     -- Check left or right
     local leftItem = zombieInv:containsEval(PredicateAmputationItemLeft)

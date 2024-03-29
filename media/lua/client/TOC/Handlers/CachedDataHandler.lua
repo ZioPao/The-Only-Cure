@@ -135,6 +135,8 @@ function CachedDataHandler.CalculateBothHandsFeasibility()
         getCore():addKeyBinding(interactStr, Keyboard.KEY_NONE)
     else
         TOC_DEBUG.print("Re-enabling interact key")
+
+        if not CachedDataHandler.interactKey then CachedDataHandler.interactKey = getCore():getKey(interactStr) end
         getCore():addKeyBinding(interactStr, CachedDataHandler.interactKey)
     end
 end
