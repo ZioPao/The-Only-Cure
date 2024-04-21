@@ -42,7 +42,6 @@ function LocalPlayerController.InitializePlayer(isForced)
 
     -- Set a bool to use an overriding GetDamagedParts
     SetHealthPanelTOC()
-
 end
 
 ---Handles the traits
@@ -53,7 +52,7 @@ function LocalPlayerController.ManageTraits(playerObj)
         if playerObj:HasTrait(k) then
             -- Once we find one, we should be done.
             local tempHandler = AmputationHandler:new(v)
-            tempHandler:execute(false)      -- No damage
+            tempHandler:execute(false) -- No damage
             tempHandler:close()
             return
         end
@@ -67,7 +66,6 @@ end
 ---Used to heal an area that has been cut previously. There's an exception for bites, those are managed differently
 ---@param bodyPart BodyPart
 function LocalPlayerController.HealArea(bodyPart)
-
     bodyPart:setFractureTime(0)
 
     bodyPart:setScratched(false, true)
@@ -115,7 +113,7 @@ function LocalPlayerController.TryRandomBleed(character, limbName)
     if cicTime == 0 then return end
 
     -- TODO This is just a placeholder, we need to figure out a better way to calculate this chance
-    local normCicTime = CommonMethods.Normalize(cicTime, 0, StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM[limbName])/2
+    local normCicTime = CommonMethods.Normalize(cicTime, 0, StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM[limbName]) / 2
     TOC_DEBUG.print("OG cicTime: " .. tostring(cicTime))
     TOC_DEBUG.print("Normalized cic time : " .. tostring(normCicTime))
 
@@ -127,7 +125,6 @@ function LocalPlayerController.TryRandomBleed(character, limbName)
         character:getBodyDamage():getBodyPart(adjacentBodyPartType):setBleedingTime(20)
     end
 end
-
 
 -------------------------
 --* Damage handling  *--
@@ -144,12 +141,11 @@ function LocalPlayerController.HandleDamage(character)
     local bd = character:getBodyDamage()
     local dcInst = DataController.GetInstance()
     local modDataNeedsUpdate = false
-    for i=1, #StaticData.LIMBS_STR do
+    for i = 1, #StaticData.LIMBS_STR do
         local limbName = StaticData.LIMBS_STR[i]
         local bptEnum = StaticData.BODYLOCS_IND_BPT[limbName]
         local bodyPart = bd:getBodyPart(bptEnum)
         if dcInst:getIsCut(limbName) then
-
             -- Generic injury, let's heal it since they already cut the limb off
             if bodyPart:HasInjury() then
                 TOC_DEBUG.print("Healing area - " .. limbName)
@@ -173,7 +169,7 @@ function LocalPlayerController.HandleDamage(character)
     -- We can skip this loop if the player has been infected. The one before we kinda need it to handle correctly the bites in case the player wanna cut stuff off anyway
     if dcInst:getIsIgnoredPartInfected() then return end
 
-    for i=1, #StaticData.IGNORED_BODYLOCS_BPT do
+    for i = 1, #StaticData.IGNORED_BODYLOCS_BPT do
         local bodyPartType = StaticData.IGNORED_BODYLOCS_BPT[i]
         local bodyPart = bd:getBodyPart(bodyPartType)
         if bodyPart and (bodyPart:bitten() or bodyPart:IsInfected()) then
@@ -189,7 +185,6 @@ function LocalPlayerController.HandleDamage(character)
 
     -- Disable the lock
     LocalPlayerController.hasBeenDamaged = false
-
 end
 
 ---Setup HandleDamage, triggered by OnPlayerGetDamage
@@ -197,7 +192,6 @@ end
 ---@param damageType string
 ---@param damageAmount number
 function LocalPlayerController.OnGetDamage(character, damageType, damageAmount)
-
     -- TODO Check if other players in the online triggers this
 
     if LocalPlayerController.hasBeenDamaged == false then
@@ -274,13 +268,12 @@ function LocalPlayerController.UpdateAmputations()
 
     if needsUpdate then
         TOC_DEBUG.print("updating modData from cicatrization loop")
-        dcInst:apply()      -- TODO This is gonna be heavy. Not entirely sure
+        dcInst:apply() -- TODO This is gonna be heavy. Not entirely sure
     else
         TOC_DEBUG.print("Removing UpdateAmputations")
-        Events.EveryHours.Remove(LocalPlayerController.UpdateAmputations)     -- We can remove it safely, no cicatrization happening here boys
+        Events.EveryHours.Remove(LocalPlayerController.UpdateAmputations) -- We can remove it safely, no cicatrization happening here boys
     end
     TOC_DEBUG.print("updating cicatrization and wound dirtyness!")
-
 end
 
 ---Starts safely the loop to update cicatrzation
@@ -323,9 +316,8 @@ function LocalPlayerController.HandleTourniquet()
     -- local wornItems = playerObj:getWornItems()
     -- for j=1,wornItems:size() do
     --     local wornItem = wornItems:get(j-1)
-        
-    -- end
 
+    -- end
 end
 
 Events.OnPuttingTourniquet.Add(LocalPlayerController.HandleTourniquet)
@@ -333,12 +325,43 @@ Events.OnPuttingTourniquet.Add(LocalPlayerController.HandleTourniquet)
 
 --* Object drop handling when amputation occurs
 
+--- Drop all items from the affected limb
+---@param limbName string
 function LocalPlayerController.DropItemsAfterAmputation(limbName)
-
     -- TODO Check for watches and stuff like that
 
+    TOC_DEBUG.print("Triggered DropItemsAfterAmputation")
+    local side = CommonMethods.GetSide(limbName)
+    local sideStr
+
+    if side == 'R' then
+        sideStr = "Right"
+    else
+        sideStr = 'Left'
+    end
 
 
+    local pl = getPlayer()
+
+    local wornItems = pl:getWornItems()
+
+    for i = 1, wornItems:size() do
+        local it = wornItems:get(i - 1)
+        if it then
+            local wornItem = wornItems:get(i - 1):getItem()
+            TOC_DEBUG.print(wornItem:getBodyLocation())
+
+            local bl = wornItem:getBodyLocation()
+            if string.contains(limbName, "Hand_") and (bl == sideStr .. "_MiddleFinger" or bl == sideStr .. "_RingFinger") then
+                pl:removeWornItem(wornItem)
+            end
+
+
+            if string.contains(limbName, "ForeArm_") and (bl == sideStr .. "Wrist") then
+                pl:removeWornItem(wornItem)
+            end
+        end
+    end
 end
 
 Events.OnAmputatedLimb.Add(LocalPlayerController.DropItemsAfterAmputation)
