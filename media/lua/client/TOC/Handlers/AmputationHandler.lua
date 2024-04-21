@@ -182,7 +182,7 @@ function AmputationHandler:execute(damagePlayer)
     self:damageAfterAmputation(surgeonFactor)
 
     -- Trigger this event
-    triggerEvent("OnAmputatedLimb")
+    triggerEvent("OnAmputatedLimb", self.limbName)
 end
 
 ---Deletes the instance

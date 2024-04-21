@@ -331,4 +331,19 @@ end
 Events.OnPuttingTourniquet.Add(LocalPlayerController.HandleTourniquet)
 
 
+--* Object drop handling when amputation occurs
+
+function LocalPlayerController.DropItemsAfterAmputation(limbName)
+
+    -- TODO Check for watches and stuff like that
+
+
+
+end
+
+Events.OnAmputatedLimb.Add(LocalPlayerController.DropItemsAfterAmputation)
+
+
+
+
 return LocalPlayerController

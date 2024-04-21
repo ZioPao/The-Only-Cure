@@ -69,6 +69,16 @@ end
 ---@param stitchesItem InventoryItem?
 ---@param bandageItem InventoryItem?
 local function PerformAction(surgeon, patient, limbName, sawItem, stitchesItem, bandageItem)
+    -- get saw in hand
+    -- todo primary or secondary depending on amputation status of surgeon
+    ISTimedActionQueue.add(ISEquipWeaponAction:new(surgeon, sawItem, 50, true, false))
+
+    local lHandItem = surgeon:getSecondaryHandItem()
+    if lHandItem then
+        ISTimedActionQueue.add(ISUnequipAction:new(surgeon, lHandItem, 50))
+    end
+
+
     ISTimedActionQueue.add(CutLimbAction:new(surgeon, patient, limbName, sawItem, stitchesItem, bandageItem))
 end
 
