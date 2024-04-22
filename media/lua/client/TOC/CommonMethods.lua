@@ -24,6 +24,19 @@ function CommonMethods.GetSide(name)
     if string.find(name, "_L") then return "L" else return "R" end
 end
 
+---Returns full name for the side, to be used with BodyLocations
+---@param side string
+---@return string
+function CommonMethods.GetSideFull(side)
+    if side == 'R' then
+        return "Right"
+    elseif side == 'L' then
+        return 'Left'
+    end
+
+    return nil
+end
+
 ---Stops and start an event, making sure that we don't stack them up
 ---@param event string
 ---@param method function

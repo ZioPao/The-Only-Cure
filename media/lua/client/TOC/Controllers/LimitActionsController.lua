@@ -263,3 +263,43 @@ function ISWorldObjectContextMenu.createMenu(player, worldobjects, x, y, test)
 end
 
 
+--* DISABLE WEARING CERTAIN ITEMS WHEN NO LIMB 
+
+local function CheckLimbFeasibility(limbName)
+    local dcInst = DataController.GetInstance()
+    local isFeasible = not dcInst:getIsCut(limbName) or dcInst:getIsProstEquipped(limbName)
+    TOC_DEBUG.print("isFeasible="..tostring(isFeasible))
+    return isFeasible
+end
+
+
+---@diagnostic disable-next-line: duplicate-set-field
+local og_ISWearClothing_isValid = ISWearClothing.isValid
+function ISWearClothing:isValid()
+    local isEquippable = og_ISWearClothing_isValid(self)
+    if not isEquippable then return isEquippable end
+
+    ---@type Item
+    local item = self.item
+    local itemBodyLoc = item:getBodyLocation()
+
+    local limbToCheck = StaticData.AFFECTED_BODYLOCS_TO_LIMBS_IND_STR[itemBodyLoc]
+    if CheckLimbFeasibility(limbToCheck) then return isEquippable else return false end
+end
+
+local og_ISClothingExtraAction_isValid = ISClothingExtraAction.isValid
+---@diagnostic disable-next-line: duplicate-set-field
+function ISClothingExtraAction:isValid()
+    local isEquippable = og_ISClothingExtraAction_isValid(self)
+    if not isEquippable then return isEquippable end
+
+
+    TOC_DEBUG.print("Checking if we can equip item")
+    -- self.extra is a string, not the item
+    local testItem = InventoryItemFactory.CreateItem(self.extra)
+    local itemBodyLoc = testItem:getBodyLocation()
+
+    local limbToCheck = StaticData.AFFECTED_BODYLOCS_TO_LIMBS_IND_STR[itemBodyLoc]
+    TOC_DEBUG.print("Limb to check: " .. tostring(limbToCheck))
+    if CheckLimbFeasibility(limbToCheck) then return isEquippable else return false end
+end

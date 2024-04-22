@@ -178,6 +178,40 @@ StaticData.TOURNIQUET_BODYLOCS_TO_GROUPS_IND_STR = {
 }
 
 
+StaticData.AFFECTED_BODYLOCS_TO_LIMBS_IND_STR = {}
+
+local handsBodyLocs = {"Hands%s", "%s_MiddleFinger", "%s_RingFinger"}
+local foreArmBodyLocs = {"%sWrist"}
+
+
+
+for side, _ in pairs(StaticData.SIDES_IND_STR) do
+    for part, _ in pairs(StaticData.PARTS_IND_STR) do
+        local limbName = part .. "_" .. side
+
+        local sideFull
+        if side == 'R' then sideFull = "Right" else sideFull = "Left" end
+
+        if part == "Hand" then
+            for i=1, #handsBodyLocs do
+                local bl = string.format(handsBodyLocs[i], sideFull)
+                StaticData.AFFECTED_BODYLOCS_TO_LIMBS_IND_STR[bl] = limbName
+            end
+        elseif part == "ForeArm" then
+            -- -- UGLY very ugly
+            -- for i=1, #handsBodyLocs do
+            --     local bl = string.format(handsBodyLocs[i], sideFull)
+            --     StaticData.AFFECTED_BODYLOCS_TO_LIMBS_IND_STR[bl] = limbName
+            -- end
+            for i=1, #foreArmBodyLocs do
+                local bl = string.format(foreArmBodyLocs[i], sideFull)
+                StaticData.AFFECTED_BODYLOCS_TO_LIMBS_IND_STR[bl] = limbName
+            end
+
+        end
+
+    end
+end
 
 
 

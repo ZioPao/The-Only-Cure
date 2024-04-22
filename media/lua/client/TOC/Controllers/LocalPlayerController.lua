@@ -325,24 +325,35 @@ Events.OnPuttingTourniquet.Add(LocalPlayerController.HandleTourniquet)
 
 --* Object drop handling when amputation occurs
 
---- Drop all items from the affected limb
----@param limbName string
-function LocalPlayerController.DropItemsAfterAmputation(limbName)
-    -- TODO Check for watches and stuff like that
 
-    TOC_DEBUG.print("Triggered DropItemsAfterAmputation")
+function LocalPlayerController.CanItemBeEquipped(itemObj, limbName)
+    local bl = itemObj:getBodyLocation()
     local side = CommonMethods.GetSide(limbName)
-    local sideStr
+    local sideStr = CommonMethods.GetSideFull(side)
 
-    if side == 'R' then
-        sideStr = "Right"
-    else
-        sideStr = 'Left'
+    -- TODO Check from DataController
+
+    if string.contains(limbName, "Hand_") and (bl == sideStr .. "_MiddleFinger" or bl == sideStr .. "_RingFinger") then
+        return false
     end
 
 
-    local pl = getPlayer()
+    if string.contains(limbName, "ForeArm_") and (bl == sideStr .. "Wrist") then
+        return false
+    end
 
+    return true
+end
+
+
+--- Drop all items from the affected limb
+---@param limbName string
+function LocalPlayerController.DropItemsAfterAmputation(limbName)
+    TOC_DEBUG.print("Triggered DropItemsAfterAmputation")
+    local side = CommonMethods.GetSide(limbName)
+    local sideStr = CommonMethods.GetSideFull(side)
+
+    local pl = getPlayer()
     local wornItems = pl:getWornItems()
 
     for i = 1, wornItems:size() do
