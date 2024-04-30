@@ -273,33 +273,32 @@ local function CheckLimbFeasibility(limbName)
 end
 
 
----@diagnostic disable-next-line: duplicate-set-field
-local og_ISWearClothing_isValid = ISWearClothing.isValid
-function ISWearClothing:isValid()
-    local isEquippable = og_ISWearClothing_isValid(self)
+
+
+---@param obj any
+---@param wrappedFunc function
+---@param item InventoryItem
+---@return boolean
+local function WrapClothingAction(obj, wrappedFunc, item)
+    local isEquippable = wrappedFunc(obj)
     if not isEquippable then return isEquippable end
 
-    ---@type Item
-    local item = self.item
     local itemBodyLoc = item:getBodyLocation()
 
     local limbToCheck = StaticData.AFFECTED_BODYLOCS_TO_LIMBS_IND_STR[itemBodyLoc]
     if CheckLimbFeasibility(limbToCheck) then return isEquippable else return false end
 end
 
+
+
+---@diagnostic disable-next-line: duplicate-set-field
+local og_ISWearClothing_isValid = ISWearClothing.isValid
+function ISWearClothing:isValid()
+    return WrapClothingAction(self, og_ISWearClothing_isValid, self.item)
+end
+
 local og_ISClothingExtraAction_isValid = ISClothingExtraAction.isValid
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISClothingExtraAction:isValid()
-    local isEquippable = og_ISClothingExtraAction_isValid(self)
-    if not isEquippable then return isEquippable end
-
-
-    TOC_DEBUG.print("Checking if we can equip item")
-    -- self.extra is a string, not the item
-    local testItem = InventoryItemFactory.CreateItem(self.extra)
-    local itemBodyLoc = testItem:getBodyLocation()
-
-    local limbToCheck = StaticData.AFFECTED_BODYLOCS_TO_LIMBS_IND_STR[itemBodyLoc]
-    TOC_DEBUG.print("Limb to check: " .. tostring(limbToCheck))
-    if CheckLimbFeasibility(limbToCheck) then return isEquippable else return false end
+    return WrapClothingAction(self, og_ISClothingExtraAction_isValid, InventoryItemFactory.CreateItem(self.extra))
 end
