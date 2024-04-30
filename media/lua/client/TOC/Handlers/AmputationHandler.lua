@@ -3,6 +3,7 @@ local ItemsController = require("TOC/Controllers/ItemsController")
 local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
 local LocalPlayerController = require("TOC/Controllers/LocalPlayerController")
 local StaticData = require("TOC/StaticData")
+local CommonMethods = require("TOC/CommonMethods")
 ---------------------------
 
 --- Manages an amputation. Will be run on the patient client
@@ -40,6 +41,31 @@ end
 
 
 --* Static methods *--
+
+
+---@param player IsoPlayer
+---@param limbName string
+---@return boolean
+function AmputationHandler.CheckTourniquet(player, limbName)
+
+    local side = CommonMethods.GetSide(limbName)
+
+    local wornItems = player:getWornItems()
+    for j=1,wornItems:size() do
+        local wornItem = wornItems:get(j-1)
+
+        local fType = wornItem:getItem():getFullType()
+        if string.contains(fType, "Surg_Arm_Tourniquet_") then
+            -- Check side
+            if luautils.stringEnds(fType, side) then
+                TOC_DEBUG.print("Found acceptable tourniquet")
+                return true
+            end
+        end
+    end
+
+    return false
+end
 
 ---@param player IsoPlayer
 ---@param limbName string
@@ -120,7 +146,7 @@ end
 ---Set the damage to the adjacent part of the cut area
 ---@param surgeonFactor number
 function AmputationHandler:damageAfterAmputation(surgeonFactor)
-    -- TODO Torniquet should reduce the damage in total, less blood loss
+
 
     TOC_DEBUG.print("Applying damage after amputation")
     local patientStats = self.patientPl:getStats()
@@ -129,6 +155,17 @@ function AmputationHandler:damageAfterAmputation(surgeonFactor)
     local adjacentLimb = StaticData.LIMBS_ADJACENT_IND_STR[self.limbName]
     local bodyPart = bd:getBodyPart(BodyPartType[adjacentLimb])
     local baseDamage = StaticData.LIMBS_BASE_DAMAGE_IND_NUM[self.limbName]
+
+
+    -- TODO Torniquet should reduce the damage in total, less blood loss
+    -- Check if player has tourniquet equipped on the limb
+
+    local hasTourniquet = AmputationHandler.CheckTourniquet(self.patientPl, self.limbName)
+    if hasTourniquet then
+        TOC_DEBUG.print("Do something different for the damage calculation because tourniquet is applied")
+        baseDamage = baseDamage * 0.5   -- 50% less damage due to tourniquet
+    end
+
 
     bodyPart:AddDamage(baseDamage - surgeonFactor)
     bodyPart:setAdditionalPain(baseDamage - surgeonFactor)

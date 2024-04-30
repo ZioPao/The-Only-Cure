@@ -53,3 +53,6 @@ group:setMultiItem("TOC_Arm", true)
 
 BodyLocationsAPI.MoveOrCreateBeforeOrAfter("TOC_ArmProst", "TOC_Arm", true)
 group:setMultiItem("TOC_ArmProst", true)
+
+BodyLocationsAPI.MoveOrCreateBeforeOrAfter("TOC_ArmAccessory", "TOC_ArmProst", true)
+group:setMultiItem("TOC_ArmAccessory", true)
