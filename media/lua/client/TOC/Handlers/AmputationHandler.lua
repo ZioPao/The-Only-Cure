@@ -157,9 +157,8 @@ function AmputationHandler:damageAfterAmputation(surgeonFactor)
     local baseDamage = StaticData.LIMBS_BASE_DAMAGE_IND_NUM[self.limbName]
 
 
-    -- TODO Torniquet should reduce the damage in total, less blood loss
     -- Check if player has tourniquet equipped on the limb
-
+    -- TODO Suboptimal checks, but they should work for now.
     local hasTourniquet = AmputationHandler.CheckTourniquet(self.patientPl, self.limbName)
     if hasTourniquet then
         TOC_DEBUG.print("Do something different for the damage calculation because tourniquet is applied")

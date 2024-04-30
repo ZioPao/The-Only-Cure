@@ -20,7 +20,6 @@ module TOC
 		Insulation = 1.0,
 		WindResistance = 1.0,
 		WaterResistance = 1.0,
-		Icon = genericAmputation,
 		CanHaveHoles = false,
 	}
 
@@ -38,7 +37,6 @@ module TOC
 		Insulation = 1.0,
 		WindResistance = 1.0,
 		WaterResistance = 1.0,
-		Icon = genericAmputation,
 		CanHaveHoles = false,
 	}
 
@@ -55,7 +53,6 @@ module TOC
 		Insulation = 1.0,
 		WindResistance = 1.0,
 		WaterResistance = 1.0,
-		Icon = genericAmputation,
 		CanHaveHoles = false,
 	}
 
@@ -74,7 +71,6 @@ module TOC
 		
 		WindResistance = 1.0,
 		WaterResistance = 1.0,
-		Icon = genericAmputation,
 		CanHaveHoles = false,
 	}
 
@@ -92,7 +88,6 @@ module TOC
 		Insulation = 1.0,
 		WindResistance = 1.0,
 		WaterResistance = 1.0,
-		Icon = genericAmputation,
 		CanHaveHoles = false,
 
 	}
@@ -111,7 +106,6 @@ module TOC
 		Insulation = 1.0,
 		WindResistance = 1.0,
 		WaterResistance = 1.0,
-		Icon = genericAmputation,
 		CanHaveHoles = false,
 	}
 
