@@ -31,6 +31,7 @@ Keep in mind that if you amputate your upper arm, you won't be able to equip any
 
 ## Cicatrization
 You can check the cicatrization status of an amputated limb from your **Health Panel**.
+From time to time, you should clean your wounds with a bandage to help the cicatrization process.
 If your limb isn't completely cicatrized, you can still equip prosthetic limbs, but that can trigger random bleedings from that area.
 
 ## Prosthesis
