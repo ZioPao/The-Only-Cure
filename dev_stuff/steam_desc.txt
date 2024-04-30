@@ -1,0 +1,77 @@
+[img]https://raw.githubusercontent.com/ZioPao/The-Only-Cure/551125bb50cb65608ad89ca81ef0daccb3b02c4c/dev_stuff/logos/title.png[/img]
+
+[h1]You're bitten. You only have two choices.[/h1]
+Wait until you succumb to the virus or take matters into your own hands.
+
+By that we mean, cut that thing off before it kills you!
+
+This version of [b]The Only Cure[/b] has been rebuilt from scratch to support future additions.
+
+Supports [b]Single Player[/b] and [b]Multiplayer[/b]!
+
+[h1]Setup[/h1]
+Use it with the following mods for the intended experience:
+[list]
+[*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2904920097]Fancy Handwork[/url]
+[*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2934621024]Brutal Handwork[/url]
+[/list]
+
+[h1]Quick guide[/h1]
+[h2]Amputation[/h2]
+Get a [i]Saw[/i] or a [i]Garden Saw[/i], right click on it, and choose which limb to amputate. You can also drag n' drop your Saw item directly into the afflicted area to start cutting it off.
+
+If you have a tourniquet, place it on the correct side to dampen the amount of damage you will take after you're done amputating the limb.
+
+Keep in mind that if you amputate your upper arm, you won't be able to equip any prosthesis.
+
+[h2]Cicatrization[/h2]
+You can check the cicatrization status of an amputated limb from your [b]Health Panel[/b]
+From time to time, you should clean your wounds with a bandage to help the cicatrization process.
+If your limb isn't completely cicatrized, you can still equip prosthetic limbs, but that can trigger random bleedings from that area.
+
+[h2]Prosthesis[/h2]
+If you're missing a hand, you won't be able to do a lot of things, such as equipping two-handed weapons. With prosthetics limbs, you can fix that.
+There are two prosthesis type that can be crafted\found in medical areas:
+[list]
+[*] Hook Prosthesis
+[*] Arm Prosthesis
+[/list]
+
+The main difference between the twos is that your actions will take longer with the Hook Prosthesis.
+
+[h1]Issues[/h1]
+Got any issues? Report them on GitHub!
+[url=https://github.com/ZioPao/The-Only-Cure][img]https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white[/img][/url]
+
+
+[h1]Credits[/h1]
+
+[table]
+  [tr]
+    [th]Pao[/th]
+    [th]Developer[/th]
+  [/tr]
+  [tr]
+    [th]Mr. Bounty[/th]
+    [th]Original Developer[/th]
+  [/tr]
+  [tr]
+    [th]Chuckleberry Finn[/th]
+    [th]Logo and Icon[/th]
+  [/tr]
+  [tr]
+    [th]dhert[/th]
+    [th]Compatibility API[/th]
+  [/tr]
+[/table]
+
+[hr]
+
+[h1]Want to support me?[/h1]
+[url=https://ko-fi.com/M4M7IERNW][img]https://storage.ko-fi.com/cdn/kofi3.png[/img][/url]
+
+[hr]
+
+
+Workshop ID: 3236152598
+Mod ID: TheOnlyCure
