@@ -11,7 +11,6 @@ module TOC
 		texture = Prosthesis\normalArm,
 	}
 
-    
     model prostheticArmHook
 	{
 		mesh = Prosthesis/hookArm_Ground,

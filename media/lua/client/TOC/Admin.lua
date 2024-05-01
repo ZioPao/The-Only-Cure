@@ -44,3 +44,20 @@ local function AddAdminTocOptions(playerNum, context, worldobjects)
     end
 end
 Events.OnFillWorldObjectContextMenu.Add(AddAdminTocOptions)
+
+
+--* Override to cheats to fix stuff
+
+local og_ISHealthPanel_onCheatCurrentPlayer = ISHealthPanel.onCheatCurrentPlayer
+
+function ISHealthPanel.onCheatCurrentPlayer(bodyPart, action, player)
+    og_ISHealthPanel_onCheatCurrentPlayer(bodyPart, action, player)
+
+    if action == "healthFullBody" then
+        -- todo loop all limbs and reset them if infected
+    end
+
+    if action == "healthFull" then
+        -- todo get limbname from bodypart
+    end
+end

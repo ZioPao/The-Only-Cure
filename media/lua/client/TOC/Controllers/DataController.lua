@@ -252,6 +252,13 @@ function DataController:getIsCauterized(limbName)
     return self.tocData.limbs[limbName].isCauterized
 end
 
+---Get isInfected
+---@param limbName string
+---@return boolean
+function DataController:getIsInfected(limbName)
+    return self.tocData.limbs[limbName].isInfected
+end
+
 ---Get woundDirtyness
 ---@param limbName string
 ---@return number

@@ -158,7 +158,7 @@ function LocalPlayerController.HandleDamage(character)
                 LocalPlayerController.HealZombieInfection(bd, bodyPart, limbName, dcInst)
             end
         else
-            if bodyPart:bitten() or bodyPart:IsInfected() then
+            if (bodyPart:bitten() or bodyPart:IsInfected()) and not dcInst:getIsInfected(limbName) then
                 dcInst:setIsInfected(limbName, true)
                 modDataNeedsUpdate = true
             end

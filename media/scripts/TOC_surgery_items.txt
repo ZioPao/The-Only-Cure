@@ -18,7 +18,7 @@ module TOC
         BodyLocation = TOC_ArmAccessory,
 		BloodLocation = UpperArms;UpperBody,
 
-        Weight = 1,
+        Weight = 0.25,
 
         Icon = tourniquet,
         WorldStaticModel = tourniquet,
@@ -38,7 +38,7 @@ module TOC
         BodyLocation = TOC_ArmAccessory,
 		BloodLocation = UpperArms;UpperBody,
 
-        Weight = 1,
+        Weight = 0.25,
 
         Icon = tourniquet,
         WorldStaticModel = tourniquet,
