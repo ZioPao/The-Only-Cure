@@ -21,4 +21,36 @@
     <textureChoices>Amputations\Human\Upperarm\skin03_hairy_b</textureChoices>
     <textureChoices>Amputations\Human\Upperarm\skin04_hairy_b</textureChoices>
     <textureChoices>Amputations\Human\Upperarm\skin05_hairy_b</textureChoices>
+
+    <!-- HUMAN AFTER CICATRIZATION -->
+
+    <textureChoices>Body\MaleBody01</textureChoices>
+    <textureChoices>Body\MaleBody02</textureChoices>
+    <textureChoices>Body\MaleBody03</textureChoices>
+    <textureChoices>Body\MaleBody04</textureChoices>
+    <textureChoices>Body\MaleBody05</textureChoices>
+
+    <textureChoices>Body\MaleBody01a</textureChoices>
+    <textureChoices>Body\MaleBody02a</textureChoices>
+    <textureChoices>Body\MaleBody03a</textureChoices>
+    <textureChoices>Body\MaleBody04</textureChoices>
+    <textureChoices>Body\MaleBody05a</textureChoices>
+
+    <!-- ZOMBIE -->
+    <textureChoices>Amputations\Zombie\Upperarm\z_skin01_l1</textureChoices>
+    <textureChoices>Amputations\Zombie\Upperarm\z_skin01_l2</textureChoices>
+    <textureChoices>Amputations\Zombie\Upperarm\z_skin01_l3</textureChoices>
+
+    <textureChoices>Amputations\Zombie\Upperarm\z_skin02_l1</textureChoices>
+    <textureChoices>Amputations\Zombie\Upperarm\z_skin02_l2</textureChoices>
+    <textureChoices>Amputations\Zombie\Upperarm\z_skin02_l3</textureChoices>
+
+    <textureChoices>Amputations\Zombie\Upperarm\z_skin03_l1</textureChoices>
+    <textureChoices>Amputations\Zombie\Upperarm\z_skin03_l2</textureChoices>
+    <textureChoices>Amputations\Zombie\Upperarm\z_skin03_l3</textureChoices>
+
+    <textureChoices>Amputations\Zombie\Upperarm\z_skin04_l1</textureChoices>
+    <textureChoices>Amputations\Zombie\Upperarm\z_skin04_l2</textureChoices>
+    <textureChoices>Amputations\Zombie\Upperarm\z_skin04_l3</textureChoices>
+    
 </clothingItem>

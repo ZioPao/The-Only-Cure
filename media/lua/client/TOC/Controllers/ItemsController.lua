@@ -27,9 +27,11 @@ function ItemsController.Player.GetAmputationTexturesIndex(playerObj, isCicatriz
     end
 
     if isCicatrized then
-        matchedIndex = matchedIndex + (isHairy and 5 or 10) -- We add 5 is it's the texture texture, else 10
+        matchedIndex = matchedIndex + (isHairy and 5 or 10) -- We add 5 is it's the texture, else 10
     end
 
+    TOC_DEBUG.print("isCicatrized= " .. tostring(isCicatrized))
+    TOC_DEBUG.print("Amputation Texture Index: " .. tostring(matchedIndex))
     return matchedIndex - 1
 end
 
@@ -43,7 +45,7 @@ function ItemsController.Player.RemoveClothingItem(playerObj, clothingItem)
         playerObj:removeWornItem(clothingItem)
 
         ---@diagnostic disable-next-line: param-type-mismatch
-        playerObj:getInventory():Remove(clothingItem)       -- Umbrella is wrong, can be an InventoryItem too
+        playerObj:getInventory():Remove(clothingItem) -- Umbrella is wrong, can be an InventoryItem too
         TOC_DEBUG.print("found and deleted" .. tostring(clothingItem))
 
         -- Reset model
@@ -75,13 +77,12 @@ end
 ---Deletes all the old amputation items, used for resets
 ---@param playerObj IsoPlayer
 function ItemsController.Player.DeleteAllOldAmputationItems(playerObj)
-
     -- This part is a workaround for a pretty shitty implementation on the java side. Check ProsthesisHandler for more infos
     local group = BodyLocations.getGroup("Human")
     group:setMultiItem("TOC_Arm", false)
     group:setMultiItem("TOC_ArmProst", false)
 
-    for i=1, #StaticData.LIMBS_STR do
+    for i = 1, #StaticData.LIMBS_STR do
         local limbName = StaticData.LIMBS_STR[i]
         local clothItemName = StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. limbName
         local clothItem = playerObj:getInventory():FindAndReturn(clothItemName)
@@ -93,7 +94,6 @@ function ItemsController.Player.DeleteAllOldAmputationItems(playerObj)
 
     group:setMultiItem("TOC_Arm", true)
     group:setMultiItem("TOC_ArmProst", true)
-
 end
 
 ---Spawns and equips the correct amputation item to the player.
@@ -109,7 +109,31 @@ function ItemsController.Player.SpawnAmputationItem(playerObj, limbName)
     playerObj:setWornItem(clothingItem:getBodyLocation(), clothingItem)
 end
 
+---Search through worn items and modifies a specific amputation item
+---@param playerObj IsoPlayer
+---@param limbName string
+---@param isCicatrized boolean
+function ItemsController.Player.OverrideAmputationItemVisuals(playerObj, limbName, isCicatrized)
+    local wornItems = playerObj:getWornItems()
+    local fullType = StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. limbName
 
+    for i = 1, wornItems:size() do
+        local it = wornItems:get(i - 1)
+        if it then
+            local wornItem = wornItems:get(i - 1):getItem()
+            TOC_DEBUG.print(wornItem:getFullType())
+            if wornItem:getFullType() == fullType then
+                TOC_DEBUG.print("Found amputation item for " .. limbName)
+
+                -- change it here
+                local texId = ItemsController.Player.GetAmputationTexturesIndex(playerObj, isCicatrized)
+                wornItem:getVisual():setTextureChoice(texId)
+                playerObj:resetModelNextFrame()     -- necessary to update the model
+                return
+            end
+        end
+    end
+end
 
 --* Zombie Methods *--
 ---@class ItemsController.Zombie
@@ -135,14 +159,14 @@ end
 function ItemsController.Zombie.GetAmputationTexturesIndex(zombie)
     local x = zombie:getHumanVisual():getSkinTexture()
 
-    -- Starting ID for zombies = 10
+    -- Starting ID for zombies = 20
     -- 3 levels
     local matchedIndex = tonumber(x:match("ZedBody0(%d)")) - 1
     matchedIndex = matchedIndex * 3
 
-    local level = tonumber(x:match("%d$")) - 1  -- it's from 1 to 3, but we're using it like 0 indexed arrays
+    local level = tonumber(x:match("%d$")) - 1 -- it's from 1 to 3, but we're using it like 0 indexed arrays
 
-    local finalId = 10 + matchedIndex + level
+    local finalId = 20 + matchedIndex + level
     --print("Zombie texture index: " .. tostring(finalId))
     return finalId
 end

@@ -262,6 +262,9 @@ function LocalPlayerController.UpdateAmputations()
             if cicTime <= 0 then
                 TOC_DEBUG.print(tostring(limbName) .. " is cicatrized")
                 dcInst:setIsCicatrized(limbName, true)
+                -- Set visual
+                local ItemsController = require("TOC/Controllers/ItemsController")
+                ItemsController.Player.OverrideAmputationItemVisuals(pl, limbName, true)
             end
         end
     end
@@ -303,7 +306,6 @@ function LocalPlayerController.CanItemBeEquipped(itemObj, limbName)
 
     return true
 end
-
 
 --- Drop all items from the affected limb
 ---@param limbName string

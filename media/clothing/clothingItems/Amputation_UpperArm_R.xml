@@ -22,6 +22,21 @@
     <textureChoices>Amputations\Human\Upperarm1\skin04_hairy_b</textureChoices>
     <textureChoices>Amputations\Human\Upperarm1\skin05_hairy_b</textureChoices>
 
+    <!-- HUMAN AFTER CICATRIZATION -->
+
+    <textureChoices>Body\MaleBody01</textureChoices>
+    <textureChoices>Body\MaleBody02</textureChoices>
+    <textureChoices>Body\MaleBody03</textureChoices>
+    <textureChoices>Body\MaleBody04</textureChoices>
+    <textureChoices>Body\MaleBody05</textureChoices>
+
+    <textureChoices>Body\MaleBody01a</textureChoices>
+    <textureChoices>Body\MaleBody02a</textureChoices>
+    <textureChoices>Body\MaleBody03a</textureChoices>
+    <textureChoices>Body\MaleBody04</textureChoices>
+    <textureChoices>Body\MaleBody05a</textureChoices>
+
+    
     <!-- ZOMBIE -->
     <textureChoices>Amputations\Zombie\Upperarm\z_skin01_l1</textureChoices>
     <textureChoices>Amputations\Zombie\Upperarm\z_skin01_l2</textureChoices>
