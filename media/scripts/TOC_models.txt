@@ -1,4 +1,4 @@
-module Prosthesis
+module TOC
 {
     imports
     {
@@ -18,5 +18,9 @@ module Prosthesis
 		texture = Prosthesis\hookArm,
 	}
     
-    
+	model tourniquet
+	{
+		mesh = Surgery/Tourniquet_Ground,
+		texture = Surgery\tourniquet,
+	}
 }

@@ -21,6 +21,7 @@ module TOC
         Weight = 1,
 
         Icon = tourniquet,
+        WorldStaticModel = tourniquet,
         CanHaveHoles = false,
     }
 
@@ -40,6 +41,7 @@ module TOC
         Weight = 1,
 
         Icon = tourniquet,
+        WorldStaticModel = tourniquet,
         CanHaveHoles = false,
     }
 
