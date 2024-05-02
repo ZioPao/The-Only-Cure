@@ -50,6 +50,9 @@ The main difference between the twos is that your actions will take longer with 
 
 When you equip a prosthetic limb, you will slowly gain familiarity with it, making actions more speedy in due time.
 
+## Admin tools
+If something strange happened, an admin can reset TOC mechanics on any player by right clicking on them and select _"Reset Amputations"_. They could also do the opposite by clicking on _"Force Amputation"_ for each amputable limb.
+
 # Credits
 |  |  |
 | ------------- | ------------- |
