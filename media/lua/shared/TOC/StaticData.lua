@@ -118,10 +118,12 @@ for side, _ in pairs(StaticData.SIDES_IND_STR) do
 
 
         -- BodyParts stuff
-        local bptString = BodyPartType.ToString(BodyPartType[assembledName]:getType())
+        ---@type BodyPartType
+        local bptType = BodyPartType[assembledName]
+        local bptString = BodyPartType.ToString(bptType)
 
 
-        StaticData.LIMBS_TO_BODYLOCS_IND_BPT[assembledName] = BodyPartType[assembledName]
+        StaticData.LIMBS_TO_BODYLOCS_IND_BPT[assembledName] = bptType
         StaticData.BODYLOCS_TO_LIMBS_IND_STR[bptString] = assembledName
 
         -- Dependencies and cicatrization time

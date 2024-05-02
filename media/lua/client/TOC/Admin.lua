@@ -70,6 +70,8 @@ function ISHealthPanel.onCheatCurrentPlayer(bodyPart, action, player)
             dcInst:setIsInfected(limbName, false)
         end
 
+        dcInst:setIsIgnoredPartInfected(false)
+
         dcInst:apply()
     end
 
