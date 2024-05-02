@@ -143,7 +143,7 @@ function LocalPlayerController.HandleDamage(character)
     local modDataNeedsUpdate = false
     for i = 1, #StaticData.LIMBS_STR do
         local limbName = StaticData.LIMBS_STR[i]
-        local bptEnum = StaticData.BODYLOCS_IND_BPT[limbName]
+        local bptEnum = StaticData.LIMBS_TO_BODYLOCS_IND_BPT[limbName]
         local bodyPart = bd:getBodyPart(bptEnum)
         if dcInst:getIsCut(limbName) then
             -- Generic injury, let's heal it since they already cut the limb off

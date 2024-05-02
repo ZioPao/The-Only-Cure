@@ -89,7 +89,7 @@ end
 ---@param stitchesItem InventoryItem
 ---@return ISStitch
 function AmputationHandler.PrepareStitchesAction(prevAction, limbName, surgeonPl, patientPl, stitchesItem)
-    local bptEnum = StaticData.BODYLOCS_IND_BPT[limbName]
+    local bptEnum = StaticData.LIMBS_TO_BODYLOCS_IND_BPT[limbName]
     local bd = patientPl:getBodyDamage()
     local bodyPart = bd:getBodyPart(bptEnum)
     local stitchesAction = ISStitch:new(surgeonPl, patientPl, stitchesItem, bodyPart, true)
@@ -106,7 +106,7 @@ end
 ---@param bandageItem InventoryItem
 ---@return ISApplyBandage
 function AmputationHandler.PrepareBandagesAction(prevAction, limbName, surgeonPl, patientPl, bandageItem)
-    local bptEnum = StaticData.BODYLOCS_IND_BPT[limbName]
+    local bptEnum = StaticData.LIMBS_TO_BODYLOCS_IND_BPT[limbName]
     local bd = patientPl:getBodyDamage()
     local bodyPart = bd:getBodyPart(bptEnum)
     local bandageAction = ISApplyBandage:new(surgeonPl, patientPl, bandageItem, bodyPart, true)

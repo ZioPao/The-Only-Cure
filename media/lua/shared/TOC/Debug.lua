@@ -63,7 +63,7 @@ function TOC_DEBUG.TestBodyDamage(id)
 
     if bd then
         TOC_DEBUG.print("bd for " .. pl:getUsername() .. " exists")
-        local bptEnum = StaticData.BODYLOCS_IND_BPT["Hand_L"]
+        local bptEnum = StaticData.LIMBS_TO_BODYLOCS_IND_BPT["Hand_L"]
         local bodyPart = bd:getBodyPart(bptEnum)
 
         bodyPart:setBleeding(true)

@@ -1,4 +1,6 @@
 local CommandsData = require("TOC/CommandsData")
+local StaticData = require("TOC/StaticData")
+local DataController = require("TOC/Controllers/DataController")
 -------------------
 
 ---@param playerNum number
@@ -50,14 +52,33 @@ Events.OnFillWorldObjectContextMenu.Add(AddAdminTocOptions)
 
 local og_ISHealthPanel_onCheatCurrentPlayer = ISHealthPanel.onCheatCurrentPlayer
 
+---Override to onCheatCurrentPlayer to fix behaviour with TOC
+---@param bodyPart BodyPart
+---@param action any
+---@param player IsoPlayer
 function ISHealthPanel.onCheatCurrentPlayer(bodyPart, action, player)
     og_ISHealthPanel_onCheatCurrentPlayer(bodyPart, action, player)
+    local bptString = BodyPartType.ToString(bodyPart:getType())
 
     if action == "healthFullBody" then
-        -- todo loop all limbs and reset them if infected
+        -- loop all limbs and reset them if infected
+        local dcInst = DataController.GetInstance()
+
+        for i = 1, #StaticData.LIMBS_STR do
+            local limbName = StaticData.LIMBS_STR[i]
+
+            dcInst:setIsInfected(limbName, false)
+        end
+
+        dcInst:apply()
     end
 
     if action == "healthFull" then
-        -- todo get limbname from bodypart
+        -- Get the limbName for that BodyPart and fix the values in TOC Data
+        local limbName = StaticData.BODYLOCS_TO_LIMBS_IND_STR[bptString]
+        local dcInst = DataController.GetInstance()
+
+        dcInst:setIsInfected(limbName, false)
+        dcInst:apply()
     end
 end

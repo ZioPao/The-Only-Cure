@@ -68,8 +68,11 @@ StaticData.LIMBS_ADJACENT_IND_STR = {}
 StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM = {}
 StaticData.LIMBS_BASE_DAMAGE_IND_NUM = {}
 StaticData.LIMBS_TIME_MULTIPLIER_IND_NUM = {}
-StaticData.BODYLOCS_IND_BPT = {}
 
+
+
+StaticData.LIMBS_TO_BODYLOCS_IND_BPT = {}            -- {limbName = bodyLoc}
+StaticData.BODYLOCS_TO_LIMBS_IND_STR = {}            -- {bodyLoc = limbName}
 
 -- FIXME You weren't considering surgeonFactor, which decreases that base time. Fuck mod 60
 -- CicatrizationBaseTime should be mod 60 since we're using EveryHours to update the cicatrizationTime
@@ -112,7 +115,14 @@ for side, _ in pairs(StaticData.SIDES_IND_STR) do
         -- Assembled strings
         table.insert(StaticData.LIMBS_STR, assembledName)   -- We need a table like this to cycle through it easily
         StaticData.LIMBS_IND_STR[assembledName] = assembledName
-        StaticData.BODYLOCS_IND_BPT[assembledName] = BodyPartType[assembledName]
+
+
+        -- BodyParts stuff
+        local bptString = BodyPartType.ToString(BodyPartType[assembledName]:getType())
+
+
+        StaticData.LIMBS_TO_BODYLOCS_IND_BPT[assembledName] = BodyPartType[assembledName]
+        StaticData.BODYLOCS_TO_LIMBS_IND_STR[bptString] = assembledName
 
         -- Dependencies and cicatrization time
         if part == StaticData.PARTS_IND_STR.Hand then
@@ -147,7 +157,7 @@ end
 
 -- TODO We can do this in one pass if we do it before
 
-StaticData.AMP_GROUP_TO_LIMBS_MATCH_IND_STR = {}  -- THis is probably unnecessary
+StaticData.AMP_GROUP_TO_LIMBS_MATCH_IND_STR = {}  -- This is probably unnecessary
 StaticData.LIMBS_TO_AMP_GROUPS_MATCH_IND_STR = {}
 
 for side, _ in pairs(StaticData.SIDES_IND_STR) do
