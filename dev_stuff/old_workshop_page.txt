@@ -1,0 +1,54 @@
+https://steamcommunity.com/sharedfiles/filedetails/?id=3236152598
+
+
+[img]https://i.imgur.com/PctsskC.png[/img]
+
+[h1]Supports B41+. Compatible with SP and MP[/h1]
+[h2]Made by [b]Mr. Bounty[/b] and maintained by [b]Pao[/b][/h2]
+[img]https://i.imgur.com/RNxXaZ8.gif[/img]
+
+
+[img]https://i.imgur.com/C6FcUgm.png[/img]
+[h1] An update will come "soon". The work in progress version is available on GitHub [url=https://github.com/ZioPao/The-Only-Cure]here[/url].[/h1]
+
+
+[img]https://i.imgur.com/koMbiql.png[/img]
+[list]
+[*]Amputate different parts of your arm to prevent an infection
+[*]Cicatrization process and surgery after amputation
+[*]Prosthesis for cut limbs up to the forearm
+[*]Debug cheats (Multiplayer compatible)
+[/list]
+
+
+[img]https://i.imgur.com/BOj0YGn.png[/img]
+You can find a concise tutorial about the mod [url=https://github.com/ZioPao/The-Only-Cure/wiki]here[/url]. The wiki will be updated whenever we add some new feature that needs to be explained.
+
+
+[img]https://i.imgur.com/RGF3ZTF.png[/img]
+[h2]Required mods[/h2]
+[list]
+[*][url=https://steamcommunity.com/workshop/filedetails/?id=2760035814]Simple UI library[/url]
+[/list]
+
+[h2]Recommended mods[/h2]
+[list]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2904920097]Fancy Handwork[/url]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2934621024]Brutal Handwork[/url]
+[/list]
+
+[h2]Compatible mods[/h2]
+[list]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2366717227]Swap It[/url]
+[/list]
+
+[h2]Incompatible mods[/h2]
+[list]
+[*][url=https://steamcommunity.com/workshop/filedetails/?id=2629286881]Military Ponchos[/url] (Amputation sometimes won't show)
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2915572347]zRe Bandaged Status[/url] (TOC button in the health panel menu won't shown)
+[/list]
+
+[hr]
+
+Workshop ID: 2703664356
+Mod ID: Amputation
