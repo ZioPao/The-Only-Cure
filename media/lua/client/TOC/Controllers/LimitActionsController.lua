@@ -268,7 +268,7 @@ end
 local function CheckLimbFeasibility(limbName)
     local dcInst = DataController.GetInstance()
     local isFeasible = not dcInst:getIsCut(limbName) or dcInst:getIsProstEquipped(limbName)
-    TOC_DEBUG.print("isFeasible="..tostring(isFeasible))
+    --TOC_DEBUG.print("isFeasible="..tostring(isFeasible))
     return isFeasible
 end
 
