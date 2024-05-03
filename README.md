@@ -7,7 +7,7 @@
   <img src='https://img.shields.io/badge/Steam-000000?style=for-the-badge&logo=steam&logoColor=white' />        
 </a>
 </p>
-# You're bitten. You have two choices.
+You're bitten. You have two choices.
 Wait until you succumb to the virus or take matters into your hands. Cut off that infected part and live to die another day.
 
 This version of **The Only Cure** has been rebuilt from scratch to support future additions and to feel as close as possible as a vanilla mechanic.
@@ -15,7 +15,6 @@ This version of **The Only Cure** has been rebuilt from scratch to support futur
 **The older version will be delisted shortly and it will not be supported anymore.**
 
 Supports **Single Player** and **Multiplayer**!
-
 
 # Setup
 Use it with the following mods for the intended experience:
@@ -49,6 +48,9 @@ There are two prosthesis type that can be crafted\found.
 The main difference between the twos is that your actions will take longer with the Hook Prosthesis.
 
 When you equip a prosthetic limb, you will slowly gain familiarity with it, making actions more speedy in due time.
+
+## Admin tools
+If something strange happened, an admin can reset TOC mechanics on any player by right clicking on them and select _"Reset Amputations"_. They could also do the opposite by clicking on _"Force Amputation"_ for each amputable limb.
 
 # Credits
 |  |  |

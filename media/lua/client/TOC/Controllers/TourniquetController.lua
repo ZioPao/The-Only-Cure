@@ -71,11 +71,13 @@ function TourniquetController.WrapClothingAction(obj, wrappedFunc)
         group:setMultiItem(TourniquetController.bodyLoc, false)
     end
 
-    wrappedFunc(obj)
+    local ogValue = wrappedFunc(obj)
 
     if isTourniquet then
         group:setMultiItem(TourniquetController.bodyLoc, true)
     end
+
+    return ogValue      -- Needed for isValid
 end
 
 
@@ -98,12 +100,12 @@ end
 
 local og_ISWearClothing_isValid = ISWearClothing.isValid
 function ISWearClothing:isValid()
-    TourniquetController.WrapClothingAction(self, og_ISWearClothing_isValid)
+    return TourniquetController.WrapClothingAction(self, og_ISWearClothing_isValid)
 end
 
 local og_ISUnequipAction_perform = ISUnequipAction.perform
 function ISUnequipAction:perform()
-    TourniquetController.WrapClothingAction(self, og_ISUnequipAction_perform)
+   return TourniquetController.WrapClothingAction(self, og_ISUnequipAction_perform)
 end
 
 
