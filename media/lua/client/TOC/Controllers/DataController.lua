@@ -57,6 +57,7 @@ function DataController:setup(key)
     ---@type tocModDataType
     self.tocData = {
         -- Generic stuff that does not belong anywhere else
+        isInitializing = true,
         isIgnoredPartInfected = false,
         isAnyLimbCut = false,
         limbs = {},
@@ -86,8 +87,15 @@ function DataController:setup(key)
         }
     end
 
-    -- Add it to global mod data
+    -- Add it to client global mod data
     ModData.add(key, self.tocData)
+
+    -- Sync with the server
+    self:apply()
+
+    -- -- Disable lock
+    -- self.tocData.isInitializing = false
+    -- ModData.add(key, self.tocData)
 
 end
 
@@ -100,7 +108,7 @@ function DataController:applyOnlineData(tocData)
 end
 
 ---@param key string
-function DataController:loadLocalData(key)
+function DataController:tryLoadLocalData(key)
     self.tocData = ModData.get(key)
 
     --TOC_DEBUG.printTable(self.tocData)
@@ -389,6 +397,7 @@ function DataController.ReceiveData(key, data)
     -- TODO Add update from server scenario
 
     if handler.isResetForced then
+        TOC_DEBUG.print("Forced reset")
         handler:setup(key)
     elseif data then
         if data.isUpdateFromServer then
@@ -396,7 +405,8 @@ function DataController.ReceiveData(key, data)
         end
         handler:applyOnlineData(data)
     elseif username == getPlayer():getUsername() then
-        handler:loadLocalData(key)
+        TOC_DEBUG.print("loading local data")
+        handler:tryLoadLocalData(key)
     end
 
 
@@ -436,7 +446,7 @@ Events.OnReceiveGlobalModData.Add(DataController.ReceiveData)
 --- SP Only initialization
 ---@param key string
 function DataController:initSinglePlayer(key)
-    self:loadLocalData(key)
+    self:tryLoadLocalData(key)
     if self.tocData == nil or self.isResetForced then
         self:setup(key)
     end

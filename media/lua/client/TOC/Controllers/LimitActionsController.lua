@@ -15,8 +15,12 @@ local StaticData = require("TOC/StaticData")
 -- a prosthesis on, that can trigger random bleeds.
 
 local function CheckHandFeasibility(limbName)
+    TOC_DEBUG.print("Checking hand feasibility: " .. limbName)
     local dcInst = DataController.GetInstance()
-    return not dcInst:getIsCut(limbName) or dcInst:getIsProstEquipped(limbName)
+
+    local isFeasible = not dcInst:getIsCut(limbName) or dcInst:getIsProstEquipped(limbName)
+    TOC_DEBUG.print("isFeasible: " .. tostring(isFeasible))
+    return isFeasible
 end
 
 
@@ -107,6 +111,8 @@ end
 ---A recreation of the original method, but with amputations in mind
 ---@param dcInst DataController
 function ISEquipWeaponAction:performWithAmputation(dcInst)
+
+    TOC_DEBUG.print("running ISEquipWeaponAction performWithAmputation")
     local hand = nil
     local otherHand = nil
     local getMethodFirst = nil
@@ -130,6 +136,10 @@ function ISEquipWeaponAction:performWithAmputation(dcInst)
         setMethodSecond = self.character.setSecondaryHandItem
     end
 
+    local isFirstValid = CheckHandFeasibility(hand)
+    local isSecondValid = CheckHandFeasibility(otherHand)
+
+
     if not self.twoHands then
         if getMethodFirst(self.character) and getMethodFirst(self.character):isRequiresEquippedBothHands() then
             setMethodFirst(self.character, nil)
@@ -145,10 +155,10 @@ function ISEquipWeaponAction:performWithAmputation(dcInst)
             setMethodSecond(self.character, nil)
             -- TODO We should use the CachedData indexable instead of dcInst
 
-            if not dcInst:getIsCut(hand) then
+            if isFirstValid then
                 setMethodSecond(self.character, self.item)
                 -- Check other HAND!
-            elseif not dcInst:getIsCut(otherHand) then
+            elseif isSecondValid then
                 setMethodFirst(self.character, self.item)
             end
         end
@@ -156,13 +166,10 @@ function ISEquipWeaponAction:performWithAmputation(dcInst)
         setMethodFirst(self.character, nil)
         setMethodSecond(self.character, nil)
 
-
-        local isFirstValid = CheckHandFeasibility(hand)
-        local isSecondValid = CheckHandFeasibility(otherHand)
         -- TOC_DEBUG.print("First Hand: " .. tostring(hand))
-        -- TOC_DEBUG.print("Prost Group: " .. tostring(prostGroup))
+        -- --TOC_DEBUG.print("Prost Group: " .. tostring(prostGroup))
         -- TOC_DEBUG.print("Other Hand: " .. tostring(otherHand))
-        -- TOC_DEBUG.print("Other Prost Group: " .. tostring(otherProstGroup))
+        -- --TOC_DEBUG.print("Other Prost Group: " .. tostring(otherProstGroup))
 
         -- TOC_DEBUG.print("isPrimaryHandValid: " .. tostring(isFirstValid))
         -- TOC_DEBUG.print("isSecondaryHandValid: " .. tostring(isSecondValid))

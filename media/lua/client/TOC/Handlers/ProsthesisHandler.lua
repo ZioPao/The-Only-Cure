@@ -70,11 +70,10 @@ function ProsthesisHandler.CheckIfEquippable(fullType)
     return false
 end
 
-
 ---Handle equipping or unequipping prosthetics
 ---@param item InventoryItem
 ---@param isEquipping boolean
----@return boolean 
+---@return boolean
 function ProsthesisHandler.SearchAndSetupProsthesis(item, isEquipping)
     if not ProsthesisHandler.CheckIfProst(item) then return false end
 
@@ -100,7 +99,7 @@ local function HandleProsthesisValidation(item, isEquippable)
     local isProst = ProsthesisHandler.CheckIfProst(item)
     if not isProst then return isEquippable end
 
-    local fullType = item:getFullType()        -- use fulltype for side
+    local fullType = item:getFullType() -- use fulltype for side
     if isEquippable then
         isEquippable = ProsthesisHandler.CheckIfEquippable(fullType)
     else
@@ -133,8 +132,6 @@ function ISClothingExtraAction:isValid()
     return HandleProsthesisValidation(testItem, isEquippable)
 end
 
-
-
 --[[
     Horrendous workaround
 
@@ -161,7 +158,6 @@ function ISClothingExtraAction:perform()
     if isProst then
         group:setMultiItem("TOC_ArmProst", true)
     end
-
 end
 
 local og_ISUnequipAction_perform = ISUnequipAction.perform
@@ -176,8 +172,15 @@ function ISUnequipAction:perform()
 
     if isProst then
         group:setMultiItem("TOC_ArmProst", true)
+
+        -- we need to fetch the limbname associated to the prosthesis
+        local side = CommonMethods.GetSide(self.item:getFullType())
+        local highestAmputatedLimbs = CachedDataHandler.GetHighestAmputatedLimbs(getPlayer():getUsername())
+        if highestAmputatedLimbs then
+            local hal = highestAmputatedLimbs[side]
+            triggerEvent("OnProsthesisUnequipped", hal)
+        end
     end
 end
-
 
 return ProsthesisHandler
