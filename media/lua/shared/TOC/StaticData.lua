@@ -232,9 +232,9 @@ end
 
 -- Link a trait to a specific body part
 StaticData.TRAITS_BP = {
-    AmputeeHand = "Hand_L",
-    AmputeeLowerArm = "ForeArm_L",
-    AmputeeUpeerArm = "UpperArm_L"
+    Amputee_Hand = "Hand_L",
+    Amputee_ForeArm = "ForeArm_L",
+    Amputee_UpperArm = "UpperArm_L"
 }
 
 -----------------

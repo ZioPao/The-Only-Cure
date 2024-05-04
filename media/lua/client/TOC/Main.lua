@@ -6,39 +6,12 @@ require("TOC/Events")
 
 ---@class Main
 local Main = {
-    _version = 2.0
+    _version = "2.0.2"
 }
 
----Setups the custom traits
-function Main.SetupTraits()
-    -- Perks.Left_Hand is defined in perks.txt
-
-    local traitsTable = {
-        [1] = TraitFactory.addTrait("Amputee_Hand", getText("UI_trait_Amputee_Hand"), -8, getText("UI_trait_Amputee_Hand_desc"), false, false),
-        [2] = TraitFactory.addTrait("Amputee_LowerArm", getText("UI_trait_Amputee_LowerArm"), -10, getText("UI_trait_Amputee_LowerArm_desc"), false, false),
-        [3] = TraitFactory.addTrait("Amputee_UpperArm", getText("UI_trait_Amputee_UpperArm"), -20, getText("UI_trait_Amputee_UpperArm_desc"), false, false)
-    }
-
-    for i=1, #traitsTable do
-
-        ---@type Trait
-        local t = traitsTable[i]
-        ---@diagnostic disable-next-line: undefined-field
-        t:addXPBoost(Perks.Left_Hand, 4)
-        t:addXPBoost(Perks.Fitness, -1)
-        t:addXPBoost(Perks.Strength, -1)
-    end
-
-    TraitFactory.addTrait("Insensitive", getText("UI_trait_Insensitive"), 6, getText("UI_trait_Insensitive_desc"), false, false)
-
-    TraitFactory.setMutualExclusive("Amputee_Hand", "Amputee_LowerArm")
-    TraitFactory.setMutualExclusive("Amputee_Hand", "Amputee_UpperArm")
-    TraitFactory.setMutualExclusive("Amputee_LowerArm", "Amputee_UpperArm")
-end
-
 function Main.Start()
-    TOC_DEBUG.print("running Start method")
-    Main.SetupTraits()
+    TOC_DEBUG.print("Starting The Only Cure version " .. tostring(Main._version))
+    --Main.SetupTraits()
     Main.SetupEvents()
 end
 
@@ -46,6 +19,7 @@ function Main.SetupEvents()
     local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
     Events.OnReceivedTocData.Add(CachedDataHandler.CalculateCacheableValues)
 end
+
 
 function Main.InitializePlayer()
     ---Looop until we've successfully initialized the mod

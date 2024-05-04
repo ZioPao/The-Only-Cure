@@ -33,6 +33,9 @@ function LocalPlayerController.InitializePlayer(isForced)
     Events.OnAmputatedLimb.Add(LocalPlayerController.ToggleUpdateAmputations)
     LocalPlayerController.ToggleUpdateAmputations()
 
+    -- Manage their traits
+    LocalPlayerController.ManageTraits(playerObj)
+
     -- Since isForced is used to reset an existing player data, we're gonna clean their ISHealthPanel table too
     if isForced then
         local ItemsController = require("TOC/Controllers/ItemsController")
