@@ -29,10 +29,16 @@ function ServerDataHandler.AddTable(key, table)
     --TOC_DEBUG.printTable(table)
 
     -- Set that the data has been modified and it's updated on the server
-    table.isUpdateFromServer = true
+    table.isUpdateFromServer = true -- FIX this is useless
 
     ModData.add(key, table)     -- Add it to the server mod data
     ServerDataHandler.modData[key] = table
+
+
+    -- if table.isInitializing == true then
+    --     TOC_DEBUG.print("Applied data after setup")
+    --     table.isInitializing = false
+    -- end
 
 
     -- Since this could be triggered by a different client than the one referenced in the key, we're gonna
