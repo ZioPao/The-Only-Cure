@@ -354,10 +354,20 @@ function LocalPlayerController.DropItemsAfterAmputation(limbName)
             end
         end
     end
+
+    -- TODO Consider 2 handed weapons too
+
+    -- equipped items too
+    if side == "R" then
+        pl:setPrimaryHandItem(nil)
+    elseif side == "L" then
+        pl:setSecondaryHandItem(nil)
+    end
+
 end
 
 Events.OnAmputatedLimb.Add(LocalPlayerController.DropItemsAfterAmputation)
-
+Events.OnProsthesisUnequipped.Add(LocalPlayerController.DropItemsAfterAmputation)
 
 
 
