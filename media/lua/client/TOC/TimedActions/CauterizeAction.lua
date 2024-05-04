@@ -1,5 +1,6 @@
 require "TimedActions/ISBaseTimedAction"
 local DataController = require("TOC/Controllers/DataController")
+local LocalPlayerController = require("TOC/Controllers/LocalPlayerController")
 ---------------
 
 ---@class CauterizeAction : ISBaseTimedAction
@@ -72,11 +73,14 @@ function CauterizeAction:perform()
 
     local dcInst = DataController.GetInstance()
     dcInst:setCicatrizationTime(self.limbName, 0)
-    dcInst:setIsCicatrized(self.limbName, true)
     dcInst:setIsCauterized(self.limbName, true)
 
-    -- we don't care about the depended limbs, since they're alread "cicatrized"
+    -- Set isCicatrized and the visuals in one go, since this action is gonna be run only on a single client
+    LocalPlayerController.HandleSetCicatrization(dcInst, self.character, self.limbName)
 
+    -- TODO Add specific visuals for cauterization
+
+    -- we don't care about the depended limbs, since they're alread "cicatrized"
     dcInst:apply()
 
     ISBaseTimedAction.perform(self)
