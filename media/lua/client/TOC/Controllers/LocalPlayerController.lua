@@ -33,6 +33,9 @@ function LocalPlayerController.InitializePlayer(isForced)
     Events.OnAmputatedLimb.Add(LocalPlayerController.ToggleUpdateAmputations)
     LocalPlayerController.ToggleUpdateAmputations()
 
+    -- Manage their traits
+    LocalPlayerController.ManageTraits(playerObj)
+
     -- Since isForced is used to reset an existing player data, we're gonna clean their ISHealthPanel table too
     if isForced then
         local ItemsController = require("TOC/Controllers/ItemsController")
@@ -47,13 +50,16 @@ end
 ---Handles the traits
 ---@param playerObj IsoPlayer
 function LocalPlayerController.ManageTraits(playerObj)
-    local AmputationHandler = require("Handlers/TOC_AmputationHandler")
+    local AmputationHandler = require("TOC/Handlers/AmputationHandler")
     for k, v in pairs(StaticData.TRAITS_BP) do
         if playerObj:HasTrait(k) then
-            -- Once we find one, we should be done.
-            local tempHandler = AmputationHandler:new(v)
+            -- Once we find one, we should be done since they're exclusive
+            local tempHandler = AmputationHandler:new(v, playerObj)
             tempHandler:execute(false) -- No damage
             tempHandler:close()
+
+            -- The wound should be already cicatrized
+            LocalPlayerController.HandleSetCicatrization(DataController.GetInstance(), playerObj, v)
             return
         end
     end
@@ -257,14 +263,11 @@ function LocalPlayerController.UpdateAmputations()
             cicTime = cicTime - cicDec
 
 
-            dcInst:setCicatrizationTime(limbName, cicTime)
             TOC_DEBUG.print("New cicatrization time: " .. tostring(cicTime))
             if cicTime <= 0 then
-                TOC_DEBUG.print(tostring(limbName) .. " is cicatrized")
-                dcInst:setIsCicatrized(limbName, true)
-                -- Set visual
-                local ItemsController = require("TOC/Controllers/ItemsController")
-                ItemsController.Player.OverrideAmputationItemVisuals(pl, limbName, true)
+                LocalPlayerController.HandleSetCicatrization(dcInst, pl, limbName)
+            else
+                dcInst:setCicatrizationTime(limbName, cicTime)
             end
         end
     end
@@ -283,6 +286,23 @@ end
 function LocalPlayerController.ToggleUpdateAmputations()
     TOC_DEBUG.print("Activating amputation handling loop (if it wasn't active before)")
     CommonMethods.SafeStartEvent("EveryHours", LocalPlayerController.UpdateAmputations)
+end
+
+
+--* Cicatrization and cicatrization visuals *--
+
+---Set the boolean and cicTime in DCINST and the visuals for the amputated limb
+---@param dcInst DataController
+---@param playerObj IsoPlayer
+---@param limbName string
+function LocalPlayerController.HandleSetCicatrization(dcInst, playerObj, limbName)
+    TOC_DEBUG.print(tostring(limbName) .. " is cicatrized")
+    dcInst:setIsCicatrized(limbName, true)
+    dcInst:setCicatrizationTime(limbName, 0)
+
+    -- Set visuals for the amputation
+    local ItemsController = require("TOC/Controllers/ItemsController")
+    ItemsController.Player.OverrideAmputationItemVisuals(playerObj, limbName, true)
 end
 
 --* Object drop handling when amputation occurs

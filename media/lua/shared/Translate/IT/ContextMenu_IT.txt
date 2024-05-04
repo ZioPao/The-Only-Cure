@@ -1,0 +1,33 @@
+ContextMenu_IT = {
+    ContextMenu_Amputate = "Amputa",
+    ContextMenu_Amputate_Bandage = "Amputa e fascia",
+    ContextMenu_Amputate_Stitch = "Amputa e metti i punti",
+    ContextMenu_Amputate_Stitch_Bandage = "Amputate, metti i punti e fascia",
+
+    ContextMenu_Cauterize = "Cauterizza",
+    
+    ContextMenu_Limb_Hand_L = "Mano Sinistra",
+    ContextMenu_Limb_ForeArm_L = "Avambraccio Sinistro",
+    ContextMenu_Limb_UpperArm_L = "Braccio Superiore Sinistro",
+    ContextMenu_Limb_Hand_R = "Mano Destra",
+    ContextMenu_Limb_ForeArm_R = "Avambraccio Destro",
+    ContextMenu_Limb_UpperArm_R = "Braccio Superiore Destro",
+
+    ContextMenu_InstallProstRight = "Installa protesi sul braccio destro",
+    ContextMenu_InstallProstLeft = "Installa protesi sul braccio sinistro",
+
+    ContextMenu_PutTourniquetArmLeft = "Metti laccio emostatico sul braccio sinistro",
+    ContextMenu_PutTourniquetLegL = "Metti laccio emostatico sulla gamba sinistra",
+    ContextMenu_PutTourniquetArmRight = "Metti laccio emostatico sul braccio destro",
+    ContextMenu_PutTourniquetLegR = "Metti laccio emostatico sulla gamba destra",
+
+
+    ContextMenu_CleanWound = "Pulisci ferita",
+
+
+
+    ContextMenu_Admin_TOC = "TOC",
+    ContextMenu_Admin_ResetTOC = "Reset Amputations",
+    ContextMenu_Admin_ForceAmputation = "Force Amputation",
+    
+}
