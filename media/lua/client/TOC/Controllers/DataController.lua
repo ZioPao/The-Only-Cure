@@ -368,6 +368,8 @@ end
 function DataController.ReceiveData(key, data)
     -- During startup the game can return Bob as the player username, adding a useless ModData table
     if key == "TOC_Bob" then return end
+    if not luautils.stringStarts(key, StaticData.MOD_NAME .. "_") then return end
+
 
     TOC_DEBUG.print("ReceiveData for " .. key)
     if data == {} or data == nil then
