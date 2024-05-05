@@ -6,9 +6,9 @@ Wait until you succumb to the virus or take matters into your hands. Cut off tha
 
 This version of [b]The Only Cure[/b] has been rebuilt from scratch to support future additions and to feel as close as possible as a vanilla mechanic.
 
+[b]If you're using an older version of The Only Cure and want to switch with this, you're gonna need to create a new character\save to prevent issues.[/b]
 [b]The older version will be delisted shortly and it will not be supported anymore.[/b]
-
-Supports [b]Single Player[/b] and [b]Multiplayer[/b]!
+[h1]Supports [b]Single Player[/b] and [b]Multiplayer[/b]. Host Mode is currently [b]UNSUPPORTED![/b][/h1]
 
 [h1]Setup[/h1]
 Use it with the following mods for the intended experience:
@@ -16,6 +16,8 @@ Use it with the following mods for the intended experience:
 [*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2904920097]Fancy Handwork[/url]
 [*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2934621024]Brutal Handwork[/url]
 [/list]
+
+Place them [b]BEFORE[/b] The Only Cure in your mod list!
 
 [hr][/hr]
 
@@ -73,6 +75,10 @@ Got any issues or found some pesky bugs? Report them on GitHub!
   [tr]
     [th]dhert[/th]
     [th]Compatibility API[/th]
+  [/tr]
+  [tr]
+    [th]JCloudJalix[/th]
+    [th]German translation[/th]
   [/tr]
 [/table]
 
