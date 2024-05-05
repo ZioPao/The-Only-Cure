@@ -156,30 +156,28 @@ end)
 TestFramework.registerTestModule("Various", "Visuals", function()
     local Tests = {}
 
-    function Tests.AddBloodLeftForearm()
+    function Tests.AddBloodRightForearm()
         local playerObj = getPlayer()
-        local limbName = "ForeArm_L"
-        local fullType = StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. limbName
-
-
-        local item = playerObj:getInventory():FindAndReturn(fullType)
-        if instanceof(item, "Clothing") then
-
-            ---@cast item Clothing
-
-            print("Found limb to add blood onto")
-            item:setBloodLevel(100)
-            local coveredParts = BloodClothingType.getCoveredParts(item:getBloodClothingType())
-            if coveredParts then
-                for j=0,coveredParts:size()-1 do
-                    item:setBlood(coveredParts:get(j), 100)
-                    item:setDirt(coveredParts:get(j), 100)
-                end
-            end
-
-        end
-
-        playerObj:resetModelNextFrame()
+        -- local wornItems = playerObj:getWornItems()
+        -- local limbName = "ForeArm_R"
+        -- local fullType = StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. limbName
+    
+        -- for i = 1, wornItems:size() do
+        --     local it = wornItems:get(i - 1)
+        --     if it then
+        --         local wornItem = wornItems:get(i - 1):getItem()
+        --         TOC_DEBUG.print(wornItem:getFullType())
+        --         if wornItem:getFullType() == fullType then
+        --             TOC_DEBUG.print("Found amputation item for " .. limbName)
+    
+        --             -- change it here
+        --             wornItem:setBloodLevel
+        --             wornItem:getVisual():setTextureChoice(texId)
+        --             playerObj:resetModelNextFrame()     -- necessary to update the model
+        --             return
+        --         end
+        --     end
+        -- end
     end
 
     return Tests

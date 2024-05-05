@@ -145,8 +145,8 @@ end
 
 local og_ISClothingExtraAction_perform = ISClothingExtraAction.perform
 function ISClothingExtraAction:perform()
-    local extraItem = InventoryItemFactory.CreateItem(self.extra)
-    local isProst = ProsthesisHandler.SearchAndSetupProsthesis(extraItem, true)
+    --local extraItem = InventoryItemFactory.CreateItem(self.extra)
+    local isProst = ProsthesisHandler.SearchAndSetupProsthesis(self.item, true)
     local group
     if isProst then
         group = BodyLocations.getGroup("Human")
