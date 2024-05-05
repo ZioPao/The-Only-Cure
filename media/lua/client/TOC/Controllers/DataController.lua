@@ -362,7 +362,7 @@ end
 function DataController:apply()
     TOC_DEBUG.print("Applying data for " .. self.username)
     ModData.transmit(CommandsData.GetKey(self.username))
-    
+
     -- if getPlayer():getUsername() ~= self.username then
     --     sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayApplyFromOtherClient, {patientUsername = self.username} )
     --     -- force request from the server for that other client...

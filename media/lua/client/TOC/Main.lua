@@ -6,12 +6,11 @@ require("TOC/Events")
 
 ---@class Main
 local Main = {
-    _version = "2.0.4"
+    _version = "2.0.5"
 }
 
 function Main.Start()
     TOC_DEBUG.print("Starting The Only Cure version " .. tostring(Main._version))
-    --Main.SetupTraits()
     Main.SetupEvents()
 end
 
