@@ -63,22 +63,31 @@ function ISBaseTimedAction:perform()
     og_ISBaseTimedAction_perform(self)
 
     TOC_DEBUG.print("Running ISBaseTimedAction.perform override")
+    TOC_DEBUG.print("max time: " .. tostring(self.maxTime))
 
     local dcInst = DataController.GetInstance()
     if not dcInst:getIsAnyLimbCut() then return end
 
     local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(LocalPlayerController.username)
+    local xp = self.maxTime/100
     for k, _ in pairs(amputatedLimbs) do
         local limbName = k
 
         -- We're checking for only "visible" amputations to prevent from having bleeds everywhere
         if dcInst:getIsCut(limbName) and dcInst:getIsVisible(limbName) then
             local side = CommonMethods.GetSide(limbName)
-            LocalPlayerController.playerObj:getXp():AddXP(Perks["Side_" .. side], 1) -- TODO Make it dynamic
+            LocalPlayerController.playerObj:getXp():AddXP(Perks["Side_" .. side], xp)
             if not dcInst:getIsCicatrized(limbName) and dcInst:getIsProstEquipped(limbName) then
                 TOC_DEBUG.print("Trying for bleed, player met the criteria")
                 LocalPlayerController.TryRandomBleed(self.character, limbName)
             end
+
+
+            -- Level up prosthesis perk
+            if dcInst:getIsProstEquipped(limbName) then
+                LocalPlayerController.playerObj:getXp():AddXP(Perks["ProstFamiliarity"], xp)
+            end
+
         end
     end
 end
