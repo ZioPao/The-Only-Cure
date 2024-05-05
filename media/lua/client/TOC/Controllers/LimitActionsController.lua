@@ -79,6 +79,13 @@ function ISBaseTimedAction:perform()
                 TOC_DEBUG.print("Trying for bleed, player met the criteria")
                 LocalPlayerController.TryRandomBleed(self.character, limbName)
             end
+
+
+            -- Level up prosthesis perk
+            if dcInst:getIsProstEquipped(limbName) then
+                LocalPlayerController.playerObj:getXp():AddXP(Perks["ProstFamiliarity"], 1) -- TODO Make it dynamic
+            end
+
         end
     end
 end
