@@ -11,7 +11,6 @@ local Main = {
 
 function Main.Start()
     TOC_DEBUG.print("Starting The Only Cure version " .. tostring(Main._version))
-    --Main.SetupTraits()
     Main.SetupEvents()
 end
 
