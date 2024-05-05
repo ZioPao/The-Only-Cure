@@ -474,4 +474,12 @@ function DataController.GetInstance(username)
     end
 end
 
+
+function DataController.DestroyInstance(username)
+    if DataController.instances[username] ~= nil then
+        DataController.instances[username] = nil
+    end
+
+end
+
 return DataController
