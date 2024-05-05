@@ -43,13 +43,18 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
 
         for k, _ in pairs(amputatedLimbs) do
             local limbName = k
-            --if dcInst:getIsCut(limbName) then
-            local perk = Perks["Side_" .. CommonMethods.GetSide(limbName)]
-            local perkLevel = pl:getPerkLevel(perk)
+            local perkAmp = Perks["Side_" .. CommonMethods.GetSide(limbName)]
+            local perkLevel = pl:getPerkLevel(perkAmp)
+
+            if dcInst:getIsProstEquipped(limbName) then
+                -- TODO We should separate this in multiple perks, since this is gonna be a generic familiarity and could make no actual sense
+                local perkProst = Perks["ProstFamiliarity"]
+                perkLevel = perkLevel + pl:getPerkLevel(perkProst)
+            end
+
             local perkLevelScaled
             if perkLevel ~= 0 then perkLevelScaled = perkLevel / 10 else perkLevelScaled = 0 end
             time = time * (StaticData.LIMBS_TIME_MULTIPLIER_IND_NUM[limbName] - perkLevelScaled)
-            --end
         end
     end
     return time
