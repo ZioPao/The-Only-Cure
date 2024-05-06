@@ -17,8 +17,8 @@ Steps to reproduce the behavior:
 3. Scroll down to '....'
 4. See error
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+**Logs**
+Please upload your game logs too. Server logs are useful too.
 
 **Additional context**
 Add any other context about the problem here.
