@@ -6,7 +6,7 @@ require("TOC/Events")
 
 ---@class Main
 local Main = {
-    _version = "2.0.6"
+    _version = "2.0.7"
 }
 
 function Main.Start()
@@ -36,15 +36,14 @@ function Main.InitializePlayer()
     CommonMethods.SafeStartEvent("OnTick", TryToInitialize)
 end
 
----Clean the TOC table for that SP player, to prevent from clogging it up
+---Clean the TOC table for that SP player, to prevent it from clogging ModData up
 ---@param player IsoPlayer
 function Main.WipeData(player)
-    TOC_DEBUG.print("Wiping data after death")
-    local key = CommandsData.GetKey(player:getUsername())
+    local username = player:getUsername()
+    TOC_DEBUG.print("Wiping data after death: " .. username)
+    local key = CommandsData.GetKey(username)
 
     --ModData.remove(key)
-
-
 
     if not isClient() then
         -- For SP, it's enough just removing the data this way
@@ -54,7 +53,14 @@ function Main.WipeData(player)
         -- at the next character by passing an empty mod data
         ModData.add(key, {})
         ModData.transmit(key)
+
     end
+
+
+    -- Let's wipe the instance too just to be sure
+    local DataController = require("TOC/Controllers/DataController")
+    DataController.DestroyInstance(username)
+
 end
 
 --* Events *--
