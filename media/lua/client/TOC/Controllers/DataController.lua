@@ -381,9 +381,9 @@ function DataController.ReceiveData(key, data)
 
     TOC_DEBUG.print("ReceiveData for " .. key)
 
-    if data == nil or data.limbs == nil then
-        TOC_DEBUG.print("Data is nil, new character or something is wrong")
-    end
+    -- if data == nil or data.limbs == nil then
+    --     TOC_DEBUG.print("Data is nil, new character or something is wrong")
+    -- end
 
     -- Get DataController instance if there was none for that user and reapply the correct ModData table as a reference
     local username = key:sub(5)
@@ -407,7 +407,7 @@ function DataController.ReceiveData(key, data)
         end
         handler:applyOnlineData(data)
     elseif username == getPlayer():getUsername() then
-        TOC_DEBUG.print("loading local data")
+        TOC_DEBUG.print("Trying to load local data or no data is available")
         handler:tryLoadLocalData(key)
     end
 
