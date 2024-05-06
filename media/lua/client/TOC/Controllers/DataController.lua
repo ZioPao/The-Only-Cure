@@ -380,8 +380,9 @@ function DataController.ReceiveData(key, data)
 
 
     TOC_DEBUG.print("ReceiveData for " .. key)
-    if data == {} or data == nil then
-        error("Data is nil, new character or something is wrong")
+
+    if data == nil or data.limbs == nil then
+        TOC_DEBUG.print("Data is nil, new character or something is wrong")
     end
 
     -- Get DataController instance if there was none for that user and reapply the correct ModData table as a reference
@@ -399,7 +400,8 @@ function DataController.ReceiveData(key, data)
     if handler.isResetForced then
         TOC_DEBUG.print("Forced reset")
         handler:setup(key)
-    elseif data then
+    elseif data and data.limbs then
+        -- Let's validate that the data structure is actually valid to prevent issues
         if data.isUpdateFromServer then
             TOC_DEBUG.print("Update from the server")
         end

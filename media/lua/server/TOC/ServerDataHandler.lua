@@ -34,6 +34,10 @@ function ServerDataHandler.AddTable(key, table)
     ModData.add(key, table)     -- Add it to the server mod data
     ServerDataHandler.modData[key] = table
 
+
+    -- Check integrity of table. if it doesn't contains toc data, it means that we received a reset 
+    if table.limbs == nil then return end
+
     -- Since this could be triggered by a different client than the one referenced in the key, we're gonna
     -- apply the changes back to the key client again to be sure that everything is in sync
     local username = CommandsData.GetUsername(key)
