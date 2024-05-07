@@ -132,36 +132,26 @@ function ISClothingExtraAction:isValid()
     return HandleProsthesisValidation(testItem, isEquippable)
 end
 
---[[
+
+local og_ISClothingExtraAction_perform = ISClothingExtraAction.perform
+function ISClothingExtraAction:perform()
+    local extraItem = InventoryItemFactory.CreateItem(self.extra)
+    ProsthesisHandler.SearchAndSetupProsthesis(extraItem, true)
+    og_ISClothingExtraAction_perform(self)
+end
+
+local og_ISUnequipAction_perform = ISUnequipAction.perform
+function ISUnequipAction:perform()
+
+    --[[
     Horrendous workaround
 
     To unequp items, the java side uses WornItems.setItem, which has
     a check for multiItem. Basically, if it's active, it won't actually remove the item,
     fucking things up. So, to be 100% sure that we're removing the items, we're gonna
     disable and re-enable the multi-item bool for the Unequip Action.
-]]
+    ]]
 
-
-
-local og_ISClothingExtraAction_perform = ISClothingExtraAction.perform
-function ISClothingExtraAction:perform()
-    local extraItem = InventoryItemFactory.CreateItem(self.extra)
-    local isProst = ProsthesisHandler.SearchAndSetupProsthesis(extraItem, true)
-    local group
-    if isProst then
-        group = BodyLocations.getGroup("Human")
-        group:setMultiItem("TOC_ArmProst", false)
-    end
-
-    og_ISClothingExtraAction_perform(self)
-
-    if isProst then
-        group:setMultiItem("TOC_ArmProst", true)
-    end
-end
-
-local og_ISUnequipAction_perform = ISUnequipAction.perform
-function ISUnequipAction:perform()
     local isProst = ProsthesisHandler.SearchAndSetupProsthesis(self.item, false)
     local group
     if isProst then

@@ -145,6 +145,14 @@ end)
 TestFramework.registerTestModule("Various", "Player", function()
     local Tests = {}
 
+
+    function Tests.BleedTest()
+        local pl = getPlayer()
+
+        --pl:getBodyDamage():getBodyPart(BodyPartType.ForeArm_R):setBleeding(true)
+        pl:getBodyDamage():getBodyPart(BodyPartType.ForeArm_R):setBleedingTime(20)
+    end
+
     function Tests.Kill()
         getPlayer():Kill(getPlayer())
     end
