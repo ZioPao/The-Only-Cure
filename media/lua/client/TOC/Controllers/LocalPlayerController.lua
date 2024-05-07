@@ -127,8 +127,15 @@ function LocalPlayerController.TryRandomBleed(character, limbName)
     if chance > normCicTime then
         TOC_DEBUG.print("Triggered bleeding from non cicatrized wound")
         local adjacentBodyPartType = BodyPartType[StaticData.LIMBS_ADJACENT_IND_STR[limbName]]
-        character:getBodyDamage():getBodyPart(adjacentBodyPartType):setBleeding(true)
-        character:getBodyDamage():getBodyPart(adjacentBodyPartType):setBleedingTime(20)
+
+        -- we need to check if the wound is already bleeding before doing anything else to prevent issues with bandages
+        local bp = character:getBodyDamage():getBodyPart(adjacentBodyPartType)
+        bp:setBleedingTime(20)      -- TODO Should depend on cicatrization instead of a fixed time
+
+        
+
+        
+        --character:getBodyDamage():getBodyPart(adjacentBodyPartType):setBleeding(true)
     end
 end
 
