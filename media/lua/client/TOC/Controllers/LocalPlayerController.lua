@@ -131,10 +131,9 @@ function LocalPlayerController.TryRandomBleed(character, limbName)
         -- we need to check if the wound is already bleeding before doing anything else to prevent issues with bandages
         local bp = character:getBodyDamage():getBodyPart(adjacentBodyPartType)
         bp:setBleedingTime(20)      -- TODO Should depend on cicatrization instead of a fixed time
+        -- ADD Could break bandages if bleeding is too much?
 
-        
 
-        
         --character:getBodyDamage():getBodyPart(adjacentBodyPartType):setBleeding(true)
     end
 end
