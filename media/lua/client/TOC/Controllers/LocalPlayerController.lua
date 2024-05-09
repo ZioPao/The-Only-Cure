@@ -147,6 +147,7 @@ LocalPlayerController.hasBeenDamaged = false
 ---Check if the player has in infected body part or if they have been hit in a cut area
 ---@param character IsoPlayer|IsoGameCharacter
 function LocalPlayerController.HandleDamage(character)
+    --TOC_DEBUG.print("Player got hit!")
     -- TOC_DEBUG.print(damageType)
     if character ~= getPlayer() then return end
     local bd = character:getBodyDamage()
@@ -203,7 +204,6 @@ end
 ---@param damageAmount number
 function LocalPlayerController.OnGetDamage(character, damageType, damageAmount)
     -- TODO Check if other players in the online triggers this
-    TOC_DEBUG.print("Player got hit!")
 
     if LocalPlayerController.hasBeenDamaged == false then
         -- Start checks
