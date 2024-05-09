@@ -147,7 +147,6 @@ LocalPlayerController.hasBeenDamaged = false
 ---Check if the player has in infected body part or if they have been hit in a cut area
 ---@param character IsoPlayer|IsoGameCharacter
 function LocalPlayerController.HandleDamage(character)
-    -- TOC_DEBUG.print("Player got hit!")
     -- TOC_DEBUG.print(damageType)
     if character ~= getPlayer() then return end
     local bd = character:getBodyDamage()
@@ -179,18 +178,17 @@ function LocalPlayerController.HandleDamage(character)
 
     -- Check other body parts that are not included in the mod, if there's a bite there then the player is fucked
     -- We can skip this loop if the player has been infected. The one before we kinda need it to handle correctly the bites in case the player wanna cut stuff off anyway
-    if dcInst:getIsIgnoredPartInfected() then return end
-
-    for i = 1, #StaticData.IGNORED_BODYLOCS_BPT do
-        local bodyPartType = StaticData.IGNORED_BODYLOCS_BPT[i]
-        local bodyPart = bd:getBodyPart(bodyPartType)
-        if bodyPart and (bodyPart:bitten() or bodyPart:IsInfected()) then
-            dcInst:setIsIgnoredPartInfected(true)
-            modDataNeedsUpdate = true
+    if not dcInst:getIsIgnoredPartInfected() then
+        for i = 1, #StaticData.IGNORED_BODYLOCS_BPT do
+            local bodyPartType = StaticData.IGNORED_BODYLOCS_BPT[i]
+            local bodyPart = bd:getBodyPart(bodyPartType)
+            if bodyPart and (bodyPart:bitten() or bodyPart:IsInfected()) then
+                dcInst:setIsIgnoredPartInfected(true)
+                modDataNeedsUpdate = true
+            end
         end
     end
 
-    -- TODO in theory  should sync modData, but it's gonna be expensive as fuck. Figure it out
     if modDataNeedsUpdate then
         dcInst:apply()
     end
@@ -205,6 +203,7 @@ end
 ---@param damageAmount number
 function LocalPlayerController.OnGetDamage(character, damageType, damageAmount)
     -- TODO Check if other players in the online triggers this
+    TOC_DEBUG.print("Player got hit!")
 
     if LocalPlayerController.hasBeenDamaged == false then
         -- Start checks
