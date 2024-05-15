@@ -149,7 +149,11 @@ LocalPlayerController.hasBeenDamaged = false
 function LocalPlayerController.HandleDamage(character)
     --TOC_DEBUG.print("Player got hit!")
     -- TOC_DEBUG.print(damageType)
-    if character ~= getPlayer() then return end
+    if character ~= getPlayer() then
+        -- Disable lock before doing anything else
+        LocalPlayerController.hasBeenDamaged = false
+        return
+    end
     local bd = character:getBodyDamage()
     local dcInst = DataController.GetInstance()
     local modDataNeedsUpdate = false
