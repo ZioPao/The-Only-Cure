@@ -133,16 +133,21 @@ function CachedDataHandler.CalculateBothHandsFeasibility()
     CachedDataHandler.CalculateHandFeasibility("Hand_L")
     CachedDataHandler.CalculateHandFeasibility("Hand_R")
     local interactStr = "Interact"
+
+    if CachedDataHandler.interactKey == nil or CachedDataHandler.interactKey == 0 then
+        CachedDataHandler.interactKey = getCore():getKey(interactStr)
+    end
+
+
+
     if not CachedDataHandler.GetBothHandsFeasibility() then
         TOC_DEBUG.print("Disabling interact key")
-
-        -- Cache the current key
-        CachedDataHandler.interactKey = getCore():getKey(interactStr)
+        TOC_DEBUG.print("Cached current key for interact: " .. tostring(CachedDataHandler.interactKey))
         getCore():addKeyBinding(interactStr, Keyboard.KEY_NONE)
     else
         TOC_DEBUG.print("Re-enabling interact key")
+        TOC_DEBUG.print("Cached current key for interact: " .. tostring(CachedDataHandler.interactKey))
 
-        if not CachedDataHandler.interactKey then CachedDataHandler.interactKey = getCore():getKey(interactStr) end
         getCore():addKeyBinding(interactStr, CachedDataHandler.interactKey)
     end
 end

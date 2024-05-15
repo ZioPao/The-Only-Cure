@@ -6,7 +6,7 @@ require("TOC/Events")
 
 ---@class Main
 local Main = {
-    _version = "2.0.10"
+    _version = "2.0.11"
 }
 
 function Main.Start()
@@ -58,8 +58,9 @@ function Main.WipeData(player)
 
 
     -- Let's wipe the instance too just to be sure
-    local DataController = require("TOC/Controllers/DataController")
-    DataController.DestroyInstance(username)
+    -- TODO This can break things I guess
+    --local DataController = require("TOC/Controllers/DataController")
+    --DataController.DestroyInstance(username)
 
 end
 

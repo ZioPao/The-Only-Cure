@@ -17,10 +17,12 @@ ItemsController.Player = {}
 ---@return number
 ---@private
 function ItemsController.Player.GetAmputationTexturesIndex(playerObj, isCicatrized)
+    -- FIX Broken
     local textureString = playerObj:getHumanVisual():getSkinTexture()
     local isHairy = textureString:sub(-1) == "a"
 
-    local matchedIndex = tonumber(textureString:match("%d$")) or 0
+    local matchedIndex = tonumber(textureString:match("%d%d"))      -- it must always be at least 1
+    TOC_DEBUG.print("Texture string: " .. tostring(textureString))
 
     if isHairy then
         matchedIndex = matchedIndex + 5
@@ -30,7 +32,7 @@ function ItemsController.Player.GetAmputationTexturesIndex(playerObj, isCicatriz
         matchedIndex = matchedIndex + (isHairy and 5 or 10) -- We add 5 is it's the texture, else 10
     end
 
-    TOC_DEBUG.print("isCicatrized= " .. tostring(isCicatrized))
+    TOC_DEBUG.print("isCicatrized = " .. tostring(isCicatrized))
     TOC_DEBUG.print("Amputation Texture Index: " .. tostring(matchedIndex))
     return matchedIndex - 1
 end
