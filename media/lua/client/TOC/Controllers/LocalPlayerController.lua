@@ -202,17 +202,13 @@ function LocalPlayerController.HandleDamage(character)
     LocalPlayerController.hasBeenDamaged = false
 end
 
----Setup HandleDamage, triggered by OnPlayerGetDamage
+---Setup HandleDamage, triggered by OnPlayerGetDamage. To prevent a spam caused by this awful event, we use a bool lock
 ---@param character IsoPlayer|IsoGameCharacter
 ---@param damageType string
 ---@param damageAmount number
 function LocalPlayerController.OnGetDamage(character, damageType, damageAmount)
-    -- TODO Check if other players in the online triggers this
-
     if LocalPlayerController.hasBeenDamaged == false then
         -- Start checks
-
-        -- TODO Add a timer before we can re-enable this bool?
         LocalPlayerController.hasBeenDamaged = true
         LocalPlayerController.HandleDamage(character)
     end
