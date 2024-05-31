@@ -97,6 +97,7 @@ function DataController:setup(key)
     -- self.tocData.isInitializing = false
     -- ModData.add(key, self.tocData)
 
+    triggerEvent("OnSetupTocData")
 end
 
 ---In case of desync between the table on ModData and the table here
@@ -416,6 +417,8 @@ function DataController.ReceiveData(key, data)
     handler:setIsDataReady(true)
 
     triggerEvent("OnReceivedTocData", handler.username)
+
+    -- TODO We need an event to track if initialization has been finalized
 
 
 

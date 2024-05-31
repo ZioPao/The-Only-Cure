@@ -5,7 +5,7 @@ local TRAITS = {
     Amputee_Hand = "Amputee_Hand",
     Amputee_ForeArm = "Amputee_ForeArm",
     Amputee_UpperArm = "Amputee_UpperArm",
-    Insensitive = "Insensitive"
+    --Insensitive = "Insensitive"       -- TODO Disabled for now, until we reintroduce it
 }
 
 
@@ -37,7 +37,7 @@ local function SetupTraits()
         t:addXPBoost(Perks.Strength, -1)
     end
 
-    TraitFactory.addTrait(TRAITS.Insensitive, GetTraitText(TRAITS.Insensitive), 6, GetTraitDesc(TRAITS.Insensitive), false, false)
+    --TraitFactory.addTrait(TRAITS.Insensitive, GetTraitText(TRAITS.Insensitive), 6, GetTraitDesc(TRAITS.Insensitive), false, false)
 
     TraitFactory.setMutualExclusive(TRAITS.Amputee_Hand, TRAITS.Amputee_ForeArm)
     TraitFactory.setMutualExclusive(TRAITS.Amputee_Hand, TRAITS.Amputee_UpperArm)
