@@ -46,11 +46,13 @@ function LocalPlayerController.InitializePlayer(isForced)
     SetHealthPanelTOC()
 end
 
----Handles the traits
----@param playerObj IsoPlayer
-function LocalPlayerController.ManageTraits(playerObj)
 
-    -- FIX This can fail if we haven't initialized TOC in time`
+
+---Handles the traits
+function LocalPlayerController.ManageTraits()
+
+    -- Local player
+    local playerObj = getPlayer()
 
     local AmputationHandler = require("TOC/Handlers/AmputationHandler")
     for k, v in pairs(StaticData.TRAITS_BP) do
@@ -66,6 +68,11 @@ function LocalPlayerController.ManageTraits(playerObj)
         end
     end
 end
+
+-- We need to manage traits when we're done setupping everything
+-- It shouldn't be done every single time we initialize the player, fetching data, etc.
+Events.OnSetupTocData.Add(LocalPlayerController.ManageTraits)
+
 
 ----------------------------------------------------------
 

@@ -97,14 +97,7 @@ function DataController:setup(key)
     -- self.tocData.isInitializing = false
     -- ModData.add(key, self.tocData)
 
-
-
-    -- FIX THIS THING HERE ISN'T REALLY CORRECT BUT IT'S A WORKAROUND UNTIL WE FIGURE IT OUT
-    -- The issue is that we need to do this once, not every single time we load data.
-    -- Manage their traits
-    local LocalPlayerController = require("TOC/Controller/LocalPlayerController")
-    LocalPlayerController.ManageTraits(getPlayer())
-
+    triggerEvent("OnSetupTocData")
 end
 
 ---In case of desync between the table on ModData and the table here
