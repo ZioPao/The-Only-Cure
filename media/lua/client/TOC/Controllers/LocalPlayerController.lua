@@ -6,6 +6,8 @@ require("TOC/Events")
 -----------
 
 
+
+
 -- Handle ONLY stuff for the local client
 
 ---@class LocalPlayerController
@@ -33,9 +35,6 @@ function LocalPlayerController.InitializePlayer(isForced)
     Events.OnAmputatedLimb.Add(LocalPlayerController.ToggleUpdateAmputations)
     LocalPlayerController.ToggleUpdateAmputations()
 
-    -- Manage their traits
-    LocalPlayerController.ManageTraits(playerObj)
-
     -- Since isForced is used to reset an existing player data, we're gonna clean their ISHealthPanel table too
     if isForced then
         local ItemsController = require("TOC/Controllers/ItemsController")
@@ -50,6 +49,9 @@ end
 ---Handles the traits
 ---@param playerObj IsoPlayer
 function LocalPlayerController.ManageTraits(playerObj)
+
+    -- FIX This can fail if we haven't initialized TOC in time`
+
     local AmputationHandler = require("TOC/Handlers/AmputationHandler")
     for k, v in pairs(StaticData.TRAITS_BP) do
         if playerObj:HasTrait(k) then
