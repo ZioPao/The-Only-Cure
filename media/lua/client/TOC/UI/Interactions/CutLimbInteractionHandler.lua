@@ -13,7 +13,8 @@ local CutLimbAction = require("TOC/TimedActions/CutLimbAction")
 ---Check if the item type corresponds to a compatible saw
 ---@param itemType string
 local function CheckIfSaw(itemType)
-    return itemType:contains(StaticData.SAWS_TYPES_IND_STR.saw) or itemType:contains(StaticData.SAWS_TYPES_IND_STR.gardenSaw)
+    return itemType == StaticData.SAWS_TYPES_IND_STR.saw
+            or itemType == StaticData.SAWS_TYPES_IND_STR.gardenSaw
 end
 
 ---Return a compatible bandage
