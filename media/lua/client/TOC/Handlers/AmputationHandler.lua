@@ -89,9 +89,12 @@ end
 ---@param stitchesItem InventoryItem
 ---@return ISStitch
 function AmputationHandler.PrepareStitchesAction(prevAction, limbName, surgeonPl, patientPl, stitchesItem)
-    local bptEnum = StaticData.LIMBS_TO_BODYLOCS_IND_BPT[limbName]
     local bd = patientPl:getBodyDamage()
-    local bodyPart = bd:getBodyPart(bptEnum)
+
+    -- we need the adjacent one, not the actual one
+    local adjacentLimb = StaticData.LIMBS_ADJACENT_IND_STR[limbName]
+    local bodyPart = bd:getBodyPart(BodyPartType[adjacentLimb])
+
     local stitchesAction = ISStitch:new(surgeonPl, patientPl, stitchesItem, bodyPart, true)
     ISTimedActionQueue.addAfter(prevAction, stitchesAction)
 
@@ -106,9 +109,11 @@ end
 ---@param bandageItem InventoryItem
 ---@return ISApplyBandage
 function AmputationHandler.PrepareBandagesAction(prevAction, limbName, surgeonPl, patientPl, bandageItem)
-    local bptEnum = StaticData.LIMBS_TO_BODYLOCS_IND_BPT[limbName]
     local bd = patientPl:getBodyDamage()
-    local bodyPart = bd:getBodyPart(bptEnum)
+    -- we need the adjacent one, not the actual one
+    local adjacentLimb = StaticData.LIMBS_ADJACENT_IND_STR[limbName]
+    local bodyPart = bd:getBodyPart(BodyPartType[adjacentLimb])
+
     local bandageAction = ISApplyBandage:new(surgeonPl, patientPl, bandageItem, bodyPart, true)
     ISTimedActionQueue.addAfter(prevAction, bandageAction)
 

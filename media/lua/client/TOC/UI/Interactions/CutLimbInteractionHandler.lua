@@ -38,9 +38,8 @@ local function GetStitchesConsumableItem(player)
     -- Suture needle has priority
 
     local sutureNeedle = plInv:FindAndReturn("Base.SutureNeedle")
-    ---@cast sutureNeedle DrainableComboItem
 
-    if sutureNeedle and sutureNeedle:getUsedDelta() > 0 then
+    if sutureNeedle then
         return sutureNeedle
     else
         -- Didn't find the suture one, so let's search for the normal one + thread

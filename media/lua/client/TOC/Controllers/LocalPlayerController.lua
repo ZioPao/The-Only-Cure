@@ -58,12 +58,15 @@ function LocalPlayerController.ManageTraits()
     for k, v in pairs(StaticData.TRAITS_BP) do
         if playerObj:HasTrait(k) then
             -- Once we find one, we should be done since they're exclusive
+            TOC_DEBUG.print("Player has amputation trait " .. k .. ", executing it")
             local tempHandler = AmputationHandler:new(v, playerObj)
             tempHandler:execute(false) -- No damage
             tempHandler:close()
 
             -- The wound should be already cicatrized
+            local dcInst = DataController.GetInstance()
             LocalPlayerController.HandleSetCicatrization(DataController.GetInstance(), playerObj, v)
+            dcInst:apply()
             return
         end
     end
@@ -310,7 +313,7 @@ end
 ---@param playerObj IsoPlayer
 ---@param limbName string
 function LocalPlayerController.HandleSetCicatrization(dcInst, playerObj, limbName)
-    TOC_DEBUG.print(tostring(limbName) .. " is cicatrized")
+    TOC_DEBUG.print("Setting cicatrization to " .. tostring(limbName))
     dcInst:setIsCicatrized(limbName, true)
     dcInst:setCicatrizationTime(limbName, 0)
 
