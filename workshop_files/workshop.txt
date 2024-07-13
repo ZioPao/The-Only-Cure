@@ -1,95 +1,185 @@
 version=1
 id=3236152598
 title=The Only Cure - Rebuilt
-description=[img]https://raw.githubusercontent.com/ZioPao/The-Only-Cure/551125bb50cb65608ad89ca81ef0daccb3b02c4c/dev_stuff/logos/title.png[/img]
-description=
-description=
-description=[h1]You're bitten. You have two choices.[/h1]
-description=Wait until you succumb to the virus or take matters into your hands. Cut off that infected part and live to die another day.
-description=
-description=This version of [b]The Only Cure[/b] has been rebuilt from scratch to support future additions and to feel as close as possible as a vanilla mechanic.
-description=
-description=[b]If you're using an older version of The Only Cure and want to switch with this, you're gonna need to create a new character\save to prevent issues.[/b]
-description=[b]The older version will be delisted shortly and it will not be supported anymore.[/b]
-description=[h1]Supports [b]Single Player[/b] and [b]Multiplayer[/b]. Host Mode is currently [b]UNSUPPORTED![/b][/h1]
-description=
-description=[h1]Setup[/h1]
-description=Use it with the following mods for the intended experience:
-description=[list]
-description=[*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2904920097]Fancy Handwork[/url]
-description=[*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2934621024]Brutal Handwork[/url]
-description=[/list]
-description=
-description=Place them [b]BEFORE[/b] The Only Cure in your mod list!
-description=
-description=[hr][/hr]
-description=
-description=[h1]Quick guide[/h1]
-description=[h2]Amputation[/h2]
-description=Get a [i]Saw[/i] or a [i]Garden Saw[/i], right click on it, and choose which limb to amputate. You can also drag n' drop your Saw item directly into the afflicted area to start cutting it off.
-description=
-description=If you have some [i]bandages[/i] and\or [i]stitches[/i] in your inventory you will automatically use them, multiplying the chances of your survival.
-description=If you have a [i]tourniquet[/i], place it on the correct side to dampen the amount of damage you will take after you're done amputating the limb.
-description=
-description=Keep in mind that if you amputate your [b]upper arm[/b], you won't be able to equip any prosthesis.
-description=
-description=After you've amputated a limb, you will gain [b]skill points[/b] for the amputated side, making timed actions faster in due time.
-description=
-description=[h2]Cicatrization[/h2]
-description=You can check the cicatrization status of an amputated limb from your [b]Health Panel[/b]
-description=From time to time, you should clean your wounds with a bandage to help the cicatrization process.
-description=If your limb isn't completely cicatrized, you can still equip prosthetic limbs, but that can trigger random bleedings from that area.
-description=
-description=[h2]Prosthetics[/h2]
-description=If you're missing a hand, you won't be able to do a lot of things, such as equipping two-handed weapons. With prosthetics limbs, you can fix that.
-description=There are two prosthesis type that can be crafted\found in medical areas:
-description=[list]
-description=[*] Hook Prosthesis
-description=[*] Arm Prosthesis
-description=[/list]
-description=
-description=The main difference between the twos is that your actions will take longer with the Hook Prosthesis.
-description=When you equip a prosthetic limb, you will slowly gain skill points in the [b]Prosthesis Familiarity[/b] perk, making actions more speedy in due time.
-description=
-description=[h2]Admin tools[/h2]
-description=If something strange happened, an admin can reset TOC mechanics on any player by right clicking on them and select [i]"Reset Amputations"[/i]. They could also do the opposite by clicking on [i]"Force Amputation"[/i] for each amputable limb.
-description=
-description=[hr][/hr]
-description=
-description=[h1]Issues and bugs?[/h1]
-description=Got any issues or found some pesky bugs? Report them on GitHub!
-description=
-description=[url=https://github.com/ZioPao/The-Only-Cure][img]https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white[/img][/url]
-description=
-description=[h1]Credits[/h1]
-description=[table]
-description=  [tr]
-description=    [th]Pao[/th]
-description=    [th]Developer[/th]
-description=  [/tr]
-description=  [tr]
-description=    [th]Mr. Bounty[/th]
-description=    [th]Original Developer[/th]
-description=  [/tr]
-description=  [tr]
-description=    [th]Chuckleberry Finn[/th]
-description=    [th]Logo and Icon[/th]
-description=  [/tr]
-description=  [tr]
-description=    [th]dhert[/th]
-description=    [th]Compatibility API[/th]
-description=  [/tr]
-description=  [tr]
-description=    [th]JCloudJalix[/th]
-description=    [th]German Translation[/th]
-description=  [/tr]
-description=[/table]
-description=
-description=[hr][/hr]
-description=
-description=[h1]Want to support me?[/h1]
-description=[url=https://ko-fi.com/M4M7IERNW][img]https://storage.ko-fi.com/cdn/kofi3.png[/img][/url]
-description=
-description=[hr][/hr]
+description=[img]https://raw.githubusercontent.com/ZioPao/The-Only-Cure/551125bb50cb65608ad89ca81ef0daccb3b02c4c/dev_stuff/logos/title.png[/img]
+
+description=
+
+description=
+
+description=[h1]You're bitten. You have two choices.[/h1]
+
+description=Wait until you succumb to the virus or take matters into your hands. Cut off that infected part and live to die another day.
+
+description=
+
+description=This version of [b]The Only Cure[/b] has been rebuilt from scratch to support future additions and to feel as close as possible as a vanilla mechanic.
+
+description=
+
+description=[b]If you're using an older version of The Only Cure and want to switch with this, you're gonna need to create a new character\save to prevent issues.[/b]
+
+description=[b]The older version will be delisted shortly and it will not be supported anymore.[/b]
+
+description=[h1]Supports [b]Single Player[/b] and [b]Multiplayer[/b]. Host Mode is currently [b]UNSUPPORTED![/b][/h1]
+
+description=
+
+description=[h1]Setup[/h1]
+
+description=Use it with the following mods for the intended experience:
+
+description=[list]
+
+description=[*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2904920097]Fancy Handwork[/url]
+
+description=[*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2934621024]Brutal Handwork[/url]
+
+description=[/list]
+
+description=
+
+description=Place them [b]BEFORE[/b] The Only Cure in your mod list!
+
+description=
+
+description=[hr][/hr]
+
+description=
+
+description=[h1]Quick guide[/h1]
+
+description=[h2]Amputation[/h2]
+
+description=Get a [i]Saw[/i] or a [i]Garden Saw[/i], right click on it, and choose which limb to amputate. You can also drag n' drop your Saw item directly into the afflicted area to start cutting it off.
+
+description=
+
+description=If you have some [i]bandages[/i] and\or [i]stitches[/i] in your inventory you will automatically use them, multiplying the chances of your survival.
+
+description=If you have a [i]tourniquet[/i], place it on the correct side to dampen the amount of damage you will take after you're done amputating the limb.
+
+description=
+
+description=Keep in mind that if you amputate your [b]upper arm[/b], you won't be able to equip any prosthesis.
+
+description=
+
+description=After you've amputated a limb, you will gain [b]skill points[/b] for the amputated side, making timed actions faster in due time.
+
+description=
+
+description=[h2]Cicatrization[/h2]
+
+description=You can check the cicatrization status of an amputated limb from your [b]Health Panel[/b]
+
+description=From time to time, you should clean your wounds with a bandage to help the cicatrization process.
+
+description=If your limb isn't completely cicatrized, you can still equip prosthetic limbs, but that can trigger random bleedings from that area.
+
+description=
+
+description=[h2]Prosthetics[/h2]
+
+description=If you're missing a hand, you won't be able to do a lot of things, such as equipping two-handed weapons. With prosthetics limbs, you can fix that.
+
+description=There are two prosthesis type that can be crafted\found in medical areas:
+
+description=[list]
+
+description=[*] Hook Prosthesis
+
+description=[*] Arm Prosthesis
+
+description=[/list]
+
+description=
+
+description=The main difference between the twos is that your actions will take longer with the Hook Prosthesis.
+
+description=When you equip a prosthetic limb, you will slowly gain skill points in the [b]Prosthesis Familiarity[/b] perk, making actions more speedy in due time.
+
+description=
+
+description=[h2]Admin tools[/h2]
+
+description=If something strange happened, an admin can reset TOC mechanics on any player by right clicking on them and select [i]"Reset Amputations"[/i]. They could also do the opposite by clicking on [i]"Force Amputation"[/i] for each amputable limb.
+
+description=
+
+description=[hr][/hr]
+
+description=
+
+description=[h1]Issues and bugs?[/h1]
+
+description=Got any issues or found some pesky bugs? Report them on GitHub!
+
+description=
+
+description=[url=https://github.com/ZioPao/The-Only-Cure][img]https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white[/img][/url]
+
+description=
+
+description=[h1]Credits[/h1]
+
+description=[table]
+
+description=  [tr]
+
+description=    [th]Pao[/th]
+
+description=    [th]Developer[/th]
+
+description=  [/tr]
+
+description=  [tr]
+
+description=    [th]Mr. Bounty[/th]
+
+description=    [th]Original Developer[/th]
+
+description=  [/tr]
+
+description=  [tr]
+
+description=    [th]Chuckleberry Finn[/th]
+
+description=    [th]Logo and Icon[/th]
+
+description=  [/tr]
+
+description=  [tr]
+
+description=    [th]dhert[/th]
+
+description=    [th]Compatibility API[/th]
+
+description=  [/tr]
+
+description=  [tr]
+
+description=    [th]JCloudJalix, Rinary1[/th]
+
+description=    [th]Translations[/th]
+
+description=  [/tr]
+
+description=[/table]
+
+description=
+
+description=[hr][/hr]
+
+description=
+
+description=[h1]Want to support me?[/h1]
+
+description=[url=https://ko-fi.com/M4M7IERNW][img]https://storage.ko-fi.com/cdn/kofi3.png[/img][/url]
+
+description=
+
+description=[hr][/hr]
+
 tags=Build 41;Balance;Interface;Items;Misc;Multiplayer;Realistic;Textures
 visibility=public
