@@ -58,6 +58,7 @@ function LocalPlayerController.ManageTraits()
     for k, v in pairs(StaticData.TRAITS_BP) do
         if playerObj:HasTrait(k) then
             -- Once we find one, we should be done since they're exclusive
+            TOC_DEBUG.print("Player has amputation trait " .. k .. ", executing it")
             local tempHandler = AmputationHandler:new(v, playerObj)
             tempHandler:execute(false) -- No damage
             tempHandler:close()
