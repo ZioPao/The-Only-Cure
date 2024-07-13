@@ -1,0 +1,7 @@
+Sandbox_UA = {
+    Sandbox_TOC = "The Only Cure",
+    Sandbox_TOC_CicatrizationSpeed = "Швидкість рубцювання",
+    Sandbox_TOC_WoundDirtynessMultiplier = "Множник забруднення рани",
+    Sandbox_TOC_SurgeonAbilityImportance = "Важливість медичних навичок лікаря",
+
+}
