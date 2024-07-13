@@ -64,7 +64,9 @@ function LocalPlayerController.ManageTraits()
             tempHandler:close()
 
             -- The wound should be already cicatrized
+            local dcInst = DataController.GetInstance()
             LocalPlayerController.HandleSetCicatrization(DataController.GetInstance(), playerObj, v)
+            dcInst:apply()
             return
         end
     end
@@ -311,7 +313,7 @@ end
 ---@param playerObj IsoPlayer
 ---@param limbName string
 function LocalPlayerController.HandleSetCicatrization(dcInst, playerObj, limbName)
-    TOC_DEBUG.print(tostring(limbName) .. " is cicatrized")
+    TOC_DEBUG.print("Setting cicatrization to " .. tostring(limbName))
     dcInst:setIsCicatrized(limbName, true)
     dcInst:setCicatrizationTime(limbName, 0)
 
