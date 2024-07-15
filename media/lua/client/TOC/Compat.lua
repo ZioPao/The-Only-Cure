@@ -28,7 +28,8 @@ end
 
 
 function Compat.iMeds()
-
+    require("Component/Interface/Service/ContextMenu/Menu/HealthPanel/HealthPanelMenuInitializer")
+    -- placeholder, in case we need to do something more drastic with it.
 end
 
 
