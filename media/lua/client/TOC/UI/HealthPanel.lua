@@ -1,7 +1,7 @@
 local StaticData = require("TOC/StaticData")
-local CommandsData = require("TOC/CommandsData")
 local DataController = require("TOC/Controllers/DataController")
 local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
+local Compat = require("TOC/Compat")
 
 local CutLimbInteractionHandler = require("TOC/UI/Interactions/CutLimbInteractionHandler")
 local WoundCleaningInteractionHandler = require("TOC/UI/Interactions/WoundCleaningInteractionHandler")
@@ -11,6 +11,9 @@ local WoundCleaningInteractionHandler = require("TOC/UI/Interactions/WoundCleani
 local isReady = false
 
 function SetHealthPanelTOC()
+
+    -- depending on compatibility
+
     isReady = true
 end
 
@@ -128,23 +131,23 @@ function ISHealthPanel:render()
 end
 
 
-local og_ISHealthPanel_update = ISHealthPanel.update
-function ISHealthPanel:update()
-    og_ISHealthPanel_update(self)
-    -- TODO Listen for changes on other player side instead of looping this
+-- local og_ISHealthPanel_update = ISHealthPanel.update
+-- function ISHealthPanel:update()
+--     og_ISHealthPanel_update(self)
+--     -- TODO Listen for changes on other player side instead of looping this
 
 
-    -- FIX Re-enable it, just for test
-    if self.character then
-        local locPlUsername = getPlayer():getUsername()
-        local remPlUsername = self.character:getUsername()
-        if locPlUsername ~= remPlUsername and self:isReallyVisible() then
-            -- Request update for TOC DATA
-            local key = CommandsData.GetKey(remPlUsername)
-            --ModData.request(key)
-        end
-    end
-end
+--     -- FIX Re-enable it, just for test
+--     if self.character then
+--         local locPlUsername = getPlayer():getUsername()
+--         local remPlUsername = self.character:getUsername()
+--         if locPlUsername ~= remPlUsername and self:isReallyVisible() then
+--             -- Request update for TOC DATA
+--             local key = CommandsData.GetKey(remPlUsername)
+--             --ModData.request(key)
+--         end
+--     end
+-- end
 
 
 
@@ -252,10 +255,10 @@ end
 
 local og_ISHealthPanel_getDamagedParts = ISHealthPanel.getDamagedParts
 function ISHealthPanel:getDamagedParts()
-    -- TODO Overriding it is a lot easier, but ew
-
-    if isReady then
-
+    -- check for imeds or if TOC is ready to display its stuff on the health panel
+    if isReady == false or Compat.handlers['iMeds'].isActive or Compat.handlers['iMedsFixed'].isActive then
+        return og_ISHealthPanel_getDamagedParts(self)
+    elseif isReady then
         local result = {}
         local bodyParts = self:getPatient():getBodyDamage():getBodyParts()
         if isClient() and not self:getPatient():isLocalPlayer() then
@@ -274,8 +277,5 @@ function ISHealthPanel:getDamagedParts()
             end
         end
         return result
-
-    else
-        return og_ISHealthPanel_getDamagedParts(self)
     end
 end
