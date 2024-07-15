@@ -1,3 +1,6 @@
+
+if not SandboxVars.TOC.EnableZombieAmputations then return end
+
 require "lua_timers"
 
 local ItemsController = require("TOC/Controllers/ItemsController")
@@ -38,8 +41,6 @@ end
 local function PredicateAmputationItemRight(item)
     return item:getType():contains("Amputation_") and item:getType():contains("_R")
 end
-
-
 
 ---@param zombie IsoZombie
 local function SpawnAmputation(zombie, side)

@@ -3,6 +3,7 @@ Sandbox_EN = {
     Sandbox_TOC_CicatrizationSpeed = "Cicatrization Speed",
     Sandbox_TOC_WoundDirtynessMultiplier = "Wound Dirtyness Multiplier",
     Sandbox_TOC_SurgeonAbilityImportance = "Relevance of surgeon doctor ability",
+    Sandbox_TOC_EnableZombieAmputations = "Enable Zombie amputations",
     Sandbox_TOC_ZombieAmputationDamageThreshold = "Zombie amputations damage treshold",
     Sandbox_TOC_ZombieAmputationDamageChance = "Zombie amputations damage chance",
 
