@@ -1,0 +1,29 @@
+ContextMenu_FR = {
+    ContextMenu_Amputate = "Amputer",
+    ContextMenu_Amputate_Bandage = "Amputer et bander",
+    ContextMenu_Amputate_Stitch = "Amputer et suturer",
+    ContextMenu_Amputate_Stitch_Bandage = "Amputer, suturer et bander",
+
+    ContextMenu_Cauterize = "Cautériser",
+    
+    ContextMenu_Limb_Hand_L = "Main gauche",
+    ContextMenu_Limb_ForeArm_L = "Avant-bras gauche",
+    ContextMenu_Limb_UpperArm_L = "Bras supérieur gauche",
+    ContextMenu_Limb_Hand_R = "Main droite",
+    ContextMenu_Limb_ForeArm_R = "Avant-bras droit",
+    ContextMenu_Limb_UpperArm_R = "Bras supérieur droit",
+
+    ContextMenu_InstallProstRight = "Installer une prothèse sur le bras droit",
+    ContextMenu_InstallProstLeft = "Installer une prothèse sur le bras gauche",
+
+    ContextMenu_PutTourniquetArmLeft = "Mettre un garrot sur le bras gauche",
+    ContextMenu_PutTourniquetLegL = "Mettre un garrot sur la jambe gauche",
+    ContextMenu_PutTourniquetArmRight = "Mettre un garrot sur le bras droit",
+    ContextMenu_PutTourniquetLegR = "Mettre un garrot sur la jambe droite",
+
+    ContextMenu_CleanWound = "Nettoyer la plaie",
+
+    ContextMenu_Admin_TOC = "TOC",
+    ContextMenu_Admin_ResetTOC = "Réinitialiser les amputations",
+    ContextMenu_Admin_ForceAmputation = "Forcer l'amputation",
+}

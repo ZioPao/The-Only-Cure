@@ -1,0 +1,7 @@
+Sandbox_FR = {
+    Sandbox_TOC = "Le Seul Remède",
+    Sandbox_TOC_CicatrizationSpeed = "Vitesse de cicatrisation",
+    Sandbox_TOC_WoundDirtynessMultiplier = "Multiplicateur de saleté de la plaie",
+    Sandbox_TOC_SurgeonAbilityImportance = "Importance de la compétence du chirurgien",
+
+}
