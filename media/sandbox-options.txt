@@ -31,7 +31,7 @@ option TOC.SurgeonAbilityImportance
 option TOC.EnableZombieAmputations
 {
     type = boolean,
-    default = true,
+    default = false,
     page = TOC,
     translation= TOC_EnableZombieAmputations,
 }

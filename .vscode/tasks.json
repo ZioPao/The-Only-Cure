@@ -10,6 +10,12 @@
             "command": "python ${config:zomboid_user_folder}/PaosCrap/make_workshop_pack.py picch ${workspaceFolderBasename}",
         },
         {
+            "label": "Upload mod",
+            "type": "shell",
+            "options": {"statusbar": {"label": "$(arrow-up) Upload Mod"}},
+            "command": "python ${config:zomboid_user_folder}/PaosCrap/upload_mod_to_steam/main.py ${config:mod_id} ${config:zomboid_user_folder}/Workshop/${workspaceFolderBasename}",
+        },
+        {
             "label": "Run Zomboid Debug No Steam",
             "type": "shell",
             "presentation": {
