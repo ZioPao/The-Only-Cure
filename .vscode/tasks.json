@@ -10,6 +10,12 @@
             "command": "python ${config:zomboid_user_folder}/PaosCrap/make_workshop_pack.py picch ${workspaceFolderBasename}",
         },
         {
+            "label": "Upload mod",
+            "type": "shell",
+            "options": {"statusbar": {"label": "$(arrow-up) Upload Mod"}},
+            "command": "python ${config:zomboid_user_folder}/PaosCrap/upload_mod_to_steam/main.py ${config:mod_id} ${config:zomboid_user_folder}/Workshop/${workspaceFolderBasename}",
+        },
+        {
             "label": "Run Zomboid Debug No Steam",
             "type": "shell",
             "presentation": {
@@ -56,6 +62,15 @@
             "options": {"statusbar": {"label": "$(run) Zomboid Server (TOC+FH+BH)"}},
             "type": "shell",
             "command":"\"${config:zomboid_server_folder}\\StartServer64_nosteam_custom.bat\" TOC_FH_BH",
+            "problemMatcher": [
+                "$eslint-stylish"
+            ]
+        },
+        {
+            "label": "Run Zomboid Test Server 3",
+            "options": {"statusbar": {"label": "$(run) Zomboid Server (TOC+FH+BH+iMedsFixed)"}},
+            "type": "shell",
+            "command":"\"${config:zomboid_server_folder}\\StartServer64_nosteam_custom.bat\" TOC_FH_BH_imeds",
             "problemMatcher": [
                 "$eslint-stylish"
             ]

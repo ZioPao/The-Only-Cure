@@ -3,13 +3,8 @@ local StaticData = require("TOC/StaticData")
 local CommandsData = require("TOC/CommandsData")
 ------------------------
 
-
-
-
-
 local ServerDataHandler = {}
 ServerDataHandler.modData = {}
-
 
 ---Get the server mod data table containing that player TOC data
 ---@param key string
