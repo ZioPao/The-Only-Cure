@@ -156,6 +156,9 @@ function ItemsController.Zombie.SpawnAmputationItem(zombie, amputationFullType)
     -- Spawn the item too in the inventory to keep track of stuff this way. It's gonna get deleted when we reload the game
     local zombieInv = zombie:getInventory()
     zombieInv:AddItem(amputationFullType)
+
+
+    -- TODO Remove objects in that part of the body to prevent items floating in mid air
 end
 
 function ItemsController.Zombie.GetAmputationTexturesIndex(zombie)

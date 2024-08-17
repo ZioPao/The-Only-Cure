@@ -1,6 +1,3 @@
-
-if not SandboxVars.TOC.EnableZombieAmputations then return end
-
 require "lua_timers"
 
 local ItemsController = require("TOC/Controllers/ItemsController")
@@ -73,6 +70,8 @@ local bloodAmount = 10
 ---@param zombie IsoZombie
 ---@param handWeapon HandWeapon
 local function HandleZombiesAmputations(player, zombie, handWeapon, damage)
+    if not SandboxVars.TOC.EnableZombieAmputations then return end
+
     if not instanceof(zombie, "IsoZombie") or not instanceof(player, "IsoPlayer") then return end
     if player ~= getPlayer() then return end
 
@@ -109,6 +108,7 @@ Events.OnWeaponHitCharacter.Add(HandleZombiesAmputations)
 local localOnlyZombiesMD
 
 local function SetupZombiesModData()
+    if not SandboxVars.TOC.EnableZombieAmputations then return end
     local zombieKey = CommandsData.GetZombieKey()
     localOnlyZombiesMD = ModData.getOrCreate(zombieKey)
 end
@@ -118,6 +118,8 @@ Events.OnInitGlobalModData.Add(SetupZombiesModData)
 
 ---@param zombie IsoZombie
 local function ReapplyAmputation(zombie)
+    if not SandboxVars.TOC.EnableZombieAmputations then return end
+
     local pID = GetZombieID(zombie)
 
     if localOnlyZombiesMD[pID] ~= nil then
