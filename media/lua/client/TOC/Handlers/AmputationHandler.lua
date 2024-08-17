@@ -156,7 +156,9 @@ function AmputationHandler:damageAfterAmputation(surgeonFactor)
     patientStats:setStress(baseDamage - surgeonFactor)
 end
 
----Execute the amputation
+---Execute the amputation. This method doesn't check if the upper limb has been amputated or not, so if
+--- somehow the method gets triggered and we're trying to cut off a part that doesn't really exist anymore,
+--- it will still be executed. This is by design, additional checks must be made BEFORE running the AmputationHandler
 ---@param damagePlayer boolean
 function AmputationHandler:execute(damagePlayer)
     local surgeonFactor = self.surgeonPl:getPerkLevel(Perks.Doctor) * SandboxVars.TOC.SurgeonAbilityImportance

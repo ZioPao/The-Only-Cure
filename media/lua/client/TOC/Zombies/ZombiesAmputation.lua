@@ -61,8 +61,6 @@ end
 
 -------------------------------
 
-
-
 local bloodAmount = 10
 
 
@@ -84,13 +82,22 @@ local function HandleZombiesAmputations(player, zombie, handWeapon, damage)
     if (damage > SandboxVars.TOC.ZombieAmputationDamageThreshold and randomChance) or isCrit then
         TOC_DEBUG.print("Amputating zombie limbs - damage: " .. tostring(damage))
         local zombieInv = zombie:getInventory()
+
         -- Check left or right
-        if not zombieInv:containsEval(PredicateAmputationItemLeft) then
-            SpawnAmputation(zombie, "L")
-        elseif not zombieInv:containsEval(PredicateAmputationItemRight) then
-            SpawnAmputation(zombie, "R")
+        local randSide = ZombRand(2)        -- Random side
+        local preferredSide = randSide == 0 and "L" or "R"
+        local alternateSide = preferredSide == "L" and "R" or "L"
+
+        local predicatePreferred = preferredSide == "L" and PredicateAmputationItemLeft or PredicateAmputationItemRight
+        local predicateAlternate = alternateSide == "L" and PredicateAmputationItemLeft or PredicateAmputationItemRight
+
+        if not zombieInv:containsEval(predicatePreferred) then
+            SpawnAmputation(zombie, preferredSide)
+        elseif not zombieInv:containsEval(predicateAlternate) then
+            SpawnAmputation(zombie, alternateSide)
         end
 
+        TOC_DEBUG.print("Amputating zombie limbs - damage: " .. tostring(damage) .. ", preferred limb side: " .. preferredSide)
 
         -- add blood splat every couple of seconds for a while
         addBloodSplat(getCell():getGridSquare(zombie:getX(), zombie:getY(), zombie:getZ()), bloodAmount)

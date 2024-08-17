@@ -24,7 +24,7 @@ function ServerRelayCommands.RelayExecuteAmputationAction(surgeonPl, args)
     local surgeonNum = surgeonPl:getOnlineID()
 
     ---@type receiveDamageDuringAmputationParams
-    local params = {surgeonNum = surgeonNum, limbName = args.limbName}
+    local params = {surgeonNum = surgeonNum, limbName = args.limbName, damagePlayer = true}
     sendServerCommand(patientPl, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveExecuteAmputationAction, params)
 end
 
@@ -36,6 +36,21 @@ function ServerRelayCommands.RelayExecuteInitialization(adminObj, args)
     local patientPl = getPlayerByOnlineID(args.patientNum)
     sendServerCommand(patientPl, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveExecuteInitialization, {})
 
+end
+
+---Relay a forced amputation to another client.
+---@param adminObj IsoPlayer
+---@param args relayForcedAmputationParams
+function ServerRelayCommands.RelayForcedAmputation(adminObj, args)
+    local patientPl = getPlayerByOnlineID(args.patientNum)
+    local adminNum = adminObj:getOnlineID()
+
+    ---@type receiveDamageDuringAmputationParams
+    local ampParams = {surgeonNum = adminNum, limbName = args.limbName, damagePlayer = false}        -- the only difference between relayExecuteAmputationAction and this is the damage
+    sendServerCommand(patientPl, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveExecuteAmputationAction, ampParams)
+
+    -- Automatic cicatrization
+    sendServerCommand(patientPl, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveForcedCicatrization, {limbName = args.limbName})
 end
 
 
