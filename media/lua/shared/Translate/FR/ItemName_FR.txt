@@ -1,0 +1,11 @@
+ItemName_FR = {
+
+    ItemName_TOC.Surg_Arm_Tourniquet_L = "Garrot",
+    ItemName_TOC.Surg_Arm_Tourniquet_R = "Garrot",
+
+    ItemName_TOC.Prost_NormalArm_L = "Bras prothétique",
+    ItemName_TOC.Prost_NormalArm_R = "Bras prothétique",
+
+    ItemName_TOC.Prost_HookArm_L = "Bras prothétique - Crochet",
+    ItemName_TOC.Prost_HookArm_R = "Bras prothétique - Crochet",
+}
