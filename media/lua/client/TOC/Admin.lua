@@ -43,6 +43,21 @@ local function AddAdminTocOptions(playerNum, context, worldobjects)
             sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayExecuteInitialization,
                 { patientNum = clickedPlayerNum })
         end)
+
+        -- Force amputation
+        local forceAmpOption = subMenu:addOption(getText("ContextMenu_Admin_ForceAmputation"), nil, nil)
+        local forceAmpSubMenu = ISContextMenu:getNew(subMenu)
+        context:addSubMenu(forceAmpOption, forceAmpSubMenu)
+
+        for i = 1, #StaticData.LIMBS_STR do
+            local limbName = StaticData.LIMBS_STR[i]
+            local limbTranslatedName = getText("ContextMenu_Limb_" .. limbName)
+
+            forceAmpSubMenu:addOption(limbTranslatedName, nil, function()
+                sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayForcedAmputation,
+                    { patientNum = clickedPlayerNum, limbName = limbName })
+            end)
+        end
     end
 end
 Events.OnFillWorldObjectContextMenu.Add(AddAdminTocOptions)
