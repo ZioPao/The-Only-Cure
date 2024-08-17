@@ -1,0 +1,16 @@
+UI_FR = {
+    UI_trait_Amputee_Hand = "Main gauche amputée",
+    UI_trait_Amputee_Hand_desc = "",
+
+    UI_trait_Amputee_ForeArm = "Avant-bras gauche amputé",
+    UI_trait_Amputee_ForeArm_desc = "",
+
+    UI_trait_Amputee_UpperArm = "Bras supérieur gauche amputé",
+    UI_trait_Amputee_UpperArm_desc = "",
+
+    UI_trait_Insensitive = "Insensible",
+    UI_trait_Insensitive_desc = "",
+
+    UI_Say_CantEquip = "Je ne peux pas l'équiper comme ça..."
+
+}
