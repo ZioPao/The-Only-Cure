@@ -1,0 +1,5 @@
+Recipes_FR = {
+    Recipe_Craft_Prosthetic_Arm = "Fabriquer un bras prothétique",
+    Recipe_Craft_Prosthetic_Hook = "Fabriquer un crochet prothétique",
+
+}
