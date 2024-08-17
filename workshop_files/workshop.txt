@@ -159,7 +159,7 @@ description=  [/tr]
 
 description=  [tr]
 
-description=    [th]JCloudJalix, Rinary1, pllq, ttaeo[/th]
+description=    [th]JCloudJalix, Rinary1, pllq, ttaeo, pgmbru[/th]
 
 description=    [th]Translations[/th]
 
