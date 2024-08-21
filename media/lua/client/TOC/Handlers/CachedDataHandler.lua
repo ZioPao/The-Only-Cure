@@ -123,7 +123,8 @@ function CachedDataHandler.CalculateHandFeasibility(limbName)
     CachedDataHandler.handFeasibility[side] = not dcInst:getIsCut(limbName) or dcInst:getIsProstEquipped(limbName)
 end
 
-
+---@param side string Either "L" or "R"
+---@return boolean
 function CachedDataHandler.GetHandFeasibility(side)
     return CachedDataHandler.handFeasibility[side]
 end
