@@ -123,8 +123,7 @@ function ISEquipWeaponAction:isValid()
 end
 
 ---A recreation of the original method, but with amputations in mind
----@param dcInst DataController
-function ISEquipWeaponAction:performWithAmputation(dcInst)
+function ISEquipWeaponAction:performWithAmputation()
 
     TOC_DEBUG.print("running ISEquipWeaponAction performWithAmputation")
     local hand = nil
@@ -208,7 +207,7 @@ function ISEquipWeaponAction:perform()
     local dcInst = DataController.GetInstance(self.character:getUsername())
     -- Just check it any limb has been cut. If not, we can just return from here
     if dcInst:getIsAnyLimbCut() == true then
-        self:performWithAmputation(dcInst)
+        self:performWithAmputation()
     end
 end
 
