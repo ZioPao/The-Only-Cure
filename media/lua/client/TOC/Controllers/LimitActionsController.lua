@@ -32,8 +32,12 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
     local time = og_ISBaseTimedAction_adjustMaxTime(self, maxTime)
 
     -- Exceptions handling, if we find that parameter then we just use the original time
-    local queue = ISTimedActionQueue.getTimedActionQueue(getPlayer())
-    if queue and queue.current and queue.current.skipTOC then return time end
+    local actionsQueue = ISTimedActionQueue.getTimedActionQueue(getPlayer())
+
+    if actionsQueue and actionsQueue.current and actionsQueue.skipTOC then
+        --TOC_DEBUG.print("Should skip TOC stuff")
+        return time
+    end
 
     -- Action is valid, check if we have any cut limb and then modify maxTime
     local dcInst = DataController.GetInstance()
@@ -57,6 +61,10 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
             time = time * (StaticData.LIMBS_TIME_MULTIPLIER_IND_NUM[limbName] - perkLevelScaled)
         end
     end
+    if actionsQueue and actionsQueue.current then
+        TOC_DEBUG.print("OG Action: " .. tostring(actionsQueue.current.Type))
+    end
+    TOC_DEBUG.print("New time with amputations: " .. tostring(time))
     return time
 end
 
