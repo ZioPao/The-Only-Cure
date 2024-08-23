@@ -32,8 +32,12 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
     local time = og_ISBaseTimedAction_adjustMaxTime(self, maxTime)
 
     -- Exceptions handling, if we find that parameter then we just use the original time
-    local queue = ISTimedActionQueue.getTimedActionQueue(getPlayer())
-    if queue and queue.current and queue.current.skipTOC then return time end
+    local actionsQueue = ISTimedActionQueue.getTimedActionQueue(getPlayer())
+
+    if actionsQueue and actionsQueue.current and actionsQueue.skipTOC then
+        --TOC_DEBUG.print("Should skip TOC stuff")
+        return time
+    end
 
     -- Action is valid, check if we have any cut limb and then modify maxTime
     local dcInst = DataController.GetInstance()
@@ -57,6 +61,10 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
             time = time * (StaticData.LIMBS_TIME_MULTIPLIER_IND_NUM[limbName] - perkLevelScaled)
         end
     end
+    if actionsQueue and actionsQueue.current then
+        TOC_DEBUG.print("OG Action: " .. tostring(actionsQueue.current.Type))
+    end
+    TOC_DEBUG.print("New time with amputations: " .. tostring(time))
     return time
 end
 
@@ -74,7 +82,7 @@ function ISBaseTimedAction:perform()
     if not dcInst:getIsAnyLimbCut() then return end
 
     local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(LocalPlayerController.username)
-    local xp = self.maxTime/100
+    local xp = self.maxTime / 100
     for k, _ in pairs(amputatedLimbs) do
         local limbName = k
 
@@ -92,7 +100,6 @@ function ISBaseTimedAction:perform()
             if dcInst:getIsProstEquipped(limbName) then
                 LocalPlayerController.playerObj:getXp():AddXP(Perks["ProstFamiliarity"], xp)
             end
-
         end
     end
 end
@@ -123,9 +130,7 @@ function ISEquipWeaponAction:isValid()
 end
 
 ---A recreation of the original method, but with amputations in mind
----@param dcInst DataController
-function ISEquipWeaponAction:performWithAmputation(dcInst)
-
+function ISEquipWeaponAction:performWithAmputation()
     TOC_DEBUG.print("running ISEquipWeaponAction performWithAmputation")
     local hand = nil
     local otherHand = nil
@@ -204,12 +209,15 @@ local og_ISEquipWeaponAction_perform = ISEquipWeaponAction.perform
 function ISEquipWeaponAction:perform()
     og_ISEquipWeaponAction_perform(self)
 
-    -- TODO Can we do it earlier?
+
+    --if self.character == getPlayer() then
     local dcInst = DataController.GetInstance(self.character:getUsername())
     -- Just check it any limb has been cut. If not, we can just return from here
-    if dcInst:getIsAnyLimbCut() == true then
-        self:performWithAmputation(dcInst)
+    if dcInst:getIsAnyLimbCut() then
+        self:performWithAmputation()
     end
+
+    --end
 end
 
 function ISInventoryPaneContextMenu.doEquipOption(context, playerObj, isWeapon, items, player)
@@ -269,6 +277,23 @@ function ISWorldObjectContextMenu.createMenu(player, worldobjects, x, y, test)
     ---@type ISContextMenu
     local ogContext = og_ISWorldObjectContextMenu_createMenu(player, worldobjects, x, y, test)
 
+
+    -- The vanilla game doesn't count an item in the off hand as "equipped" for picking up glass. Let's fix that here
+    local brokenGlassOption = ogContext:getOptionFromName(getText("ContextMenu_RemoveBrokenGlass"))
+
+    if brokenGlassOption then
+        local playerObj = getSpecificPlayer(player)
+        if (CachedDataHandler.GetHandFeasibility(StaticData.SIDES_IND_STR.R) and playerObj:getPrimaryHandItem()) or
+            (CachedDataHandler.GetHandFeasibility(StaticData.SIDES_IND_STR.L) and playerObj:getSecondaryHandItem())
+        then
+            brokenGlassOption.notAvailable = false
+            brokenGlassOption.toolTip = nil     -- This is active only when you can't do the action.
+        end
+    end
+
+
+
+
     -- check if no hands, disable various interactions
     if not CachedDataHandler.GetBothHandsFeasibility() then
         TOC_DEBUG.print("NO hands :((")
@@ -283,8 +308,7 @@ function ISWorldObjectContextMenu.createMenu(player, worldobjects, x, y, test)
     return ogContext
 end
 
-
---* DISABLE WEARING CERTAIN ITEMS WHEN NO LIMB 
+--* DISABLE WEARING CERTAIN ITEMS WHEN NO LIMB
 
 local function CheckLimbFeasibility(limbName)
     local dcInst = DataController.GetInstance()

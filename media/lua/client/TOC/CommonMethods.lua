@@ -26,7 +26,7 @@ end
 
 ---Returns full name for the side, to be used with BodyLocations
 ---@param side string
----@return string
+---@return string?
 function CommonMethods.GetSideFull(side)
     if side == 'R' then
         return "Right"
