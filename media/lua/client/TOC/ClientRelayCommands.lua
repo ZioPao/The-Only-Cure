@@ -72,3 +72,6 @@ local function OnServerRelayCommand(module, command, args)
 end
 
 Events.OnServerCommand.Add(OnServerRelayCommand)
+
+-- TODO temporary
+return ClientRelayCommands

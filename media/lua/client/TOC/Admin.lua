@@ -1,4 +1,5 @@
 local CommandsData = require("TOC/CommandsData")
+local ClientRelayCommands = require("TOC/ClientRelayCommands")
 local StaticData = require("TOC/StaticData")
 local DataController = require("TOC/Controllers/DataController")
 -------------------
@@ -7,7 +8,8 @@ local DataController = require("TOC/Controllers/DataController")
 ---@param context ISContextMenu
 ---@param worldobjects table
 local function AddAdminTocOptions(playerNum, context, worldobjects)
-    if not isAdmin() then return end
+
+    if (isClient() and not isDebugEnabled()) or isAdmin() then return end
 
     local players = {}
     for _, v in ipairs(worldobjects) do
@@ -40,8 +42,13 @@ local function AddAdminTocOptions(playerNum, context, worldobjects)
         context:addSubMenu(option, subMenu)
 
         subMenu:addOption(getText("ContextMenu_Admin_ResetTOC"), nil, function()
-            sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayExecuteInitialization,
-                { patientNum = clickedPlayerNum })
+            if isClient() then
+                sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayExecuteInitialization,
+                    { patientNum = clickedPlayerNum })
+            else
+                -- TODO ugly
+                ClientRelayCommands.ReceiveExecuteInitialization()
+            end
         end)
 
         -- Force amputation
@@ -54,8 +61,14 @@ local function AddAdminTocOptions(playerNum, context, worldobjects)
             local limbTranslatedName = getText("ContextMenu_Limb_" .. limbName)
 
             forceAmpSubMenu:addOption(limbTranslatedName, nil, function()
-                sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayForcedAmputation,
+                if isClient() then
+                    sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayForcedAmputation,
                     { patientNum = clickedPlayerNum, limbName = limbName })
+                else
+                    ClientRelayCommands.ReceiveExecuteAmputationAction({surgeonNum=clickedPlayerNum, limbName=limbName, damagePlayer=false})
+                    -- todo ugly
+                end
+
             end)
         end
     end
