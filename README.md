@@ -12,8 +12,6 @@ Wait until you succumb to the virus or take matters into your hands. Cut off tha
 
 This version of **The Only Cure** has been rebuilt from scratch to support future additions and to feel as close as possible as a vanilla mechanic.
 
-**The older version will be delisted shortly and it will not be supported anymore.**
-
 Supports **Single Player** and **Multiplayer**!
 
 # Setup

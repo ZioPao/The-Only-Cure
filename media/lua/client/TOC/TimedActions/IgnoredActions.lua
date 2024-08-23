@@ -43,7 +43,14 @@ end
 local og_ISUnequipAction_new = ISUnequipAction.new
 function ISUnequipAction:new(character, item, time)
     local action = og_ISUnequipAction_new(self, character, item, time)
-    HandleSpeedSpecificAction(action)
+    ---@cast item InventoryItem
+
+    -- For some reason (I have no clue why), if we re-run the method it breaks basically every unequip clothing action. Not for weapons though.
+    if instanceof(item, 'HandWeapon') then
+        --print("Running handlespeedspecificaction")
+        HandleSpeedSpecificAction(action)
+    end
+
     return action
 end
 

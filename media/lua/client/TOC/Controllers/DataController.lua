@@ -416,6 +416,7 @@ function DataController.ReceiveData(key, data)
     handler:setIsResetForced(false)
     handler:setIsDataReady(true)
 
+    --TOC_DEBUG.print("Finished ReceiveData, triggering OnReceivedTocData")
     triggerEvent("OnReceivedTocData", handler.username)
 
     -- TODO We need an event to track if initialization has been finalized

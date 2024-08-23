@@ -22,13 +22,10 @@ end
 ---Will calculate all the values that we need
 function CachedDataHandler.CalculateCacheableValues(username)
     CachedDataHandler.CalculateHighestAmputatedLimbs(username)
-
-    -- FIX This should be run ONLY on the actual client, never on other clients. Just a placeholder fix for now
     if getPlayer():getUsername() == username then
         CachedDataHandler.CalculateBothHandsFeasibility()
     end
 end
-
 
 
 
@@ -120,12 +117,22 @@ CachedDataHandler.handFeasibility = {}
 function CachedDataHandler.CalculateHandFeasibility(limbName)
     local dcInst = DataController.GetInstance()
     local side = CommonMethods.GetSide(limbName)
+
+    -- TODO if we re run this too early, it might break everything after a forced re-init
+
     CachedDataHandler.handFeasibility[side] = not dcInst:getIsCut(limbName) or dcInst:getIsProstEquipped(limbName)
+    TOC_DEBUG.print("Calculated hand feasibility: " .. tostring(side))
 end
 
 ---@param side string Either "L" or "R"
 ---@return boolean
 function CachedDataHandler.GetHandFeasibility(side)
+
+    -- FIX horrendous workaround, but with a forced init we run the caching too early and it breaks this, setting it to nil.
+    if CachedDataHandler.handFeasibility[side] == nil then
+        CachedDataHandler.CalculateBothHandsFeasibility()
+    end
+
     return CachedDataHandler.handFeasibility[side]
 end
 

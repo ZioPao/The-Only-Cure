@@ -42,6 +42,7 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
     -- Action is valid, check if we have any cut limb and then modify maxTime
     local dcInst = DataController.GetInstance()
     if time ~= -1 and dcInst and dcInst:getIsAnyLimbCut() then
+        --TOC_DEBUG.print("Overriding adjustMaxTime")
         local pl = getPlayer()
         local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(pl:getUsername())
 
@@ -60,11 +61,10 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
             if perkLevel ~= 0 then perkLevelScaled = perkLevel / 10 else perkLevelScaled = 0 end
             time = time * (StaticData.LIMBS_TIME_MULTIPLIER_IND_NUM[limbName] - perkLevelScaled)
         end
+
     end
-    if actionsQueue and actionsQueue.current then
-        TOC_DEBUG.print("OG Action: " .. tostring(actionsQueue.current.Type))
-    end
-    TOC_DEBUG.print("New time with amputations: " .. tostring(time))
+
+    --TOC_DEBUG.print("New time with amputations: " .. tostring(time))
     return time
 end
 
@@ -122,6 +122,10 @@ function ISEquipWeaponAction:isValid()
         local isPrimaryHandValid = CachedDataHandler.GetHandFeasibility(StaticData.SIDES_IND_STR.R)
         local isSecondaryHandValid = CachedDataHandler.GetHandFeasibility(StaticData.SIDES_IND_STR.L)
         -- Both hands are cut off, so it's impossible to equip in any way
+
+        --TOC_DEBUG.print("isPrimaryHandValid : " .. tostring(isPrimaryHandValid))
+        --TOC_DEBUG.print("isSecondaryHandValid : " .. tostring(isSecondaryHandValid))
+
         if not isPrimaryHandValid and not isSecondaryHandValid then
             isValid = false
         end

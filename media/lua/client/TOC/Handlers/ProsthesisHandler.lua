@@ -168,7 +168,11 @@ function ISUnequipAction:perform()
         local highestAmputatedLimbs = CachedDataHandler.GetHighestAmputatedLimbs(getPlayer():getUsername())
         if highestAmputatedLimbs then
             local hal = highestAmputatedLimbs[side]
-            triggerEvent("OnProsthesisUnequipped", hal)
+            if hal then
+            -- This could break if amputated limbs aren't cached for some reason
+                triggerEvent("OnProsthesisUnequipped", hal)
+            end
+
         end
     end
 end
