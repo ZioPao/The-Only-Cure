@@ -59,7 +59,17 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
 
             local perkLevelScaled
             if perkLevel ~= 0 then perkLevelScaled = perkLevel / 10 else perkLevelScaled = 0 end
-            time = time * (StaticData.LIMBS_TIME_MULTIPLIER_IND_NUM[limbName] - perkLevelScaled)
+            TOC_DEBUG.print("Perk Level: " .. tostring(perkLevel))
+            TOC_DEBUG.print("OG time: " .. tostring(time))
+
+            -- Modified Time shouldn't EVER be lower compared to the og one.
+            local modifiedTime = time * (StaticData.LIMBS_TIME_MULTIPLIER_IND_NUM[limbName] - perkLevelScaled)
+
+            if modifiedTime >= time then
+                time = modifiedTime
+            end
+
+            --TOC_DEBUG.print("Modified time: " .. tostring(time))
         end
 
     end
