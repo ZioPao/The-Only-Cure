@@ -1,3 +1,8 @@
+-- TODO This section must be overhauled
+
+local DataController = require("TOC/Controllers/DataController")
+local StaticData = require("TOC/StaticData")
+
 ---@diagnostic disable: duplicate-set-field
 -- Bunch of actions shouldn't be modified by the adjusted time 
 
@@ -8,38 +13,54 @@
 ---ISEquipWeaponAction
 ---ISUnequipAction
 
---- We're forced to re-run this crap to fix it
----@param action ISBaseTimedAction
-local function HandleSpeedSpecificAction(action)
-    action.skipTOC = true
-    action.animSpeed = action.maxTime / action:adjustMaxTime(action.maxTime)
-    action.maxTime = -1
-end
+-- --- We're forced to re-run this crap to fix it
+-- ---@param action ISBaseTimedAction
+-- local function HandleSpeedSpecificAction(action, time)
+--     action.skipTOC = true
+--     action.maxTime = time
+--     action.animSpeed = 1.0
+-- end
 
-local og_ISAttachItemHotbar_new = ISAttachItemHotbar.new
-function ISAttachItemHotbar:new(character, item, slot, slotIndex, slotDef)
-    local action = og_ISAttachItemHotbar_new(self, character, item, slot, slotIndex, slotDef)
-    HandleSpeedSpecificAction(action)
-    return action
-end
+-- local og_ISAttachItemHotbar_new = ISAttachItemHotbar.new
+-- function ISAttachItemHotbar:new(character, item, slot, slotIndex, slotDef)
+--     local action = og_ISAttachItemHotbar_new(self, character, item, slot, slotIndex, slotDef)
+--     HandleSpeedSpecificAction(action, -1)
+--     return action
+-- end
 
-local og_ISDetachItemHotbar_new = ISDetachItemHotbar.new
-function ISDetachItemHotbar:new(character, item)
-    local action = og_ISDetachItemHotbar_new(self, character, item)
-    HandleSpeedSpecificAction(action)
-    return action
-end
+-- local og_ISDetachItemHotbar_new = ISDetachItemHotbar.new
+-- function ISDetachItemHotbar:new(character, item)
+--     local action = og_ISDetachItemHotbar_new(self, character, item)
+--     HandleSpeedSpecificAction(action, -1)
+--     return action
+-- end
 
--- TODO This pile of shit is unberable. I'll just leave it like this for now.
 
 -- local og_ISEquipWeaponAction_new = ISEquipWeaponAction.new
 -- function ISEquipWeaponAction:new(character, item, time, primary, twoHands)
+
 --     local action = og_ISEquipWeaponAction_new(self, character, item, time, primary, twoHands)
---     TOC_DEBUG.print("Override ISEquipWeaponAction")
---     if not twoHands then
---         TOC_DEBUG.print("Not a two handed action, re-adding skip TOC")
---         HandleSpeedSpecificAction(action)
+--     TOC_DEBUG.print("Override ISEquipWeaponAction New")
+
+
+--     -- check if right arm is cut off or not. if it is, penality shall apply
+--     -- if we got here, the action is valid, so we know that we have a prosthesis.
+
+
+--     local dcInst = DataController.GetInstance()
+
+--     if not dcInst:getIsCut(StaticData.LIMBS_IND_STR.Hand_R) then
+--         action.skipTOC = true
+--         action.maxTime = time
+--         action.animSpeed = 1.0
+--         TOC_DEBUG.print("Skipping TOC for ISEquipWeaponAction new")
 --     end
+
+
+--     -- if not twoHands then
+--     --     TOC_DEBUG.print("Not a two handed action, re-adding skip TOC")
+--     --     HandleSpeedSpecificAction(action)
+--     -- end
 --     return action
 -- end
 
