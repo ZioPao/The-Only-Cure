@@ -30,29 +30,32 @@ function ISDetachItemHotbar:new(character, item)
     return action
 end
 
-local og_ISEquipWeaponAction_new = ISEquipWeaponAction.new
-function ISEquipWeaponAction:new(character, item, time, primary, twoHands)
-    local action = og_ISEquipWeaponAction_new(self, character, item, time, primary, twoHands)
-    --TOC_DEBUG.print("Override ISEquipWeaponAction")
-    if not twoHands then
-        HandleSpeedSpecificAction(action)
-    end
-    return action
-end
+-- TODO This pile of shit is unberable. I'll just leave it like this for now.
 
-local og_ISUnequipAction_new = ISUnequipAction.new
-function ISUnequipAction:new(character, item, time)
-    local action = og_ISUnequipAction_new(self, character, item, time)
-    ---@cast item InventoryItem
+-- local og_ISEquipWeaponAction_new = ISEquipWeaponAction.new
+-- function ISEquipWeaponAction:new(character, item, time, primary, twoHands)
+--     local action = og_ISEquipWeaponAction_new(self, character, item, time, primary, twoHands)
+--     TOC_DEBUG.print("Override ISEquipWeaponAction")
+--     if not twoHands then
+--         TOC_DEBUG.print("Not a two handed action, re-adding skip TOC")
+--         HandleSpeedSpecificAction(action)
+--     end
+--     return action
+-- end
 
-    -- For some reason (I have no clue why), if we re-run the method it breaks basically every unequip clothing action. Not for weapons though.
-    if instanceof(item, 'HandWeapon') then
-        --print("Running handlespeedspecificaction")
-        HandleSpeedSpecificAction(action)
-    end
+-- local og_ISUnequipAction_new = ISUnequipAction.new
+-- function ISUnequipAction:new(character, item, time)
+--     local action = og_ISUnequipAction_new(self, character, item, time)
+--     ---@cast item InventoryItem
 
-    return action
-end
+--     -- For some reason (I have no clue why), if we re-run the method it breaks basically every unequip clothing action. Not for weapons though.
+--     if instanceof(item, 'HandWeapon') then
+--         --print("Running handlespeedspecificaction")
+--         HandleSpeedSpecificAction(action)
+--     end
+
+--     return action
+-- end
 
 ------------------------------------------------------
 --- Normal cases
