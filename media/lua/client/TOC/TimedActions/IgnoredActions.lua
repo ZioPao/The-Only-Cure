@@ -1,7 +1,7 @@
 -- TODO This section must be overhauled
 
-local DataController = require("TOC/Controllers/DataController")
-local StaticData = require("TOC/StaticData")
+-- local DataController = require("TOC/Controllers/DataController")
+-- local StaticData = require("TOC/StaticData")
 
 ---@diagnostic disable: duplicate-set-field
 -- Bunch of actions shouldn't be modified by the adjusted time 
