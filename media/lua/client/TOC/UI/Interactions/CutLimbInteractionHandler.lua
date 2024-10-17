@@ -1,11 +1,12 @@
 local BaseHandler = require("TOC/UI/Interactions/HealthPanelBaseHandler")
 local StaticData = require("TOC/StaticData")
 local DataController = require("TOC/Controllers/DataController")
+local ConfirmationPanel = require("TOC/UI/ConfirmationPanel")
 
 local CutLimbAction = require("TOC/TimedActions/CutLimbAction")
 ---------------------
 
--- TODO Add interaction to cut and bandage!
+
 
 
 --* Various functions to help during these pesky checks
@@ -61,6 +62,12 @@ local function GetStitchesConsumableItem(player)
 end
 
 
+local textConfirmAmp = getText("IGUI_Confirmation_Amputate")
+local textAmp = getText("ContextMenu_Amputate")
+local textAmpBandage = getText("ContextMenu_Amputate_Bandage")
+local textAmpStitch = getText("ContextMenu_Amputate_Stitch")
+local textAmpStitchBandage = getText("ContextMenu_Amputate_Stitch_Bandage")
+
 ---Add the action to the queue
 ---@param limbName string
 ---@param surgeon IsoPlayer
@@ -69,24 +76,32 @@ end
 ---@param stitchesItem InventoryItem?
 ---@param bandageItem InventoryItem?
 local function PerformAction(surgeon, patient, limbName, sawItem, stitchesItem, bandageItem)
-    -- get saw in hand
-    -- todo primary or secondary depending on amputation status of surgeon
-    ISTimedActionQueue.add(ISEquipWeaponAction:new(surgeon, sawItem, 50, true, false))
-
-    local lHandItem = surgeon:getSecondaryHandItem()
-    if lHandItem then
-        ISTimedActionQueue.add(ISUnequipAction:new(surgeon, lHandItem, 50))
-    end
 
 
-    ISTimedActionQueue.add(CutLimbAction:new(surgeon, patient, limbName, sawItem, stitchesItem, bandageItem))
+    local x = (getCore():getScreenWidth() - 500) / 2
+    local y = getCore():getScreenHeight() / 2
+
+
+    ConfirmationPanel.Open(textConfirmAmp, x, y, nil, function()
+
+        -- get saw in hand
+        -- todo primary or secondary depending on amputation status of surgeon
+        ISTimedActionQueue.add(ISEquipWeaponAction:new(surgeon, sawItem, 50, true, false))
+
+        local lHandItem = surgeon:getSecondaryHandItem()
+        if lHandItem then
+            ISTimedActionQueue.add(ISUnequipAction:new(surgeon, lHandItem, 50))
+        end
+
+
+        ISTimedActionQueue.add(CutLimbAction:new(surgeon, patient, limbName, sawItem, stitchesItem, bandageItem))
+
+    end)
+
+
 end
 
 
-local textAmp = getText("ContextMenu_Amputate")
-local textAmpBandage = getText("ContextMenu_Amputate_Bandage")
-local textAmpStitch = getText("ContextMenu_Amputate_Stitch")
-local textAmpStitchBandage = getText("ContextMenu_Amputate_Stitch_Bandage")
 
 ---Adds the actions to the inventory context menu
 ---@param player IsoPlayer
@@ -214,6 +229,18 @@ function CutLimbInteractionHandler:checkItem(item)
     end
 end
 
+
+---@param x number
+---@param y number
+---@param type any
+function CutLimbInteractionHandler:openConfirmation(x, y, type)
+    ConfirmationPanel.Open(textConfirmAmp, x, y, nil, function()
+        self.onMenuOptionSelected(self, type)
+    end)
+end
+
+
+
 ---@param context ISContextMenu
 function CutLimbInteractionHandler:addToMenu(context)
     --TOC_DEBUG.print("CutLimbInteractionHandler addToMenu")
@@ -221,8 +248,12 @@ function CutLimbInteractionHandler:addToMenu(context)
     local patientUsername = self:getPatient():getUsername()
     if #types > 0 and StaticData.LIMBS_TO_BODYLOCS_IND_BPT[self.limbName] and not DataController.GetInstance(patientUsername):getIsCut(self.limbName) then
         TOC_DEBUG.print("addToMenu, types > 0")
+
+        local x = (getCore():getScreenWidth() - 500) / 2
+        local y = getCore():getScreenHeight() / 2
+
         for i=1, #types do
-            context:addOption(getText("ContextMenu_Amputate"), self, self.onMenuOptionSelected, types[i])
+            context:addOption(getText("ContextMenu_Amputate"), self, self.openConfirmation, x, y, types[i])
         end
     end
 end
