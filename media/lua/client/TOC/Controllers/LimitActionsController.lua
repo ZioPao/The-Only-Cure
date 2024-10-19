@@ -291,6 +291,12 @@ function ISWorldObjectContextMenu.createMenu(player, worldobjects, x, y, test)
     ---@type ISContextMenu
     local ogContext = og_ISWorldObjectContextMenu_createMenu(player, worldobjects, x, y, test)
 
+    -- goddamn it, zomboid devs. ogContext could be a boolean...
+    -- TBH, I don't really care about gamepad support, but all this method can break stuff. Let's just disable thisfor gamepad users.
+    if type(ogContext) == "boolean" or type(ogContext) == "string" then
+        return ogContext
+    end
+
 
     -- The vanilla game doesn't count an item in the off hand as "equipped" for picking up glass. Let's fix that here
     local brokenGlassOption = ogContext:getOptionFromName(getText("ContextMenu_RemoveBrokenGlass"))
