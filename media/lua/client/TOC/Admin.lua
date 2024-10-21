@@ -8,16 +8,7 @@ local DataController = require("TOC/Controllers/DataController")
 ---@param context ISContextMenu
 ---@param worldobjects table
 local function AddAdminTocOptions(playerNum, context, worldobjects)
-
-    -- SP Check
-    if not isDebugEnabled() then return end
-    --TOC_DEBUG.print("Debug enabled")
-
-    -- MP check
-    if isClient() and not isAdmin() then return end
-    --TOC_DEBUG.print("MP and Admin")
-
-
+    if not(isClient() and isAdmin() or isDebugEnabled()) then return end
 
     local players = {}
     for _, v in ipairs(worldobjects) do
@@ -80,6 +71,8 @@ local function AddAdminTocOptions(playerNum, context, worldobjects)
             end)
         end
     end
+
+    
 end
 Events.OnFillWorldObjectContextMenu.Add(AddAdminTocOptions)
 
