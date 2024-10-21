@@ -9,7 +9,15 @@ local DataController = require("TOC/Controllers/DataController")
 ---@param worldobjects table
 local function AddAdminTocOptions(playerNum, context, worldobjects)
 
-    if (isClient() and not isDebugEnabled()) or isAdmin() then return end
+    -- SP Check
+    if not isDebugEnabled() then return end
+    --TOC_DEBUG.print("Debug enabled")
+
+    -- MP check
+    if isClient() and not isAdmin() then return end
+    --TOC_DEBUG.print("MP and Admin")
+
+
 
     local players = {}
     for _, v in ipairs(worldobjects) do
