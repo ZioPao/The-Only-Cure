@@ -1,4 +1,0 @@
-Recipes_UA = {
-    Recipe_Craft_Prosthetic_Arm = "Створити Протез Руки",
-    Recipe_Craft_Prosthetic_Hook = "Створити Протез Руки - Гак",
-}

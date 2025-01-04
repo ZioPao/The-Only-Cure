@@ -1,0 +1,10 @@
+Tooltip_RU = {
+
+    Tooltip_Surgery_CantCauterize = "Нельзя прижигать рану",
+
+    Tooltip_Surgery_And = " и "
+    Tooltip_Surgery_TempTooLow = "Температура все еще слишком низкая",
+    Tooltip_Surgery_Coward = "У тебя не хватит смелости сделать это",
+    Tooltip_Surgery_LimbNotFree = "Сначала нужно снять протез",
+    
+}

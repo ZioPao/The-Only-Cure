@@ -1,0 +1,10 @@
+Tooltip_UA = {
+
+    Tooltip_Surgery_CantCauterize = "Не можна припекти рану",
+
+    Tooltip_Surgery_And = " та "
+    Tooltip_Surgery_TempTooLow = "Температура занадто низька",
+    Tooltip_Surgery_Coward = "Вам не вистачає сміливості зробити це",
+    Tooltip_Surgery_LimbNotFree = "Спочатку необхідно зняти протез",
+    
+}
