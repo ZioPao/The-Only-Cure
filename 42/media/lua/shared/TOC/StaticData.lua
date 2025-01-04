@@ -276,8 +276,8 @@ StaticData.AMPUTATION_CLOTHING_ITEM_BASE = "TOC.Amputation_"
 ------------------
 --* Items check
 
-local sawObj = InventoryItemFactory.CreateItem("Base.Saw")
-local gardenSawObj = InventoryItemFactory.CreateItem("Base.GardenSaw")
+local sawObj = instanceItem.CreateItem("Base.Saw")
+local gardenSawObj = instanceItem.CreateItem("Base.GardenSaw")
 
 StaticData.SAWS_NAMES_IND_STR = {
     saw = sawObj:getName(),

@@ -128,14 +128,14 @@ local og_ISClothingExtraAction_isValid = ISClothingExtraAction.isValid
 function ISClothingExtraAction:isValid()
     local isEquippable = og_ISClothingExtraAction_isValid(self)
     -- self.extra is a string, not the item
-    local testItem = InventoryItemFactory.CreateItem(self.extra)
+    local testItem = instanceItem.CreateItem(self.extra)
     return HandleProsthesisValidation(testItem, isEquippable)
 end
 
 
 local og_ISClothingExtraAction_perform = ISClothingExtraAction.perform
 function ISClothingExtraAction:perform()
-    local extraItem = InventoryItemFactory.CreateItem(self.extra)
+    local extraItem = instanceItem.CreateItem(self.extra)
     ProsthesisHandler.SearchAndSetupProsthesis(extraItem, true)
     og_ISClothingExtraAction_perform(self)
 end
