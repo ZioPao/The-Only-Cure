@@ -7,7 +7,7 @@ function TOC_DEBUG.TogglePaneMod()
 end
 
 function TOC_DEBUG.ToggleHealthPanelDebug()
-    TOC_DEBUG.enableHealthPanelDebug = not TOC_DEBUG.enableHealthPanelDebug 
+    TOC_DEBUG.enableHealthPanelDebug = not TOC_DEBUG.enableHealthPanelDebug
 end
 
 ---Print debug
