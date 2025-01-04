@@ -365,5 +365,5 @@ end
 local og_ISClothingExtraAction_isValid = ISClothingExtraAction.isValid
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISClothingExtraAction:isValid()
-    return WrapClothingAction(self, og_ISClothingExtraAction_isValid, instanceItem.CreateItem(self.extra))
+    return WrapClothingAction(self, og_ISClothingExtraAction_isValid, instanceItem(self.extra))
 end

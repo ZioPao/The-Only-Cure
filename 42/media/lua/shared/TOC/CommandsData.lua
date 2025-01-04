@@ -31,7 +31,7 @@ CommandsData.server = {
     Relay = {
         RelayDamageDuringAmputation = "RelayDamageDuringAmputation",                ---@alias relayDamageDuringAmputationParams {patientNum : number, limbName : string}
         RelayExecuteAmputationAction = "RelayExecuteAmputationAction",              ---@alias relayExecuteAmputationActionParams {patientNum : number, limbName : string}
-        
+
         --* ADMIN ONLY *--
         RelayExecuteInitialization = "RelayExecuteInitialization",                                ---@alias relayExecuteInitializationParams {patientNum : number}
         RelayForcedAmputation = "RelayForcedAmputation"                                           ---@alias relayForcedAmputationParams {patientNum : number, limbName : string}
