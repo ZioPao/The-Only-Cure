@@ -16,6 +16,18 @@
             "command": "python ${config:zomboid_user_folder}/PaosCrap/bump_version.py media/lua/client/TOC/Main.lua",
         },
         {
+            "label": "Run Zomboid Debug No Steam (42)",
+            "type": "shell",
+            "presentation": {
+                "group": "groupZomboid"
+            },
+            "command": "\"${config:zomboid_folder}\\ProjectZomboid64 - nosteam-debug 42.bat\"",
+            "options": {"statusbar": {"label": "$(run) Zomboid client (42)"}},
+            "problemMatcher": [
+                "$eslint-stylish"
+            ]
+        },
+        {
             "label": "Run Zomboid Debug No Steam",
             "type": "shell",
             "presentation": {
