@@ -103,7 +103,7 @@ function ISHealthPanel:tryDrawAmputation(highestAmputations, side, username)
     end
 
     -- B42, for some reason the positioning of the texture changed. Realigned it manually with those fixed values
-    self:drawTexture(texture, self.healthPanel.x - 7, self.healthPanel.y - 13, 1, redColor, 0, 0)
+    self:drawTexture(texture, self.healthPanel.x - 5, self.healthPanel.y - 9, 1, redColor, 0, 0)
 end
 function ISHealthPanel:tryDrawProsthesis(highestAmputations, side, username)
     local dc = DataController.GetInstance(username)     -- TODO CACHE PROSTHESIS!!! Don't use DC here
