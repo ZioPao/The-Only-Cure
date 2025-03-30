@@ -7,27 +7,33 @@ module TOC
 	/*************Craft Prosthetics*******************/
 	recipe Craft Prosthetic Arm
 	{
+       ScrapMetal=4,
        MetalPipe=4,
        Plank=2,
+       BlowTorch=2,
        keep [Recipe.GetItemTypes.WeldingMask],
 
        Result:Prost_NormalArm_L,
-       Time:150.0,
+       Time:250.0,
        Category:Welding,
        OnGiveXP:Recipe.OnGiveXP.MetalWelding10,
+       SkillRequired:MetalWelding=6,
        NeedToBeLearn:false,
 	}
 
 	recipe Craft Prosthetic Hook
 	{
+       ScrapMetal=2,
        MetalPipe=2,
        Plank=2,
+       BlowTorch=2,
        keep [Recipe.GetItemTypes.WeldingMask],
 
        Result:Prost_HookArm_L,
-       Time:100.0,
+       Time:250.0,
        Category:Welding,
        OnGiveXP:Recipe.OnGiveXP.MetalWelding10,
+       SkillRequired:MetalWelding=2,
        NeedToBeLearn:false,
 	}
 }
