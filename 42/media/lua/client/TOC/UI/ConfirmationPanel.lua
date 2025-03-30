@@ -53,14 +53,14 @@ function ConfirmationPanel:createChildren()
 
     local yButton = self:getHeight() - yPadding - btnHeight
 
-    self.btnYes = ISButton:new(xPadding, yButton, btnWidth, btnHeight, "Yes", self, self.onClick)
+    self.btnYes = ISButton:new(xPadding, yButton, btnWidth, btnHeight, getText("IGUI_Yes"), self, self.onClick)
     self.btnYes.internal = "YES"
     self.btnYes:initialise()
     self.btnYes.borderColor = { r = 1, g = 0, b = 0, a = 1 }
     self.btnYes:setEnable(true)
     self:addChild(self.btnYes)
 
-    self.btnNo = ISButton:new(self:getWidth() - xPadding - btnWidth, yButton, btnWidth, btnHeight, "No", self,
+    self.btnNo = ISButton:new(self:getWidth() - xPadding - btnWidth, yButton, btnWidth, btnHeight, getText("IGUI_No"), self,
         self.onClick)
     self.btnNo.internal = "NO"
     self.btnNo:initialise()

@@ -1,0 +1,21 @@
+IG_UI_FR = {
+    IGUI_Yes = "Oui",
+    IGUI_No = "Non",
+
+    IGUI_perks_Amputations = "Amputations",
+    IGUI_perks_Side_R = "C�t� droit",
+    IGUI_perks_Side_L = "C�t� gauche",
+    IGUI_perks_Prosthesis = "Proth�se",
+    IGUI_perks_ProstFamiliarity = "Familiarit�",
+
+    IGUI_ItemCat_Prosthesis = "Proth�se",
+    IGUI_ItemCat_Surgery = "Chirurgie",
+    IGUI_ItemCat_Amputation = "Amputation",
+
+    IGUI_HealthPanel_Cicatrization = "Cicatrisation",
+    IGUI_HealthPanel_Cicatrized = "Cicatris�",
+    IGUI_HealthPanel_Cauterized = "Caut�ris�",
+    IGUI_HealthPanel_WoundDirtyness = "Salet� de la plaie",
+    IGUI_HealthPanel_ProstEquipped = "Proth�se �quip�e",
+
+}

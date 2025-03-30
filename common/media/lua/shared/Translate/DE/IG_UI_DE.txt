@@ -1,4 +1,7 @@
 IG_UI_DE = {
+    IGUI_Yes = "Ja",
+    IGUI_No = "Nein",
+
     IGUI_perks_Amputations = "Amputationen",
     IGUI_perks_Side_R = "Rechte Seite",
     IGUI_perks_Side_L = "Linke Seite",
