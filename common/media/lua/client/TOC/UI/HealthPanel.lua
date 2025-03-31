@@ -10,10 +10,21 @@ local WoundCleaningInteractionHandler = require("TOC/UI/Interactions/WoundCleani
 
 local isReady = false
 
+
+local xMod, yMod
+
+if luautils.stringStarts(StaticData.GAME_VERSION, "41") then
+    xMod = 0
+    yMod = 0
+else
+    xMod = 5
+    yMod = 9
+end
+
+
 function SetHealthPanelTOC()
 
     -- depending on compatibility
-
     isReady = true
 end
 
@@ -101,19 +112,6 @@ function ISHealthPanel:tryDrawAmputation(highestAmputations, side, username)
         local sexPl = self.character:isFemale() and "Female" or "Male"
         texture = StaticData.HEALTH_PANEL_TEXTURES[sexPl][limbName]
     end
-
-
-
-    local xMod, yMod
-
-    if luautils.stringStarts(StaticData.GAME_VERSION, "41") then
-        xMod = 0
-        yMod = 0
-    else
-        xMod = 5
-        yMod = 9
-    end
-
     -- B42, for some reason the positioning of the texture changed. Realigned it manually with those fixed values
     self:drawTexture(texture, self.healthPanel.x - xMod, self.healthPanel.y - yMod, 1, redColor, 0, 0)
 end
@@ -121,7 +119,7 @@ function ISHealthPanel:tryDrawProsthesis(highestAmputations, side, username)
     local dc = DataController.GetInstance(username)     -- TODO CACHE PROSTHESIS!!! Don't use DC here
     local limbName = highestAmputations[side]
     if limbName and dc:getIsProstEquipped(limbName) then
-        self:drawTexture(StaticData.HEALTH_PANEL_TEXTURES.ProstArm[side], self.healthPanel.x, self.healthPanel.y, 1, 1, 1, 1)
+        self:drawTexture(StaticData.HEALTH_PANEL_TEXTURES.ProstArm[side], self.healthPanel.x - xMod, self.healthPanel.y - yMod, 1, 1, 1, 1)
     end
 end
 

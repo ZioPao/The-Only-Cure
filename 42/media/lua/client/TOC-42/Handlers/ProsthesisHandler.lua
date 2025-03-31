@@ -1,5 +1,7 @@
 local ProsthesisHandler = require("TOC/Handlers/ProsthesisHandler")     -- declared in common
 local OverridenMethodsArchive = require("TOC/OverridenMethodsArchive")
+local CommonMethods = require("TOC/CommonMethods")
+local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
 
 -- FIX in B42 for some reason unequipping prosthesis doesn't work. Still not sure why
 
@@ -23,10 +25,19 @@ end
 
 local og_ISUnequipAction_complete = ISUnequipAction.complete
 function ISUnequipAction:complete()
-	TOC_DEBUG.print("ISUnequipAction:complete")
-    TOC_DEBUG.print(self.item:getFullType())
-    self.character:removeWornItem(self.item)
+    local isProst = ProsthesisHandler.SearchAndSetupProsthesis(self.item, false)
+    local group
+    if isProst then
+        group = BodyLocations.getGroup("Human")
+        group:setMultiItem("TOC_ArmProst", false)
+    end
     og_ISUnequipAction_complete(self)
+
+    if isProst then
+        group:setMultiItem("TOC_ArmProst", true)
+    end
+
+    -- TODO RUN WORKAROUND FOR MULTI ITEM HERE!!!!
 
 
 end
