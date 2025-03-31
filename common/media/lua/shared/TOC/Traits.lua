@@ -17,9 +17,8 @@ local function GetTraitDesc(trait)
     return getText("UI_trait_" .. trait .. "_desc")
 end
 
-local function SetupTraits()
-    -- Perks.Left_Hand is defined in perks.txt
 
+local function SetupTraits()
     local traitsTable = {
         [1] = TraitFactory.addTrait(TRAITS.Amputee_Hand, GetTraitText(TRAITS.Amputee_Hand), -8, GetTraitDesc(TRAITS.Amputee_Hand), false, false),
         [2] = TraitFactory.addTrait(TRAITS.Amputee_ForeArm, GetTraitText(TRAITS.Amputee_ForeArm), -10, GetTraitDesc(TRAITS.Amputee_ForeArm), false, false),
@@ -31,7 +30,7 @@ local function SetupTraits()
         ---@type Trait
         local t = traitsTable[i]
         ---@diagnostic disable-next-line: undefined-field
-        t:addXPBoost(Perks.Left_Hand, 4)
+        t:addXPBoost(Perks.Side_L, 4)
         t:addXPBoost(Perks.Fitness, -1)
         t:addXPBoost(Perks.Strength, -1)
     end
