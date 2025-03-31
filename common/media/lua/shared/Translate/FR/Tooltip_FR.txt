@@ -1,0 +1,10 @@
+Tooltip_FR = {
+
+    Tooltip_Surgery_CantCauterize = "Vous ne pouvez pas cautériser la plaie",
+
+    Tooltip_Surgery_And = " et ",
+    Tooltip_Surgery_TempTooLow = "La température est encore trop basse",
+    Tooltip_Surgery_Coward = "Vous n'avez pas le courage de le faire",
+    Tooltip_Surgery_LimbNotFree = "Vous devez d'abord retirer la prothèse",
+
+}

@@ -276,8 +276,16 @@ StaticData.AMPUTATION_CLOTHING_ITEM_BASE = "TOC.Amputation_"
 ------------------
 --* Items check
 
-local sawObj = instanceItem("Base.Saw")
-local gardenSawObj = instanceItem("Base.GardenSaw")
+local sawObj
+local gardenSawObj
+if luautils.stringStarts(getGameVersion(), "41") then
+    sawObj = InventoryItemFactory.CreateItem("Base.Saw")
+    gardenSawObj = InventoryItemFactory.CreateItem("Base.GardenSaw")
+else
+    sawObj = instanceItem("Base.Saw")
+    gardenSawObj = instanceItem("Base.GardenSaw")
+end
+
 
 StaticData.SAWS_NAMES_IND_STR = {
     saw = sawObj:getName(),

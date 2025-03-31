@@ -1,0 +1,10 @@
+Tooltip_EN = {
+
+    Tooltip_Surgery_CantCauterize = "You can't cauterize the wound",
+
+    Tooltip_Surgery_And = " and "
+    Tooltip_Surgery_TempTooLow = "The temperature is still too low",
+    Tooltip_Surgery_Coward = "You don't have the guts to do it",
+    Tooltip_Surgery_LimbNotFree = "You need to remove the prosthesis first",
+    
+}

@@ -1,0 +1,23 @@
+IG_UI_EN = {
+    IGUI_Yes = "Yes",
+    IGUI_No = "No",
+
+    IGUI_perks_Amputations = "Amputations",
+    IGUI_perks_Side_R = "Right Side",
+    IGUI_perks_Side_L = "Left Side",
+    IGUI_perks_Prosthesis = "Prosthesis",
+    IGUI_perks_ProstFamiliarity= "Familiarity",
+
+    IGUI_ItemCat_Prosthesis = "Prosthesis",
+    IGUI_ItemCat_Surgery = "Surgery",
+    IGUI_ItemCat_Amputation = "Amputation"
+
+    IGUI_HealthPanel_Cicatrization = "Cicatrization",
+    IGUI_HealthPanel_Cicatrized = "Cicatrized",
+    IGUI_HealthPanel_Cauterized = "Cauterized",
+    IGUI_HealthPanel_WoundDirtyness = "Wound Dirtyness",
+    IGUI_HealthPanel_ProstEquipped = "Prosthesis Equipped",
+
+    IGUI_Confirmation_Amputate = " <CENTRE> Do you really want to amputate that limb?"
+
+}

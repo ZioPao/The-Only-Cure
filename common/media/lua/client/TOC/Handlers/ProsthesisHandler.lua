@@ -88,14 +88,7 @@ function ProsthesisHandler.SearchAndSetupProsthesis(item, isEquipping)
     return true
 end
 
--------------------------
---* Overrides *--
-
-
----@param item InventoryItem
----@param isEquippable boolean
----@return unknown
-local function HandleProsthesisValidation(item, isEquippable)
+function ProsthesisHandler.Validate(item, isEquippable)
     local isProst = ProsthesisHandler.CheckIfProst(item)
     if not isProst then return isEquippable end
 
@@ -110,11 +103,16 @@ local function HandleProsthesisValidation(item, isEquippable)
 end
 
 
+
+-------------------------
+--* Overrides *--
+
+
 ---@diagnostic disable-next-line: duplicate-set-field
 local og_ISWearClothing_isValid = ISWearClothing.isValid
 function ISWearClothing:isValid()
     local isEquippable = og_ISWearClothing_isValid(self)
-    return HandleProsthesisValidation(self.item, isEquippable)
+    return ProsthesisHandler.Validate(self.item, isEquippable)
 end
 
 local og_ISWearClothing_perform = ISWearClothing.perform
@@ -128,14 +126,14 @@ local og_ISClothingExtraAction_isValid = ISClothingExtraAction.isValid
 function ISClothingExtraAction:isValid()
     local isEquippable = og_ISClothingExtraAction_isValid(self)
     -- self.extra is a string, not the item
-    local testItem = instanceItem(self.extra)
-    return HandleProsthesisValidation(testItem, isEquippable)
+    local testItem = InventoryItemFactory.CreateItem(self.extra)
+    return ProsthesisHandler.Validate(testItem, isEquippable)
 end
 
 
 local og_ISClothingExtraAction_perform = ISClothingExtraAction.perform
 function ISClothingExtraAction:perform()
-    local extraItem = instanceItem(self.extra)
+    local extraItem = InventoryItemFactory.CreateItem(self.extra)
     ProsthesisHandler.SearchAndSetupProsthesis(extraItem, true)
     og_ISClothingExtraAction_perform(self)
 end

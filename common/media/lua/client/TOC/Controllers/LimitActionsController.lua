@@ -6,8 +6,43 @@ local CommonMethods = require("TOC/CommonMethods")
 local StaticData = require("TOC/StaticData")
 
 -----------------
+---@class LimitActionsController
+local LimitActionsController = {}
 
 
+--* DISABLE WEARING CERTAIN ITEMS WHEN NO LIMB
+
+function LimitActionsController.CheckLimbFeasibility(limbName)
+    local dcInst = DataController.GetInstance()
+    local isFeasible = not dcInst:getIsCut(limbName) or dcInst:getIsProstEquipped(limbName)
+    --TOC_DEBUG.print("isFeasible="..tostring(isFeasible))
+    return isFeasible
+end
+
+---@param obj any
+---@param wrappedFunc function
+---@param item InventoryItem
+---@return boolean
+function LimitActionsController.WrapClothingAction(obj, wrappedFunc, item)
+    local isEquippable = wrappedFunc(obj)
+    if not isEquippable then return isEquippable end
+
+    local itemBodyLoc = item:getBodyLocation()
+
+    local limbToCheck = StaticData.AFFECTED_BODYLOCS_TO_LIMBS_IND_STR[itemBodyLoc]
+    if LimitActionsController.CheckLimbFeasibility(limbToCheck) then return isEquippable else return false end
+end
+
+
+
+
+
+
+
+
+
+
+--------------------------------------------
 --* TIMED ACTIONS *--
 -- We want to be able to modify how long actions are gonna take,
 -- depending on amputation status and kind of action. Also, when the
@@ -328,42 +363,16 @@ function ISWorldObjectContextMenu.createMenu(player, worldobjects, x, y, test)
     return ogContext
 end
 
---* DISABLE WEARING CERTAIN ITEMS WHEN NO LIMB
-
-local function CheckLimbFeasibility(limbName)
-    local dcInst = DataController.GetInstance()
-    local isFeasible = not dcInst:getIsCut(limbName) or dcInst:getIsProstEquipped(limbName)
-    --TOC_DEBUG.print("isFeasible="..tostring(isFeasible))
-    return isFeasible
-end
-
-
-
-
----@param obj any
----@param wrappedFunc function
----@param item InventoryItem
----@return boolean
-local function WrapClothingAction(obj, wrappedFunc, item)
-    local isEquippable = wrappedFunc(obj)
-    if not isEquippable then return isEquippable end
-
-    local itemBodyLoc = item:getBodyLocation()
-
-    local limbToCheck = StaticData.AFFECTED_BODYLOCS_TO_LIMBS_IND_STR[itemBodyLoc]
-    if CheckLimbFeasibility(limbToCheck) then return isEquippable else return false end
-end
-
-
-
 ---@diagnostic disable-next-line: duplicate-set-field
 local og_ISWearClothing_isValid = ISWearClothing.isValid
 function ISWearClothing:isValid()
-    return WrapClothingAction(self, og_ISWearClothing_isValid, self.item)
+    return LimitActionsController.WrapClothingAction(self, og_ISWearClothing_isValid, self.item)
 end
 
 local og_ISClothingExtraAction_isValid = ISClothingExtraAction.isValid
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISClothingExtraAction:isValid()
-    return WrapClothingAction(self, og_ISClothingExtraAction_isValid, InventoryItemFactory.CreateItem(self.extra))
+    return LimitActionsController.WrapClothingAction(self, og_ISClothingExtraAction_isValid, InventoryItemFactory.CreateItem(self.extra))
 end
+
+return LimitActionsController

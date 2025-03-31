@@ -17,7 +17,6 @@ local function GetTraitDesc(trait)
     return getText("UI_trait_" .. trait .. "_desc")
 end
 
-
 local function SetupTraits()
     -- Perks.Left_Hand is defined in perks.txt
 

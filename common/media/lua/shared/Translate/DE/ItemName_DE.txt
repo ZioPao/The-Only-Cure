@@ -1,0 +1,9 @@
+
+ItemName_DE = {
+    ItemName_TOC.Surg_Arm_Tourniquet_L = "Tourniquet",
+    ItemName_TOC.Surg_Arm_Tourniquet_R = "Tourniquet",
+    ItemName_TOC.Prost_NormalArm_L = "Armprothese Links",
+    ItemName_TOC.Prost_NormalArm_R = "Armprothese Rechts",
+    ItemName_TOC.Prost_HookArm_L = "Linke Armprothese - Haken",
+    ItemName_TOC.Prost_HookArm_R = "Rechte Armprothese - Haken",
+}

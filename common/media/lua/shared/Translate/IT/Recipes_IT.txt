@@ -1,0 +1,4 @@
+Recipes_IT = {
+    Recipe_Craft_Prosthetic_Arm = "Costruisci un braccio prostetico",
+    Recipe_Craft_Prosthetic_Hook = "Costruisci un braccio prostetico con uncino",
+}

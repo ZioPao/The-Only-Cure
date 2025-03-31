@@ -122,14 +122,18 @@ function ISDrinkFromBottle:new(character, item, uses)
     return action
 end
 
--- FIX This doesn't exist anymore in B42
--- local og_ISFinalizeDealAction_new = ISFinalizeDealAction.new
--- function ISFinalizeDealAction:new(player, otherPlayer, itemsToGive, itemsToReceive, time)
---     local action = og_ISFinalizeDealAction_new(self, player, otherPlayer, itemsToGive, itemsToReceive, time)
---     --TOC_DEBUG.print("Override ISFinalizeDealAction")
---     action.skipTOC = true
---     return action
--- end
+if luautils.stringStarts(getGameVersion(), "41") then
+    -- This doesn't exist anymore in B42
+    local og_ISFinalizeDealAction_new = ISFinalizeDealAction.new
+    function ISFinalizeDealAction:new(player, otherPlayer, itemsToGive, itemsToReceive, time)
+        local action = og_ISFinalizeDealAction_new(self, player, otherPlayer, itemsToGive, itemsToReceive, time)
+        --TOC_DEBUG.print("Override ISFinalizeDealAction")
+        action.skipTOC = true
+        return action
+    end
+end
+
+
 
 local og_ISCampingInfoAction_new = ISCampingInfoAction.new
 function ISCampingInfoAction:new(character, campfireObject, campfire)

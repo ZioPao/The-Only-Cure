@@ -1,0 +1,33 @@
+ContextMenu_EN = {
+    ContextMenu_Amputate = "Amputate",
+    ContextMenu_Amputate_Bandage = "Amputate and bandage",
+    ContextMenu_Amputate_Stitch = "Amputate and stitches",
+    ContextMenu_Amputate_Stitch_Bandage = "Amputate, stitches and bandage",
+
+    ContextMenu_Cauterize = "Cauterize",
+    
+    ContextMenu_Limb_Hand_L = "Left Hand",
+    ContextMenu_Limb_ForeArm_L = "Left Forearm",
+    ContextMenu_Limb_UpperArm_L = "Left UpperArm"
+    ContextMenu_Limb_Hand_R = "Right Hand",
+    ContextMenu_Limb_ForeArm_R = "Right Forearm",
+    ContextMenu_Limb_UpperArm_R = "Right UpperArm",
+
+    ContextMenu_InstallProstRight = "Install prosthesis on right arm",
+    ContextMenu_InstallProstLeft = "Install prosthesis on left arm",
+
+    ContextMenu_PutTourniquetArmLeft = "Put tourniquet on left arm",
+    ContextMenu_PutTourniquetLegL = "Put tourniquet on left leg",
+    ContextMenu_PutTourniquetArmRight = "Put tourniquet on right arm",
+    ContextMenu_PutTourniquetLegR = "Put tourniquet on right leg",
+
+
+    ContextMenu_CleanWound = "Clean Wound",
+
+
+
+    ContextMenu_Admin_TOC = "TOC",
+    ContextMenu_Admin_ResetTOC = "Reset Amputations",
+    ContextMenu_Admin_ForceAmputation = "Force Amputation",
+    
+}
