@@ -2,6 +2,8 @@ local CommonMethods = require("TOC/CommonMethods")
 local StaticData = require("TOC/StaticData")
 local DataController = require("TOC/Controllers/DataController")
 local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
+
+local OverridenMethodsArchive = require("TOC/OverridenMethodsArchive")
 -------------------------
 
 ---@class ProsthesisHandler
@@ -121,7 +123,13 @@ function ISWearClothing:perform()
     og_ISWearClothing_perform(self)
 end
 
-local og_ISClothingExtraAction_isValid = ISClothingExtraAction.isValid
+
+
+
+
+
+local og_ISClothingExtraAction_isValid = OverridenMethodsArchive.Save("ISClothingExtraAction_isValid", ISClothingExtraAction.isValid)
+
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISClothingExtraAction:isValid()
     local isEquippable = og_ISClothingExtraAction_isValid(self)
@@ -130,8 +138,7 @@ function ISClothingExtraAction:isValid()
     return ProsthesisHandler.Validate(testItem, isEquippable)
 end
 
-
-local og_ISClothingExtraAction_perform = ISClothingExtraAction.perform
+local og_ISClothingExtraAction_perform = OverridenMethodsArchive.Save("ISClothingExtraAction_perform", ISClothingExtraAction.perform)
 function ISClothingExtraAction:perform()
     local extraItem = InventoryItemFactory.CreateItem(self.extra)
     ProsthesisHandler.SearchAndSetupProsthesis(extraItem, true)

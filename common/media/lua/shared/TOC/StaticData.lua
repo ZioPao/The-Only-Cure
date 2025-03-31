@@ -21,6 +21,9 @@ local StaticData = {}
 ---Mod name, used to setup Global Mod Data and various stuff
 StaticData.MOD_NAME = "TOC"
 
+-- Game version, used to correct some stuff instead of relying on versioned folders
+StaticData.GAME_VERSION = getGameVersion()
+
 -------------------------
 --* Base
 
@@ -278,7 +281,7 @@ StaticData.AMPUTATION_CLOTHING_ITEM_BASE = "TOC.Amputation_"
 
 local sawObj
 local gardenSawObj
-if luautils.stringStarts(getGameVersion(), "41") then
+if luautils.stringStarts(StaticData.GAME_VERSION, "41") then
     sawObj = InventoryItemFactory.CreateItem("Base.Saw")
     gardenSawObj = InventoryItemFactory.CreateItem("Base.GardenSaw")
 else

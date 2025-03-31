@@ -102,8 +102,20 @@ function ISHealthPanel:tryDrawAmputation(highestAmputations, side, username)
         texture = StaticData.HEALTH_PANEL_TEXTURES[sexPl][limbName]
     end
 
+
+
+    local xMod, yMod
+
+    if luautils.stringStarts(StaticData.GAME_VERSION, "41") then
+        xMod = 0
+        yMod = 0
+    else
+        xMod = 5
+        yMod = 9
+    end
+
     -- B42, for some reason the positioning of the texture changed. Realigned it manually with those fixed values
-    self:drawTexture(texture, self.healthPanel.x - 5, self.healthPanel.y - 9, 1, redColor, 0, 0)
+    self:drawTexture(texture, self.healthPanel.x - xMod, self.healthPanel.y - yMod, 1, redColor, 0, 0)
 end
 function ISHealthPanel:tryDrawProsthesis(highestAmputations, side, username)
     local dc = DataController.GetInstance(username)     -- TODO CACHE PROSTHESIS!!! Don't use DC here

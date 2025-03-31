@@ -5,6 +5,7 @@ local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
 local CommonMethods = require("TOC/CommonMethods")
 local StaticData = require("TOC/StaticData")
 
+local OverridenMethodsArchive = require("TOC/OverridenMethodsArchive")
 -----------------
 ---@class LimitActionsController
 local LimitActionsController = {}
@@ -369,7 +370,9 @@ function ISWearClothing:isValid()
     return LimitActionsController.WrapClothingAction(self, og_ISWearClothing_isValid, self.item)
 end
 
-local og_ISClothingExtraAction_isValid = ISClothingExtraAction.isValid
+
+
+local og_ISClothingExtraAction_isValid = OverridenMethodsArchive.Save("ISClothingExtraAction_isValid", ISClothingExtraAction.isValid)
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISClothingExtraAction:isValid()
     return LimitActionsController.WrapClothingAction(self, og_ISClothingExtraAction_isValid, InventoryItemFactory.CreateItem(self.extra))

@@ -1,7 +1,7 @@
 -- TODO This section must be overhauled
 
 -- local DataController = require("TOC/Controllers/DataController")
--- local StaticData = require("TOC/StaticData")
+local StaticData = require("TOC/StaticData")
 
 ---@diagnostic disable: duplicate-set-field
 -- Bunch of actions shouldn't be modified by the adjusted time 
@@ -122,7 +122,7 @@ function ISDrinkFromBottle:new(character, item, uses)
     return action
 end
 
-if luautils.stringStarts(getGameVersion(), "41") then
+if luautils.stringStarts(StaticData.GAME_VERSION, "41") then
     -- This doesn't exist anymore in B42
     local og_ISFinalizeDealAction_new = ISFinalizeDealAction.new
     function ISFinalizeDealAction:new(player, otherPlayer, itemsToGive, itemsToReceive, time)
