@@ -17,8 +17,10 @@ if luautils.stringStarts(StaticData.GAME_VERSION, "41") then
     xMod = 0
     yMod = 0
 else
-    xMod = 5        -- 5
-    yMod = 13       -- Actually in game the shift compared to the png is of 4 px...
+    -- For some reason (I didn't investigate), when applying stuff to the health panel
+    -- there is an un-accounted shift in B42.
+    xMod = 5
+    yMod = 13
 end
 
 
