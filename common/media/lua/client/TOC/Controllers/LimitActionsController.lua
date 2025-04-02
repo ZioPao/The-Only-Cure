@@ -129,6 +129,10 @@ function ISBaseTimedAction:perform()
 
     local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(LocalPlayerController.username)
     local xp = self.maxTime / 100
+
+    -- Prevent xp from being negative and decreasing perks
+    if xp < 0 then xp = 0 end
+
     for k, _ in pairs(amputatedLimbs) do
         local limbName = k
 
