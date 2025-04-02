@@ -52,27 +52,11 @@ perk Side_R
 }
 
 
-perk Prosthesis
-{
-	parent = None,
-	translation = Prosthesis,
-	passive = false,
-	xp1 = 0,
-	xp2 = 0,
-	xp3 = 0,
-	xp4 = 0,
-	xp5 = 0,
-	xp6 = 0,
-	xp7 = 0,
-	xp8 = 0,
-	xp9 = 0,
-	xp10 = 0,
-}
 perk ProstFamiliarity
 {
-	parent = Prosthesis,
-	name = ProstFamiliarity,
-	translation = ProstFamiliarity,
+	parent = Amputations,
+	name = Prosthesis,
+	translation = Prosthesis,
 	passive = false,
 	xp1 = 50,
 	xp2 = 100,

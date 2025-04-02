@@ -143,7 +143,6 @@ function ISBaseTimedAction:perform()
         if dcInst:getIsCut(limbName) and dcInst:getIsVisible(limbName) then
             local side = CommonMethods.GetSide(limbName)
 
-
             -- TODO Test it
             local xpObj = LocalPlayerController.playerObj:getXp()
             if xpObj:getLevel() < 10 then
