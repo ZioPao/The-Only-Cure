@@ -68,7 +68,7 @@ local function AddStoveContextMenu(playerNum, context, worldObjects, test)
 
 
             -- Notifications, in case the player can't do the action
-            local isPlayerCourageous = pl:HasTrait("Brave") or pl:getPerkLevel(Perks.Strength) > 5
+            local isPlayerCourageous = pl:HasTrait("Brave") or pl:HasTrait("Desensitized") or pl:getPerkLevel(Perks.Strength) > 5
             local isTempHighEnough = stoveObj:getCurrentTemperature() >= 250
             local isLimbFree = not dcInst:getIsProstEquipped(limbName)
 
