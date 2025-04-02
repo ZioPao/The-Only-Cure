@@ -5,7 +5,7 @@ local StaticData = require("TOC/StaticData")
 ----------------
 
 --- An instance will be abbreviated with dcInst
-
+-- https://github.com/ZioPao/The-Only-Cure/issues/187
 
 --- Handle all TOC mod data related stuff
 ---@class DataController
@@ -103,6 +103,10 @@ end
 ---In case of desync between the table on ModData and the table here
 ---@param tocData tocModDataType
 function DataController:applyOnlineData(tocData)
+    if not tocData or not tocData.limbs then
+        TOC_DEBUG.print("Received invalid tocData")
+        return
+    end
     local key = CommandsData.GetKey(self.username)
     ModData.add(key, tocData)
     self.tocData = ModData.get(key)
@@ -229,12 +233,8 @@ end
 ---@param limbName string
 ---@return boolean
 function DataController:getIsCut(limbName)
-    if not self.isDataReady then return false end
-    if self.tocData.limbs[limbName] then
-        return self.tocData.limbs[limbName].isCut
-    else
-        return false
-    end
+    if not self.isDataReady or not self.tocData or not self.tocData.limbs then return false end
+    return self.tocData.limbs[limbName] and self.tocData.limbs[limbName].isCut or false
 end
 
 ---Get isVisible

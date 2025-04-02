@@ -16,5 +16,9 @@
     "Lua.format.defaultConfig": {
         "indent_style": "space",
         "indent_size": "2"
-    }
+    },
+    "Lua.workspace.library": [
+        "C:\\Users\\picch\\Zomboid\\Umbrella",
+        "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure"
+    ],
 }
