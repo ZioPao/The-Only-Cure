@@ -127,6 +127,9 @@ function ISBaseTimedAction:perform()
     local dcInst = DataController.GetInstance()
     if not dcInst:getIsAnyLimbCut() then return end
 
+
+    -- First check level of perks. if already at max, skip
+    LocalPlayerController.playerObj:getPerkLevel(perkAmp)
     local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(LocalPlayerController.username)
     local xp = self.maxTime / 100
 
@@ -139,7 +142,14 @@ function ISBaseTimedAction:perform()
         -- We're checking for only "visible" amputations to prevent from having bleeds everywhere
         if dcInst:getIsCut(limbName) and dcInst:getIsVisible(limbName) then
             local side = CommonMethods.GetSide(limbName)
-            LocalPlayerController.playerObj:getXp():AddXP(Perks["Side_" .. side], xp)
+
+
+            -- TODO Test it
+            local xpObj = LocalPlayerController.playerObj:getXp()
+            if xpObj:getLevel() < 10 then
+                xpObj:AddXP(Perks["Side_" .. side], xp)
+            end
+
             if not dcInst:getIsCicatrized(limbName) and dcInst:getIsProstEquipped(limbName) then
                 TOC_DEBUG.print("Trying for bleed, player met the criteria")
                 LocalPlayerController.TryRandomBleed(self.character, limbName)
