@@ -11,14 +11,26 @@
     "Lua.diagnostics.globals": [
         "ModOptions",
         "zombie",
-        "_"
+        "_",
     ],
     "Lua.format.defaultConfig": {
         "indent_style": "space",
         "indent_size": "2"
     },
     "Lua.workspace.library": [
-        "C:\\Users\\picch\\Zomboid\\Umbrella",
-        "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure"
+        "${addons}/umbrella-unstable/module/library"
     ],
+    "Lua.runtime.version": "Lua 5.1",
+    "Lua.runtime.path": [
+        "?.lua",
+        "?/init.lua",
+        "server/?.lua"
+    ],
+    "Lua.completion.requireSeparator": "/",
+    "Lua.runtime.builtin": {
+        "debug": "disable",
+        "io": "disable",
+        "package": "disable"
+    },
+    "Lua.workspace.checkThirdParty": false
 }

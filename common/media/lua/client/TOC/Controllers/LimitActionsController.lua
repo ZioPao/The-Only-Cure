@@ -129,7 +129,7 @@ function ISBaseTimedAction:perform()
 
 
     -- First check level of perks. if already at max, skip
-    LocalPlayerController.playerObj:getPerkLevel(perkAmp)
+    -- LocalPlayerController.playerObj:getPerkLevel(perkAmp)       -- todo 
     local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(LocalPlayerController.username)
     local xp = self.maxTime / 100
 
@@ -173,7 +173,7 @@ end
 --* Equipping items overrides *--
 local og_ISEquipWeaponAction_isValid = ISEquipWeaponAction.isValid
 ---Add a condition to check the feasibility of having 2 handed weapons or if both arms are cut off
----@return boolean
+---@return boolean?
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISEquipWeaponAction:isValid()
     local isValid = og_ISEquipWeaponAction_isValid(self)

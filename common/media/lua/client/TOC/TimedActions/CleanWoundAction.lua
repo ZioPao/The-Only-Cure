@@ -33,7 +33,7 @@ function CleanWoundAction:new(doctor, otherPlayer, bandage, bodyPart)
     if doctor:isTimedActionInstant() then
         o.maxTime = 1
     end
-    if doctor:getAccessLevel() ~= "None" then
+    if doctor:getAccessLevel() ~= "None" then       -- TODO Fix for B42
         o.doctorLevel = 10
     end
 	return o
