@@ -129,7 +129,7 @@ function ISBaseTimedAction:perform()
 
 
     -- First check level of perks. if already at max, skip
-    -- LocalPlayerController.playerObj:getPerkLevel(perkAmp)       -- todo 
+
     local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(LocalPlayerController.username)
     local xp = self.maxTime / 100
 
@@ -143,7 +143,6 @@ function ISBaseTimedAction:perform()
         if dcInst:getIsCut(limbName) and dcInst:getIsVisible(limbName) then
             local side = CommonMethods.GetSide(limbName)
 
-            -- TODO Test it
             local xpObj = LocalPlayerController.playerObj:getXp()
             if xpObj:getLevel() < 10 then
                 xpObj:AddXP(Perks["Side_" .. side], xp)

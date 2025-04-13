@@ -118,7 +118,7 @@ function BaseHandler:toPlayerInventory(item, previousAction)
     if item:getContainer() ~= self:getDoctor():getInventory() then
         local action = ISInventoryTransferAction:new(self:getDoctor(), item, item:getContainer(), self:getDoctor():getInventory())
         ISTimedActionQueue.addAfter(previousAction, action)
-        -- FIXME: ISHealthPanel.actions never gets cleared
+        -- FIX: ISHealthPanel.actions never gets cleared
         self.panel.actions = self.panel.actions or {}
         self.panel.actions[action] = self.bodyPart
         return action
