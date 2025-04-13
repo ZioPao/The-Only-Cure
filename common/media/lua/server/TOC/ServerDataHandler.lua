@@ -24,8 +24,6 @@ function ServerDataHandler.AddTable(key, table)
     --TOC_DEBUG.printTable(table)
 
     -- Set that the data has been modified and it's updated on the server
-    table.isUpdateFromServer = true -- FIX this is useless as of now
-
     ModData.add(key, table)     -- Add it to the server mod data
     ServerDataHandler.modData[key] = table
 

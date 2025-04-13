@@ -50,6 +50,10 @@ Compat.handlers = {
     ['iMedsFixed'] = {
         fun = Compat.iMeds,
         isActive = false}
+
+
+
+    -- TODO Check if FirstAidOverhaul can be made compatible
 }
 
 

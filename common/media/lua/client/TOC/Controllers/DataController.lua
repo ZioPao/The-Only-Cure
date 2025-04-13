@@ -403,9 +403,6 @@ function DataController.ReceiveData(key, data)
         handler:setup(key)
     elseif data and data.limbs then
         -- Let's validate that the data structure is actually valid to prevent issues
-        if data.isUpdateFromServer then
-            TOC_DEBUG.print("Update from the server")
-        end
         handler:applyOnlineData(data)
     elseif username == getPlayer():getUsername() then
         TOC_DEBUG.print("Trying to load local data or no data is available")

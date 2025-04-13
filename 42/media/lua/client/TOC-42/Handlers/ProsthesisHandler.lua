@@ -1,9 +1,7 @@
 local ProsthesisHandler = require("TOC/Handlers/ProsthesisHandler")     -- declared in common
 local OverridenMethodsArchive = require("TOC/OverridenMethodsArchive")
-local CommonMethods = require("TOC/CommonMethods")
-local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
 
--- FIX in B42 for some reason unequipping prosthesis doesn't work. Still not sure why
+
 
 local og_ISClothingExtraAction_isValid = OverridenMethodsArchive.Get("ISClothingExtraAction_isValid")
 ---@diagnostic disable-next-line: duplicate-set-field
