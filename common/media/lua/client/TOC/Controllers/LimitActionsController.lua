@@ -129,13 +129,11 @@ function ISBaseTimedAction:perform()
 
 
     -- First check level of perks. if already at max, skip
-
     local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(LocalPlayerController.username)
     local xp = self.maxTime / 100
 
     -- Prevent xp from being negative and decreasing perks
     if xp < 0 then xp = 0 end
-
     for k, _ in pairs(amputatedLimbs) do
         local limbName = k
 
@@ -143,20 +141,28 @@ function ISBaseTimedAction:perform()
         if dcInst:getIsCut(limbName) and dcInst:getIsVisible(limbName) then
             local side = CommonMethods.GetSide(limbName)
 
-            local xpObj = LocalPlayerController.playerObj:getXp()
-            if xpObj:getLevel() < 10 then
-                xpObj:AddXP(Perks["Side_" .. side], xp)
-            end
+            local ampPerk = Perks["Side_" .. side]
+            local ampPerkLevel = LocalPlayerController.playerObj:getPerkLevel(ampPerk)
 
-            if not dcInst:getIsCicatrized(limbName) and dcInst:getIsProstEquipped(limbName) then
-                TOC_DEBUG.print("Trying for bleed, player met the criteria")
-                LocalPlayerController.TryRandomBleed(self.character, limbName)
+            if ampPerkLevel < 10 then
+                --TOC_DEBUG.print("Levelling")
+                LocalPlayerController.playerObj:getXp():AddXP(ampPerk, xp)
             end
 
 
             -- Level up prosthesis perk
             if dcInst:getIsProstEquipped(limbName) then
-                LocalPlayerController.playerObj:getXp():AddXP(Perks["ProstFamiliarity"], xp)
+                local prostPerk = Perks["ProstFamiliarity"]
+                local prostPerkLevel = LocalPlayerController.playerObj:getPerkLevel(prostPerk)
+                if prostPerkLevel < 10 then
+                    LocalPlayerController.playerObj:getXp():AddXP(prostPerk, xp)
+                end
+            end
+
+            -- Bleeding when not cicatrized
+            if not dcInst:getIsCicatrized(limbName) and dcInst:getIsProstEquipped(limbName) then
+                --TOC_DEBUG.print("Trying for bleed, player met the criteria")
+                LocalPlayerController.TryRandomBleed(self.character, limbName)
             end
         end
     end
