@@ -1,13 +1,4 @@
 {
-    "todo-tree.tree.scanMode": "workspace",
-    "mod_id": "3236152598",
-    "zomboid_user_folder": "C:/Users/picch/Zomboid",
-    "zomboid_folder": "F:\\SteamLibrary\\steamapps\\common\\ProjectZomboid",
-
-
-    "zomboid_folder_b42": "F:\\Zomboid Dev\\B42",
-    "zomboid_folder_b41": "F:\\Zomboid Dev\\B41",
-    "zomboid_server_folder": "F:\\SteamLibrary\\steamapps\\common\\Project Zomboid Dedicated Server",
     "Lua.diagnostics.globals": [
         "ModOptions",
         "zombie",
