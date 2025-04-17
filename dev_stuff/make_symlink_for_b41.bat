@@ -1,0 +1,1 @@
+mklink /J "../common/media" "../media"

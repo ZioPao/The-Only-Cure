@@ -1,16 +1,23 @@
 {
-    "todo-tree.tree.scanMode": "workspace",
-    "mod_id": "3236152598",
-    "zomboid_user_folder": "C:/Users/picch/Zomboid",
-    "zomboid_folder": "E:\\Steam\\steamapps\\common\\ProjectZomboid",
-    "zomboid_server_folder": "E:\\Steam\\steamapps\\common\\Project Zomboid Dedicated Server",
-    "Lua.diagnostics.globals": [
-        "ModOptions",
-        "zombie",
-        "_"
+    "Lua.workspace.library": [
+        "${addons}/umbrella-unstable/module/library"
     ],
-    "Lua.format.defaultConfig": {
-        "indent_style": "space",
-        "indent_size": "2"
-    }
+    "Lua.runtime.version": "Lua 5.1",
+    "Lua.runtime.path": [
+        "?.lua",
+        "?/init.lua",
+        "server/?.lua"
+    ],
+    "Lua.completion.requireSeparator": "/",
+    "Lua.runtime.builtin": {
+        "debug": "disable",
+        "io": "disable",
+        "package": "disable"
+    },
+    "Lua.workspace.checkThirdParty": false,
+    "Lua.workspace.ignoreDir": [
+        ".vscode",
+        "dev_stuff",
+        "workshop_files"
+    ]
 }

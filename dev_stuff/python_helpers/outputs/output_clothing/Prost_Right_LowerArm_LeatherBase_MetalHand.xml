@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<clothingItem>
-  <m_MaleModel>Prost_Right_LowerArm_LeatherBase_MetalHand_Male</m_MaleModel>
-  <m_FemaleModel>Prost_Right_LowerArm_LeatherBase_MetalHand_Female</m_FemaleModel>
-  <m_GUID>e12307d2-672e-4c77-bcd6-af397455d7a9</m_GUID>
-  <m_Static>false</m_Static>
-  <m_AllowRandomTint>false</m_AllowRandomTint>
-  <textureChoices>Amputations\Upperarm\skin01_b</textureChoices>
-</clothingItem>
