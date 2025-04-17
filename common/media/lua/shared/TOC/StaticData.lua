@@ -22,7 +22,8 @@ local StaticData = {}
 StaticData.MOD_NAME = "TOC"
 
 -- Game version, used to correct some stuff instead of relying on versioned folders
-StaticData.GAME_VERSION = getGameVersion()
+
+StaticData.COMPAT_42 = luautils.stringStarts(getGameVersion(), "42")
 
 -------------------------
 --* Base
@@ -281,12 +282,13 @@ StaticData.AMPUTATION_CLOTHING_ITEM_BASE = "TOC.Amputation_"
 
 local sawObj
 local gardenSawObj
-if luautils.stringStarts(StaticData.GAME_VERSION, "41") then
-    sawObj = InventoryItemFactory.CreateItem("Base.Saw")
-    gardenSawObj = InventoryItemFactory.CreateItem("Base.GardenSaw")
-else
+
+if StaticData.COMPAT_42 then
     sawObj = instanceItem("Base.Saw")
     gardenSawObj = instanceItem("Base.GardenSaw")
+else
+    sawObj = InventoryItemFactory.CreateItem("Base.Saw")
+    gardenSawObj = InventoryItemFactory.CreateItem("Base.GardenSaw")
 end
 
 

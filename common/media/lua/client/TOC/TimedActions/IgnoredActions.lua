@@ -122,8 +122,10 @@ function ISDrinkFromBottle:new(character, item, uses)
     return action
 end
 
-if luautils.stringStarts(StaticData.GAME_VERSION, "41") then
-    -- This doesn't exist anymore in B42
+
+if StaticData.COMPAT_42 == false then
+    -- TODO confirm that this doesn't exist anymore in B42
+    -- B42 nenen
     local og_ISFinalizeDealAction_new = ISFinalizeDealAction.new
     function ISFinalizeDealAction:new(player, otherPlayer, itemsToGive, itemsToReceive, time)
         local action = og_ISFinalizeDealAction_new(self, player, otherPlayer, itemsToGive, itemsToReceive, time)
@@ -131,8 +133,8 @@ if luautils.stringStarts(StaticData.GAME_VERSION, "41") then
         action.skipTOC = true
         return action
     end
-end
 
+end
 
 
 local og_ISCampingInfoAction_new = ISCampingInfoAction.new

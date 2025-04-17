@@ -13,14 +13,13 @@ local isReady = false
 
 local xMod, yMod
 
-if luautils.stringStarts(StaticData.GAME_VERSION, "41") then
-    xMod = 0
-    yMod = 0
-else
-    -- For some reason (I didn't investigate), when applying stuff to the health panel
-    -- there is an un-accounted shift in B42.
+if StaticData.COMPAT_42 then
+    -- B42 For some reason (I didn't investigate), when applying stuff to the health panel there is an un-accounted shift in B42.
     xMod = 5
     yMod = 13
+else
+    xMod = 0
+    yMod = 0
 end
 
 
