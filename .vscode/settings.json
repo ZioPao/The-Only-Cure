@@ -1,13 +1,4 @@
 {
-    "Lua.diagnostics.globals": [
-        "ModOptions",
-        "zombie",
-        "_",
-    ],
-    "Lua.format.defaultConfig": {
-        "indent_style": "space",
-        "indent_size": "2"
-    },
     "Lua.workspace.library": [
         "${addons}/umbrella-unstable/module/library"
     ],
@@ -23,5 +14,10 @@
         "io": "disable",
         "package": "disable"
     },
-    "Lua.workspace.checkThirdParty": false
+    "Lua.workspace.checkThirdParty": false,
+    "Lua.workspace.ignoreDir": [
+        ".vscode",
+        "dev_stuff",
+        "workshop_files"
+    ]
 }

@@ -7,7 +7,7 @@
             "label": "Create Workshop folder",
             "type": "shell",
             "options": {"statusbar": {"label": "$(combine) Assemble Mod"}},
-            "command": "python ${config:zomboid_user_folder}/PaosCrap/make_workshop_pack.py \"picch\" \"${workspaceFolderBasename}\"",
+            "command": "python ${config:zomboid_user_folder}/PaosCrap/make_workshop_pack.py \"picch\" \"${workspaceFolderBasename}\" \"\"",
         },
         {
             "label": "Create Workshop folder",
