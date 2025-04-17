@@ -15,7 +15,7 @@ local StaticData = require("TOC/StaticData")
 
 --- We're forced to re-run this crap to fix it
 ---@param action ISBaseTimedAction
-local function OverrideAction(action, time)
+local function OverrideAction(action, maxTime)
     -- TODO Add forced debuff instead of just relying on the vanilla values?
     action.skipTOC = true
     action.maxTime = time
@@ -25,16 +25,16 @@ end
 local og_ISAttachItemHotbar_new = ISAttachItemHotbar.new
 function ISAttachItemHotbar:new(character, item, slot, slotIndex, slotDef)
     local action = og_ISAttachItemHotbar_new(self, character, item, slot, slotIndex, slotDef)
-    OverrideAction(action, -1)
+    OverrideAction(action, 30)      -- Default time for this action
     return action
 end
 
--- local og_ISDetachItemHotbar_new = ISDetachItemHotbar.new
--- function ISDetachItemHotbar:new(character, item)
---     local action = og_ISDetachItemHotbar_new(self, character, item)
---     --action = OverrideAction(action, -1)
---     return action
--- end
+local og_ISDetachItemHotbar_new = ISDetachItemHotbar.new
+function ISDetachItemHotbar:new(character, item)
+    local action = og_ISDetachItemHotbar_new(self, character, item)
+    OverrideAction(action, 25)      -- Default time for this action
+    return action
+end
 
 
 local og_ISEquipWeaponAction_new = ISEquipWeaponAction.new
