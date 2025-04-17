@@ -12,6 +12,12 @@
         {
             "label": "Create Workshop folder",
             "type": "shell",
+            "options": {"statusbar": {"label": "$(combine) Assemble Mod (B41 ONLY)"}},
+            "command": "python ${config:zomboid_user_folder}/PaosCrap/make_workshop_pack_b41.py \"picch\" \"${workspaceFolderBasename}\"",
+        },
+        {
+            "label": "Create Workshop folder",
+            "type": "shell",
             "options": {"statusbar": {"label": "$(combine) Assemble Mod (Test)"}},
             "command": "python ${config:zomboid_user_folder}/PaosCrap/make_workshop_pack.py \"picch\" \"${workspaceFolderBasename}\" \"test\"",
         },
