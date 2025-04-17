@@ -29,12 +29,12 @@ function ISAttachItemHotbar:new(character, item, slot, slotIndex, slotDef)
     return action
 end
 
-local og_ISDetachItemHotbar_new = ISDetachItemHotbar.new
-function ISDetachItemHotbar:new(character, item)
-    local action = og_ISDetachItemHotbar_new(self, character, item)
-    action = OverrideAction(action, -1)
-    return action
-end
+-- local og_ISDetachItemHotbar_new = ISDetachItemHotbar.new
+-- function ISDetachItemHotbar:new(character, item)
+--     local action = og_ISDetachItemHotbar_new(self, character, item)
+--     --action = OverrideAction(action, -1)
+--     return action
+-- end
 
 
 local og_ISEquipWeaponAction_new = ISEquipWeaponAction.new
@@ -63,7 +63,7 @@ function ISUnequipAction:new(character, item, time)
     local action = og_ISUnequipAction_new(self, character, item, time)
     ---@cast item InventoryItem
 
-    -- For some reason (I have no clue why), if we re-run the method it breaks basically every unequip clothing action. Not for weapons though.
+    -- TODO Consider other cases where unequipping something should skip TOC.
     if instanceof(item, 'HandWeapon') then
         OverrideAction(action, time)
     end
