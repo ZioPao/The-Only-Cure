@@ -160,7 +160,6 @@ TestFramework.registerTestModule("Various", "Player", function()
     return Tests
 end)
 
-
 TestFramework.registerTestModule("Various", "Visuals", function()
     local Tests = {}
 

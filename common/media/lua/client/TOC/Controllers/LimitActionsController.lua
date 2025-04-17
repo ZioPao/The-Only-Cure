@@ -66,7 +66,6 @@ local og_ISBaseTimedAction_adjustMaxTime = ISBaseTimedAction.adjustMaxTime
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISBaseTimedAction:adjustMaxTime(maxTime)
     local time = og_ISBaseTimedAction_adjustMaxTime(self, maxTime)
-    
     --TOC_DEBUG.print("Running override for adjustMaxTime")
     -- Exceptions handling, if we find that parameter then we just use the original time
     local actionsQueue = ISTimedActionQueue.getTimedActionQueue(getPlayer())

@@ -18,7 +18,7 @@ local StaticData = require("TOC/StaticData")
 local function OverrideAction(action, maxTime)
     -- TODO Add forced debuff instead of just relying on the vanilla values?
     action.skipTOC = true
-    action.maxTime = time
+    action.maxTime = maxTime
     action.animSpeed = 1.0
 end
 
