@@ -44,11 +44,11 @@ end
 
 
 --------------------------------------------
---* TIMED ACTIONS *--
--- We want to be able to modify how long actions are gonna take,
--- depending on amputation status and kind of action. Also, when the
--- player has not completely cicatrized their own wounds, and try to do any action with
--- a prosthesis on, that can trigger random bleeds.
+--* TIMED ACTIONS 
+--* We want to be able to modify how long actions are gonna take,
+--* depending on amputation status and kind of action. Also, when the
+--* player has not completely cicatrized their own wounds, and try to do any action with
+--* a prosthesis on, that can trigger random bleeds.
 
 local function CheckHandFeasibility(limbName)
     TOC_DEBUG.print("Checking hand feasibility: " .. limbName)
@@ -60,18 +60,19 @@ local function CheckHandFeasibility(limbName)
 end
 
 
---* Time to perform actions overrides *--
+--* Time to perform actions overrides
 local og_ISBaseTimedAction_adjustMaxTime = ISBaseTimedAction.adjustMaxTime
 --- Adjust time
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISBaseTimedAction:adjustMaxTime(maxTime)
     local time = og_ISBaseTimedAction_adjustMaxTime(self, maxTime)
-
+    
+    --TOC_DEBUG.print("Running override for adjustMaxTime")
     -- Exceptions handling, if we find that parameter then we just use the original time
     local actionsQueue = ISTimedActionQueue.getTimedActionQueue(getPlayer())
 
-    if actionsQueue and actionsQueue.current and actionsQueue.skipTOC then
-        --TOC_DEBUG.print("Should skip TOC stuff")
+    if actionsQueue and actionsQueue.current and actionsQueue.current.skipTOC then
+        TOC_DEBUG.print("Should skip TOC stuff")
         return time
     end
 
@@ -114,23 +115,26 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
     return time
 end
 
---* Random bleeding during cicatrization + Perks leveling override *--
+--* Random bleeding during cicatrization + Perks leveling override
 local og_ISBaseTimedAction_perform = ISBaseTimedAction.perform
 --- After each action, level up perks
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISBaseTimedAction:perform()
     og_ISBaseTimedAction_perform(self)
 
-    TOC_DEBUG.print("Running ISBaseTimedAction.perform override")
-    TOC_DEBUG.print("max time: " .. tostring(self.maxTime))
+
+    --TOC_DEBUG.print("Running ISBaseTimedAction.perform override")
+    --TOC_DEBUG.print("max time: " .. tostring(self.maxTime))
 
     local dcInst = DataController.GetInstance()
-    if not dcInst:getIsAnyLimbCut() then return end
+    if not dcInst:getIsAnyLimbCut() or self.noExp then return end
 
 
+    --* LEVELING   
     -- First check level of perks. if already at max, skip
     local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(LocalPlayerController.username)
     local xp = self.maxTime / 100
+    -- TODO Exp should be added while doing the action, not after it's done
 
     -- Prevent xp from being negative and decreasing perks
     if xp < 0 then xp = 0 end
@@ -394,6 +398,18 @@ local og_ISClothingExtraAction_isValid = OverridenMethodsArchive.Save("ISClothin
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISClothingExtraAction:isValid()
     return LimitActionsController.WrapClothingAction(self, og_ISClothingExtraAction_isValid, InventoryItemFactory.CreateItem(self.extra))
+end
+
+
+
+
+--* Book exception for exp
+
+local og_ISReadABook_perform = ISReadABook.perform
+function ISReadABook:perform()
+    self.noExp = true
+    og_ISReadABook_perform(self)
+
 end
 
 return LimitActionsController
