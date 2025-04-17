@@ -110,14 +110,15 @@ end
 --* Overrides *--
 
 
----@diagnostic disable-next-line: duplicate-set-field
 local og_ISWearClothing_isValid = ISWearClothing.isValid
+---@diagnostic disable-next-line: duplicate-set-field
 function ISWearClothing:isValid()
     local isEquippable = og_ISWearClothing_isValid(self)
     return ProsthesisHandler.Validate(self.item, isEquippable)
 end
 
 local og_ISWearClothing_perform = ISWearClothing.perform
+---@diagnostic disable-next-line: duplicate-set-field
 function ISWearClothing:perform()
     ProsthesisHandler.SearchAndSetupProsthesis(self.item, true)
     og_ISWearClothing_perform(self)
@@ -134,18 +135,26 @@ local og_ISClothingExtraAction_isValid = OverridenMethodsArchive.Save("ISClothin
 function ISClothingExtraAction:isValid()
     local isEquippable = og_ISClothingExtraAction_isValid(self)
     -- self.extra is a string, not the item
+
+    -- B42 Compatibility to add
     local testItem = InventoryItemFactory.CreateItem(self.extra)
     return ProsthesisHandler.Validate(testItem, isEquippable)
 end
 
 local og_ISClothingExtraAction_perform = OverridenMethodsArchive.Save("ISClothingExtraAction_perform", ISClothingExtraAction.perform)
+---@diagnostic disable-next-line: duplicate-set-field
 function ISClothingExtraAction:perform()
+    
+
+    -- B42 Compatibility to add
+
     local extraItem = InventoryItemFactory.CreateItem(self.extra)
     ProsthesisHandler.SearchAndSetupProsthesis(extraItem, true)
     og_ISClothingExtraAction_perform(self)
 end
 
 local og_ISUnequipAction_perform = ISUnequipAction.perform
+---@diagnostic disable-next-line: duplicate-set-field
 function ISUnequipAction:perform()
 
     --[[

@@ -7,6 +7,9 @@ local CommonMethods = require("TOC/CommonMethods")
 ---@field otherPlayer IsoPlayer
 ---@field bandage InventoryItem
 ---@field bodyPart any
+---@field doctorLevel number
+---@field bandagedPlayerX number
+---@field bandagedPlayerY number
 local CleanWoundAction = ISBaseTimedAction:derive("CleanWoundAction")
 
 ---@param doctor IsoPlayer
@@ -33,7 +36,7 @@ function CleanWoundAction:new(doctor, otherPlayer, bandage, bodyPart)
     if doctor:isTimedActionInstant() then
         o.maxTime = 1
     end
-    if doctor:getAccessLevel() ~= "None" then       -- TODO Fix for B42
+    if doctor:getAccessLevel() ~= "None" then   -- B42 Deprecated
         o.doctorLevel = 10
     end
 	return o

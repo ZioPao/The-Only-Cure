@@ -94,16 +94,19 @@ end
 
 
 local og_ISClothingExtraAction_perform = ISClothingExtraAction.perform
+---@diagnostic disable-next-line: duplicate-set-field
 function ISClothingExtraAction:perform()
     TourniquetController.WrapClothingAction(self, og_ISClothingExtraAction_perform)
 end
 
 local og_ISWearClothing_isValid = ISWearClothing.isValid
+---@diagnostic disable-next-line: duplicate-set-field
 function ISWearClothing:isValid()
     return TourniquetController.WrapClothingAction(self, og_ISWearClothing_isValid)
 end
 
 local og_ISUnequipAction_perform = ISUnequipAction.perform
+---@diagnostic disable-next-line: duplicate-set-field
 function ISUnequipAction:perform()
    return TourniquetController.WrapClothingAction(self, og_ISUnequipAction_perform)
 end

@@ -25,7 +25,7 @@
             "label": "Bump Mod Version",
             "type": "shell",
             "options": {"statusbar": {"label": "$(arrow-up) Bump Mod Version"}},
-            "command": "python ${config:zomboid_user_folder}/PaosCrap/bump_version.py 42/media/lua/client/TOC/Main.lua",
+            "command": "python ${config:zomboid_user_folder}/PaosCrap/bump_version.py common/media/lua/client/TOC/Main.lua",
         },
         {
             "label": "Run Zomboid Debug No Steam (42)",
