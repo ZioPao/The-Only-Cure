@@ -31,6 +31,7 @@ local function AddAdminTocOptions(playerNum, context, worldobjects)
     end
 
 
+    -- ugly This whole section should be done better
     for _, pl in pairs(players) do
         ---@cast pl IsoPlayer
 
@@ -45,7 +46,6 @@ local function AddAdminTocOptions(playerNum, context, worldobjects)
                 sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayExecuteInitialization,
                     { patientNum = clickedPlayerNum })
             else
-                -- TODO ugly
                 ClientRelayCommands.ReceiveExecuteInitialization()
             end
         end)
@@ -65,7 +65,6 @@ local function AddAdminTocOptions(playerNum, context, worldobjects)
                     { patientNum = clickedPlayerNum, limbName = limbName })
                 else
                     ClientRelayCommands.ReceiveExecuteAmputationAction({surgeonNum=clickedPlayerNum, limbName=limbName, damagePlayer=false})
-                    -- todo ugly
                 end
 
             end)

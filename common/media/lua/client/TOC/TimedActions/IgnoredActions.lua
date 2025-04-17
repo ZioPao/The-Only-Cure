@@ -1,6 +1,6 @@
 -- TODO This section must be overhauled
 
--- local DataController = require("TOC/Controllers/DataController")
+local DataController = require("TOC/Controllers/DataController")
 local StaticData = require("TOC/StaticData")
 
 ---@diagnostic disable: duplicate-set-field
@@ -13,70 +13,63 @@ local StaticData = require("TOC/StaticData")
 ---ISEquipWeaponAction
 ---ISUnequipAction
 
--- --- We're forced to re-run this crap to fix it
--- ---@param action ISBaseTimedAction
--- local function HandleSpeedSpecificAction(action, time)
---     action.skipTOC = true
---     action.maxTime = time
---     action.animSpeed = 1.0
--- end
+--- We're forced to re-run this crap to fix it
+---@param action ISBaseTimedAction
+local function OverrideAction(action, time)
+    -- TODO Add forced debuff instead of just relying on the vanilla values?
+    action.skipTOC = true
+    action.maxTime = time
+    action.animSpeed = 1.0
+end
 
--- local og_ISAttachItemHotbar_new = ISAttachItemHotbar.new
--- function ISAttachItemHotbar:new(character, item, slot, slotIndex, slotDef)
---     local action = og_ISAttachItemHotbar_new(self, character, item, slot, slotIndex, slotDef)
---     HandleSpeedSpecificAction(action, -1)
---     return action
--- end
+local og_ISAttachItemHotbar_new = ISAttachItemHotbar.new
+function ISAttachItemHotbar:new(character, item, slot, slotIndex, slotDef)
+    local action = og_ISAttachItemHotbar_new(self, character, item, slot, slotIndex, slotDef)
+    OverrideAction(action, -1)
+    return action
+end
 
--- local og_ISDetachItemHotbar_new = ISDetachItemHotbar.new
--- function ISDetachItemHotbar:new(character, item)
---     local action = og_ISDetachItemHotbar_new(self, character, item)
---     HandleSpeedSpecificAction(action, -1)
---     return action
--- end
-
-
--- local og_ISEquipWeaponAction_new = ISEquipWeaponAction.new
--- function ISEquipWeaponAction:new(character, item, time, primary, twoHands)
-
---     local action = og_ISEquipWeaponAction_new(self, character, item, time, primary, twoHands)
---     TOC_DEBUG.print("Override ISEquipWeaponAction New")
+local og_ISDetachItemHotbar_new = ISDetachItemHotbar.new
+function ISDetachItemHotbar:new(character, item)
+    local action = og_ISDetachItemHotbar_new(self, character, item)
+    action = OverrideAction(action, -1)
+    return action
+end
 
 
---     -- check if right arm is cut off or not. if it is, penality shall apply
---     -- if we got here, the action is valid, so we know that we have a prosthesis.
+local og_ISEquipWeaponAction_new = ISEquipWeaponAction.new
+function ISEquipWeaponAction:new(character, item, time, primary, twoHands)
+
+    local action = og_ISEquipWeaponAction_new(self, character, item, time, primary, twoHands)
+    TOC_DEBUG.print("Override ISEquipWeaponAction New")
 
 
---     local dcInst = DataController.GetInstance()
+    -- check if right arm is cut off or not. if it is, penality shall apply
+    -- if we got here, the action is valid, so we know that we have a prosthesis.
 
---     if not dcInst:getIsCut(StaticData.LIMBS_IND_STR.Hand_R) then
---         action.skipTOC = true
---         action.maxTime = time
---         action.animSpeed = 1.0
---         TOC_DEBUG.print("Skipping TOC for ISEquipWeaponAction new")
---     end
+    local dcInst = DataController.GetInstance()
 
+    -- Brutal Handwork should be considered. Use the twohands thing
+    if not (dcInst:getIsAnyLimbCut() and twoHands) then
+        OverrideAction(action, time)
+    end
 
---     -- if not twoHands then
---     --     TOC_DEBUG.print("Not a two handed action, re-adding skip TOC")
---     --     HandleSpeedSpecificAction(action)
---     -- end
---     return action
--- end
+    return action
 
--- local og_ISUnequipAction_new = ISUnequipAction.new
--- function ISUnequipAction:new(character, item, time)
---     local action = og_ISUnequipAction_new(self, character, item, time)
---     ---@cast item InventoryItem
+end
 
---     -- For some reason (I have no clue why), if we re-run the method it breaks basically every unequip clothing action. Not for weapons though.
---     if instanceof(item, 'HandWeapon') then
---         --print("Running handlespeedspecificaction")
---         HandleSpeedSpecificAction(action)
---     end
+local og_ISUnequipAction_new = ISUnequipAction.new
+function ISUnequipAction:new(character, item, time)
+    local action = og_ISUnequipAction_new(self, character, item, time)
+    ---@cast item InventoryItem
 
---     return action
--- end
+    -- For some reason (I have no clue why), if we re-run the method it breaks basically every unequip clothing action. Not for weapons though.
+    if instanceof(item, 'HandWeapon') then
+        OverrideAction(action, time)
+    end
+
+    return action
+end
 
 ------------------------------------------------------
 --- Normal cases
