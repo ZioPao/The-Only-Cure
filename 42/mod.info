@@ -6,3 +6,6 @@ icon=icon.png
 url=https://github.com/ZioPao/The-Only-Cure
 modversion=2.2
 versionMin=42.6
+
+loadModAfter=\FancyHandwork,\BrutalHandwork,\TwoWeaponsOnBackRework
+incompatible=\BB_FirstAidOverhaul
