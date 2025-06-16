@@ -1,0 +1,25 @@
+IG_UI_UA = {
+    IGUI_Yes = "Так",
+    IGUI_No = "Ні",
+
+    IGUI_perks_Amputations = "Ампутації",
+    IGUI_perks_Side_R = "Права сторона",
+    IGUI_perks_Right Side_Description = "Пристосованість до ампутацій на правій стороні тіла",
+    IGUI_perks_Side_L = "Ліва сторона",
+    IGUI_perks_Left Side_Description = "Пристосованість до ампутацій на лівій стороні тіла",
+    IGUI_perks_Prosthesis = "Пристосованість до протеза",
+    IGUI_perks_Prosthesis Familiarity_Description = "Пристосованість до протезних кінцівок",
+
+    IGUI_ItemCat_Prosthesis = "Протез",
+    IGUI_ItemCat_Surgery = "Хірургія",
+    IGUI_ItemCat_Amputation = "Ампутація"
+
+    IGUI_HealthPanel_Cicatrization = "Рубцювання",
+    IGUI_HealthPanel_Cicatrized = "Зарубцьована",
+    IGUI_HealthPanel_Cauterized = "Припечена",
+    IGUI_HealthPanel_WoundDirtyness = "Забруднена рана",
+    IGUI_HealthPanel_ProstEquipped = "Протез установлено",
+
+    IGUI_Confirmation_Amputate = " <CENTRE> Ви дійсно хочете ампутувати цю кінцівку?"
+
+}
