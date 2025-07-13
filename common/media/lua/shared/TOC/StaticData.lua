@@ -2,7 +2,7 @@
 ---@alias limbsTable {Hand_L : partDataType, ForeArm_L : partDataType, UpperArm_L : partDataType, Hand_R : partDataType, ForeArm_R : partDataType, UpperArm_R : partDataType }
 ---@alias prosthesisData {isProstEquipped : boolean, prostFactor : number }
 ---@alias prosthesesTable {Top_L : prosthesisData, Top_R : prosthesisData }     -- TODO add Bottom_L and Bottom_R
----@alias tocModDataType { limbs : limbsTable, prostheses : prosthesesTable, isIgnoredPartInfected : boolean, isAnyLimbCut : boolean, isInitializing : boolean}
+---@alias tocModDataType { limbs : limbsTable, prostheses : prosthesesTable, isIgnoredPartInfected : boolean, isAnyLimbCut : boolean}
 ---------------------------
 
 

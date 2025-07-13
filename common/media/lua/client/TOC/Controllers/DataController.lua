@@ -57,7 +57,6 @@ function DataController:setup(key)
     ---@type tocModDataType
     self.tocData = {
         -- Generic stuff that does not belong anywhere else
-        isInitializing = true,
         isIgnoredPartInfected = false,
         isAnyLimbCut = false,
         limbs = {},
@@ -92,10 +91,6 @@ function DataController:setup(key)
 
     -- Sync with the server
     self:apply()
-
-    -- -- Disable lock
-    -- self.tocData.isInitializing = false
-    -- ModData.add(key, self.tocData)
 
     triggerEvent("OnSetupTocData")
 end
@@ -339,14 +334,11 @@ end
 ---@param cicatrizationTime integer?
 function DataController:setLimbParams(limbName, ampStatus, cicatrizationTime)
     local limbData = self.tocData.limbs[limbName]
-    if ampStatus.isCut ~= nil then limbData.isCut = ampStatus.isCut end
-    if ampStatus.isInfected ~= nil then limbData.isInfected = ampStatus.isInfected end
-    if ampStatus.isOperated ~= nil then limbData.isOperated = ampStatus.isOperated end
-    if ampStatus.isCicatrized ~= nil then limbData.isCicatrized = ampStatus.isCicatrized end
-    if ampStatus.isCauterized ~= nil then limbData.isCauterized = ampStatus.isCauterized end
-    if ampStatus.woundDirtyness ~= nil then limbData.woundDirtyness = ampStatus.woundDirtyness end
-    if ampStatus.isVisible ~= nil then limbData.isVisible = ampStatus.isVisible end
-
+    for k, v in pairs(ampStatus) do
+        if v ~= nil then
+            limbData[k] = v
+        end
+    end
     if cicatrizationTime ~= nil then limbData.cicatrizationTime = cicatrizationTime end
 end
 
