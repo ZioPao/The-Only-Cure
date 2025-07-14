@@ -6,14 +6,14 @@
         {
             "label": "Create Workshop folder",
             "type": "shell",
-            "options": {"statusbar": {"label": "$(combine) Assemble Mod"}},
-            "command": "python ${config:zomboid_user_folder}/PaosCrap/make_workshop_pack.py \"picch\" \"${workspaceFolderBasename}\" \"\"",
+            "options": {"statusbar": {"label": "$(combine) Assemble Mod - B42"}},
+            "command": "python ${config:zomboid_user_folder}/PaosCrap/make_workshop_pack.py \"42\" \"picch\" \"${workspaceFolderBasename}\" \"\"",
         },
         {
             "label": "Create Workshop folder",
             "type": "shell",
-            "options": {"statusbar": {"label": "$(combine) Assemble Mod (B41 ONLY)"}},
-            "command": "python ${config:zomboid_user_folder}/PaosCrap/make_workshop_pack_b41.py \"picch\" \"${workspaceFolderBasename}\"",
+            "options": {"statusbar": {"label": "$(combine) Assemble Mod - B41"}},
+            "command": "python ${config:zomboid_user_folder}/PaosCrap/make_workshop_pack.py \"41\" \"picch\" \"${workspaceFolderBasename}\" \"\"",
         },
         {
             "label": "Create Workshop folder",
