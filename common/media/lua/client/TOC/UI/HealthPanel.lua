@@ -143,26 +143,6 @@ function ISHealthPanel:render()
 end
 
 
--- local og_ISHealthPanel_update = ISHealthPanel.update
--- function ISHealthPanel:update()
---     og_ISHealthPanel_update(self)
---     -- TODO Listen for changes on other player side instead of looping this
-
-
---     -- FIX Re-enable it, just for test
---     if self.character then
---         local locPlUsername = getPlayer():getUsername()
---         local remPlUsername = self.character:getUsername()
---         if locPlUsername ~= remPlUsername and self:isReallyVisible() then
---             -- Request update for TOC DATA
---             local key = CommandsData.GetKey(remPlUsername)
---             --ModData.request(key)
---         end
---     end
--- end
-
-
-
 -- We need to override this to force the alpha to 1
 local og_ISCharacterInfoWindow_render = ISCharacterInfoWindow.prerender
 function ISCharacterInfoWindow:prerender()

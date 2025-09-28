@@ -33,15 +33,17 @@ function BaseHandler:checkItems()
     local containers = ISInventoryPaneContextMenu.getContainers(self:getDoctor())
     local done = {}
     local childContainers = {}
-    for i=1,containers:size() do
-        local container = containers:get(i-1)
-        done[container] = true
-        table.wipe(childContainers)
-        self:checkContainerItems(container, childContainers)
-        for _,container2 in ipairs(childContainers) do
-            if not done[container2] then
-                done[container2] = true
-                self:checkContainerItems(container2, nil)
+    if containers ~= nil then
+        for i=1, containers:size() do
+            local container = containers:get(i-1)
+            done[container] = true
+            table.wipe(childContainers)
+            self:checkContainerItems(container, childContainers)
+            for _,container2 in ipairs(childContainers) do
+                if not done[container2] then
+                    done[container2] = true
+                    self:checkContainerItems(container2, nil)
+                end
             end
         end
     end
@@ -101,7 +103,7 @@ function BaseHandler:getItemOfTag(items, type)
 end
 
 function BaseHandler:getAllItemsOfType(items, type)
-    local items = {}
+    items = {}
     for _,item in ipairs(items) do
         if item:getFullType() == type then
             table.insert(items, item)

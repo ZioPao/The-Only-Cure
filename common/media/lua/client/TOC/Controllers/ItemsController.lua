@@ -17,7 +17,6 @@ ItemsController.Player = {}
 ---@return number
 ---@private
 function ItemsController.Player.GetAmputationTexturesIndex(playerObj, isCicatrized)
-    -- FIX Broken
     local textureString = playerObj:getHumanVisual():getSkinTexture()
     local isHairy = textureString:sub(-1) == "a"
 
