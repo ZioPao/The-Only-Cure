@@ -1,0 +1,53 @@
+module TOC
+{
+	imports
+	{
+		Base
+	}
+	/*************Craft Prosthetics*******************/
+	craftRecipe Craft Prosthetic Arm
+	{
+              timedAction = BuildMetalStructureSmall,
+              Time = 150,
+              Tags = InHandCraft,
+              category = Welding,
+              NeedToBeLearn = false,
+              SkillRequired = MetalWelding:4,
+              xpAward = MetalWelding:50,
+              inputs
+              {
+                     item 4 [MetalPipe],
+                     item 2 [Plank],
+                     item 4 [Base.BlowTorch] flags[DontRecordInput],
+                     item 4 [Base.WeldingRods] flags[DontRecordInput],
+
+              }
+              outputs
+              {
+                     item 1 Prost_NormalArm_L,
+              }
+	}
+
+	craftRecipe Craft Prosthetic Hook
+	{
+              timedAction = BuildMetalStructureSmall,
+              Time = 100,
+              Tags = InHandCraft,
+              category = Welding,
+              NeedToBeLearn = false,
+              SkillRequired = MetalWelding:2,
+              xpAward = MetalWelding:30,
+              inputs
+              {
+                     item 2 [MetalPipe],
+                     item 1 [Plank],
+                     item 4 [Base.BlowTorch] flags[DontRecordInput],
+                     item 2 [Base.WeldingRods] flags[DontRecordInput],
+
+              }
+              outputs
+              {
+                     item 1 Prost_HookArm_L,
+              }
+	}
+}
