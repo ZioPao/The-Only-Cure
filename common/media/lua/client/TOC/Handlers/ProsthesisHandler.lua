@@ -86,7 +86,7 @@ function ProsthesisHandler.SearchAndSetupProsthesis(item, isEquipping)
     dcInst:apply()
 
     -- Calculates hands feasibility once again
-    CachedDataHandler.CalculateBothHandsFeasibility()
+    CachedDataHandler.OverrideBothHandsFeasibility()
     return true
 end
 

@@ -23,7 +23,7 @@ end
 function CachedDataHandler.CalculateCacheableValues(username)
     CachedDataHandler.CalculateHighestAmputatedLimbs(username)
     if getPlayer():getUsername() == username then
-        CachedDataHandler.CalculateBothHandsFeasibility()
+        CachedDataHandler.OverrideBothHandsFeasibility()
     end
 end
 
@@ -130,14 +130,13 @@ function CachedDataHandler.GetHandFeasibility(side)
 
     -- FIX horrendous workaround, but with a forced init we run the caching too early and it breaks this, setting it to nil.
     if CachedDataHandler.handFeasibility[side] == nil then
-        CachedDataHandler.CalculateBothHandsFeasibility()
+        CachedDataHandler.OverrideBothHandsFeasibility()
     end
 
     return CachedDataHandler.handFeasibility[side]
 end
 
-
-function CachedDataHandler.CalculateBothHandsFeasibility()
+function CachedDataHandler.OverrideBothHandsFeasibility()
     CachedDataHandler.CalculateHandFeasibility("Hand_L")
     CachedDataHandler.CalculateHandFeasibility("Hand_R")
     local interactStr = "Interact"
@@ -151,12 +150,22 @@ function CachedDataHandler.CalculateBothHandsFeasibility()
     if not CachedDataHandler.GetBothHandsFeasibility() then
         TOC_DEBUG.print("Disabling interact key")
         TOC_DEBUG.print("Cached current key for interact: " .. tostring(CachedDataHandler.interactKey))
-        getCore():addKeyBinding(interactStr, Keyboard.KEY_NONE)
-    else
-        TOC_DEBUG.print("Re-enabling interact key")
-        TOC_DEBUG.print("Cached current key for interact: " .. tostring(CachedDataHandler.interactKey))
 
-        getCore():addKeyBinding(interactStr, CachedDataHandler.interactKey)
+        if StaticData.COMPAT_42 then
+		    getCore():addKeyBinding(interactStr, Keyboard.KEY_NONE, 0, false, false, false)
+        else
+            getCore():addKeyBinding(interactStr, Keyboard.KEY_NONE)
+
+        end
+    else
+        --TOC_DEBUG.print("Re-enabling interact key")
+        --TOC_DEBUG.print("Cached current key for interact: " .. tostring(CachedDataHandler.interactKey))
+
+        if StaticData.COMPAT_42 then
+		    getCore():addKeyBinding(interactStr, CachedDataHandler.interactKey, 0, false, false, false)
+        else
+            getCore():addKeyBinding(interactStr, CachedDataHandler.interactKey)
+        end
     end
 end
 
@@ -165,3 +174,4 @@ function CachedDataHandler.GetBothHandsFeasibility()
 end
 
 return CachedDataHandler
+
