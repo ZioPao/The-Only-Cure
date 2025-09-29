@@ -24,7 +24,7 @@ module TOC
               }
               outputs
               {
-                     item 1 Prost_NormalArm_L,
+                     item 1 TOC.Prost_NormalArm_L,
               }
 	}
 
@@ -47,7 +47,7 @@ module TOC
               }
               outputs
               {
-                     item 1 Prost_HookArm_L,
+                     item 1 TOC.Prost_HookArm_L,
               }
 	}
 }
