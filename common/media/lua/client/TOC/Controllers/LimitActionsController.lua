@@ -36,6 +36,12 @@ end
 
 
 
+-- We need to override when the player changes key binds manually to be sure that TOC changes are re-applied
+local og_MainOptions_apply = MainOptions.apply
+function MainOptions:apply()
+    og_MainOptions_apply(self)
+    CachedDataHandler.OverrideBothHandsFeasibility()
+end
 
 
 
