@@ -64,18 +64,18 @@ end
 ---@param obj any  self 
 ---@param wrappedFunc function
 function TourniquetController.WrapClothingAction(obj, wrappedFunc)
-    local isTourniquet = TourniquetController.IsItemTourniquet(obj.item:getFullType())
-    local group
-    if isTourniquet then
-        group = BodyLocations.getGroup("Human")
-        group:setMultiItem(TourniquetController.bodyLoc, false)
-    end
+    -- local isTourniquet = TourniquetController.IsItemTourniquet(obj.item:getFullType())
+    -- local group
+    -- if isTourniquet then
+    --     group = BodyLocations.getGroup("Human")
+    --     group:setMultiItem(TourniquetController.bodyLoc, false)
+    -- end
 
     local ogValue = wrappedFunc(obj)
 
-    if isTourniquet then
-        group:setMultiItem(TourniquetController.bodyLoc, true)
-    end
+    -- if isTourniquet then
+    --     group:setMultiItem(TourniquetController.bodyLoc, true)
+    -- end
 
     return ogValue      -- Needed for isValid
 end

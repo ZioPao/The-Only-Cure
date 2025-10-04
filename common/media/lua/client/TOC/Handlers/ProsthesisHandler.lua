@@ -167,15 +167,15 @@ function ISUnequipAction:perform()
     ]]
 
     local isProst = ProsthesisHandler.SearchAndSetupProsthesis(self.item, false)
-    local group
-    if isProst then
-        group = BodyLocations.getGroup("Human")
-        group:setMultiItem("TOC_ArmProst", false)
-    end
+    -- local group
+    -- if isProst then
+    --     group = BodyLocations.getGroup("Human")
+    --     group:setMultiItem("TOC_ArmProst", false)
+    -- end
     og_ISUnequipAction_perform(self)
 
     if isProst then
-        group:setMultiItem("TOC_ArmProst", true)
+        -- group:setMultiItem("TOC_ArmProst", true)
 
         -- we need to fetch the limbname associated to the prosthesis
         local side = CommonMethods.GetSide(self.item:getFullType())
