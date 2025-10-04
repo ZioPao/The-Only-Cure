@@ -57,5 +57,11 @@
         <guid>9a5fe063-63c7-4e6f-81ca-ee77c6678e0d</guid>
     </files>
 
+    <!-- TEST -->
+    <files>
+        <path>media/clothing/clothingItems/Amputation_ForeArm_LR.xml</path>
+        <guid>8e5bc1b4-d79b-4a17-b86b-71dab6ace816</guid>
+    </files>
+
 
 </fileGuidTable>

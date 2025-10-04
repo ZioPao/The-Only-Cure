@@ -109,4 +109,24 @@ module TOC
 		CanHaveHoles = false,
 	}
 
+
+
+
+
+    item Amputation_FA_LR
+	{
+		Type = Clothing,
+		DisplayCategory = Amputation,
+
+		ClothingItem = Amputation_ForeArm_LR,
+		BodyLocation = TOC_Arm,
+
+		Weight = 0,
+		CombatSpeedModifier = 0.7,
+		BloodLocation = UpperArms;UpperBody,
+		Insulation = 1.0,
+		WindResistance = 1.0,
+		WaterResistance = 1.0,
+		CanHaveHoles = false,
+	}
 }

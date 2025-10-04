@@ -17,7 +17,7 @@ ItemsController.Player = {}
 ---@return number
 ---@private
 function ItemsController.Player.GetAmputationTexturesIndex(playerObj, isCicatrized)
-    -- FIX Broken
+    -- todo
     local textureString = playerObj:getHumanVisual():getSkinTexture()
     local isHairy = textureString:sub(-1) == "a"
 
@@ -79,13 +79,16 @@ end
 ---Deletes all the old amputation items, used for resets
 ---@param playerObj IsoPlayer
 function ItemsController.Player.DeleteAllOldAmputationItems(playerObj)
+    -- TODO Fix visual bug
     -- This part is a workaround for a pretty shitty implementation on the java side. Check ProsthesisHandler for more infos
-    local group = BodyLocations.getGroup("Human")
-    group:setMultiItem("TOC_Arm", false)
-    group:setMultiItem("TOC_ArmProst", false)
+    -- local group = BodyLocations.getGroup("Human")
+    -- group:setMultiItem("TOC_Arm", false)
+    -- group:setMultiItem("TOC_ArmProst", false)
 
     for i = 1, #StaticData.LIMBS_STR do
         local limbName = StaticData.LIMBS_STR[i]
+
+        -- TODO Won't work with dedicated clothingItems for multi amps
         local clothItemName = StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. limbName
         local clothItem = playerObj:getInventory():FindAndReturn(clothItemName)
         ---@cast clothItem InventoryItem
@@ -94,8 +97,8 @@ function ItemsController.Player.DeleteAllOldAmputationItems(playerObj)
     -- Reset model just in case
     playerObj:resetModel()
 
-    group:setMultiItem("TOC_Arm", true)
-    group:setMultiItem("TOC_ArmProst", true)
+    -- group:setMultiItem("TOC_Arm", true)
+    -- group:setMultiItem("TOC_ArmProst", true)
 end
 
 ---Spawns and equips the correct amputation item to the player.

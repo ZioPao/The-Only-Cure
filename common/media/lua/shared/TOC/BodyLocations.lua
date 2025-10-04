@@ -43,23 +43,26 @@ function BodyLocationsAPI.MoveOrCreateBeforeOrAfter(toRelocateOrCreate, location
     end
 end
 
--- function TestBodyLocations()
---     local group = BodyLocations.getGroup("Human")
---     local x = group:getAllLocations()
+function TestBodyLocations()
+    local group = BodyLocations.getGroup("Human")
+    local x = group:getAllLocations()
 
---     for i=0, x:size() -1 do
+    for i=0, x:size() -1 do
 
---         ---@type BodyLocation
---         local bl = x:get(i)
+        ---@type BodyLocation
+        local bl = x:get(i)
 
---         print(bl:getId())
---     end
--- end
+        print(bl:getId())
+    end
+end
 
 -- MultiItem causes a ton of issues... fucking hell
 
-BodyLocationsAPI.MoveOrCreateBeforeOrAfter("TOC_Arm", "FullTop", true)
-group:setMultiItem("TOC_Arm", true)
+-- BodyLocationsAPI.MoveOrCreateBeforeOrAfter("TOC_Arm", "Shirt", true)
+-- group:setMultiItem("TOC_Arm", true)
+
+local curItem = BodyLocation.new(group, "TOC_Arm") -- create new item
+group:getAllLocations():add(curItem) -- add to the list
 
 BodyLocationsAPI.MoveOrCreateBeforeOrAfter("TOC_ArmProst", "TOC_Arm", true)
 group:setMultiItem("TOC_ArmProst", true)
