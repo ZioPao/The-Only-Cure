@@ -1,6 +1,6 @@
 version=1
-id=3236152598
-title=The Only Cure - Rebuilt
+id=3580276809
+title=The Only Cure
 description=[img]https://raw.githubusercontent.com/ZioPao/The-Only-Cure/551125bb50cb65608ad89ca81ef0daccb3b02c4c/dev_stuff/logos/title.png[/img]
 
 description=
@@ -27,7 +27,7 @@ description=
 
 description=[h1]Setup[/h1]
 
-description=Use it with the following mods for the intended experience:
+description=[strike]Use it with the following mods for the intended experience:
 
 description=[list]
 
@@ -39,9 +39,11 @@ description=[/list]
 
 description=
 
-description=Place them [b]BEFORE[/b] The Only Cure in your mod list!
+description=Place them [b]BEFORE[/b] The Only Cure in your mod list![/strike]
 
 description=
+
+description=[b]At the moment, the mods listed here arent' compatible with B42.
 
 description=[hr][/hr]
 
@@ -181,5 +183,5 @@ description=
 
 description=[hr][/hr]
 
-tags=Build 41;Balance;Interface;Items;Misc;Multiplayer;Realistic;Textures
+tags=Build 42;Balance;Interface;Items;Misc;Multiplayer;Realistic;Textures
 visibility=public
