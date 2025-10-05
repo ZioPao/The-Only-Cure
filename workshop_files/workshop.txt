@@ -1,6 +1,6 @@
 version=1
 id=3580276809
-title=The Only Cure
+title=[B42] The Only Cure
 description=[img]https://raw.githubusercontent.com/ZioPao/The-Only-Cure/551125bb50cb65608ad89ca81ef0daccb3b02c4c/dev_stuff/logos/title.png[/img]
 
 description=
@@ -43,7 +43,7 @@ description=Place them [b]BEFORE[/b] The Only Cure in your mod list![/strike]
 
 description=
 
-description=[b]At the moment, the mods listed here arent' compatible with B42.
+description=[b]At the moment, the mods listed here aren't compatible with B42.
 
 description=[hr][/hr]
 
