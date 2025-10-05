@@ -9,8 +9,8 @@ local OverridenMethodsArchive = require("TOC/OverridenMethodsArchive")
 ---@class ProsthesisHandler
 local ProsthesisHandler = {}
 
-local bodyLocArmProst = StaticData.MOD_BODYLOCS_BASE_IND_STR.TOC_ArmProst
-local bodyLocLegProst = StaticData.MOD_BODYLOCS_BASE_IND_STR.TOC_LegProst
+local bodylocArmProstBaseline = "TOC_ArmProst"
+--local bodyLocLegProst = "TOC_LegProst"
 
 ---Check if the following item is a prosthesis or not
 ---@param item InventoryItem?
@@ -23,7 +23,7 @@ function ProsthesisHandler.CheckIfProst(item)
 
         return false
     end
-    return item:getBodyLocation():contains(bodyLocArmProst)
+    return item:getBodyLocation():contains(bodylocArmProstBaseline)
 end
 
 ---Get the grouping for the prosthesis
@@ -33,13 +33,10 @@ function ProsthesisHandler.GetGroup(item)
     local fullType = item:getFullType()
     local side = CommonMethods.GetSide(fullType)
 
-
     local bodyLocation = item:getBodyLocation()
     local position
-    if bodyLocation == bodyLocArmProst then
+    if bodyLocation:contains(bodylocArmProstBaseline) then
         position = "Top_"
-    elseif bodyLocation == bodyLocLegProst then
-        position = "Bottom_"
     else
         TOC_DEBUG.print("Something is wrong, no position in this item")
         position = nil

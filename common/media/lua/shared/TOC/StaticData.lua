@@ -49,11 +49,14 @@ StaticData.PARTS_STR = {
     "UpperArm"
 }
 
-
+-- TODO make it a bit more elegant
 StaticData.MOD_BODYLOCS_BASE_IND_STR = {
-    TOC_ArmProst = "TOC_ArmProst",
-    TOC_LegProst = "TOC_LegProst",
-    TOC_Arm = "TOC_Arm",
+    TOC_ArmProst_L = "TOC_ArmProst_L",
+    TOC_ArmProst_R = "TOC_ArmProst_R",
+    TOC_Arm_L = "TOC_Arm_L",
+    TOC_Arm_R = "TOC_Arm_R",
+
+    --TOC_LegProst = "TOC_LegProst",
 }
 
 -- No "MAX" here.
@@ -149,6 +152,7 @@ StaticData.AMP_GROUPS_BASE_IND_STR = {
     Bottom = "Bottom"
 }
 
+-- FIX This should be aligned with the body locs, no reason anymore to keep it separated
 StaticData.AMP_GROUPS_IND_STR = {}
 StaticData.AMP_GROUPS_STR = {}
 
