@@ -7,7 +7,7 @@
     <m_AllowRandomHue>false</m_AllowRandomHue>
     <m_AllowRandomTint>false</m_AllowRandomTint>
     <m_Masks>4</m_Masks>
-    <m_MasksFolder>none</m_MasksFolder>
+    <!-- <m_MasksFolder>none</m_MasksFolder> -->
     
     <!-- HUMAN -->
     <textureChoices>Amputations\Human\Hand\skin01_b</textureChoices>

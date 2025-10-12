@@ -10,7 +10,7 @@
 	<m_Masks>4</m_Masks>
 	<m_Masks>3</m_Masks>
 
-    <m_UnderlayMasksFolder>media/textures/Amputations/Masks</m_UnderlayMasksFolder>
+    <!-- <m_UnderlayMasksFolder>media/textures/Amputations/Masks</m_UnderlayMasksFolder> -->
 
     
     <!-- HUMAN -->

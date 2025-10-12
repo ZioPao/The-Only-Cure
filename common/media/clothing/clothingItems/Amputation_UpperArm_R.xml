@@ -8,7 +8,7 @@
     <m_AllowRandomTint>false</m_AllowRandomTint>
     <m_Masks>5</m_Masks>
     <m_Masks>6</m_Masks>
-    <m_UnderlayMasksFolder>media/textures/Amputations/Masks</m_UnderlayMasksFolder>
+    <!-- <m_UnderlayMasksFolder>media/textures/Amputations/Masks</m_UnderlayMasksFolder> -->
 
     <!-- HUMAN -->
     <textureChoices>Amputations\Human\Upperarm\skin01_b</textureChoices>
