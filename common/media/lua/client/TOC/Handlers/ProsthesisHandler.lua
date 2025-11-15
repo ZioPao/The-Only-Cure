@@ -9,8 +9,8 @@ local OverridenMethodsArchive = require("TOC/OverridenMethodsArchive")
 ---@class ProsthesisHandler
 local ProsthesisHandler = {}
 
-local bodyLocArmProst = StaticData.MOD_BODYLOCS_BASE_IND_STR.TOC_ArmProst
-local bodyLocLegProst = StaticData.MOD_BODYLOCS_BASE_IND_STR.TOC_LegProst
+local bodylocArmProstBaseline = "TOC_ArmProst"
+--local bodyLocLegProst = "TOC_LegProst"
 
 ---Check if the following item is a prosthesis or not
 ---@param item InventoryItem?
@@ -23,7 +23,7 @@ function ProsthesisHandler.CheckIfProst(item)
 
         return false
     end
-    return item:getBodyLocation():contains(bodyLocArmProst)
+    return item:getBodyLocation():contains(bodylocArmProstBaseline)
 end
 
 ---Get the grouping for the prosthesis
@@ -33,13 +33,10 @@ function ProsthesisHandler.GetGroup(item)
     local fullType = item:getFullType()
     local side = CommonMethods.GetSide(fullType)
 
-
     local bodyLocation = item:getBodyLocation()
     local position
-    if bodyLocation == bodyLocArmProst then
+    if bodyLocation:contains(bodylocArmProstBaseline) then
         position = "Top_"
-    elseif bodyLocation == bodyLocLegProst then
-        position = "Bottom_"
     else
         TOC_DEBUG.print("Something is wrong, no position in this item")
         position = nil
@@ -86,7 +83,7 @@ function ProsthesisHandler.SearchAndSetupProsthesis(item, isEquipping)
     dcInst:apply()
 
     -- Calculates hands feasibility once again
-    CachedDataHandler.CalculateBothHandsFeasibility()
+    CachedDataHandler.OverrideBothHandsFeasibility()
     return true
 end
 
@@ -110,14 +107,15 @@ end
 --* Overrides *--
 
 
----@diagnostic disable-next-line: duplicate-set-field
 local og_ISWearClothing_isValid = ISWearClothing.isValid
+---@diagnostic disable-next-line: duplicate-set-field
 function ISWearClothing:isValid()
     local isEquippable = og_ISWearClothing_isValid(self)
     return ProsthesisHandler.Validate(self.item, isEquippable)
 end
 
 local og_ISWearClothing_perform = ISWearClothing.perform
+---@diagnostic disable-next-line: duplicate-set-field
 function ISWearClothing:perform()
     ProsthesisHandler.SearchAndSetupProsthesis(self.item, true)
     og_ISWearClothing_perform(self)
@@ -134,18 +132,26 @@ local og_ISClothingExtraAction_isValid = OverridenMethodsArchive.Save("ISClothin
 function ISClothingExtraAction:isValid()
     local isEquippable = og_ISClothingExtraAction_isValid(self)
     -- self.extra is a string, not the item
+
+    -- B42 Compatibility to add
     local testItem = InventoryItemFactory.CreateItem(self.extra)
     return ProsthesisHandler.Validate(testItem, isEquippable)
 end
 
 local og_ISClothingExtraAction_perform = OverridenMethodsArchive.Save("ISClothingExtraAction_perform", ISClothingExtraAction.perform)
+---@diagnostic disable-next-line: duplicate-set-field
 function ISClothingExtraAction:perform()
+    
+
+    -- B42 Compatibility to add
+
     local extraItem = InventoryItemFactory.CreateItem(self.extra)
     ProsthesisHandler.SearchAndSetupProsthesis(extraItem, true)
     og_ISClothingExtraAction_perform(self)
 end
 
 local og_ISUnequipAction_perform = ISUnequipAction.perform
+---@diagnostic disable-next-line: duplicate-set-field
 function ISUnequipAction:perform()
 
     --[[
@@ -158,15 +164,15 @@ function ISUnequipAction:perform()
     ]]
 
     local isProst = ProsthesisHandler.SearchAndSetupProsthesis(self.item, false)
-    local group
-    if isProst then
-        group = BodyLocations.getGroup("Human")
-        group:setMultiItem("TOC_ArmProst", false)
-    end
+    -- local group
+    -- if isProst then
+    --     group = BodyLocations.getGroup("Human")
+    --     group:setMultiItem("TOC_ArmProst", false)
+    -- end
     og_ISUnequipAction_perform(self)
 
     if isProst then
-        group:setMultiItem("TOC_ArmProst", true)
+        -- group:setMultiItem("TOC_ArmProst", true)
 
         -- we need to fetch the limbname associated to the prosthesis
         local side = CommonMethods.GetSide(self.item:getFullType())

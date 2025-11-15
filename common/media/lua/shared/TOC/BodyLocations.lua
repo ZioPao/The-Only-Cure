@@ -1,5 +1,6 @@
 require("TOC/Debug")
 require("NPCs/BodyLocations")
+local StaticData = require("TOC/StaticData")
 
 local BodyLocationsAPI = {}
 local function customGetVal(obj, int) return getClassFieldVal(obj, getClassField(obj, int)) end
@@ -8,6 +9,19 @@ local group = BodyLocations.getGroup("Human")
 ---@type ArrayList
 local list = customGetVal(group, 1)
 
+---@param bodyLoc string
+function BodyLocationsAPI.New(bodyLoc)
+    local curItem
+    if StaticData.COMPAT_42 then
+        curItem = BodyLocation.new(group, bodyLoc) -- create new item
+        group:getAllLocations():add(curItem) -- add to the list
+    else
+        curItem = group:getOrCreateLocation(bodyLoc) -- get current item - or create
+    end
+    return curItem
+end
+
+-- TODO Not sure if this method actually works as intende with b42, but for our use case it's fine...
 ---@param toRelocateOrCreate string
 ---@param locationElement string
 ---@param afterBoolean boolean
@@ -19,7 +33,8 @@ function BodyLocationsAPI.MoveOrCreateBeforeOrAfter(toRelocateOrCreate, location
     if itemToMoveTo ~= nil then
         -- Check type of arg 1 == string - if not, error out.
         if type(toRelocateOrCreate) ~= "string" then error("Argument 1 is not of type string. Please re-check!", 2) end
-        local curItem = group:getOrCreateLocation(toRelocateOrCreate) -- get current item - or create
+
+        local curItem = BodyLocationsAPI.New(toRelocateOrCreate)
         list:remove(curItem) -- remove from the list
         local index = group:indexOf(locationElement) -- get current index after removal of the location to move to
         if afterBoolean then index = index + 1 end -- if we want it after it, we increase the index to move to by one
@@ -32,27 +47,33 @@ function BodyLocationsAPI.MoveOrCreateBeforeOrAfter(toRelocateOrCreate, location
     end
 end
 
-function TestBodyLocations()
-    local group = BodyLocations.getGroup("Human")
-    local x = group:getAllLocations()
 
-    for i=0, x:size() -1 do
 
-        ---@type BodyLocation
-        local bl = x:get(i)
+-- function TestBodyLocations()
+--     local group = BodyLocations.getGroup("Human")
+--     local x = group:getAllLocations()
 
-        print(bl:getId())
-    end
+--     for i=0, x:size() -1 do
 
-end
+--         ---@type BodyLocation
+--         local bl = x:get(i)
+
+--         print(bl:getId())
+--     end
+-- end
 
 -- MultiItem causes a ton of issues... fucking hell
 
-BodyLocationsAPI.MoveOrCreateBeforeOrAfter("TOC_Arm", "FullTop", true)
-group:setMultiItem("TOC_Arm", true)
+-- local curItem = BodyLocation.new(group, "TOC_Arm_L")
+-- group:getAllLocations():add(curItem)
 
-BodyLocationsAPI.MoveOrCreateBeforeOrAfter("TOC_ArmProst", "TOC_Arm", true)
-group:setMultiItem("TOC_ArmProst", true)
+-- local curItem = BodyLocation.new(group, "TOC_Arm_R")
+-- group:getAllLocations():add(curItem)
 
-BodyLocationsAPI.MoveOrCreateBeforeOrAfter("TOC_ArmAccessory", "TOC_ArmProst", true)
-group:setMultiItem("TOC_ArmAccessory", true)
+
+BodyLocationsAPI.New("TOC_Arm_L")
+BodyLocationsAPI.New("TOC_Arm_R")
+BodyLocationsAPI.New("TOC_ArmProst_L")
+BodyLocationsAPI.New("TOC_ArmProst_R")
+BodyLocationsAPI.New("TOC_ArmAccessory_L")
+BodyLocationsAPI.New("TOC_ArmAccessory_R")

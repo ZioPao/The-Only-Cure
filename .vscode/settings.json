@@ -19,5 +19,9 @@
         ".vscode",
         "dev_stuff",
         "workshop_files"
+    ],
+    "Lua.diagnostics.globals": [
+        "FHSwapHandsAction",
+        "timer"
     ]
 }

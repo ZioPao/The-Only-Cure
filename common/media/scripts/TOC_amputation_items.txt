@@ -9,9 +9,10 @@ module TOC
 	{
 		Type = Clothing,
 		DisplayCategory = Amputation,
+		hidden = true,
 
 		ClothingItem = Amputation_Hand_R,
-		BodyLocation = TOC_Arm,
+		BodyLocation = TOC_Arm_R,
 
 		Weight = 0,
 		CombatSpeedModifier = 0.9,
@@ -27,9 +28,10 @@ module TOC
 	{
 		Type = Clothing,
 		DisplayCategory = Amputation,
+		hidden = true,
 
 		ClothingItem = Amputation_ForeArm_R,
-		BodyLocation = TOC_Arm,
+		BodyLocation = TOC_Arm_R,
 
 		Weight = 0,
 		CombatSpeedModifier = 0.8,
@@ -44,9 +46,10 @@ module TOC
 	{
 		Type = Clothing,
 		DisplayCategory = Amputation,
+		hidden = true,
 
 		ClothingItem = Amputation_UpperArm_R,
-		BodyLocation = TOC_Arm,
+		BodyLocation = TOC_Arm_R,
 		BloodLocation = UpperArms;UpperBody,
 		Weight = 0,
 		CombatSpeedModifier = 0.7,
@@ -60,9 +63,10 @@ module TOC
 	{
 		Type = Clothing,
 		DisplayCategory = Amputation,
+		hidden = true,
 
 		ClothingItem = Amputation_Hand_L,
-		BodyLocation = TOC_Arm,
+		BodyLocation = TOC_Arm_L,
 
 		Weight = 0,
 		CombatSpeedModifier = 0.9,
@@ -78,9 +82,10 @@ module TOC
 	{
 		Type = Clothing,
 		DisplayCategory = Amputation,
+		hidden = true,
 
 		ClothingItem = Amputation_ForeArm_L,
-		BodyLocation = TOC_Arm,
+		BodyLocation = TOC_Arm_L,
 
 		Weight = 0,
 		CombatSpeedModifier = 0.8,
@@ -96,9 +101,10 @@ module TOC
 	{
 		Type = Clothing,
 		DisplayCategory = Amputation,
+		hidden = true,
 
 		ClothingItem = Amputation_UpperArm_L,
-		BodyLocation = TOC_Arm,
+		BodyLocation = TOC_Arm_L,
 
 		Weight = 0,
 		CombatSpeedModifier = 0.7,

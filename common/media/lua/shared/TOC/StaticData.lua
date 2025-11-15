@@ -2,7 +2,7 @@
 ---@alias limbsTable {Hand_L : partDataType, ForeArm_L : partDataType, UpperArm_L : partDataType, Hand_R : partDataType, ForeArm_R : partDataType, UpperArm_R : partDataType }
 ---@alias prosthesisData {isProstEquipped : boolean, prostFactor : number }
 ---@alias prosthesesTable {Top_L : prosthesisData, Top_R : prosthesisData }     -- TODO add Bottom_L and Bottom_R
----@alias tocModDataType { limbs : limbsTable, prostheses : prosthesesTable, isIgnoredPartInfected : boolean, isAnyLimbCut : boolean, isInitializing : boolean}
+---@alias tocModDataType { limbs : limbsTable, prostheses : prosthesesTable, isIgnoredPartInfected : boolean, isAnyLimbCut : boolean}
 ---------------------------
 
 
@@ -49,11 +49,14 @@ StaticData.PARTS_STR = {
     "UpperArm"
 }
 
-
+-- TODO make it a bit more elegant
 StaticData.MOD_BODYLOCS_BASE_IND_STR = {
-    TOC_ArmProst = "TOC_ArmProst",
-    TOC_LegProst = "TOC_LegProst",
-    TOC_Arm = "TOC_Arm",
+    TOC_ArmProst_L = "TOC_ArmProst_L",
+    TOC_ArmProst_R = "TOC_ArmProst_R",
+    TOC_Arm_L = "TOC_Arm_L",
+    TOC_Arm_R = "TOC_Arm_R",
+
+    --TOC_LegProst = "TOC_LegProst",
 }
 
 -- No "MAX" here.
@@ -149,6 +152,7 @@ StaticData.AMP_GROUPS_BASE_IND_STR = {
     Bottom = "Bottom"
 }
 
+-- FIX This should be aligned with the body locs, no reason anymore to keep it separated
 StaticData.AMP_GROUPS_IND_STR = {}
 StaticData.AMP_GROUPS_STR = {}
 

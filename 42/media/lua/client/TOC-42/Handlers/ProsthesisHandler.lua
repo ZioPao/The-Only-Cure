@@ -25,16 +25,16 @@ local og_ISUnequipAction_complete = ISUnequipAction.complete
 function ISUnequipAction:complete()
     -- Horrendous workaround. For B42, as of now, it will basically happen two times, once with :perform and once with :complete. Shouldn't
     -- matter for performance but it's really ugly.
-    local isProst = ProsthesisHandler.SearchAndSetupProsthesis(self.item, false)
-    local group
-    if isProst then
-        group = BodyLocations.getGroup("Human")
-        group:setMultiItem("TOC_ArmProst", false)
-    end
+    -- local isProst = ProsthesisHandler.SearchAndSetupProsthesis(self.item, false)
+    -- local group
+    -- if isProst then
+    --     group = BodyLocations.getGroup("Human")
+    --     group:setMultiItem("TOC_ArmProst", false)
+    -- end
     og_ISUnequipAction_complete(self)
 
-    if isProst then
-        group:setMultiItem("TOC_ArmProst", true)
-    end
+    -- if isProst then
+    --     group:setMultiItem("TOC_ArmProst", true)
+    -- end
 
 end

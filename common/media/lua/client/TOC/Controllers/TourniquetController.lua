@@ -64,18 +64,18 @@ end
 ---@param obj any  self 
 ---@param wrappedFunc function
 function TourniquetController.WrapClothingAction(obj, wrappedFunc)
-    local isTourniquet = TourniquetController.IsItemTourniquet(obj.item:getFullType())
-    local group
-    if isTourniquet then
-        group = BodyLocations.getGroup("Human")
-        group:setMultiItem(TourniquetController.bodyLoc, false)
-    end
+    -- local isTourniquet = TourniquetController.IsItemTourniquet(obj.item:getFullType())
+    -- local group
+    -- if isTourniquet then
+    --     group = BodyLocations.getGroup("Human")
+    --     group:setMultiItem(TourniquetController.bodyLoc, false)
+    -- end
 
     local ogValue = wrappedFunc(obj)
 
-    if isTourniquet then
-        group:setMultiItem(TourniquetController.bodyLoc, true)
-    end
+    -- if isTourniquet then
+    --     group:setMultiItem(TourniquetController.bodyLoc, true)
+    -- end
 
     return ogValue      -- Needed for isValid
 end
@@ -94,16 +94,19 @@ end
 
 
 local og_ISClothingExtraAction_perform = ISClothingExtraAction.perform
+---@diagnostic disable-next-line: duplicate-set-field
 function ISClothingExtraAction:perform()
     TourniquetController.WrapClothingAction(self, og_ISClothingExtraAction_perform)
 end
 
 local og_ISWearClothing_isValid = ISWearClothing.isValid
+---@diagnostic disable-next-line: duplicate-set-field
 function ISWearClothing:isValid()
     return TourniquetController.WrapClothingAction(self, og_ISWearClothing_isValid)
 end
 
 local og_ISUnequipAction_perform = ISUnequipAction.perform
+---@diagnostic disable-next-line: duplicate-set-field
 function ISUnequipAction:perform()
    return TourniquetController.WrapClothingAction(self, og_ISUnequipAction_perform)
 end

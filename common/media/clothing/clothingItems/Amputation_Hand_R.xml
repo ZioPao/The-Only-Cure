@@ -6,18 +6,32 @@
     <m_AllowRandomHue>false</m_AllowRandomHue>
     <m_AllowRandomTint>false</m_AllowRandomTint>
     <m_Masks>6</m_Masks>
-    <m_MasksFolder>none</m_MasksFolder>
+    <!-- <m_MasksFolder>none</m_MasksFolder> -->
     
     <!-- HUMAN -->
-    <textureChoices>Amputations\Human\Forearm\skin01_b</textureChoices>
-    <textureChoices>Amputations\Human\Forearm\skin02_b</textureChoices>
-    <textureChoices>Amputations\Human\Forearm\skin03_b</textureChoices>
-    <textureChoices>Amputations\Human\Forearm\skin04_b</textureChoices>
-    <textureChoices>Amputations\Human\Forearm\skin05_b</textureChoices>
+    <textureChoices>Amputations\Human\Hand\skin01_b</textureChoices>
+    <textureChoices>Amputations\Human\Hand\skin02_b</textureChoices>
+    <textureChoices>Amputations\Human\Hand\skin03_b</textureChoices>
+    <textureChoices>Amputations\Human\Hand\skin04_b</textureChoices>
+    <textureChoices>Amputations\Human\Hand\skin05_b</textureChoices>
 
-    <textureChoices>Amputations\Human\Forearm\skin01_hairy_b</textureChoices>
-    <textureChoices>Amputations\Human\Forearm\skin02_hairy_b</textureChoices>
-    <textureChoices>Amputations\Human\Forearm\skin03_hairy_b</textureChoices>
-    <textureChoices>Amputations\Human\Forearm\skin04_hairy_b</textureChoices>
-    <textureChoices>Amputations\Human\Forearm\skin05_hairy_b</textureChoices>
+    <textureChoices>Amputations\Human\Hand\skin01_hairy_b</textureChoices>
+    <textureChoices>Amputations\Human\Hand\skin02_hairy_b</textureChoices>
+    <textureChoices>Amputations\Human\Hand\skin03_hairy_b</textureChoices>
+    <textureChoices>Amputations\Human\Hand\skin04_hairy_b</textureChoices>
+    <textureChoices>Amputations\Human\Hand\skin05_hairy_b</textureChoices>
+
+    <!-- HUMAN AFTER CICATRIZATION -->
+
+    <textureChoices>Body\MaleBody01</textureChoices>
+    <textureChoices>Body\MaleBody02</textureChoices>
+    <textureChoices>Body\MaleBody03</textureChoices>
+    <textureChoices>Body\MaleBody04</textureChoices>
+    <textureChoices>Body\MaleBody05</textureChoices>
+
+    <textureChoices>Body\MaleBody01a</textureChoices>
+    <textureChoices>Body\MaleBody02a</textureChoices>
+    <textureChoices>Body\MaleBody03a</textureChoices>
+    <textureChoices>Body\MaleBody04</textureChoices>
+    <textureChoices>Body\MaleBody05a</textureChoices>
 </clothingItem>

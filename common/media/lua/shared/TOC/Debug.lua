@@ -13,10 +13,12 @@ end
 ---Print debug
 ---@param string string
 function TOC_DEBUG.print(string)
-    --if isDebugEnabled() then
-    local runningFile = TOC_DEBUG.getRunningFile()
-    print("[TOC]" .. "[" .. runningFile .. "] " .. tostring(string))
-    --end
+    if isDebugEnabled() then
+        local runningFile = TOC_DEBUG.getRunningFile()
+        print("[TOC]" .. "[" .. runningFile .. "] " .. tostring(string))
+    else
+        print(string)
+    end
 end
 
 ---Horrendous but I don't really care about performance for this
