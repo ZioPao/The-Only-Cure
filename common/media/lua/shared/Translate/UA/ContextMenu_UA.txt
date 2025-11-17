@@ -1,33 +1,33 @@
 ContextMenu_UA = {
-    ContextMenu_Amputate = "Ампутувати",
-    ContextMenu_Amputate_Bandage = "Ампутувати та перев'язати",
-    ContextMenu_Amputate_Stitch = "Ампутувати та накласти шви",
-    ContextMenu_Amputate_Stitch_Bandage = "Ампутувати, накласти шви та перев'язати",
+    ContextMenu_Amputate = "РђРјРїСѓС‚СѓРІР°С‚Рё",
+    ContextMenu_Amputate_Bandage = "РђРјРїСѓС‚СѓРІР°С‚Рё С‚Р° РїРµСЂРµРІ'СЏР·Р°С‚Рё",
+    ContextMenu_Amputate_Stitch = "РђРјРїСѓС‚СѓРІР°С‚Рё С‚Р° РЅР°РєР»Р°СЃС‚Рё С€РІРё",
+    ContextMenu_Amputate_Stitch_Bandage = "РђРјРїСѓС‚СѓРІР°С‚Рё, РЅР°РєР»Р°СЃС‚Рё С€РІРё С‚Р° РїРµСЂРµРІ'СЏР·Р°С‚Рё",
 
-    ContextMenu_Cauterize = "Припекти",
+    ContextMenu_Cauterize = "РџСЂРёРїРµРєС‚Рё",
     
-    ContextMenu_Limb_Hand_L = "Ліва Рука",
-    ContextMenu_Limb_ForeArm_L = "Ліве Передпліччя",
-    ContextMenu_Limb_UpperArm_L = "Ліве Плече"
-    ContextMenu_Limb_Hand_R = "Права Рука",
-    ContextMenu_Limb_ForeArm_R = "Праве Передпліччя",
-    ContextMenu_Limb_UpperArm_R = "Праве Плече",
+    ContextMenu_Limb_Hand_L = "Р›С–РІР° Р СѓРєР°",
+    ContextMenu_Limb_ForeArm_L = "Р›С–РІРµ РџРµСЂРµРґРїР»С–С‡С‡СЏ",
+    ContextMenu_Limb_UpperArm_L = "Р›С–РІРµ РџР»РµС‡Рµ"
+    ContextMenu_Limb_Hand_R = "РџСЂР°РІР° Р СѓРєР°",
+    ContextMenu_Limb_ForeArm_R = "РџСЂР°РІРµ РџРµСЂРµРґРїР»С–С‡С‡СЏ",
+    ContextMenu_Limb_UpperArm_R = "РџСЂР°РІРµ РџР»РµС‡Рµ",
 
-    ContextMenu_InstallProstRight = "Установити протез на праву руку",
-    ContextMenu_InstallProstLeft = "Установити протез на ліву руку",
+    ContextMenu_InstallProstRight = "РЈСЃС‚Р°РЅРѕРІРёС‚Рё РїСЂРѕС‚РµР· РЅР° РїСЂР°РІСѓ СЂСѓРєСѓ",
+    ContextMenu_InstallProstLeft = "РЈСЃС‚Р°РЅРѕРІРёС‚Рё РїСЂРѕС‚РµР· РЅР° Р»С–РІСѓ СЂСѓРєСѓ",
 
-    ContextMenu_PutTourniquetArmLeft = "Накласти джгут на ліву руку",
-    ContextMenu_PutTourniquetLegL = "Накласти джгут на ліву ногу",
-    ContextMenu_PutTourniquetArmRight = "Накласти джгут на праву руку",
-    ContextMenu_PutTourniquetLegR = "Накласти джгут на праву ногу",
+    ContextMenu_PutTourniquetArmLeft = "РќР°РєР»Р°СЃС‚Рё РґР¶РіСѓС‚ РЅР° Р»С–РІСѓ СЂСѓРєСѓ",
+    ContextMenu_PutTourniquetLegL = "РќР°РєР»Р°СЃС‚Рё РґР¶РіСѓС‚ РЅР° Р»С–РІСѓ РЅРѕРіСѓ",
+    ContextMenu_PutTourniquetArmRight = "РќР°РєР»Р°СЃС‚Рё РґР¶РіСѓС‚ РЅР° РїСЂР°РІСѓ СЂСѓРєСѓ",
+    ContextMenu_PutTourniquetLegR = "РќР°РєР»Р°СЃС‚Рё РґР¶РіСѓС‚ РЅР° РїСЂР°РІСѓ РЅРѕРіСѓ",
 
 
-    ContextMenu_CleanWound = "Очистити рану",
+    ContextMenu_CleanWound = "РћС‡РёСЃС‚РёС‚Рё СЂР°РЅСѓ",
 
 
 
     ContextMenu_Admin_TOC = "TOC",
-    ContextMenu_Admin_ResetTOC = "Скинути Ампутації",
-    ContextMenu_Admin_ForceAmputation = "Примусово Ампутувати",
+    ContextMenu_Admin_ResetTOC = "РЎРєРёРЅСѓС‚Рё РђРјРїСѓС‚Р°С†С–С—",
+    ContextMenu_Admin_ForceAmputation = "РџСЂРёРјСѓСЃРѕРІРѕ РђРјРїСѓС‚СѓРІР°С‚Рё",
     
 }

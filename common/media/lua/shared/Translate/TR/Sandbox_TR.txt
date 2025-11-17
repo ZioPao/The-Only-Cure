@@ -1,9 +1,9 @@
 Sandbox_TR = {
     Sandbox_TOC = "The Only Cure",
-    Sandbox_TOC_CicatrizationSpeed = "Yara İyileşme Hızı",
-    Sandbox_TOC_WoundDirtynessMultiplier = "Yara Kirlilik Çarpanı",
-    Sandbox_TOC_SurgeonAbilityImportance = "Cerrahın Yetenek Önemi",
-    Sandbox_TOC_EnableZombieAmputations = "Zombi Amputasyonlarını Etkinleştir",
-    Sandbox_TOC_ZombieAmputationDamageThreshold = "Zombi Amputasyon Hasar Eşiği",
-    Sandbox_TOC_ZombieAmputationDamageChance = "Zombi Amputasyon Hasar Şansı",
+    Sandbox_TOC_CicatrizationSpeed = "Yara Ä°yileÅŸme HÄ±zÄ±",
+    Sandbox_TOC_WoundDirtynessMultiplier = "Yara Kirlilik Ã‡arpanÄ±",
+    Sandbox_TOC_SurgeonAbilityImportance = "CerrahÄ±n Yetenek Ã–nemi",
+    Sandbox_TOC_EnableZombieAmputations = "Zombi AmputasyonlarÄ±nÄ± EtkinleÅŸtir",
+    Sandbox_TOC_ZombieAmputationDamageThreshold = "Zombi Amputasyon Hasar EÅŸiÄŸi",
+    Sandbox_TOC_ZombieAmputationDamageChance = "Zombi Amputasyon Hasar ÅansÄ±",
 }

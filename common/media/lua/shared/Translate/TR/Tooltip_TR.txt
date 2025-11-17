@@ -1,10 +1,8 @@
 Tooltip_TR = {
-
-    Tooltip_Surgery_CantCauterize = "Yarayý daðlayamazsýn",
+    Tooltip_Surgery_CantCauterize = "YarayÄ± daÄŸlayamazsÄ±n",
 
     Tooltip_Surgery_And = " ve ",
-    Tooltip_Surgery_TempTooLow = "Sýcaklýk hâlâ çok düþük",
+    Tooltip_Surgery_TempTooLow = "SÄ±caklÄ±k hÃ¢lÃ¢ Ã§ok dÃ¼ÅŸÃ¼k",
     Tooltip_Surgery_Coward = "Bunu yapacak cesaretin yok. KORKUYORSUN!",
-    Tooltip_Surgery_LimbNotFree = "Önce protezi çýkarman gerekiyor",
-    
+    Tooltip_Surgery_LimbNotFree = "Ã–nce protezi Ã§Ä±karman gerekiyor",
 }

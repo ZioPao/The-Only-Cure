@@ -4,17 +4,17 @@ ContextMenu_FR = {
     ContextMenu_Amputate_Stitch = "Amputer et suturer",
     ContextMenu_Amputate_Stitch_Bandage = "Amputer, suturer et bander",
 
-    ContextMenu_Cauterize = "Cautériser",
+    ContextMenu_Cauterize = "CautÃ©riser",
     
     ContextMenu_Limb_Hand_L = "Main gauche",
     ContextMenu_Limb_ForeArm_L = "Avant-bras gauche",
-    ContextMenu_Limb_UpperArm_L = "Bras supérieur gauche",
+    ContextMenu_Limb_UpperArm_L = "Bras supÃ©rieur gauche",
     ContextMenu_Limb_Hand_R = "Main droite",
     ContextMenu_Limb_ForeArm_R = "Avant-bras droit",
-    ContextMenu_Limb_UpperArm_R = "Bras supérieur droit",
+    ContextMenu_Limb_UpperArm_R = "Bras supÃ©rieur droit",
 
-    ContextMenu_InstallProstRight = "Installer une prothèse sur le bras droit",
-    ContextMenu_InstallProstLeft = "Installer une prothèse sur le bras gauche",
+    ContextMenu_InstallProstRight = "Installer une prothÃ¨se sur le bras droit",
+    ContextMenu_InstallProstLeft = "Installer une prothÃ¨se sur le bras gauche",
 
     ContextMenu_PutTourniquetArmLeft = "Mettre un garrot sur le bras gauche",
     ContextMenu_PutTourniquetLegL = "Mettre un garrot sur la jambe gauche",
@@ -24,6 +24,6 @@ ContextMenu_FR = {
     ContextMenu_CleanWound = "Nettoyer la plaie",
 
     ContextMenu_Admin_TOC = "TOC",
-    ContextMenu_Admin_ResetTOC = "Réinitialiser les amputations",
+    ContextMenu_Admin_ResetTOC = "RÃ©initialiser les amputations",
     ContextMenu_Admin_ForceAmputation = "Forcer l'amputation",
 }

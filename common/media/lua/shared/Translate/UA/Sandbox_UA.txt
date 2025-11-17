@@ -1,10 +1,10 @@
 Sandbox_UA = {
     Sandbox_TOC = "The Only Cure",
-    Sandbox_TOC_CicatrizationSpeed = "Швидкість рубцювання",
-    Sandbox_TOC_WoundDirtynessMultiplier = "Множник забруднення рани",
-    Sandbox_TOC_SurgeonAbilityImportance = "Важливість медичних навичок лікаря",
-    Sandbox_TOC_EnableZombieAmputations = "Увімкнути ампутації зомбі",
-    Sandbox_TOC_ZombieAmputationDamageThreshold = "Поріг шкоди при ампутації зомбі",
-    Sandbox_TOC_ZombieAmputationDamageChance = "Шанс нанесення шкоди при ампутації зомбі",
+    Sandbox_TOC_CicatrizationSpeed = "РЁРІРёРґРєС–СЃС‚СЊ СЂСѓР±С†СЋРІР°РЅРЅСЏ",
+    Sandbox_TOC_WoundDirtynessMultiplier = "РњРЅРѕР¶РЅРёРє Р·Р°Р±СЂСѓРґРЅРµРЅРЅСЏ СЂР°РЅРё",
+    Sandbox_TOC_SurgeonAbilityImportance = "Р’Р°Р¶Р»РёРІС–СЃС‚СЊ РјРµРґРёС‡РЅРёС… РЅР°РІРёС‡РѕРє Р»С–РєР°СЂСЏ",
+    Sandbox_TOC_EnableZombieAmputations = "РЈРІС–РјРєРЅСѓС‚Рё Р°РјРїСѓС‚Р°С†С–С— Р·РѕРјР±С–",
+    Sandbox_TOC_ZombieAmputationDamageThreshold = "РџРѕСЂС–Рі С€РєРѕРґРё РїСЂРё Р°РјРїСѓС‚Р°С†С–С— Р·РѕРјР±С–",
+    Sandbox_TOC_ZombieAmputationDamageChance = "РЁР°РЅСЃ РЅР°РЅРµСЃРµРЅРЅСЏ С€РєРѕРґРё РїСЂРё Р°РјРїСѓС‚Р°С†С–С— Р·РѕРјР±С–",
 
 }
