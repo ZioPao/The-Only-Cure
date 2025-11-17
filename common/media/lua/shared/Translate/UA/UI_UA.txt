@@ -1,16 +1,16 @@
 UI_UA = {
-    UI_trait_Amputee_Hand = "Ампутована Ліва Рука",
+    UI_trait_Amputee_Hand = "РђРјРїСѓС‚РѕРІР°РЅР° Р›С–РІР° Р СѓРєР°",
     UI_trait_Amputee_Hand_desc = "",
 
-    UI_trait_Amputee_ForeArm = "Ампутоване Ліве Передпліччя",
+    UI_trait_Amputee_ForeArm = "РђРјРїСѓС‚РѕРІР°РЅРµ Р›С–РІРµ РџРµСЂРµРґРїР»С–С‡С‡СЏ",
     UI_trait_Amputee_ForeArm_desc = "",
 
-    UI_trait_Amputee_UpperArm = "Ампутоване Ліве Плече",
+    UI_trait_Amputee_UpperArm = "РђРјРїСѓС‚РѕРІР°РЅРµ Р›С–РІРµ РџР»РµС‡Рµ",
     UI_trait_Amputee_UpperArm_desc = "",
 
-    UI_trait_Insensitive = "Нечутливий",
+    UI_trait_Insensitive = "РќРµС‡СѓС‚Р»РёРІРёР№",
     UI_trait_Insensitive_desc = "",
 
 
-    UI_Say_CantEquip = "Я не можу встановити це таким чином..."
+    UI_Say_CantEquip = "РЇ РЅРµ РјРѕР¶Сѓ РІСЃС‚Р°РЅРѕРІРёС‚Рё С†Рµ С‚Р°РєРёРј С‡РёРЅРѕРј..."
 }

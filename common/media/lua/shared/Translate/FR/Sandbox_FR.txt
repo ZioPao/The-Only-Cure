@@ -1,10 +1,10 @@
 Sandbox_FR = {
-    Sandbox_TOC = "Le Seul RemËde",
+    Sandbox_TOC = "Le Seul Rem√®de",
     Sandbox_TOC_CicatrizationSpeed = "Vitesse de cicatrisation",
-    Sandbox_TOC_WoundDirtynessMultiplier = "Multiplicateur de saletÈ de la plaie",
-    Sandbox_TOC_SurgeonAbilityImportance = "Importance de la compÈtence du chirurgien",
+    Sandbox_TOC_WoundDirtynessMultiplier = "Multiplicateur de salet√© de la plaie",
+    Sandbox_TOC_SurgeonAbilityImportance = "Importance de la comp√©tence du chirurgien",
     Sandbox_TOC_EnableZombieAmputations = "Activer les amputations de zombies",
-    Sandbox_TOC_ZombieAmputationDamageThreshold = "Seuil de dÈg‚ts pour amputations de zombies",
-    Sandbox_TOC_ZombieAmputationDamageChance = "ProbabilitÈ d'amputations de zombies",
+    Sandbox_TOC_ZombieAmputationDamageThreshold = "Seuil de d√©g√¢ts pour amputations de zombies",
+    Sandbox_TOC_ZombieAmputationDamageChance = "Probabilit√© d'amputations de zombies",
 
 }

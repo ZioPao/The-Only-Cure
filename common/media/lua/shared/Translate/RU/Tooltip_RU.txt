@@ -1,10 +1,10 @@
 Tooltip_RU = {
 
-    Tooltip_Surgery_CantCauterize = "Нельзя прижигать рану",
+    Tooltip_Surgery_CantCauterize = "РќРµР»СЊР·СЏ РїСЂРёР¶РёРіР°С‚СЊ СЂР°РЅСѓ",
 
-    Tooltip_Surgery_And = " и "
-    Tooltip_Surgery_TempTooLow = "Температура все еще слишком низкая",
-    Tooltip_Surgery_Coward = "У тебя не хватит смелости сделать это",
-    Tooltip_Surgery_LimbNotFree = "Сначала нужно снять протез",
+    Tooltip_Surgery_And = " Рё "
+    Tooltip_Surgery_TempTooLow = "РўРµРјРїРµСЂР°С‚СѓСЂР° РІСЃРµ РµС‰Рµ СЃР»РёС€РєРѕРј РЅРёР·РєР°СЏ",
+    Tooltip_Surgery_Coward = "РЈ С‚РµР±СЏ РЅРµ С…РІР°С‚РёС‚ СЃРјРµР»РѕСЃС‚Рё СЃРґРµР»Р°С‚СЊ СЌС‚Рѕ",
+    Tooltip_Surgery_LimbNotFree = "РЎРЅР°С‡Р°Р»Р° РЅСѓР¶РЅРѕ СЃРЅСЏС‚СЊ РїСЂРѕС‚РµР·",
     
 }

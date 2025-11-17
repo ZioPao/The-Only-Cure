@@ -1,19 +1,19 @@
 IG_UI_TR = {
     IGUI_perks_Amputations = "Amputasyonlar",
-    IGUI_perks_Side_R = "Sað Taraf",
+    IGUI_perks_Side_R = "SaÄŸ Taraf",
     IGUI_perks_Side_L = "Sol Taraf",
     IGUI_perks_Prosthesis = "Protez",
-    IGUI_perks_ProstFamiliarity = "Aþinalýk",
+    IGUI_perks_ProstFamiliarity = "AÅŸinalÄ±k",
 
     IGUI_ItemCat_Prosthesis = "Protez",
     IGUI_ItemCat_Surgery = "Cerrahi",
     IGUI_ItemCat_Amputation = "Amputasyon",
 
-    IGUI_HealthPanel_Cicatrization = "Yara Ýyileþmesi",
-    IGUI_HealthPanel_Cicatrized = "Ýyileþti",
-    IGUI_HealthPanel_Cauterized = "Daðlandý",
-    IGUI_HealthPanel_WoundDirtyness = "Yara Kirliliði",
-    IGUI_HealthPanel_ProstEquipped = "Protez Takýlý",
+    IGUI_HealthPanel_Cicatrization = "Yara Ä°yileÅŸmesi",
+    IGUI_HealthPanel_Cicatrized = "Ä°yileÅŸti",
+    IGUI_HealthPanel_Cauterized = "DaÄŸlandÄ±",
+    IGUI_HealthPanel_WoundDirtyness = "Yara KirliliÄŸi",
+    IGUI_HealthPanel_ProstEquipped = "Protez TakÄ±lÄ±",
 
-    IGUI_Confirmation_Amputate = " <CENTRE> Bu uzvu gerçekten ampute etmek istiyor musunuz?"
+    IGUI_Confirmation_Amputate = " <CENTRE> Bu uzvu gerÃ§ekten ampute etmek istiyor musunuz?"
 }

@@ -1,7 +1,7 @@
 Sandbox_RU = {
-    Sandbox_TOC = "The Only Cure",
-    Sandbox_TOC_CicatrizationSpeed = "Скорость заживления",
-    Sandbox_TOC_WoundDirtynessMultiplier = "Множитель загрязнения ран",
-    Sandbox_TOC_SurgeonAbilityImportance = "Значимость способностей врача-хирурга",
+    Sandbox_TOC = "РЎРїР°СЃРµРЅСЊРµ РІ РћС‚СЃРµС‡РµРЅРёРё",
+    Sandbox_TOC_CicatrizationSpeed = "РЎРєРѕСЂРѕСЃС‚СЊ Р·Р°Р¶РёРІР»РµРЅРёСЏ",
+    Sandbox_TOC_WoundDirtynessMultiplier = "РњРЅРѕР¶РёС‚РµР»СЊ Р·Р°РіСЂСЏР·РЅРµРЅРёСЏ СЂР°РЅ",
+    Sandbox_TOC_SurgeonAbilityImportance = "Р—РЅР°С‡РёРјРѕСЃС‚СЊ СЃРїРѕСЃРѕР±РЅРѕСЃС‚РµР№ РІСЂР°С‡Р°-С…РёСЂСѓСЂРіР°",
 
 }
