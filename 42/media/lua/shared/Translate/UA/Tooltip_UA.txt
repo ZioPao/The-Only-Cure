@@ -1,10 +1,10 @@
 Tooltip_UA = {
 
-    Tooltip_Surgery_CantCauterize = "РќРµ РјРѕР¶РЅР° РїСЂРёРїРµРєС‚Рё СЂР°РЅСѓ",
+    Tooltip_Surgery_CantCauterize = "Не можна припекти рану",
 
-    Tooltip_Surgery_And = " С‚Р° "
-    Tooltip_Surgery_TempTooLow = "РўРµРјРїРµСЂР°С‚СѓСЂР° Р·Р°РЅР°РґС‚Рѕ РЅРёР·СЊРєР°",
-    Tooltip_Surgery_Coward = "Р’Р°Рј РЅРµ РІРёСЃС‚Р°С‡Р°С” СЃРјС–Р»РёРІРѕСЃС‚С– Р·СЂРѕР±РёС‚Рё С†Рµ",
-    Tooltip_Surgery_LimbNotFree = "РЎРїРѕС‡Р°С‚РєСѓ РЅРµРѕР±С…С–РґРЅРѕ Р·РЅСЏС‚Рё РїСЂРѕС‚РµР·",
+    Tooltip_Surgery_And = " та "
+    Tooltip_Surgery_TempTooLow = "Температура занадто низька",
+    Tooltip_Surgery_Coward = "Вам не вистачає сміливості зробити це",
+    Tooltip_Surgery_LimbNotFree = "Спочатку необхідно зняти протез",
     
 }

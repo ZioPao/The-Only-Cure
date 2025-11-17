@@ -1,11 +1,11 @@
 ItemName_UA = {
 
-    ItemName_TOC.Surg_Arm_Tourniquet_L = "Р”Р¶РіСѓС‚",
-    ItemName_TOC.Surg_Arm_Tourniquet_R = "Р”Р¶РіСѓС‚",
+    ItemName_TOC.Surg_Arm_Tourniquet_L = "Джгут",
+    ItemName_TOC.Surg_Arm_Tourniquet_R = "Джгут",
 
-    ItemName_TOC.Prost_NormalArm_L = "РџСЂРѕС‚РµР· Р СѓРєРё",
-    ItemName_TOC.Prost_NormalArm_R = "РџСЂРѕС‚РµР· Р СѓРєРё",
+    ItemName_TOC.Prost_NormalArm_L = "Протез Руки",
+    ItemName_TOC.Prost_NormalArm_R = "Протез Руки",
 
-    ItemName_TOC.Prost_HookArm_L = "РџСЂРѕС‚РµР· Р СѓРєРё - Р“Р°Рє",
-    ItemName_TOC.Prost_HookArm_R = "РџСЂРѕС‚РµР· Р СѓРєРё - Р“Р°Рє",
+    ItemName_TOC.Prost_HookArm_L = "Протез Руки - Гак",
+    ItemName_TOC.Prost_HookArm_R = "Протез Руки - Гак",
 }

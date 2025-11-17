@@ -1,18 +1,18 @@
 IG_UI_UA = {
-    IGUI_perks_Amputations = "РђРјРїСѓС‚Р°С†С–С—",
-    IGUI_perks_Side_R = "РџСЂР°РІР° СЃС‚РѕСЂРѕРЅР°",
-    IGUI_perks_Side_L = "Р›С–РІР° СЃС‚РѕСЂРѕРЅР°",
-    IGUI_perks_Prosthesis = "РџСЂРѕС‚РµР·",
-    IGUI_perks_ProstFamiliarity= "РџСЂРёСЃС‚РѕСЃРѕРІР°РЅС–СЃС‚СЊ",
+    IGUI_perks_Amputations = "Ампутації",
+    IGUI_perks_Side_R = "Права сторона",
+    IGUI_perks_Side_L = "Ліва сторона",
+    IGUI_perks_Prosthesis = "Протез",
+    IGUI_perks_ProstFamiliarity= "Пристосованість",
 
-    IGUI_ItemCat_Prosthesis = "РџСЂРѕС‚РµР·",
-    IGUI_ItemCat_Surgery = "РҐС–СЂСѓСЂРіС–СЏ",
-    IGUI_ItemCat_Amputation = "РђРјРїСѓС‚Р°С†С–СЏ"
+    IGUI_ItemCat_Prosthesis = "Протез",
+    IGUI_ItemCat_Surgery = "Хірургія",
+    IGUI_ItemCat_Amputation = "Ампутація"
 
-    IGUI_HealthPanel_Cicatrization = "Р СѓР±С†СЋРІР°РЅРЅСЏ",
-    IGUI_HealthPanel_Cicatrized = "Р—Р°СЂСѓР±С†СЊРѕРІР°РЅР°",
-    IGUI_HealthPanel_Cauterized = "РџСЂРёРїРµС‡РµРЅР°",
-    IGUI_HealthPanel_WoundDirtyness = "Р—Р°Р±СЂСѓРґРЅРµРЅР° СЂР°РЅР°",
-    IGUI_HealthPanel_ProstEquipped = "РџСЂРѕС‚РµР· СѓСЃС‚Р°РЅРѕРІР»РµРЅРѕ",
+    IGUI_HealthPanel_Cicatrization = "Рубцювання",
+    IGUI_HealthPanel_Cicatrized = "Зарубцьована",
+    IGUI_HealthPanel_Cauterized = "Припечена",
+    IGUI_HealthPanel_WoundDirtyness = "Забруднена рана",
+    IGUI_HealthPanel_ProstEquipped = "Протез установлено",
 
 }
