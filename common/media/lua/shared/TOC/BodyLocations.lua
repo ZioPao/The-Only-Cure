@@ -13,7 +13,7 @@ local list = customGetVal(group, 1)
 function BodyLocationsAPI.New(bodyLoc)
     local curItem
     if StaticData.COMPAT_42 then
-        curItem = BodyLocation.new(group, bodyLoc) -- create new item
+        curItem = group:getOrCreateLocation(bodyLoc) -- get current item - or create
         group:getAllLocations():add(curItem) -- add to the list
     else
         curItem = group:getOrCreateLocation(bodyLoc) -- get current item - or create

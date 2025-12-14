@@ -22,7 +22,6 @@ local StaticData = {}
 StaticData.MOD_NAME = "TOC"
 
 -- Game version, used to correct some stuff instead of relying on versioned folders
-
 StaticData.COMPAT_42 = luautils.stringStarts(getGameVersion(), "42")
 
 -------------------------
