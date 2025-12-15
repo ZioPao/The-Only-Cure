@@ -56,7 +56,7 @@ function LocalPlayerController.ManageTraits()
 
     local AmputationHandler = require("TOC/Handlers/AmputationHandler")
     for k, v in pairs(StaticData.TRAITS_BP) do
-        if playerObj:HasTrait(k) then
+        if playerObj:hasTrait(k) then
             -- Once we find one, we should be done since they're exclusive
             TOC_DEBUG.print("Player has amputation trait " .. k .. ", executing it")
             local tempHandler = AmputationHandler:new(v, playerObj)

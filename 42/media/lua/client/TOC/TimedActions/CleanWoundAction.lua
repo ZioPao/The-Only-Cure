@@ -87,7 +87,7 @@ function CleanWoundAction:perform()
 
     TOC_DEBUG.print("CleanWound for " .. self.otherPlayer:getUsername())
 
-    if self.character:HasTrait("Hemophobic") then
+    if self.character:hasTrait("Hemophobic") then
         self.character:getStats():setPanic(self.character:getStats():getPanic() + 15)
     end
 

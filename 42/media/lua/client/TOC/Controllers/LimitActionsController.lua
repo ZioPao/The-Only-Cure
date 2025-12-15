@@ -397,7 +397,7 @@ end
 local og_ISClothingExtraAction_isValid = OverridenMethodsArchive.Save("ISClothingExtraAction_isValid", ISClothingExtraAction.isValid)
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISClothingExtraAction:isValid()
-    return LimitActionsController.WrapClothingAction(self, og_ISClothingExtraAction_isValid, InventoryItemFactory.CreateItem(self.extra))
+    return LimitActionsController.WrapClothingAction(self, og_ISClothingExtraAction_isValid, instanceItem(self.extra))
 end
 
 
