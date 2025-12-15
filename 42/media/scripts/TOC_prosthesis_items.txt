@@ -9,7 +9,7 @@ module TOC
 
 	item Prost_HookArm_L
 	{
-		Type = Clothing,
+		ItemType = base:Clothing,
 		DisplayCategory = Prosthesis,
 		DisplayName	= ProstArmHook,
 		ClothingItem = Prost_HookArm_L,
@@ -31,7 +31,7 @@ module TOC
 	}
 	item Prost_HookArm_R
 	{
-		Type = Clothing,
+		ItemType = base:Clothing,
 		DisplayCategory = Prosthesis,
 		DisplayName	= ProstArmHook,
 		ClothingItem = Prost_HookArm_R,
@@ -53,7 +53,7 @@ module TOC
 
 	item Prost_NormalArm_L
 	{
-		Type = Clothing,
+		ItemType = base:Clothing,
 		DisplayCategory = Prosthesis,
 		DisplayName	= ProstArmHook,
 		ClothingItem = Prost_NormalArm_L,
@@ -75,7 +75,7 @@ module TOC
 
 	item Prost_NormalArm_R
 	{
-		Type = Clothing,
+		ItemType = base:Clothing,
 		DisplayCategory = Prosthesis,
 		DisplayName	= ProstArmHook,
 		ClothingItem = Prost_NormalArm_R,
