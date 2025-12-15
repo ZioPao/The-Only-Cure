@@ -2,6 +2,7 @@ local DataController = require("TOC/Controllers/DataController")
 local CommonMethods = require("TOC/CommonMethods")
 local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
 local StaticData = require("TOC/StaticData")
+local TOC_Registries = require("TOC/Registries")
 require("TOC/Events")
 -----------
 
@@ -55,11 +56,13 @@ function LocalPlayerController.ManageTraits()
     local playerObj = getPlayer()
 
     local AmputationHandler = require("TOC/Handlers/AmputationHandler")
-    for k, v in pairs(StaticData.TRAITS_BP) do
-        if playerObj:hasTrait(k) then
+
+    for k, v in pairs(TOC_Registries.Traits) do
+        if playerObj:hasTrait(v) then
             -- Once we find one, we should be done since they're exclusive
             TOC_DEBUG.print("Player has amputation trait " .. k .. ", executing it")
-            local tempHandler = AmputationHandler:new(v, playerObj)
+            local limbName = StaticData.TRAITS_BP[k]
+            local tempHandler = AmputationHandler:new(limbName, playerObj)
             tempHandler:execute(false) -- No damage
             tempHandler:close()
 
