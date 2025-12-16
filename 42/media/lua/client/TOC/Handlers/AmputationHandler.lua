@@ -52,7 +52,7 @@ function AmputationHandler.ApplyDamageDuringAmputation(player, limbName)
 
     -- Check if tourniquet is applied on the zone
     for bl, tournAmpGroup in pairs(StaticData.TOURNIQUET_BODYLOCS_TO_GROUPS_IND_STR) do
-        local item = player:getWornItem(bl)
+        local item = player:getWornItem(ItemBodyLocation[bl])
 
         -- LimbName -> Group -> BodyLoc
         if item and tournAmpGroup == ampGroup then
