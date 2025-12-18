@@ -52,7 +52,7 @@ function AmputationHandler.ApplyDamageDuringAmputation(player, limbName)
 
     -- Check if tourniquet is applied on the zone
     for bl, tournAmpGroup in pairs(StaticData.TOURNIQUET_BODYLOCS_TO_GROUPS_IND_STR) do
-        local item = player:getWornItem(ItemBodyLocation[bl])
+        local item = player:getWornItem(bl)
 
         -- LimbName -> Group -> BodyLoc
         if item and tournAmpGroup == ampGroup then
@@ -152,8 +152,8 @@ function AmputationHandler:damageAfterAmputation(surgeonFactor)
     bodyPart:setBleedingTime(baseDamage - surgeonFactor)
     bodyPart:setDeepWounded(true)
     bodyPart:setDeepWoundTime(baseDamage - surgeonFactor)
-    patientStats:setEndurance(surgeonFactor)
-    patientStats:setStress(baseDamage - surgeonFactor)
+    patientStats:set(CharacterStat.ENDURANCE, surgeonFactor)
+    patientStats:set(CharacterStat.STRESS, baseDamage - surgeonFactor)
 end
 
 ---Execute the amputation. This method doesn't check if the upper limb has been amputated or not, so if
@@ -191,7 +191,7 @@ function AmputationHandler:execute(damagePlayer)
     CachedDataHandler.CalculateCacheableValues(username)
 
     -- If the part was actually infected, heal the player, if they were in time (infectionLevel < 20)
-    if bd:getInfectionLevel() < 20 and bodyPart:IsInfected() and not dcInst:getIsIgnoredPartInfected() then
+    if bd:getGeneralWoundInfectionLevel() < 20 and bodyPart:IsInfected() and not dcInst:getIsIgnoredPartInfected() then
         LocalPlayerController.HealZombieInfection(bd, bodyPart, self.limbName, dcInst)
     end
 
