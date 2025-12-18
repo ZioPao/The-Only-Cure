@@ -5,7 +5,6 @@
 ---@alias tocModDataType { limbs : limbsTable, prostheses : prosthesesTable, isIgnoredPartInfected : boolean, isAnyLimbCut : boolean}
 ---------------------------
 
-
 -- _STR = Only strings, no index
 -- _IND_STR =  indexed Strings
 -- _IND_BPT = Indexed BodyPartType
@@ -22,6 +21,7 @@ local StaticData = {}
 StaticData.MOD_NAME = "TOC"
 
 -- Game version, used to correct some stuff instead of relying on versioned folders
+
 StaticData.COMPAT_42 = luautils.stringStarts(getGameVersion(), "42")
 
 -------------------------
@@ -50,10 +50,10 @@ StaticData.PARTS_STR = {
 
 -- TODO make it a bit more elegant
 StaticData.MOD_BODYLOCS_BASE_IND_STR = {
-    TOC_ArmProst_L = "TOC_ArmProst_L",
-    TOC_ArmProst_R = "TOC_ArmProst_R",
-    TOC_Arm_L = "TOC_Arm_L",
-    TOC_Arm_R = "TOC_Arm_R",
+    TOC_ArmProst_L = "toc_armprost_l",
+    TOC_ArmProst_R = "toc_armprost_r",
+    TOC_Arm_L = "toc:toc_arm_l",
+    TOC_Arm_R = "toc:toc_arm_r",
 
     --TOC_LegProst = "TOC_LegProst",
 }
@@ -192,8 +192,8 @@ end
 
 
 StaticData.TOURNIQUET_BODYLOCS_TO_GROUPS_IND_STR = {
-    ["HandsLeft"] = StaticData.AMP_GROUPS_IND_STR.Top_L,
-    ["HandsRight"] = StaticData.AMP_GROUPS_IND_STR.Top_R
+    [ItemBodyLocation.HANDS_LEFT] = StaticData.AMP_GROUPS_IND_STR.Top_L,
+    [ItemBodyLocation.HANDS_RIGHT] = StaticData.AMP_GROUPS_IND_STR.Top_R
 }
 
 
@@ -241,7 +241,7 @@ end
 StaticData.TRAITS_BP = {
     Amputee_Hand = "Hand_L",
     Amputee_ForeArm = "ForeArm_L",
-    Amputee_UpperArm = "UpperArm_L"
+    Amputee_UpperArm = "UpperArm_L",
 }
 
 -----------------
