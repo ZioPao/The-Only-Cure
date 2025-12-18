@@ -1,1 +1,1 @@
-return TOC_Registries
+return _TOCRegistries
