@@ -9,7 +9,7 @@ local OverridenMethodsArchive = require("TOC/OverridenMethodsArchive")
 ---@class ProsthesisHandler
 local ProsthesisHandler = {}
 
-local bodylocArmProstBaseline = "TOC_ArmProst"
+local bodylocArmProstBaseline = "toc:toc_armprost"
 --local bodyLocLegProst = "TOC_LegProst"
 
 ---Check if the following item is a prosthesis or not
@@ -17,13 +17,12 @@ local bodylocArmProstBaseline = "TOC_ArmProst"
 ---@return boolean
 function ProsthesisHandler.CheckIfProst(item)
     -- TODO Won't be correct when prost for legs are gonna be in
-    --TOC_DEBUG.print("Checking if item is prost")
     if item == nil then
-        --TOC_DEBUG.print("Not prost")
+        TOC_DEBUG.print("Not prost")
 
         return false
     end
-    return item:getBodyLocation():contains(bodylocArmProstBaseline)
+    return item:getBodyLocation():toString():contains(bodylocArmProstBaseline)
 end
 
 ---Get the grouping for the prosthesis
@@ -35,7 +34,7 @@ function ProsthesisHandler.GetGroup(item)
 
     local bodyLocation = item:getBodyLocation()
     local position
-    if bodyLocation:contains(bodylocArmProstBaseline) then
+    if bodyLocation:toString():contains(bodylocArmProstBaseline) then
         position = "Top_"
     else
         TOC_DEBUG.print("Something is wrong, no position in this item")
@@ -133,14 +132,19 @@ function ISClothingExtraAction:isValid()
     local isEquippable = og_ISClothingExtraAction_isValid(self)
     -- self.extra is a string, not the item
 
-    local testItem = instanceItem(self.extra)
+    -- B42 Compatibility to add
+    local testItem = InventoryItemFactory.CreateItem(self.extra)
     return ProsthesisHandler.Validate(testItem, isEquippable)
 end
 
 local og_ISClothingExtraAction_perform = OverridenMethodsArchive.Save("ISClothingExtraAction_perform", ISClothingExtraAction.perform)
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISClothingExtraAction:perform()
-    local extraItem = instanceItem(self.extra)
+    
+
+    -- B42 Compatibility to add
+
+    local extraItem = InventoryItemFactory.CreateItem(self.extra)
     ProsthesisHandler.SearchAndSetupProsthesis(extraItem, true)
     og_ISClothingExtraAction_perform(self)
 end
@@ -180,24 +184,6 @@ function ISUnequipAction:perform()
             end
         end
     end
-end
-
-local og_ISUnequipAction_complete = ISUnequipAction.complete
-function ISUnequipAction:complete()
-    -- Horrendous workaround. For B42, as of now, it will basically happen two times, once with :perform and once with :complete. Shouldn't
-    -- matter for performance but it's really ugly.
-    -- local isProst = ProsthesisHandler.SearchAndSetupProsthesis(self.item, false)
-    -- local group
-    -- if isProst then
-    --     group = BodyLocations.getGroup("Human")
-    --     group:setMultiItem("TOC_ArmProst", false)
-    -- end
-    og_ISUnequipAction_complete(self)
-
-    -- if isProst then
-    --     group:setMultiItem("TOC_ArmProst", true)
-    -- end
-
 end
 
 return ProsthesisHandler
