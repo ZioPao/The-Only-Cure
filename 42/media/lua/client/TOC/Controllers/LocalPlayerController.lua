@@ -2,8 +2,8 @@ local DataController = require("TOC/Controllers/DataController")
 local CommonMethods = require("TOC/CommonMethods")
 local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
 local StaticData = require("TOC/StaticData")
-local TOC_Registries = require("TOC/Registries")
 require("TOC/Events")
+local TOC = require("TOC/Registries")
 -----------
 
 
@@ -56,13 +56,11 @@ function LocalPlayerController.ManageTraits()
     local playerObj = getPlayer()
 
     local AmputationHandler = require("TOC/Handlers/AmputationHandler")
-
-    for k, v in pairs(TOC_Registries.Traits) do
-        if playerObj:hasTrait(v) then
+    for k, v in pairs(StaticData.TRAITS_BP) do
+        if playerObj:hasTrait(TOC.traits[k]) then
             -- Once we find one, we should be done since they're exclusive
             TOC_DEBUG.print("Player has amputation trait " .. k .. ", executing it")
-            local limbName = StaticData.TRAITS_BP[k]
-            local tempHandler = AmputationHandler:new(limbName, playerObj)
+            local tempHandler = AmputationHandler:new(v, playerObj)
             tempHandler:execute(false) -- No damage
             tempHandler:close()
 
@@ -119,7 +117,6 @@ function LocalPlayerController.HealZombieInfection(bodyDamage, bodyPart, limbNam
     bodyDamage:setInfected(false)
     bodyDamage:setInfectionMortalityDuration(-1)
     bodyDamage:setInfectionTime(-1)
-    bodyDamage:setInfectionLevel(-1)
     bodyPart:SetInfected(false)
 
     dcInst:setIsInfected(limbName, false)
