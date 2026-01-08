@@ -9,12 +9,7 @@
             "options": {"statusbar": {"label": "$(combine) Assemble Mod - B42"}},
             "command": "python ${config:zomboid_user_folder}/PaosCrap/make_workshop_pack.py \"42\" \"picch\" \"${workspaceFolderBasename}\" \"\"",
         },
-        {
-            "label": "Create Workshop folder",
-            "type": "shell",
-            "options": {"statusbar": {"label": "$(combine) Assemble Mod - B41"}},
-            "command": "python ${config:zomboid_user_folder}/PaosCrap/make_workshop_pack.py \"41\" \"picch\" \"${workspaceFolderBasename}\" \"\"",
-        },
+        
         {
             "label": "Create Workshop folder",
             "type": "shell",
@@ -35,18 +30,6 @@
             },
             "command": "\"${config:zomboid_folder_b42}\\ProjectZomboid64 - nosteam-debug 42.bat\"",
             "options": {"statusbar": {"label": "$(run) Zomboid client (42)"}},
-            "problemMatcher": [
-                "$eslint-stylish"
-            ]
-        },
-        {
-            "label": "Run Zomboid Debug No Steam (41)",
-            "type": "shell",
-            "presentation": {
-                "group": "groupZomboid"
-            },
-            "command": "\"${config:zomboid_folder_b41}\\ProjectZomboid64 - nosteam-debug.bat\"",
-            "options": {"statusbar": {"label": "$(run) Zomboid client (41)"}},
             "problemMatcher": [
                 "$eslint-stylish"
             ]
