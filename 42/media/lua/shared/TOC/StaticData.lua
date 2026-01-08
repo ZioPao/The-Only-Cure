@@ -48,15 +48,6 @@ StaticData.PARTS_STR = {
     "UpperArm"
 }
 
--- TODO make it a bit more elegant
-StaticData.MOD_BODYLOCS_BASE_IND_STR = {
-    TOC_ArmProst_L = "toc_armprost_l",
-    TOC_ArmProst_R = "toc_armprost_r",
-    TOC_Arm_L = "toc:toc_arm_l",
-    TOC_Arm_R = "toc:toc_arm_r",
-
-    --TOC_LegProst = "TOC_LegProst",
-}
 
 -- No "MAX" here.
 StaticData.IGNORED_BODYLOCS_BPT = {
