@@ -15,7 +15,7 @@ module TOC
         ClothingItemExtra = Surg_Arm_Tourniquet_R,
         ClothingItemExtraOption = PutTourniquetArmRight,
         clothingExtraSubmenu = PutTourniquetArmLeft,
-        BodyLocation = toc:TOC_ArmAccessory_L,
+        BodyLocation = toc:ArmAccessory_L,
 		BloodLocation = UpperArms;UpperBody,
 
         Weight = 0.25,
@@ -35,7 +35,7 @@ module TOC
         ClothingItemExtra = Surg_Arm_Tourniquet_L,
         ClothingItemExtraOption = PutTourniquetArmLeft,
         clothingExtraSubmenu = PutTourniquetArmRight,
-        BodyLocation = toc:TOC_ArmAccessory_R,
+        BodyLocation = toc:ArmAccessory_R,
 		BloodLocation = UpperArms;UpperBody,
 
         Weight = 0.25,

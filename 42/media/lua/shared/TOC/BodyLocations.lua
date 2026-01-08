@@ -1,74 +1,109 @@
-require("TOC/Debug")
-require("NPCs/BodyLocations")
-local TOC = require("TOC/Registries")
-local StaticData = require("TOC/StaticData")
+--Based on RabenRabo's bodylocation solution from their mod "Fantasy Bodyparts" and "Fantasy Legs" sub-mod.
+--Modified by GanydeBielovzki with permission for batch use for the Frockin' Splendor franchise and spin-offs.
+--To copy, further modify or otherwise use this code the original creator and the modifier must be credited.
 
-local BodyLocationsAPI = {}
-local function customGetVal(obj, int) return getClassFieldVal(obj, getClassField(obj, int)) end
-local group = BodyLocations.getGroup("Human")
-
----@type ArrayList
-local list = customGetVal(group, 1)
-
----@param bodyLoc string
-function BodyLocationsAPI.New(bodyLoc)
-    curItem = group:getOrCreateLocation(bodyLoc) -- get current item - or create
-    return curItem
+local function copyBodyLocationProperties(oldGroup, oldLocID, newGroup)
+	for k = 0, oldGroup:size()-1 do
+		local otherLocID = oldGroup:getLocationByIndex(k):getId()
+		if oldGroup:isExclusive(oldLocID, otherLocID)
+		then
+			newGroup:setExclusive(oldLocID, otherLocID)
+		end
+		if oldGroup:isHideModel(oldLocID, otherLocID)
+		then
+			newGroup:setHideModel(oldLocID, otherLocID)
+		end
+		if oldGroup:isAltModel(oldLocID, otherLocID)
+		then
+			newGroup:setAltModel(oldLocID, otherLocID)
+		end
+	end
 end
 
--- TODO Not sure if this method actually works as intende with b42, but for our use case it's fine...
----@param toRelocateOrCreate string
----@param locationElement string
----@param afterBoolean boolean
----@return BodyLocation
-function BodyLocationsAPI.MoveOrCreateBeforeOrAfter(toRelocateOrCreate, locationElement, afterBoolean)
-    -- Check type of arg 2 == string - if not error out.
-    if type(locationElement) ~= "string" then error("Argument 2 is not of type string. Please re-check!", 2) end
-    local itemToMoveTo = group:getLocation(locationElement) -- get location to move to
-    if itemToMoveTo ~= nil then
-        -- Check type of arg 1 == string - if not, error out.
-        if type(toRelocateOrCreate) ~= "string" then error("Argument 1 is not of type string. Please re-check!", 2) end
+local function addBodyLocationsAt(groupName, locationList)
+	local results = {}
 
-        local curItem = BodyLocationsAPI.New(toRelocateOrCreate)
-        list:remove(curItem) -- remove from the list
-        local index = group:indexOf(locationElement) -- get current index after removal of the location to move to
-        if afterBoolean then index = index + 1 end -- if we want it after it, we increase the index to move to by one
-        list:add(index, curItem) -- we add the item again
+	-- get list (!!actually a view!!) of all groups and copy to array (BodyLocations.reset() will also clear the view)
+	local allGroupsList = BodyLocations.getAllGroups()
+	local allGroups = {}
+	for i = 0, allGroupsList:size()-1 do
+		allGroups[i + 1] = allGroupsList:get(i)
+	end
 
+	BodyLocations.reset()
 
-        return curItem
-    else -- we did not find the location to move to, so we throw an error.
-        error("Could not find the BodyLocation [".. tostring(locationElement) .."] - please check the passed arguments!", 2)
-    end
+	-- recreate all groups/bodylocations and insert new bodylocations
+	for i = 1, #allGroups do
+		local oldGroup = allGroups[i]
+		local newGroup = BodyLocations.getGroup(oldGroup:getId())
+
+		-- FIRST: Process all original locations AND insert new ones at correct positions
+		for j = 0, oldGroup:size()-1 do
+			local oldLoc = oldGroup:getLocationByIndex(j)
+			local oldLocID = oldLoc:getId()
+
+			-- For each location definition, check if it should be inserted here
+			for _, locDef in ipairs(locationList) do
+				if oldGroup:getId() == groupName then
+					local newLocID = type(locDef.name) ~= "string" and locDef.name or 
+								   ItemBodyLocation.get(ResourceLocation.of(locDef.name))
+
+					local refLocID = type(locDef.reference) ~= "string" and locDef.reference or 
+								   ResourceLocation.of(locDef.reference)
+
+					local isTargetGroupAndLoc = refLocID == oldLocID
+
+					if isTargetGroupAndLoc and locDef.before then
+						results[locDef.name] = newGroup:getOrCreateLocation(newLocID)
+					end
+				end
+			end
+
+			-- Add the original location
+			newGroup:getOrCreateLocation(oldLocID)
+
+			-- Check for "after" insertions
+			for _, locDef in ipairs(locationList) do
+				if oldGroup:getId() == groupName then
+					local newLocID = type(locDef.name) ~= "string" and locDef.name or 
+								   ItemBodyLocation.get(ResourceLocation.of(locDef.name))
+
+					local refLocID = type(locDef.reference) ~= "string" and locDef.reference or 
+								   ResourceLocation.of(locDef.reference)
+
+					local isTargetGroupAndLoc = refLocID == oldLocID
+
+					if isTargetGroupAndLoc and not locDef.before then
+						results[locDef.name] = newGroup:getOrCreateLocation(newLocID)
+					end
+				end
+			end
+		end
+
+		-- SECOND: copy bodylocation properties from old groups to new groups
+		for j = 0, oldGroup:size()-1 do
+			local oldLocID = oldGroup:getLocationByIndex(j):getId()
+			newGroup:setMultiItem(oldLocID, oldGroup:isMultiItem(oldLocID))
+			copyBodyLocationProperties(oldGroup, oldLocID, newGroup)
+		end
+	end
+
+	return results
 end
 
+local results = addBodyLocationsAt("Human", {
+    {name = "toc:Arm_L", reference = ItemBodyLocation.FULL_TOP, before = false},
+    {name = "toc:Arm_R", reference = ItemBodyLocation.FULL_TOP, before = false},
+    {name = "toc:ArmProst_L", reference = ItemBodyLocation.FULL_TOP, before = false},
+    {name = "toc:ArmProst_R", reference = ItemBodyLocation.FULL_TOP, before = false},
+    {name = "toc:ArmAccessory_L", reference = ItemBodyLocation.FULL_TOP, before = false},
+    {name = "toc:ArmAccessory_R", reference = ItemBodyLocation.FULL_TOP, before = false},
+})
 
 
--- function TestBodyLocations()
---     local group = BodyLocations.getGroup("Human")
---     local x = group:getAllLocations()
-
---     for i=0, x:size() -1 do
-
---         ---@type BodyLocation
---         local bl = x:get(i)
-
---         print(bl:getId())
---     end
--- end
-
--- MultiItem causes a ton of issues... fucking hell
-
--- local curItem = BodyLocation.new(group, "TOC_Arm_L")
--- group:getAllLocations():add(curItem)
-
--- local curItem = BodyLocation.new(group, "TOC_Arm_R")
--- group:getAllLocations():add(curItem)
-
-
-BodyLocationsAPI.New(TOC.bodylocations.TOC_Arm_L)
-BodyLocationsAPI.New(TOC.bodylocations.TOC_Arm_R)
-BodyLocationsAPI.New(TOC.bodylocations.TOC_ArmProst_L)
-BodyLocationsAPI.New(TOC.bodylocations.TOC_ArmProst_R)
-BodyLocationsAPI.New(TOC.bodylocations.TOC_ArmAccessory_L)
-BodyLocationsAPI.New(TOC.bodylocations.TOC_ArmAccessory_R)
+results['toc:Arm_L']:setMultiItem(true)
+results['toc:Arm_R']:setMultiItem(true)
+results['toc:ArmProst_L']:setMultiItem(true)
+results['toc:ArmProst_R']:setMultiItem(true)
+results['toc:ArmAccessory_L']:setMultiItem(true)
+results['toc:ArmAccessory_R']:setMultiItem(true)
