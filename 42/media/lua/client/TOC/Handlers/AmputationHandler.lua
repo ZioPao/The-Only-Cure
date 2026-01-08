@@ -190,8 +190,10 @@ function AmputationHandler:execute(damagePlayer)
     -- Cache highest amputation and hand feasibility
     CachedDataHandler.CalculateCacheableValues(username)
 
+    -- TODO Test this again for 42.13
     -- If the part was actually infected, heal the player, if they were in time (infectionLevel < 20)
-    if bd:getGeneralWoundInfectionLevel() < 20 and bodyPart:IsInfected() and not dcInst:getIsIgnoredPartInfected() then
+    local infectionLevel = self.patientPl:getStats():get(CharacterStat.ZOMBIE_INFECTION)
+    if infectionLevel < 20 and bodyPart:isInfected() and not dcInst:getIsIgnoredPartInfected() then
         LocalPlayerController.HealZombieInfection(bd, bodyPart, self.limbName, dcInst)
     end
 

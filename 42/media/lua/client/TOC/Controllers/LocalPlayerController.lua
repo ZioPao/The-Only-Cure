@@ -94,7 +94,8 @@ function LocalPlayerController.HealArea(bodyPart)
     bodyPart:setBleedingTime(0)
 
     bodyPart:SetBitten(false)
-    bodyPart:setBiteTime(0)
+    --bodyPart:setBiteTime(0)
+    bodyPart:SetInfected(false)
 
     bodyPart:setCut(false)
     bodyPart:setCutTime(0)
@@ -111,13 +112,14 @@ end
 ---@param bodyPart BodyPart
 ---@param limbName string
 ---@param dcInst DataController
-function LocalPlayerController.HealZombieInfection(bodyDamage, bodyPart, limbName, dcInst)
+function LocalPlayerController.HealZombieInfection(bodyDamage, limbName, dcInst)
+    -- FIX Different in B42.13, to be set with stats?
     if bodyDamage:isInfected() == false then return end
 
     bodyDamage:setInfected(false)
     bodyDamage:setInfectionMortalityDuration(-1)
     bodyDamage:setInfectionTime(-1)
-    bodyPart:SetInfected(false)
+    --bodyPart:SetInfected(false)
 
     dcInst:setIsInfected(limbName, false)
     dcInst:apply()
@@ -183,7 +185,7 @@ function LocalPlayerController.HandleDamage(character)
             -- Special case for bites\zombie infections
             if bodyPart:IsInfected() then
                 TOC_DEBUG.print("Healed from zombie infection - " .. limbName)
-                LocalPlayerController.HealZombieInfection(bd, bodyPart, limbName, dcInst)
+                LocalPlayerController.HealZombieInfection(bd, limbName, dcInst)
             end
         else
             if (bodyPart:bitten() or bodyPart:IsInfected()) and not dcInst:getIsInfected(limbName) then
