@@ -1,3 +1,6 @@
+-- TODO Move this to server side for 42.13
+
+
 local DataController = require("TOC/Controllers/DataController")
 local ItemsController = require("TOC/Controllers/ItemsController")
 local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
@@ -156,7 +159,7 @@ function AmputationHandler:damageAfterAmputation(surgeonFactor)
     patientStats:set(CharacterStat.STRESS, baseDamage - surgeonFactor)
 end
 
----Execute the amputation. This method doesn't check if the upper limb has been amputated or not, so if
+--- Execute the amputation. This method doesn't check if the upper limb has been amputated or not, so if
 --- somehow the method gets triggered and we're trying to cut off a part that doesn't really exist anymore,
 --- it will still be executed. This is by design, additional checks must be made BEFORE running the AmputationHandler
 ---@param damagePlayer boolean
@@ -193,7 +196,10 @@ function AmputationHandler:execute(damagePlayer)
     -- TODO Test this again for 42.13
     -- If the part was actually infected, heal the player, if they were in time (infectionLevel < 20)
     local infectionLevel = self.patientPl:getStats():get(CharacterStat.ZOMBIE_INFECTION)
-    if infectionLevel < 20 and bodyPart:isInfected() and not dcInst:getIsIgnoredPartInfected() then
+
+
+
+    if infectionLevel < 20 and bodyPart:IsInfected() and not dcInst:getIsIgnoredPartInfected() then
         LocalPlayerController.HealZombieInfection(bd, bodyPart, self.limbName, dcInst)
     end
 
@@ -205,7 +211,7 @@ function AmputationHandler:execute(damagePlayer)
     triggerEvent("OnAmputatedLimb", self.limbName)
 end
 
----Deletes the instance
+---Delete the instance
 function AmputationHandler:close()
     AmputationHandler.instance = nil
 end
