@@ -24,9 +24,7 @@ local CutLimbAction = ISBaseTimedAction:derive("CutLimbAction")
 ---@param bandageItem InventoryItem?
 ---@return CutLimbAction
 function CutLimbAction:new(surgeon, patient, limbName, item, stitchesItem, bandageItem)
-    local o = {}
-    setmetatable(o, self)
-    self.__index = self
+    local o = ISBaseTimedAction.new(self, surgeon)
 
     -- We need to follow ISBaseTimedAction. self.character is gonna be the surgeon
     o.character = surgeon
@@ -43,10 +41,19 @@ function CutLimbAction:new(surgeon, patient, limbName, item, stitchesItem, banda
     o.stopOnWalk = true
     o.stopOnRun = true
 
-    o.maxTime = 1000 - (surgeon:getPerkLevel(Perks.Doctor) * 50)
-    if o.character:isTimedActionInstant() then o.maxTime = 1 end
+    o.maxTime = o:getDuration()
 
     return o
+end
+
+function CutLimbAction:getDuration()
+    if self.character:isTimedActionInstant() then
+        return 1
+    else
+        local baseTime = 1000
+        local perkLevel = self.character:getPerkLevel(Perks.Doctor)
+        return baseTime - (perkLevel * 50)
+    end
 end
 
 function CutLimbAction:isValid()
@@ -89,6 +96,16 @@ function CutLimbAction:start()
 
 end
 
+-- function CutLimbAction:serverStart()
+
+--     emulateAnimEvent(self.netAction, 200, "")
+
+-- end
+
+-- function CutLimbAction:animEvent(event, parameter)
+
+-- end
+
 function CutLimbAction:waitToStart()
     if self.character == self.patient then
         return false
@@ -117,22 +134,30 @@ function CutLimbAction:stop()
 end
 
 function CutLimbAction:perform()
-    -- Stop the sound
     self:stopSound()
-
-    if self.patient == self.character then
-        TOC_DEBUG.print("patient and surgeon are the same, executing on the client")
-        local handler = AmputationHandler:new(self.limbName)
-        handler:execute(true)
-    else
-        TOC_DEBUG.print("patient and surgeon not the same, sending relay to server")
-        -- Other player
-        ---@type relayExecuteAmputationActionParams
-        local params = {patientNum = self.patient:getOnlineID(), limbName = self.limbName}
-        sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayExecuteAmputationAction, params )
-    end
-
     ISBaseTimedAction.perform(self)
 end
+
+function CutLimbAction:complete()
+    -- TODO AmputationHandler runs client side, by doing this this would run on the server. AM I missing something?
+    local handler = AmputationHandler:new(self.limbName, self.character)
+    handler:execute(true)
+end
+
+-- function CutLimbAction:perform()
+--     -- Stop the sound
+--     if self.patient == self.character then
+--         TOC_DEBUG.print("patient and surgeon are the same, executing on the client")
+--         local handler = AmputationHandler:new(self.limbName)
+--         handler:execute(true)
+--     else
+--         TOC_DEBUG.print("patient and surgeon not the same, sending relay to server")
+--         -- Other player
+--         ---@type relayExecuteAmputationActionParams
+--         local params = {patientNum = self.patient:getOnlineID(), limbName = self.limbName}
+--         sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayExecuteAmputationAction, params )
+--     end
+
+-- end
 
 return CutLimbAction
