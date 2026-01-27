@@ -5,7 +5,8 @@ local CommandsData = {}
 
 CommandsData.modules = {
     TOC_DEBUG = "TOC_DEBUG",
-    TOC_RELAY = "TOC_RELAY"
+    TOC_RELAY = "TOC_RELAY",
+    TOC_ITEMS = "TOC_ITEMS"
 }
 
 CommandsData.client = {

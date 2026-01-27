@@ -49,6 +49,8 @@ function ItemsController.Player.RemoveClothingItem(playerObj, clothingItem)
 
         ---@diagnostic disable-next-line: param-type-mismatch
         playerObj:getInventory():Remove(clothingItem) -- Umbrella is wrong, can be an InventoryItem too
+        sendRemoveItemFromContainer(playerObj:getInventory(), clothingItem)
+
         TOC_DEBUG.print("found and deleted" .. tostring(clothingItem))
 
         -- Reset model
@@ -108,11 +110,13 @@ end
 function ItemsController.Player.SpawnAmputationItem(playerObj, limbName)
     TOC_DEBUG.print("clothing name " .. StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. limbName)
     local clothingItem = playerObj:getInventory():AddItem(StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. limbName)
+
     local texId = ItemsController.Player.GetAmputationTexturesIndex(playerObj, false)
 
     ---@cast clothingItem InventoryItem
     clothingItem:getVisual():setTextureChoice(texId) -- it counts from 0, so we have to subtract 1
     playerObj:setWornItem(clothingItem:getBodyLocation(), clothingItem)
+    sendAddItemToContainer(playerObj:getInventory(), clothingItem)
 end
 
 ---Search through worn items and modifies a specific amputation item

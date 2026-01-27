@@ -2,7 +2,7 @@
 
 
 local DataController = require("TOC/Controllers/DataController")
-local ItemsController = require("TOC/Controllers/ItemsController")
+local CommandsData = require("TOC/CommandsData")
 local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
 local LocalPlayerController = require("TOC/Controllers/LocalPlayerController")
 local StaticData = require("TOC/StaticData")
@@ -177,8 +177,15 @@ function AmputationHandler:execute(damagePlayer)
     LocalPlayerController.HealArea(bodyPart)
 
     -- Give the player the correct amputation item
-    ItemsController.Player.DeleteOldAmputationItem(self.patientPl, self.limbName)
-    ItemsController.Player.SpawnAmputationItem(self.patientPl, self.limbName)
+
+    -- FIX This can be done in a single step instead of this crap
+    sendClientCommand(CommandsData.modules.TOC_ITEMS, "DeleteOldAmputationItem", 
+    {playerNum = self.patientPl:getOnlineID(), limbName = self.limbName})
+    sendClientCommand(CommandsData.modules.TOC_ITEMS, "SpawnAmputationItem", 
+    {playerNum = self.patientPl:getOnlineID(), limbName = self.limbName})
+
+    --ItemsController.Player.DeleteOldAmputationItem(self.patientPl, self.limbName)
+    --ItemsController.Player.SpawnAmputationItem(self.patientPl, self.limbName)
 
     -- Add it to the list of cut limbs on this local client
     local username = self.patientPl:getUsername()

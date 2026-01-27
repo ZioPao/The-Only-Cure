@@ -1,6 +1,8 @@
 local DataController = require("TOC/Controllers/DataController")
 local CommonMethods = require("TOC/CommonMethods")
 local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
+local CommandsData = require("TOC/CommandsData")
+
 local StaticData = require("TOC/StaticData")
 require("TOC/Events")
 local TOC = require("TOC/Registries")
@@ -38,8 +40,7 @@ function LocalPlayerController.InitializePlayer(isForced)
 
     -- Since isForced is used to reset an existing player data, we're gonna clean their ISHealthPanel table too
     if isForced then
-        local ItemsController = require("TOC/Controllers/ItemsController")
-        ItemsController.Player.DeleteAllOldAmputationItems(playerObj)
+        sendClientCommand(CommandsData.modules.TOC_ITEMS, "DeleteAllOldAmputationItems", {playerNum = playerObj:getOnlineID()})
         CachedDataHandler.Setup(username)
     end
 
@@ -319,9 +320,10 @@ function LocalPlayerController.HandleSetCicatrization(dcInst, playerObj, limbNam
     dcInst:setIsCicatrized(limbName, true)
     dcInst:setCicatrizationTime(limbName, 0)
 
-    -- Set visuals for the amputation
-    local ItemsController = require("TOC/Controllers/ItemsController")
-    ItemsController.Player.OverrideAmputationItemVisuals(playerObj, limbName, true)
+    -- -- Set visuals for the amputation
+    sendClientCommand(CommandsData.modules.TOC_ITEMS, "OverrideAmputationItemVisuals", 
+    {playerNum = playerObj:getOnlineID(), limbName = limbName, isCicatrized = true})
+
 end
 
 --* Object drop handling when amputation occurs

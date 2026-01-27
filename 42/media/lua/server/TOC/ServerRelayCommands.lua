@@ -53,7 +53,11 @@ function ServerRelayCommands.RelayForcedAmputation(adminObj, args)
     sendServerCommand(patientPl, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveForcedCicatrization, {limbName = args.limbName})
 end
 
-
+function ServerRelayCommands.DeleteAllOldAmputationItems(_, args)
+    local playerObj = getPlayerByOnlineID(args.playerNum)
+    local ItemsController = require("TOC/Controllers/ItemsController")
+    ItemsController.Player.DeleteAllOldAmputationItems(playerObj)
+end
 
 -------------------------
 

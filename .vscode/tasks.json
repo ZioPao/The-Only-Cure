@@ -28,7 +28,7 @@
             "presentation": {
                 "group": "groupZomboid"
             },
-            "command": "\"${config:zomboid_folder_b42}\\ProjectZomboid64 - nosteam-debug 42.bat\"",
+            "command": "\"${config:zomboid_folder_b42}\\ProjectZomboid64_Debug_NoSteam.bat\"",
             "options": {"statusbar": {"label": "$(run) Zomboid client (42)"}},
             "problemMatcher": [
                 "$eslint-stylish"
@@ -67,15 +67,15 @@
         //         "Run Zomboid Debug No Steam", "Run Zomboid Debug No Steam 2"],
         //     "problemMatcher": []
         // },
-        // {
-        //     "label": "Run Zomboid Test Server",
-        //     "options": {"statusbar": {"label": "$(run) Zomboid Server (TOC)"}},
-        //     "type": "shell",
-        //     "command":"\"${config:zomboid_server_folder}\\StartServer64_nosteam_custom.bat\" TOC",
-        //     "problemMatcher": [
-        //         "$eslint-stylish"
-        //     ]
-        // },
+        {
+            "label": "Run Zomboid Test Server",
+            "options": {"statusbar": {"label": "$(run) Zomboid Server (TOC)"}},
+            "type": "shell",
+            "command":"\"${config:zomboid_server_folder}\\StartServer64_nosteam_custom.bat\" TOC",
+            "problemMatcher": [
+                "$eslint-stylish"
+            ]
+        },
         // {
         //     "label": "Run Zomboid Test Server 2",
         //     "options": {"statusbar": {"label": "$(run) Zomboid Server (TOC+FH+BH)"}},
