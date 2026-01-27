@@ -46,6 +46,17 @@ function ClientRelayCommands.ReceiveApplyFromServer()
 end
 
 
+--* RELOAD MODEL *--
+function ClientRelayCommands.ReceiveReloadModel(args)
+    local texId = args.texId
+    local itemName = args.itemName
+    TOC_DEBUG.print("Resetting visuals locally for item " .. itemName .. " with texId " .. tostring(texId))
+
+    local clothingItem = getPlayer():getInventory():FindAndReturn(itemName)
+    getPlayer():setWornItem(clothingItem:getBodyLocation(), clothingItem)
+
+end
+
 --* TRIGGERED BY ADMINS *--
 
 function ClientRelayCommands.ReceiveExecuteInitialization()

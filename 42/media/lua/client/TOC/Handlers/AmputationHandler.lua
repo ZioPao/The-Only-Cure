@@ -184,8 +184,6 @@ function AmputationHandler:execute(damagePlayer)
     sendClientCommand(CommandsData.modules.TOC_ITEMS, "SpawnAmputationItem", 
     {playerNum = self.patientPl:getOnlineID(), limbName = self.limbName})
 
-    --ItemsController.Player.DeleteOldAmputationItem(self.patientPl, self.limbName)
-    --ItemsController.Player.SpawnAmputationItem(self.patientPl, self.limbName)
 
     -- Add it to the list of cut limbs on this local client
     local username = self.patientPl:getUsername()

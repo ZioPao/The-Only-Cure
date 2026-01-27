@@ -2,6 +2,8 @@
 
 local StaticData = require("TOC/StaticData")
 local CommonMethods = require("TOC/CommonMethods")
+local CommandsData = require("TOC/CommandsData")
+
 ---------------------------
 
 --- Submodule to handle spawning the correct items after certain actions (ie: cutting a hand). LOCAL ONLY!
@@ -97,11 +99,7 @@ function ItemsController.Player.DeleteAllOldAmputationItems(playerObj)
         ---@cast clothItem InventoryItem
         ItemsController.Player.RemoveClothingItem(playerObj, clothItem)
     end
-    -- Reset model just in case
-    playerObj:resetModel()
 
-    -- group:setMultiItem("TOC_Arm", true)
-    -- group:setMultiItem("TOC_ArmProst", true)
 end
 
 ---Spawns and equips the correct amputation item to the player.
@@ -109,14 +107,15 @@ end
 ---@param limbName string
 function ItemsController.Player.SpawnAmputationItem(playerObj, limbName)
     TOC_DEBUG.print("clothing name " .. StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. limbName)
-    local clothingItem = playerObj:getInventory():AddItem(StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. limbName)
+    local itemName = StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. limbName
+    local clothingItem = playerObj:getInventory():AddItem(itemName)
 
     local texId = ItemsController.Player.GetAmputationTexturesIndex(playerObj, false)
 
     ---@cast clothingItem InventoryItem
     clothingItem:getVisual():setTextureChoice(texId) -- it counts from 0, so we have to subtract 1
-    playerObj:setWornItem(clothingItem:getBodyLocation(), clothingItem)
     sendAddItemToContainer(playerObj:getInventory(), clothingItem)
+    sendServerCommand(CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveWearAmputation, {itemName = itemName, texId = texId})
 end
 
 ---Search through worn items and modifies a specific amputation item

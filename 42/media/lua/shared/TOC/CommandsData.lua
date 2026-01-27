@@ -16,6 +16,7 @@ CommandsData.client = {
 
         --* APPLY *--
         ReceiveApplyFromServer = "ReceiveApplyFromServer",
+        ReceiveWearAmputation = "ReceiveWearAmputation",
 
         --* ADMIN ONLY --*
         ReceiveExecuteInitialization = "ReceiveExecuteInitialization",
