@@ -46,12 +46,9 @@ function ClientRelayCommands.ReceiveApplyFromServer()
 end
 
 
---* RELOAD MODEL *--
-function ClientRelayCommands.ReceiveReloadModel(args)
-    local texId = args.texId
+--* WEAR AMPUTATION ITEM *--
+function ClientRelayCommands.ReceiveWearAmputation(args)
     local itemName = args.itemName
-    TOC_DEBUG.print("Resetting visuals locally for item " .. itemName .. " with texId " .. tostring(texId))
-
     local clothingItem = getPlayer():getInventory():FindAndReturn(itemName)
     getPlayer():setWornItem(clothingItem:getBodyLocation(), clothingItem)
 

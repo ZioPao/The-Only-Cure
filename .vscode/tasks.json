@@ -33,7 +33,22 @@
             "problemMatcher": [
                 "$eslint-stylish"
             ]
+            
         },
+        {
+            "label": "Run Zomboid Debug No Steam (42) - 2nd Instance",
+            "type": "shell",
+            "presentation": {
+                "group": "groupZomboid"
+            },
+            "command": "\"${config:zomboid_folder_b42}\\ProjectZomboid64_Debug_NoSteam.bat\"",
+            "options": {"statusbar": {"label": "$(run) Zomboid client (42) - 2nd Instance"}},
+            "problemMatcher": [
+                "$eslint-stylish"
+            ]
+            
+        },
+
         // {
         //     "label": "Run Zomboid Debug No Steam",
         //     "type": "shell",
