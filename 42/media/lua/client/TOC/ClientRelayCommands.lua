@@ -12,7 +12,7 @@ local ClientRelayCommands = {}
 local function InitAmputationHandler(limbName, surgeonNum)
 
     -- TODO Pretty unclean
-    local surgeonPl = getSpecificPlayer(surgeonNum)
+    local surgeonPl = getSpecificPlayer(surgeonNum)     -- fix broken, getOnlineID not working anymore
     local handler = AmputationHandler:new(limbName, surgeonPl)
     return handler
 end

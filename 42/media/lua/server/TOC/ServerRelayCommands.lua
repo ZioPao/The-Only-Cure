@@ -21,7 +21,7 @@ end
 ---@param args relayExecuteAmputationActionParams
 function ServerRelayCommands.RelayExecuteAmputationAction(surgeonPl, args)
     local patientPl = getPlayerByOnlineID(args.patientNum)
-    local surgeonNum = surgeonPl:getOnlineID()
+    local surgeonNum = surgeonPl:getPlayerNum()
 
     ---@type receiveDamageDuringAmputationParams
     local params = {surgeonNum = surgeonNum, limbName = args.limbName, damagePlayer = true}
@@ -43,7 +43,7 @@ end
 ---@param args relayForcedAmputationParams
 function ServerRelayCommands.RelayForcedAmputation(adminObj, args)
     local patientPl = getPlayerByOnlineID(args.patientNum)
-    local adminNum = adminObj:getOnlineID()
+    local adminNum = adminObj:getPlayerNum()
 
     ---@type receiveDamageDuringAmputationParams
     local ampParams = {surgeonNum = adminNum, limbName = args.limbName, damagePlayer = false}        -- the only difference between relayExecuteAmputationAction and this is the damage
