@@ -12,20 +12,26 @@ function ServerRelayCommands.RelayDamageDuringAmputation(_, args)
     local patientPl = getPlayerByOnlineID(args.patientNum)
 
     ---@type receiveDamageDuringAmputationParams
-    local params = {limbName = args.limbName}
-    sendServerCommand(patientPl, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveDamageDuringAmputation, params)
+    --local params = {limbName = args.limbName}
+    local AmputationHandler = require("TOC/Handlers/AmputationHandler")
+    AmputationHandler.ApplyDamageDuringAmputation(patientPl, args.limbName)
+    --sendServerCommand(patientPl, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveDamageDuringAmputation, params)
 end
 
 ---Relay ExecuteAmputationAction to another client
 ---@param surgeonPl IsoPlayer
 ---@param args relayExecuteAmputationActionParams
 function ServerRelayCommands.RelayExecuteAmputationAction(surgeonPl, args)
+    TOC_DEBUG.print("Relaying ExecuteAmputationAction to patient num " .. tostring(args.patientNum) .. " for limb " .. tostring(args.limbName))
     local patientPl = getPlayerByOnlineID(args.patientNum)
-    local surgeonNum = surgeonPl:getPlayerNum()
+    --local surgeonNum = surgeonPl:getPlayerNum()
 
-    ---@type receiveDamageDuringAmputationParams
-    local params = {surgeonNum = surgeonNum, limbName = args.limbName, damagePlayer = true}
-    sendServerCommand(patientPl, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveExecuteAmputationAction, params)
+    local handler = AmputationHandler:new(surgeonPl, patientPl, args.limbName)
+    handler:execute(true)
+
+    -- ---@type receiveDamageDuringAmputationParams
+    -- local params = {surgeonNum = surgeonNum, limbName = args.limbName, damagePlayer = true}
+    -- sendServerCommand(patientPl, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveExecuteAmputationAction, params)
 end
 
 --* ADMIN ONLY *--

@@ -5,7 +5,7 @@ local CommandsData = require("TOC/CommandsData")
 
 local StaticData = require("TOC/StaticData")
 require("TOC/Events")
-local TOC = require("TOC/Registries")
+local TOC_REG = require("TOC/Registries")
 -----------
 
 
@@ -58,8 +58,9 @@ function LocalPlayerController.ManageTraits()
 
     local AmputationHandler = require("TOC/Handlers/AmputationHandler")
     for k, v in pairs(StaticData.TRAITS_BP) do
-        if playerObj:hasTrait(TOC.traits[k]) then
+        if playerObj:hasTrait(TOC_REG.traits[k]) then
             -- Once we find one, we should be done since they're exclusive
+            -- FIX B42.13, broken
             TOC_DEBUG.print("Player has amputation trait " .. k .. ", executing it")
             local tempHandler = AmputationHandler:new(v, playerObj)
             tempHandler:execute(false) -- No damage
@@ -86,6 +87,8 @@ Events.OnSetupTocData.Add(LocalPlayerController.ManageTraits)
 ---Used to heal an area that has been cut previously. There's an exception for bites, those are managed differently
 ---@param bodyPart BodyPart
 function LocalPlayerController.HealArea(bodyPart)
+
+    -- FIX not compatible with B42.13, bodyPart stuff is handled server side
     bodyPart:setFractureTime(0)
 
     bodyPart:setScratched(false, true)
@@ -107,6 +110,7 @@ function LocalPlayerController.HealArea(bodyPart)
     bodyPart:setHaveBullet(false, 0)
     bodyPart:setHaveGlass(false)
     bodyPart:setSplint(false, 0)
+
 end
 
 ---@param bodyDamage BodyDamage

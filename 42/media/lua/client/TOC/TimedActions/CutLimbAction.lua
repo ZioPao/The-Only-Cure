@@ -61,14 +61,13 @@ function CutLimbAction:isValid()
 end
 
 function CutLimbAction:start()
-    if self.patient == self.character then
-        -- Self
-        AmputationHandler.ApplyDamageDuringAmputation(self.patient, self.limbName)
-    else
-        -- Another player
-        ---@type relayDamageDuringAmputationParams
+
+    if isClient() then
+        -- MP
         local params = {patientNum = self.patient:getOnlineID(), limbName = self.limbName}
-        sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayDamageDuringAmputation, params )
+        sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayDamageDuringAmputation, params)
+    else
+        AmputationHandler.ApplyDamageDuringAmputation(self.patient, self.limbName)
     end
 
     ---@type ISBaseTimedAction
@@ -139,9 +138,16 @@ function CutLimbAction:perform()
 end
 
 function CutLimbAction:complete()
-    -- TODO AmputationHandler runs client side, by doing this this would run on the server. AM I missing something?
-    local handler = AmputationHandler:new(self.limbName, self.character)
-    handler:execute(true)
+    
+    if isClient() then
+        -- MP
+        local params = {patientNum = self.patient:getOnlineID(), limbName = self.limbName}
+        sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayExecuteAmputationAction, params)
+    else
+        local handler = AmputationHandler:new(self.character, self.patient, self.limbName)
+        handler:execute(true)
+    end
+
 end
 
 -- function CutLimbAction:perform()

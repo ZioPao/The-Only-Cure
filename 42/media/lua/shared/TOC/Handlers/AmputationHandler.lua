@@ -11,21 +11,22 @@ local TourniquetController = require("TOC/Controllers/TourniquetController")
 
 --- Manages an amputation. Will be run on the patient client
 ---@class AmputationHandler
+---@field surgeonPl IsoPlayer
 ---@field patientPl IsoPlayer
 ---@field limbName string
 ---@field bodyPartType BodyPartType
----@field surgeonPl IsoPlayer?
 local AmputationHandler = {}
 
 ---@param limbName string
 ---@param surgeonPl IsoPlayer?
 ---@return AmputationHandler
-function AmputationHandler:new(limbName, surgeonPl)
+function AmputationHandler:new(surgeonPl, patientPl, limbName)
     local o = {}
     setmetatable(o, self)
     self.__index = self
 
-    o.patientPl = getPlayer()
+    o.surgeonPl = surgeonPl
+    o.patientPl = patientPl
     o.limbName = limbName
     o.bodyPartType = BodyPartType[limbName]
 
@@ -48,8 +49,6 @@ end
 ---@param player IsoPlayer
 ---@param limbName string
 function AmputationHandler.ApplyDamageDuringAmputation(player, limbName)
-
-
     local ampGroup = StaticData.LIMBS_TO_AMP_GROUPS_MATCH_IND_STR[limbName]
     local isTourniquetEquipped = false
 
@@ -82,6 +81,10 @@ function AmputationHandler.ApplyDamageDuringAmputation(player, limbName)
     end
 
     bodyDamagePart:setBleedingTime(bleedingTime)
+
+    -- syncVisuals?
+    
+    syncBodyPart(bodyDamagePart, 0xFFFFFFFFFFF)
 end
 
 
@@ -164,6 +167,7 @@ end
 --- it will still be executed. This is by design, additional checks must be made BEFORE running the AmputationHandler
 ---@param damagePlayer boolean
 function AmputationHandler:execute(damagePlayer)
+    -- FIX B42.13, completely broken for MP
     local surgeonFactor = self.surgeonPl:getPerkLevel(Perks.Doctor) * SandboxVars.TOC.SurgeonAbilityImportance
 
     -- Set the data in modData
@@ -178,7 +182,6 @@ function AmputationHandler:execute(damagePlayer)
 
     -- Give the player the correct amputation item
 
-    -- FIX This can be done in a single step instead of this crap
     sendClientCommand(CommandsData.modules.TOC_ITEMS, "DeleteOldAmputationItem", 
     {playerNum = self.patientPl:getOnlineID(), limbName = self.limbName})
     sendClientCommand(CommandsData.modules.TOC_ITEMS, "SpawnAmputationItem", 

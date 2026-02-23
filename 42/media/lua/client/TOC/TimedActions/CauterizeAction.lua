@@ -14,9 +14,8 @@ local CauterizeAction = ISBaseTimedAction:derive("CauterizeAction")
 ---@param limbName string
 ---@return CauterizeAction
 function CauterizeAction:new(character, limbName, stoveObj)
-    local o = {}
-    setmetatable(o, self)
-    self.__index = self
+
+    local o = ISBaseTimedAction.new(self, character)
 
     -- We need to follow ISBaseTimedAction. self.character is gonna be the surgeon
     o.character = character
@@ -27,10 +26,16 @@ function CauterizeAction:new(character, limbName, stoveObj)
     o.stopOnRun = true
 
     -- Max time depends on the strength
-    o.maxTime = 20
+    o.maxTime = o:getDuration()
     if o.character:isTimedActionInstant() then o.maxTime = 1 end
 
     return o
+end
+
+function CauterizeAction:getDuration()
+    local baseTime = 500
+    local strengthLevel = self.character:getPerkLevel(Perks.Strength)
+    return baseTime - (strengthLevel * 50)
 end
 
 function CauterizeAction:isValid()

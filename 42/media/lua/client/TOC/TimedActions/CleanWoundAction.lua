@@ -1,126 +1,125 @@
-local DataController = require("TOC/Controllers/DataController")
-local CommonMethods = require("TOC/CommonMethods")
---------------------
+-- local DataController = require("TOC/Controllers/DataController")
+-- local CommonMethods = require("TOC/CommonMethods")
+-- --------------------
 
----@class CleanWoundAction : ISBaseTimedAction
----@field doctor IsoPlayer
----@field otherPlayer IsoPlayer
----@field bandage InventoryItem
----@field bodyPart any
----@field doctorLevel number
----@field bandagedPlayerX number
----@field bandagedPlayerY number
-local CleanWoundAction = ISBaseTimedAction:derive("CleanWoundAction")
+-- ---@class CleanWoundAction : ISBaseTimedAction
+-- ---@field doctor IsoPlayer
+-- ---@field patient IsoPlayer
+-- ---@field bandage InventoryItem
+-- ---@field bodyPart any
+-- ---@field characterLevel number
+-- ---@field bandagedPlayerX number
+-- ---@field bandagedPlayerY number
+-- local CleanWoundAction = ISBaseTimedAction:derive("CleanWoundAction")
 
----@param doctor IsoPlayer
----@param otherPlayer IsoPlayer
----@param bandage InventoryItem
----@param bodyPart any
----@return CleanWoundAction
-function CleanWoundAction:new(doctor, otherPlayer, bandage, bodyPart)
-	local o = {}
-	setmetatable(o, self)
-	self.__index = self
-	o.character = doctor
-    o.otherPlayer = otherPlayer
-    o.doctorLevel = doctor:getPerkLevel(Perks.Doctor)
-	o.bodyPart = bodyPart
-    o.bandage = bandage
-	o.stopOnWalk = true
-	o.stopOnRun = true
+-- ---@param character IsoPlayer doctor performing the action
+-- ---@param patient IsoPlayer
+-- ---@param bandage InventoryItem
+-- ---@param bodyPart any
+-- ---@return CleanWoundAction
+-- function CleanWoundAction:new(character, patient, bandage, bodyPart)
 
-    o.bandagedPlayerX = otherPlayer:getX()
-    o.bandagedPlayerY = otherPlayer:getY()
+--     local o = ISBaseTimedAction.new(self, character)
 
-    o.maxTime = 250 - (o.doctorLevel * 6)
-    if doctor:isTimedActionInstant() then
-        o.maxTime = 1
-    end
-    if doctor:getAccessLevel() ~= "None" then   -- B42 Deprecated
-        o.doctorLevel = 10
-    end
-	return o
-end
-function CleanWoundAction:isValid()
-	if ISHealthPanel.DidPatientMove(self.character, self.otherPlayer, self.bandagedPlayerX, self.bandagedPlayerY) then
-		return false
-	end
-	return true
-end
+--     o.patient = patient
+--     o.characterLevel = character:getPerkLevel(Perks.Doctor)
+-- 	o.bodyPart = bodyPart
+--     o.bandage = bandage
+-- 	o.stopOnWalk = true
+-- 	o.stopOnRun = true
 
-function CleanWoundAction:waitToStart()
-    if self.character == self.otherPlayer then
-        return false
-    end
-    self.character:faceThisObject(self.otherPlayer)
-    return self.character:shouldBeTurning()
-end
+--     o.bandagedPlayerX = patient:getX()
+--     o.bandagedPlayerY = patient:getY()
 
-function CleanWoundAction:update()
-    if self.character ~= self.otherPlayer then
-        self.character:faceThisObject(self.otherPlayer)
-    end
-    local jobType = getText("ContextMenu_CleanWound")
-    ISHealthPanel.setBodyPartActionForPlayer(self.otherPlayer, self.bodyPart, self, jobType, { cleanBurn = true })
-    self.character:setMetabolicTarget(Metabolics.LightDomestic)
-end
+--     o.maxTime = 250 - (o.characterLevel * 6)
+--     if character:isTimedActionInstant() then
+--         o.maxTime = 1
+--     end
+--     -- if doctor:getAccessLevel() ~= "None" then   -- B42 Deprecated
+--     --     o.characterLevel = 10
+--     -- end
+-- 	return o
+-- end
+-- function CleanWoundAction:isValid()
+-- 	if ISHealthPanel.DidPatientMove(self.character, self.patient, self.bandagedPlayerX, self.bandagedPlayerY) then
+-- 		return false
+-- 	end
+-- 	return true
+-- end
 
-function CleanWoundAction:start()
-    if self.character == self.otherPlayer then
-        self:setActionAnim(CharacterActionAnims.Bandage)
-        self:setAnimVariable("BandageType", ISHealthPanel.getBandageType(self.bodyPart))
-        self.character:reportEvent("EventBandage")
-    else
-        self:setActionAnim("Loot")
-        self.character:SetVariable("LootPosition", "Mid")
-        self.character:reportEvent("EventLootItem")
-    end
-    self:setOverrideHandModels(nil, nil)
-end
+-- function CleanWoundAction:waitToStart()
+--     if self.character == self.patient then
+--         return false
+--     end
+--     self.character:faceThisObject(self.patient)
+--     return self.character:shouldBeTurning()
+-- end
 
-function CleanWoundAction:stop()
-    ISHealthPanel.setBodyPartActionForPlayer(self.otherPlayer, self.bodyPart, nil, nil, nil)
-    ISBaseTimedAction.stop(self)
-end
+-- function CleanWoundAction:update()
+--     if self.character ~= self.patient then
+--         self.character:faceThisObject(self.patient)
+--     end
+--     local jobType = getText("ContextMenu_CleanWound")
+--     ISHealthPanel.setBodyPartActionForPlayer(self.patient, self.bodyPart, self, jobType, { cleanBurn = true })
+--     self.character:setMetabolicTarget(Metabolics.LightDomestic)
+-- end
 
-function CleanWoundAction:perform()
+-- function CleanWoundAction:start()
+--     if self.character == self.patient then
+--         self:setActionAnim(CharacterActionAnims.Bandage)
+--         self:setAnimVariable("BandageType", ISHealthPanel.getBandageType(self.bodyPart))
+--         self.character:reportEvent("EventBandage")
+--     else
+--         self:setActionAnim("Loot")
+--         self.character:SetVariable("LootPosition", "Mid")
+--         self.character:reportEvent("EventLootItem")
+--     end
+--     self:setOverrideHandModels(nil, nil)
+-- end
 
-    TOC_DEBUG.print("CleanWound for " .. self.otherPlayer:getUsername())
+-- function CleanWoundAction:stop()
+--     ISHealthPanel.setBodyPartActionForPlayer(self.patient, self.bodyPart, nil, nil, nil)
+--     ISBaseTimedAction.stop(self)
+-- end
 
-    if self.character:hasTrait("Hemophobic") then
-        self.character:getStats():setPanic(self.character:getStats():getPanic() + 15)
-    end
+-- function CleanWoundAction:perform()
 
-    self.character:getXp():AddXP(Perks.Doctor, 10)
-    local addPain = (60 - (self.doctorLevel * 1))
-    self.bodyPart:setAdditionalPain(self.bodyPart:getAdditionalPain() + addPain)
-    self.bandage:Use()
+--     TOC_DEBUG.print("CleanWound for " .. self.patient:getUsername())
 
-    -- TOC Data handling
+--     if self.character:hasTrait("Hemophobic") then
+--         self.character:getStats():setPanic(self.character:getStats():getPanic() + 15)
+--     end
 
-    local limbName = CommonMethods.GetLimbNameFromBodyPart(self.bodyPart)
-    local dcInst = DataController.GetInstance(self.otherPlayer:getUsername())
+--     self.character:getXp():AddXP(Perks.Doctor, 10)
+--     local addPain = (60 - (self.characterLevel * 1))
+--     self.bodyPart:setAdditionalPain(self.bodyPart:getAdditionalPain() + addPain)
+--     self.bandage:Use()
 
-    local currentWoundDirtyness = dcInst:getWoundDirtyness(limbName)
-    local newWoundDirtyness = currentWoundDirtyness - (self.bandage:getBandagePower() * 10)
-    if newWoundDirtyness < 0 then newWoundDirtyness = 0 end
+--     -- TOC Data handling
 
-    dcInst:setWoundDirtyness(limbName, newWoundDirtyness)
+--     local limbName = CommonMethods.GetLimbNameFromBodyPart(self.bodyPart)
+--     local dcInst = DataController.GetInstance(self.patient:getUsername())
 
-    dcInst:apply()
+--     local currentWoundDirtyness = dcInst:getWoundDirtyness(limbName)
+--     local newWoundDirtyness = currentWoundDirtyness - (self.bandage:getBandagePower() * 10)
+--     if newWoundDirtyness < 0 then newWoundDirtyness = 0 end
 
-    -- Clean visual
-    local bbptEnum = BloodBodyPartType[limbName]
+--     dcInst:setWoundDirtyness(limbName, newWoundDirtyness)
 
-    ---@type HumanVisual
-    local visual = self.otherPlayer:getHumanVisual()
-    visual:setDirt(bbptEnum, 0)
-    visual:setBlood(bbptEnum, 0)
+--     dcInst:apply()
 
-    ISHealthPanel.setBodyPartActionForPlayer(self.otherPlayer, self.bodyPart, nil, nil, nil)
+--     -- Clean visual
+--     local bbptEnum = BloodBodyPartType[limbName]
 
-    -- needed to remove from queue / start next.
-    ISBaseTimedAction.perform(self)
-end
+--     ---@type HumanVisual
+--     local visual = self.patient:getHumanVisual()
+--     visual:setDirt(bbptEnum, 0)
+--     visual:setBlood(bbptEnum, 0)
 
-return CleanWoundAction
+--     ISHealthPanel.setBodyPartActionForPlayer(self.patient, self.bodyPart, nil, nil, nil)
+
+--     -- needed to remove from queue / start next.
+--     ISBaseTimedAction.perform(self)
+-- end
+
+-- return CleanWoundAction

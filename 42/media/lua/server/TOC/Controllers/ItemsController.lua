@@ -46,11 +46,12 @@ end
 ---@return boolean
 ---@private
 function ItemsController.Player.RemoveClothingItem(playerObj, clothingItem)
+    -- FIX removeWornItem doesn't sync correctly to client, meaning it gets stuck visually until relog
     if clothingItem and instanceof(clothingItem, "InventoryItem") then
         playerObj:removeWornItem(clothingItem)
 
         ---@diagnostic disable-next-line: param-type-mismatch
-        playerObj:getInventory():Remove(clothingItem) -- Umbrella is wrong, can be an InventoryItem too
+        playerObj:getInventory():Remove(clothingItem)
         sendRemoveItemFromContainer(playerObj:getInventory(), clothingItem)
 
         TOC_DEBUG.print("found and deleted" .. tostring(clothingItem))
