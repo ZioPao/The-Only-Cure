@@ -86,7 +86,7 @@ function CleanWoundAction:perform()
 
     TOC_DEBUG.print("CleanWound for " .. self.patient:getUsername())
 
-    if self.character:hasTrait("Hemophobic") then
+    if self.character:hasTrait(CharacterTrait.HEMOPHOBIC) then
         self.character:getStats():setPanic(self.character:getStats():getPanic() + 15)
     end
 
