@@ -25,7 +25,7 @@ function ISEquipWeaponAction:new(character, item, maxTimeInit, primary, twoHands
     -- check if right arm is cut off or not. if it is, penality shall apply
     -- if we got here, the action is valid, so we know that we have a prosthesis.
     local DataController = require("TOC/Controllers/DataController")
-    local dcInst = DataController.GetInstance()     -- FIX b42.14 USER NOT USERNAME
+    local dcInst = DataController.GetInstance(character:getUsername())     -- FIX b42.14 USER NOT USERNAME
 
     -- Brutal Handwork should be considered. Use the twohands thing
     if not (dcInst:getIsAnyLimbCut() and twoHands) then
