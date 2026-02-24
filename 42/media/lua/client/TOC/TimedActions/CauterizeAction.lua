@@ -83,8 +83,6 @@ function CauterizeAction:perform()
     -- Set isCicatrized and the visuals in one go, since this action is gonna be run only on a single client
     LocalPlayerController.HandleSetCicatrization(dcInst, self.character, self.limbName)
 
-    -- TODO Add specific visuals for cauterization
-
     -- we don't care about the depended limbs, since they're alread "cicatrized"
     dcInst:apply()
 
