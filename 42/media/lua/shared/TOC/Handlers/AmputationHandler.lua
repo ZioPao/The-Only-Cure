@@ -1,10 +1,5 @@
--- TODO Move this to server side for 42.13
-
-
-local DataController = require("TOC/Controllers/DataController")
-local CommandsData = require("TOC/CommandsData")
-local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
-local LocalPlayerController = require("TOC/Controllers/LocalPlayerController")
+-- local CommandsData = require("TOC/CommandsData")
+-- local LocalPlayerController = require("TOC/Controllers/LocalPlayerController")
 local StaticData = require("TOC/StaticData")
 local TourniquetController = require("TOC/Controllers/TourniquetController")
 ---------------------------
@@ -126,6 +121,36 @@ function AmputationHandler.PrepareBandagesAction(prevAction, limbName, surgeonPl
     return bandageAction
 end
 
+---Used to heal an area that has been cut previously. There's an exception for bites, those are managed differently
+---@param bodyPart BodyPart
+function AmputationHandler.HealArea(bodyPart)
+    bodyPart:setFractureTime(0)
+
+    bodyPart:setScratched(false, true)
+    bodyPart:setScratchTime(0)
+
+    bodyPart:setBleeding(false)
+    bodyPart:setBleedingTime(0)
+
+    bodyPart:SetBitten(false)
+    --bodyPart:setBiteTime(0)
+    bodyPart:SetInfected(false)
+
+    bodyPart:setCut(false)
+    bodyPart:setCutTime(0)
+
+    bodyPart:setDeepWounded(false)
+    bodyPart:setDeepWoundTime(0)
+
+    bodyPart:setHaveBullet(false, 0)
+    bodyPart:setHaveGlass(false)
+    bodyPart:setSplint(false, 0)
+
+    syncBodyPart(bodyPart, 0xFFFFFFFFFFF)
+
+    -- fix bleeding is not synced from server to client
+end
+
 
 --* Main methods *--
 
@@ -160,6 +185,8 @@ function AmputationHandler:damageAfterAmputation(surgeonFactor)
     bodyPart:setDeepWoundTime(baseDamage - surgeonFactor)
     patientStats:set(CharacterStat.ENDURANCE, surgeonFactor)
     patientStats:set(CharacterStat.STRESS, baseDamage - surgeonFactor)
+    
+    syncBodyPart(bodyPart, 0xFFFFFFFFFFF)
 end
 
 --- Execute the amputation. This method doesn't check if the upper limb has been amputated or not, so if
@@ -167,56 +194,54 @@ end
 --- it will still be executed. This is by design, additional checks must be made BEFORE running the AmputationHandler
 ---@param damagePlayer boolean
 function AmputationHandler:execute(damagePlayer)
-    -- FIX B42.13, completely broken for MP
     local surgeonFactor = self.surgeonPl:getPerkLevel(Perks.Doctor) * SandboxVars.TOC.SurgeonAbilityImportance
+    local patientUsername = self.patientPl:getUsername()
 
     -- Set the data in modData
-    local dcInst = DataController.GetInstance()
+    local DataController = require("TOC/Controllers/DataController")
+    local dcInst = DataController.GetInstance(patientUsername)
     dcInst:setCutLimb(self.limbName, false, false, false, surgeonFactor)
     dcInst:apply()      -- This will force rechecking the cached amputated limbs on the other client
 
     -- Heal the area, we're gonna re-set the damage after (if it's enabled)
     local bd = self.patientPl:getBodyDamage()
     local bodyPart = bd:getBodyPart(self.bodyPartType)
-    LocalPlayerController.HealArea(bodyPart)
 
-    -- Give the player the correct amputation item
+    AmputationHandler.HealArea(bodyPart)
 
-    sendClientCommand(CommandsData.modules.TOC_ITEMS, "DeleteOldAmputationItem", 
-    {playerNum = self.patientPl:getOnlineID(), limbName = self.limbName})
-    sendClientCommand(CommandsData.modules.TOC_ITEMS, "SpawnAmputationItem", 
-    {playerNum = self.patientPl:getOnlineID(), limbName = self.limbName})
-
+    local ItemsController = require("TOC/Controllers/ItemsController")
+    ItemsController.Player.DeleteOldAmputationItem(self.patientPl, self.limbName)
+    ItemsController.Player.SpawnAmputationItem(self.patientPl, self.limbName)
 
     -- Add it to the list of cut limbs on this local client
-    local username = self.patientPl:getUsername()
-    CachedDataHandler.AddAmputatedLimb(username, self.limbName)
+    local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
+    CachedDataHandler.AddAmputatedLimb(patientUsername, self.limbName)
 
-    -- TODO Not optimal, we're already cycling through this when using setCutLimb
-    for i=1, #StaticData.LIMBS_DEPENDENCIES_IND_STR[self.limbName] do
-        local dependedLimbName = StaticData.LIMBS_DEPENDENCIES_IND_STR[self.limbName][i]
-        CachedDataHandler.AddAmputatedLimb(username, dependedLimbName)
-    end
+    -- -- TODO Not optimal, we're already cycling through this when using setCutLimb
+    -- for i=1, #StaticData.LIMBS_DEPENDENCIES_IND_STR[self.limbName] do
+    --     local dependedLimbName = StaticData.LIMBS_DEPENDENCIES_IND_STR[self.limbName][i]
+    --     CachedDataHandler.AddAmputatedLimb(username, dependedLimbName)
+    -- end
 
-    -- Cache highest amputation and hand feasibility
-    CachedDataHandler.CalculateCacheableValues(username)
+    -- -- Cache highest amputation and hand feasibility
+    -- CachedDataHandler.CalculateCacheableValues(username)
 
-    -- TODO Test this again for 42.13
-    -- If the part was actually infected, heal the player, if they were in time (infectionLevel < 20)
-    local infectionLevel = self.patientPl:getStats():get(CharacterStat.ZOMBIE_INFECTION)
+    -- -- TODO Test this again for 42.13
+    -- -- If the part was actually infected, heal the player, if they were in time (infectionLevel < 20)
+    -- local infectionLevel = self.patientPl:getStats():get(CharacterStat.ZOMBIE_INFECTION)
 
 
 
-    if infectionLevel < 20 and bodyPart:IsInfected() and not dcInst:getIsIgnoredPartInfected() then
-        LocalPlayerController.HealZombieInfection(bd, bodyPart, self.limbName, dcInst)
-    end
+    -- if infectionLevel < 20 and bodyPart:IsInfected() and not dcInst:getIsIgnoredPartInfected() then
+    --     LocalPlayerController.HealZombieInfection(bd, bodyPart, self.limbName, dcInst)
+    -- end
 
-    -- The last part is to handle the damage that the player will receive after the amputation
-    if not damagePlayer then return end
-    self:damageAfterAmputation(surgeonFactor)
+    -- -- The last part is to handle the damage that the player will receive after the amputation
+    -- if not damagePlayer then return end
+    -- self:damageAfterAmputation(surgeonFactor)
 
-    -- Trigger this event
-    triggerEvent("OnAmputatedLimb", self.limbName)
+    -- -- Trigger this event
+    -- triggerEvent("OnAmputatedLimb", self.limbName)
 end
 
 ---Delete the instance

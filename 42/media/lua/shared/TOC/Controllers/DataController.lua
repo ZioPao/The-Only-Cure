@@ -1,11 +1,8 @@
-if isServer() then return end
-
 local CommandsData = require("TOC/CommandsData")
 local StaticData = require("TOC/StaticData")
 ----------------
 
 --- An instance will be abbreviated with dcInst
--- https://github.com/ZioPao/The-Only-Cure/issues/187
 
 --- Handle all TOC mod data related stuff
 ---@class DataController
@@ -353,13 +350,10 @@ end
 --* Global Mod Data Handling *--
 
 function DataController:apply()
-    TOC_DEBUG.print("Applying data for " .. self.username)
-    ModData.transmit(CommandsData.GetKey(self.username))
-
-    -- if getPlayer():getUsername() ~= self.username then
-    --     sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayApplyFromOtherClient, {patientUsername = self.username} )
-    --     -- force request from the server for that other client...
-    -- end
+    if isClient() then
+        TOC_DEBUG.print("Sending ModData to server for " .. self.username)
+        ModData.transmit(CommandsData.GetKey(self.username))
+    end
 end
 
 
@@ -457,7 +451,9 @@ end
 ---@param username string?
 ---@return DataController
 function DataController.GetInstance(username)
-    if username == nil or username == "Bob" then
+
+    -- TODO To be changed in due time, isClient() is here but we want username to be necessary
+    if isClient() and (username == nil or username == "Bob") then
         username = getPlayer():getUsername()
     end
 

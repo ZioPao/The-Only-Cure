@@ -41,7 +41,7 @@ function CutLimbAction:new(surgeon, patient, limbName, item, stitchesItem, banda
     o.stopOnWalk = true
     o.stopOnRun = true
 
-    o.maxTime = o:getDuration()
+    o.maxTime = 1 --o:getDuration()
 
     return o
 end
@@ -52,7 +52,9 @@ function CutLimbAction:getDuration()
     else
         local baseTime = 1000
         local perkLevel = self.character:getPerkLevel(Perks.Doctor)
-        return baseTime - (perkLevel * 50)
+        local finalTime = baseTime - (perkLevel * 50)
+        TOC_DEBUG.print("finalTime = " .. finalTime)
+        return finalTime
     end
 end
 
@@ -134,11 +136,6 @@ end
 
 function CutLimbAction:perform()
     self:stopSound()
-    ISBaseTimedAction.perform(self)
-end
-
-function CutLimbAction:complete()
-    
     if isClient() then
         -- MP
         local params = {patientNum = self.patient:getOnlineID(), limbName = self.limbName}
@@ -147,8 +144,14 @@ function CutLimbAction:complete()
         local handler = AmputationHandler:new(self.character, self.patient, self.limbName)
         handler:execute(true)
     end
-
+    ISBaseTimedAction.perform(self)
 end
+
+-- function CutLimbAction:complete()
+    
+
+
+-- end
 
 -- function CutLimbAction:perform()
 --     -- Stop the sound

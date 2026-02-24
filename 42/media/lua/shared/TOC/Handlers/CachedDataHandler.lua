@@ -1,7 +1,6 @@
 local DataController = require("TOC/Controllers/DataController")
 
 local StaticData = require("TOC/StaticData")
-local CommonMethods = require("TOC/CommonMethods")
 ---------------------------
 
 ---@class CachedDataHandler
@@ -86,7 +85,7 @@ function CachedDataHandler.CalculateHighestAmputatedLimbs(username)
 
     local amputatedLimbs = CachedDataHandler.amputatedLimbs[username]
     CachedDataHandler.highestAmputatedLimbs[username] = {}
-    --TOC_DEBUG.print("Searching highest amputations for " .. username)
+    local CommonMethods = require("TOC/CommonMethods")
 
     for k, _ in pairs(amputatedLimbs) do
         local limbName = k
@@ -116,6 +115,7 @@ CachedDataHandler.handFeasibility = {}
 ---@param limbName string
 function CachedDataHandler.CalculateHandFeasibility(limbName)
     local dcInst = DataController.GetInstance()
+    local CommonMethods = require("TOC/CommonMethods")
     local side = CommonMethods.GetSide(limbName)
 
     -- TODO if we re run this too early, it might break everything after a forced re-init

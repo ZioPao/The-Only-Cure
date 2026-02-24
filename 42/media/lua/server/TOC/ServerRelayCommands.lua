@@ -25,7 +25,7 @@ function ServerRelayCommands.RelayExecuteAmputationAction(surgeonPl, args)
     TOC_DEBUG.print("Relaying ExecuteAmputationAction to patient num " .. tostring(args.patientNum) .. " for limb " .. tostring(args.limbName))
     local patientPl = getPlayerByOnlineID(args.patientNum)
     --local surgeonNum = surgeonPl:getPlayerNum()
-
+    local AmputationHandler = require("TOC/Handlers/AmputationHandler")
     local handler = AmputationHandler:new(surgeonPl, patientPl, args.limbName)
     handler:execute(true)
 
