@@ -274,26 +274,17 @@ StaticData.AMPUTATION_CLOTHING_ITEM_BASE = "TOC.Amputation_"
 ------------------
 --* Items check
 
-local sawObj
-local gardenSawObj
+StaticData.SAWS_TYPES = {
 
-if StaticData.COMPAT_42 then
-    sawObj = instanceItem("Base.Saw")
-    gardenSawObj = instanceItem("Base.GardenSaw")
-else
-    sawObj = InventoryItemFactory.CreateItem("Base.Saw")
-    gardenSawObj = InventoryItemFactory.CreateItem("Base.GardenSaw")
-end
-
-
-StaticData.SAWS_NAMES_IND_STR = {
-    saw = sawObj:getName(),
-    gardenSaw = gardenSawObj:getName()
-}
-
-StaticData.SAWS_TYPES_IND_STR = {
-    saw = sawObj:getType(),
-    gardenSaw = gardenSawObj:getType()
+    ["Base.Saw"] = 1,
+    ["Base.GardenSaw"] = 1,
+    ["Base.Plank_Saw"] = 1,
+    ["Base.SmallSaw"] = 1,
+    ["Base.Machete"] = 1,
+    ["Base.MacheteForged"] = 1,
+    ["Base.Hatchet"] = 1,
+    ["Base.HandAxe_Old"] = 1,
+    ["Base.HandAxe"] = 1
 }
 
 

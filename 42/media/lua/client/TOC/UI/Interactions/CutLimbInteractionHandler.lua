@@ -12,10 +12,13 @@ local CutLimbAction = require("TOC/TimedActions/CutLimbAction")
 --* Various functions to help during these pesky checks
 
 ---Check if the item type corresponds to a compatible saw
----@param itemType string
-local function CheckIfSaw(itemType)
-    return itemType == StaticData.SAWS_TYPES_IND_STR.saw
-            or itemType == StaticData.SAWS_TYPES_IND_STR.gardenSaw
+---@param fullItemType string
+local function CheckIfSaw(fullItemType)
+    if StaticData.SAWS_TYPES[fullItemType] == 1 then
+        return true
+    else 
+        return false
+    end
 end
 
 ---Return a compatible bandage
@@ -179,8 +182,8 @@ local function AddInventoryAmputationMenu(playerNum, context, items)
         break
     end
 
-    local itemType = item:getType()
-    if CheckIfSaw(itemType) then
+    local fullItemType = item:getFullType()
+    if CheckIfSaw(fullItemType) then
         local player = getSpecificPlayer(playerNum)
         local sawItem = item
         local stitchesItem = GetStitchesConsumableItem(player)
@@ -221,10 +224,10 @@ end
 ---@param item InventoryItem
 function CutLimbInteractionHandler:checkItem(item)
     --TOC_DEBUG.print("CutLimbInteractionHandler checkItem")
-    local itemType = item:getType()
+    local fullItemType = item:getFullType()
 
-    if CheckIfSaw(itemType) then
-        TOC_DEBUG.print("added to list -> " .. itemType)
+    if CheckIfSaw(fullItemType) then
+        TOC_DEBUG.print("added to list -> " .. fullItemType)
         self:addItem(self.items.ITEMS, item)
     end
 end
