@@ -122,8 +122,11 @@ function AmputationHandler.PrepareBandagesAction(prevAction, limbName, surgeonPl
 end
 
 ---Used to heal an area that has been cut previously. There's an exception for bites, those are managed differently
----@param bodyPart BodyPart
-function AmputationHandler.HealArea(bodyPart)
+function AmputationHandler:healArea()
+    -- Heal the area, we're gonna re-set the damage after (if it's enabled)
+    local bd = self.patientPl:getBodyDamage()
+    local bodyPart = bd:getBodyPart(self.bodyPartType)
+
     bodyPart:setFractureTime(0)
 
     bodyPart:setScratched(false, true)
@@ -151,6 +154,21 @@ function AmputationHandler.HealArea(bodyPart)
     -- fix bleeding is not synced from server to client
 end
 
+--- TO BE TESTED
+---@param isPartInfected boolean
+function AmputationHandler:healInfection(isPartInfected)
+     -- If the part was actually infected, heal the player, if they were in time (infectionLevel < 20)
+    local infectionLevel = self.patientPl:getStats():get(CharacterStat.ZOMBIE_INFECTION)
+    local bd = self.patientPl:getBodyDamage()
+    local bodyPart = bd:getBodyPart(self.bodyPartType)
+    if infectionLevel < 20 and bodyPart:IsInfected() and not isPartInfected then
+        if bd:isInfected() == false then return end
+
+        bd:setInfected(false)
+        bd:setInfectionMortalityDuration(-1)
+        bd:setInfectionTime(-1)
+    end
+end
 
 --* Main methods *--
 
@@ -203,15 +221,7 @@ function AmputationHandler:execute(damagePlayer)
     dcInst:setCutLimb(self.limbName, false, false, false, surgeonFactor)
 
     -- TODO apply shouldn't have IsoPlayer as a parameter, just an hack to make this crap work
-    --print(self.patientPl)
-
     dcInst:apply(self.patientPl)      -- This will force rechecking the cached amputated limbs on the other client
-
-    -- Heal the area, we're gonna re-set the damage after (if it's enabled)
-    local bd = self.patientPl:getBodyDamage()
-    local bodyPart = bd:getBodyPart(self.bodyPartType)
-
-    AmputationHandler.HealArea(bodyPart)
 
     local ItemsController = require("TOC/Controllers/ItemsController")
     ItemsController.Player.DeleteOldAmputationItem(self.patientPl, self.limbName)
@@ -230,21 +240,14 @@ function AmputationHandler:execute(damagePlayer)
     -- Cache highest amputation and hand feasibility
     CachedDataHandler.CalculateCacheableValues(patientUsername)
 
-    -- -- FIX Test this again for 42.13
-    -- -- If the part was actually infected, heal the player, if they were in time (infectionLevel < 20)
-    -- local infectionLevel = self.patientPl:getStats():get(CharacterStat.ZOMBIE_INFECTION)
-
-
-
-    -- if infectionLevel < 20 and bodyPart:IsInfected() and not dcInst:getIsIgnoredPartInfected() then
-    --     LocalPlayerController.HealZombieInfection(bd, bodyPart, self.limbName, dcInst)
-    -- end
-
-    -- -- The last part is to handle the damage that the player will receive after the amputation
-    -- if not damagePlayer then return end
-    -- self:damageAfterAmputation(surgeonFactor)
+    -- FIX Test this again for 42.13
+    self:healArea()
+    self:healInfection(dcInst:getIsIgnoredPartInfected())
+    if not damagePlayer then return end
+    self:damageAfterAmputation(surgeonFactor)
 
     -- -- Trigger this event
+    -- FIX 42.14 Run on client not server!!!!
     -- triggerEvent("OnAmputatedLimb", self.limbName)
 end
 
