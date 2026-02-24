@@ -349,10 +349,18 @@ end
 
 --* Global Mod Data Handling *--
 
-function DataController:apply()
+---
+---@param playerObj IsoPlayer? TEMPORARY WORKAROUND FOR B42.14, SERVER ONLY
+function DataController:apply(playerObj)
     if isClient() then
         TOC_DEBUG.print("Sending ModData to server for " .. self.username)
         ModData.transmit(CommandsData.GetKey(self.username))
+    end
+
+    if isServer() then
+        --TOC_DEBUG.print("Forwarding ModData to " .. playerObj:getUsername())
+        -- Notify player that they must request the data from the server
+        sendServerCommand(playerObj, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveApplyFromServer, {})
     end
 end
 

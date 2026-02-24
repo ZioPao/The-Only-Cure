@@ -40,7 +40,7 @@ end
 --* APPLY RELAY *--
 
 function ClientRelayCommands.ReceiveApplyFromServer()
-    TOC_DEBUG.print("Received forced re-apply from server")
+    TOC_DEBUG.print("Applying ModData from server")
     local key = CommandsData.GetKey(getPlayer():getUsername())
     ModData.request(key)
 end

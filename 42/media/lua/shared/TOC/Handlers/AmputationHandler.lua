@@ -201,7 +201,11 @@ function AmputationHandler:execute(damagePlayer)
     local DataController = require("TOC/Controllers/DataController")
     local dcInst = DataController.GetInstance(patientUsername)
     dcInst:setCutLimb(self.limbName, false, false, false, surgeonFactor)
-    dcInst:apply()      -- This will force rechecking the cached amputated limbs on the other client
+
+    -- TODO apply shouldn't have IsoPlayer as a parameter, just an hack to make this crap work
+    --print(self.patientPl)
+
+    dcInst:apply(self.patientPl)      -- This will force rechecking the cached amputated limbs on the other client
 
     -- Heal the area, we're gonna re-set the damage after (if it's enabled)
     local bd = self.patientPl:getBodyDamage()
@@ -217,16 +221,16 @@ function AmputationHandler:execute(damagePlayer)
     local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
     CachedDataHandler.AddAmputatedLimb(patientUsername, self.limbName)
 
-    -- -- TODO Not optimal, we're already cycling through this when using setCutLimb
-    -- for i=1, #StaticData.LIMBS_DEPENDENCIES_IND_STR[self.limbName] do
-    --     local dependedLimbName = StaticData.LIMBS_DEPENDENCIES_IND_STR[self.limbName][i]
-    --     CachedDataHandler.AddAmputatedLimb(username, dependedLimbName)
-    -- end
+    -- TODO Not optimal, we're already cycling through this when using setCutLimb
+    for i=1, #StaticData.LIMBS_DEPENDENCIES_IND_STR[self.limbName] do
+        local dependedLimbName = StaticData.LIMBS_DEPENDENCIES_IND_STR[self.limbName][i]
+        CachedDataHandler.AddAmputatedLimb(patientUsername, dependedLimbName)
+    end
 
-    -- -- Cache highest amputation and hand feasibility
-    -- CachedDataHandler.CalculateCacheableValues(username)
+    -- Cache highest amputation and hand feasibility
+    CachedDataHandler.CalculateCacheableValues(patientUsername)
 
-    -- -- TODO Test this again for 42.13
+    -- -- FIX Test this again for 42.13
     -- -- If the part was actually infected, heal the player, if they were in time (infectionLevel < 20)
     -- local infectionLevel = self.patientPl:getStats():get(CharacterStat.ZOMBIE_INFECTION)
 
