@@ -54,6 +54,10 @@ function ClientRelayCommands.ReceiveWearAmputation(args)
 
 end
 
+function ClientRelayCommands.ReceiveToggleEvent(args)
+    triggerEvent("OnAmputatedLimb", args.limbName)
+end
+
 --* TRIGGERED BY ADMINS *--
 
 function ClientRelayCommands.ReceiveExecuteInitialization()

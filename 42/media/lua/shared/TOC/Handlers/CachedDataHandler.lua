@@ -1,5 +1,4 @@
 local DataController = require("TOC/Controllers/DataController")
-
 local StaticData = require("TOC/StaticData")
 ---------------------------
 
@@ -21,9 +20,13 @@ end
 ---Will calculate all the values that we need
 function CachedDataHandler.CalculateCacheableValues(username)
     CachedDataHandler.CalculateHighestAmputatedLimbs(username)
-    if getPlayer():getUsername() == username then
-        CachedDataHandler.OverrideBothHandsFeasibility()
-    end
+
+
+    -- TODO Sync with client?
+    -- FIX B42.14, reimplement. Should be run on client only
+    -- if getPlayer():getUsername() == username then
+    --     CachedDataHandler.OverrideBothHandsFeasibility()
+    -- end
 end
 
 

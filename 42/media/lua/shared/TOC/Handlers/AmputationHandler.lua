@@ -1,4 +1,4 @@
--- local CommandsData = require("TOC/CommandsData")
+local CommandsData = require("TOC/CommandsData")
 -- local LocalPlayerController = require("TOC/Controllers/LocalPlayerController")
 local StaticData = require("TOC/StaticData")
 local TourniquetController = require("TOC/Controllers/TourniquetController")
@@ -175,8 +175,6 @@ end
 ---Set the damage to the adjacent part of the cut area
 ---@param surgeonFactor number
 function AmputationHandler:damageAfterAmputation(surgeonFactor)
-
-
     TOC_DEBUG.print("Applying damage after amputation")
     local patientStats = self.patientPl:getStats()
     local bd = self.patientPl:getBodyDamage()
@@ -188,17 +186,20 @@ function AmputationHandler:damageAfterAmputation(surgeonFactor)
 
     -- Check if player has tourniquet equipped on the limb
     -- TODO Suboptimal checks, but they should work for now.
-    local hasTourniquet = TourniquetController.CheckTourniquetOnLimb(self.patientPl, self.limbName)
-    if hasTourniquet then
-        TOC_DEBUG.print("Do something different for the damage calculation because tourniquet is applied")
-        baseDamage = baseDamage * 0.5   -- 50% less damage due to tourniquet
-    end
+    -- FIX B42.14 reimplement server side
+    -- local hasTourniquet = TourniquetController.CheckTourniquetOnLimb(self.patientPl, self.limbName)
+    -- if hasTourniquet then
+    --     TOC_DEBUG.print("Do something different for the damage calculation because tourniquet is applied")
+    --     baseDamage = baseDamage * 0.5   -- 50% less damage due to tourniquet
+    -- end
 
 
     bodyPart:AddDamage(baseDamage - surgeonFactor)
     bodyPart:setAdditionalPain(baseDamage - surgeonFactor)
     bodyPart:setBleeding(true)
     bodyPart:setBleedingTime(baseDamage - surgeonFactor)
+
+    -- FIX Not working correctly!
     bodyPart:setDeepWounded(true)
     bodyPart:setDeepWoundTime(baseDamage - surgeonFactor)
     patientStats:set(CharacterStat.ENDURANCE, surgeonFactor)
@@ -246,9 +247,12 @@ function AmputationHandler:execute(damagePlayer)
     if not damagePlayer then return end
     self:damageAfterAmputation(surgeonFactor)
 
-    -- -- Trigger this event
-    -- FIX 42.14 Run on client not server!!!!
-    -- triggerEvent("OnAmputatedLimb", self.limbName)
+    if isClient() then
+        sendServerCommand(self.patientPl, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveToggleEvent, {limbName = self.limbName})
+    else
+        triggerEvent("OnAmputatedLimb", self.limbName)
+    end
+
 end
 
 ---Delete the instance
