@@ -17,11 +17,12 @@ local bodylocArmProstBaseline = "toc:toc_armprost"
 ---@return boolean
 function ProsthesisHandler.CheckIfProst(item)
     -- TODO Won't be correct when prost for legs are gonna be in
-    if item == nil then
-        TOC_DEBUG.print("Not prost")
+    if item == nil or item:getBodyLocation() == nil then
+        TOC_DEBUG.print("Not prost or no body location")
 
         return false
     end
+
     return item:getBodyLocation():toString():contains(bodylocArmProstBaseline)
 end
 
