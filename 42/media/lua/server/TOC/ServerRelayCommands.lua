@@ -51,12 +51,13 @@ function ServerRelayCommands.RelayForcedAmputation(adminObj, args)
     local patientPl = getPlayerByOnlineID(args.patientNum)
     local adminNum = adminObj:getPlayerNum()
 
-    ---@type receiveDamageDuringAmputationParams
-    local ampParams = {surgeonNum = adminNum, limbName = args.limbName, damagePlayer = false}        -- the only difference between relayExecuteAmputationAction and this is the damage
-    sendServerCommand(patientPl, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveExecuteAmputationAction, ampParams)
+    local AmputationHandler = require("TOC/Handlers/AmputationHandler")
+    local handler = AmputationHandler:new(adminObj, patientPl, args.limbName)
+    handler:execute(false)
 
+    -- FIX 42.14
     -- Automatic cicatrization
-    sendServerCommand(patientPl, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveForcedCicatrization, {limbName = args.limbName})
+    -- sendServerCommand(patientPl, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveForcedCicatrization, {limbName = args.limbName})
 end
 
 function ServerRelayCommands.DeleteAllOldAmputationItems(_, args)
