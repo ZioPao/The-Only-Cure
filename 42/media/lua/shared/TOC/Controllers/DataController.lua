@@ -105,6 +105,7 @@ function DataController:ensureDataInitialized(key)
     if data and data.limbs then
         self.tocData = data
         TOC_DEBUG.print("Found and loaded local data")
+        TOC_DEBUG.printTable(self.tocData)
     end
 
     if self.tocData == nil or self.isResetForced then
@@ -129,13 +130,15 @@ end
 function DataController:setup(key)
     TOC_DEBUG.print("Running setup")
 
+    -- Clean ModData
+    ModData.remove(key)
+
     -- create default structure
     self.tocData = self:createDefaultData()
 
     -- persist
     self:saveModData(key, self.tocData)
 
-    -- keep setup side-effects minimal; notify setup completion
     triggerEvent("OnSetupTocData")
 end
 
@@ -409,7 +412,7 @@ end
 ---SHARED
 ---@param player IsoPlayer? TO BE USED ONLY WHEN RUN ON SERVER!!!!
 function DataController:apply(player)
-    if isClient() then
+    if isClient() and self:getIsDataReady() then
         TOC_DEBUG.print("[WORKAROUND] Sending ModData to server for " .. self.username)
         ModData.transmit(CommandsData.GetKey(self.username))
     elseif isServer() then
