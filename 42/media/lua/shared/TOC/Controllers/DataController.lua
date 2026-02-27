@@ -40,7 +40,7 @@ function DataController:new(username, isResetForced)
     local key = CommandsData.GetKey(o.username)
 
     -- Server / singleplayer: ensure data exists locally
-    if isServer() then
+    if isServer() or not isClient() then
         o:ensureDataInitialized(key)
     end
 
