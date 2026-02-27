@@ -100,15 +100,21 @@ end
 ---@private
 ---@server
 function DataController:ensureDataInitialized(key)
-    -- Tries to load already existing data
-    local data = self:loadModData(key)
+    local data
+    if not self.isResetForced then
+        -- Tries to load already existing data
+
+        data = self:loadModData(key)
+    end
+
     if data and data.limbs then
         self.tocData = data
         TOC_DEBUG.print("Found and loaded local data")
-        TOC_DEBUG.printTable(self.tocData)
+        --TOC_DEBUG.printTable(self.tocData)
     end
 
     if self.tocData == nil or self.isResetForced then
+        TOC_DEBUG.print("Resetting TOC ModData")
         self:setup(key)
     end
 
@@ -133,7 +139,7 @@ function DataController:setup(key)
     -- persist
     self:saveModData(key, self.tocData)
 
-    triggerEvent("OnSetupTocData")
+   -- triggerEvent("OnSetupTocData")
 end
 
 ---In case of desync between the table on ModData and the table here
@@ -159,16 +165,17 @@ end
 ---@param isForced boolean
 ---@client
 function DataController.RequestFromServer(username, isForced)
-    --fix sp and mp split here
-
-    -- local pl = CommonMethods.GetPatientForServer(id)
-    -- local username = pl:getUsername()
-
     TOC_DEBUG.print("Requesting DC from Server")
 
     -- placeholder datacontroller, to be initialized
     local h = DataController:new(username, isForced)
-    sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayRequestDataController, {username = username, isForced = isForced})
+
+    if isClient() or not isServer() then
+        sendClientCommand(CommandsData.modules.TOC_RELAY,
+            CommandsData.server.Relay.RelayRequestDataController,
+            {username = username, isForced = isForced})
+    end
+
     return h
 end
 
@@ -434,20 +441,16 @@ end
 ---SERVER
 ---@param player IsoPlayer player to receive updated data
 function DataController:apply(player)
-    if isClient() and self:getIsDataReady() then
-        -- TOC_DEBUG.print("[WORKAROUND] Sending ModData to server for " .. self.username)
-        -- ModData.transmit(CommandsData.GetKey(self.username))
-    elseif isServer() then
-        --TOC_DEBUG.print("Forwarding ModData to " .. playerObj:getUsername())
-        -- Notify player that they must request the data from the server
-        --B42 TEMPORARY WORKAROUND FOR B42.14 ugly
-        sendServerCommand(player, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveApplyFromServer, {patientUsername = self.username})
+    if isClient() then return end
 
-        -- To be used with Cache
-        triggerEvent("OnInitTocData", player, self.username, true)
+    if isServer() then
+        sendServerCommand(player, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveApplyFromServer,
+            {patientUsername = self.username})
     end
 
-
+    -- To be used with Cache, SP and MP (Server)
+    TOC_DEBUG.print("Finished apply, triggering OnInitTocData")
+    triggerEvent("OnInitTocData", player, self.username, true)
 end
 
 --- SHARED
@@ -470,7 +473,7 @@ function DataController.ReceiveData(key, data)
     handler:save(data)
 
     -- FIX Should be an event
-    if isClient() then
+    if isClient() or not isServer() then
         -- Set a bool to use an overriding GetDamagedParts
         SetHealthPanelTOC()
     end

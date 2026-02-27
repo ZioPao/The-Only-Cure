@@ -275,8 +275,8 @@ function AmputationHandler:execute(damagePlayer)
     end
 
     -- REMOVE ME
-    TOC_DEBUG.print("Post amputation TOC data")
-    TOC_DEBUG.printTable(dcInst.tocData)
+    --TOC_DEBUG.print("Post amputation TOC data")
+    --TOC_DEBUG.printTable(dcInst.tocData)
 
 end
 

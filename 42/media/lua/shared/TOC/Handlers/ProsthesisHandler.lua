@@ -58,8 +58,8 @@ function ProsthesisHandler.CheckIfEquippable(fullType)
 
     local highestAmputatedLimbs = CachedDataHandler.GetHighestAmputatedLimbs(getPlayer():getUsername())
 
-    TOC_DEBUG.print("highestAmputatedLimbs")
-    TOC_DEBUG.printTable(highestAmputatedLimbs)
+    --TOC_DEBUG.print("highestAmputatedLimbs")
+    --TOC_DEBUG.printTable(highestAmputatedLimbs)
     if highestAmputatedLimbs then
         local hal = highestAmputatedLimbs[side]
         if hal and not string.contains(hal, "UpperArm") then

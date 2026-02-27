@@ -233,22 +233,36 @@ end
 ---@param patientUsername string username of player with cached values
 ---@param recalculate boolean
 function CachedDataHandler.SendCache(player, patientUsername, recalculate)
+    TOC_DEBUG.print("SendingCache")
     if recalculate then
         CachedDataHandler.CalculateCacheableValues(patientUsername)
     end
     local cache = CachedDataHandler.GetAll(patientUsername)
-    local CommandsData = require("TOC/CommandsData")
 
-    -- UGLY should be in ServerRelayCommands, but to not create circular dependencies we are keeping it here for now
-    sendServerCommand(player, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveCache, {
-        patientUsername = patientUsername, cache = cache})
+    if isServer() then
+        local CommandsData = require("TOC/CommandsData")
+
+        -- UGLY should be in ServerRelayCommands, but to not create circular dependencies we are keeping it here for now
+        sendServerCommand(player, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveCache, {
+            patientUsername = patientUsername, cache = cache})
+    elseif not isClient() then
+        -- SP
+        CachedDataHandler.ApplyFromServer(patientUsername, cache)
+        CachedDataHandler.OverrideInteractionsKey()
+    end
+
 end
 
 
 if isServer() then
     Events.OnServerStarted.Add(function()
-        TOC_DEBUG.print("Setting up CachedDataHandler events")
+        Events.OnInitTocData.Add(CachedDataHandler.SendCache)
+    end)
+elseif not isClient() then
+
+    Events.OnGameStart.Add(function()
         Events.OnInitTocData.Add(CachedDataHandler.SendCache)
     end)
 end
+
 return CachedDataHandler

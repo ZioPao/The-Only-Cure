@@ -51,8 +51,7 @@ function ClientRelayCommands.ReceiveCache(args)
     CachedDataHandler.ApplyFromServer(args.patientUsername, args.cache)
 
     if getPlayer():getUsername() == args.patientUsername then
-        CachedDataHandler.OverrideInteractionsKey(args.patientUsername)
-
+        CachedDataHandler.OverrideInteractionsKey()
     end
 end
 
@@ -71,16 +70,6 @@ function ClientRelayCommands.ReceiveExecuteInitialization()
     LocalPlayerController.InitializePlayer(true)
 end
 
----Creates a new handler and execute the amputation function on this client
----@param args receiveForcedCicatrizationParams
-function ClientRelayCommands.ReceiveForcedCicatrization(args)
-    local dcInst = DataController.GetInstance(getPlayer():getUsername())
-    --dcInst:setCicatrizationTime(args.limbName, 1)
-    dcInst:setIsCicatrized(args.limbName, true)
-    
-    
-    dcInst:apply() -- FIX no apply on client
-end
 
 -------------------------
 
