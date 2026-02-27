@@ -126,7 +126,7 @@ function LocalPlayerController.HealZombieInfection(bodyDamage, limbName, dcInst)
     --bodyPart:SetInfected(false)
 
     dcInst:setIsInfected(limbName, false)
-    dcInst:apply()
+
 end
 
 ---@param character IsoPlayer
@@ -172,10 +172,12 @@ function LocalPlayerController.HandleDamage(character)
         LocalPlayerController.hasBeenDamaged = false
         return
     end
+    
     local bd = character:getBodyDamage()
     local dcInst = DataController.GetInstance(character:getUsername())
-    local modDataNeedsUpdate = false
+
     for i = 1, #StaticData.LIMBS_STR do
+        local modDataNeedsUpdate = false
         local limbName = StaticData.LIMBS_STR[i]
         local bptEnum = StaticData.LIMBS_TO_BODYLOCS_IND_BPT[limbName]
         local bodyPart = bd:getBodyPart(bptEnum)
@@ -190,12 +192,17 @@ function LocalPlayerController.HandleDamage(character)
             if bodyPart:IsInfected() then
                 TOC_DEBUG.print("Healed from zombie infection - " .. limbName)
                 LocalPlayerController.HealZombieInfection(bd, limbName, dcInst)
+                modDataNeedsUpdate = true
             end
         else
             if (bodyPart:bitten() or bodyPart:IsInfected()) and not dcInst:getIsInfected(limbName) then
                 dcInst:setIsInfected(limbName, true)
                 modDataNeedsUpdate = true
             end
+        end
+
+        if modDataNeedsUpdate then
+            dcInst:updateAmputationsFromClient(limbName)
         end
     end
 
@@ -207,13 +214,10 @@ function LocalPlayerController.HandleDamage(character)
             local bodyPart = bd:getBodyPart(bodyPartType)
             if bodyPart and (bodyPart:bitten() or bodyPart:IsInfected()) then
                 dcInst:setIsIgnoredPartInfected(true)
-                modDataNeedsUpdate = true
+                -- Unclean, but it's just another client command in the end.
+                dcInst:updateIsIgnoredPartInfectedFromClient()
             end
         end
-    end
-
-    if modDataNeedsUpdate then
-        dcInst:apply()
     end
 
     -- Disable the lock
@@ -251,6 +255,8 @@ function LocalPlayerController.UpdateAmputations()
     local visual = pl:getHumanVisual()
     local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(pl:getUsername())
     local needsUpdate = false
+
+    TOC_DEBUG.print("updating cicatrization and wound dirtyness!")
 
     for k, _ in pairs(amputatedLimbs) do
         local limbName = k
@@ -292,17 +298,17 @@ function LocalPlayerController.UpdateAmputations()
             else
                 dcInst:setCicatrizationTime(limbName, cicTime)
             end
+
+            dcInst:updateAmputationsFromClient(limbName)
+
         end
     end
 
-    if needsUpdate then
-        TOC_DEBUG.print("updating modData from cicatrization loop")
-        dcInst:apply() -- TODO This is gonna be heavy. Not entirely sure
-    else
+    if not needsUpdate then
         TOC_DEBUG.print("Removing UpdateAmputations")
         Events.EveryHours.Remove(LocalPlayerController.UpdateAmputations) -- We can remove it safely, no cicatrization happening here boys
     end
-    TOC_DEBUG.print("updating cicatrization and wound dirtyness!")
+
 end
 
 ---Starts safely the loop to update cicatrzation
@@ -324,7 +330,7 @@ function LocalPlayerController.HandleSetCicatrization(dcInst, playerObj, limbNam
     dcInst:setCicatrizationTime(limbName, 0)
 
     -- -- Set visuals for the amputation
-    sendClientCommand(CommandsData.modules.TOC_ITEMS, "OverrideAmputationItemVisuals", 
+    sendClientCommand(CommandsData.modules.TOC_ITEMS, "OverrideAmputationItemVisuals",
     {patientNum = playerObj:getOnlineID(), limbName = limbName, isCicatrized = true})
 
 end

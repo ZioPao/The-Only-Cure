@@ -10,7 +10,43 @@ local ServerRelayCommands = {}
 --* DATA CONTROLLER
 function ServerRelayCommands.RelayRequestDataController(playerObj, args)
     local DataController = require("TOC/Controllers/DataController")
-    DataController:new(playerObj:getUsername(), args.isForced) 
+    local h = DataController:new(args.username, args.isForced)
+
+    -- Send data
+    h:apply(playerObj)        -- transmit to specific client
+end
+
+---Used to update data from client in a cautious way
+---@param playerObj IsoPlayer
+---@param args table
+function ServerRelayCommands.UpdateDataControllerFromClient(playerObj, args)
+    local DataController = require("TOC/Controllers/DataController")
+    local h = DataController.GetInstance(playerObj:getUsername())
+
+    if args.cicTime then
+        h:setCicatrizationTime(args.limbName, args.cicTime)
+    end
+
+    if args.dirtyness then
+        h:setWoundDirtyness(args.limbName, args.dirtyness)
+    end
+
+    if args.isInfected then
+        h:setIsInfected(args.limbName, args.isInfected)
+    end
+
+    if args.isCauterized then
+        h:setIsCauterized(args.limbName, args.isCauterized)
+    end
+
+    if args.isCicatrized then
+        h:setIsCicatrized(args.limbName, args.isCicatrized)
+    end
+
+    if args.isIgnoredPartInfected then
+        h:setIsIgnoredPartInfected(args.isIgnoredPartInfected)
+    end
+
 end
 
 

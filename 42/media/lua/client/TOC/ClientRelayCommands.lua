@@ -42,9 +42,9 @@ function ClientRelayCommands.FinalizeAmputationAction(args)
 end
 
 --* APPLY RELAY *--
-function ClientRelayCommands.ReceiveApplyFromServer()
-    TOC_DEBUG.print("Applying ModData from server")
-    local key = CommandsData.GetKey(getPlayer():getUsername())
+function ClientRelayCommands.ReceiveApplyFromServer(args)
+    local key = CommandsData.GetKey(args.patientUsername)
+    TOC_DEBUG.print("Applying ModData from server for " .. args.patientUsername)
     ModData.request(key)
 end
 
@@ -74,7 +74,9 @@ function ClientRelayCommands.ReceiveForcedCicatrization(args)
     local dcInst = DataController.GetInstance(getPlayer():getUsername())
     --dcInst:setCicatrizationTime(args.limbName, 1)
     dcInst:setIsCicatrized(args.limbName, true)
-    dcInst:apply()
+    
+    
+    dcInst:apply() -- FIX no apply on client
 end
 
 -------------------------
@@ -88,5 +90,4 @@ end
 
 Events.OnServerCommand.Add(OnServerRelayCommand)
 
--- TODO temporary
 return ClientRelayCommands

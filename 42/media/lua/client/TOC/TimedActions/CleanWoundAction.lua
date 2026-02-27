@@ -106,7 +106,7 @@ function CleanWoundAction:perform()
 
     dcInst:setWoundDirtyness(limbName, newWoundDirtyness)
 
-    dcInst:apply()
+    dcInst:updateAmputationsFromClient(limbName)
 
     -- Clean visual
     local bbptEnum = BloodBodyPartType[limbName]

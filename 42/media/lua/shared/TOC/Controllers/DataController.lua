@@ -114,12 +114,6 @@ function DataController:ensureDataInitialized(key)
 
     self:setIsDataReady(true)
     self:setIsResetForced(false)
-
-    local pl = CommonMethods.FindOnlinePlayer(self.username)        -- UGLY just to maek things work at this point
-    self:apply(pl)        -- transmit to specific client
-
-    -- To be used with Cache
-    triggerEvent("OnInitTocData", pl, self.username, true)
 end
 
 
@@ -211,7 +205,7 @@ function DataController:setIsCut(limbName, isCut)
     self.tocData.limbs[limbName].isCut = isCut
 end
 
----Set isInfected
+---Set isInfected.
 ---@param limbName string
 ---@param isInfected boolean
 function DataController:setIsInfected(limbName, isInfected)
@@ -404,24 +398,55 @@ end
 
 ---Decreases the cicatrization time
 ---@param limbName string
+---@client
 function DataController:decreaseCicatrizationTime(limbName)
     self.tocData.limbs[limbName].cicatrizationTime = self.tocData.limbs[limbName].cicatrizationTime - 1
 end
 
+--* Specific updates from Client
+---@param limbName string
+---Sends only the necessary data to update cicatrization stats to server, while being already ok on the client
+function DataController:updateAmputationsFromClient(limbName)
+    local cicTime = self:getCicatrizationTime(limbName)
+    local dirtyness = self:getWoundDirtyness(limbName)
+    local isInfected = self:getIsInfected(limbName)
+    local isCicatrized = self:getIsCicatrized(limbName)
+    local isCauterized = self:getIsCauterized(limbName)
+
+    sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.UpdateDataControllerFromClient, {limbName = limbName,
+    cicTime = cicTime,
+    dirtyness = dirtyness,
+    isInfected = isInfected,
+    isCauterized = isCauterized,
+    isCicatrized = isCicatrized})
+end
+
+
+function DataController:updateIsIgnoredPartInfectedFromClient()
+    local isIgnoredPartInfected = self:getIsIgnoredPartInfected()
+    sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.UpdateDataControllerFromClient, {
+    isIgnoredPartInfected = isIgnoredPartInfected})
+end
+
 --* Global Mod Data Handling *--
 
----SHARED
+---SERVER
 ---@param player IsoPlayer? TO BE USED ONLY WHEN RUN ON SERVER!!!!
 function DataController:apply(player)
     if isClient() and self:getIsDataReady() then
-        TOC_DEBUG.print("[WORKAROUND] Sending ModData to server for " .. self.username)
-        ModData.transmit(CommandsData.GetKey(self.username))
+        -- TOC_DEBUG.print("[WORKAROUND] Sending ModData to server for " .. self.username)
+        -- ModData.transmit(CommandsData.GetKey(self.username))
     elseif isServer() then
         --TOC_DEBUG.print("Forwarding ModData to " .. playerObj:getUsername())
         -- Notify player that they must request the data from the server
         --B42 TEMPORARY WORKAROUND FOR B42.14 ugly
-        sendServerCommand(player, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveApplyFromServer, {})
+        sendServerCommand(player, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveApplyFromServer, {patientUsername = self.username})
+
+        -- To be used with Cache
+        triggerEvent("OnInitTocData", player, self.username, true)
     end
+
+
 end
 
 --- SHARED

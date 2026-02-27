@@ -1,4 +1,4 @@
-if not getActivatedMods():contains("TEST_FRAMEWORK") or not isDebugEnabled() then return end
+if not getActivatedMods():contains("\\TEST_FRAMEWORK") or not isDebugEnabled() then return end
 local TestFramework = require("TestFramework/TestFramework")
 local TestUtils = require("TestFramework/TestUtils")
 
@@ -56,6 +56,10 @@ TestFramework.registerTestModule("LocalPlayerController", "Cicatrization", funct
         end
         DataController.GetInstance():apply()
         TestUtils.assert(DataController.GetInstance():getIsCut("Hand_L"))
+    end
+
+    function Tests.RunCicatrizationLoop()
+        LocalPlayerController.UpdateAmputations()
     end
 
     return Tests

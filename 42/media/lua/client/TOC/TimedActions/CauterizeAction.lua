@@ -84,7 +84,7 @@ function CauterizeAction:perform()
     LocalPlayerController.HandleSetCicatrization(dcInst, self.character, self.limbName)
 
     -- we don't care about the depended limbs, since they're alread "cicatrized"
-    dcInst:apply()
+    dcInst:updateAmputationsFromClient(self.limbName)
 
     ISBaseTimedAction.perform(self)
 end
