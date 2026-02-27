@@ -407,18 +407,20 @@ end
 ---@param limbName string
 ---Sends only the necessary data to update cicatrization stats to server, while being already ok on the client
 function DataController:updateAmputationsFromClient(limbName)
-    local cicTime = self:getCicatrizationTime(limbName)
-    local dirtyness = self:getWoundDirtyness(limbName)
-    local isInfected = self:getIsInfected(limbName)
-    local isCicatrized = self:getIsCicatrized(limbName)
-    local isCauterized = self:getIsCauterized(limbName)
+    if self:getIsDataReady() then
+        local cicTime = self:getCicatrizationTime(limbName)
+        local dirtyness = self:getWoundDirtyness(limbName)
+        local isInfected = self:getIsInfected(limbName)
+        local isCicatrized = self:getIsCicatrized(limbName)
+        local isCauterized = self:getIsCauterized(limbName)
 
-    sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.UpdateDataControllerFromClient, {limbName = limbName,
-    cicTime = cicTime,
-    dirtyness = dirtyness,
-    isInfected = isInfected,
-    isCauterized = isCauterized,
-    isCicatrized = isCicatrized})
+        sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.UpdateDataControllerFromClient, {limbName = limbName,
+        cicTime = cicTime,
+        dirtyness = dirtyness,
+        isInfected = isInfected,
+        isCauterized = isCauterized,
+        isCicatrized = isCicatrized})
+    end
 end
 
 
