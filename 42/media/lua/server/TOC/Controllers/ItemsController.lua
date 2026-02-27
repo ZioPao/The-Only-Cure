@@ -54,7 +54,7 @@ function ItemsController.Player.RemoveClothingItem(playerObj, clothingItem)
         playerObj:getInventory():Remove(clothingItem)
         sendRemoveItemFromContainer(playerObj:getInventory(), clothingItem)
 
-        TOC_DEBUG.print("found and deleted" .. tostring(clothingItem))
+        TOC_DEBUG.print("found and deleted " .. tostring(clothingItem))
 
         -- Reset model
         playerObj:resetModelNextFrame()
@@ -116,7 +116,14 @@ function ItemsController.Player.SpawnAmputationItem(playerObj, limbName)
     ---@cast clothingItem InventoryItem
     clothingItem:getVisual():setTextureChoice(texId) -- it counts from 0, so we have to subtract 1
     sendAddItemToContainer(playerObj:getInventory(), clothingItem)
-    sendServerCommand(playerObj, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveWearAmputation, {itemName = itemName, texId = texId})
+
+    if isServer() then
+        --sendServerCommand works only in MP
+        sendServerCommand(playerObj, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveWearAmputation, {itemName = itemName, texId = texId})
+    else
+        local AmputationHandler = require("TOC/Handlers/AmputationHandler")
+        AmputationHandler.WearAmputationItem(playerObj, itemName)
+    end
 end
 
 ---Search through worn items and modifies a specific amputation item

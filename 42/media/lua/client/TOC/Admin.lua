@@ -60,12 +60,12 @@ local function AddAdminTocOptions(playerNum, context, worldobjects)
             local limbTranslatedName = getText("ContextMenu_Limb_" .. limbName)
 
             forceAmpSubMenu:addOption(limbTranslatedName, nil, function()
-                if isClient() then
-                    sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayForcedAmputation,
-                    { patientNum = clickedPlayerNum, limbName = limbName })
-                else
-                    ClientRelayCommands.ReceiveExecuteAmputationAction({surgeonNum=clickedPlayerNum, limbName=limbName, damagePlayer=false})
-                end
+                --if isClient() then
+                sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayForcedAmputation,
+                { patientNum = clickedPlayerNum, limbName = limbName })
+                -- else
+                --     ClientRelayCommands.ReceiveExecuteAmputationAction({surgeonNum=clickedPlayerNum, limbName=limbName, damagePlayer=false})
+                -- end
 
             end)
         end

@@ -12,8 +12,9 @@ local StaticData = require("TOC/StaticData")
 ---@field bodyPartType BodyPartType
 local AmputationHandler = {}
 
+---@param surgeonPl IsoPlayer
+---@param patientPl IsoPlayer
 ---@param limbName string
----@param surgeonPl IsoPlayer?
 ---@return AmputationHandler
 function AmputationHandler:new(surgeonPl, patientPl, limbName)
     local o = {}
@@ -121,6 +122,13 @@ function AmputationHandler.PrepareBandagesAction(prevAction, limbName, surgeonPl
     return bandageAction
 end
 
+---@param player IsoPlayer
+---@param itemName string
+function AmputationHandler.WearAmputationItem(player, itemName)
+    local clothingItem = player:getInventory():FindAndReturn(itemName)
+    player:setWornItem(clothingItem:getBodyLocation(), clothingItem)
+end
+
 ---Used to heal an area that has been cut previously. There's an exception for bites, those are managed differently
 function AmputationHandler:healArea()
     -- Heal the area, we're gonna re-set the damage after (if it's enabled)
@@ -204,7 +212,7 @@ function AmputationHandler:damageAfterAmputation(surgeonFactor)
     bodyPart:setDeepWoundTime(baseDamage - surgeonFactor)
     patientStats:set(CharacterStat.ENDURANCE, surgeonFactor)
     patientStats:set(CharacterStat.STRESS, baseDamage - surgeonFactor)
-    
+
     syncBodyPart(bodyPart, 0xFFFFFFFFFFF)
 end
 

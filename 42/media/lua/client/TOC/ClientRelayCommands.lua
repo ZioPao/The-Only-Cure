@@ -13,7 +13,7 @@ local function InitAmputationHandler(limbName, surgeonNum)
 
     -- TODO Pretty unclean
     local surgeonPl = getSpecificPlayer(surgeonNum)     -- fix broken, getOnlineID not working anymore
-    local handler = AmputationHandler:new(limbName, surgeonPl)
+    local handler = AmputationHandler:new(surgeonPl, getPlayer(), limbName)
     return handler
 end
 
@@ -56,13 +56,9 @@ end
 
 --* WEAR AMPUTATION ITEM *--
 function ClientRelayCommands.ReceiveWearAmputation(args)
-    local itemName = args.itemName
-    local clothingItem = getPlayer():getInventory():FindAndReturn(itemName)
-    getPlayer():setWornItem(clothingItem:getBodyLocation(), clothingItem)
-
+    TOC_DEBUG.print("Received wear amputation, item " .. tostring(args.itemName))
+    AmputationHandler.WearAmputationItem(getPlayer(), args.itemName)
 end
-
-
 
 
 --* TRIGGERED BY ADMINS *--
