@@ -15,8 +15,10 @@ function Main.Start()
 end
 
 function Main.SetupEvents()
-    local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
-    Events.OnReceivedTocData.Add(CachedDataHandler.CalculateCacheableValues)
+
+    -- B42 Wrong, CachedDataHandler is only serverside now
+    --local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
+    --Events.OnReceivedTocData.Add(CachedDataHandler.CalculateCacheableValues)
 end
 
 

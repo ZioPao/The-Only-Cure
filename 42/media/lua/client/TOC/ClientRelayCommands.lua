@@ -36,6 +36,11 @@ function ClientRelayCommands.ReceiveExecuteAmputationAction(args)
     handler:execute(args.damagePlayer)
 end
 
+function ClientRelayCommands.FinalizeAmputationAction(args)
+    local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
+    CachedDataHandler.ApplyFromServer(args.cache)
+    triggerEvent("OnAmputatedLimb", args.limbName)
+end
 
 --* APPLY RELAY *--
 
@@ -54,9 +59,8 @@ function ClientRelayCommands.ReceiveWearAmputation(args)
 
 end
 
-function ClientRelayCommands.ReceiveToggleEvent(args)
-    triggerEvent("OnAmputatedLimb", args.limbName)
-end
+
+
 
 --* TRIGGERED BY ADMINS *--
 

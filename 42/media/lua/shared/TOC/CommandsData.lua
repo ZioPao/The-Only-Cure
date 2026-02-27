@@ -13,11 +13,12 @@ CommandsData.client = {
     Relay = {
         ReceiveDamageDuringAmputation = "ReceiveDamageDuringAmputation",            ---@alias receiveDamageDuringAmputationParams { limbName : string}
         ReceiveExecuteAmputationAction = "ReceiveExecuteAmputationAction",       ---@alias receiveExecuteAmputationActionParams {surgeonNum : number, limbName : string, damagePlayer : boolean}
-
+        FinalizeAmputationAction = "FinalizeAmputationAction",
+        
         --* APPLY *--
         ReceiveApplyFromServer = "ReceiveApplyFromServer",
         ReceiveWearAmputation = "ReceiveWearAmputation",
-        ReceiveToggleEvent = "ReceiveToggleEvent",
+        --ReceiveToggleEvent = "ReceiveToggleEvent",
 
         --* ADMIN ONLY --*
         ReceiveExecuteInitialization = "ReceiveExecuteInitialization",

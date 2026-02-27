@@ -40,7 +40,7 @@ end
 local og_MainOptions_apply = MainOptions.apply
 function MainOptions:apply(closeAfter)
     og_MainOptions_apply(self, closeAfter)
-    CachedDataHandler.OverrideBothHandsFeasibility()
+    CachedDataHandler.OverrideInteractionsKey()
 end
 
 

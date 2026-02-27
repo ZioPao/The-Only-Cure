@@ -1,3 +1,6 @@
+-- B42 Overhaul necessary, separte server only functions from client/shared ones
+
+
 local DataController = require("TOC/Controllers/DataController")
 local StaticData = require("TOC/StaticData")
 ---------------------------
@@ -16,19 +19,29 @@ function CachedDataHandler.Setup(username)
     CachedDataHandler.handFeasibility[username] = {}
 end
 
+--CLIENT ONLY
+function CachedDataHandler.ApplyFromServer(cache)
+    CachedDataHandler.amputatedLimbs = cache.amputatedLimbs or {}
+    CachedDataHandler.highestAmputatedLimbs = cache.highestAmputatedLimbs or {}
+    CachedDataHandler.handFeasibility = cache.handFeasibility or {}
+end
+
+---SERVER ONLY
 ---Will calculate all the values that we need
 function CachedDataHandler.CalculateCacheableValues(username)
     CachedDataHandler.CalculateHighestAmputatedLimbs(username)
+    CachedDataHandler.CalculateHandFeasibility(username, "Hand_L")
+    CachedDataHandler.CalculateHandFeasibility(username, "Hand_R")
 
     -- Recalculate hand feasibility for the given username.
     -- Only run the keybinding/UI parts on the local client for the local player.
-    if username and isClient() and getPlayer() and getPlayer():getUsername() == username then
-        CachedDataHandler.OverrideBothHandsFeasibility(username)
-    else
-        -- Still calculate the raw feasibility values on server/other contexts
-        CachedDataHandler.CalculateHandFeasibility(username, "Hand_L")
-        CachedDataHandler.CalculateHandFeasibility(username, "Hand_R")
-    end
+    -- if username and isClient() and getPlayer() and getPlayer():getUsername() == username then
+    --     CachedDataHandler.OverrideBothHandsFeasibility(username)
+    -- else
+    --     -- Still calculate the raw feasibility values on server/other contexts
+    --     CachedDataHandler.CalculateHandFeasibility(username, "Hand_L")
+    --     CachedDataHandler.CalculateHandFeasibility(username, "Hand_R")
+    -- end
 end
 
 --* Amputated Limbs caching *--
@@ -69,9 +82,11 @@ function CachedDataHandler.GetAmputatedLimbs(username)
     return CachedDataHandler.amputatedLimbs[username]
 end
 
+
 --* Highest amputated limb per side caching *--
 CachedDataHandler.highestAmputatedLimbs = {}
 
+---SERVER SIDE ONLY
 ---Calculate the highest point of amputations achieved by the player
 ---@param username string
 function CachedDataHandler.CalculateHighestAmputatedLimbs(username)
@@ -108,21 +123,12 @@ end
 --* Hand feasibility caching *--
 CachedDataHandler.handFeasibility = {}
 
+---SERVER SIDE ONLY
+---@private
 ---@param username string
 ---@param limbName string
 function CachedDataHandler.CalculateHandFeasibility(username, limbName)
     local CommonMethods = require("TOC/CommonMethods")
-
-    -- Resolve username to local player on client if omitted
-    if username == nil then
-        if isClient() and getPlayer() then
-            username = getPlayer():getUsername()
-        else
-            TOC_DEBUG.print("CalculateHandFeasibility called without username on server/invalid context")
-            return
-        end
-    end
-
     local dcInst = DataController.GetInstance(username)
     if dcInst == nil then
         TOC_DEBUG.print("DataController not found for CalculateHandFeasibility for " .. tostring(username))
@@ -136,89 +142,58 @@ function CachedDataHandler.CalculateHandFeasibility(username, limbName)
     TOC_DEBUG.print("Calculated hand feasibility for " .. tostring(username) .. " side: " .. tostring(side))
 end
 
+---SHARED
 ---@param side string Either "L" or "R"
----@param username string (optional) username to query; defaults to local player on client
+---@param username string username to query
 ---@return boolean
 function CachedDataHandler.GetHandFeasibility(side, username)
-
-    -- Resolve username to local player on client if omitted
-    if username == nil then
-        if isClient() and getPlayer() then
-            username = getPlayer():getUsername()
-        else
-            TOC_DEBUG.print("GetHandFeasibility called without username on server/invalid context")
-            return false
-        end
-    end
-
-    CachedDataHandler.handFeasibility[username] = CachedDataHandler.handFeasibility[username] or {}
-
-    -- If missing, recalculate for that user
-    if CachedDataHandler.handFeasibility[username][side] == nil then
-        CachedDataHandler.OverrideBothHandsFeasibility(username)
+    if CachedDataHandler.handFeasibility[username] == nil then
+        TOC_DEBUG.print("handFeasibility cache missing for " .. tostring(username))
+        return false
     end
 
     return CachedDataHandler.handFeasibility[username][side]
 end
 
-function CachedDataHandler.OverrideBothHandsFeasibility(username)
+---CLIENT ONLY
+---@param username string
+function CachedDataHandler.OverrideInteractionsKey(username)
     -- Resolve username to local player on client if omitted
-    if username == nil then
-        if isClient() and getPlayer() then
-            username = getPlayer():getUsername()
-        else
-            TOC_DEBUG.print("OverrideBothHandsFeasibility called without username on server/invalid context")
-            return
-        end
+
+    if CachedDataHandler.handFeasibility[username] == nil then
+         return
     end
 
-    CachedDataHandler.CalculateHandFeasibility(username, "Hand_L")
-    CachedDataHandler.CalculateHandFeasibility(username, "Hand_R")
     local interactStr = "Interact"
-
     -- Only touch keybindings/UI when running on the local client and for that client username
-    if isClient() and getPlayer() and getPlayer():getUsername() == username then
+    if CachedDataHandler.interactKey == nil or CachedDataHandler.interactKey == 0 then
+        CachedDataHandler.interactKey = getCore():getKey(interactStr)
+    end
+    
+    if not CachedDataHandler.GetBothHandsFeasibility(username) then
+        TOC_DEBUG.print("Disabling interact key for local player")
+        TOC_DEBUG.print("Cached current key for interact: " .. tostring(CachedDataHandler.interactKey))
 
-        if CachedDataHandler.interactKey == nil or CachedDataHandler.interactKey == 0 then
-            CachedDataHandler.interactKey = getCore():getKey(interactStr)
-        end
+        getCore():addKeyBinding(interactStr, CachedDataHandler.interactKey and CachedDataHandler.interactKey or Keyboard.KEY_NONE)
+        getCore():addKeyBinding(interactStr, Keyboard.KEY_NONE)
 
-        if not CachedDataHandler.GetBothHandsFeasibility(username) then
-            TOC_DEBUG.print("Disabling interact key for local player")
-            TOC_DEBUG.print("Cached current key for interact: " .. tostring(CachedDataHandler.interactKey))
+    else
+        getCore():addKeyBinding(interactStr, CachedDataHandler.interactKey)
 
-            if StaticData.COMPAT_42 then
-                getCore():addKeyBinding(interactStr, Keyboard.KEY_NONE, 0, false, false, false)
-            else
-                getCore():addKeyBinding(interactStr, CachedDataHandler.interactKey and CachedDataHandler.interactKey or Keyboard.KEY_NONE)
-                getCore():addKeyBinding(interactStr, Keyboard.KEY_NONE)
-            end
-        else
-            -- Restore cached key for local player
-            TOC_DEBUG.print("Re-enabling interact key for local player")
-            TOC_DEBUG.print("Cached current key for interact: " .. tostring(CachedDataHandler.interactKey))
-
-            if StaticData.COMPAT_42 then
-                getCore():addKeyBinding(interactStr, CachedDataHandler.interactKey, 0, false, false, false)
-            else
-                getCore():addKeyBinding(interactStr, CachedDataHandler.interactKey)
-            end
-        end
     end
 end
 
+
+---SHARED
+---@param username string
+---@return boolean
 function CachedDataHandler.GetBothHandsFeasibility(username)
     -- Resolve username to local player on client if omitted
-    if username == nil then
-        if isClient() and getPlayer() then
-            username = getPlayer():getUsername()
-        else
-            TOC_DEBUG.print("GetBothHandsFeasibility called without username on server/invalid context")
-            return false
-        end
+    if CachedDataHandler.handFeasibility[username] == nil then
+        TOC_DEBUG.print("handFeasibility cache missing for " .. tostring(username))
+        return false
     end
 
-    CachedDataHandler.handFeasibility[username] = CachedDataHandler.handFeasibility[username] or {}
     return (CachedDataHandler.handFeasibility[username]["L"] or CachedDataHandler.handFeasibility[username]["R"]) or false
 end
 

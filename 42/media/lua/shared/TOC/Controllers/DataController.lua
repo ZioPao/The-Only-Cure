@@ -1,3 +1,12 @@
+--* REWORK PLAN --
+-- DataController will mainly work Server side, with the client that will be able to REQUEST updates.
+-- Server is the authoritative source
+
+
+
+
+
+
 local CommandsData = require("TOC/CommandsData")
 local StaticData = require("TOC/StaticData")
 ----------------
@@ -18,7 +27,7 @@ DataController.instances = {}
 ---@param isResetForced boolean?
 ---@return DataController
 function DataController:new(username, isResetForced)
-    TOC_DEBUG.print("Creating new DataController instance for " .. username)
+    TOC_DEBUG.print("Creating new instance of DataController instance for " .. username)
     ---@type DataController
     ---@diagnostic disable-next-line: missing-fields
     local o = {}
@@ -34,12 +43,14 @@ function DataController:new(username, isResetForced)
 
     local key = CommandsData.GetKey(username)
 
+    -- Multiplayer, client
     if isClient() then
         -- In MP, we request the data from the server to trigger DataController.ReceiveData
         ModData.request(key)
     else
-        -- In SP, we handle it with another function which will reference the saved instance in DataController.instances
-        o:initSinglePlayer(key)
+        -- SP or Server
+        -- will reference the saved instance in DataController.instances
+        o:init(key)
     end
 
     return o
@@ -350,10 +361,11 @@ end
 --* Global Mod Data Handling *--
 
 ---
----@param playerObj IsoPlayer? TEMPORARY WORKAROUND FOR B42.14, SERVER ONLY
+---@param playerObj IsoPlayer? 
 function DataController:apply(playerObj)
+    --B42 TEMPORARY WORKAROUND FOR B42.14, it should be server only
     if isClient() then
-        TOC_DEBUG.print("Sending ModData to server for " .. self.username)
+        TOC_DEBUG.print("[WORKAROUND] Sending ModData to server for " .. self.username)
         ModData.transmit(CommandsData.GetKey(self.username))
     end
 
@@ -442,7 +454,7 @@ Events.OnReceiveGlobalModData.Add(DataController.ReceiveData)
 
 --- SP Only initialization
 ---@param key string
-function DataController:initSinglePlayer(key)
+function DataController:init(key)
     self:tryLoadLocalData(key)
     if self.tocData == nil or self.isResetForced then
         self:setup(key)
@@ -452,21 +464,17 @@ function DataController:initSinglePlayer(key)
     self:setIsResetForced(false)
 
     -- Event, triggers caching
+    -- B42 Broken
     triggerEvent("OnReceivedTocData", self.username)
 end
 -------------------
 
----@param username string?
+---@param username string
 ---@return DataController
 function DataController.GetInstance(username)
-
-    -- TODO To be changed in due time, isClient() is here but we want username to be necessary
-    if isClient() and (username == nil or username == "Bob") then
-        username = getPlayer():getUsername()
-    end
-
+    -- Check if instance exist. If not, request from server
     if DataController.instances[username] == nil then
-        TOC_DEBUG.print("Creating NEW instance for " .. username)
+        TOC_DEBUG.print("Creating/fetching DC instance for " .. username)
         return DataController:new(username)
     else
         return DataController.instances[username]

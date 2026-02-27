@@ -4,7 +4,7 @@ local StaticData = require("TOC/StaticData")
 local TourniquetController = require("TOC/Controllers/TourniquetController")
 ---------------------------
 
---- Manages an amputation. Will be run on the patient client
+--- Manages an amputation. Will be run on the server
 ---@class AmputationHandler
 ---@field surgeonPl IsoPlayer
 ---@field patientPl IsoPlayer
@@ -247,8 +247,17 @@ function AmputationHandler:execute(damagePlayer)
     if not damagePlayer then return end
     self:damageAfterAmputation(surgeonFactor)
 
-    if isClient() then
-        sendServerCommand(self.patientPl, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveToggleEvent, {limbName = self.limbName})
+    if isServer() then
+        local cache = {
+            amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(patientUsername),
+            highestAmputatedLimbs = CachedDataHandler.GetHighestAmputatedLimbs(patientUsername),
+            handFeasibility = {
+                ["L"] = CachedDataHandler.GetHandFeasibility("L", patientUsername),
+                ["R"] = CachedDataHandler.GetHandFeasibility("R", patientUsername)
+            }
+        }
+        sendServerCommand(self.patientPl, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.FinalizeAmputationAction,
+        {cache = cache, limbName = self.limbName})
     else
         triggerEvent("OnAmputatedLimb", self.limbName)
     end
