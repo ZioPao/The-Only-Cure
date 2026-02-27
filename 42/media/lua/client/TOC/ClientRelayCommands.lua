@@ -49,6 +49,11 @@ end
 function ClientRelayCommands.ReceiveCache(args)
     local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
     CachedDataHandler.ApplyFromServer(args.patientUsername, args.cache)
+
+    if getPlayer():getUsername() == args.patientUsername then
+        CachedDataHandler.OverrideInteractionsKey(args.patientUsername)
+
+    end
 end
 
 

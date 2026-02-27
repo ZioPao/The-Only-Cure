@@ -186,10 +186,9 @@ function CachedDataHandler.GetHandFeasibility(side, username)
 end
 
 ---CLIENT ONLY
----@param username string
-function CachedDataHandler.OverrideInteractionsKey(username)
-    -- Resolve username to local player on client if omitted
-
+function CachedDataHandler.OverrideInteractionsKey()
+    -- Resolve username to local player on client ONLY
+    local username = getPlayer():getUsername()
     if CachedDataHandler.handFeasibility[username] == nil then
          return
     end

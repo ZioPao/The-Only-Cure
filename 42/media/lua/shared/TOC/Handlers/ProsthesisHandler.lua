@@ -89,8 +89,10 @@ function ProsthesisHandler.SearchAndSetupProsthesis(character, item, isEquipping
     dcInst:setIsProstEquipped(group, isEquipping)
     dcInst:apply(character)
 
-    -- Calculates hands feasibility once again
-    CachedDataHandler.OverrideInteractionsKey(username)
+
+    -- FIX Should be handled separately, when recalculating cache
+    -- -- Calculates hands feasibility once again
+    -- CachedDataHandler.OverrideInteractionsKey(username)
     return true
 end
 
@@ -102,6 +104,7 @@ function ProsthesisHandler.Validate(item, isEquippable)
     if isEquippable then
         isEquippable = ProsthesisHandler.CheckIfEquippable(fullType)
     else
+        TOC_DEBUG.print("Should say cant equip")
         getPlayer():Say(getText("UI_Say_CantEquip"))        -- FIX not working
     end
 
@@ -140,23 +143,23 @@ function ISClothingExtraAction:isValid()
     return ProsthesisHandler.Validate(testItem, isEquippable)
 end
 
-local og_ISClothingExtraAction_perform = OverridenMethodsArchive.Save("ISClothingExtraAction_perform", ISClothingExtraAction.perform)
+local og_ISClothingExtraAction_complete = OverridenMethodsArchive.Save("ISClothingExtraAction_complete", ISClothingExtraAction.complete)
 ---@diagnostic disable-next-line: duplicate-set-field
-function ISClothingExtraAction:perform()
+function ISClothingExtraAction:complete()
     local extraItem = instanceItem(self.extra)
-    TOC_DEBUG.print("ISClothingExtraAction_perform 1")
+    TOC_DEBUG.print("ISClothingExtraAction_complete 1")
     ProsthesisHandler.SearchAndSetupProsthesis(self.character, extraItem, true)
-    TOC_DEBUG.print("ISClothingExtraAction_perform 2")
+    TOC_DEBUG.print("ISClothingExtraAction_complete 2")
 
-    og_ISClothingExtraAction_perform(self)
+    og_ISClothingExtraAction_complete(self)
 end
 
-local og_ISUnequipAction_perform = ISUnequipAction.perform
+local og_ISUnequipAction_complete = ISUnequipAction.complete
 ---@diagnostic disable-next-line: duplicate-set-field
-function ISUnequipAction:perform()
+function ISUnequipAction:complete()
 
     local isProst = ProsthesisHandler.SearchAndSetupProsthesis(self.character, self.item, false)
-    og_ISUnequipAction_perform(self)
+    og_ISUnequipAction_complete(self)
 
     if isProst then
         -- we need to fetch the limbname associated to the prosthesis

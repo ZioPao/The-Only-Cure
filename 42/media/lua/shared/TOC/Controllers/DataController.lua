@@ -319,6 +319,7 @@ end
 ---@param limbName string
 ---@return number
 function DataController:getWoundDirtyness(limbName)
+    if not self.isDataReady then return -1 end      -- prevent errors, but scary
     return self.tocData.limbs[limbName].woundDirtyness
 end
 
@@ -326,6 +327,7 @@ end
 ---@param limbName string
 ---@return number
 function DataController:getCicatrizationTime(limbName)
+    if not self.isDataReady then return -1 end      -- prevent errors, but scary
     return self.tocData.limbs[limbName].cicatrizationTime
 end
 
