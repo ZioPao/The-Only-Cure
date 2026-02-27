@@ -9,7 +9,7 @@ local OverridenMethodsArchive = require("TOC/OverridenMethodsArchive")
 ---@class ProsthesisHandler
 local ProsthesisHandler = {}
 
-local bodylocArmProstBaseline = "toc:toc_armprost"
+local bodylocArmProstBaseline = "toc:armprost_"
 --local bodyLocLegProst = "TOC_LegProst"
 
 ---Check if the following item is a prosthesis or not
@@ -51,16 +51,16 @@ end
 ---@param fullType string
 ---@return boolean
 function ProsthesisHandler.CheckIfEquippable(fullType)
-    --TOC_DEBUG.print("Current item is a prosthesis")
+    TOC_DEBUG.print("Current item is a prosthesis")
     local side = CommonMethods.GetSide(fullType)
-    --TOC_DEBUG.print("Checking side: " .. tostring(side))
+    TOC_DEBUG.print("Checking side: " .. tostring(side))
 
     local highestAmputatedLimbs = CachedDataHandler.GetHighestAmputatedLimbs(getPlayer():getUsername())
 
     if highestAmputatedLimbs then
         local hal = highestAmputatedLimbs[side]
         if hal and not string.contains(hal, "UpperArm") then
-            --TOC_DEBUG.print("Found acceptable limb to use prosthesis => " .. tostring(hal))
+            TOC_DEBUG.print("Found acceptable limb to use prosthesis => " .. tostring(hal))
             return true
         end
     end
@@ -70,20 +70,23 @@ function ProsthesisHandler.CheckIfEquippable(fullType)
 end
 
 ---Handle equipping or unequipping prosthetics
+---@param character IsoPlayer
 ---@param item InventoryItem
 ---@param isEquipping boolean
 ---@return boolean
-function ProsthesisHandler.SearchAndSetupProsthesis(item, isEquipping)
+function ProsthesisHandler.SearchAndSetupProsthesis(character, item, isEquipping)
     if not ProsthesisHandler.CheckIfProst(item) then return false end
+
+    local username = character:getUsername()
 
     local group = ProsthesisHandler.GetGroup(item)
     TOC_DEBUG.print("Setup Prosthesis => " .. group .. " - is equipping? " .. tostring(isEquipping))
-    local dcInst = DataController.GetInstance()
+    local dcInst = DataController.GetInstance(username)
     dcInst:setIsProstEquipped(group, isEquipping)
     dcInst:apply()
 
     -- Calculates hands feasibility once again
-    CachedDataHandler.OverrideBothHandsFeasibility()
+    CachedDataHandler.OverrideInteractionsKey(username)
     return true
 end
 
@@ -117,13 +120,9 @@ end
 local og_ISWearClothing_perform = ISWearClothing.perform
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISWearClothing:perform()
-    ProsthesisHandler.SearchAndSetupProsthesis(self.item, true)
+    ProsthesisHandler.SearchAndSetupProsthesis(self.character, self.item, true)
     og_ISWearClothing_perform(self)
 end
-
-
-
-
 
 
 local og_ISClothingExtraAction_isValid = OverridenMethodsArchive.Save("ISClothingExtraAction_isValid", ISClothingExtraAction.isValid)
@@ -132,51 +131,29 @@ local og_ISClothingExtraAction_isValid = OverridenMethodsArchive.Save("ISClothin
 function ISClothingExtraAction:isValid()
     local isEquippable = og_ISClothingExtraAction_isValid(self)
     -- self.extra is a string, not the item
-
-    -- B42 Compatibility to add
-    local testItem = InventoryItemFactory.CreateItem(self.extra)
+    local testItem = instanceItem(self.extra)
     return ProsthesisHandler.Validate(testItem, isEquippable)
 end
 
 local og_ISClothingExtraAction_perform = OverridenMethodsArchive.Save("ISClothingExtraAction_perform", ISClothingExtraAction.perform)
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISClothingExtraAction:perform()
-    
-
-    -- B42 Compatibility to add
-
-    local extraItem = InventoryItemFactory.CreateItem(self.extra)
-    ProsthesisHandler.SearchAndSetupProsthesis(extraItem, true)
+    local extraItem = instanceItem(self.extra)
+    ProsthesisHandler.SearchAndSetupProsthesis(self.character, extraItem, true)
     og_ISClothingExtraAction_perform(self)
 end
 
-local og_ISUnequipAction_perform = ISUnequipAction.perform
+local og_ISUnequipAction_complete = ISUnequipAction.complete
 ---@diagnostic disable-next-line: duplicate-set-field
-function ISUnequipAction:perform()
-
-    --[[
-    Horrendous workaround
-
-    To unequp items, the java side uses WornItems.setItem, which has
-    a check for multiItem. Basically, if it's active, it won't actually remove the item,
-    fucking things up. So, to be 100% sure that we're removing the items, we're gonna
-    disable and re-enable the multi-item bool for the Unequip Action.
-    ]]
-
-    local isProst = ProsthesisHandler.SearchAndSetupProsthesis(self.item, false)
-    -- local group
-    -- if isProst then
-    --     group = BodyLocations.getGroup("Human")
-    --     group:setMultiItem("TOC_ArmProst", false)
-    -- end
-    og_ISUnequipAction_perform(self)
+function ISUnequipAction:complete()
+    -- B42 Completely broken!
+    local isProst = ProsthesisHandler.SearchAndSetupProsthesis(self.character, self.item, false)
+    og_ISUnequipAction_complete(self)
 
     if isProst then
-        -- group:setMultiItem("TOC_ArmProst", true)
-
         -- we need to fetch the limbname associated to the prosthesis
         local side = CommonMethods.GetSide(self.item:getFullType())
-        local highestAmputatedLimbs = CachedDataHandler.GetHighestAmputatedLimbs(getPlayer():getUsername())
+        local highestAmputatedLimbs = CachedDataHandler.GetHighestAmputatedLimbs(self.character:getUsername())
         if highestAmputatedLimbs then
             local hal = highestAmputatedLimbs[side]
             if hal then
