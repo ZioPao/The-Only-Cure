@@ -433,7 +433,7 @@ end
 --* Global Mod Data Handling *--
 
 ---SERVER
----@param player IsoPlayer? TO BE USED ONLY WHEN RUN ON SERVER!!!!
+---@param player IsoPlayer player to receive updated data
 function DataController:apply(player)
     if isClient() and self:getIsDataReady() then
         -- TOC_DEBUG.print("[WORKAROUND] Sending ModData to server for " .. self.username)

@@ -73,10 +73,6 @@ function ServerRelayCommands.RelayExecuteAmputationAction(surgeonPl, args)
     local AmputationHandler = require("TOC/Handlers/AmputationHandler")
     local handler = AmputationHandler:new(surgeonPl, patientPl, args.limbName)
     handler:execute(true)
-
-    -- ---@type receiveDamageDuringAmputationParams
-    -- local params = {surgeonNum = surgeonNum, limbName = args.limbName, damagePlayer = true}
-    -- sendServerCommand(patientPl, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveExecuteAmputationAction, params)
 end
 
 --* ADMIN ONLY *--

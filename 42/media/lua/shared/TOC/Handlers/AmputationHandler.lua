@@ -259,10 +259,17 @@ function AmputationHandler:execute(damagePlayer)
         --B42 Send bleeding too! Need to be synced with client
     end
     if isServer() then
+        -- Both patient and surgeon should get the update!
+
         TOC_DEBUG.print("Sending finalize amputation action to clients with data => " .. patientUsername)
         local cache = CachedDataHandler.GetAll(patientUsername)
+
         sendServerCommand(self.patientPl, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.FinalizeAmputationAction,
         {cache = cache, limbName = self.limbName, damagePlayer = damagePlayer})
+
+        if self.patientPl ~= self.surgeonPl then
+            dcInst:apply(self.surgeonPl)
+        end
     else
         triggerEvent("OnAmputatedLimb", self.limbName)
     end
