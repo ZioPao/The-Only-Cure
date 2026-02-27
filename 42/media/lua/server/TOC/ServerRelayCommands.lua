@@ -1,5 +1,6 @@
 require ("TOC/Debug")
 local CommandsData = require("TOC/CommandsData")
+local CommonMethods = require("TOC/CommonMethods")
 --------------------------------------------
 
 local ServerRelayCommands = {}
@@ -9,12 +10,7 @@ local ServerRelayCommands = {}
 ---Relay DamageDuringAmputation to another client
 ---@param args relayDamageDuringAmputationParams
 function ServerRelayCommands.RelayDamageDuringAmputation(_, args)
-    local patientPl
-    if not isServer() then
-        patientPl = getPlayer()     -- SP
-    else
-        patientPl = getPlayerByOnlineID(args.patientNum)
-    end
+    local patientPl = CommonMethods.GetPatientForServer(args.patientNum)
     ---@type receiveDamageDuringAmputationParams
     --local params = {limbName = args.limbName}
     local AmputationHandler = require("TOC/Handlers/AmputationHandler")
@@ -27,13 +23,7 @@ end
 ---@param args relayExecuteAmputationActionParams
 function ServerRelayCommands.RelayExecuteAmputationAction(surgeonPl, args)
     TOC_DEBUG.print("Relaying ExecuteAmputationAction to patient num " .. tostring(args.patientNum) .. " for limb " .. tostring(args.limbName))
-
-    local patientPl
-    if not isServer() then
-        patientPl = getPlayer()     -- SP
-    else
-        patientPl = getPlayerByOnlineID(args.patientNum)
-    end
+    local patientPl = CommonMethods.GetPatientForServer(args.patientNum)
 
     local AmputationHandler = require("TOC/Handlers/AmputationHandler")
     local handler = AmputationHandler:new(surgeonPl, patientPl, args.limbName)
@@ -61,13 +51,7 @@ end
 ---@param adminObj IsoPlayer
 ---@param args relayExecuteInitializationParams
 function ServerRelayCommands.RelayExecuteInitialization(adminObj, args)
-    local patientPl
-    if not isServer() then
-        patientPl = getPlayer()     -- SP
-    else
-        patientPl = getPlayerByOnlineID(args.patientNum)
-    end
-
+    local patientPl = CommonMethods.GetPatientForServer(args.patientNum)
     sendServerCommand(patientPl, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveExecuteInitialization, {})
 end
 
@@ -75,13 +59,7 @@ end
 ---@param adminObj IsoPlayer
 ---@param args relayForcedAmputationParams
 function ServerRelayCommands.RelayForcedAmputation(adminObj, args)
-    local patientPl
-    if not isServer() then
-        patientPl = getPlayer()     -- SP
-    else
-        patientPl = getPlayerByOnlineID(args.patientNum)
-    end
-
+    local patientPl = CommonMethods.GetPatientForServer(args.patientNum)
     local AmputationHandler = require("TOC/Handlers/AmputationHandler")
     local handler = AmputationHandler:new(adminObj, patientPl, args.limbName)
     handler:execute(false)
@@ -92,15 +70,9 @@ function ServerRelayCommands.RelayForcedAmputation(adminObj, args)
 end
 
 function ServerRelayCommands.DeleteAllOldAmputationItems(_, args)
-    local playerObj
-    if not isServer() then
-        playerObj = getPlayer()     -- SP
-    else
-        playerObj = getPlayerByOnlineID(args.playerNum)
-    end
-
+    local patientPl = CommonMethods.GetPatientForServer(args.patientNum)
     local ItemsController = require("TOC/Controllers/ItemsController")
-    ItemsController.Player.DeleteAllOldAmputationItems(playerObj)
+    ItemsController.Player.DeleteAllOldAmputationItems(patientPl)
 end
 
 -------------------------

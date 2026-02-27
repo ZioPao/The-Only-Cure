@@ -45,4 +45,11 @@ function CommonMethods.SafeStartEvent(event, method)
     Events[event].Add(method)
 end
 
+---Fetch correct patient player for server commands, depending on context (SP or MP)
+---@param num number
+---@return IsoPlayer
+function CommonMethods.GetPatientForServer(num)
+    if isServer() then return getPlayerByOnlineID(num) else return getPlayer() end
+end
+
 return CommonMethods
