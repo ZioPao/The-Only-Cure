@@ -1,7 +1,7 @@
 local CommandsData = require("TOC/CommandsData")
 -- local LocalPlayerController = require("TOC/Controllers/LocalPlayerController")
 local StaticData = require("TOC/StaticData")
-local TourniquetController = require("TOC/Controllers/TourniquetController")
+--local TourniquetController = require("TOC/Controllers/TourniquetController")
 ---------------------------
 
 --- Manages an amputation. Will be run on the server
@@ -244,20 +244,18 @@ function AmputationHandler:execute(damagePlayer)
     -- FIX Test this again for 42.13
     self:healArea()
     self:healInfection(dcInst:getIsIgnoredPartInfected())
-    if not damagePlayer then return end
-    self:damageAfterAmputation(surgeonFactor)
 
+
+    if damagePlayer then
+        self:damageAfterAmputation(surgeonFactor)
+
+        --B42 Send bleeding too! Need to be synced with client
+    end
     if isServer() then
-        local cache = {
-            amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(patientUsername),
-            highestAmputatedLimbs = CachedDataHandler.GetHighestAmputatedLimbs(patientUsername),
-            handFeasibility = {
-                ["L"] = CachedDataHandler.GetHandFeasibility("L", patientUsername),
-                ["R"] = CachedDataHandler.GetHandFeasibility("R", patientUsername)
-            }
-        }
+        TOC_DEBUG.print("Sending finalize amputation action to clients with data => " .. patientUsername)
+        local cache = CachedDataHandler.GetAll(patientUsername)
         sendServerCommand(self.patientPl, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.FinalizeAmputationAction,
-        {cache = cache, limbName = self.limbName})
+        {cache = cache, limbName = self.limbName, damagePlayer = damagePlayer})
     else
         triggerEvent("OnAmputatedLimb", self.limbName)
     end

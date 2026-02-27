@@ -14,7 +14,7 @@ local LimitActionsController = {}
 --* DISABLE WEARING CERTAIN ITEMS WHEN NO LIMB
 
 function LimitActionsController.CheckLimbFeasibility(limbName)
-    local dcInst = DataController.GetInstance()
+    local dcInst = DataController.GetInstance(getPlayer():getUsername())
     local isFeasible = not dcInst:getIsCut(limbName) or dcInst:getIsProstEquipped(limbName)
     --TOC_DEBUG.print("isFeasible="..tostring(isFeasible))
     return isFeasible
@@ -40,7 +40,7 @@ end
 local og_MainOptions_apply = MainOptions.apply
 function MainOptions:apply(closeAfter)
     og_MainOptions_apply(self, closeAfter)
-    CachedDataHandler.OverrideInteractionsKey()
+    CachedDataHandler.OverrideInteractionsKey(getPlayer():getUsername())
 end
 
 
@@ -53,7 +53,7 @@ end
 
 local function CheckHandFeasibility(limbName)
     TOC_DEBUG.print("Checking hand feasibility: " .. limbName)
-    local dcInst = DataController.GetInstance()
+    local dcInst = DataController.GetInstance(getPlayer():getUsername())
 
     local isFeasible = not dcInst:getIsCut(limbName) or dcInst:getIsProstEquipped(limbName)
     TOC_DEBUG.print("isFeasible: " .. tostring(isFeasible))
@@ -77,7 +77,7 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
     end
 
     -- Action is valid, check if we have any cut limb and then modify maxTime
-    local dcInst = DataController.GetInstance()
+    local dcInst = DataController.GetInstance(getPlayer():getUsername())
     if time ~= -1 and dcInst and dcInst:getIsAnyLimbCut() then
         --TOC_DEBUG.print("Overriding adjustMaxTime")
         local pl = getPlayer()
@@ -126,7 +126,7 @@ function ISBaseTimedAction:perform()
     --TOC_DEBUG.print("Running ISBaseTimedAction.perform override")
     --TOC_DEBUG.print("max time: " .. tostring(self.maxTime))
 
-    local dcInst = DataController.GetInstance()
+    local dcInst = DataController.GetInstance(self.character:getUsername())
     if not dcInst:getIsAnyLimbCut() or self.noExp then return end
 
 
@@ -187,8 +187,9 @@ local og_ISEquipWeaponAction_isValid = ISEquipWeaponAction.isValid
 function ISEquipWeaponAction:isValid()
     local isValid = og_ISEquipWeaponAction_isValid(self)
     if isValid then
-        local isPrimaryHandValid = CachedDataHandler.GetHandFeasibility(StaticData.SIDES_IND_STR.R)
-        local isSecondaryHandValid = CachedDataHandler.GetHandFeasibility(StaticData.SIDES_IND_STR.L)
+        local username = self.character:getUsername()
+        local isPrimaryHandValid = CachedDataHandler.GetHandFeasibility(StaticData.SIDES_IND_STR.R, username)
+        local isSecondaryHandValid = CachedDataHandler.GetHandFeasibility(StaticData.SIDES_IND_STR.L, username)
         -- Both hands are cut off, so it's impossible to equip in any way
 
         --TOC_DEBUG.print("isPrimaryHandValid : " .. tostring(isPrimaryHandValid))
@@ -355,26 +356,23 @@ function ISWorldObjectContextMenu.createMenu(player, worldobjects, x, y, test)
         return ogContext
     end
 
-
     -- The vanilla game doesn't count an item in the off hand as "equipped" for picking up glass. Let's fix that here
     local brokenGlassOption = ogContext:getOptionFromName(getText("ContextMenu_RemoveBrokenGlass"))
+    local playerObj = getSpecificPlayer(player)
 
     if brokenGlassOption then
-        local playerObj = getSpecificPlayer(player)
-        if (CachedDataHandler.GetHandFeasibility(StaticData.SIDES_IND_STR.R) and playerObj:getPrimaryHandItem()) or
-            (CachedDataHandler.GetHandFeasibility(StaticData.SIDES_IND_STR.L) and playerObj:getSecondaryHandItem())
+        local username = playerObj:getUsername()
+        if (CachedDataHandler.GetHandFeasibility(StaticData.SIDES_IND_STR.R, username) and playerObj:getPrimaryHandItem()) or
+            (CachedDataHandler.GetHandFeasibility(StaticData.SIDES_IND_STR.L, username) and playerObj:getSecondaryHandItem())
         then
             brokenGlassOption.notAvailable = false
             brokenGlassOption.toolTip = nil     -- This is active only when you can't do the action.
         end
     end
 
-
-
-
     -- check if no hands, disable various interactions
-    if not CachedDataHandler.GetBothHandsFeasibility() then
-        TOC_DEBUG.print("NO hands :((")
+    if not CachedDataHandler.GetBothHandsFeasibility(playerObj:getUsername()) then
+        TOC_DEBUG.print("NO hands! Disabling interactions")
         for i = 1, #noHandsImpossibleActions do
             local optionName = noHandsImpossibleActions[i]
             local option = ogContext:getOptionFromName(optionName)

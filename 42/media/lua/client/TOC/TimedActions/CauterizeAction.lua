@@ -76,7 +76,7 @@ function CauterizeAction:perform()
     -- Stop the sound
     self:stopSound()
 
-    local dcInst = DataController.GetInstance()
+    local dcInst = DataController.GetInstance(self.character:getUsername())
     dcInst:setCicatrizationTime(self.limbName, 0)
     dcInst:setIsCauterized(self.limbName, true)
 

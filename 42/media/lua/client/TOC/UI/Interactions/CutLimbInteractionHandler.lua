@@ -155,7 +155,7 @@ local function AddInvAmputationOptions(player, context, sawItem, stitchesItem, b
     -- end
 
 
-    local dc = DataController.GetInstance()
+    local dc = DataController.GetInstance(player:getUsername())
     for i = 1, #StaticData.LIMBS_STR do
         local limbName = StaticData.LIMBS_STR[i]
         if not dc:getIsCut(limbName) then

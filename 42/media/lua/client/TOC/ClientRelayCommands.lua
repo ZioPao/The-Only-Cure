@@ -29,7 +29,7 @@ function ClientRelayCommands.ReceiveExecuteAmputationAction(args)
 
     -- Check if player already doesn't have that limb or it's a dependant limb.
     -- Mostly a check for admin forced amputations more than anything else, since this case is handled in the GUI already.
-    local dcInst = DataController.GetInstance()
+    local dcInst = DataController.GetInstance(getPlayer():getUsername())
     if dcInst:getIsCut(args.limbName) then return end
 
     local handler = InitAmputationHandler(args.limbName, args.surgeonNum)
@@ -37,17 +37,20 @@ function ClientRelayCommands.ReceiveExecuteAmputationAction(args)
 end
 
 function ClientRelayCommands.FinalizeAmputationAction(args)
-    local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
-    CachedDataHandler.ApplyFromServer(args.cache)
+    ClientRelayCommands.ReceiveCache(args)
     triggerEvent("OnAmputatedLimb", args.limbName)
 end
 
 --* APPLY RELAY *--
-
 function ClientRelayCommands.ReceiveApplyFromServer()
     TOC_DEBUG.print("Applying ModData from server")
     local key = CommandsData.GetKey(getPlayer():getUsername())
     ModData.request(key)
+end
+
+function ClientRelayCommands.ReceiveCache(args)
+    local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
+    CachedDataHandler.ApplyFromServer(args.cache)
 end
 
 
@@ -72,7 +75,7 @@ end
 ---Creates a new handler and execute the amputation function on this client
 ---@param args receiveForcedCicatrizationParams
 function ClientRelayCommands.ReceiveForcedCicatrization(args)
-    local dcInst = DataController.GetInstance()
+    local dcInst = DataController.GetInstance(getPlayer():getUsername())
     --dcInst:setCicatrizationTime(args.limbName, 1)
     dcInst:setIsCicatrized(args.limbName, true)
     dcInst:apply()

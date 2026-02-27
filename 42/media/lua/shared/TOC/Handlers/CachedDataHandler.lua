@@ -8,6 +8,10 @@ local StaticData = require("TOC/StaticData")
 ---@class CachedDataHandler
 local CachedDataHandler = {}
 
+CachedDataHandler.amputatedLimbs = {}
+CachedDataHandler.highestAmputatedLimbs = {}
+CachedDataHandler.handFeasibility = {}
+
 ---Reset everything cache related for that specific user
 ---@param username string
 function CachedDataHandler.Setup(username)
@@ -19,11 +23,25 @@ function CachedDataHandler.Setup(username)
     CachedDataHandler.handFeasibility[username] = {}
 end
 
---CLIENT ONLY
+---CLIENT ONLY
+---@param cache table
 function CachedDataHandler.ApplyFromServer(cache)
-    CachedDataHandler.amputatedLimbs = cache.amputatedLimbs or {}
-    CachedDataHandler.highestAmputatedLimbs = cache.highestAmputatedLimbs or {}
-    CachedDataHandler.handFeasibility = cache.handFeasibility or {}
+
+    local playerUsername = getPlayer():getUsername()
+    CachedDataHandler.amputatedLimbs[playerUsername] = cache.amputatedLimbs or {}
+    CachedDataHandler.highestAmputatedLimbs[playerUsername] = cache.highestAmputatedLimbs or {}
+    CachedDataHandler.handFeasibility[playerUsername] = cache.handFeasibility or {}
+
+    -- TOC_DEBUG.printTable(CachedDataHandler.amputatedLimbs[playerUsername])
+    -- TOC_DEBUG.printTable(CachedDataHandler.highestAmputatedLimbs[playerUsername])
+    -- TOC_DEBUG.printTable(CachedDataHandler.handFeasibility[playerUsername])
+end
+
+--CLIENT ONLY
+function CachedDataHandler.RequestCacheFromServer(recalculate)
+    TOC_DEBUG.print("Requesting cache from server")
+    local CommandsData = require("TOC/CommandsData")
+    sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.SendCache, {recalculate = recalculate})
 end
 
 ---SERVER ONLY
@@ -44,8 +62,20 @@ function CachedDataHandler.CalculateCacheableValues(username)
     -- end
 end
 
+---SHARED
+function CachedDataHandler.GetAll(username)
+    return {
+        amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(username),
+        highestAmputatedLimbs = CachedDataHandler.GetHighestAmputatedLimbs(username),
+        handFeasibility = {
+            ["L"] = CachedDataHandler.GetHandFeasibility("L", username),
+            ["R"] = CachedDataHandler.GetHandFeasibility("R", username)
+        }
+    }
+end
+
 --* Amputated Limbs caching *--
-CachedDataHandler.amputatedLimbs = {}
+
 
 ---Calculate the currently amputated limbs for a certain player
 ---@param username string
@@ -84,7 +114,6 @@ end
 
 
 --* Highest amputated limb per side caching *--
-CachedDataHandler.highestAmputatedLimbs = {}
 
 ---SERVER SIDE ONLY
 ---Calculate the highest point of amputations achieved by the player
@@ -121,7 +150,7 @@ function CachedDataHandler.GetHighestAmputatedLimbs(username)
 end
 
 --* Hand feasibility caching *--
-CachedDataHandler.handFeasibility = {}
+
 
 ---SERVER SIDE ONLY
 ---@private

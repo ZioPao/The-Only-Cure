@@ -31,17 +31,20 @@ function LocalPlayerController.InitializePlayer(isForced)
     TOC_DEBUG.print("Initializing local player: " .. username)
 
     DataController:new(username, isForced)
+    CachedDataHandler.RequestCacheFromServer(true)
+
     LocalPlayerController.playerObj = playerObj
     LocalPlayerController.username = username
 
     --Setup the CicatrizationUpdate event and triggers it once
-    Events.OnAmputatedLimb.Add(LocalPlayerController.ToggleUpdateAmputations)
+    CommonMethods.SafeStartEvent("OnAmputatedLimb", LocalPlayerController.UpdateAmputations)
+
+    --Events.OnAmputatedLimb.Add(LocalPlayerController.ToggleUpdateAmputations)
     LocalPlayerController.ToggleUpdateAmputations()
 
     -- Since isForced is used to reset an existing player data, we're gonna clean their ISHealthPanel table too
     if isForced then
         sendClientCommand(CommandsData.modules.TOC_ITEMS, "DeleteAllOldAmputationItems", {playerNum = playerObj:getOnlineID()})
-        CachedDataHandler.Setup(username)
     end
 
     -- Set a bool to use an overriding GetDamagedParts
@@ -67,8 +70,8 @@ function LocalPlayerController.ManageTraits()
             tempHandler:close()
 
             -- The wound should be already cicatrized
-            local dcInst = DataController.GetInstance()
-            LocalPlayerController.HandleSetCicatrization(DataController.GetInstance(), playerObj, v)
+            local dcInst = DataController.GetInstance(getPlayer():getUsername())
+            LocalPlayerController.HandleSetCicatrization(dcInst, playerObj, v)
             dcInst:apply()
             return
         end
@@ -134,7 +137,7 @@ end
 ---@param limbName string
 function LocalPlayerController.TryRandomBleed(character, limbName)
     -- Chance should be determined by the cicatrization time
-    local cicTime = DataController.GetInstance():getCicatrizationTime(limbName)
+    local cicTime = DataController.GetInstance(character:getUsername()):getCicatrizationTime(limbName)
     if cicTime == 0 then return end
 
     -- TODO This is just a placeholder, we need to figure out a better way to calculate this chance
@@ -174,7 +177,7 @@ function LocalPlayerController.HandleDamage(character)
         return
     end
     local bd = character:getBodyDamage()
-    local dcInst = DataController.GetInstance()
+    local dcInst = DataController.GetInstance(character:getUsername())
     local modDataNeedsUpdate = false
     for i = 1, #StaticData.LIMBS_STR do
         local limbName = StaticData.LIMBS_STR[i]
@@ -239,7 +242,7 @@ Events.OnPlayerGetDamage.Add(LocalPlayerController.OnGetDamage)
 
 ---Updates the cicatrization process, run when a limb has been cut. Run it every 1 hour
 function LocalPlayerController.UpdateAmputations()
-    local dcInst = DataController.GetInstance()
+    local dcInst = DataController.GetInstance(getPlayer():getUsername())
     if not dcInst:getIsDataReady() then
         TOC_DEBUG.print("Data not ready for UpdateAmputations, waiting next loop")
         return

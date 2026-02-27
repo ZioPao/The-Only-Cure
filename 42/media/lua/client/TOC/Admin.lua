@@ -87,10 +87,11 @@ local og_ISHealthPanel_onCheatCurrentPlayer = ISHealthPanel.onCheatCurrentPlayer
 function ISHealthPanel.onCheatCurrentPlayer(bodyPart, action, player)
     og_ISHealthPanel_onCheatCurrentPlayer(bodyPart, action, player)
     local bptString = BodyPartType.ToString(bodyPart:getType())
+    local username = player:getUsername()
 
     if action == "healthFullBody" then
         -- loop all limbs and reset them if infected
-        local dcInst = DataController.GetInstance()
+        local dcInst = DataController.GetInstance(username)
 
         for i = 1, #StaticData.LIMBS_STR do
             local limbName = StaticData.LIMBS_STR[i]
@@ -106,7 +107,7 @@ function ISHealthPanel.onCheatCurrentPlayer(bodyPart, action, player)
     if action == "healthFull" then
         -- Get the limbName for that BodyPart and fix the values in TOC Data
         local limbName = StaticData.BODYLOCS_TO_LIMBS_IND_STR[bptString]
-        local dcInst = DataController.GetInstance()
+        local dcInst = DataController.GetInstance(username)
 
         dcInst:setIsInfected(limbName, false)
         dcInst:apply()

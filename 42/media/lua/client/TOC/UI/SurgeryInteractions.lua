@@ -25,7 +25,7 @@ local function AddStoveContextMenu(playerNum, context, worldObjects, test)
 
     local pl = getSpecificPlayer(playerNum)
 
-    local dcInst = DataController.GetInstance()
+    local dcInst = DataController.GetInstance(pl:getUsername())
     if not dcInst:getIsAnyLimbCut() then return end
     local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(pl:getUsername())
 

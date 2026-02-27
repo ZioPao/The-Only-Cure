@@ -14,7 +14,7 @@ function ServerRelayCommands.RelayDamageDuringAmputation(_, args)
     ---@type receiveDamageDuringAmputationParams
     --local params = {limbName = args.limbName}
     local AmputationHandler = require("TOC/Handlers/AmputationHandler")
-    AmputationHandler.ApplyDamageDuringAmputation(patientPl, args.limbName)
+    AmputationHandler.ApplyDamageDuringAmputation(patientPl, args.limbName)     -- ignore warning, class is in shared
     --sendServerCommand(patientPl, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveDamageDuringAmputation, params)
 end
 
@@ -32,6 +32,18 @@ function ServerRelayCommands.RelayExecuteAmputationAction(surgeonPl, args)
     -- ---@type receiveDamageDuringAmputationParams
     -- local params = {surgeonNum = surgeonNum, limbName = args.limbName, damagePlayer = true}
     -- sendServerCommand(patientPl, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveExecuteAmputationAction, params)
+end
+
+function ServerRelayCommands.SendCache(player, args)
+    local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
+    local username = player:getUsername()
+    if args.recalculate then
+        CachedDataHandler.CalculateCacheableValues(username)
+    end
+
+    local cache = CachedDataHandler.GetAll(username)
+    TOC_DEBUG.print("Sending cache to client for " .. username)
+    sendServerCommand(player, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveCache, {cache = cache})
 end
 
 --* ADMIN ONLY *--

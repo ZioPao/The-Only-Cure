@@ -56,7 +56,7 @@ function DataController:new(username, isResetForced)
     return o
 end
 
-
+---SERVER ONLY
 ---Setup a new toc mod data data class
 ---@param key string
 function DataController:setup(key)
@@ -385,46 +385,38 @@ function DataController.ReceiveData(key, data)
     if key == "TOC_Bob" then return end
     if not luautils.stringStarts(key, StaticData.MOD_NAME .. "_") then return end
 
-
     TOC_DEBUG.print("ReceiveData for " .. key)
 
-    -- if data == nil or data.limbs == nil then
-    --     TOC_DEBUG.print("Data is nil, new character or something is wrong")
-    -- end
-
-    -- Get DataController instance if there was none for that user and reapply the correct ModData table as a reference
-    local username = key:sub(5)
-    local handler = DataController.GetInstance(username)
-
-    -- Bit of a workaround, but in a perfect world, I'd use the server to get the data and that would be it.
-    -- but Zomboid Mod Data handling is too finnicky at best to be that reliable, in case of an unwanted disconnection and what not,
-    -- so for now, I'm gonna assume that the local data (for the local client) is the
-    -- most recent (and correct) one instead of trying to fetch it from the server every single time
-
-
-    -- TODO Add update from server scenario
-
-    if handler.isResetForced then
-        TOC_DEBUG.print("Forced reset")
-        handler:setup(key)
-    elseif data and data.limbs then
-        -- Let's validate that the data structure is actually valid to prevent issues
+    if data == nil or data.limbs == nil then
+        TOC_DEBUG.print("data/data.limbs is nil, new character or something is wrong")
+    else
+        -- Get DataController instance if there was none for that user and reapply the correct ModData table as a reference
+        local username = key:sub(5)
+        local handler = DataController.GetInstance(username)
         handler:applyOnlineData(data)
-    elseif username == getPlayer():getUsername() then
-        TOC_DEBUG.print("Trying to load local data or no data is available")
-        handler:tryLoadLocalData(key)
-    end
+
+        -- TODO add some sanity checks for the data received from the server
+
+        -- if handler.isResetForced then
+        --     TOC_DEBUG.print("Forced reset")
+        --     handler:setup(key)
+        -- elseif data and data.limbs then
+        --     -- Let's validate that the data structure is actually valid to prevent issues
+        -- elseif username == getPlayer():getUsername() then
+        --     TOC_DEBUG.print("Trying to load local data or no data is available")
+        --     handler:tryLoadLocalData(key)
+        -- end
 
 
-    handler:setIsResetForced(false)
-    handler:setIsDataReady(true)
+        handler:setIsResetForced(false)
+        handler:setIsDataReady(true)
 
     --TOC_DEBUG.print("Finished ReceiveData, triggering OnReceivedTocData")
     triggerEvent("OnReceivedTocData", handler.username)
 
     -- TODO We need an event to track if initialization has been finalized
 
-
+    end
 
     -- if username == getPlayer():getUsername() and not handler.isResetForced then
     --     handler:loadLocalData(key)
@@ -452,7 +444,7 @@ Events.OnReceiveGlobalModData.Add(DataController.ReceiveData)
 
 
 
---- SP Only initialization
+--- Server/SP Only initialization
 ---@param key string
 function DataController:init(key)
     self:tryLoadLocalData(key)
