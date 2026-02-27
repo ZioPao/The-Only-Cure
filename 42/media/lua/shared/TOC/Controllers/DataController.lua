@@ -2,7 +2,6 @@
 -- DataController will mainly work Server side, with the client that will be able to REQUEST updates.
 -- Server is the authoritative source
 
-
 local CommandsData = require("TOC/CommandsData")
 local StaticData = require("TOC/StaticData")
 ----------------
@@ -11,6 +10,7 @@ local StaticData = require("TOC/StaticData")
 
 --- Handle all TOC mod data related stuff
 ---@class DataController
+---@field player IsoPlayer
 ---@field username string
 ---@field tocData tocModDataType
 ---@field isDataReady boolean
@@ -19,44 +19,87 @@ local DataController = {}
 DataController.instances = {}
 
 ---SERVER ONLY
----Setup a new Mod Data Handler
----@param username string
+---Setup a new Mod Data Handler (must be run on server)
+---@param player IsoPlayer
 ---@param isResetForced boolean?
 ---@return DataController
-function DataController:new(username, isResetForced)
-    TOC_DEBUG.print("Creating new instance of DataController instance for " .. username)
+function DataController:new(player, isResetForced)
     ---@type DataController
     ---@diagnostic disable-next-line: missing-fields
     local o = {}
     setmetatable(o, self)
     self.__index = self
 
-    o.username = username
-    --o.isResetForced = isResetForced or false
+    o.player = player
+    o.username = player:getUsername()
     o.isDataReady = false
+    o.isResetForced = isResetForced or false
+    TOC_DEBUG.print("Creating new instance of DataController instance for " .. o.username)
 
-    -- We're gonna set it already from here, to prevent it from looping in SP (in case we need to fetch this instance)
-    DataController.instances[username] = o
+    -- store instance immediately
+    DataController.instances[o.username] = o
 
-    local key = CommandsData.GetKey(username)
+    local key = CommandsData.GetKey(o.username)
 
-    -- Multiplayer, client
-    -- if isClient() then
-    --     -- In MP, we request the data from the server to trigger DataController.ReceiveData
-    --     ModData.request(key)
-    -- elseif not isClient() then
-    --     -- SP, Server, or reset
-    --     -- will reference the saved instance in DataController.instances
-    --     o:init(key)
-    -- end
+    -- Server / singleplayer: ensure data exists locally
+    if isServer() or not isClient() then
+        o:ensureDataInitialized(key)
+    end
+
+
+    -- For client in MP, placeholder DataController instance until it gets readied with data from the server
 
     return o
 end
 
---- Server/SP Only initialization
----@param key string
-function DataController:init(key)
-    self:tryLoadLocalData(key)
+-- Helpers: encapsulate ModData operations and default data creation
+function DataController:createDefaultData()
+    local tocData = {
+        isIgnoredPartInfected = false,
+        isAnyLimbCut = false,
+        limbs = {},
+        prostheses = {}
+    }
+
+    local defaultParams = {
+        isCut = false, isInfected = false, isOperated = false, isCicatrized = false, isCauterized = false,
+        woundDirtyness = -1, cicatrizationTime = -1,
+        isVisible = false
+    }
+
+    for i=1, #StaticData.LIMBS_STR do
+        local limbName = StaticData.LIMBS_STR[i]
+        tocData.limbs[limbName] = {}
+        for k, v in pairs(defaultParams) do tocData.limbs[limbName][k] = v end
+        tocData.limbs[limbName].cicatrizationTime = 0
+    end
+
+    for i=1, #StaticData.AMP_GROUPS_STR do
+        local group = StaticData.AMP_GROUPS_STR[i]
+        tocData.prostheses[group] = {
+            isProstEquipped = false,
+            prostFactor = 0,
+        }
+    end
+
+    return tocData
+end
+
+function DataController:loadModData(key)
+    return ModData.get(key)
+end
+
+function DataController:saveModData(key, data)
+    ModData.add(key, data)
+end
+
+function DataController:ensureDataInitialized(key)
+    local data = self:loadModData(key)
+    if data and data.limbs then
+        self.tocData = data
+        TOC_DEBUG.print("Found and loaded local data")
+    end
+
     if self.tocData == nil or self.isResetForced then
         self:setup(key)
     end
@@ -64,83 +107,45 @@ function DataController:init(key)
     self:setIsDataReady(true)
     self:setIsResetForced(false)
 
-    -- Event, triggers caching
-    -- B42 Broken
-    triggerEvent("OnReceivedTocData", self.username)
+    self:apply()        -- transmit to client
+
+    triggerEvent("OnInitTocData", self.player, true)
 end
+
 
 ---SERVER ONLY
 ---Setup a new toc mod data data class
 ---@param key string
+---@private
 function DataController:setup(key)
     TOC_DEBUG.print("Running setup")
 
-    ---@type tocModDataType
-    self.tocData = {
-        -- Generic stuff that does not belong anywhere else
-        isIgnoredPartInfected = false,
-        isAnyLimbCut = false,
-        limbs = {},
-        prostheses = {}
-    }
+    -- create default structure
+    self.tocData = self:createDefaultData()
 
-    ---@type partDataType
-    local defaultParams = {
-        isCut = false, isInfected = false, isOperated = false, isCicatrized = false, isCauterized = false,
-        woundDirtyness = -1, cicatrizationTime = -1,
-        isVisible = false
-    }
+    -- persist
+    self:saveModData(key, self.tocData)
 
-    -- Initialize limbs
-    for i=1, #StaticData.LIMBS_STR do
-        local limbName = StaticData.LIMBS_STR[i]
-        self.tocData.limbs[limbName] = {}
-        self:setLimbParams(StaticData.LIMBS_STR[i], defaultParams, 0)
-    end
-
-    -- Initialize prostheses stuff
-    for i=1, #StaticData.AMP_GROUPS_STR do
-        local group = StaticData.AMP_GROUPS_STR[i]
-        self.tocData.prostheses[group] = {
-            isProstEquipped = false,
-            prostFactor = 0,
-        }
-    end
-
-    -- Add it to client global mod data
-    ModData.add(key, self.tocData)
-
-    -- Sync with the server
-    self:apply()
-
+    -- keep setup side-effects minimal; notify setup completion
     triggerEvent("OnSetupTocData")
 end
 
 ---In case of desync between the table on ModData and the table here
 ---@param tocData tocModDataType
-function DataController:applyOnlineData(tocData)
+---@private
+function DataController:saveClientData(tocData)
     if not tocData or not tocData.limbs then
         TOC_DEBUG.print("Received invalid tocData")
         return
     end
     local key = CommandsData.GetKey(self.username)
     ModData.add(key, tocData)
-    self.tocData = ModData.get(key)
+    self.tocData = tocData
+    self:setIsResetForced(false)
+    self:setIsDataReady(true)
+    triggerEvent("OnReceivedTocData", self.username)
 end
 
----@param key string
-function DataController:tryLoadLocalData(key)
-    self.tocData = ModData.get(key)
-
-    --TOC_DEBUG.printTable(self.tocData)
-
-    if self.tocData and self.tocData.limbs then
-        TOC_DEBUG.print("Found and loaded local data")
-    else
-        TOC_DEBUG.print("Local data failed to load! Running setup")
-        self:setup(key)
-    end
-end
 -----------------
 --* Setters *--
 
@@ -200,7 +205,6 @@ end
 function DataController:setWoundDirtyness(limbName, woundDirtyness)
     self.tocData.limbs[limbName].woundDirtyness = woundDirtyness
 end
-
 
 ---Set cicatrizationTime
 ---@param limbName string
@@ -292,7 +296,6 @@ function DataController:getWoundDirtyness(limbName)
     return self.tocData.limbs[limbName].woundDirtyness
 end
 
-
 ---Get cicatrizationTime
 ---@param limbName string
 ---@return number
@@ -373,24 +376,20 @@ end
 
 --* Global Mod Data Handling *--
 
----
----@param playerObj IsoPlayer? 
-function DataController:apply(playerObj)
+---SHARED
+function DataController:apply()
     --B42 TEMPORARY WORKAROUND FOR B42.14, it should be server only
     if isClient() then
         TOC_DEBUG.print("[WORKAROUND] Sending ModData to server for " .. self.username)
         ModData.transmit(CommandsData.GetKey(self.username))
-    end
-
-    if isServer() then
+    elseif isServer() then
         --TOC_DEBUG.print("Forwarding ModData to " .. playerObj:getUsername())
         -- Notify player that they must request the data from the server
-        sendServerCommand(playerObj, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveApplyFromServer, {})
+        sendServerCommand(self.player, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveApplyFromServer, {})
     end
 end
 
-
----Online only, Global Mod Data doesn't trigger this in SP
+--- SHARED
 ---@param key string
 ---@param data tocModDataType
 function DataController.ReceiveData(key, data)
@@ -404,78 +403,47 @@ function DataController.ReceiveData(key, data)
 
     if data == nil or data == false or data.limbs == nil then
         TOC_DEBUG.print("data/data.limbs is nil, new character or something is wrong")
-    else
-        -- Get DataController instance if there was none for that user and reapply the correct ModData table as a reference
-        handler:applyOnlineData(data)
-
-        -- TODO add some sanity checks for the data received from the server
-
-        -- if handler.isResetForced then
-        --     TOC_DEBUG.print("Forced reset")
-        --     handler:setup(key)
-        -- elseif data and data.limbs then
-        --     -- Let's validate that the data structure is actually valid to prevent issues
-        -- elseif username == getPlayer():getUsername() then
-        --     TOC_DEBUG.print("Trying to load local data or no data is available")
-        --     handler:tryLoadLocalData(key)
-        -- end
-
-
-        handler:setIsResetForced(false)
-        handler:setIsDataReady(true)
-
-    --TOC_DEBUG.print("Finished ReceiveData, triggering OnReceivedTocData")
-    triggerEvent("OnReceivedTocData", handler.username)
-
-    -- TODO We need an event to track if initialization has been finalized
-
+        return
     end
 
-    -- if username == getPlayer():getUsername() and not handler.isResetForced then
-    --     handler:loadLocalData(key)
-    -- elseif handler.isResetForced or data == nil then
-    --     TOC_DEBUG.print("Data is nil or empty!?")
-    --     TOC_DEBUG.printTable(data)
-    --     handler:setup(key)
-    -- elseif data and data.limbs then
-    --     handler:applyOnlineData(data)
-    -- end
+    -- Persist and apply received data; applyOnlineData handles flags and event
+    handler:saveClientData(data)
 
-    -- handler:setIsResetForced(false)
-    -- handler:setIsDataReady(true)
-
-    -- -- Event, triggers caching
-    -- triggerEvent("OnReceivedTocData", handler.username)
-
-    -- Transmit it back to the server
-    --ModData.transmit(key)
-    --TOC_DEBUG.print("Transmitting data after receiving it for: " .. handler.username)
+    -- FIX Should be an event
+    if isClient() then
+        -- Set a bool to use an overriding GetDamagedParts
+        SetHealthPanelTOC()
+    end
 
 end
 
 Events.OnReceiveGlobalModData.Add(DataController.ReceiveData)
 
-
 -------------------
 
-
-function DataController.RequestFromServer(username, isForced)
+function DataController.RequestFromServer(isForced)
     --fix sp and mp split here
-    sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.RequestInstanceFromServer, {username = username, isForced = isForced})
+
+    -- placeholder datacontroller, to be initialized
+    DataController:new(getPlayer(), isForced)
+    sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayRequestDataController, {isForced = isForced})
 end
 
 ---@param username string
 ---@return DataController
 function DataController.GetInstance(username)
-    -- Check if instance exist. If not, request from server
-    if DataController.instances[username] == nil then
-        TOC_DEBUG.print("Creating/fetching DC instance for " .. username)
-        return DataController:new(username)
-    else
+    -- If instance exists, return it
+    if DataController.instances[username] ~= nil then
         return DataController.instances[username]
     end
-end
 
+    TOC_DEBUG.print("Fetching DC instance for " .. tostring(username))
+
+    -- if isServer() or not isClient() then
+    --     -- Create server-side authoritative instance
+    --     return DataController:new(username)
+    -- end
+end
 
 function DataController.DestroyInstance(username)
     if DataController.instances[username] ~= nil then

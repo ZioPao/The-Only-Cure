@@ -229,8 +229,7 @@ function AmputationHandler:execute(damagePlayer)
     local dcInst = DataController.GetInstance(patientUsername)
     dcInst:setCutLimb(self.limbName, false, false, false, surgeonFactor)
 
-    -- TODO apply shouldn't have IsoPlayer as a parameter, just an hack to make this crap work
-    dcInst:apply(self.patientPl)      -- This will force rechecking the cached amputated limbs on the other client
+    dcInst:apply()      -- This will force rechecking the cached amputated limbs on the other client
 
     local ItemsController = require("TOC/Controllers/ItemsController")
     ItemsController.Player.DeleteOldAmputationItem(self.patientPl, self.limbName)

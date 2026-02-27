@@ -227,4 +227,28 @@ function CachedDataHandler.GetBothHandsFeasibility(username)
     return (CachedDataHandler.handFeasibility[username]["L"] or CachedDataHandler.handFeasibility[username]["R"]) or false
 end
 
+------------------
+
+---SERVER ONLY
+---@param player IsoPlayer
+---@param recalculate boolean
+function CachedDataHandler.SendCache(player, recalculate)
+    local username = player:getUsername()
+    if recalculate then
+        CachedDataHandler.CalculateCacheableValues(username)
+    end
+    local cache = CachedDataHandler.GetAll(username)
+    local CommandsData = require("TOC/CommandsData")
+
+    -- UGLY should be in ServerRelayCommands, but to not create circular dependencies we are keeping it here for now
+    sendServerCommand(player, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveCache, {patientUsername = username, cache = cache})
+end
+
+
+if isServer() then
+    Events.OnServerStarted.Add(function()
+        TOC_DEBUG.print("Setting up CachedDataHandler events")
+        Events.OnInitTocData.Add(CachedDataHandler.SendCache)
+    end)
+end
 return CachedDataHandler

@@ -31,8 +31,8 @@ function LocalPlayerController.InitializePlayer(isForced)
     TOC_DEBUG.print("Initializing local player: " .. username)
 
     --DataController:new(username, isForced)
-    DataController.RequestFromServer(username, isForced)
-    CachedDataHandler.RequestFromServer(username, true)        -- fix could return nothing if data controller hasn't been finalized on the server side.
+    DataController.RequestFromServer(isForced)
+    --CachedDataHandler.RequestFromServer(username, true)        -- fix could return nothing if data controller hasn't been finalized on the server side.
 
     LocalPlayerController.playerObj = playerObj
     LocalPlayerController.username = username
@@ -47,9 +47,6 @@ function LocalPlayerController.InitializePlayer(isForced)
     if isForced then
         sendClientCommand(CommandsData.modules.TOC_ITEMS, "DeleteAllOldAmputationItems", {patientNum = playerObj:getOnlineID()})
     end
-
-    -- Set a bool to use an overriding GetDamagedParts
-    SetHealthPanelTOC()
 end
 
 

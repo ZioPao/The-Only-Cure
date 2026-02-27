@@ -7,6 +7,15 @@ local ServerRelayCommands = {}
 
 -- TODO We can easily make this a lot more simple without having functions 
 
+--* DATA CONTROLLER
+function ServerRelayCommands.RelayRequestDataController(playerObj, args)
+    local DataController = require("TOC/Controllers/DataController")
+    DataController:new(playerObj, args.isForced)
+end
+
+
+--* AMPUTATION
+
 ---Relay DamageDuringAmputation to another client
 ---@param args relayDamageDuringAmputationParams
 function ServerRelayCommands.RelayDamageDuringAmputation(_, args)
@@ -34,17 +43,14 @@ function ServerRelayCommands.RelayExecuteAmputationAction(surgeonPl, args)
     -- sendServerCommand(patientPl, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveExecuteAmputationAction, params)
 end
 
+
+--* CACHE
+
 ---@param player IsoPlayer
 ---@param args table{patientUsername: string, recalculate: boolean}
 function ServerRelayCommands.SendCache(player, args)
     local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
-    if args.recalculate then
-        CachedDataHandler.CalculateCacheableValues(args.patientUsername)
-    end
-
-    local cache = CachedDataHandler.GetAll(args.patientUsername)
-    TOC_DEBUG.print("Sending cache to client " .. player:getUsername() .. " for patient " .. args.patientUsername)
-    sendServerCommand(player, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveCache, {patientUsername = args.patientUsername, cache = cache})
+    CachedDataHandler.SendCache(player, args.recalculate)
 end
 
 --* ADMIN ONLY *--
@@ -57,8 +63,6 @@ function ServerRelayCommands.RelayExecuteInitialization(adminObj, args)
     -- Deletes data from ModData
     local key = CommandsData.GetKey(patientPl:getUsername())
     ModData.remove(key)
-
-    --
 
     sendServerCommand(patientPl, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveExecuteInitialization, {})
 end

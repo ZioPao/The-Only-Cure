@@ -33,6 +33,10 @@ CommandsData.server = {
     },
 
     Relay = {
+
+        --* INIT
+        RelayRequestDataController = "RelayRequestDataController",                                              ---@alias relayRequestDataControllerParams {username : string, isForced : boolean}
+
         RelayDamageDuringAmputation = "RelayDamageDuringAmputation",                ---@alias relayDamageDuringAmputationParams {patientNum : number, limbName : string}
         RelayExecuteAmputationAction = "RelayExecuteAmputationAction",              ---@alias relayExecuteAmputationActionParams {patientNum : number, limbName : string}
         SendCache = "SendCache",
