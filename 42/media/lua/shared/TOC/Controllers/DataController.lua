@@ -341,6 +341,7 @@ end
 ---@param limbName string
 ---@return boolean
 function DataController:getIsProstEquipped(limbName)
+    if not self.isDataReady then return false end
     local prostGroup = StaticData.LIMBS_TO_AMP_GROUPS_MATCH_IND_STR[limbName]
     return self.tocData.prostheses[prostGroup].isProstEquipped
 end
