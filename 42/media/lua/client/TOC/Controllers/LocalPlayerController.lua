@@ -30,8 +30,9 @@ function LocalPlayerController.InitializePlayer(isForced)
 
     TOC_DEBUG.print("Initializing local player: " .. username)
 
-    DataController:new(username, isForced)
-    CachedDataHandler.RequestCacheFromServer(true)
+    --DataController:new(username, isForced)
+    DataController.RequestFromServer(username, isForced)
+    CachedDataHandler.RequestFromServer(username, true)        -- fix could return nothing if data controller hasn't been finalized on the server side.
 
     LocalPlayerController.playerObj = playerObj
     LocalPlayerController.username = username
@@ -44,7 +45,7 @@ function LocalPlayerController.InitializePlayer(isForced)
 
     -- Since isForced is used to reset an existing player data, we're gonna clean their ISHealthPanel table too
     if isForced then
-        sendClientCommand(CommandsData.modules.TOC_ITEMS, "DeleteAllOldAmputationItems", {playerNum = playerObj:getOnlineID()})
+        sendClientCommand(CommandsData.modules.TOC_ITEMS, "DeleteAllOldAmputationItems", {patientNum = playerObj:getOnlineID()})
     end
 
     -- Set a bool to use an overriding GetDamagedParts
@@ -329,7 +330,7 @@ function LocalPlayerController.HandleSetCicatrization(dcInst, playerObj, limbNam
 
     -- -- Set visuals for the amputation
     sendClientCommand(CommandsData.modules.TOC_ITEMS, "OverrideAmputationItemVisuals", 
-    {playerNum = playerObj:getOnlineID(), limbName = limbName, isCicatrized = true})
+    {patientNum = playerObj:getOnlineID(), limbName = limbName, isCicatrized = true})
 
 end
 

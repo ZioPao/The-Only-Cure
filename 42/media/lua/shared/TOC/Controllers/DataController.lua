@@ -3,10 +3,6 @@
 -- Server is the authoritative source
 
 
-
-
-
-
 local CommandsData = require("TOC/CommandsData")
 local StaticData = require("TOC/StaticData")
 ----------------
@@ -22,6 +18,7 @@ local StaticData = require("TOC/StaticData")
 local DataController = {}
 DataController.instances = {}
 
+---SERVER ONLY
 ---Setup a new Mod Data Handler
 ---@param username string
 ---@param isResetForced boolean?
@@ -35,7 +32,7 @@ function DataController:new(username, isResetForced)
     self.__index = self
 
     o.username = username
-    o.isResetForced = isResetForced or false
+    --o.isResetForced = isResetForced or false
     o.isDataReady = false
 
     -- We're gonna set it already from here, to prevent it from looping in SP (in case we need to fetch this instance)
@@ -44,16 +41,32 @@ function DataController:new(username, isResetForced)
     local key = CommandsData.GetKey(username)
 
     -- Multiplayer, client
-    if isClient() then
-        -- In MP, we request the data from the server to trigger DataController.ReceiveData
-        ModData.request(key)
-    else
-        -- SP or Server
-        -- will reference the saved instance in DataController.instances
-        o:init(key)
-    end
+    -- if isClient() then
+    --     -- In MP, we request the data from the server to trigger DataController.ReceiveData
+    --     ModData.request(key)
+    -- elseif not isClient() then
+    --     -- SP, Server, or reset
+    --     -- will reference the saved instance in DataController.instances
+    --     o:init(key)
+    -- end
 
     return o
+end
+
+--- Server/SP Only initialization
+---@param key string
+function DataController:init(key)
+    self:tryLoadLocalData(key)
+    if self.tocData == nil or self.isResetForced then
+        self:setup(key)
+    end
+
+    self:setIsDataReady(true)
+    self:setIsResetForced(false)
+
+    -- Event, triggers caching
+    -- B42 Broken
+    triggerEvent("OnReceivedTocData", self.username)
 end
 
 ---SERVER ONLY
@@ -386,13 +399,13 @@ function DataController.ReceiveData(key, data)
     if not luautils.stringStarts(key, StaticData.MOD_NAME .. "_") then return end
 
     TOC_DEBUG.print("ReceiveData for " .. key)
+    local username = key:sub(5)
+    local handler = DataController.GetInstance(username)
 
-    if data == nil or data.limbs == nil then
+    if data == nil or data == false or data.limbs == nil then
         TOC_DEBUG.print("data/data.limbs is nil, new character or something is wrong")
     else
         -- Get DataController instance if there was none for that user and reapply the correct ModData table as a reference
-        local username = key:sub(5)
-        local handler = DataController.GetInstance(username)
         handler:applyOnlineData(data)
 
         -- TODO add some sanity checks for the data received from the server
@@ -443,23 +456,13 @@ end
 Events.OnReceiveGlobalModData.Add(DataController.ReceiveData)
 
 
-
---- Server/SP Only initialization
----@param key string
-function DataController:init(key)
-    self:tryLoadLocalData(key)
-    if self.tocData == nil or self.isResetForced then
-        self:setup(key)
-    end
-
-    self:setIsDataReady(true)
-    self:setIsResetForced(false)
-
-    -- Event, triggers caching
-    -- B42 Broken
-    triggerEvent("OnReceivedTocData", self.username)
-end
 -------------------
+
+
+function DataController.RequestFromServer(username, isForced)
+    --fix sp and mp split here
+    sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.RequestInstanceFromServer, {username = username, isForced = isForced})
+end
 
 ---@param username string
 ---@return DataController

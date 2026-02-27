@@ -17,7 +17,7 @@ end
 function Main.SetupEvents()
     -- B42 maybe makes more sense if it's in InitializePlayer
     local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
-    Events.OnReceivedTocData.Add(CachedDataHandler.RequestCacheFromServer)
+    Events.OnReceivedTocData.Add(CachedDataHandler.RequestFromServer)
 end
 
 

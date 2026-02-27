@@ -34,16 +34,17 @@ function ServerRelayCommands.RelayExecuteAmputationAction(surgeonPl, args)
     -- sendServerCommand(patientPl, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveExecuteAmputationAction, params)
 end
 
+---@param player IsoPlayer
+---@param args table{patientUsername: string, recalculate: boolean}
 function ServerRelayCommands.SendCache(player, args)
     local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
-    local username = player:getUsername()
     if args.recalculate then
-        CachedDataHandler.CalculateCacheableValues(username)
+        CachedDataHandler.CalculateCacheableValues(args.patientUsername)
     end
 
-    local cache = CachedDataHandler.GetAll(username)
-    TOC_DEBUG.print("Sending cache to client for " .. username)
-    sendServerCommand(player, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveCache, {cache = cache})
+    local cache = CachedDataHandler.GetAll(args.patientUsername)
+    TOC_DEBUG.print("Sending cache to client " .. player:getUsername() .. " for patient " .. args.patientUsername)
+    sendServerCommand(player, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveCache, {patientUsername = args.patientUsername, cache = cache})
 end
 
 --* ADMIN ONLY *--
@@ -52,6 +53,13 @@ end
 ---@param args relayExecuteInitializationParams
 function ServerRelayCommands.RelayExecuteInitialization(adminObj, args)
     local patientPl = CommonMethods.GetPatientForServer(args.patientNum)
+
+    -- Deletes data from ModData
+    local key = CommandsData.GetKey(patientPl:getUsername())
+    ModData.remove(key)
+
+    --
+
     sendServerCommand(patientPl, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveExecuteInitialization, {})
 end
 

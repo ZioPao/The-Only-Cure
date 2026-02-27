@@ -38,10 +38,11 @@ function CachedDataHandler.ApplyFromServer(cache)
 end
 
 --CLIENT ONLY
-function CachedDataHandler.RequestCacheFromServer(recalculate)
-    TOC_DEBUG.print("Requesting cache from server")
+function CachedDataHandler.RequestFromServer(patientUsername, recalculate)
+    TOC_DEBUG.print("Requesting cache from server for player " .. tostring(patientUsername))
     local CommandsData = require("TOC/CommandsData")
-    sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.SendCache, {recalculate = recalculate})
+    sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.SendCache,
+    {patientUsername = patientUsername, recalculate = recalculate})
 end
 
 ---SERVER ONLY

@@ -7,18 +7,18 @@ local ItemsController = require("TOC/Controllers/ItemsController")
 
 local ServerItemsCommands = {}
 
-function ServerItemsCommands.SpawnAmputationItem(_, args)
-    local patientPl = CommonMethods.GetPatientForServer(args.patientNum)
-    local limbName = args.limbName
-    ItemsController.Player.SpawnAmputationItem(patientPl, limbName)
-end
+-- function ServerItemsCommands.SpawnAmputationItem(_, args)
+--     local patientPl = CommonMethods.GetPatientForServer(args.patientNum)
+--     local limbName = args.limbName
+--     ItemsController.Player.SpawnAmputationItem(patientPl, limbName)
+-- end
 
-function ServerItemsCommands.DeleteOldAmputationItem(_, args)
-    local patientPl = CommonMethods.GetPatientForServer(args.patientNum)
-    local limbName = args.limbName
+-- function ServerItemsCommands.DeleteOldAmputationItem(_, args)
+--     local patientPl = CommonMethods.GetPatientForServer(args.patientNum)
+--     local limbName = args.limbName
 
-    ItemsController.Player.DeleteOldAmputationItem(patientPl, limbName)
-end
+--     ItemsController.Player.DeleteOldAmputationItem(patientPl, limbName)
+-- end
 
 function ServerItemsCommands.DeleteAllOldAmputationItems(_, args)
     local patientPl = CommonMethods.GetPatientForServer(args.patientNum)
