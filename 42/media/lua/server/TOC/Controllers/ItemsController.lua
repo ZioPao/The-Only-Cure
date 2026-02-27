@@ -1,5 +1,3 @@
--- TODO Should be server side in 42.13
-
 local StaticData = require("TOC/StaticData")
 local CommonMethods = require("TOC/CommonMethods")
 local CommandsData = require("TOC/CommandsData")

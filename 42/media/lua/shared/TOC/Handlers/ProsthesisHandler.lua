@@ -73,6 +73,7 @@ function ProsthesisHandler.CheckIfEquippable(fullType)
 end
 
 ---Handle equipping or unequipping prosthetics
+---@server
 ---@param character IsoPlayer
 ---@param item InventoryItem
 ---@param isEquipping boolean
@@ -150,30 +151,24 @@ function ISClothingExtraAction:perform()
     og_ISClothingExtraAction_perform(self)
 end
 
-local og_ISUnequipAction_complete = ISUnequipAction.complete
+local og_ISUnequipAction_perform = ISUnequipAction.perform
 ---@diagnostic disable-next-line: duplicate-set-field
-function ISUnequipAction:complete()
-    -- B42 Completely broken!
-    TOC_DEBUG.print("ISUnequipAction:complete 1")
+function ISUnequipAction:perform()
 
     local isProst = ProsthesisHandler.SearchAndSetupProsthesis(self.character, self.item, false)
-    TOC_DEBUG.print("ISUnequipAction:complete 2")
+    og_ISUnequipAction_perform(self)
 
-    og_ISUnequipAction_complete(self)
-    TOC_DEBUG.print("ISUnequipAction:complete 3")
-
-    -- if isProst then
-    --     -- we need to fetch the limbname associated to the prosthesis
-    --     local side = CommonMethods.GetSide(self.item:getFullType())
-    --     local highestAmputatedLimbs = CachedDataHandler.GetHighestAmputatedLimbs(self.character:getUsername())
-    --     if highestAmputatedLimbs then
-    --         local hal = highestAmputatedLimbs[side]
-    --         if hal then
-    --         -- This could break if amputated limbs aren't cached for some reason
-    --             triggerEvent("OnProsthesisUnequipped", hal)
-    --         end
-    --     end
-    -- end
+    if isProst then
+        -- we need to fetch the limbname associated to the prosthesis
+        local side = CommonMethods.GetSide(self.item:getFullType())
+        local highestAmputatedLimbs = CachedDataHandler.GetHighestAmputatedLimbs(self.character:getUsername())
+        if highestAmputatedLimbs then
+            local hal = highestAmputatedLimbs[side]
+            if hal then
+                triggerEvent("OnProsthesisUnequipped", hal)
+            end
+        end
+    end
 end
 
 return ProsthesisHandler

@@ -27,3 +27,14 @@ DataController should be initialized with
 username or playernum?
 
 To request 
+
+
+______________
+
+local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
+local x = CachedDataHandler.GetAll(getPlayer():getUsername())
+TOC_DEBUG.printTable(x)
+
+local DataController = require("TOC/Controllers/DataController")
+local h = DataController.GetInstance(getPlayer():getUsername())
+TOC_DEBUG.printTable(h.tocData)
