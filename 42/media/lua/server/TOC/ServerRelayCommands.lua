@@ -79,16 +79,6 @@ function ServerRelayCommands.RelayExecuteAmputationAction(surgeonPl, args)
     -- sendServerCommand(patientPl, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveExecuteAmputationAction, params)
 end
 
-
---* CACHE
-
----@param player IsoPlayer
----@param args table{patientUsername: string, recalculate: boolean}
-function ServerRelayCommands.SendCache(player, args)
-    local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
-    CachedDataHandler.SendCache(player, args.recalculate)
-end
-
 --* ADMIN ONLY *--
 ---Relay a local init from another client
 ---@param adminObj IsoPlayer

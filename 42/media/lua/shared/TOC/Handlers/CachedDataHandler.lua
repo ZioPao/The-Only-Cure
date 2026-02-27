@@ -24,13 +24,13 @@ function CachedDataHandler.Setup(username)
 end
 
 ---CLIENT ONLY
+---@param patientUsername string
 ---@param cache table
-function CachedDataHandler.ApplyFromServer(cache)
+function CachedDataHandler.ApplyFromServer(patientUsername, cache)
 
-    local playerUsername = getPlayer():getUsername()
-    CachedDataHandler.amputatedLimbs[playerUsername] = cache.amputatedLimbs or {}
-    CachedDataHandler.highestAmputatedLimbs[playerUsername] = cache.highestAmputatedLimbs or {}
-    CachedDataHandler.handFeasibility[playerUsername] = cache.handFeasibility or {}
+    CachedDataHandler.amputatedLimbs[patientUsername] = cache.amputatedLimbs or {}
+    CachedDataHandler.highestAmputatedLimbs[patientUsername] = cache.highestAmputatedLimbs or {}
+    CachedDataHandler.handFeasibility[patientUsername] = cache.handFeasibility or {}
 
     -- TOC_DEBUG.printTable(CachedDataHandler.amputatedLimbs[playerUsername])
     -- TOC_DEBUG.printTable(CachedDataHandler.highestAmputatedLimbs[playerUsername])
@@ -241,7 +241,8 @@ function CachedDataHandler.SendCache(player, patientUsername, recalculate)
     local CommandsData = require("TOC/CommandsData")
 
     -- UGLY should be in ServerRelayCommands, but to not create circular dependencies we are keeping it here for now
-    sendServerCommand(player, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveCache, {patientUsername = patientUsername, cache = cache})
+    sendServerCommand(player, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveCache, {
+        patientUsername = patientUsername, cache = cache})
 end
 
 

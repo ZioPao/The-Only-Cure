@@ -50,7 +50,7 @@ end
 
 function ClientRelayCommands.ReceiveCache(args)
     local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
-    CachedDataHandler.ApplyFromServer(args.cache)
+    CachedDataHandler.ApplyFromServer(args.patientUsername, args.cache)
 end
 
 
