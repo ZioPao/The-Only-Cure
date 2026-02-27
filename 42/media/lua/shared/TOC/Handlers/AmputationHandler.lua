@@ -271,8 +271,12 @@ function AmputationHandler:execute(damagePlayer)
             dcInst:apply(self.surgeonPl)
         end
     else
-        triggerEvent("OnAmputatedLimb", self.limbName)
+        --triggerEvent("OnAmputatedLimb", self.limbName)
     end
+
+    -- REMOVE ME
+    TOC_DEBUG.print("Post amputation TOC data")
+    TOC_DEBUG.printTable(dcInst.tocData)
 
 end
 

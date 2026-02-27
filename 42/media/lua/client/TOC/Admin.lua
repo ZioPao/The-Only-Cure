@@ -63,9 +63,7 @@ local function AddAdminTocOptions(playerNum, context, worldobjects)
                 --if isClient() then
                 sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayForcedAmputation,
                 { patientNum = clickedPlayerNum, limbName = limbName })
-                -- else
-                --     ClientRelayCommands.ReceiveExecuteAmputationAction({surgeonNum=clickedPlayerNum, limbName=limbName, damagePlayer=false})
-                -- end
+
 
             end)
         end
@@ -86,33 +84,13 @@ local og_ISHealthPanel_onCheatCurrentPlayer = ISHealthPanel.onCheatCurrentPlayer
 ---@param player IsoPlayer
 function ISHealthPanel.onCheatCurrentPlayer(bodyPart, action, player)
     og_ISHealthPanel_onCheatCurrentPlayer(bodyPart, action, player)
-    local bptString = BodyPartType.ToString(bodyPart:getType())
-    local username = player:getUsername()
+    if action == "healthFullBody" or action == 'healthFull' then
+        if isClient() then
 
-    if action == "healthFullBody" then
-        -- loop all limbs and reset them if infected
-        local dcInst = DataController.GetInstance(username)
-
-        for i = 1, #StaticData.LIMBS_STR do
-            local limbName = StaticData.LIMBS_STR[i]
-
-            dcInst:setIsInfected(limbName, false)
+            sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayExecuteInitialization,
+                { patientNum = player:getOnlineID() })
+        else
+            ClientRelayCommands.ReceiveExecuteInitialization()
         end
-
-        dcInst:setIsIgnoredPartInfected(false)
-
-        dcInst:apply()        -- FIX No apply from client
-
-    end
-
-    if action == "healthFull" then
-        -- Get the limbName for that BodyPart and fix the values in TOC Data
-        local limbName = StaticData.BODYLOCS_TO_LIMBS_IND_STR[bptString]
-        local dcInst = DataController.GetInstance(username)
-
-        dcInst:setIsInfected(limbName, false)
-
-        dcInst:apply()        -- FIX no apply from client
-
     end
 end

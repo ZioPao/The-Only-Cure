@@ -22,6 +22,7 @@ function ProsthesisHandler.CheckIfProst(item)
 
         return false
     end
+    TOC_DEBUG.print("CheckIfProst")
 
     return item:getBodyLocation():toString():contains(bodylocArmProstBaseline)
 end
@@ -57,6 +58,8 @@ function ProsthesisHandler.CheckIfEquippable(fullType)
 
     local highestAmputatedLimbs = CachedDataHandler.GetHighestAmputatedLimbs(getPlayer():getUsername())
 
+    TOC_DEBUG.print("highestAmputatedLimbs")
+    TOC_DEBUG.printTable(highestAmputatedLimbs)
     if highestAmputatedLimbs then
         local hal = highestAmputatedLimbs[side]
         if hal and not string.contains(hal, "UpperArm") then
@@ -98,7 +101,7 @@ function ProsthesisHandler.Validate(item, isEquippable)
     if isEquippable then
         isEquippable = ProsthesisHandler.CheckIfEquippable(fullType)
     else
-        getPlayer():Say(getText("UI_Say_CantEquip"))
+        getPlayer():Say(getText("UI_Say_CantEquip"))        -- FIX not working
     end
 
     return isEquippable
@@ -110,66 +113,67 @@ end
 --* Overrides *--
 
 
--- local og_ISWearClothing_isValid = ISWearClothing.isValid
--- ---@diagnostic disable-next-line: duplicate-set-field
--- function ISWearClothing:isValid()
---     local isEquippable = og_ISWearClothing_isValid(self)
---     return ProsthesisHandler.Validate(self.item, isEquippable)
--- end
+local og_ISWearClothing_isValid = ISWearClothing.isValid
+---@diagnostic disable-next-line: duplicate-set-field
+function ISWearClothing:isValid()
+    TOC_DEBUG.print("ISWearClothing override")
+    local isEquippable = og_ISWearClothing_isValid(self)
+    return ProsthesisHandler.Validate(self.item, isEquippable)
+end
 
--- local og_ISWearClothing_perform = ISWearClothing.perform
--- ---@diagnostic disable-next-line: duplicate-set-field
--- function ISWearClothing:perform()
---     ProsthesisHandler.SearchAndSetupProsthesis(self.character, self.item, true)
---     og_ISWearClothing_perform(self)
--- end
+local og_ISWearClothing_perform = ISWearClothing.perform
+---@diagnostic disable-next-line: duplicate-set-field
+function ISWearClothing:perform()
+    ProsthesisHandler.SearchAndSetupProsthesis(self.character, self.item, true)
+    og_ISWearClothing_perform(self)
+end
 
 
--- local og_ISClothingExtraAction_isValid = OverridenMethodsArchive.Save("ISClothingExtraAction_isValid", ISClothingExtraAction.isValid)
+local og_ISClothingExtraAction_isValid = OverridenMethodsArchive.Save("ISClothingExtraAction_isValid", ISClothingExtraAction.isValid)
 
--- ---@diagnostic disable-next-line: duplicate-set-field
--- function ISClothingExtraAction:isValid()
---     local isEquippable = og_ISClothingExtraAction_isValid(self)
---     -- self.extra is a string, not the item
---     local testItem = instanceItem(self.extra)
---     return ProsthesisHandler.Validate(testItem, isEquippable)
--- end
+---@diagnostic disable-next-line: duplicate-set-field
+function ISClothingExtraAction:isValid()
+    local isEquippable = og_ISClothingExtraAction_isValid(self)
+    -- self.extra is a string, not the item
+    local testItem = instanceItem(self.extra)
+    return ProsthesisHandler.Validate(testItem, isEquippable)
+end
 
--- local og_ISClothingExtraAction_perform = OverridenMethodsArchive.Save("ISClothingExtraAction_perform", ISClothingExtraAction.perform)
--- ---@diagnostic disable-next-line: duplicate-set-field
--- function ISClothingExtraAction:perform()
---     local extraItem = instanceItem(self.extra)
---     TOC_DEBUG.print("ISClothingExtraAction_perform 1")
---     ProsthesisHandler.SearchAndSetupProsthesis(self.character, extraItem, true)
---     TOC_DEBUG.print("ISClothingExtraAction_perform 2")
+local og_ISClothingExtraAction_perform = OverridenMethodsArchive.Save("ISClothingExtraAction_perform", ISClothingExtraAction.perform)
+---@diagnostic disable-next-line: duplicate-set-field
+function ISClothingExtraAction:perform()
+    local extraItem = instanceItem(self.extra)
+    TOC_DEBUG.print("ISClothingExtraAction_perform 1")
+    ProsthesisHandler.SearchAndSetupProsthesis(self.character, extraItem, true)
+    TOC_DEBUG.print("ISClothingExtraAction_perform 2")
 
---     og_ISClothingExtraAction_perform(self)
--- end
+    og_ISClothingExtraAction_perform(self)
+end
 
--- local og_ISUnequipAction_complete = ISUnequipAction.complete
--- ---@diagnostic disable-next-line: duplicate-set-field
--- function ISUnequipAction:complete()
---     -- B42 Completely broken!
---     TOC_DEBUG.print("ISUnequipAction:complete 1")
+local og_ISUnequipAction_complete = ISUnequipAction.complete
+---@diagnostic disable-next-line: duplicate-set-field
+function ISUnequipAction:complete()
+    -- B42 Completely broken!
+    TOC_DEBUG.print("ISUnequipAction:complete 1")
 
---     local isProst = ProsthesisHandler.SearchAndSetupProsthesis(self.character, self.item, false)
---     TOC_DEBUG.print("ISUnequipAction:complete 2")
+    local isProst = ProsthesisHandler.SearchAndSetupProsthesis(self.character, self.item, false)
+    TOC_DEBUG.print("ISUnequipAction:complete 2")
 
---     og_ISUnequipAction_complete(self)
---     TOC_DEBUG.print("ISUnequipAction:complete 3")
+    og_ISUnequipAction_complete(self)
+    TOC_DEBUG.print("ISUnequipAction:complete 3")
 
---     -- if isProst then
---     --     -- we need to fetch the limbname associated to the prosthesis
---     --     local side = CommonMethods.GetSide(self.item:getFullType())
---     --     local highestAmputatedLimbs = CachedDataHandler.GetHighestAmputatedLimbs(self.character:getUsername())
---     --     if highestAmputatedLimbs then
---     --         local hal = highestAmputatedLimbs[side]
---     --         if hal then
---     --         -- This could break if amputated limbs aren't cached for some reason
---     --             triggerEvent("OnProsthesisUnequipped", hal)
---     --         end
---     --     end
---     -- end
--- end
+    -- if isProst then
+    --     -- we need to fetch the limbname associated to the prosthesis
+    --     local side = CommonMethods.GetSide(self.item:getFullType())
+    --     local highestAmputatedLimbs = CachedDataHandler.GetHighestAmputatedLimbs(self.character:getUsername())
+    --     if highestAmputatedLimbs then
+    --         local hal = highestAmputatedLimbs[side]
+    --         if hal then
+    --         -- This could break if amputated limbs aren't cached for some reason
+    --             triggerEvent("OnProsthesisUnequipped", hal)
+    --         end
+    --     end
+    -- end
+end
 
 return ProsthesisHandler

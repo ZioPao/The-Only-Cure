@@ -204,11 +204,11 @@ function CachedDataHandler.OverrideInteractionsKey(username)
         TOC_DEBUG.print("Disabling interact key for local player")
         TOC_DEBUG.print("Cached current key for interact: " .. tostring(CachedDataHandler.interactKey))
 
-        getCore():addKeyBinding(interactStr, CachedDataHandler.interactKey and CachedDataHandler.interactKey or Keyboard.KEY_NONE)
-        getCore():addKeyBinding(interactStr, Keyboard.KEY_NONE)
+        getCore():addKeyBinding(interactStr, CachedDataHandler.interactKey and CachedDataHandler.interactKey or Keyboard.KEY_NONE, 0, false, false, false)
+        getCore():addKeyBinding(interactStr, Keyboard.KEY_NONE, 0, false, false, false)
 
     else
-        getCore():addKeyBinding(interactStr, CachedDataHandler.interactKey)
+        getCore():addKeyBinding(interactStr, CachedDataHandler.interactKey, 0, false, false, false)
 
     end
 end

@@ -319,7 +319,6 @@ end
 ---@param limbName string
 ---@return number
 function DataController:getWoundDirtyness(limbName)
-    if not self.isDataReady then return -1 end
     return self.tocData.limbs[limbName].woundDirtyness
 end
 
@@ -327,7 +326,6 @@ end
 ---@param limbName string
 ---@return number
 function DataController:getCicatrizationTime(limbName)
-    if not self.isDataReady then return -1 end
     return self.tocData.limbs[limbName].cicatrizationTime
 end
 
@@ -377,7 +375,6 @@ function DataController:setCutLimb(limbName, isOperated, isCicatrized, isCauteri
     -- Set that a limb has been cut, to activate some functions without having to loop through the parts
     self:setIsAnyLimbCut(true)
 
-    -- TODO In theory we should cache data from here, not AmputationHandler
 end
 
 ---Set a limb data

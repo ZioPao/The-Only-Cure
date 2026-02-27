@@ -23,28 +23,40 @@ function ServerRelayCommands.UpdateDataControllerFromClient(playerObj, args)
     local DataController = require("TOC/Controllers/DataController")
     local h = DataController.GetInstance(playerObj:getUsername())
 
+    TOC_DEBUG.print("CLIENT SYNC of DC for " .. args.limbName)
     if args.cicTime then
         h:setCicatrizationTime(args.limbName, args.cicTime)
+        TOC_DEBUG.print("CicTime = " .. tostring(args.cicTime))
     end
 
     if args.dirtyness then
         h:setWoundDirtyness(args.limbName, args.dirtyness)
+        TOC_DEBUG.print("Dirtyness = " .. tostring(args.dirtyness))
+
     end
 
     if args.isInfected then
         h:setIsInfected(args.limbName, args.isInfected)
+        TOC_DEBUG.print("isInfected = " .. tostring(args.isInfected))
+
     end
 
     if args.isCauterized then
         h:setIsCauterized(args.limbName, args.isCauterized)
+        TOC_DEBUG.print("isCauterized = " .. tostring(args.isCauterized))
+
     end
 
     if args.isCicatrized then
         h:setIsCicatrized(args.limbName, args.isCicatrized)
+        TOC_DEBUG.print("iscicatrized = " .. tostring(args.isCicatrized))
+
     end
 
     if args.isIgnoredPartInfected then
         h:setIsIgnoredPartInfected(args.isIgnoredPartInfected)
+        TOC_DEBUG.print("isignoredpartinfected = " .. tostring(args.isIgnoredPartInfected))
+
     end
 
 end

@@ -36,9 +36,6 @@ function LocalPlayerController.InitializePlayer(isForced)
     LocalPlayerController.username = username
 
     --Setup the CicatrizationUpdate event and triggers it once
-    CommonMethods.SafeStartEvent("OnAmputatedLimb", LocalPlayerController.UpdateAmputations)
-
-    --Events.OnAmputatedLimb.Add(LocalPlayerController.ToggleUpdateAmputations)
     LocalPlayerController.ToggleUpdateAmputations()
 
     -- Since isForced is used to reset an existing player data, we're gonna clean their ISHealthPanel table too

@@ -38,7 +38,7 @@ end
 
 function ClientRelayCommands.FinalizeAmputationAction(args)
     ClientRelayCommands.ReceiveCache(args)
-    triggerEvent("OnAmputatedLimb", args.limbName)
+    --triggerEvent("OnAmputatedLimb", args.limbName)
 end
 
 --* APPLY RELAY *--
