@@ -41,7 +41,7 @@ function CutLimbAction:new(surgeon, patient, limbName, item, stitchesItem, banda
     o.stopOnWalk = true
     o.stopOnRun = true
 
-    o.maxTime = 1 --o:getDuration()
+    o.maxTime = o:getDuration()
 
     return o
 end
