@@ -110,9 +110,11 @@ function ServerRelayCommands.RelayForcedAmputation(adminObj, args)
     local handler = AmputationHandler:new(adminObj, patientPl, args.limbName)
     handler:execute(false)
 
-    -- FIX 42.14
-    -- Automatic cicatrization
-    -- sendServerCommand(patientPl, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveForcedCicatrization, {limbName = args.limbName})
+    -- Janky, but since this is an admin option we don't really care about optimizing it
+    local DataController = require("TOC/Controllers/DataController")
+    local h = DataController.GetInstance(patientPl:getUsername())
+    h:setIsCicatrized(args.limbName, true)
+    h:apply(patientPl)
 end
 
 function ServerRelayCommands.DeleteAllOldAmputationItems(_, args)
