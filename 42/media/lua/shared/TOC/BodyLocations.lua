@@ -101,9 +101,9 @@ local results = addBodyLocationsAt("Human", {
 })
 
 
-results['toc:Arm_L']:setMultiItem(true)
-results['toc:Arm_R']:setMultiItem(true)
-results['toc:ArmProst_L']:setMultiItem(true)
-results['toc:ArmProst_R']:setMultiItem(true)
-results['toc:ArmAccessory_L']:setMultiItem(true)
-results['toc:ArmAccessory_R']:setMultiItem(true)
+results['toc:Arm_L']:setMultiItem(false)
+results['toc:Arm_R']:setMultiItem(false)
+results['toc:ArmProst_L']:setMultiItem(false)
+results['toc:ArmProst_R']:setMultiItem(false)
+results['toc:ArmAccessory_L']:setMultiItem(false)
+results['toc:ArmAccessory_R']:setMultiItem(false)
