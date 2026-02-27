@@ -9,3 +9,21 @@
 7. Server recalc cache
 8. Server sends cache to client
 9. Client receives cache
+
+
+
+
+
+
+
+
+
+
+______________
+
+
+
+DataController should be initialized with 
+username or playernum?
+
+To request 

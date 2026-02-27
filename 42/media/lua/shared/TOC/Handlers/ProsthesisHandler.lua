@@ -83,7 +83,7 @@ function ProsthesisHandler.SearchAndSetupProsthesis(character, item, isEquipping
     TOC_DEBUG.print("Setup Prosthesis => " .. group .. " - is equipping? " .. tostring(isEquipping))
     local dcInst = DataController.GetInstance(username)
     dcInst:setIsProstEquipped(group, isEquipping)
-    dcInst:apply()
+    dcInst:apply(character)
 
     -- Calculates hands feasibility once again
     CachedDataHandler.OverrideInteractionsKey(username)

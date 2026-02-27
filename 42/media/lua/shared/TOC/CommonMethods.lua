@@ -52,4 +52,20 @@ function CommonMethods.GetPatientForServer(num)
     if isServer() then return getPlayerByOnlineID(num) else return getPlayer() end
 end
 
+
+---@param username string
+---@return IsoPlayer
+function CommonMethods.FindOnlinePlayer(username)
+    local onlinePlayers = getOnlinePlayers()
+    for i=0, onlinePlayers:size() - 1 do
+
+        ---@type IsoPlayer
+        local player = onlinePlayers:get(i)
+        if player:getUsername() == username then
+            return player
+        end
+    end
+
+    return nil
+end
 return CommonMethods

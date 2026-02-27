@@ -88,10 +88,11 @@ function ISHealthPanel.onCheatCurrentPlayer(bodyPart, action, player)
     og_ISHealthPanel_onCheatCurrentPlayer(bodyPart, action, player)
     local bptString = BodyPartType.ToString(bodyPart:getType())
     local username = player:getUsername()
+    local id = player:getOnlineID()
 
     if action == "healthFullBody" then
         -- loop all limbs and reset them if infected
-        local dcInst = DataController.GetInstance(username)
+        local dcInst = DataController.GetInstance(id)
 
         for i = 1, #StaticData.LIMBS_STR do
             local limbName = StaticData.LIMBS_STR[i]

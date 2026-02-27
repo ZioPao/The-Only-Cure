@@ -10,7 +10,7 @@ local ServerRelayCommands = {}
 --* DATA CONTROLLER
 function ServerRelayCommands.RelayRequestDataController(playerObj, args)
     local DataController = require("TOC/Controllers/DataController")
-    DataController:new(playerObj, args.isForced)
+    DataController:new(playerObj:getUsername(), args.isForced) 
 end
 
 

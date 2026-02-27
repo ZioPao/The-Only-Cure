@@ -1,5 +1,5 @@
 local CommandsData = require("TOC/CommandsData")
-local ServerDataHandler = require("TOC/ServerDataHandler")
+--local ServerDataHandler = require("TOC/Handlers/ServerDataHandler")
 ----------------------------
 
 local DebugCommands = {}
@@ -8,7 +8,7 @@ local DebugCommands = {}
 ---@param playerObj IsoPlayer
 ---@param args table
 function DebugCommands.PrintAllTocData(playerObj, args)
-    TOC_DEBUG.printTable(ServerDataHandler.modData)
+    --TOC_DEBUG.printTable(ServerDataHandler.modData)
 end
 
 ---Print ALL TOC data
@@ -16,8 +16,8 @@ end
 ---@param args printTocDataParams
 function DebugCommands.PrintTocData(playerObj, args)
     local key = CommandsData.GetKey(args.username)
-    local tocData = ServerDataHandler.GetTable(key)
-    TOC_DEBUG.printTable(tocData)
+    --local tocData = ServerDataHandler.GetTable(key)
+    --TOC_DEBUG.printTable(tocData)
 end
 
 --------------------

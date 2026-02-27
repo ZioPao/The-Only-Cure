@@ -3,6 +3,7 @@
 -- Server is the authoritative source
 
 local CommandsData = require("TOC/CommandsData")
+local CommonMethods = require("TOC/CommonMethods")
 local StaticData = require("TOC/StaticData")
 ----------------
 
@@ -10,7 +11,6 @@ local StaticData = require("TOC/StaticData")
 
 --- Handle all TOC mod data related stuff
 ---@class DataController
----@field player IsoPlayer
 ---@field username string
 ---@field tocData tocModDataType
 ---@field isDataReady boolean
@@ -18,20 +18,18 @@ local StaticData = require("TOC/StaticData")
 local DataController = {}
 DataController.instances = {}
 
----SERVER ONLY
----Setup a new Mod Data Handler (must be run on server)
----@param player IsoPlayer
+---Create a new instance of DataController. If is onClient, will request the creation serverside
+---@param username string
 ---@param isResetForced boolean?
 ---@return DataController
-function DataController:new(player, isResetForced)
+function DataController:new(username, isResetForced)
     ---@type DataController
     ---@diagnostic disable-next-line: missing-fields
     local o = {}
     setmetatable(o, self)
     self.__index = self
 
-    o.player = player
-    o.username = player:getUsername()
+    o.username = username
     o.isDataReady = false
     o.isResetForced = isResetForced or false
     TOC_DEBUG.print("Creating new instance of DataController instance for " .. o.username)
@@ -42,7 +40,7 @@ function DataController:new(player, isResetForced)
     local key = CommandsData.GetKey(o.username)
 
     -- Server / singleplayer: ensure data exists locally
-    if isServer() or not isClient() then
+    if isServer() then
         o:ensureDataInitialized(key)
     end
 
@@ -52,7 +50,9 @@ function DataController:new(player, isResetForced)
     return o
 end
 
--- Helpers: encapsulate ModData operations and default data creation
+---encapsulate ModData operations and default data creation
+---@private
+---@server
 function DataController:createDefaultData()
     local tocData = {
         isIgnoredPartInfected = false,
@@ -85,15 +85,22 @@ function DataController:createDefaultData()
     return tocData
 end
 
+---@private
+---@server
 function DataController:loadModData(key)
     return ModData.get(key)
 end
 
+---@private
+---@server
 function DataController:saveModData(key, data)
     ModData.add(key, data)
 end
 
+---@private
+---@server
 function DataController:ensureDataInitialized(key)
+    -- Tries to load already existing data
     local data = self:loadModData(key)
     if data and data.limbs then
         self.tocData = data
@@ -107,16 +114,18 @@ function DataController:ensureDataInitialized(key)
     self:setIsDataReady(true)
     self:setIsResetForced(false)
 
-    self:apply()        -- transmit to client
+    local pl = CommonMethods.FindOnlinePlayer(self.username)        -- UGLY just to maek things work at this point
+    self:apply(pl)        -- transmit to specific client
 
-    triggerEvent("OnInitTocData", self.player, true)
+    -- To be used with Cache
+    triggerEvent("OnInitTocData", pl, self.username, true)
 end
 
 
----SERVER ONLY
 ---Setup a new toc mod data data class
 ---@param key string
 ---@private
+---@server
 function DataController:setup(key)
     TOC_DEBUG.print("Running setup")
 
@@ -133,7 +142,8 @@ end
 ---In case of desync between the table on ModData and the table here
 ---@param tocData tocModDataType
 ---@private
-function DataController:saveClientData(tocData)
+---@server
+function DataController:save(tocData)
     if not tocData or not tocData.limbs then
         TOC_DEBUG.print("Received invalid tocData")
         return
@@ -143,8 +153,28 @@ function DataController:saveClientData(tocData)
     self.tocData = tocData
     self:setIsResetForced(false)
     self:setIsDataReady(true)
-    triggerEvent("OnReceivedTocData", self.username)
+    --triggerEvent("OnReceivedTocData", self.username)
 end
+
+-------------------------------------------
+
+---@param username string
+---@param isForced boolean
+---@client
+function DataController.RequestFromServer(username, isForced)
+    --fix sp and mp split here
+
+    -- local pl = CommonMethods.GetPatientForServer(id)
+    -- local username = pl:getUsername()
+
+    TOC_DEBUG.print("Requesting DC from Server")
+
+    -- placeholder datacontroller, to be initialized
+    local h = DataController:new(username, isForced)
+    sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayRequestDataController, {username = username, isForced = isForced})
+    return h
+end
+
 
 -----------------
 --* Setters *--
@@ -377,15 +407,16 @@ end
 --* Global Mod Data Handling *--
 
 ---SHARED
-function DataController:apply()
-    --B42 TEMPORARY WORKAROUND FOR B42.14, it should be server only
+---@param player IsoPlayer? TO BE USED ONLY WHEN RUN ON SERVER!!!!
+function DataController:apply(player)
     if isClient() then
         TOC_DEBUG.print("[WORKAROUND] Sending ModData to server for " .. self.username)
         ModData.transmit(CommandsData.GetKey(self.username))
     elseif isServer() then
         --TOC_DEBUG.print("Forwarding ModData to " .. playerObj:getUsername())
         -- Notify player that they must request the data from the server
-        sendServerCommand(self.player, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveApplyFromServer, {})
+        --B42 TEMPORARY WORKAROUND FOR B42.14 ugly
+        sendServerCommand(player, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveApplyFromServer, {})
     end
 end
 
@@ -406,8 +437,7 @@ function DataController.ReceiveData(key, data)
         return
     end
 
-    -- Persist and apply received data; applyOnlineData handles flags and event
-    handler:saveClientData(data)
+    handler:save(data)
 
     -- FIX Should be an event
     if isClient() then
@@ -419,31 +449,25 @@ end
 
 Events.OnReceiveGlobalModData.Add(DataController.ReceiveData)
 
--------------------
-
-function DataController.RequestFromServer(isForced)
-    --fix sp and mp split here
-
-    -- placeholder datacontroller, to be initialized
-    DataController:new(getPlayer(), isForced)
-    sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayRequestDataController, {isForced = isForced})
-end
+-----------------
 
 ---@param username string
+---@param isReset boolean?
 ---@return DataController
-function DataController.GetInstance(username)
-    -- If instance exists, return it
+function DataController.GetInstance(username, isReset)
+
     if DataController.instances[username] ~= nil then
+        -- If instance exists (even placeholder), return it
         return DataController.instances[username]
+    elseif isServer() then      --B42 broken in sp
+        return DataController:new(username, isReset)
     end
-
-    TOC_DEBUG.print("Fetching DC instance for " .. tostring(username))
-
-    -- if isServer() or not isClient() then
-    --     -- Create server-side authoritative instance
-    --     return DataController:new(username)
+    -- elseif isClient() then
+    --     return DataController.RequestFromServer(username, isReset)
     -- end
 end
+
+
 
 function DataController.DestroyInstance(username)
     if DataController.instances[username] ~= nil then

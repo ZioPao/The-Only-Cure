@@ -138,7 +138,7 @@ function ItemsController.Player.OverrideAmputationItemVisuals(playerObj, limbNam
         local it = wornItems:get(i - 1)
         if it then
             local wornItem = wornItems:get(i - 1):getItem()
-            TOC_DEBUG.print(wornItem:getFullType())
+            --TOC_DEBUG.print(wornItem:getFullType())
             if wornItem:getFullType() == fullType then
                 TOC_DEBUG.print("Found amputation item for " .. limbName)
 

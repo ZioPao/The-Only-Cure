@@ -27,12 +27,10 @@ local LocalPlayerController = {}
 function LocalPlayerController.InitializePlayer(isForced)
     local playerObj = getPlayer()
     local username = playerObj:getUsername()
+    local id = playerObj:getOnlineID()
 
     TOC_DEBUG.print("Initializing local player: " .. username)
-
-    --DataController:new(username, isForced)
-    DataController.RequestFromServer(isForced)
-    --CachedDataHandler.RequestFromServer(username, true)        -- fix could return nothing if data controller hasn't been finalized on the server side.
+    DataController.RequestFromServer(username, isReset)
 
     LocalPlayerController.playerObj = playerObj
     LocalPlayerController.username = username
