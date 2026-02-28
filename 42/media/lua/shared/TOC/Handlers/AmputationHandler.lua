@@ -195,11 +195,12 @@ function AmputationHandler:damageAfterAmputation(surgeonFactor)
     -- Check if player has tourniquet equipped on the limb
     -- TODO Suboptimal checks, but they should work for now.
     -- FIX B42.14 reimplement server side
-    -- local hasTourniquet = TourniquetController.CheckTourniquetOnLimb(self.patientPl, self.limbName)
-    -- if hasTourniquet then
-    --     TOC_DEBUG.print("Do something different for the damage calculation because tourniquet is applied")
-    --     baseDamage = baseDamage * 0.5   -- 50% less damage due to tourniquet
-    -- end
+    local TourniquetController = require("TOC/Controllers/TourniquetController")
+    local hasTourniquet = TourniquetController.CheckTourniquetOnLimb(self.patientPl, self.limbName)
+    if hasTourniquet then
+        TOC_DEBUG.print("Do something different for the damage calculation because tourniquet is applied")
+        baseDamage = baseDamage * 0.5   -- 50% less damage due to tourniquet
+    end
 
 
     bodyPart:AddDamage(baseDamage - surgeonFactor)
@@ -219,6 +220,7 @@ end
 --- Execute the amputation. This method doesn't check if the upper limb has been amputated or not, so if
 --- somehow the method gets triggered and we're trying to cut off a part that doesn't really exist anymore,
 --- it will still be executed. This is by design, additional checks must be made BEFORE running the AmputationHandler
+---@server
 ---@param damagePlayer boolean
 function AmputationHandler:execute(damagePlayer)
     local surgeonFactor = self.surgeonPl:getPerkLevel(Perks.Doctor) * SandboxVars.TOC.SurgeonAbilityImportance
@@ -258,6 +260,8 @@ function AmputationHandler:execute(damagePlayer)
 
         --B42 Send bleeding too! Need to be synced with client
     end
+
+    -- MP only
     if isServer() then
         -- Both patient and surgeon should get the update!
 
@@ -270,13 +274,8 @@ function AmputationHandler:execute(damagePlayer)
         if self.patientPl ~= self.surgeonPl then
             dcInst:apply(self.surgeonPl)
         end
-    else
-        --triggerEvent("OnAmputatedLimb", self.limbName)
     end
 
-    -- REMOVE ME
-    --TOC_DEBUG.print("Post amputation TOC data")
-    --TOC_DEBUG.printTable(dcInst.tocData)
 
 end
 

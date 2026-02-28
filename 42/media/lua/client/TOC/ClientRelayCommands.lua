@@ -24,7 +24,6 @@ end
 ---Creates a new handler and execute the amputation function on this client
 ---@param args receiveExecuteAmputationActionParams
 function ClientRelayCommands.ReceiveExecuteAmputationAction(args)
-
     -- Check if player already doesn't have that limb or it's a dependant limb.
     -- Mostly a check for admin forced amputations more than anything else, since this case is handled in the GUI already.
     local dcInst = DataController.GetInstance(getPlayer():getUsername())

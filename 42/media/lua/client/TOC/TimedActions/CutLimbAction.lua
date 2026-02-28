@@ -147,26 +147,4 @@ function CutLimbAction:perform()
     ISBaseTimedAction.perform(self)
 end
 
--- function CutLimbAction:complete()
-    
-
-
--- end
-
--- function CutLimbAction:perform()
---     -- Stop the sound
---     if self.patient == self.character then
---         TOC_DEBUG.print("patient and surgeon are the same, executing on the client")
---         local handler = AmputationHandler:new(self.limbName)
---         handler:execute(true)
---     else
---         TOC_DEBUG.print("patient and surgeon not the same, sending relay to server")
---         -- Other player
---         ---@type relayExecuteAmputationActionParams
---         local params = {patientNum = self.patient:getOnlineID(), limbName = self.limbName}
---         sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayExecuteAmputationAction, params )
---     end
-
--- end
-
 return CutLimbAction

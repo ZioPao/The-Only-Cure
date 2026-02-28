@@ -56,15 +56,15 @@ function LocalPlayerController.ManageTraits()
         if playerObj:hasTrait(TOC_REG.traits[k]) then
             -- Once we find one, we should be done since they're exclusive
             -- FIX B42.13, broken
-            TOC_DEBUG.print("Player has amputation trait " .. k .. ", executing it")
-            local tempHandler = AmputationHandler:new(v, playerObj)
-            tempHandler:execute(false) -- No damage
-            tempHandler:close()
+            -- TOC_DEBUG.print("Player has amputation trait " .. k .. ", executing it")
+            -- local tempHandler = AmputationHandler:new(v, playerObj)
+            -- tempHandler:execute(false) -- No damage
+            -- tempHandler:close()
 
-            -- The wound should be already cicatrized
-            local dcInst = DataController.GetInstance(getPlayer():getUsername())
-            LocalPlayerController.HandleSetCicatrization(dcInst, playerObj, v)
-            dcInst:apply()
+            -- -- The wound should be already cicatrized
+            -- local dcInst = DataController.GetInstance(getPlayer():getUsername())
+            -- LocalPlayerController.HandleSetCicatrization(dcInst, playerObj, v)
+            -- dcInst:apply()
             return
         end
     end

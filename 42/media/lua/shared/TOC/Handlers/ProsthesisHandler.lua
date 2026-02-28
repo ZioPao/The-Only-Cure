@@ -88,11 +88,6 @@ function ProsthesisHandler.SearchAndSetupProsthesis(character, item, isEquipping
     local dcInst = DataController.GetInstance(username)
     dcInst:setIsProstEquipped(group, isEquipping)
     dcInst:apply(character)
-
-
-    -- FIX Should be handled separately, when recalculating cache
-    -- -- Calculates hands feasibility once again
-    -- CachedDataHandler.OverrideInteractionsKey(username)
     return true
 end
 

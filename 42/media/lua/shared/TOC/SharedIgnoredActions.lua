@@ -36,7 +36,7 @@ function ISEquipWeaponAction:new(character, item, maxTimeInit, primary, twoHands
 
 end
 
---FIX Re-enable
+--FIX Re-enable?
 -- local og_ISUnequipAction_new = ISUnequipAction.new
 -- function ISUnequipAction:new(character, item, maxTimeInit)
 --     local action = og_ISUnequipAction_new(self, character, item, maxTimeInit)
