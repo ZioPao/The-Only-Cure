@@ -113,6 +113,7 @@ function ServerRelayCommands.RelayForcedAmputation(adminObj, args)
     -- Janky, but since this is an admin option we don't really care about optimizing it
     local DataController = require("TOC/Controllers/DataController")
     local h = DataController.GetInstance(patientPl:getUsername())
+    h:setCicatrizationTime(args.limbName, 0)        -- for color of cicatrization in health panel
     h:setIsCicatrized(args.limbName, true)
     h:apply(patientPl)
 end
