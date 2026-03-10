@@ -191,17 +191,14 @@ function AmputationHandler:damageAfterAmputation(surgeonFactor)
     local bodyPart = bd:getBodyPart(BodyPartType[adjacentLimb])
     local baseDamage = StaticData.LIMBS_BASE_DAMAGE_IND_NUM[self.limbName]
 
-
     -- Check if player has tourniquet equipped on the limb
     -- TODO Suboptimal checks, but they should work for now.
-    -- FIX B42.14 reimplement server side
     local TourniquetController = require("TOC/Controllers/TourniquetController")
     local hasTourniquet = TourniquetController.CheckTourniquetOnLimb(self.patientPl, self.limbName)
     if hasTourniquet then
         TOC_DEBUG.print("Do something different for the damage calculation because tourniquet is applied")
         baseDamage = baseDamage * 0.5   -- 50% less damage due to tourniquet
     end
-
 
     bodyPart:AddDamage(baseDamage - surgeonFactor)
     bodyPart:setAdditionalPain(baseDamage - surgeonFactor)

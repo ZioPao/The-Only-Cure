@@ -87,6 +87,15 @@ function ServerRelayCommands.RelayExecuteAmputationAction(surgeonPl, args)
     handler:execute(true)
 end
 
+--* XP
+
+---@param playerObj IsoPlayer
+---@param args {perkName : string, xp : number}
+function ServerRelayCommands.RelayAddXp(playerObj, args)
+    TOC_DEBUG.print("received Add exp," .. tostring(args.perkName) .. " . " .. tostring(args.xp))
+    addXp(playerObj, Perks[args.perkName], args.xp)
+end
+
 --* ADMIN ONLY *--
 ---Relay a local init from another client
 ---@param adminObj IsoPlayer

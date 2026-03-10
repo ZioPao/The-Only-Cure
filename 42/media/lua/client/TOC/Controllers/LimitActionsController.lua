@@ -34,15 +34,12 @@ function LimitActionsController.WrapClothingAction(obj, wrappedFunc, item)
     if LimitActionsController.CheckLimbFeasibility(limbToCheck) then return isEquippable else return false end
 end
 
-
-
 -- We need to override when the player changes key binds manually to be sure that TOC changes are re-applied
 local og_MainOptions_apply = MainOptions.apply
 function MainOptions:apply(closeAfter)
     og_MainOptions_apply(self, closeAfter)
     CachedDataHandler.OverrideInteractionsKey(getPlayer():getUsername())
 end
-
 
 --------------------------------------------
 --* TIMED ACTIONS 
@@ -58,118 +55,6 @@ local function CheckHandFeasibility(limbName)
     local isFeasible = not dcInst:getIsCut(limbName) or dcInst:getIsProstEquipped(limbName)
     TOC_DEBUG.print("isFeasible: " .. tostring(isFeasible))
     return isFeasible
-end
-
-
---* Time to perform actions overrides
-local og_ISBaseTimedAction_adjustMaxTime = ISBaseTimedAction.adjustMaxTime
---- Adjust time
----@diagnostic disable-next-line: duplicate-set-field
-function ISBaseTimedAction:adjustMaxTime(maxTime)
-    local time = og_ISBaseTimedAction_adjustMaxTime(self, maxTime)
-    --TOC_DEBUG.print("Running override for adjustMaxTime")
-    -- Exceptions handling, if we find that parameter then we just use the original time
-    local actionsQueue = ISTimedActionQueue.getTimedActionQueue(getPlayer())
-
-    if actionsQueue and actionsQueue.current and actionsQueue.current.skipTOC then
-        TOC_DEBUG.print("Should skip TOC stuff")
-        return time
-    end
-
-    -- Action is valid, check if we have any cut limb and then modify maxTime
-    local dcInst = DataController.GetInstance(getPlayer():getUsername())
-    if time ~= -1 and dcInst and dcInst:getIsAnyLimbCut() then
-        --TOC_DEBUG.print("Overriding adjustMaxTime")
-        local pl = getPlayer()
-        local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(pl:getUsername())
-
-        for k, _ in pairs(amputatedLimbs) do
-            local limbName = k
-            local perkAmp = Perks["Side_" .. CommonMethods.GetSide(limbName)]
-            local perkLevel = pl:getPerkLevel(perkAmp)
-
-            if dcInst:getIsProstEquipped(limbName) then
-                -- TODO We should separate this in multiple perks, since this is gonna be a generic familiarity and could make no actual sense
-                local perkProst = Perks["ProstFamiliarity"]
-                perkLevel = perkLevel + pl:getPerkLevel(perkProst)
-            end
-
-            local perkLevelScaled
-            if perkLevel ~= 0 then perkLevelScaled = perkLevel / 10 else perkLevelScaled = 0 end
-            TOC_DEBUG.print("Perk Level: " .. tostring(perkLevel))
-            TOC_DEBUG.print("OG time: " .. tostring(time))
-
-            -- Modified Time shouldn't EVER be lower compared to the og one.
-            local modifiedTime = time * (StaticData.LIMBS_TIME_MULTIPLIER_IND_NUM[limbName] - perkLevelScaled)
-
-            if modifiedTime >= time then
-                time = modifiedTime
-            end
-
-            --TOC_DEBUG.print("Modified time: " .. tostring(time))
-        end
-
-    end
-
-    --TOC_DEBUG.print("New time with amputations: " .. tostring(time))
-    return time
-end
-
---* Random bleeding during cicatrization + Perks leveling override
-local og_ISBaseTimedAction_perform = ISBaseTimedAction.perform
---- After each action, level up perks
----@diagnostic disable-next-line: duplicate-set-field
-function ISBaseTimedAction:perform()
-    og_ISBaseTimedAction_perform(self)
-
-
-    --TOC_DEBUG.print("Running ISBaseTimedAction.perform override")
-    --TOC_DEBUG.print("max time: " .. tostring(self.maxTime))
-
-    local dcInst = DataController.GetInstance(self.character:getUsername())
-    if not dcInst:getIsAnyLimbCut() or self.noExp then return end
-
-
-    --* LEVELING   
-    -- First check level of perks. if already at max, skip
-    local amputatedLimbs = CachedDataHandler.GetAmputatedLimbs(LocalPlayerController.username)
-    local xp = self.maxTime / 100
-    -- TODO Exp should be added while doing the action, not after it's done
-
-    -- Prevent xp from being negative and decreasing perks
-    if xp < 0 then xp = 0 end
-    for k, _ in pairs(amputatedLimbs) do
-        local limbName = k
-
-        -- We're checking for only "visible" amputations to prevent from having bleeds everywhere
-        if dcInst:getIsCut(limbName) and dcInst:getIsVisible(limbName) then
-            local side = CommonMethods.GetSide(limbName)
-
-            local ampPerk = Perks["Side_" .. side]
-            local ampPerkLevel = LocalPlayerController.playerObj:getPerkLevel(ampPerk)
-
-            if ampPerkLevel < 10 then
-                --TOC_DEBUG.print("Levelling")
-                LocalPlayerController.playerObj:getXp():AddXP(ampPerk, xp)
-            end
-
-
-            -- Level up prosthesis perk
-            if dcInst:getIsProstEquipped(limbName) then
-                local prostPerk = Perks["ProstFamiliarity"]
-                local prostPerkLevel = LocalPlayerController.playerObj:getPerkLevel(prostPerk)
-                if prostPerkLevel < 10 then
-                    LocalPlayerController.playerObj:getXp():AddXP(prostPerk, xp)
-                end
-            end
-
-            -- Bleeding when not cicatrized
-            if not dcInst:getIsCicatrized(limbName) and dcInst:getIsProstEquipped(limbName) then
-                --TOC_DEBUG.print("Trying for bleed, player met the criteria")
-                LocalPlayerController.TryRandomBleed(self.character, limbName)
-            end
-        end
-    end
 end
 
 --* EQUIPPING ITEMS *--
@@ -390,15 +275,11 @@ function ISWearClothing:isValid()
     return LimitActionsController.WrapClothingAction(self, og_ISWearClothing_isValid, self.item)
 end
 
-
-
 local og_ISClothingExtraAction_isValid = OverridenMethodsArchive.Save("ISClothingExtraAction_isValid", ISClothingExtraAction.isValid)
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISClothingExtraAction:isValid()
     return LimitActionsController.WrapClothingAction(self, og_ISClothingExtraAction_isValid, instanceItem(self.extra))
 end
-
-
 
 
 --* Book exception for exp

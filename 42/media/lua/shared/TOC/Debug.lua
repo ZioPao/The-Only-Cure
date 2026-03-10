@@ -110,3 +110,11 @@ function TOC_DEBUG.testRelayDamage()
     local params = {limbName = "Hand_R", patientNum = getPlayer():getOnlineID()}
     sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayDamageDuringAmputation, params)
 end
+
+---Test XP relay for a given perk name and amount
+---@param perkName string e.g. "Side_L", "Side_R", "ProstFamiliarity"
+---@param xp number
+function TOC_DEBUG.testAddXp(perkName, xp)
+    TOC_DEBUG.print("Testing addXp: perkName=" .. tostring(perkName) .. " xp=" .. tostring(xp))
+    sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayAddXp, {perkName = perkName, xp = xp})
+end

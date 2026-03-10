@@ -9,10 +9,11 @@ CommandsData.modules = {
     TOC_ITEMS = "TOC_ITEMS"
 }
 
+-- Commands sent FROM server TO client (sendServerCommand), handled in ClientRelayCommands.lua
 CommandsData.client = {
     Relay = {
         ReceiveDamageDuringAmputation = "ReceiveDamageDuringAmputation",            ---@alias receiveDamageDuringAmputationParams { limbName : string}
-        ReceiveExecuteAmputationAction = "ReceiveExecuteAmputationAction",       ---@alias receiveExecuteAmputationActionParams {surgeonNum : number, limbName : string, damagePlayer : boolean}
+        ReceiveExecuteAmputationAction = "ReceiveExecuteAmputationAction",           ---@alias receiveExecuteAmputationActionParams {surgeonNum : number, limbName : string, damagePlayer : boolean}
         FinalizeAmputationAction = "FinalizeAmputationAction",
 
         --* APPLY *--
@@ -22,10 +23,10 @@ CommandsData.client = {
 
         --* ADMIN ONLY --*
         ReceiveExecuteInitialization = "ReceiveExecuteInitialization",
-        ReceiveForcedCicatrization = "ReceiveForcedCicatrization"               ---@alias receiveForcedCicatrizationParams {limbName : string}
     }
 }
 
+-- Commands sent FROM client TO server (sendClientCommand), handled in ServerRelayCommands.lua
 CommandsData.server = {
     Debug = {
         PrintTocData = "PrintTocData",                                  ---@alias printTocDataParams {username : string}
@@ -33,17 +34,19 @@ CommandsData.server = {
     },
 
     Relay = {
-
-        RelayRequestDataController = "RelayRequestDataController",                                              ---@alias relayRequestDataControllerParams {username : string, isForced : boolean}
+        RelayRequestDataController = "RelayRequestDataController",       ---@alias relayRequestDataControllerParams {username : string, isForced : boolean}
         UpdateDataControllerFromClient = "UpdateDataControllerFromClient",
 
-        RelayDamageDuringAmputation = "RelayDamageDuringAmputation",                ---@alias relayDamageDuringAmputationParams {patientNum : number, limbName : string}
-        RelayExecuteAmputationAction = "RelayExecuteAmputationAction",              ---@alias relayExecuteAmputationActionParams {patientNum : number, limbName : string}
+        RelayDamageDuringAmputation = "RelayDamageDuringAmputation",    ---@alias relayDamageDuringAmputationParams {patientNum : number, limbName : string}
+        RelayExecuteAmputationAction = "RelayExecuteAmputationAction",  ---@alias relayExecuteAmputationActionParams {patientNum : number, limbName : string}
         SendCache = "SendCache",
 
+        --* PERKS LEVEL UP *--
+        RelayAddXp = "RelayAddXp",                                      ---@alias relayAddXpParams {perkName : string, xp : number}
+
         --* ADMIN ONLY *--
-        RelayExecuteInitialization = "RelayExecuteInitialization",                                ---@alias relayExecuteInitializationParams {patientNum : number}
-        RelayForcedAmputation = "RelayForcedAmputation"                                           ---@alias relayForcedAmputationParams {patientNum : number, limbName : string}
+        RelayExecuteInitialization = "RelayExecuteInitialization",       ---@alias relayExecuteInitializationParams {patientNum : number}
+        RelayForcedAmputation = "RelayForcedAmputation"                  ---@alias relayForcedAmputationParams {patientNum : number, limbName : string}
     }
 }
 
