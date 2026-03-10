@@ -4,10 +4,11 @@ local CommonMethods = require("TOC/CommonMethods")
 
 local XP_PER_TICK = 0.01
 
----Adds TOC XP to all amputated limb perks. Server and SP only.
+---Iterates all valid amputated limbs and calls applyXp(character, perkName) for each.
+---Shared logic — no XP mechanism assumed.
 ---@param action ISBaseTimedAction
-local function AddTOCXp(action)
-    if isClient() then return end
+---@param applyXp fun(character: IsoPlayer, perkName: string)
+local function IterateTOCXp(action, applyXp)
     ---@diagnostic disable-next-line: undefined-field
     if action.skipTOC or action.noExp then return end
 
@@ -21,22 +22,26 @@ local function AddTOCXp(action)
 
     for limbName, _ in pairs(amputatedLimbs) do
         if dcInst:getIsCut(limbName) and dcInst:getIsVisible(limbName) then
-            local side = CommonMethods.GetSide(limbName)
-            local perkName = "Side_" .. side
-            local ampLevel = character:getPerkLevel(Perks[perkName])
-            TOC_DEBUG.print("AddTOCXp | " .. perkName .. "=" .. tostring(ampLevel))
-            if ampLevel < 10 then
-                addXp(character, Perks[perkName], XP_PER_TICK)
+            local perkName = "Side_" .. CommonMethods.GetSide(limbName)
+            if character:getPerkLevel(Perks[perkName]) < 10 then
+                TOC_DEBUG.print("IterateTOCXp | " .. perkName)
+                applyXp(character, perkName)
             end
-            if dcInst:getIsProstEquipped(limbName) then
-                local prostLevel = character:getPerkLevel(Perks["ProstFamiliarity"])
-                TOC_DEBUG.print("AddTOCXp | ProstFamiliarity=" .. tostring(prostLevel))
-                if prostLevel < 10 then
-                    addXp(character, Perks["ProstFamiliarity"], XP_PER_TICK)
-                end
+            if dcInst:getIsProstEquipped(limbName) and character:getPerkLevel(Perks["ProstFamiliarity"]) < 10 then
+                TOC_DEBUG.print("IterateTOCXp | ProstFamiliarity")
+                applyXp(character, "ProstFamiliarity")
             end
         end
     end
+end
+
+---Adds TOC XP directly via addXp(). Server and SP only.
+---@param action ISBaseTimedAction
+local function AddTOCXp(action)
+    if isClient() then return end
+    IterateTOCXp(action, function(character, perkName)
+        addXp(character, Perks[perkName], XP_PER_TICK)
+    end)
 end
 
 ---Wraps an action class's update() to inject TOC XP each tick.
@@ -86,4 +91,4 @@ WrapUpdate(ISPickUpGroundCoverItem)
 WrapUpdate(ISPickAxeGroundCoverItem)
 WrapUpdate(ISGrabItemAction)        -- client-only class, WrapUpdate handles nil safely
 
-return { AddTOCXp = AddTOCXp, WrapUpdate = WrapUpdate }
+return { IterateTOCXp = IterateTOCXp, WrapUpdate = WrapUpdate }
