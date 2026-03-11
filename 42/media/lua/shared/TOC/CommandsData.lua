@@ -44,6 +44,9 @@ CommandsData.server = {
         --* PERKS LEVEL UP *--
         RelayAddXp = "RelayAddXp",                                      ---@alias relayAddXpParams {perkName : string, xp : number}
 
+        --* TRAITS *--
+        RelayApplyTraitAmputation = "RelayApplyTraitAmputation",         ---@alias relayApplyTraitAmputationParams {limbName : string}
+
         --* ADMIN ONLY *--
         RelayExecuteInitialization = "RelayExecuteInitialization",       ---@alias relayExecuteInitializationParams {patientNum : number}
         RelayForcedAmputation = "RelayForcedAmputation"                  ---@alias relayForcedAmputationParams {patientNum : number, limbName : string}

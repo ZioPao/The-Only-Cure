@@ -96,6 +96,26 @@ function ServerRelayCommands.RelayAddXp(playerObj, args)
     addXp(playerObj, Perks[args.perkName], args.xp)
 end
 
+--* TRAITS *--
+
+---Apply a trait amputation for the requesting player (surgeon = patient, no damage, pre-cicatrized)
+---@param playerObj IsoPlayer
+---@param args relayApplyTraitAmputationParams
+function ServerRelayCommands.RelayApplyTraitAmputation(playerObj, args)
+    local DataController = require("TOC/Controllers/DataController")
+    local dcInst = DataController.GetInstance(playerObj:getUsername())
+    if dcInst:getIsCut(args.limbName) then return end  -- already applied on a previous login
+
+    TOC_DEBUG.print("Applying trait amputation for " .. playerObj:getUsername() .. " - " .. args.limbName)
+    local AmputationHandler = require("TOC/Handlers/AmputationHandler")
+    local handler = AmputationHandler:new(playerObj, playerObj, args.limbName)
+    handler:execute(false)  -- no damage
+
+    dcInst:setCicatrizationTime(args.limbName, 0)
+    dcInst:setIsCicatrized(args.limbName, true)
+    dcInst:apply(playerObj)
+end
+
 --* ADMIN ONLY *--
 ---Relay a local init from another client
 ---@param adminObj IsoPlayer

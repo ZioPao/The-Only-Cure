@@ -139,7 +139,6 @@ function DataController:setup(key)
     -- persist
     self:saveModData(key, self.tocData)
 
-   -- triggerEvent("OnSetupTocData")
 end
 
 ---In case of desync between the table on ModData and the table here

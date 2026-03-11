@@ -41,39 +41,27 @@ function LocalPlayerController.InitializePlayer(isForced)
     if isForced then
         sendClientCommand(CommandsData.modules.TOC_ITEMS, "DeleteAllOldAmputationItems", {patientNum = playerObj:getOnlineID()})
     end
+
+    -- Traits override everything
+    LocalPlayerController.ManageTraits()
 end
 
 
 
 ---Handles the traits
 function LocalPlayerController.ManageTraits()
-
-    -- Local player
     local playerObj = getPlayer()
+    local dcInst = DataController.GetInstance(playerObj:getUsername())
 
-    local AmputationHandler = require("TOC/Handlers/AmputationHandler")
     for k, v in pairs(StaticData.TRAITS_BP) do
         if playerObj:hasTrait(TOC_REG.traits[k]) then
-            -- Once we find one, we should be done since they're exclusive
-            -- FIX B42.13, broken
-            -- TOC_DEBUG.print("Player has amputation trait " .. k .. ", executing it")
-            -- local tempHandler = AmputationHandler:new(v, playerObj)
-            -- tempHandler:execute(false) -- No damage
-            -- tempHandler:close()
-
-            -- -- The wound should be already cicatrized
-            -- local dcInst = DataController.GetInstance(getPlayer():getUsername())
-            -- LocalPlayerController.HandleSetCicatrization(dcInst, playerObj, v)
-            -- dcInst:apply()
+            if dcInst:getIsCut(v) then return end  -- already applied on a previous login
+            TOC_DEBUG.print("Player has amputation trait " .. k .. ", applying it for limb " .. v)
+            sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayApplyTraitAmputation, {limbName = v})
             return
         end
     end
 end
-
--- We need to manage traits when we're done setupping everything
--- It shouldn't be done every single time we initialize the player, fetching data, etc.
-Events.OnSetupTocData.Add(LocalPlayerController.ManageTraits)
-
 
 ----------------------------------------------------------
 
