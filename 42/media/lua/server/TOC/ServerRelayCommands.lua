@@ -9,11 +9,8 @@ local ServerRelayCommands = {}
 
 --* DATA CONTROLLER
 function ServerRelayCommands.RelayRequestDataController(playerObj, args)
-    local DataController = require("TOC/Controllers/DataController")
-    local h = DataController:new(args.username, args.isForced)
-
-    -- Send data
-    h:apply(playerObj)        -- transmit to specific client
+    local ServerDataController = require("TOC/Controllers/ServerDataController")
+    ServerDataController.Initialize(args.username, args.isForced, playerObj)
 end
 
 ---Used to update data from client in a cautious way

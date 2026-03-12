@@ -29,21 +29,23 @@ function LocalPlayerController.InitializePlayer(isForced)
     local username = playerObj:getUsername()
 
     TOC_DEBUG.print("Initializing local player: " .. username)
-    DataController.RequestFromServer(username, isForced)
 
     LocalPlayerController.playerObj = playerObj
     LocalPlayerController.username = username
 
-    --Setup the CicatrizationUpdate event and triggers it once
-    LocalPlayerController.ToggleUpdateAmputations()
+    local ClientDataController = require("TOC/Controllers/ClientDataController")
+    ClientDataController.Request(username, isForced, playerObj)
+
+    -- Post-init logic runs once data is ready: immediate in SP, async in MP
+    DataController.WhenReady(username, function(_dcInst)
+        LocalPlayerController.ToggleUpdateAmputations()
+        LocalPlayerController.ManageTraits()
+    end)
 
     -- Since isForced is used to reset an existing player data, we're gonna clean their ISHealthPanel table too
     if isForced then
         sendClientCommand(CommandsData.modules.TOC_ITEMS, "DeleteAllOldAmputationItems", {patientNum = playerObj:getOnlineID()})
     end
-
-    -- Traits override everything
-    LocalPlayerController.ManageTraits()
 end
 
 
@@ -157,8 +159,13 @@ function LocalPlayerController.HandleDamage(character)
         return
     end
     
-    local bd = character:getBodyDamage()
     local dcInst = DataController.GetInstance(character:getUsername())
+    if not dcInst or not dcInst:getIsDataReady() then
+        LocalPlayerController.hasBeenDamaged = false
+        return
+    end
+
+    local bd = character:getBodyDamage()
 
     for i = 1, #StaticData.LIMBS_STR do
         local modDataNeedsUpdate = false
@@ -227,10 +234,6 @@ Events.OnPlayerGetDamage.Add(LocalPlayerController.OnGetDamage)
 ---Updates the cicatrization process, run when a limb has been cut. Run it every 1 hour
 function LocalPlayerController.UpdateAmputations()
     local dcInst = DataController.GetInstance(getPlayer():getUsername())
-    if not dcInst:getIsDataReady() then
-        TOC_DEBUG.print("Data not ready for UpdateAmputations, waiting next loop")
-        return
-    end
     if not dcInst:getIsAnyLimbCut() then
         Events.EveryHours.Remove(LocalPlayerController.UpdateAmputations)
     end

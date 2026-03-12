@@ -1,6 +1,5 @@
---* REWORK PLAN --
--- DataController will mainly work Server side, with the client that will be able to REQUEST updates.
--- Server is the authoritative source
+-- DataController: pure data model. Server-side lifecycle is handled by ServerDataController.
+-- Client-side async load is handled by ClientDataController.
 
 local CommandsData = require("TOC/CommandsData")
 local CommonMethods = require("TOC/CommonMethods")
@@ -17,8 +16,10 @@ local StaticData = require("TOC/StaticData")
 ---@field isResetForced boolean
 local DataController = {}
 DataController.instances = {}
+DataController._readyCallbacks = {}
 
----Create a new instance of DataController. If is onClient, will request the creation serverside
+---Create a new shell instance of DataController. Does NOT initialize tocData.
+---Use ServerDataController.Initialize (server/SP) or ClientDataController.Request (client) to populate data.
 ---@param username string
 ---@param isResetForced boolean?
 ---@return DataController
@@ -32,119 +33,34 @@ function DataController:new(username, isResetForced)
     o.username = username
     o.isDataReady = false
     o.isResetForced = isResetForced or false
-    TOC_DEBUG.print("Creating new instance of DataController instance for " .. o.username)
+    TOC_DEBUG.print("Creating new shell instance of DataController for " .. o.username)
 
     -- store instance immediately
     DataController.instances[o.username] = o
 
-    local key = CommandsData.GetKey(o.username)
-
-    -- Server / singleplayer: ensure data exists locally
-    if isServer() or not isClient() then
-        o:ensureDataInitialized(key)
-    end
-
-
-    -- For client in MP, placeholder DataController instance until it gets readied with data from the server
-
     return o
 end
 
----encapsulate ModData operations and default data creation
----@private
----@server
-function DataController:createDefaultData()
-    local tocData = {
-        isIgnoredPartInfected = false,
-        isAnyLimbCut = false,
-        limbs = {},
-        prostheses = {}
-    }
-
-    local defaultParams = {
-        isCut = false, isInfected = false, isOperated = false, isCicatrized = false, isCauterized = false,
-        woundDirtyness = -1, cicatrizationTime = -1,
-        isVisible = false
-    }
-
-    for i=1, #StaticData.LIMBS_STR do
-        local limbName = StaticData.LIMBS_STR[i]
-        tocData.limbs[limbName] = {}
-        for k, v in pairs(defaultParams) do tocData.limbs[limbName][k] = v end
-        tocData.limbs[limbName].cicatrizationTime = 0
+---Register a callback to run when DC data is ready for a username.
+---If the instance already exists and is ready, fires immediately (synchronously).
+---Otherwise queues the callback until setIsDataReady(true) is called.
+---@param username string
+---@param callback fun(dcInst: DataController)
+function DataController.WhenReady(username, callback)
+    local inst = DataController.instances[username]
+    if inst and inst.isDataReady then
+        callback(inst)
+        return
     end
-
-    for i=1, #StaticData.AMP_GROUPS_STR do
-        local group = StaticData.AMP_GROUPS_STR[i]
-        tocData.prostheses[group] = {
-            isProstEquipped = false,
-            prostFactor = 0,
-        }
+    if not DataController._readyCallbacks[username] then
+        DataController._readyCallbacks[username] = {}
     end
-
-    return tocData
+    table.insert(DataController._readyCallbacks[username], callback)
 end
 
----@private
----@server
-function DataController:loadModData(key)
-    return ModData.get(key)
-end
-
----@private
----@server
-function DataController:saveModData(key, data)
-    ModData.add(key, data)
-end
-
----@private
----@server
-function DataController:ensureDataInitialized(key)
-    local data
-    if not self.isResetForced then
-        -- Tries to load already existing data
-
-        data = self:loadModData(key)
-    end
-
-    if data and data.limbs then
-        self.tocData = data
-        TOC_DEBUG.print("Found and loaded local data")
-        --TOC_DEBUG.printTable(self.tocData)
-    end
-
-    if self.tocData == nil or self.isResetForced then
-        TOC_DEBUG.print("Resetting TOC ModData")
-        self:setup(key)
-    end
-
-    self:setIsDataReady(true)
-    self:setIsResetForced(false)
-end
-
-
----Setup a new toc mod data data class
----@param key string
----@private
----@server
-function DataController:setup(key)
-    TOC_DEBUG.print("Running setup")
-
-    -- Clean ModData
-    ModData.remove(key)
-
-    -- create default structure
-    self.tocData = self:createDefaultData()
-
-    -- persist
-    self:saveModData(key, self.tocData)
-
-end
-
----In case of desync between the table on ModData and the table here
+---In case of desync between the table on ModData and the table here.
+---Called by ClientDataController.OnDataReceived when the server data arrives.
 ---@param tocData tocModDataType
----@private
----@server
 function DataController:save(tocData)
     if not tocData or not tocData.limbs then
         TOC_DEBUG.print("Received invalid tocData")
@@ -155,29 +71,7 @@ function DataController:save(tocData)
     self.tocData = tocData
     self:setIsResetForced(false)
     self:setIsDataReady(true)
-    --triggerEvent("OnReceivedTocData", self.username)
 end
-
--------------------------------------------
-
----@param username string
----@param isForced boolean
----@client
-function DataController.RequestFromServer(username, isForced)
-    TOC_DEBUG.print("Requesting DC from Server")
-
-    -- placeholder datacontroller, to be initialized
-    local h = DataController:new(username, isForced)
-
-    if isClient() or not isServer() then
-        sendClientCommand(CommandsData.modules.TOC_RELAY,
-            CommandsData.server.Relay.RelayRequestDataController,
-            {username = username, isForced = isForced})
-    end
-
-    return h
-end
-
 
 -----------------
 --* Setters *--
@@ -185,7 +79,25 @@ end
 ---@param isDataReady boolean
 function DataController:setIsDataReady(isDataReady)
     self.isDataReady = isDataReady
+    if isDataReady then
+        triggerEvent("OnTOCDataReady", self.username)
+    end
 end
+
+---Listener for OnTOCDataReady. Fires and clears any queued WhenReady callbacks for the username.
+---@param username string
+function DataController.OnDataReady(username)
+    local callbacks = DataController._readyCallbacks[username]
+    if not callbacks then return end
+    DataController._readyCallbacks[username] = nil
+    local inst = DataController.instances[username]
+    for _, cb in ipairs(callbacks) do
+        pcall(cb, inst)
+    end
+end
+
+LuaEventManager.AddEvent("OnTOCDataReady")      -- Triggered by DataController:setIsDataReady(true); arg: username
+Events.OnTOCDataReady.Add(DataController.OnDataReady)
 
 ---@param isResetForced boolean
 function DataController:setIsResetForced(isResetForced)
@@ -204,7 +116,7 @@ function DataController:setIsIgnoredPartInfected(isIgnoredPartInfected)
     self.tocData.isIgnoredPartInfected = isIgnoredPartInfected
 end
 
----Set isCut 
+---Set isCut
 ---@param limbName string
 ---@param isCut boolean
 function DataController:setIsCut(limbName, isCut)
@@ -263,12 +175,11 @@ end
 -----------------
 --* Getters *--
 
----comment
 ---@return boolean
 function DataController:getIsDataReady()
     return self.isDataReady
 end
----Set a generic boolean that toggles varies function of the mod
+
 ---@return boolean
 function DataController:getIsAnyLimbCut()
     if not self.isDataReady then return false end
@@ -325,7 +236,7 @@ end
 ---@param limbName string
 ---@return number
 function DataController:getWoundDirtyness(limbName)
-    if not self.isDataReady then return -1 end      -- prevent errors, but scary
+    if not self.isDataReady then return -1 end
     return self.tocData.limbs[limbName].woundDirtyness
 end
 
@@ -333,7 +244,7 @@ end
 ---@param limbName string
 ---@return number
 function DataController:getCicatrizationTime(limbName)
-    if not self.isDataReady then return -1 end      -- prevent errors, but scary
+    if not self.isDataReady then return -1 end
     return self.tocData.limbs[limbName].cicatrizationTime
 end
 
@@ -437,7 +348,7 @@ end
 
 --* Global Mod Data Handling *--
 
----SERVER
+---SERVER: push current state to a specific client (MP) or fire OnInitTocData (SP/server)
 ---@param player IsoPlayer player to receive updated data
 function DataController:apply(player)
     if isClient() then return end
@@ -452,60 +363,19 @@ function DataController:apply(player)
     triggerEvent("OnInitTocData", player, self.username, true)
 end
 
---- SHARED
----@param key string
----@param data tocModDataType
-function DataController.ReceiveData(key, data)
-    -- During startup the game can return Bob as the player username, adding a useless ModData table
-    if key == "TOC_Bob" then return end
-    if not luautils.stringStarts(key, StaticData.MOD_NAME .. "_") then return end
-
-    TOC_DEBUG.print("ReceiveData for " .. key)
-    local username = key:sub(5)
-    local handler = DataController.GetInstance(username)
-
-    if data == nil or data == false or data.limbs == nil then
-        TOC_DEBUG.print("data/data.limbs is nil, new character or something is wrong")
-        return
-    end
-
-    handler:save(data)
-
-    -- FIX Should be an event
-    if isClient() or not isServer() then
-        -- Set a bool to use an overriding GetDamagedParts
-        SetHealthPanelTOC()
-    end
-
-end
-
-Events.OnReceiveGlobalModData.Add(DataController.ReceiveData)
-
 -----------------
 
 ---@param username string
----@param isReset boolean?
----@return DataController
-function DataController.GetInstance(username, isReset)
-
-    if DataController.instances[username] ~= nil then
-        -- If instance exists (even placeholder), return it
-        return DataController.instances[username]
-    elseif isServer() then      --B42 broken in sp
-        return DataController:new(username, isReset)
-    end
-    -- elseif isClient() then
-    --     return DataController.RequestFromServer(username, isReset)
-    -- end
+---@return DataController?
+function DataController.GetInstance(username)
+    return DataController.instances[username]
 end
-
-
 
 function DataController.DestroyInstance(username)
     if DataController.instances[username] ~= nil then
         DataController.instances[username] = nil
     end
-
+    DataController._readyCallbacks[username] = nil
 end
 
 return DataController

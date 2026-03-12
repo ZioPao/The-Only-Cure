@@ -181,7 +181,8 @@ local og_ISMedicalCheckAction_perform = ISMedicalCheckAction.perform
 function ISMedicalCheckAction:perform()
     local username = self.otherPlayer:getUsername()
     TOC_DEBUG.print("Medical Action on " .. username )
-    DataController.RequestFromServer(username, false)
+    local ClientDataController = require("TOC/Controllers/ClientDataController")
+    ClientDataController.Request(username, false)
     -- We need to recalculate them here before we can create the highest amputations point
     og_ISMedicalCheckAction_perform(self)
 end
