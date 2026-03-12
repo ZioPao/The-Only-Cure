@@ -252,7 +252,7 @@ function LocalPlayerController.UpdateAmputations()
         if not isCicatrized then
             needsUpdate = true
             local cicTime = dcInst:getCicatrizationTime(limbName)
-            TOC_DEBUG.print("Updating cicatrization for " .. tostring(limbName))
+            --TOC_DEBUG.print("Updating cicatrization for " .. tostring(limbName))
 
             --* Dirtyness of the wound
 
@@ -270,16 +270,15 @@ function LocalPlayerController.UpdateAmputations()
             end
 
             dcInst:setWoundDirtyness(limbName, dirtyness)
-            TOC_DEBUG.print("Dirtyness for this zone: " .. tostring(dirtyness))
+            --TOC_DEBUG.print("Dirtyness for this zone: " .. tostring(dirtyness))
 
             --* Cicatrization
 
             local cicDec = SandboxVars.TOC.CicatrizationSpeed - dirtyness
             if cicDec <= 0 then cicDec = 0.1 end
             cicTime = cicTime - cicDec
+            --TOC_DEBUG.print("New cicatrization time: " .. tostring(cicTime))
 
-
-            TOC_DEBUG.print("New cicatrization time: " .. tostring(cicTime))
             if cicTime <= 0 then
                 LocalPlayerController.HandleSetCicatrization(dcInst, pl, limbName)
             else
@@ -358,8 +357,7 @@ function LocalPlayerController.DropItemsAfterAmputation(limbName)
         local it = wornItems:get(i - 1)
         if it then
             local wornItem = wornItems:get(i - 1):getItem()
-            TOC_DEBUG.print(wornItem:getBodyLocation())
-
+            --TOC_DEBUG.print(wornItem:getBodyLocation())
             local bl = wornItem:getBodyLocation()
             if string.contains(limbName, "Hand_") and (bl == sideStr .. "_MiddleFinger" or bl == sideStr .. "_RingFinger") then
                 pl:removeWornItem(wornItem)

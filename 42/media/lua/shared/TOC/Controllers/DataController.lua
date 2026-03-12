@@ -4,6 +4,7 @@
 local CommandsData = require("TOC/CommandsData")
 local CommonMethods = require("TOC/CommonMethods")
 local StaticData = require("TOC/StaticData")
+require("TOC/Events")
 ----------------
 
 --- An instance will be abbreviated with dcInst
@@ -96,7 +97,6 @@ function DataController.OnDataReady(username)
     end
 end
 
-LuaEventManager.AddEvent("OnTOCDataReady")      -- Triggered by DataController:setIsDataReady(true); arg: username
 Events.OnTOCDataReady.Add(DataController.OnDataReady)
 
 ---@param isResetForced boolean

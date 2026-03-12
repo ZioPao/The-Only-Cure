@@ -18,12 +18,10 @@ local bodylocArmProstBaseline = "toc:armprost_"
 function ProsthesisHandler.CheckIfProst(item)
     -- TODO Won't be correct when prost for legs are gonna be in
     if item == nil or item:getBodyLocation() == nil then
-        TOC_DEBUG.print("Not prost or no body location")
-
+        --TOC_DEBUG.print("Not prost or no body location")
         return false
     end
-    TOC_DEBUG.print("CheckIfProst")
-
+    --TOC_DEBUG.print("CheckIfProst")
     return item:getBodyLocation():toString():contains(bodylocArmProstBaseline)
 end
 
@@ -52,9 +50,9 @@ end
 ---@param fullType string
 ---@return boolean
 function ProsthesisHandler.CheckIfEquippable(fullType)
-    TOC_DEBUG.print("Current item is a prosthesis")
+    --TOC_DEBUG.print("Current item is a prosthesis")
     local side = CommonMethods.GetSide(fullType)
-    TOC_DEBUG.print("Checking side: " .. tostring(side))
+    --TOC_DEBUG.print("Checking side: " .. tostring(side))
 
     local highestAmputatedLimbs = CachedDataHandler.GetHighestAmputatedLimbs(getPlayer():getUsername())
 
@@ -115,7 +113,7 @@ end
 local og_ISWearClothing_isValid = ISWearClothing.isValid
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISWearClothing:isValid()
-    TOC_DEBUG.print("ISWearClothing override")
+    --TOC_DEBUG.print("ISWearClothing override")
     local isEquippable = og_ISWearClothing_isValid(self)
     return ProsthesisHandler.Validate(self.item, isEquippable)
 end

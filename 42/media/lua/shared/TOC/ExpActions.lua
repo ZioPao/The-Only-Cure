@@ -24,11 +24,11 @@ local function IterateTOCXp(action, applyXp)
         if dcInst:getIsCut(limbName) and dcInst:getIsVisible(limbName) then
             local perkName = "Side_" .. CommonMethods.GetSide(limbName)
             if character:getPerkLevel(Perks[perkName]) < 10 then
-                TOC_DEBUG.print("IterateTOCXp | " .. perkName)
+                --TOC_DEBUG.print("IterateTOCXp | " .. perkName)
                 applyXp(character, perkName)
             end
             if dcInst:getIsProstEquipped(limbName) and character:getPerkLevel(Perks["ProstFamiliarity"]) < 10 then
-                TOC_DEBUG.print("IterateTOCXp | ProstFamiliarity")
+                --TOC_DEBUG.print("IterateTOCXp | ProstFamiliarity")
                 applyXp(character, "ProstFamiliarity")
             end
         end

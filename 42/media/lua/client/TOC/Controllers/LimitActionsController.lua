@@ -49,11 +49,10 @@ end
 --* a prosthesis on, that can trigger random bleeds.
 
 local function CheckHandFeasibility(limbName)
-    TOC_DEBUG.print("Checking hand feasibility: " .. limbName)
     local dcInst = DataController.GetInstance(getPlayer():getUsername())
-
     local isFeasible = not dcInst:getIsCut(limbName) or dcInst:getIsProstEquipped(limbName)
-    TOC_DEBUG.print("isFeasible: " .. tostring(isFeasible))
+    --TOC_DEBUG.print("Checking hand feasibility: " .. limbName)
+    --TOC_DEBUG.print("isFeasible: " .. tostring(isFeasible))
     return isFeasible
 end
 
@@ -89,7 +88,7 @@ end
 
 ---A recreation of the original method, but with amputations in mind
 function ISEquipWeaponAction:performWithAmputation()
-    TOC_DEBUG.print("running ISEquipWeaponAction performWithAmputation")
+    --TOC_DEBUG.print("running ISEquipWeaponAction performWithAmputation")
     local hand = nil
     local otherHand = nil
     local getMethodFirst = nil
