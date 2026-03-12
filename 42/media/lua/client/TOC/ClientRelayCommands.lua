@@ -1,0 +1,84 @@
+local CommandsData = require("TOC/CommandsData")
+local AmputationHandler = require("TOC/Handlers/AmputationHandler")
+local DataController = require("TOC/Controllers/DataController")
+--------------------------------------------
+
+local ClientRelayCommands = {}
+
+---Initialize Amputation Handler
+---@param limbName any
+---@param surgeonNum any
+---@return AmputationHandler
+local function InitAmputationHandler(limbName, surgeonNum)
+    local surgeonPl = getSpecificPlayer(surgeonNum)
+    local handler = AmputationHandler:new(surgeonPl, getPlayer(), limbName)
+    return handler
+end
+
+---Receive the damage from another player during the amputation
+---@param args receiveDamageDuringAmputationParams
+function ClientRelayCommands.ReceiveDamageDuringAmputation(args)
+    AmputationHandler.ApplyDamageDuringAmputation(getPlayer(), args.limbName)
+end
+
+---Creates a new handler and execute the amputation function on this client
+---@param args receiveExecuteAmputationActionParams
+function ClientRelayCommands.ReceiveExecuteAmputationAction(args)
+    -- Check if player already doesn't have that limb or it's a dependant limb.
+    -- Mostly a check for admin forced amputations more than anything else, since this case is handled in the GUI already.
+    local dcInst = DataController.GetInstance(getPlayer():getUsername())
+    if dcInst:getIsCut(args.limbName) then return end
+
+    local handler = InitAmputationHandler(args.limbName, args.surgeonNum)
+    handler:execute(args.damagePlayer)
+end
+
+function ClientRelayCommands.FinalizeAmputationAction(args)
+    ClientRelayCommands.ReceiveCache(args)
+    --triggerEvent("OnAmputatedLimb", args.limbName)
+end
+
+--* APPLY RELAY *--
+function ClientRelayCommands.ReceiveApplyFromServer(args)
+    local key = CommandsData.GetKey(args.patientUsername)
+    TOC_DEBUG.print("Applying ModData from server for " .. args.patientUsername)
+    ModData.request(key)
+end
+
+function ClientRelayCommands.ReceiveCache(args)
+    local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
+    CachedDataHandler.ApplyFromServer(args.patientUsername, args.cache)
+
+    if getPlayer():getUsername() == args.patientUsername then
+        CachedDataHandler.OverrideInteractionsKey()
+    end
+end
+
+
+--* WEAR AMPUTATION ITEM *--
+function ClientRelayCommands.ReceiveWearAmputation(args)
+    TOC_DEBUG.print("Received wear amputation, item " .. tostring(args.itemName))
+    AmputationHandler.WearAmputationItem(getPlayer(), args.itemName)
+end
+
+
+--* TRIGGERED BY ADMINS *--
+
+function ClientRelayCommands.ReceiveExecuteInitialization()
+    local LocalPlayerController = require("TOC/Controllers/LocalPlayerController")
+    LocalPlayerController.InitializePlayer(true)
+end
+
+
+-------------------------
+
+local function OnServerRelayCommand(module, command, args)
+    if module == CommandsData.modules.TOC_RELAY and ClientRelayCommands[command] then
+        TOC_DEBUG.print("Received Server Relay command - " .. tostring(command))
+        ClientRelayCommands[command](args)
+    end
+end
+
+Events.OnServerCommand.Add(OnServerRelayCommand)
+
+return ClientRelayCommands

@@ -1,0 +1,40 @@
+1. client joins
+2. client uses local initialization
+3. Local Initialization calls Server to create new DataController
+4. DC gets instanced in server.
+	4.1 If no previous moddata has been found, create new one for player
+	4.2 Otherwise, get old moddata and applies to instance of DC
+5. Sync with Client, sends DC data through GlobalModData transmit to specific Client
+6. Client requests Cache, force recalc from server
+7. Server recalc cache
+8. Server sends cache to client
+9. Client receives cache
+
+
+
+
+
+
+
+
+
+
+______________
+
+
+
+DataController should be initialized with 
+username or playernum?
+
+To request 
+
+
+______________
+
+local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
+local x = CachedDataHandler.GetAll(getPlayer():getUsername())
+TOC_DEBUG.printTable(x)
+
+local DataController = require("TOC/Controllers/DataController")
+local h = DataController.GetInstance(getPlayer():getUsername())
+TOC_DEBUG.printTable(h.tocData)

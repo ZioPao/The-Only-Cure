@@ -1,7 +1,0 @@
-Sandbox_RU = {
-    Sandbox_TOC = "The Only Cure",
-    Sandbox_TOC_CicatrizationSpeed = "Скорость заживления",
-    Sandbox_TOC_WoundDirtynessMultiplier = "Множитель загрязнения ран",
-    Sandbox_TOC_SurgeonAbilityImportance = "Значимость способностей врача-хирурга",
-
-}

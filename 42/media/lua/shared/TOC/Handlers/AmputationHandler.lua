@@ -1,0 +1,284 @@
+local CommandsData = require("TOC/CommandsData")
+-- local LocalPlayerController = require("TOC/Controllers/LocalPlayerController")
+local StaticData = require("TOC/StaticData")
+--local TourniquetController = require("TOC/Controllers/TourniquetController")
+---------------------------
+
+--- Manages an amputation. Will be run on the server
+---@class AmputationHandler
+---@field surgeonPl IsoPlayer
+---@field patientPl IsoPlayer
+---@field limbName string
+---@field bodyPartType BodyPartType
+local AmputationHandler = {}
+
+---@param surgeonPl IsoPlayer
+---@param patientPl IsoPlayer
+---@param limbName string
+---@return AmputationHandler
+function AmputationHandler:new(surgeonPl, patientPl, limbName)
+    local o = {}
+    setmetatable(o, self)
+    self.__index = self
+
+    o.surgeonPl = surgeonPl
+    o.patientPl = patientPl
+    o.limbName = limbName
+    o.bodyPartType = BodyPartType[limbName]
+
+    -- TOC_DEBUG.print("limbName = " .. o.limbName)
+    -- TOC_DEBUG.print("bodyPartType = " .. tostring(o.bodyPartType))
+
+    if surgeonPl then
+        o.surgeonPl = surgeonPl
+    else
+        o.surgeonPl = o.patientPl
+    end
+
+    AmputationHandler.instance = o
+    return o
+end
+
+
+--* Static methods *--
+
+---@param player IsoPlayer
+---@param limbName string
+function AmputationHandler.ApplyDamageDuringAmputation(player, limbName)
+    local ampGroup = StaticData.LIMBS_TO_AMP_GROUPS_MATCH_IND_STR[limbName]
+    local isTourniquetEquipped = false
+
+    -- Check if tourniquet is applied on the zone
+    for bl, tournAmpGroup in pairs(StaticData.TOURNIQUET_BODYLOCS_TO_GROUPS_IND_STR) do
+        local item = player:getWornItem(bl)
+
+        -- LimbName -> Group -> BodyLoc
+        if item and tournAmpGroup == ampGroup then
+            TOC_DEBUG.print("tourniquet is equipped")
+            isTourniquetEquipped = true
+            break
+        end
+    end
+
+
+    local bodyDamage = player:getBodyDamage()
+    local bodyPartType = BodyPartType[limbName]
+    local bodyDamagePart = bodyDamage:getBodyPart(bodyPartType)
+    TOC_DEBUG.print("damage patient - " .. tostring(bodyPartType))
+
+    bodyDamagePart:setBleeding(true)
+    bodyDamagePart:setCut(true)
+
+    local bleedingTime
+    if isTourniquetEquipped then
+        bleedingTime = ZombRand(1,5)
+    else
+        bleedingTime = ZombRand(10, 20)
+    end
+
+    bodyDamagePart:setBleedingTime(bleedingTime)
+
+    -- syncVisuals?
+    
+    syncBodyPart(bodyDamagePart, 0xFFFFFFFFFFF)
+end
+
+
+---@param prevAction ISBaseTimedAction
+---@param limbName string
+---@param surgeonPl IsoPlayer
+---@param patientPl IsoPlayer
+---@param stitchesItem InventoryItem
+---@return ISStitch
+function AmputationHandler.PrepareStitchesAction(prevAction, limbName, surgeonPl, patientPl, stitchesItem)
+    local bd = patientPl:getBodyDamage()
+
+    -- we need the adjacent one, not the actual one
+    local adjacentLimb = StaticData.LIMBS_ADJACENT_IND_STR[limbName]
+    local bodyPart = bd:getBodyPart(BodyPartType[adjacentLimb])
+
+    local stitchesAction = ISStitch:new(surgeonPl, patientPl, stitchesItem, bodyPart, true)
+    ISTimedActionQueue.addAfter(prevAction, stitchesAction)
+
+    return stitchesAction
+end
+
+---Setup the ISApplyBandage action that will trigger after the amputation
+---@param prevAction ISBaseTimedAction
+---@param limbName string
+---@param surgeonPl IsoPlayer
+---@param patientPl IsoPlayer
+---@param bandageItem InventoryItem
+---@return ISApplyBandage
+function AmputationHandler.PrepareBandagesAction(prevAction, limbName, surgeonPl, patientPl, bandageItem)
+    local bd = patientPl:getBodyDamage()
+    -- we need the adjacent one, not the actual one
+    local adjacentLimb = StaticData.LIMBS_ADJACENT_IND_STR[limbName]
+    local bodyPart = bd:getBodyPart(BodyPartType[adjacentLimb])
+
+    local bandageAction = ISApplyBandage:new(surgeonPl, patientPl, bandageItem, bodyPart, true)
+    ISTimedActionQueue.addAfter(prevAction, bandageAction)
+
+    return bandageAction
+end
+
+---@param player IsoPlayer
+---@param itemName string
+function AmputationHandler.WearAmputationItem(player, itemName)
+    local clothingItem = player:getInventory():FindAndReturn(itemName)
+    player:setWornItem(clothingItem:getBodyLocation(), clothingItem)
+end
+
+---Used to heal an area that has been cut previously. There's an exception for bites, those are managed differently
+function AmputationHandler:healArea()
+    -- Heal the area, we're gonna re-set the damage after (if it's enabled)
+    local bd = self.patientPl:getBodyDamage()
+    local bodyPart = bd:getBodyPart(self.bodyPartType)
+
+    bodyPart:setFractureTime(0)
+
+    bodyPart:setScratched(false, true)
+    bodyPart:setScratchTime(0)
+
+    bodyPart:setBleeding(false)
+    bodyPart:setBleedingTime(0)
+
+    bodyPart:SetBitten(false)
+    --bodyPart:setBiteTime(0)
+    bodyPart:SetInfected(false)
+
+    bodyPart:setCut(false)
+    bodyPart:setCutTime(0)
+
+    bodyPart:setDeepWounded(false)
+    bodyPart:setDeepWoundTime(0)
+
+    bodyPart:setHaveBullet(false, 0)
+    bodyPart:setHaveGlass(false)
+    bodyPart:setSplint(false, 0)
+
+    syncBodyPart(bodyPart, 0xFFFFFFFFFFF)
+
+    -- fix bleeding is not synced from server to client
+end
+
+--- TO BE TESTED
+---@param isPartInfected boolean
+function AmputationHandler:healInfection(isPartInfected)
+     -- If the part was actually infected, heal the player, if they were in time (infectionLevel < 20)
+    local infectionLevel = self.patientPl:getStats():get(CharacterStat.ZOMBIE_INFECTION)
+    local bd = self.patientPl:getBodyDamage()
+    local bodyPart = bd:getBodyPart(self.bodyPartType)
+    if infectionLevel < 20 and bodyPart:IsInfected() and not isPartInfected then
+        if bd:isInfected() == false then return end
+
+        bd:setInfected(false)
+        bd:setInfectionMortalityDuration(-1)
+        bd:setInfectionTime(-1)
+    end
+end
+
+--* Main methods *--
+
+---Set the damage to the adjacent part of the cut area
+---@param surgeonFactor number
+function AmputationHandler:damageAfterAmputation(surgeonFactor)
+    TOC_DEBUG.print("Applying damage after amputation")
+    local patientStats = self.patientPl:getStats()
+    local bd = self.patientPl:getBodyDamage()
+
+    local adjacentLimb = StaticData.LIMBS_ADJACENT_IND_STR[self.limbName]
+    local bodyPart = bd:getBodyPart(BodyPartType[adjacentLimb])
+    local baseDamage = StaticData.LIMBS_BASE_DAMAGE_IND_NUM[self.limbName]
+
+    -- Check if player has tourniquet equipped on the limb
+    -- TODO Suboptimal checks, but they should work for now.
+    local TourniquetController = require("TOC/Controllers/TourniquetController")
+    local hasTourniquet = TourniquetController.CheckTourniquetOnLimb(self.patientPl, self.limbName)
+    if hasTourniquet then
+        TOC_DEBUG.print("Do something different for the damage calculation because tourniquet is applied")
+        baseDamage = baseDamage * 0.5   -- 50% less damage due to tourniquet
+    end
+
+    bodyPart:AddDamage(baseDamage - surgeonFactor)
+    bodyPart:setAdditionalPain(baseDamage - surgeonFactor)
+    bodyPart:setBleeding(true)
+    bodyPart:setBleedingTime(baseDamage - surgeonFactor)
+
+    -- FIX Not working correctly!
+    bodyPart:setDeepWounded(true)
+    bodyPart:setDeepWoundTime(baseDamage - surgeonFactor)
+    patientStats:set(CharacterStat.ENDURANCE, surgeonFactor)
+    patientStats:set(CharacterStat.STRESS, baseDamage - surgeonFactor)
+
+    syncBodyPart(bodyPart, 0xFFFFFFFFFFF)
+end
+
+--- Execute the amputation. This method doesn't check if the upper limb has been amputated or not, so if
+--- somehow the method gets triggered and we're trying to cut off a part that doesn't really exist anymore,
+--- it will still be executed. This is by design, additional checks must be made BEFORE running the AmputationHandler
+---@server
+---@param damagePlayer boolean
+function AmputationHandler:execute(damagePlayer)
+    local surgeonFactor = self.surgeonPl:getPerkLevel(Perks.Doctor) * SandboxVars.TOC.SurgeonAbilityImportance
+    local patientUsername = self.patientPl:getUsername()
+
+    -- Set the data in modData
+    local DataController = require("TOC/Controllers/DataController")
+    local dcInst = DataController.GetInstance(patientUsername)
+    dcInst:setCutLimb(self.limbName, false, false, false, surgeonFactor)
+
+    dcInst:apply(self.patientPl)      -- This will force rechecking the cached amputated limbs on the other client
+
+    local ItemsController = require("TOC/Controllers/ItemsController")
+    ItemsController.Player.DeleteOldAmputationItem(self.patientPl, self.limbName)
+    ItemsController.Player.SpawnAmputationItem(self.patientPl, self.limbName)
+
+    -- Add it to the list of cut limbs on this local client
+    local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
+    CachedDataHandler.AddAmputatedLimb(patientUsername, self.limbName)
+
+    -- TODO Not optimal, we're already cycling through this when using setCutLimb
+    for i=1, #StaticData.LIMBS_DEPENDENCIES_IND_STR[self.limbName] do
+        local dependedLimbName = StaticData.LIMBS_DEPENDENCIES_IND_STR[self.limbName][i]
+        CachedDataHandler.AddAmputatedLimb(patientUsername, dependedLimbName)
+    end
+
+    -- Cache highest amputation and hand feasibility
+    CachedDataHandler.CalculateCacheableValues(patientUsername)
+
+    -- FIX Test this again for 42.13
+    self:healArea()
+    self:healInfection(dcInst:getIsIgnoredPartInfected())
+
+
+    if damagePlayer then
+        self:damageAfterAmputation(surgeonFactor)
+
+        --B42 Send bleeding too! Need to be synced with client
+    end
+
+    -- MP only
+    if isServer() then
+        -- Both patient and surgeon should get the update!
+
+        TOC_DEBUG.print("Sending finalize amputation action to clients with data => " .. patientUsername)
+        local cache = CachedDataHandler.GetAll(patientUsername)
+
+        sendServerCommand(self.patientPl, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.FinalizeAmputationAction,
+        {cache = cache, limbName = self.limbName, damagePlayer = damagePlayer})
+
+        if self.patientPl ~= self.surgeonPl then
+            dcInst:apply(self.surgeonPl)
+        end
+    end
+
+
+end
+
+---Delete the instance
+function AmputationHandler:close()
+    AmputationHandler.instance = nil
+end
+
+return AmputationHandler

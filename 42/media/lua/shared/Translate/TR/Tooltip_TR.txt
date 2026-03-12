@@ -1,0 +1,8 @@
+Tooltip_TR = {
+    Tooltip_Surgery_CantCauterize = "Yarayı dağlayamazsın",
+
+    Tooltip_Surgery_And = " ve ",
+    Tooltip_Surgery_TempTooLow = "Sıcaklık hâlâ çok düşük",
+    Tooltip_Surgery_Coward = "Bunu yapacak cesaretin yok. KORKUYORSUN!",
+    Tooltip_Surgery_LimbNotFree = "Önce protezi çıkarman gerekiyor",
+}

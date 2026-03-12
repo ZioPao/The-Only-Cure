@@ -1,0 +1,98 @@
+module TOC
+{
+	imports
+	{
+		Base
+	}
+
+	/****************** TOP ******************/
+
+	item Prost_HookArm_L
+	{
+		ItemType = base:Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName	= ProstArmHook,
+		ClothingItem = Prost_HookArm_L,
+		ClothingItemExtra = Prost_HookArm_R,
+		ClothingItemExtraOption = InstallProstRight,
+		clothingExtraSubmenu = InstallProstLeft,
+		BodyLocation = toc:armprost_l,
+		Weight = 1.5,
+		CombatSpeedModifier = 1.05,
+		BloodLocation = UpperArms;UpperBody,
+		Insulation = 1.0,
+		WindResistance = 1.0,
+		WaterResistance = 1.0,
+		CanHaveHoles = false,
+
+		Icon = armProsthetic,
+        WorldStaticModel = prostheticArmHook,
+
+	}
+	item Prost_HookArm_R
+	{
+		ItemType = base:Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName	= ProstArmHook,
+		ClothingItem = Prost_HookArm_R,
+		ClothingItemExtra = Prost_HookArm_L,
+		ClothingItemExtraOption = InstallProstLeft,
+		clothingExtraSubmenu = InstallProstRight,
+		BodyLocation = toc:armprost_r,
+		Weight = 1.5,
+		CombatSpeedModifier = 1.05,
+		BloodLocation = UpperArms;UpperBody,
+		Insulation = 1.0,
+		WindResistance = 1.0,
+		WaterResistance = 1.0,
+		CanHaveHoles = false,
+
+		Icon = armProsthetic,
+        WorldStaticModel = prostheticArmHook,
+	}
+
+	item Prost_NormalArm_L
+	{
+		ItemType = base:Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName	= ProstArmHook,
+		ClothingItem = Prost_NormalArm_L,
+		ClothingItemExtra = Prost_NormalArm_R,
+		ClothingItemExtraOption = InstallProstRight,
+		clothingExtraSubmenu = InstallProstLeft,
+		BodyLocation = toc:armprost_l,
+		Weight = 2,
+		CombatSpeedModifier = 1.1,
+		BloodLocation = UpperArms;UpperBody,
+		Insulation = 1.0,
+		WindResistance = 1.0,
+		WaterResistance = 1.0,
+		CanHaveHoles = false,
+
+		Icon = armProsthetic,
+        WorldStaticModel = prostheticArm,
+	}
+
+	item Prost_NormalArm_R
+	{
+		ItemType = base:Clothing,
+		DisplayCategory = Prosthesis,
+		DisplayName	= ProstArmHook,
+		ClothingItem = Prost_NormalArm_R,
+		ClothingItemExtra = Prost_NormalArm_L,
+		ClothingItemExtraOption = InstallProstLeft,
+		clothingExtraSubmenu = InstallProstRight,
+		BodyLocation = toc:armprost_r,
+		Weight = 2,
+		CombatSpeedModifier = 1.1,
+		BloodLocation = UpperArms;UpperBody,
+		Insulation = 1.0,
+		WindResistance = 1.0,
+		WaterResistance = 1.0,
+		CanHaveHoles = false,
+
+		Icon = armProsthetic,
+        WorldStaticModel = prostheticArm,
+	}
+	
+}

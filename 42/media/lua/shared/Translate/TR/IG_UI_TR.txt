@@ -1,0 +1,19 @@
+IG_UI_TR = {
+    IGUI_perks_Amputations = "Amputasyonlar",
+    IGUI_perks_Side_R = "Sağ Taraf",
+    IGUI_perks_Side_L = "Sol Taraf",
+    IGUI_perks_Prosthesis = "Protez",
+    IGUI_perks_ProstFamiliarity = "Aşinalık",
+
+    IGUI_ItemCat_Prosthesis = "Protez",
+    IGUI_ItemCat_Surgery = "Cerrahi",
+    IGUI_ItemCat_Amputation = "Amputasyon",
+
+    IGUI_HealthPanel_Cicatrization = "Yara İyileşmesi",
+    IGUI_HealthPanel_Cicatrized = "İyileşti",
+    IGUI_HealthPanel_Cauterized = "Dağlandı",
+    IGUI_HealthPanel_WoundDirtyness = "Yara Kirliliği",
+    IGUI_HealthPanel_ProstEquipped = "Protez Takılı",
+
+    IGUI_Confirmation_Amputate = " <CENTRE> Bu uzvu gerçekten ampute etmek istiyor musunuz?"
+}

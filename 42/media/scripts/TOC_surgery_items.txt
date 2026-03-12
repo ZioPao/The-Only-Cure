@@ -1,0 +1,48 @@
+module TOC
+{
+	imports
+	{
+		Base
+	}
+
+    item Surg_Arm_Tourniquet_L
+    {
+		ItemType = base:Clothing,
+        DisplayCategory = Surgery,
+        DisplayName = Tourniquet,
+
+        ClothingItem = Surg_Arm_Tourniquet_L,
+        ClothingItemExtra = Surg_Arm_Tourniquet_R,
+        ClothingItemExtraOption = PutTourniquetArmRight,
+        clothingExtraSubmenu = PutTourniquetArmLeft,
+        BodyLocation = toc:ArmAccessory_L,
+		BloodLocation = UpperArms;UpperBody,
+
+        Weight = 0.25,
+
+        Icon = tourniquet,
+        WorldStaticModel = tourniquet,
+        CanHaveHoles = false,
+    }
+
+    item Surg_Arm_Tourniquet_R
+    {
+		ItemType = base:Clothing,
+        DisplayCategory = Surgery,
+        DisplayName = Tourniquet,
+
+        ClothingItem = Surg_Arm_Tourniquet_R,
+        ClothingItemExtra = Surg_Arm_Tourniquet_L,
+        ClothingItemExtraOption = PutTourniquetArmLeft,
+        clothingExtraSubmenu = PutTourniquetArmRight,
+        BodyLocation = toc:ArmAccessory_R,
+		BloodLocation = UpperArms;UpperBody,
+
+        Weight = 0.25,
+
+        Icon = tourniquet,
+        WorldStaticModel = tourniquet,
+        CanHaveHoles = false,
+    }
+
+}
