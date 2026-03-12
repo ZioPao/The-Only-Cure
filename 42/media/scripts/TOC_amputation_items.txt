@@ -99,7 +99,7 @@ module TOC
 
     item Amputation_UpperArm_L
 	{
-		Type = base:Clothing,
+		ItemType = base:Clothing,
 		DisplayCategory = Amputation,
 		hidden = true,
 
