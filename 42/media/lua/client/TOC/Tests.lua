@@ -9,6 +9,7 @@ local DataController = require("TOC/Controllers/DataController")
 local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
 local CommonMethods = require("TOC/CommonMethods")
 local StaticData = require("TOC/StaticData")
+local CommandsData = require("TOC/CommandsData")
 
 -- ============================================================
 --  Shared helpers
@@ -19,23 +20,47 @@ local function getUsername()
 end
 
 --- Returns the existing DataController instance for the local player.
---- Assumes LocalPlayerController.InitializePlayer was called at least once.
 local function getDC()
     return DataController.GetInstance(getUsername())
 end
 
---- Resets player data through the proper client-facing API.
---- In SP, ClientDataController.Request calls ServerDataController.Initialize directly —
---- synchronous, no relay command, no double-init.
+--- SP: synchronous — ClientDataController.Request calls ServerDataController.Initialize directly.
+--- MP: async — sends relay command; caller must wait for DC ready before using the instance.
 local function requestReset()
     local ClientDataController = require("TOC/Controllers/ClientDataController")
     ClientDataController.Request(getUsername(), true)
     CachedDataHandler.Setup(getUsername())
 end
 
+--- MP helper: returns an AsyncTest that resets state and waits for DC to be ready.
+local function asyncResetAndWait()
+    return AsyncTest:new()
+        :next(function()
+            requestReset()
+        end)
+        :repeatUntil(function()
+            local dc = DataController.GetInstance(getUsername())
+            return dc ~= nil and dc:getIsDataReady()
+        end, 5000)
+end
+
+--- MP helper: sends RelayExecuteAmputationAction and waits for the DC to reflect the cut.
+local function asyncAmpMP(limbName)
+    local pl = getPlayer()
+    return asyncResetAndWait()
+        :next(function()
+            sendClientCommand(CommandsData.modules.TOC_RELAY,
+                CommandsData.server.Relay.RelayExecuteAmputationAction,
+                {patientNum = pl:getOnlineID(), limbName = limbName})
+        end)
+        :repeatUntil(function()
+            return getDC():getIsCut(limbName) == true
+        end, 10000)
+end
+
 
 -- ============================================================
---  CommonMethods — pure utility functions
+--  CommonMethods — pure utility functions (SP + MP)
 -- ============================================================
 
 TestFramework.registerTestModule("TOC", "CommonMethods", function()
@@ -80,7 +105,7 @@ end)
 
 
 -- ============================================================
---  StaticData — table integrity
+--  StaticData — table integrity (SP + MP)
 -- ============================================================
 
 TestFramework.registerTestModule("TOC", "StaticData", function()
@@ -133,15 +158,13 @@ end)
 
 
 -- ============================================================
---  LocalPlayerController — Setup & Perks
+--  LocalPlayerController — Setup & Perks (SP + MP)
 -- ============================================================
 
 TestFramework.registerTestModule("LocalPlayerController", "Setup", function()
     local Tests = TestUtils.newTestModule("client/TOC/Tests.lua")
 
     function Tests.InitializePlayer()
-        -- In SP, ClientDataController.Request calls ServerDataController.Initialize directly,
-        -- so tocData is populated synchronously before this function returns.
         LocalPlayerController.InitializePlayer(true)
     end
 
@@ -182,11 +205,12 @@ end)
 
 
 -- ============================================================
---  DataController — getters / setters
---  Operates on the existing instance (created by InitializePlayer).
---  _setup resets to a known clean state via the proper client API.
+--  DataController — getters / setters  [SP only]
+--  Direct setters bypass the server relay; only valid when
+--  server and client share the same Lua state.
 -- ============================================================
 
+if not isClient() then
 TestFramework.registerTestModule("DataController", "Setters and Getters", function()
     local Tests = TestUtils.newTestModule("client/TOC/Tests.lua")
 
@@ -269,7 +293,6 @@ TestFramework.registerTestModule("DataController", "Setters and Getters", functi
     function Tests.SetGetProstEquipped()
         local dc = getDC()
         dc:setIsProstEquipped("Top_L", true)
-        -- getIsProstEquipped takes a limbName and maps it to group internally
         TestUtils.assert(dc:getIsProstEquipped("Hand_L") == true)
         dc:setIsProstEquipped("Top_L", false)
         TestUtils.assert(dc:getIsProstEquipped("Hand_L") == false)
@@ -299,7 +322,6 @@ TestFramework.registerTestModule("DataController", "setCutLimb cascade", functio
         TestUtils.assert(dc:getIsCut("Hand_L") == true)
         TestUtils.assert(dc:getIsVisible("Hand_L") == true)
         TestUtils.assert(dc:getIsAnyLimbCut() == true)
-        -- Other side untouched
         TestUtils.assert(dc:getIsCut("Hand_R") == false)
         TestUtils.assert(dc:getIsCut("ForeArm_L") == false)
     end
@@ -309,7 +331,6 @@ TestFramework.registerTestModule("DataController", "setCutLimb cascade", functio
         dc:setCutLimb("ForeArm_L", false, false, false, 0)
         TestUtils.assert(dc:getIsCut("ForeArm_L") == true)
         TestUtils.assert(dc:getIsCut("Hand_L") == true)
-        -- ForeArm is visible (cut point); Hand is dependent (not visible)
         TestUtils.assert(dc:getIsVisible("ForeArm_L") == true)
         TestUtils.assert(dc:getIsVisible("Hand_L") == false)
     end
@@ -335,10 +356,12 @@ TestFramework.registerTestModule("DataController", "setCutLimb cascade", functio
 
     return Tests
 end)
+end -- if not isClient()
 
 
 -- ============================================================
---  CachedDataHandler — cache operations
+--  CachedDataHandler — cache operations (SP + MP)
+--  These tests only manipulate the local cache, not DC state.
 -- ============================================================
 
 TestFramework.registerTestModule("CachedDataHandler", "Cache operations", function()
@@ -381,6 +404,11 @@ TestFramework.registerTestModule("CachedDataHandler", "Cache operations", functi
 end)
 
 
+-- ============================================================
+--  CachedDataHandler — feasibility / highest  [SP only]
+-- ============================================================
+
+if not isClient() then
 TestFramework.registerTestModule("CachedDataHandler", "Hand feasibility", function()
     local Tests = TestUtils.newTestModule("client/TOC/Tests.lua")
 
@@ -443,7 +471,6 @@ TestFramework.registerTestModule("CachedDataHandler", "Highest amputated limbs",
         getDC():setCutLimb("ForeArm_L", false, false, false, 0)
         CachedDataHandler.CalculateHighestAmputatedLimbs(getUsername())
         local highest = CachedDataHandler.GetHighestAmputatedLimbs(getUsername())
-        -- ForeArm_L is visible=true; Hand_L is dependent (visible=false), so not highest
         TestUtils.assert(highest["L"] == "ForeArm_L")
     end
 
@@ -456,15 +483,14 @@ TestFramework.registerTestModule("CachedDataHandler", "Highest amputated limbs",
 
     return Tests
 end)
+end -- if not isClient()
 
 
 -- ============================================================
---  AmputationHandler — full execute flow
---  execute() is @server but in SP isServer()=false skips sendServerCommand;
---  the DataController and CachedDataHandler mutations still run.
---  _setup resets DC before each test via the proper client API.
+--  AmputationHandler — execute()  [SP only]
 -- ============================================================
 
+if not isClient() then
 TestFramework.registerTestModule("AmputationHandler", "Left side", function()
     local Tests = TestUtils.newTestModule("client/TOC/Tests.lua")
 
@@ -556,10 +582,125 @@ TestFramework.registerTestModule("AmputationHandler", "Cross-side isolation", fu
 
     return Tests
 end)
+end -- if not isClient()
 
 
 -- ============================================================
---  TourniquetController — worn-item detection
+--  AmputationHandler (MP) — via server relay  [MP only]
+--  Uses sendClientCommand → RelayExecuteAmputationAction then
+--  waits for the DC update to arrive back on the client.
+-- ============================================================
+
+if isClient() then
+TestFramework.registerTestModule("AmputationHandler (MP)", "Left side", function()
+    local Tests = TestUtils.newTestModule("client/TOC/Tests.lua")
+
+    function Tests.CutLeftHand()
+        return asyncAmpMP("Hand_L")
+            :next(function()
+                TestUtils.assert(getDC():getIsCut("Hand_L") == true)
+                TestUtils.assert(getDC():getIsAnyLimbCut() == true)
+            end)
+            :finally(function() requestReset() end)
+    end
+
+    function Tests.CutLeftForeArm_CascadesToHand()
+        return asyncAmpMP("ForeArm_L")
+            :next(function()
+                TestUtils.assert(getDC():getIsCut("ForeArm_L") == true)
+                TestUtils.assert(getDC():getIsCut("Hand_L") == true)
+                TestUtils.assert(getDC():getIsVisible("ForeArm_L") == true)
+                TestUtils.assert(getDC():getIsVisible("Hand_L") == false)
+            end)
+            :finally(function() requestReset() end)
+    end
+
+    function Tests.CutLeftUpperArm_CascadesToAll()
+        return asyncAmpMP("UpperArm_L")
+            :next(function()
+                TestUtils.assert(getDC():getIsCut("UpperArm_L") == true)
+                TestUtils.assert(getDC():getIsCut("ForeArm_L") == true)
+                TestUtils.assert(getDC():getIsCut("Hand_L") == true)
+            end)
+            :finally(function() requestReset() end)
+    end
+
+    return Tests
+end)
+
+TestFramework.registerTestModule("AmputationHandler (MP)", "Right side", function()
+    local Tests = TestUtils.newTestModule("client/TOC/Tests.lua")
+
+    function Tests.CutRightHand()
+        return asyncAmpMP("Hand_R")
+            :next(function()
+                TestUtils.assert(getDC():getIsCut("Hand_R") == true)
+            end)
+            :finally(function() requestReset() end)
+    end
+
+    function Tests.CutRightForeArm_CascadesToHand()
+        return asyncAmpMP("ForeArm_R")
+            :next(function()
+                TestUtils.assert(getDC():getIsCut("ForeArm_R") == true)
+                TestUtils.assert(getDC():getIsCut("Hand_R") == true)
+            end)
+            :finally(function() requestReset() end)
+    end
+
+    function Tests.CutRightUpperArm_CascadesToAll()
+        return asyncAmpMP("UpperArm_R")
+            :next(function()
+                TestUtils.assert(getDC():getIsCut("UpperArm_R") == true)
+                TestUtils.assert(getDC():getIsCut("ForeArm_R") == true)
+                TestUtils.assert(getDC():getIsCut("Hand_R") == true)
+            end)
+            :finally(function() requestReset() end)
+    end
+
+    return Tests
+end)
+
+TestFramework.registerTestModule("AmputationHandler (MP)", "Cross-side isolation", function()
+    local Tests = TestUtils.newTestModule("client/TOC/Tests.lua")
+
+    function Tests.LeftCutDoesNotAffectRight()
+        return asyncAmpMP("Hand_L")
+            :next(function()
+                TestUtils.assert(getDC():getIsCut("Hand_R") == false)
+                TestUtils.assert(getDC():getIsCut("ForeArm_R") == false)
+                TestUtils.assert(getDC():getIsCut("UpperArm_R") == false)
+            end)
+            :finally(function() requestReset() end)
+    end
+
+    function Tests.RightCutDoesNotAffectLeft()
+        return asyncAmpMP("Hand_R")
+            :next(function()
+                TestUtils.assert(getDC():getIsCut("Hand_L") == false)
+                TestUtils.assert(getDC():getIsCut("ForeArm_L") == false)
+                TestUtils.assert(getDC():getIsCut("UpperArm_L") == false)
+            end)
+            :finally(function() requestReset() end)
+    end
+
+    function Tests.CacheIsUpdatedAfterRelay()
+        return asyncAmpMP("Hand_L")
+            :next(function()
+                local amputated = CachedDataHandler.GetAmputatedLimbs(getUsername())
+                TestUtils.assertTable(amputated)
+                TestUtils.assert(amputated["Hand_L"] ~= nil)
+            end)
+            :finally(function() requestReset() end)
+    end
+
+    return Tests
+end)
+end -- if isClient()
+
+
+-- ============================================================
+--  TourniquetController — worn-item detection (SP + MP)
 -- ============================================================
 
 TestFramework.registerTestModule("TourniquetController", "Item detection", function()
@@ -568,7 +709,6 @@ TestFramework.registerTestModule("TourniquetController", "Item detection", funct
 
     TestFramework.addCodeCoverage(Tests, TourniquetController, "TourniquetController")
 
-    -- Mock helpers
     local function mockPlayerWithTourniquet(fullType)
         local wornItem = { getItem = function() return { getFullType = function() return fullType end } end }
         return {
@@ -608,8 +748,8 @@ TestFramework.registerTestModule("TourniquetController", "Item detection", funct
 
     function Tests.CheckTourniquetOnLimb_CorrectSide_True()
         local pl = mockPlayerWithTourniquet("The_Only_Cure.Surg_Arm_Tourniquet_L")
-        TestUtils.assert(TourniquetController.CheckTourniquetOnLimb(pl, "Hand_L")    == true)
-        TestUtils.assert(TourniquetController.CheckTourniquetOnLimb(pl, "ForeArm_L") == true)
+        TestUtils.assert(TourniquetController.CheckTourniquetOnLimb(pl, "Hand_L")     == true)
+        TestUtils.assert(TourniquetController.CheckTourniquetOnLimb(pl, "ForeArm_L")  == true)
         TestUtils.assert(TourniquetController.CheckTourniquetOnLimb(pl, "UpperArm_L") == true)
     end
 
@@ -634,13 +774,12 @@ end)
 
 
 -- ============================================================
---  LocalPlayerController — utility methods
+--  LocalPlayerController — utility methods (SP + MP)
 -- ============================================================
 
 TestFramework.registerTestModule("LocalPlayerController", "CanItemBeEquipped", function()
     local Tests = TestUtils.newTestModule("client/TOC/Tests.lua")
 
-    -- Minimal mock: CanItemBeEquipped only calls :getBodyLocation()
     local function mockItem(bodyLoc)
         return { getBodyLocation = function() return bodyLoc end }
     end
@@ -671,25 +810,31 @@ end)
 TestFramework.registerTestModule("LocalPlayerController", "HandleSetCicatrization", function()
     local Tests = TestUtils.newTestModule("client/TOC/Tests.lua")
 
-    function Tests._setup()
-        requestReset()
-    end
-
     function Tests.MarksCicatrizedAndResetsTime()
-        local dc = getDC()
-        dc:setIsCut("Hand_R", true)
-        dc:setCicatrizationTime("Hand_R", 50)
-        TestUtils.assert(dc:getIsCicatrized("Hand_R") == false)
+        local pl = getPlayer()
+        return asyncAmpMP("Hand_R")
+            :next(function()
+                local dc = getDC()
+                TestUtils.assert(dc:getIsCicatrized("Hand_R") == false)
+                TestUtils.assert(dc:getCicatrizationTime("Hand_R") > 0)
 
-        LocalPlayerController.HandleSetCicatrization(dc, getPlayer(), "Hand_R")
+                LocalPlayerController.HandleSetCicatrization(dc, pl, "Hand_R")
 
-        TestUtils.assert(dc:getIsCicatrized("Hand_R") == true)
-        TestUtils.assert(dc:getCicatrizationTime("Hand_R") == 0)
+                TestUtils.assert(dc:getIsCicatrized("Hand_R") == true)
+                TestUtils.assert(dc:getCicatrizationTime("Hand_R") == 0)
+            end)
+            :finally(function() requestReset() end)
     end
 
     return Tests
 end)
 
+
+-- ============================================================
+--  LocalPlayerController — Cicatrization loop  [SP only]
+-- ============================================================
+
+if not isClient() then
 TestFramework.registerTestModule("LocalPlayerController", "Cicatrization loop", function()
     local Tests = TestUtils.newTestModule("client/TOC/Tests.lua")
 
@@ -707,12 +852,14 @@ TestFramework.registerTestModule("LocalPlayerController", "Cicatrization loop", 
 
     return Tests
 end)
+end -- if not isClient()
 
 
 -- ============================================================
---  TimedActions — async tests using AsyncTest
+--  TimedActions — async tests  [SP only for Cauterize setup]
 -- ============================================================
 
+if not isClient() then
 TestFramework.registerTestModule("TimedActions", "CauterizeAction", function()
     local Tests = TestUtils.newTestModule("client/TOC/Tests.lua")
     local CauterizeAction = require("TOC/TimedActions/CauterizeAction")
@@ -736,15 +883,16 @@ TestFramework.registerTestModule("TimedActions", "CauterizeAction", function()
             end)
     end
 
-    function Tests.CauterizeLeftHand()     return queueCauterize("Hand_L")    end
-    function Tests.CauterizeLeftForeArm()  return queueCauterize("ForeArm_L") end
-    function Tests.CauterizeLeftUpperArm() return queueCauterize("UpperArm_L") end
-    function Tests.CauterizeRightHand()    return queueCauterize("Hand_R")    end
-    function Tests.CauterizeRightForeArm() return queueCauterize("ForeArm_R") end
+    function Tests.CauterizeLeftHand()      return queueCauterize("Hand_L")     end
+    function Tests.CauterizeLeftForeArm()   return queueCauterize("ForeArm_L")  end
+    function Tests.CauterizeLeftUpperArm()  return queueCauterize("UpperArm_L") end
+    function Tests.CauterizeRightHand()     return queueCauterize("Hand_R")     end
+    function Tests.CauterizeRightForeArm()  return queueCauterize("ForeArm_R")  end
     function Tests.CauterizeRightUpperArm() return queueCauterize("UpperArm_R") end
 
     return Tests
 end)
+end -- if not isClient()
 
 TestFramework.registerTestModule("TimedActions", "CutLimbAction", function()
     local Tests = TestUtils.newTestModule("client/TOC/Tests.lua")
@@ -781,7 +929,7 @@ end)
 
 
 -- ============================================================
---  Various — player state helpers
+--  Various — player state helpers (SP + MP)
 -- ============================================================
 
 TestFramework.registerTestModule("Various", "Player", function()

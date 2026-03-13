@@ -15,7 +15,7 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
     -- Exceptions handling, if we find that parameter then we just use the original time
 
     if self.skipTOC then
-        TOC_DEBUG.print("Should skip TOC stuff")
+        --TOC_DEBUG.print("Should skip TOC stuff")
         return time
     end
 

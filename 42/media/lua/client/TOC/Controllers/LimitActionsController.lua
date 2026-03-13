@@ -51,7 +51,6 @@ end
 local function CheckHandFeasibility(limbName)
     --TOC_DEBUG.print("Checking hand feasibility: " .. limbName)
     local dcInst = DataController.GetInstance(getPlayer():getUsername())
-
     local isFeasible = not dcInst:getIsCut(limbName) or dcInst:getIsProstEquipped(limbName)
    -- TOC_DEBUG.print("isFeasible: " .. tostring(isFeasible))
     return isFeasible
