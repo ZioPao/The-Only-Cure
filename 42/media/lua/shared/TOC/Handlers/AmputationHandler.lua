@@ -135,27 +135,7 @@ function AmputationHandler:healArea()
     local bd = self.patientPl:getBodyDamage()
     local bodyPart = bd:getBodyPart(self.bodyPartType)
 
-    bodyPart:setFractureTime(0)
-
-    bodyPart:setScratched(false, true)
-    bodyPart:setScratchTime(0)
-
-    bodyPart:setBleeding(false)
-    bodyPart:setBleedingTime(0)
-
-    bodyPart:SetBitten(false)
-    --bodyPart:setBiteTime(0)
-    bodyPart:SetInfected(false)
-
-    bodyPart:setCut(false)
-    bodyPart:setCutTime(0)
-
-    bodyPart:setDeepWounded(false)
-    bodyPart:setDeepWoundTime(0)
-
-    bodyPart:setHaveBullet(false, 0)
-    bodyPart:setHaveGlass(false)
-    bodyPart:setSplint(false, 0)
+    bodyPart:RestoreToFullHealth()
 
     syncBodyPart(bodyPart, 0xFFFFFFFFFFF)
 
