@@ -16,7 +16,7 @@ local CutLimbAction = require("TOC/TimedActions/CutLimbAction")
 local function CheckIfSaw(fullItemType)
     if StaticData.SAWS_TYPES[fullItemType] == 1 then
         return true
-    else 
+    else
         return false
     end
 end
@@ -26,7 +26,9 @@ end
 ---@return InventoryItem?
 local function GetBandageItem(player)
     local plInv = player:getInventory()
-    local bandageItem = plInv:FindAndReturn("Base.Bandage") or plInv:FindAndReturn("Base.RippedSheets")
+    local bandageItem = plInv:FindAndReturn("Base.Bandage") or
+                        plInv:FindAndReturn("Base.RippedSheets") or
+                        plInv:FindAndReturn("Base.AlcoholBandage")
 
     ---@cast bandageItem InventoryItem
 
@@ -57,7 +59,7 @@ local function GetStitchesConsumableItem(player)
         local threadItem = plInv:FindAndReturn("Base.Thread")
         ---@cast threadItem DrainableComboItem
 
-        if threadItem and threadItem:getUsedDelta() > 0 then
+        if threadItem and threadItem:getUseDelta() > 0 then
             return threadItem
         end
     end
