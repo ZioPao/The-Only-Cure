@@ -1,0 +1,20 @@
+{
+    "IGUI_Yes": "Tak",
+    "IGUI_No": "Nie",
+    "IGUI_perks_Amputations": "Amputacje",
+    "IGUI_perks_Side_R": "Prawa strona",
+    "IGUI_perks_Right Side_Description": "Znajomość amputacji po prawej stronie ciała",
+    "IGUI_perks_Side_L": "Lewa strona",
+    "IGUI_perks_Left Side_Description": "Znajomość amputacji po lewej stronie ciała",
+    "IGUI_perks_Prosthesis": "Znajomość protez",
+    "IGUI_perks_Prosthesis Familiarity_Description": "Znajomość protez kończyn",
+    "IGUI_ItemCat_Prosthesis": "Protezy",
+    "IGUI_ItemCat_Surgery": "Chirurgia",
+    "IGUI_ItemCat_Amputation": "Amputacja",
+    "IGUI_HealthPanel_Cicatrization": "Bliznowacenie",
+    "IGUI_HealthPanel_Cicatrized": "Zabliźnione",
+    "IGUI_HealthPanel_Cauterized": "Przyżegane",
+    "IGUI_HealthPanel_WoundDirtyness": "Zanieczyszczenie rany",
+    "IGUI_HealthPanel_ProstEquipped": "Wyposażony w protezę",
+    "IGUI_Confirmation_Amputate": " <CENTRE> Czy na pewno chcesz amputować tę kończynę?"
+}
