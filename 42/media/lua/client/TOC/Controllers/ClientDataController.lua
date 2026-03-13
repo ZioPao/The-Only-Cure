@@ -56,8 +56,6 @@ function ClientDataController.OnDataReceived(key, data)
     -- Populate DC and fire WhenReady callbacks
     handler:save(data)
 
-    triggerEvent("OnReceivedTocData", username)
-
     -- Activate TOC override for the health panel
     SetHealthPanelTOC()
 end

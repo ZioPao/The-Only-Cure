@@ -381,6 +381,8 @@ function LocalPlayerController.DropItemsAfterAmputation(limbName)
 
 end
 
+LuaEventManager.AddEvent("OnAmputatedLimb")
+LuaEventManager.AddEvent("OnProsthesisUnequipped")
 Events.OnAmputatedLimb.Add(LocalPlayerController.DropItemsAfterAmputation)
 Events.OnProsthesisUnequipped.Add(LocalPlayerController.DropItemsAfterAmputation)
 

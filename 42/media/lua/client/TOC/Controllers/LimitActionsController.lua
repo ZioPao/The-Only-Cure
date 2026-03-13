@@ -1,8 +1,5 @@
-local LocalPlayerController = require("TOC/Controllers/LocalPlayerController")
 local DataController = require("TOC/Controllers/DataController")
-
 local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
-local CommonMethods = require("TOC/CommonMethods")
 local StaticData = require("TOC/StaticData")
 
 local OverridenMethodsArchive = require("TOC/OverridenMethodsArchive")

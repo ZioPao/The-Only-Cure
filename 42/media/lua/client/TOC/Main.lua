@@ -1,4 +1,3 @@
-local LocalPlayerController = require("TOC/Controllers/LocalPlayerController")
 local CommonMethods = require("TOC/CommonMethods")
 local CommandsData = require("TOC/CommandsData")
 require("TOC/Events")
@@ -11,15 +10,7 @@ local Main = {
 
 function Main.Start()
     TOC_DEBUG.print("Starting The Only Cure version " .. tostring(Main._version))
-    Main.SetupEvents()
 end
-
-function Main.SetupEvents()
-    -- B42 maybe makes more sense if it's in InitializePlayer
-    --local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
-    --Events.OnReceivedTocData.Add(CachedDataHandler.RequestFromServer)
-end
-
 
 function Main.InitializePlayer()
     ---Looop until we've successfully initialized the mod
@@ -30,7 +21,7 @@ function Main.InitializePlayer()
             TOC_DEBUG.print("Username is still Bob, waiting")
             return
         end
-
+        local LocalPlayerController = require("TOC/Controllers/LocalPlayerController")
         LocalPlayerController.InitializePlayer(false)
         Events.OnTick.Remove(TryToInitialize)
     end

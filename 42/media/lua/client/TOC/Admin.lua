@@ -1,7 +1,6 @@
 local CommandsData = require("TOC/CommandsData")
 local ClientRelayCommands = require("TOC/ClientRelayCommands")
 local StaticData = require("TOC/StaticData")
-local DataController = require("TOC/Controllers/DataController")
 -------------------
 
 ---@param playerNum number
