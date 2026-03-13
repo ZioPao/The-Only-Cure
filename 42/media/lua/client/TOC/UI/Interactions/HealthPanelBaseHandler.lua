@@ -1,4 +1,6 @@
--- Had to copy and paste this stuff from the base game since this is a local only class. Kinda shit, but eh
+-- Updated to B42.15.2; hopefully they don't change this often.
+-- Had to copy and paste this stuff from the base game since this is a local only class. 
+-- Kinda shit, but eh
 
 ---@class BaseHandler : ISBaseObject
 ---@field panel ISUIElement
@@ -20,7 +22,6 @@ function BaseHandler:new(panel, bodyPart)
 end
 
 function BaseHandler:isInjured()
-    --TOC_DEBUG.print("Running isInjured")
     local bodyPart = self.bodyPart
     return (bodyPart:HasInjury() or bodyPart:stitched() or bodyPart:getSplintFactor() > 0) and not bodyPart:bandaged()
 end
@@ -33,17 +34,15 @@ function BaseHandler:checkItems()
     local containers = ISInventoryPaneContextMenu.getContainers(self:getDoctor())
     local done = {}
     local childContainers = {}
-    if containers ~= nil then
-        for i=1, containers:size() do
-            local container = containers:get(i-1)
-            done[container] = true
-            table.wipe(childContainers)
-            self:checkContainerItems(container, childContainers)
-            for _,container2 in ipairs(childContainers) do
-                if not done[container2] then
-                    done[container2] = true
-                    self:checkContainerItems(container2, nil)
-                end
+    for i=1,containers:size() do
+        local container = containers:get(i-1)
+        done[container] = true
+        table.wipe(childContainers)
+        self:checkContainerItems(container, childContainers)
+        for _,container2 in ipairs(childContainers) do
+            if not done[container2] then
+                done[container2] = true
+                self:checkContainerItems(container2, nil)
             end
         end
     end
@@ -58,8 +57,7 @@ function BaseHandler:checkContainerItems(container, childContainers)
                 table.insert(childContainers, item:getInventory())
             end
         else
-            ---@diagnostic disable-next-line: undefined-field
-            self:checkItem(item)        -- This is in inherited classes, we never use this class by itself
+            self:checkItem(item)            -- from children classes
         end
     end
 end
@@ -95,7 +93,7 @@ end
 
 function BaseHandler:getItemOfTag(items, type)
     for _,item in ipairs(items) do
-        if item:hasTag(type) then
+        if item:hasTag(ItemTag.get(ResourceLocation.of(type))) then
             return item
         end
     end
@@ -103,7 +101,7 @@ function BaseHandler:getItemOfTag(items, type)
 end
 
 function BaseHandler:getAllItemsOfType(items, type)
-    items = {}
+    local items = {}
     for _,item in ipairs(items) do
         if item:getFullType() == type then
             table.insert(items, item)
@@ -118,8 +116,9 @@ end
 
 function BaseHandler:toPlayerInventory(item, previousAction)
     if item:getContainer() ~= self:getDoctor():getInventory() then
-        local action = ISInventoryTransferAction:new(self:getDoctor(), item, item:getContainer(), self:getDoctor():getInventory())
+        local action = ISInventoryTransferUtil.newInventoryTransferAction(self:getDoctor(), item, item:getContainer(), self:getDoctor():getInventory())
         ISTimedActionQueue.addAfter(previousAction, action)
+        -- FIXME: ISHealthPanel.actions never gets cleared
         self.panel.actions = self.panel.actions or {}
         self.panel.actions[action] = self.bodyPart
         return action

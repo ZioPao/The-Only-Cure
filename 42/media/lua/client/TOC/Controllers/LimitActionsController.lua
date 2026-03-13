@@ -33,9 +33,10 @@ end
 
 -- We need to override when the player changes key binds manually to be sure that TOC changes are re-applied
 local og_MainOptions_apply = MainOptions.apply
+---@diagnostic disable-next-line: duplicate-set-field
 function MainOptions:apply(closeAfter)
     og_MainOptions_apply(self, closeAfter)
-    CachedDataHandler.OverrideInteractionsKey(getPlayer():getUsername())
+    CachedDataHandler.OverrideInteractionsKey()
 end
 
 --------------------------------------------

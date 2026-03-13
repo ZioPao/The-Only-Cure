@@ -16,7 +16,7 @@ local CutLimbAction = require("TOC/TimedActions/CutLimbAction")
 local function CheckIfSaw(fullItemType)
     if StaticData.SAWS_TYPES[fullItemType] == 1 then
         return true
-    else 
+    else
         return false
     end
 end
@@ -26,7 +26,9 @@ end
 ---@return InventoryItem?
 local function GetBandageItem(player)
     local plInv = player:getInventory()
-    local bandageItem = plInv:FindAndReturn("Base.Bandage") or plInv:FindAndReturn("Base.RippedSheets")
+    local bandageItem = plInv:FindAndReturn("Base.Bandage") or
+                        plInv:FindAndReturn("Base.RippedSheets") or
+                        plInv:FindAndReturn("Base.AlcoholBandage")
 
     ---@cast bandageItem InventoryItem
 
@@ -57,7 +59,7 @@ local function GetStitchesConsumableItem(player)
         local threadItem = plInv:FindAndReturn("Base.Thread")
         ---@cast threadItem DrainableComboItem
 
-        if threadItem and threadItem:getUsedDelta() > 0 then
+        if threadItem and threadItem:getUseDelta() > 0 then
             return threadItem
         end
     end
@@ -205,6 +207,8 @@ Events.OnFillInventoryObjectContextMenu.Add(AddInventoryAmputationMenu)
 ---@field items table
 ---@field limbName string
 ---@field itemType string temporary
+---@field stitchesItem InventoryItem?
+---@field bandageItem InventoryItem?
 local CutLimbInteractionHandler = BaseHandler:derive("CutLimbInteractionHandler")
 
 
@@ -217,6 +221,8 @@ function CutLimbInteractionHandler:new(panel, bodyPart)
     o.items.ITEMS = {}
     o.limbName = BodyPartType.ToString(bodyPart:getType())
     o.itemType = "Saw"
+    o.stitchesItem = nil
+    o.bandageItem = nil
     --TOC_DEBUG.print("init CutLimbInteractionHandler")
     return o
 end
@@ -225,6 +231,7 @@ end
 function CutLimbInteractionHandler:checkItem(item)
     --TOC_DEBUG.print("CutLimbInteractionHandler checkItem")
     local fullItemType = item:getFullType()
+    
 
     if CheckIfSaw(fullItemType) then
         TOC_DEBUG.print("added to list -> " .. fullItemType)
@@ -252,11 +259,26 @@ function CutLimbInteractionHandler:addToMenu(context)
     if #types > 0 and StaticData.LIMBS_TO_BODYLOCS_IND_BPT[self.limbName] and not DataController.GetInstance(patientUsername):getIsCut(self.limbName) then
         TOC_DEBUG.print("addToMenu, types > 0")
 
+        local doctor = self:getDoctor()
+        self.stitchesItem = GetStitchesConsumableItem(doctor)
+        self.bandageItem  = GetBandageItem(doctor)
+
+        local text
+        if self.stitchesItem and self.bandageItem then
+            text = textAmpStitchBandage
+        elseif self.stitchesItem then
+            text = textAmpStitch
+        elseif self.bandageItem then
+            text = textAmpBandage
+        else
+            text = textAmp
+        end
+
         local x = (getCore():getScreenWidth() - 500) / 2
         local y = getCore():getScreenHeight() / 2
 
         for i=1, #types do
-            context:addOption(getText("ContextMenu_Amputate"), self, self.openConfirmation, x, y, types[i])
+            context:addOption(text, self, self.openConfirmation, x, y, types[i])
         end
     end
 end
@@ -264,6 +286,9 @@ end
 function CutLimbInteractionHandler:dropItems(items)
     local types = self:getAllItemTypes(items)
     if #self.items.ITEMS > 0 and #types == 1 and StaticData.LIMBS_TO_BODYLOCS_IND_BPT[self.limbName] then
+        local doctor = self:getDoctor()
+        self.stitchesItem = GetStitchesConsumableItem(doctor)
+        self.bandageItem  = GetBandageItem(doctor)
         self:onMenuOptionSelected(types[1])
         return true
     end
@@ -283,7 +308,7 @@ function CutLimbInteractionHandler:perform(previousAction, itemType)
     local item = self:getItemOfType(self.items.ITEMS, itemType)
     previousAction = self:toPlayerInventory(item, previousAction)
     TOC_DEBUG.print("Perform CutLimbInteractionHandler on " .. self.limbName)
-    local action = CutLimbAction:new(self:getDoctor(),self:getPatient(), self.limbName, item)
+    local action = CutLimbAction:new(self:getDoctor(), self:getPatient(), self.limbName, item, self.stitchesItem, self.bandageItem)
     ISTimedActionQueue.addAfter(previousAction, action)
 end
 
