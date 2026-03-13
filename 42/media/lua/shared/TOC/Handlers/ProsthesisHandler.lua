@@ -115,7 +115,7 @@ end
 local og_ISWearClothing_isValid = ISWearClothing.isValid
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISWearClothing:isValid()
-    TOC_DEBUG.print("ISWearClothing override")
+    --TOC_DEBUG.print("ISWearClothing override")
     local isEquippable = og_ISWearClothing_isValid(self)
     return ProsthesisHandler.Validate(self.item, isEquippable)
 end
@@ -142,9 +142,9 @@ local og_ISClothingExtraAction_complete = OverridenMethodsArchive.Save("ISClothi
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISClothingExtraAction:complete()
     local extraItem = instanceItem(self.extra)
-    TOC_DEBUG.print("ISClothingExtraAction_complete 1")
+    --TOC_DEBUG.print("ISClothingExtraAction_complete 1")
     ProsthesisHandler.SearchAndSetupProsthesis(self.character, extraItem, true)
-    TOC_DEBUG.print("ISClothingExtraAction_complete 2")
+    --TOC_DEBUG.print("ISClothingExtraAction_complete 2")
 
     og_ISClothingExtraAction_complete(self)
 end

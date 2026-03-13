@@ -19,7 +19,7 @@ local og_ISEquipWeaponAction_new = ISEquipWeaponAction.new
 function ISEquipWeaponAction:new(character, item, maxTimeInit, primary, twoHands, alwaysTurnOn)
 
     local action = og_ISEquipWeaponAction_new(self, character, item, maxTimeInit, primary, twoHands, alwaysTurnOn)
-    TOC_DEBUG.print("Override ISEquipWeaponAction New")
+    --TOC_DEBUG.print("Override ISEquipWeaponAction New")
 
 
     -- check if right arm is cut off or not. if it is, penality shall apply
@@ -54,7 +54,7 @@ end
 local og_ISTakeWaterAction_new = ISTakeWaterAction.new
 function ISTakeWaterAction:new(character, item, waterObject, waterTaintedCL)
     local o = og_ISTakeWaterAction_new(self,character, item, waterObject, waterTaintedCL)
-    TOC_DEBUG.print("Override ISTakeWaterAction")
+    --TOC_DEBUG.print("Override ISTakeWaterAction")
     o.skipTOC = true
     return o
 end
@@ -62,7 +62,7 @@ end
 local og_ISEatFoodAction_new = ISEatFoodAction.new
 function ISEatFoodAction:new(character, item, percentage)
     local o = og_ISEatFoodAction_new(self, character, item, percentage)
-    TOC_DEBUG.print("Override ISEatFoodAction")
+    --TOC_DEBUG.print("Override ISEatFoodAction")
     o.skipTOC = true
     return o
 end

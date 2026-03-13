@@ -49,11 +49,11 @@ end
 --* a prosthesis on, that can trigger random bleeds.
 
 local function CheckHandFeasibility(limbName)
-    TOC_DEBUG.print("Checking hand feasibility: " .. limbName)
+    --TOC_DEBUG.print("Checking hand feasibility: " .. limbName)
     local dcInst = DataController.GetInstance(getPlayer():getUsername())
 
     local isFeasible = not dcInst:getIsCut(limbName) or dcInst:getIsProstEquipped(limbName)
-    TOC_DEBUG.print("isFeasible: " .. tostring(isFeasible))
+   -- TOC_DEBUG.print("isFeasible: " .. tostring(isFeasible))
     return isFeasible
 end
 
@@ -89,7 +89,7 @@ end
 
 ---A recreation of the original method, but with amputations in mind
 function ISEquipWeaponAction:performWithAmputation()
-    TOC_DEBUG.print("running ISEquipWeaponAction performWithAmputation")
+    --TOC_DEBUG.print("running ISEquipWeaponAction performWithAmputation")
     local hand = nil
     local otherHand = nil
     local getMethodFirst = nil
@@ -257,7 +257,7 @@ function ISWorldObjectContextMenu.createMenu(player, worldobjects, x, y, test)
 
     -- check if no hands, disable various interactions
     if not CachedDataHandler.GetBothHandsFeasibility(playerObj:getUsername()) then
-        TOC_DEBUG.print("NO hands! Disabling interactions")
+        TOC_DEBUG.print("No hands! Disabling interactions")
         for i = 1, #noHandsImpossibleActions do
             local optionName = noHandsImpossibleActions[i]
             local option = ogContext:getOptionFromName(optionName)
