@@ -20,6 +20,8 @@ function ISEquipWeaponAction:new(character, item, maxTimeInit, primary, twoHands
 
     local action = og_ISEquipWeaponAction_new(self, character, item, maxTimeInit, primary, twoHands, alwaysTurnOn)
     --TOC_DEBUG.print("Override ISEquipWeaponAction New")
+
+
     -- check if right arm is cut off or not. if it is, penality shall apply
     -- if we got here, the action is valid, so we know that we have a prosthesis.
     local DataController = require("TOC/Controllers/DataController")

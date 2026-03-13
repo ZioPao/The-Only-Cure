@@ -1,0 +1,17 @@
+{
+    "IGUI_Yes": "예",
+    "IGUI_No": "아니요",
+    "IGUI_perks_Amputations": "절단",
+    "IGUI_perks_Side_R": "오른쪽",
+    "IGUI_perks_Side_L": "왼쪽",
+    "IGUI_perks_Prosthesis": "의수",
+    "IGUI_perks_ProstFamiliarity": "친숙도",
+    "IGUI_ItemCat_Prosthesis": "의수",
+    "IGUI_ItemCat_Surgery": "수술",
+    "IGUI_ItemCat_Amputation": "절단",
+    "IGUI_HealthPanel_Cicatrization": "상처 치유중",
+    "IGUI_HealthPanel_Cicatrized": "상처 치유됨",
+    "IGUI_HealthPanel_Cauterized": "지져서 막았다",
+    "IGUI_HealthPanel_WoundDirtyness": "상처 오염도",
+    "IGUI_HealthPanel_ProstEquipped": "의수 장착됨"
+}

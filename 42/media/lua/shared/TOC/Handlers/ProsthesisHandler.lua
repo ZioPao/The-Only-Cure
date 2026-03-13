@@ -140,9 +140,9 @@ local og_ISClothingExtraAction_complete = OverridenMethodsArchive.Save("ISClothi
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISClothingExtraAction:complete()
     local extraItem = instanceItem(self.extra)
-    TOC_DEBUG.print("ISClothingExtraAction_complete 1")
+    --TOC_DEBUG.print("ISClothingExtraAction_complete 1")
     ProsthesisHandler.SearchAndSetupProsthesis(self.character, extraItem, true)
-    TOC_DEBUG.print("ISClothingExtraAction_complete 2")
+    --TOC_DEBUG.print("ISClothingExtraAction_complete 2")
 
     og_ISClothingExtraAction_complete(self)
 end

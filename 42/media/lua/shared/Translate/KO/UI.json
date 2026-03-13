@@ -1,0 +1,11 @@
+{
+    "UI_trait_Amputee_Hand": "이병헌",
+    "UI_trait_Amputee_Hand_desc": "상구씨 인자부터 바보로 삽시다 - 왼 손을 잃었습니다",
+    "UI_trait_Amputee_ForeArm": "왼팔목이 없음",
+    "UI_trait_Amputee_ForeArm_desc": "팔꿈치 아래로 절단돼, 의수 착용은 가능합니다",
+    "UI_trait_Amputee_UpperArm": "샹크스",
+    "UI_trait_Amputee_UpperArm_desc": "왼 팔을 새로운 시대에 선사했습니다",
+    "UI_trait_Insensitive": "Insensitive",
+    "UI_trait_Insensitive_desc": "",
+    "UI_Say_CantEquip": "이런식으로 장착할 수 없어..."
+}

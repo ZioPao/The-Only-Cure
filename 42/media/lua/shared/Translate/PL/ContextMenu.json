@@ -1,0 +1,23 @@
+{
+    "ContextMenu_Amputate": "Amputuj",
+    "ContextMenu_Amputate_Bandage": "Amputuj i zabandażuj",
+    "ContextMenu_Amputate_Stitch": "Amputuj i zaszyj",
+    "ContextMenu_Amputate_Stitch_Bandage": "Amputuj, zaszyj i zabandażuj",
+    "ContextMenu_Cauterize": "Przyżegaj",
+    "ContextMenu_Limb_Hand_L": "Lewa Dłoń",
+    "ContextMenu_Limb_ForeArm_L": "Lewe przedramię",
+    "ContextMenu_Limb_UpperArm_L": "Lewe ramię",
+    "ContextMenu_Limb_Hand_R": "Prawa dłoń",
+    "ContextMenu_Limb_ForeArm_R": "Prawe przedramię",
+    "ContextMenu_Limb_UpperArm_R": "Prawe ramię",
+    "ContextMenu_InstallProstRight": "Zainstaluj protezę na prawej ręce",
+    "ContextMenu_InstallProstLeft": "Zainstaluj protezę na lewej ręce",
+    "ContextMenu_PutTourniquetArmLeft": "Załóż opaskę uciskową na lewą rękę",
+    "ContextMenu_PutTourniquetLegL": "Załóż opaskę uciskową na lewą nogę",
+    "ContextMenu_PutTourniquetArmRight": "Załóż opaskę uciskową na prawą rękę",
+    "ContextMenu_PutTourniquetLegR": "Załóż opaskę uciskową na prawą nogę",
+    "ContextMenu_CleanWound": "Oczyść ranę",
+    "ContextMenu_Admin_TOC": "TOC",
+    "ContextMenu_Admin_ResetTOC": "Resetuj amputacje",
+    "ContextMenu_Admin_ForceAmputation": "Wymuś amputację"
+}

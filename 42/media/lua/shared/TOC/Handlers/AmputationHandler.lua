@@ -54,7 +54,7 @@ function AmputationHandler.ApplyDamageDuringAmputation(player, limbName)
 
         -- LimbName -> Group -> BodyLoc
         if item and tournAmpGroup == ampGroup then
-            TOC_DEBUG.print("tourniquet is equipped")
+            TOC_DEBUG.print("Tourniquet is equipped")
             isTourniquetEquipped = true
             break
         end
