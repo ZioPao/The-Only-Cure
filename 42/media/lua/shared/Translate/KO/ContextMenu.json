@@ -1,0 +1,23 @@
+{
+    "ContextMenu_Amputate": "절단하기",
+    "ContextMenu_Amputate_Bandage": "절단하고 붕대감기",
+    "ContextMenu_Amputate_Stitch": "절단하고 봉합하기",
+    "ContextMenu_Amputate_Stitch_Bandage": "절단, 봉합하고 붕대감기",
+    "ContextMenu_Cauterize": "지져서 막기",
+    "ContextMenu_Limb_Hand_L": "왼손",
+    "ContextMenu_Limb_ForeArm_L": "왼팔목",
+    "ContextMenu_Limb_UpperArm_L": "왼 팔뚝",
+    "ContextMenu_Limb_Hand_R": "오른손",
+    "ContextMenu_Limb_ForeArm_R": "오른팔목",
+    "ContextMenu_Limb_UpperArm_R": "오른 팔뚝",
+    "ContextMenu_InstallProstRight": "오른팔에 의수 장착",
+    "ContextMenu_InstallProstLeft": "왼팔에 의수 장착",
+    "ContextMenu_PutTourniquetArmLeft": "왼팔에 지혈대 착용",
+    "ContextMenu_PutTourniquetLegL": "왼다리에 지혈대 착용",
+    "ContextMenu_PutTourniquetArmRight": "오른팔에 지혈대 착용",
+    "ContextMenu_PutTourniquetLegR": "오른다리에 지혈대 착용",
+    "ContextMenu_CleanWound": "상처 닦기",
+    "ContextMenu_Admin_TOC": "TOC",
+    "ContextMenu_Admin_ResetTOC": "절단 상태 초기화",
+    "ContextMenu_Admin_ForceAmputation": "강제 절단"
+}

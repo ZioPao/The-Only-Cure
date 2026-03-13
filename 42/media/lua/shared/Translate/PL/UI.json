@@ -1,0 +1,11 @@
+{
+    "UI_trait_Amputee_Hand": "Amputowana lewa dłoń",
+    "UI_trait_Amputee_Hand_desc": "",
+    "UI_trait_Amputee_ForeArm": "Amputowane lewe przedramię",
+    "UI_trait_Amputee_ForeArm_desc": "",
+    "UI_trait_Amputee_UpperArm": "Amputowane lewe ramię",
+    "UI_trait_Amputee_UpperArm_desc": "",
+    "UI_trait_Insensitive": "Niewrażliwy",
+    "UI_trait_Insensitive_desc": "",
+    "UI_Say_CantEquip": "Nie mogę tego założyć w ten sposób..."
+}

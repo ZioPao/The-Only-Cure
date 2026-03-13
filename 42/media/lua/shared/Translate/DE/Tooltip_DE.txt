@@ -1,8 +1,0 @@
-Tooltip_DE = {
-    Tooltip_Surgery_CantCauterize = "Du kannst die Wunde nicht kauterisieren",
-    Tooltip_Surgery_And = " und "
-    Tooltip_Surgery_TempTooLow = "Die Temperatur ist immer noch zu niedrig",
-    Tooltip_Surgery_Coward = "Du hast nicht den Mut dazu",
-    Tooltip_Surgery_LimbNotFree = "Zuerst musst du die Prothese abnehmen",
-    
-}
