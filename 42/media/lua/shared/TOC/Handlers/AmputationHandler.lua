@@ -135,27 +135,7 @@ function AmputationHandler:healArea()
     local bd = self.patientPl:getBodyDamage()
     local bodyPart = bd:getBodyPart(self.bodyPartType)
 
-    bodyPart:setFractureTime(0)
-
-    bodyPart:setScratched(false, true)
-    bodyPart:setScratchTime(0)
-
-    bodyPart:setBleeding(false)
-    bodyPart:setBleedingTime(0)
-
-    bodyPart:SetBitten(false)
-    --bodyPart:setBiteTime(0)
-    bodyPart:SetInfected(false)
-
-    bodyPart:setCut(false)
-    bodyPart:setCutTime(0)
-
-    bodyPart:setDeepWounded(false)
-    bodyPart:setDeepWoundTime(0)
-
-    bodyPart:setHaveBullet(false, 0)
-    bodyPart:setHaveGlass(false)
-    bodyPart:setSplint(false, 0)
+    bodyPart:RestoreToFullHealth()
 
     syncBodyPart(bodyPart, 0xFFFFFFFFFFF)
 
@@ -165,13 +145,16 @@ end
 --- TO BE TESTED
 ---@param isPartInfected boolean
 function AmputationHandler:healInfection(isPartInfected)
-     -- If the part was actually infected, heal the player, if they were in time (infectionLevel < 20)
-    local infectionLevel = self.patientPl:getStats():get(CharacterStat.ZOMBIE_INFECTION)
-    local bd = self.patientPl:getBodyDamage()
-    local bodyPart = bd:getBodyPart(self.bodyPartType)
-    if infectionLevel < 20 and bodyPart:IsInfected() and not isPartInfected then
-        if bd:isInfected() == false then return end
+    -- If the part was actually infected, heal the player, if they were in time (infectionLevel < 20)
+    local plStats = self.patientPl:getStats()
+    local infectionLevel = plStats:get(CharacterStat.ZOMBIE_INFECTION)
 
+    --TOC_DEBUG.print(tostring(infectionLevel))
+    --TOC_DEBUG.print("IgnoredPartInfected: " .. tostring(isPartInfected))
+    local bd = self.patientPl:getBodyDamage()
+
+    if infectionLevel < 20 and not isPartInfected then
+        plStats:set(CharacterStat.ZOMBIE_INFECTION, 0)
         bd:setInfected(false)
         bd:setInfectionMortalityDuration(-1)
         bd:setInfectionTime(-1)
@@ -247,7 +230,6 @@ function AmputationHandler:execute(damagePlayer)
     -- Cache highest amputation and hand feasibility
     CachedDataHandler.CalculateCacheableValues(patientUsername)
 
-    -- FIX Test this again for 42.13
     self:healArea()
     self:healInfection(dcInst:getIsIgnoredPartInfected())
 
