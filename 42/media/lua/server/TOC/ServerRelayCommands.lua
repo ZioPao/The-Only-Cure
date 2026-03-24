@@ -89,7 +89,7 @@ end
 ---@param playerObj IsoPlayer
 ---@param args {perkName : string, xp : number}
 function ServerRelayCommands.RelayAddXp(playerObj, args)
-    TOC_DEBUG.print("received Add exp," .. tostring(args.perkName) .. " . " .. tostring(args.xp))
+    --TOC_DEBUG.print("received Add exp," .. tostring(args.perkName) .. " . " .. tostring(args.xp))
     addXp(playerObj, Perks[args.perkName], args.xp)
 end
 
@@ -154,7 +154,7 @@ end
 
 local function OnClientRelayCommand(module, command, playerObj, args)
     if module == CommandsData.modules.TOC_RELAY and ServerRelayCommands[command] then
-        TOC_DEBUG.print("Received Client Relay command - " .. tostring(command))
+        --TOC_DEBUG.print("Received Client Relay command - " .. tostring(command))
         ServerRelayCommands[command](playerObj, args)
     end
 end
