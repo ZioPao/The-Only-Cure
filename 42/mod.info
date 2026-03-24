@@ -5,6 +5,6 @@ id=TheOnlyCure
 icon=icon.png
 url=https://github.com/ZioPao/The-Only-Cure
 modversion=2.3.4
-versionMin=42.13
+versionMin=42.15
 loadModAfter=\FancyHandwork,\BrutalHandwork,\TwoWeaponsOnBackRework
 incompatible=\BB_FirstAidOverhaul
