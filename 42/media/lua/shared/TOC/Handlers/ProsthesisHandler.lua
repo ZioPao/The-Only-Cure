@@ -121,11 +121,14 @@ function ISWearClothing:isValid()
     return ProsthesisHandler.Validate(self.item, isEquippable)
 end
 
-local og_ISWearClothing_perform = ISWearClothing.perform
+local og_ISWearClothing_complete = ISWearClothing.complete
 ---@diagnostic disable-next-line: duplicate-set-field
-function ISWearClothing:perform()
-    ProsthesisHandler.SearchAndSetupProsthesis(self.character, self.item, true)
-    og_ISWearClothing_perform(self)
+function ISWearClothing:complete()
+    local result = og_ISWearClothing_complete(self)
+    if result then
+        ProsthesisHandler.SearchAndSetupProsthesis(self.character, self.item, true)
+    end
+    return result
 end
 
 
