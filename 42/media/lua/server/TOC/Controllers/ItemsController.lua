@@ -44,7 +44,6 @@ end
 ---@return boolean
 ---@private
 function ItemsController.Player.RemoveClothingItem(playerObj, clothingItem)
-    -- FIX removeWornItem doesn't sync correctly to client, meaning it gets stuck visually until relog
     if clothingItem and instanceof(clothingItem, "InventoryItem") then
         playerObj:removeWornItem(clothingItem)
 
@@ -124,6 +123,71 @@ function ItemsController.Player.SpawnAmputationItem(playerObj, limbName)
     end
 end
 
+---Drop worn items and unequip hands for the amputated limb, called server-side after amputation or prosthesis unequip
+---@param playerObj IsoPlayer
+---@param limbName string
+function ItemsController.Player.DropItemsAfterAmputation(playerObj, limbName)
+    TOC_DEBUG.print("DropItemsAfterAmputation | limbName=" .. limbName)
+
+    local side = CommonMethods.GetSide(limbName)
+    local sideStr = CommonMethods.GetSideFull(side)
+    -- TOC_DEBUG.print("DropItemsAfterAmputation | side=" .. tostring(side) .. " sideStr=" .. tostring(sideStr))
+
+    local wornItems = playerObj:getWornItems()
+    -- .print("DropItemsAfterAmputation | wornItems size=" .. tostring(wornItems:size()))
+
+    -- Unequip worn items blocked by the amputated limb (moves them back to inventory)
+    for i = 1, wornItems:size() do
+        local it = wornItems:get(i - 1)
+        if it then
+            local wornItem = it:getItem()
+            local bl = wornItem:getBodyLocation()
+            -- TOC_DEBUG.print("DropItemsAfterAmputation | worn bl=" .. tostring(bl))
+            if string.contains(limbName, "Hand_") and (bl == sideStr .. "_MiddleFinger" or bl == sideStr .. "_RingFinger") then
+                -- TOC_DEBUG.print("DropItemsAfterAmputation | removing finger item " .. tostring(wornItem))
+                playerObj:removeWornItem(wornItem)
+            end
+            if string.contains(limbName, "ForeArm_") and (bl == sideStr .. "Wrist") then
+                -- TOC_DEBUG.print("DropItemsAfterAmputation | removing wrist item " .. tostring(wornItem))
+                playerObj:removeWornItem(wornItem)
+            end
+        end
+    end
+
+    -- Unequip held items for the amputated side (runs for any arm limb, not just Hand_)
+    -- If the same item is in both hands, it's a two-handed equip — clear both slots
+    if side == "R" then
+        local primaryItem = playerObj:getPrimaryHandItem()
+        -- TOC_DEBUG.print("DropItemsAfterAmputation | R primaryItem=" .. tostring(primaryItem))
+        if primaryItem then
+            if primaryItem == playerObj:getSecondaryHandItem() then
+                -- TOC_DEBUG.print("DropItemsAfterAmputation | two-handed equip, clearing both")
+                ---@diagnostic disable-next-line: param-type-mismatch
+                playerObj:setSecondaryHandItem(nil)
+            end
+            ---@diagnostic disable-next-line: param-type-mismatch
+            playerObj:setPrimaryHandItem(nil)
+        end
+    elseif side == "L" then
+        local secondaryItem = playerObj:getSecondaryHandItem()
+        -- TOC_DEBUG.print("DropItemsAfterAmputation | L secondaryItem=" .. tostring(secondaryItem))
+        if secondaryItem then
+            if secondaryItem == playerObj:getPrimaryHandItem() then
+                -- TOC_DEBUG.print("DropItemsAfterAmputation | two-handed equip, clearing both")
+                ---@diagnostic disable-next-line: param-type-mismatch
+                playerObj:setPrimaryHandItem(nil)
+            end
+            ---@diagnostic disable-next-line: param-type-mismatch
+            playerObj:setSecondaryHandItem(nil)
+        end
+    end
+
+
+    sendEquip(playerObj)   -- sync hand state to all clients
+
+    TOC_DEBUG.print("Finishing DropItemsAfterAmputation")
+end
+
 ---Search through worn items and modifies a specific amputation item
 ---@param playerObj IsoPlayer
 ---@param limbName string
@@ -188,5 +252,8 @@ function ItemsController.Zombie.GetAmputationTexturesIndex(zombie)
     --print("Zombie texture index: " .. tostring(finalId))
     return finalId
 end
+
+Events.OnAmputatedLimb.Add(ItemsController.Player.DropItemsAfterAmputation)
+Events.OnProsthesisUnequipped.Add(ItemsController.Player.DropItemsAfterAmputation)
 
 return ItemsController

@@ -343,48 +343,6 @@ function LocalPlayerController.CanItemBeEquipped(itemObj, limbName)
     return true
 end
 
---- Drop all items from the affected limb
----@param limbName string
-function LocalPlayerController.DropItemsAfterAmputation(limbName)
-    TOC_DEBUG.print("Triggered DropItemsAfterAmputation")
-    local side = CommonMethods.GetSide(limbName)
-    local sideStr = CommonMethods.GetSideFull(side)
-
-    local pl = getPlayer()
-    local wornItems = pl:getWornItems()
-
-    for i = 1, wornItems:size() do
-        local it = wornItems:get(i - 1)
-        if it then
-            local wornItem = wornItems:get(i - 1):getItem()
-            --TOC_DEBUG.print(wornItem:getBodyLocation())
-            local bl = wornItem:getBodyLocation()
-            if string.contains(limbName, "Hand_") and (bl == sideStr .. "_MiddleFinger" or bl == sideStr .. "_RingFinger") then
-                pl:removeWornItem(wornItem)
-            end
-
-
-            if string.contains(limbName, "ForeArm_") and (bl == sideStr .. "Wrist") then
-                pl:removeWornItem(wornItem)
-            end
-        end
-    end
-
-    -- TODO Consider 2 handed weapons too
-
-    -- equipped items too
-    if side == "R" then
-        pl:setPrimaryHandItem(nil)
-    elseif side == "L" then
-        pl:setSecondaryHandItem(nil)
-    end
-
-end
-
-LuaEventManager.AddEvent("OnAmputatedLimb")
-LuaEventManager.AddEvent("OnProsthesisUnequipped")
-Events.OnAmputatedLimb.Add(LocalPlayerController.DropItemsAfterAmputation)
-Events.OnProsthesisUnequipped.Add(LocalPlayerController.DropItemsAfterAmputation)
 
 
 

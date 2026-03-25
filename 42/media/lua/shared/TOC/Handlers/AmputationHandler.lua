@@ -4,6 +4,8 @@ local StaticData = require("TOC/StaticData")
 --local TourniquetController = require("TOC/Controllers/TourniquetController")
 ---------------------------
 
+LuaEventManager.AddEvent("OnAmputatedLimb")     -- Triggered when a limb is amputated; args: playerObj, limbName
+
 --- Manages an amputation. Will be run on the server
 ---@class AmputationHandler
 ---@field surgeonPl IsoPlayer
@@ -216,6 +218,11 @@ function AmputationHandler:execute(damagePlayer)
     local ItemsController = require("TOC/Controllers/ItemsController")
     ItemsController.Player.DeleteOldAmputationItem(self.patientPl, self.limbName)
     ItemsController.Player.SpawnAmputationItem(self.patientPl, self.limbName)
+
+    triggerEvent("OnAmputatedLimb", self.patientPl, self.limbName)
+    for i = 1, #StaticData.LIMBS_DEPENDENCIES_IND_STR[self.limbName] do
+        triggerEvent("OnAmputatedLimb", self.patientPl, StaticData.LIMBS_DEPENDENCIES_IND_STR[self.limbName][i])
+    end
 
     -- Add it to the list of cut limbs on this local client
     local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")

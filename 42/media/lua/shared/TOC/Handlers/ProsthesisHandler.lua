@@ -6,6 +6,8 @@ local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
 local OverridenMethodsArchive = require("TOC/OverridenMethodsArchive")
 -------------------------
 
+LuaEventManager.AddEvent("OnProsthesisUnequipped")  -- args: playerObj, limbName
+
 ---@class ProsthesisHandler
 local ProsthesisHandler = {}
 
@@ -84,6 +86,7 @@ function ProsthesisHandler.SearchAndSetupProsthesis(character, item, isEquipping
     local group = ProsthesisHandler.GetGroup(item)
     TOC_DEBUG.print("Setup Prosthesis => " .. group .. " - is equipping? " .. tostring(isEquipping))
     local dcInst = DataController.GetInstance(username)
+    if not dcInst then return false end     -- DC not ready yet, bail safely
     dcInst:setIsProstEquipped(group, isEquipping)
     dcInst:apply(character)
     return true
@@ -144,7 +147,7 @@ function ISClothingExtraAction:complete()
     ProsthesisHandler.SearchAndSetupProsthesis(self.character, extraItem, true)
     --TOC_DEBUG.print("ISClothingExtraAction_complete 2")
 
-    og_ISClothingExtraAction_complete(self)
+    return og_ISClothingExtraAction_complete(self)
 end
 
 local og_ISUnequipAction_complete = ISUnequipAction.complete
@@ -152,7 +155,7 @@ local og_ISUnequipAction_complete = ISUnequipAction.complete
 function ISUnequipAction:complete()
 
     local isProst = ProsthesisHandler.SearchAndSetupProsthesis(self.character, self.item, false)
-    og_ISUnequipAction_complete(self)
+    local result = og_ISUnequipAction_complete(self)
 
     if isProst then
         -- we need to fetch the limbname associated to the prosthesis
@@ -161,10 +164,13 @@ function ISUnequipAction:complete()
         if highestAmputatedLimbs then
             local hal = highestAmputatedLimbs[side]
             if hal then
-                triggerEvent("OnProsthesisUnequipped", hal)
+                TOC_DEBUG.print("Triggered OnProsthesisUnequipped")
+                triggerEvent("OnProsthesisUnequipped", self.character, hal)
             end
         end
     end
+
+    return result
 end
 
 return ProsthesisHandler
