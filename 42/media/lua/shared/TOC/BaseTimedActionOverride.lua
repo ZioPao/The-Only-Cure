@@ -1,4 +1,3 @@
-local LocalPlayerController = require("TOC/Controllers/LocalPlayerController")
 local DataController = require("TOC/Controllers/DataController")
 local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
 local CommonMethods = require("TOC/CommonMethods")
@@ -54,13 +53,42 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
     return time
 end
 
+
+---@param character IsoPlayer
+---@param limbName string
+local function TryRandomBleed(character, limbName)
+    -- Chance should be determined by the cicatrization time
+    local cicTime = DataController.GetInstance(character:getUsername()):getCicatrizationTime(limbName)
+    if cicTime == 0 then return end
+
+    -- TODO This is just a placeholder, we need to figure out a better way to calculate this chance
+    local normCicTime = CommonMethods.Normalize(cicTime, 0, StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM[limbName]) / 2
+    TOC_DEBUG.print("OG cicTime: " .. tostring(cicTime))
+    TOC_DEBUG.print("Normalized cic time : " .. tostring(normCicTime))
+
+    local chance = ZombRandFloat(0.0, 1.0)
+    if chance > normCicTime then
+        TOC_DEBUG.print("Triggered bleeding from non cicatrized wound")
+        local adjacentBodyPartType = BodyPartType[StaticData.LIMBS_ADJACENT_IND_STR[limbName]]
+
+        -- we need to check if the wound is already bleeding before doing anything else to prevent issues with bandages
+        local bp = character:getBodyDamage():getBodyPart(adjacentBodyPartType)
+        bp:setBleedingTime(20)      -- TODO Should depend on cicatrization instead of a fixed time
+        -- ADD Could break bandages if bleeding is too much?
+
+
+        --character:getBodyDamage():getBodyPart(adjacentBodyPartType):setBleeding(true)
+    end
+end
+
+
 --* Random bleeding during cicatrization
 local og_ISBaseTimedAction_perform = ISBaseTimedAction.perform
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISBaseTimedAction:perform()
     og_ISBaseTimedAction_perform(self)
 
-    if isServer() then return end
+    if isServer() then return end   -- would never be server anyway I guess, it's perform...
 
     local username = self.character:getUsername()
     local dcInst = DataController.GetInstance(username)
@@ -73,7 +101,7 @@ function ISBaseTimedAction:perform()
         local limbName = k
         if dcInst:getIsCut(limbName) and dcInst:getIsVisible(limbName) then
             if not dcInst:getIsCicatrized(limbName) and dcInst:getIsProstEquipped(limbName) then
-                LocalPlayerController.TryRandomBleed(self.character, limbName)
+                TryRandomBleed(self.character, limbName)
             end
         end
     end
