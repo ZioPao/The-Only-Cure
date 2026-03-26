@@ -61,15 +61,14 @@ local function TryRandomBleed(character, limbName)
     local cicTime = DataController.GetInstance(character:getUsername()):getCicatrizationTime(limbName)
     if cicTime == 0 then return end
 
-    -- TODO This is just a placeholder, we need to figure out a better way to calculate this chance
     local normCicTime = CommonMethods.Normalize(cicTime, 0, StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM[limbName]) / 2
     TOC_DEBUG.print("OG cicTime: " .. tostring(cicTime))
     TOC_DEBUG.print("Normalized cic time : " .. tostring(normCicTime))
 
     local chance = ZombRandFloat(0.0, 1.0)
-    if chance > normCicTime then
-        TOC_DEBUG.print("Triggered bleeding from non cicatrized wound")
-        local bleedingTime = 20     -- TODO Should depend on cicatrization instead of a fixed time
+    if chance < normCicTime then
+        local bleedingTime = math.max(1, math.floor(normCicTime * 2 * 20))
+        TOC_DEBUG.print("Triggered bleeding from non cicatrized wound, secs: " .. tostring(bleedingTime))
 
         if isClient() then
             -- MP: client-side setBleedingTime does not sync to server — relay the call
