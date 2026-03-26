@@ -47,6 +47,8 @@ CommandsData.server = {
         --* TRAITS *--
         RelayApplyTraitAmputation = "RelayApplyTraitAmputation",         ---@alias relayApplyTraitAmputationParams {limbName : string}
 
+        RelayTriggerBleed = "RelayTriggerBleed",                         ---@alias relayTriggerBleedParams {patientNum : number, limbName : string, bleedingTime : number}
+
         --* ADMIN ONLY *--
         RelayExecuteInitialization = "RelayExecuteInitialization",       ---@alias relayExecuteInitializationParams {patientNum : number}
         RelayForcedAmputation = "RelayForcedAmputation"                  ---@alias relayForcedAmputationParams {patientNum : number, limbName : string}

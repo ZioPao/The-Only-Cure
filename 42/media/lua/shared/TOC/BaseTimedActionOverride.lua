@@ -69,15 +69,22 @@ local function TryRandomBleed(character, limbName)
     local chance = ZombRandFloat(0.0, 1.0)
     if chance > normCicTime then
         TOC_DEBUG.print("Triggered bleeding from non cicatrized wound")
-        local adjacentBodyPartType = BodyPartType[StaticData.LIMBS_ADJACENT_IND_STR[limbName]]
+        local bleedingTime = 20     -- TODO Should depend on cicatrization instead of a fixed time
 
-        -- we need to check if the wound is already bleeding before doing anything else to prevent issues with bandages
-        local bp = character:getBodyDamage():getBodyPart(adjacentBodyPartType)
-        bp:setBleedingTime(20)      -- TODO Should depend on cicatrization instead of a fixed time
-        -- ADD Could break bandages if bleeding is too much?
-
-
-        --character:getBodyDamage():getBodyPart(adjacentBodyPartType):setBleeding(true)
+        if isClient() then
+            -- MP: client-side setBleedingTime does not sync to server — relay the call
+            local CommandsData = require("TOC/CommandsData")
+            sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayTriggerBleed, {
+                patientNum = character:getOnlineID(),
+                limbName = limbName,
+                bleedingTime = bleedingTime,
+            })
+        else
+            -- SP: same Lua state as server, apply directly
+            local adjacentBodyPartType = BodyPartType[StaticData.LIMBS_ADJACENT_IND_STR[limbName]]
+            local bp = character:getBodyDamage():getBodyPart(adjacentBodyPartType)
+            bp:setBleedingTime(bleedingTime)
+        end
     end
 end
 
