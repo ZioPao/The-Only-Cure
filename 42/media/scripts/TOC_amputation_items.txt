@@ -18,9 +18,9 @@ module TOC
 		CombatSpeedModifier = 0.9,
 		BloodLocation = Hands;LowerArms,
 
-		Insulation = 1.0,
-		WindResistance = 1.0,
-		WaterResistance = 1.0,
+		Insulation = 0.0,
+		WindResistance = 0.0,
+		WaterResistance = 0.0,
 		CanHaveHoles = false,
 	}
 
@@ -36,9 +36,9 @@ module TOC
 		Weight = 0,
 		CombatSpeedModifier = 0.8,
 		BloodLocation = UpperArms;LowerArms,
-		Insulation = 1.0,
-		WindResistance = 1.0,
-		WaterResistance = 1.0,
+		Insulation = 0.0,
+		WindResistance = 0.0,
+		WaterResistance = 0.0,
 		CanHaveHoles = false,
 	}
 
@@ -53,9 +53,9 @@ module TOC
 		BloodLocation = UpperArms;UpperBody,
 		Weight = 0,
 		CombatSpeedModifier = 0.7,
-		Insulation = 1.0,
-		WindResistance = 1.0,
-		WaterResistance = 1.0,
+		Insulation = 0.0,
+		WindResistance = 0.0,
+		WaterResistance = 0.0,
 		CanHaveHoles = false,
 	}
 
@@ -71,10 +71,10 @@ module TOC
 		Weight = 0,
 		CombatSpeedModifier = 0.9,
 		BloodLocation = Hands;LowerArms,
-		Insulation = 1.0,
+		Insulation = 0.0,
 		
-		WindResistance = 1.0,
-		WaterResistance = 1.0,
+		WindResistance = 0.0,
+		WaterResistance = 0.0,
 		CanHaveHoles = false,
 	}
 
@@ -90,9 +90,9 @@ module TOC
 		Weight = 0,
 		CombatSpeedModifier = 0.8,
 		BloodLocation = UpperArms;LowerArms,
-		Insulation = 1.0,
-		WindResistance = 1.0,
-		WaterResistance = 1.0,
+		Insulation = 0.0,
+		WindResistance = 0.0,
+		WaterResistance = 0.0,
 		CanHaveHoles = false,
 
 	}
@@ -109,9 +109,9 @@ module TOC
 		Weight = 0,
 		CombatSpeedModifier = 0.7,
 		BloodLocation = UpperArms;UpperBody,
-		Insulation = 1.0,
-		WindResistance = 1.0,
-		WaterResistance = 1.0,
+		Insulation = 0.0,
+		WindResistance = 0.0,
+		WaterResistance = 0.0,
 		CanHaveHoles = false,
 	}
 
