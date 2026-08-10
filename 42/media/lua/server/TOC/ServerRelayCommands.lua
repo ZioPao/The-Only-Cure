@@ -21,7 +21,10 @@ function ServerRelayCommands.UpdateDataControllerFromClient(playerObj, args)
     local DataController = require("TOC/Controllers/DataController")
     local h = DataController.GetInstance(playerObj:getUsername())
 
-    TOC_DEBUG.print("CLIENT SYNC of DC for " .. args.limbName)
+    -- limbName is absent on the updateIsIgnoredPartInfectedFromClient path, and
+    -- Lua evaluates this concatenation before the call, so a bare `.. args.limbName`
+    -- threw here and aborted the whole handler before any field was applied.
+    TOC_DEBUG.print("CLIENT SYNC of DC for " .. tostring(args.limbName))
     if args.cicTime then
         h:setCicatrizationTime(args.limbName, args.cicTime)
         TOC_DEBUG.print("CicTime = " .. tostring(args.cicTime))
