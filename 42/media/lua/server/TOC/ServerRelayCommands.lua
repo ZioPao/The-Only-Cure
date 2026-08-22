@@ -21,7 +21,10 @@ function ServerRelayCommands.UpdateDataControllerFromClient(playerObj, args)
     local DataController = require("TOC/Controllers/DataController")
     local h = DataController.GetInstance(playerObj:getUsername())
 
-    TOC_DEBUG.print("CLIENT SYNC of DC for " .. args.limbName)
+    -- limbName is absent on the updateIsIgnoredPartInfectedFromClient path, and
+    -- Lua evaluates this concatenation before the call, so a bare `.. args.limbName`
+    -- threw here and aborted the whole handler before any field was applied.
+    TOC_DEBUG.print("CLIENT SYNC of DC for " .. tostring(args.limbName))
     if args.cicTime then
         h:setCicatrizationTime(args.limbName, args.cicTime)
         TOC_DEBUG.print("CicTime = " .. tostring(args.cicTime))
@@ -112,6 +115,44 @@ function ServerRelayCommands.RelayApplyTraitAmputation(playerObj, args)
     dcInst:setCicatrizationTime(args.limbName, 0)
     dcInst:setIsCicatrized(args.limbName, true)
     dcInst:apply(playerObj)
+end
+
+--* PROSTHESES *--
+
+---Apply a prosthesis equip/unequip that the owning client reported.
+---The client is only allowed to touch its own data, and only a group that already
+---exists on it, so the worst a crafted packet can do is toggle a flag it could
+---toggle anyway by wearing the item.
+---@param playerObj IsoPlayer
+---@param args relayProsthesisStateParams
+function ServerRelayCommands.RelayProsthesisState(playerObj, args)
+    local username = playerObj:getUsername()
+    local DataController = require("TOC/Controllers/DataController")
+    local dcInst = DataController.GetInstance(username)
+    if not dcInst or not dcInst.tocData or not dcInst.tocData.prostheses then return end
+    if type(args.group) ~= "string" or dcInst.tocData.prostheses[args.group] == nil then return end
+
+    local isEquipped = args.isEquipped == true
+    TOC_DEBUG.print("Prosthesis state from client for " .. username .. " => " .. args.group .. " - " .. tostring(isEquipped))
+    dcInst:setIsProstEquipped(args.group, isEquipped)
+    dcInst:apply(playerObj)
+
+    if not isEquipped then
+        -- ProsthesisHandler triggers OnProsthesisUnequipped from ISUnequipAction:complete,
+        -- which is client-side, while its only listener (ItemsController.Player.
+        -- DropItemsAfterAmputation) is registered in a server/ file. So in MP the rings
+        -- and the held weapon the prosthesis was allowing stayed on. Fire it here, where
+        -- the listener actually lives. Harmless if it ends up running twice - the handler
+        -- only removes finger/wrist items and clears hand slots.
+        local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
+        local highestAmputatedLimbs = CachedDataHandler.GetHighestAmputatedLimbs(username)
+        if highestAmputatedLimbs then
+            local hal = highestAmputatedLimbs[CommonMethods.GetSide(args.group)]
+            if hal then
+                triggerEvent("OnProsthesisUnequipped", playerObj, hal)
+            end
+        end
+    end
 end
 
 --* ADMIN ONLY *--
