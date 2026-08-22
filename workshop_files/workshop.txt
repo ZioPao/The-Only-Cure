@@ -1,6 +1,6 @@
 version=1
 id=3580276809
-title=[B42] The Only Cure
+title=[B42.15] The Only Cure
 description=[img]https://raw.githubusercontent.com/ZioPao/The-Only-Cure/551125bb50cb65608ad89ca81ef0daccb3b02c4c/dev_stuff/logos/title.png[/img]
 
 description=

@@ -1,6 +1,7 @@
 require ("TOC/Debug")
 local CommandsData = require("TOC/CommandsData")
 local CommonMethods = require("TOC/CommonMethods")
+local StaticData = require("TOC/StaticData")
 --------------------------------------------
 
 local ServerRelayCommands = {}
@@ -142,6 +143,20 @@ function ServerRelayCommands.RelayForcedAmputation(adminObj, args)
     h:setCicatrizationTime(args.limbName, 0)        -- for color of cicatrization in health panel
     h:setIsCicatrized(args.limbName, true)
     h:apply(patientPl)
+end
+
+---Apply bleeding to the patient's wound server-side, relayed from client perform() in MP
+---@param playerObj IsoPlayer sender (validated against patientNum — players can only bleed themselves)
+---@param args relayTriggerBleedParams
+function ServerRelayCommands.RelayTriggerBleed(playerObj, args)
+    if playerObj:getOnlineID() ~= args.patientNum then return end
+    local patientPl = CommonMethods.GetPatientForServer(args.patientNum)
+    if not patientPl then return end
+    local adjacentBodyPartType = BodyPartType[StaticData.LIMBS_ADJACENT_IND_STR[args.limbName]]
+    local bp = patientPl:getBodyDamage():getBodyPart(adjacentBodyPartType)
+    if bp then
+        bp:setBleedingTime(args.bleedingTime)
+    end
 end
 
 function ServerRelayCommands.DeleteAllOldAmputationItems(_, args)

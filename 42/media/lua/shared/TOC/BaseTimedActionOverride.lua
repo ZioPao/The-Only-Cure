@@ -1,4 +1,3 @@
-local LocalPlayerController = require("TOC/Controllers/LocalPlayerController")
 local DataController = require("TOC/Controllers/DataController")
 local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
 local CommonMethods = require("TOC/CommonMethods")
@@ -54,13 +53,48 @@ function ISBaseTimedAction:adjustMaxTime(maxTime)
     return time
 end
 
+
+---@param character IsoPlayer
+---@param limbName string
+local function TryRandomBleed(character, limbName)
+    -- Chance should be determined by the cicatrization time
+    local cicTime = DataController.GetInstance(character:getUsername()):getCicatrizationTime(limbName)
+    if cicTime == 0 then return end
+
+    local normCicTime = CommonMethods.Normalize(cicTime, 0, StaticData.LIMBS_CICATRIZATION_TIME_IND_NUM[limbName]) / 2
+    TOC_DEBUG.print("OG cicTime: " .. tostring(cicTime))
+    TOC_DEBUG.print("Normalized cic time : " .. tostring(normCicTime))
+
+    local chance = ZombRandFloat(0.0, 1.0)
+    if chance < normCicTime then
+        local bleedingTime = math.max(1, math.floor(normCicTime * 2 * 20))
+        TOC_DEBUG.print("Triggered bleeding from non cicatrized wound, secs: " .. tostring(bleedingTime))
+
+        if isClient() then
+            -- MP: client-side setBleedingTime does not sync to server — relay the call
+            local CommandsData = require("TOC/CommandsData")
+            sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayTriggerBleed, {
+                patientNum = character:getOnlineID(),
+                limbName = limbName,
+                bleedingTime = bleedingTime,
+            })
+        else
+            -- SP: same Lua state as server, apply directly
+            local adjacentBodyPartType = BodyPartType[StaticData.LIMBS_ADJACENT_IND_STR[limbName]]
+            local bp = character:getBodyDamage():getBodyPart(adjacentBodyPartType)
+            bp:setBleedingTime(bleedingTime)
+        end
+    end
+end
+
+
 --* Random bleeding during cicatrization
 local og_ISBaseTimedAction_perform = ISBaseTimedAction.perform
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISBaseTimedAction:perform()
     og_ISBaseTimedAction_perform(self)
 
-    if isServer() then return end
+    if isServer() then return end   -- would never be server anyway I guess, it's perform...
 
     local username = self.character:getUsername()
     local dcInst = DataController.GetInstance(username)
@@ -73,7 +107,7 @@ function ISBaseTimedAction:perform()
         local limbName = k
         if dcInst:getIsCut(limbName) and dcInst:getIsVisible(limbName) then
             if not dcInst:getIsCicatrized(limbName) and dcInst:getIsProstEquipped(limbName) then
-                LocalPlayerController.TryRandomBleed(self.character, limbName)
+                TryRandomBleed(self.character, limbName)
             end
         end
     end
