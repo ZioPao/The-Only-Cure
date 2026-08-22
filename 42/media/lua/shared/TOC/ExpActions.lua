@@ -53,6 +53,7 @@ local function FlushTOCXp(action)
     end
 end
 
+-- TODO Confirm this
 ---Adds TOC XP for one tick: directly via addXp() on the server and in SP, or
 ---accumulated for relay on a client.
 ---
@@ -87,6 +88,7 @@ local function AddTOCXp(action)
     end)
 end
 
+-- TODO Confirm this
 --* The flush hooks go on ISBaseTimedAction rather than on each wrapped subclass.
 --* Every timed action ends by calling up into ISBaseTimedAction.perform / .stop, so
 --* one pair of wraps covers all of them - and unlike assigning perform/stop onto
@@ -113,6 +115,8 @@ end
 ---@param actionClass table
 local function WrapUpdate(actionClass)
     if not actionClass then return end
+    TOC_DEBUG.print("WrapUpdate: " .. tostring(actionClass.Type))
+
     local og = actionClass.update
     function actionClass:update()
         og(self)
@@ -153,13 +157,5 @@ WrapUpdate(ISRemovePatch)
 --* Item handling
 WrapUpdate(ISPickUpGroundCoverItem)
 WrapUpdate(ISPickAxeGroundCoverItem)
-WrapUpdate(ISGrabItemAction)        -- client-only class, WrapUpdate handles nil safely
-
---* ISInventoryTransferAction used to be wrapped separately in
---* client/TOC/TimedActions/ExpActionsClient.lua, because it was the one action that
---* needed the relay. Now that AddTOCXp relays on any client, it is just another
---* entry in this list - which also means it finally grants XP in singleplayer,
---* where the old client-only file relayed into nothing.
-WrapUpdate(ISInventoryTransferAction)
 
 return { IterateTOCXp = IterateTOCXp, WrapUpdate = WrapUpdate }
