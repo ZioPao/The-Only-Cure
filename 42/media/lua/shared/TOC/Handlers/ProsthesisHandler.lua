@@ -1,3 +1,4 @@
+local CommandsData = require("TOC/CommandsData")
 local CommonMethods = require("TOC/CommonMethods")
 local StaticData = require("TOC/StaticData")
 local DataController = require("TOC/Controllers/DataController")
@@ -72,8 +73,10 @@ function ProsthesisHandler.CheckIfEquippable(fullType)
     return false
 end
 
----Handle equipping or unequipping prosthetics
----@server
+---Handle equipping or unequipping prosthetics.
+---This was annotated @server, but all three callers below are timed action complete()
+---methods, and a timed action is only ever ticked by the client that owns the character.
+---In MP it therefore always runs on a client.
 ---@param character IsoPlayer
 ---@param item InventoryItem
 ---@param isEquipping boolean
@@ -88,6 +91,17 @@ function ProsthesisHandler.SearchAndSetupProsthesis(character, item, isEquipping
     local dcInst = DataController.GetInstance(username)
     if not dcInst then return false end     -- DC not ready yet, bail safely
     dcInst:setIsProstEquipped(group, isEquipping)
+
+    -- apply() does nothing on a client, and nothing else carried the flag up, so the
+    -- server's copy stayed false forever. That copy wins at the next login, so a worn
+    -- prosthesis silently stopped counting after a relog - hand feasibility back to
+    -- unusable, no adjustMaxTime bonus, no "Prosthesis Equipped" in the health panel -
+    -- until it was taken off and put back on. Mirror the change to the server instead.
+    if isClient() and character:isLocalPlayer() then
+        sendClientCommand(CommandsData.modules.TOC_RELAY, CommandsData.server.Relay.RelayProsthesisState,
+            {group = group, isEquipped = isEquipping})
+    end
+
     dcInst:apply(character)
     return true
 end

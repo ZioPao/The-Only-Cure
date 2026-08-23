@@ -1,0 +1,962 @@
+{
+  "nodes": [
+    {
+      "id": "github_issue_template_bug_report",
+      "label": "Bug Report Template",
+      "file_type": "document",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\.github\\ISSUE_TEMPLATE\\bug_report.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "readme",
+      "label": "The Only Cure README",
+      "file_type": "document",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "readme_amputation_mechanic",
+      "label": "Amputation Mechanic",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Saw right-click or drag-and-drop cuts off the infected limb; bandages/stitches auto-used to boost survival, tourniquet placed on correct side dampens post-amputation damage; upper arm amputation blocks prosthesis equipping; amputated side gains skill for timed actions"
+    },
+    {
+      "id": "readme_cicatrization",
+      "label": "Cicatrization",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Gradual wound healing after amputation; player must periodically clean wounds with bandages; a prosthesis can be equipped before full cicatrization but risks random bleedings — design intent is to reward post-surgery maintenance"
+    },
+    {
+      "id": "readme_prosthesis",
+      "label": "Prosthesis (Hook and Arm)",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Two prosthesis types exist: Hook (cheaper, actions take longer) and Arm (faster actions at 1.1x speed modifier), trading craft cost for action speed; equipping slowly grants Prosthesis Familiarity"
+    },
+    {
+      "id": "readme_admin_tools",
+      "label": "Admin Tools (Reset/Force Amputation)",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "dev_stuff_steam_desc",
+      "label": "Steam Workshop Description",
+      "file_type": "document",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\dev_stuff\\steam_desc.txt",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "workshop_files_workshop",
+      "label": "Steam Workshop Listing (B42)",
+      "file_type": "document",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\workshop_files\\workshop.txt",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "workshop_files_workshop_test",
+      "label": "Steam Workshop Test Listing",
+      "file_type": "document",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\workshop_files\\workshop_test.txt",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "temp_flow_42_datacontroller",
+      "label": "DataController",
+      "file_type": "code",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\temp_flow_42.txt",
+      "source_location": "line 38",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "temp_flow_42_cacheddatahandler",
+      "label": "CachedDataHandler",
+      "file_type": "code",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\temp_flow_42.txt",
+      "source_location": "line 34",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "temp_flow_42_moddata_sync_flow",
+      "label": "Multiplayer ModData Sync Flow",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\temp_flow_42.txt",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Client join flow: Local Initialization creates a server DataController, which loads or creates moddata per player, syncs via GlobalModData, then serves a force-recalced cache to the client — keeps amputation state consistent across host/clients"
+    },
+    {
+      "id": "42_media_perks_amputations",
+      "label": "Amputations (Parent Perk)",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\perks.txt",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "42_media_perks_side_l",
+      "label": "Side_L Perk (Left Side Amputation)",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\perks.txt",
+      "source_location": "line 19",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "XP is granted to the amputated side, making timed actions on that side faster at higher skill, offsetting the lost limb"
+    },
+    {
+      "id": "42_media_perks_side_r",
+      "label": "Side_R Perk (Right Side Amputation)",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\perks.txt",
+      "source_location": "line 36",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "42_media_perks_prostfamiliarity",
+      "label": "ProstFamiliarity (Prosthesis Familiarity) Perk",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\perks.txt",
+      "source_location": "line 55",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Equipping a prosthetic limb gradually awards familiarity XP, making actions with the prosthesis faster over time"
+    },
+    {
+      "id": "42_media_sandbox_options_toc_cicatrizationspeed",
+      "label": "Sandbox Option TOC.CicatrizationSpeed",
+      "file_type": "code",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\sandbox-options.txt",
+      "source_location": "line 2",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "42_media_sandbox_options_toc_wounddirtynessmultiplier",
+      "label": "Sandbox Option TOC.WoundDirtynessMultiplier",
+      "file_type": "code",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\sandbox-options.txt",
+      "source_location": "line 12",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "42_media_sandbox_options_toc_surgeonabilityimportance",
+      "label": "Sandbox Option TOC.SurgeonAbilityImportance",
+      "file_type": "code",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\sandbox-options.txt",
+      "source_location": "line 21",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "42_media_scripts_toc_amputation_items_amputation_hand_r",
+      "label": "Amputation_Hand_R (Stump Clothing)",
+      "file_type": "code",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_amputation_items.txt",
+      "source_location": "line 8",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "42_media_scripts_toc_amputation_items_amputation_forearm_r",
+      "label": "Amputation_ForeArm_R (Stump Clothing)",
+      "file_type": "code",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_amputation_items.txt",
+      "source_location": "line 27",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "42_media_scripts_toc_amputation_items_amputation_upperarm_r",
+      "label": "Amputation_UpperArm_R (Stump Clothing)",
+      "file_type": "code",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_amputation_items.txt",
+      "source_location": "line 45",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "42_media_scripts_toc_amputation_items_amputation_hand_l",
+      "label": "Amputation_Hand_L (Stump Clothing)",
+      "file_type": "code",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_amputation_items.txt",
+      "source_location": "line 62",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "42_media_scripts_toc_amputation_items_amputation_forearm_l",
+      "label": "Amputation_ForeArm_L (Stump Clothing)",
+      "file_type": "code",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_amputation_items.txt",
+      "source_location": "line 81",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "42_media_scripts_toc_amputation_items_amputation_upperarm_l",
+      "label": "Amputation_UpperArm_L (Stump Clothing)",
+      "file_type": "code",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_amputation_items.txt",
+      "source_location": "line 100",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "42_media_scripts_toc_models_prostheticarm",
+      "label": "prostheticArm Model",
+      "file_type": "code",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_models.txt",
+      "source_location": "line 8",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "42_media_scripts_toc_models_prostheticarmhook",
+      "label": "prostheticArmHook Model",
+      "file_type": "code",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_models.txt",
+      "source_location": "line 14",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "42_media_scripts_toc_models_tourniquet",
+      "label": "tourniquet Model",
+      "file_type": "code",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_models.txt",
+      "source_location": "line 20",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "42_media_scripts_toc_prosthesis_items_prost_hookarm_l",
+      "label": "Prost_HookArm_L (Left Hook Prosthesis)",
+      "file_type": "code",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_prosthesis_items.txt",
+      "source_location": "line 10",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "42_media_scripts_toc_prosthesis_items_prost_hookarm_r",
+      "label": "Prost_HookArm_R (Right Hook Prosthesis)",
+      "file_type": "code",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_prosthesis_items.txt",
+      "source_location": "line 32",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "42_media_scripts_toc_prosthesis_items_prost_normalarm_l",
+      "label": "Prost_NormalArm_L (Left Arm Prosthesis)",
+      "file_type": "code",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_prosthesis_items.txt",
+      "source_location": "line 54",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "42_media_scripts_toc_prosthesis_items_prost_normalarm_r",
+      "label": "Prost_NormalArm_R (Right Arm Prosthesis)",
+      "file_type": "code",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_prosthesis_items.txt",
+      "source_location": "line 76",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "42_media_scripts_toc_recipes_craft_prosthetic_arm",
+      "label": "Recipe: Craft Prosthetic Arm",
+      "file_type": "code",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_recipes.txt",
+      "source_location": "line 8",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "42_media_scripts_toc_recipes_craft_prosthetic_hook",
+      "label": "Recipe: Craft Prosthetic Hook",
+      "file_type": "code",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_recipes.txt",
+      "source_location": "line 31",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "42_media_scripts_toc_sounds_amputation_sound",
+      "label": "Sound: Amputation",
+      "file_type": "code",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_sounds.txt",
+      "source_location": "line 3",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "42_media_scripts_toc_sounds_cauterization_sound",
+      "label": "Sound: Cauterization",
+      "file_type": "code",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_sounds.txt",
+      "source_location": "line 14",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "42_media_scripts_toc_surgery_items_surg_arm_tourniquet_l",
+      "label": "Surg_Arm_Tourniquet_L",
+      "file_type": "code",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_surgery_items.txt",
+      "source_location": "line 8",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "42_media_scripts_toc_surgery_items_surg_arm_tourniquet_r",
+      "label": "Surg_Arm_Tourniquet_R",
+      "file_type": "code",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_surgery_items.txt",
+      "source_location": "line 28",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "42_media_scripts_toc_traits_amputee_hand",
+      "label": "Trait: Amputee Hand",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_traits.txt",
+      "source_location": "line 3",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "42_media_scripts_toc_traits_amputee_forearm",
+      "label": "Trait: Amputee Forearm",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_traits.txt",
+      "source_location": "line 18",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "42_media_scripts_toc_traits_amputee_upperarm",
+      "label": "Trait: Amputee Upper Arm",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_traits.txt",
+      "source_location": "line 30",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "42_media_perks_side_l",
+      "target": "42_media_perks_amputations",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\perks.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "42_media_perks_side_r",
+      "target": "42_media_perks_amputations",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\perks.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "42_media_perks_prostfamiliarity",
+      "target": "42_media_perks_amputations",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\perks.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "42_media_scripts_toc_traits_amputee_hand",
+      "target": "42_media_perks_side_l",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_traits.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "42_media_scripts_toc_traits_amputee_forearm",
+      "target": "42_media_perks_side_l",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_traits.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "42_media_scripts_toc_traits_amputee_upperarm",
+      "target": "42_media_perks_side_l",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_traits.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "42_media_scripts_toc_traits_amputee_hand",
+      "target": "42_media_scripts_toc_traits_amputee_forearm",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_traits.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "42_media_scripts_toc_traits_amputee_hand",
+      "target": "42_media_scripts_toc_traits_amputee_upperarm",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_traits.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "42_media_scripts_toc_traits_amputee_forearm",
+      "target": "42_media_scripts_toc_traits_amputee_upperarm",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_traits.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "42_media_scripts_toc_recipes_craft_prosthetic_arm",
+      "target": "42_media_scripts_toc_prosthesis_items_prost_normalarm_l",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_recipes.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "42_media_scripts_toc_recipes_craft_prosthetic_hook",
+      "target": "42_media_scripts_toc_prosthesis_items_prost_hookarm_l",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_recipes.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "42_media_scripts_toc_prosthesis_items_prost_normalarm_l",
+      "target": "42_media_scripts_toc_models_prostheticarm",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_prosthesis_items.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "42_media_scripts_toc_prosthesis_items_prost_normalarm_r",
+      "target": "42_media_scripts_toc_models_prostheticarm",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_prosthesis_items.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "42_media_scripts_toc_prosthesis_items_prost_hookarm_l",
+      "target": "42_media_scripts_toc_models_prostheticarmhook",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_prosthesis_items.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "42_media_scripts_toc_prosthesis_items_prost_hookarm_r",
+      "target": "42_media_scripts_toc_models_prostheticarmhook",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_prosthesis_items.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "42_media_scripts_toc_prosthesis_items_prost_normalarm_l",
+      "target": "42_media_scripts_toc_prosthesis_items_prost_normalarm_r",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_prosthesis_items.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "42_media_scripts_toc_prosthesis_items_prost_normalarm_r",
+      "target": "42_media_scripts_toc_prosthesis_items_prost_normalarm_l",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_prosthesis_items.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "42_media_scripts_toc_prosthesis_items_prost_hookarm_l",
+      "target": "42_media_scripts_toc_prosthesis_items_prost_hookarm_r",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_prosthesis_items.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "42_media_scripts_toc_prosthesis_items_prost_hookarm_r",
+      "target": "42_media_scripts_toc_prosthesis_items_prost_hookarm_l",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_prosthesis_items.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "42_media_scripts_toc_surgery_items_surg_arm_tourniquet_l",
+      "target": "42_media_scripts_toc_models_tourniquet",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_surgery_items.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "42_media_scripts_toc_surgery_items_surg_arm_tourniquet_r",
+      "target": "42_media_scripts_toc_models_tourniquet",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_surgery_items.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "42_media_scripts_toc_surgery_items_surg_arm_tourniquet_l",
+      "target": "42_media_scripts_toc_surgery_items_surg_arm_tourniquet_r",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_surgery_items.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "42_media_scripts_toc_surgery_items_surg_arm_tourniquet_r",
+      "target": "42_media_scripts_toc_surgery_items_surg_arm_tourniquet_l",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_surgery_items.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "readme",
+      "target": "readme_amputation_mechanic",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\README.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "readme",
+      "target": "readme_cicatrization",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\README.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "readme",
+      "target": "readme_prosthesis",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\README.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "readme",
+      "target": "readme_admin_tools",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\README.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "readme_amputation_mechanic",
+      "target": "42_media_scripts_toc_surgery_items_surg_arm_tourniquet_l",
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\README.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "readme_cicatrization",
+      "target": "42_media_sandbox_options_toc_cicatrizationspeed",
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\sandbox-options.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "readme_cicatrization",
+      "target": "42_media_sandbox_options_toc_wounddirtynessmultiplier",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.65,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\sandbox-options.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "readme_amputation_mechanic",
+      "target": "42_media_sandbox_options_toc_surgeonabilityimportance",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.65,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\sandbox-options.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "readme_prosthesis",
+      "target": "42_media_perks_prostfamiliarity",
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\perks.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "readme_prosthesis",
+      "target": "42_media_scripts_toc_prosthesis_items_prost_normalarm_l",
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\README.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "readme_prosthesis",
+      "target": "42_media_scripts_toc_traits_amputee_upperarm",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.65,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\README.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "readme_admin_tools",
+      "target": "42_media_scripts_toc_traits_amputee_hand",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.65,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\README.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "readme_amputation_mechanic",
+      "target": "42_media_scripts_toc_amputation_items_amputation_hand_r",
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\README.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "42_media_scripts_toc_sounds_amputation_sound",
+      "target": "readme_amputation_mechanic",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.65,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_sounds.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "42_media_scripts_toc_sounds_cauterization_sound",
+      "target": "readme_amputation_mechanic",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.55,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_sounds.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "42_media_scripts_toc_traits_amputee_forearm",
+      "target": "42_media_scripts_toc_amputation_items_amputation_forearm_r",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_amputation_items.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "dev_stuff_steam_desc",
+      "target": "readme",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\dev_stuff\\steam_desc.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "workshop_files_workshop",
+      "target": "readme",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\workshop_files\\workshop.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "workshop_files_workshop_test",
+      "target": "workshop_files_workshop",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\workshop_files\\workshop_test.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "github_issue_template_bug_report",
+      "target": "readme",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.65,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\.github\\ISSUE_TEMPLATE\\bug_report.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "temp_flow_42_datacontroller",
+      "target": "temp_flow_42_cacheddatahandler",
+      "relation": "shares_data_with",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\temp_flow_42.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "temp_flow_42_moddata_sync_flow",
+      "target": "temp_flow_42_datacontroller",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\temp_flow_42.txt",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "prosthetic_arm_system",
+      "label": "Prosthetic Arm System (Recipes, Items, Models, Perk)",
+      "nodes": [
+        "42_media_scripts_toc_recipes_craft_prosthetic_arm",
+        "42_media_scripts_toc_recipes_craft_prosthetic_hook",
+        "42_media_scripts_toc_prosthesis_items_prost_normalarm_l",
+        "42_media_scripts_toc_prosthesis_items_prost_hookarm_l",
+        "42_media_scripts_toc_models_prostheticarm",
+        "42_media_scripts_toc_models_prostheticarmhook",
+        "42_media_perks_prostfamiliarity"
+      ],
+      "relation": "participate_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_recipes.txt"
+    },
+    {
+      "id": "amputation_workflow",
+      "label": "Amputation Workflow (Stumps, Tourniquet, Traits, Sounds)",
+      "nodes": [
+        "42_media_scripts_toc_amputation_items_amputation_hand_r",
+        "42_media_scripts_toc_amputation_items_amputation_upperarm_r",
+        "42_media_scripts_toc_surgery_items_surg_arm_tourniquet_l",
+        "42_media_scripts_toc_traits_amputee_hand",
+        "42_media_scripts_toc_sounds_amputation_sound"
+      ],
+      "relation": "participate_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\42\\media\\scripts\\TOC_traits.txt"
+    },
+    {
+      "id": "mp_moddata_sync",
+      "label": "Multiplayer ModData Sync (DataController, CachedDataHandler)",
+      "nodes": [
+        "temp_flow_42_datacontroller",
+        "temp_flow_42_cacheddatahandler",
+        "temp_flow_42_moddata_sync_flow"
+      ],
+      "relation": "participate_in",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.9,
+      "source_file": "C:\\Users\\picch\\Zomboid\\mods\\The-Only-Cure\\temp_flow_42.txt"
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

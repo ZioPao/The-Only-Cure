@@ -5,7 +5,7 @@ require("TOC/Events")
 
 ---@class Main
 local Main = {
-    _version = "2.3.6"
+    _version = "2.4.0"
 }
 
 function Main.Start()

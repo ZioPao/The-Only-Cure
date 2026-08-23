@@ -234,7 +234,13 @@ function ISWorldObjectContextMenu.createMenu(player, worldobjects, x, y, test)
 
     -- goddamn it, zomboid devs. ogContext could be a boolean...
     -- TBH, I don't really care about gamepad support, but all this method can break stuff. Let's just disable thisfor gamepad users.
-    if type(ogContext) == "boolean" or type(ogContext) == "string" then
+    --
+    -- ...and it can also be nil, which is not a rare edge case: vanilla returns nil
+    -- whenever the game is paused, the player is asleep or trading, or nothing
+    -- interactable is under the cursor. Checking for "not a table" covers nil and
+    -- anything else non-indexable in one go, so the getOptionFromName calls below
+    -- can never be reached on a non-table.
+    if type(ogContext) ~= "table" then
         return ogContext
     end
 
