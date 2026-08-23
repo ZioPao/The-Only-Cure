@@ -1,0 +1,15 @@
+C:\Users\picch\Zomboid\mods\The-Only-Cure\.github\ISSUE_TEMPLATE\bug_report.md
+C:\Users\picch\Zomboid\mods\The-Only-Cure\42\media\perks.txt
+C:\Users\picch\Zomboid\mods\The-Only-Cure\42\media\sandbox-options.txt
+C:\Users\picch\Zomboid\mods\The-Only-Cure\42\media\scripts\TOC_amputation_items.txt
+C:\Users\picch\Zomboid\mods\The-Only-Cure\42\media\scripts\TOC_models.txt
+C:\Users\picch\Zomboid\mods\The-Only-Cure\42\media\scripts\TOC_prosthesis_items.txt
+C:\Users\picch\Zomboid\mods\The-Only-Cure\42\media\scripts\TOC_recipes.txt
+C:\Users\picch\Zomboid\mods\The-Only-Cure\42\media\scripts\TOC_sounds.txt
+C:\Users\picch\Zomboid\mods\The-Only-Cure\42\media\scripts\TOC_surgery_items.txt
+C:\Users\picch\Zomboid\mods\The-Only-Cure\42\media\scripts\TOC_traits.txt
+C:\Users\picch\Zomboid\mods\The-Only-Cure\README.md
+C:\Users\picch\Zomboid\mods\The-Only-Cure\dev_stuff\steam_desc.txt
+C:\Users\picch\Zomboid\mods\The-Only-Cure\temp_flow_42.txt
+C:\Users\picch\Zomboid\mods\The-Only-Cure\workshop_files\workshop.txt
+C:\Users\picch\Zomboid\mods\The-Only-Cure\workshop_files\workshop_test.txt
