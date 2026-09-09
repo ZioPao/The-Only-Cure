@@ -43,7 +43,7 @@ description=Place them [b]BEFORE[/b] The Only Cure in your mod list![/strike]
 
 description=
 
-description=[b]At the moment, the mods listed here aren't compatible with B42.
+description=[b]At the moment, the mods listed here aren't compatible with B42.[/b]
 
 description=[hr][/hr]
 

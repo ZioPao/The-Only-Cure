@@ -27,3 +27,55 @@ option TOC.SurgeonAbilityImportance
     page = TOC,
     translation = TOC_SurgeonAbilityImportance,
 }
+
+option MultiplierConfig.Side_L
+{
+    type = double,
+    min = 0.0,
+    max = 1000.0,
+    default = 1.0,
+    page = TOC,
+    translation = TOC_XPMultiplierSide_L,
+}
+option MultiplierConfig.Side_R
+{
+    type = double,
+    min = 0.0,
+    max = 1000.0,
+    default = 1.0,
+    page = TOC,
+    translation = TOC_XPMultiplierSide_R,
+}
+option MultiplierConfig.ProstFamiliarity
+{
+    type = double,
+    min = 0.0,
+    max = 1000.0,
+    default = 1.0,
+    page = TOC,
+    translation = TOC_XPMultiplierProstFamiliarity,
+option TOC.EnableZombieAmputations
+{
+    type = boolean,
+    default = false,
+    page = TOC,
+    translation = TOC_EnableZombieAmputations,
+}
+option TOC.ZombieAmputationDamageThreshold
+{
+    type = integer,
+    min = 0,
+    max = 10,
+    default = 1,
+    page = TOC,
+    translation = TOC_ZombieAmputationDamageThreshold,
+}
+option TOC.ZombieAmputationDamageChance
+{
+    type = integer,
+    min = 0,
+    max = 100,
+    default = 25,
+    page = TOC,
+    translation = TOC_ZombieAmputationDamageChance,
+}
