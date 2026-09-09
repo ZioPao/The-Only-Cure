@@ -2,5 +2,8 @@
     "Sandbox_TOC": "유일한 치료법",
     "Sandbox_TOC_CicatrizationSpeed": "절단 상처 회복 속도",
     "Sandbox_TOC_WoundDirtynessMultiplier": "절단 상처 오염 속도 배수",
-    "Sandbox_TOC_SurgeonAbilityImportance": "Relevance of surgeon doctor ability"
+    "Sandbox_TOC_SurgeonAbilityImportance": "외과 의사 능력 중요도",
+    "Sandbox_TOC_EnableZombieAmputations": "좀비 절단 활성화",
+    "Sandbox_TOC_ZombieAmputationDamageThreshold": "좀비 절단 피해 임계값",
+    "Sandbox_TOC_ZombieAmputationDamageChance": "좀비 절단 피해 확률"
 }

@@ -16,5 +16,6 @@
     "IGUI_HealthPanel_Cicatrized": "Vernarbt",
     "IGUI_HealthPanel_Cauterized": "Kauterisiert",
     "IGUI_HealthPanel_WoundDirtyness": "Wundverschmutzung",
-    "IGUI_HealthPanel_ProstEquipped": "Prothese angelegt"
+    "IGUI_HealthPanel_ProstEquipped": "Prothese angelegt",
+    "IGUI_Confirmation_Amputate": " <CENTRE> Willst du dieses Gliedmaß wirklich amputieren?"
 }

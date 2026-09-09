@@ -27,3 +27,28 @@ option TOC.SurgeonAbilityImportance
     page = TOC,
     translation = TOC_SurgeonAbilityImportance,
 }
+option TOC.EnableZombieAmputations
+{
+    type = boolean,
+    default = true,
+    page = TOC,
+    translation = TOC_EnableZombieAmputations,
+}
+option TOC.ZombieAmputationDamageThreshold
+{
+    type = integer,
+    min = 0,
+    max = 10,
+    default = 1,
+    page = TOC,
+    translation = TOC_ZombieAmputationDamageThreshold,
+}
+option TOC.ZombieAmputationDamageChance
+{
+    type = integer,
+    min = 0,
+    max = 100,
+    default = 25,
+    page = TOC,
+    translation = TOC_ZombieAmputationDamageChance,
+}
