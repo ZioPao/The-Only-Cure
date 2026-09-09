@@ -4,6 +4,9 @@
     "Sandbox_TOC_WoundDirtynessMultiplier": "Wound Dirtyness Multiplier",
     "Sandbox_TOC_SurgeonAbilityImportance": "Relevance of surgeon doctor ability",
     "Sandbox_TOC_EnableZombieAmputations": "Enable Zombie amputations",
-    "Sandbox_TOC_ZombieAmputationDamageThreshold": "Zombie amputations damage threshold",
-    "Sandbox_TOC_ZombieAmputationDamageChance": "Zombie amputations damage chance"
+    "Sandbox_TOC_ZombieAmputationDamageThreshold": "Zombie amputations damage treshold",
+    "Sandbox_TOC_ZombieAmputationDamageChance": "Zombie amputations damage chance",
+    "Sandbox_TOC_XPMultiplierSide_L": "Left Side XP Multiplier",
+    "Sandbox_TOC_XPMultiplierSide_R": "Right Side XP Multiplier",
+    "Sandbox_TOC_XPMultiplierProstFamiliarity": "Prosthesis Familiarity XP Multiplier"
 }
