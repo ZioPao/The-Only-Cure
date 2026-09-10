@@ -189,6 +189,35 @@ function ServerRelayCommands.RelayForcedAmputation(adminObj, args)
     h:apply(patientPl)
 end
 
+---Clear a bite sitting on the requesting player's own already-amputated limb (#279).
+---The client detects it (it can only ever see itself); the server validates and
+---clears it authoritatively, since client Lua cannot push BodyDamage. Sender is
+---implicitly scoped: we only ever touch playerObj's own data, so a crafted packet
+---can at most clear the sender's own phantom bites - nothing it couldn't already
+---achieve by playing normally.
+---@param playerObj IsoPlayer
+---@param args requestSanitizeCutLimbParams
+function ServerRelayCommands.RequestSanitizeCutLimb(playerObj, args)
+    local limbName = args and args.limbName or nil
+    if type(limbName) ~= "string" or StaticData.LIMBS_TO_BODYLOCS_IND_BPT[limbName] == nil then
+        TOC_DEBUG.print("RequestSanitizeCutLimb rejected: bad limbName from " .. playerObj:getUsername())
+        return
+    end
+
+    local DataController = require("TOC/Controllers/DataController")
+    local dcInst = DataController.GetInstance(playerObj:getUsername())
+    if not dcInst or not dcInst:getIsDataReady() then return end
+    if not dcInst:getIsCut(limbName) then
+        TOC_DEBUG.print("RequestSanitizeCutLimb rejected: limb not cut - " .. limbName)
+        return
+    end
+
+    TOC_DEBUG.print("RequestSanitizeCutLimb accepted for " .. playerObj:getUsername() .. " - " .. limbName)
+    local ServerDamageSanitizer = require("TOC/Controllers/ServerDamageSanitizer")
+    local ok, err = pcall(ServerDamageSanitizer.SanitizePlayer, playerObj)
+    if not ok then TOC_DEBUG.print("RequestSanitizeCutLimb error: " .. tostring(err)) end
+end
+
 ---Apply bleeding to the patient's wound server-side, relayed from client perform() in MP
 ---@param playerObj IsoPlayer sender (validated against patientNum — players can only bleed themselves)
 ---@param args relayTriggerBleedParams

@@ -245,6 +245,70 @@ end
 
 Events.OnPlayerGetDamage.Add(LocalPlayerController.OnGetDamage)
 
+--* Bite-on-cut-limb polling (issue #279) *--
+-- Why this exists alongside HandleDamage above (read before touching either):
+--  - HandleDamage is REACTIVE: it runs on OnPlayerGetDamage, which the engine does
+--    NOT fire for MP zombie hits (victim client forwards the hit via
+--    sendZombieHit and applies nothing; the server rolls damage and pushes full
+--    BodyDamage back via PlayerDamage packet, eventlessly). So HandleDamage never
+--    sees the bite moment in MP - only later INFECTION ticks, if at all.
+--  - This poll is DETECTIVE: it runs on OnPlayerUpdate (local-player-only on
+--    clients), spots a bite sitting on an already-cut limb, clears it locally for
+--    instant display relief via HealArea, and - the part that actually fixes MP -
+--    asks the server to clear it authoritatively via RequestSanitizeCutLimb.
+--    Client Lua can never push BodyDamage itself (syncBodyPart is a no-op outside
+--    the server), hence the round-trip.
+-- Both paths are idempotent: clearing already-clean state is a cheap no-op loop.
+-- Throttle state below belongs ONLY to this poll; it shares nothing with the
+-- hasBeenDamaged lock above.
+
+---How often (in OnPlayerUpdate ticks) to scan cut limbs. ~60 ticks ~= 1 second.
+LocalPlayerController.sanitizePollInterval = 60
+---Minimum ticks between two sanitize requests for the SAME limb. Bounds packets.
+LocalPlayerController.sanitizeRequestCooldown = 600
+LocalPlayerController.sanitizePollTick = 0
+---@type table<string, integer> limbName -> poll tick of last sent request
+LocalPlayerController.sanitizeLastRequestTick = {}
+
+---@param character IsoPlayer|IsoGameCharacter
+function LocalPlayerController.PollCutLimbsForBites(character)
+    if character ~= getPlayer() then return end
+
+    LocalPlayerController.sanitizePollTick = LocalPlayerController.sanitizePollTick + 1
+    if LocalPlayerController.sanitizePollTick % LocalPlayerController.sanitizePollInterval ~= 0 then return end
+
+    local playerObj = getPlayer()
+    local dcInst = DataController.GetInstance(playerObj:getUsername())
+    if not dcInst or not dcInst:getIsDataReady() then return end
+    if not dcInst:getIsAnyLimbCut() then return end
+
+    local bd = playerObj:getBodyDamage()
+    if not bd then return end
+
+    for i = 1, #StaticData.LIMBS_STR do
+        local limbName = StaticData.LIMBS_STR[i]
+        if dcInst:getIsCut(limbName) then
+            local bptEnum = StaticData.LIMBS_TO_BODYLOCS_IND_BPT[limbName]
+            local bodyPart = bptEnum and bd:getBodyPart(bptEnum) or nil
+            if bodyPart and (bodyPart:bitten() or bodyPart:IsInfected()) then
+                -- Local relief: correct in SP, display-only in MP (server re-pushes).
+                LocalPlayerController.HealArea(bodyPart)
+
+                local lastReq = LocalPlayerController.sanitizeLastRequestTick[limbName] or -LocalPlayerController.sanitizeRequestCooldown
+                if LocalPlayerController.sanitizePollTick - lastReq >= LocalPlayerController.sanitizeRequestCooldown then
+                    LocalPlayerController.sanitizeLastRequestTick[limbName] = LocalPlayerController.sanitizePollTick
+                    TOC_DEBUG.print("Requesting server sanitize for bite on missing limb - " .. limbName)
+                    sendClientCommand(CommandsData.modules.TOC_RELAY,
+                        CommandsData.server.Relay.RequestSanitizeCutLimb,
+                        {limbName = limbName})
+                end
+            end
+        end
+    end
+end
+
+Events.OnPlayerUpdate.Add(LocalPlayerController.PollCutLimbsForBites)
+
 --* Amputation Loop handling *--
 
 ---Updates the cicatrization process, run when a limb has been cut. Run it every 1 hour
