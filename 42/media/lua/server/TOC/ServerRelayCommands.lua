@@ -36,25 +36,28 @@ function ServerRelayCommands.UpdateDataControllerFromClient(playerObj, args)
 
     end
 
-    if args.isInfected then
+    -- DRAFT #279: `if args.flag` drops `false`, so a client clearing isInfected
+    -- (bite on missing limb healed) never reached the server and the flag stayed
+    -- stale. Check for nil instead so both true and false propagate.
+    if args.isInfected ~= nil then
         h:setIsInfected(args.limbName, args.isInfected)
         TOC_DEBUG.print("isInfected = " .. tostring(args.isInfected))
 
     end
 
-    if args.isCauterized then
+    if args.isCauterized ~= nil then
         h:setIsCauterized(args.limbName, args.isCauterized)
         TOC_DEBUG.print("isCauterized = " .. tostring(args.isCauterized))
 
     end
 
-    if args.isCicatrized then
+    if args.isCicatrized ~= nil then
         h:setIsCicatrized(args.limbName, args.isCicatrized)
         TOC_DEBUG.print("iscicatrized = " .. tostring(args.isCicatrized))
 
     end
 
-    if args.isIgnoredPartInfected then
+    if args.isIgnoredPartInfected ~= nil then
         h:setIsIgnoredPartInfected(args.isIgnoredPartInfected)
         TOC_DEBUG.print("isignoredpartinfected = " .. tostring(args.isIgnoredPartInfected))
 

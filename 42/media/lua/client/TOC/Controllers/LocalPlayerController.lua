@@ -70,6 +70,10 @@ end
 --* Health *--
 
 ---Used to heal an area that has been cut previously. There's an exception for bites, those are managed differently
+---DRAFT FIX for #279: bites can still roll on the vanilla BodyPart of an
+---already-amputated limb (amputation is modData + stump clothing, prosthesis is
+---only a toc:armprost_* item BodyLocation). Clear bite/infection timers too,
+---otherwise the health panel keeps showing "Bitten" on a missing limb.
 ---@param bodyPart BodyPart
 function LocalPlayerController.HealArea(bodyPart)
 
@@ -83,7 +87,12 @@ function LocalPlayerController.HealArea(bodyPart)
     bodyPart:setBleedingTime(0)
 
     bodyPart:SetBitten(false)
-    --bodyPart:setBiteTime(0)
+    -- DRAFT #279: SetBitten(false) alone leaves BiteTime running, so HasInjury()
+    -- stays true and ISHealthPanel keeps listing the missing limb. Guarded for
+    -- B42 server-side API differences.
+    if bodyPart.setBiteTime then bodyPart:setBiteTime(0) end
+    if bodyPart.setInfected then bodyPart:setInfected(false) end
+    if bodyPart.setInfectionTime then bodyPart:setInfectionTime(0) end
     bodyPart:SetInfected(false)
 
     bodyPart:setCut(false)
@@ -180,9 +189,16 @@ function LocalPlayerController.HandleDamage(character)
             end
 
             -- Special case for bites\zombie infections
-            if bodyPart:IsInfected() then
+            -- DRAFT #279: bitten() can be true without IsInfected() yet; both mean
+            -- "zombie hit a missing limb" and must be cleared + synced, otherwise
+            -- the bite persists on the panel with no valid re-amputation target.
+            if bodyPart:bitten() or bodyPart:IsInfected() then
                 TOC_DEBUG.print("Healed from zombie infection - " .. limbName)
                 LocalPlayerController.HealZombieInfection(bd, limbName, dcInst)
+                modDataNeedsUpdate = true
+            elseif dcInst:getIsInfected(limbName) then
+                -- Injury was cleared above but the modData flag stayed stale.
+                dcInst:setIsInfected(limbName, false)
                 modDataNeedsUpdate = true
             end
         else
