@@ -188,6 +188,9 @@ end
 ---CLIENT ONLY
 function CachedDataHandler.OverrideInteractionsKey()
     -- Resolve username to local player on client ONLY
+    -- this runs after a reload, causing a dumb error. 
+    local pl = getPlayer()
+    if pl == nil then return end
     local username = getPlayer():getUsername()
     if CachedDataHandler.handFeasibility[username] == nil then
          return
