@@ -16,5 +16,8 @@
     "ContextMenu_PutTourniquetLegL": "Lege das Tourniquet am linken Bein an",
     "ContextMenu_PutTourniquetArmRight": "Lege das Tourniquet am rechten Arm an",
     "ContextMenu_PutTourniquetLegR": "Lege das Tourniquet am rechten Bein an",
-    "ContextMenu_CleanWound": "Saubere Wunde"
+    "ContextMenu_CleanWound": "Saubere Wunde",
+    "ContextMenu_Admin_TOC": "TOC",
+    "ContextMenu_Admin_ResetTOC": "Amputationen zurücksetzen",
+    "ContextMenu_Admin_ForceAmputation": "Amputation erzwingen"
 }

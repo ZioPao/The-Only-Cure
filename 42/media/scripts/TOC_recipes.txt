@@ -5,7 +5,7 @@ module TOC
 		Base
 	}
 	/*************Craft Prosthetics*******************/
-	craftRecipe Craft Prosthetic Arm
+	craftRecipe Craft_Prosthetic_Arm
 	{
               timedAction = BuildMetalStructureSmall,
               Time = 150,
@@ -16,8 +16,8 @@ module TOC
               xpAward = MetalWelding:50,
               inputs
               {
-                     item 4 [MetalPipe],
-                     item 2 [Plank],
+                     item 4 [Base.MetalPipe],
+                     item 2 [Base.Plank],
                      item 4 [Base.BlowTorch] flags[DontRecordInput],
                      item 4 [Base.WeldingRods] flags[DontRecordInput],
 
@@ -28,7 +28,7 @@ module TOC
               }
 	}
 
-	craftRecipe Craft Prosthetic Hook
+	craftRecipe Craft_Prosthetic_Hook
 	{
               timedAction = BuildMetalStructureSmall,
               Time = 100,
@@ -39,8 +39,8 @@ module TOC
               xpAward = MetalWelding:30,
               inputs
               {
-                     item 2 [MetalPipe],
-                     item 1 [Plank],
+                     item 2 [Base.MetalPipe],
+                     item 1 [Base.Plank],
                      item 4 [Base.BlowTorch] flags[DontRecordInput],
                      item 2 [Base.WeldingRods] flags[DontRecordInput],
 

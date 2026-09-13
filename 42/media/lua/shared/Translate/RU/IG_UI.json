@@ -1,4 +1,6 @@
 {
+    "IGUI_Yes": "Да",
+    "IGUI_No": "Нет",
     "IGUI_perks_Amputations": "Ампутации",
     "IGUI_perks_Side_R": "Правая сторона",
     "IGUI_perks_Side_L": "Левая сторона",
@@ -14,5 +16,6 @@
     "IGUI_HealthPanel_Cicatrized": "Заживлено",
     "IGUI_HealthPanel_Cauterized": "Прижженно",
     "IGUI_HealthPanel_WoundDirtyness": "Загрезнённая рана",
-    "IGUI_HealthPanel_ProstEquipped": "Протез экипирован"
+    "IGUI_HealthPanel_ProstEquipped": "Протез экипирован",
+    "IGUI_Confirmation_Amputate": " <CENTRE> Вы уверены, что хотите ампутировать эту конечность?"
 }

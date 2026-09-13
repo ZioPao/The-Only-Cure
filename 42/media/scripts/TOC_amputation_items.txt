@@ -7,7 +7,7 @@ module TOC
 	/****************** Clothing that look like a cut limb ******************/
     item Amputation_Hand_R
 	{
-		ItemType = base:Clothing,
+		ItemType = base:clothing,
 		DisplayCategory = Amputation,
 		hidden = true,
 
@@ -26,7 +26,7 @@ module TOC
 
     item Amputation_ForeArm_R
 	{
-		ItemType = base:Clothing,
+		ItemType = base:clothing,
 		DisplayCategory = Amputation,
 		hidden = true,
 
@@ -44,7 +44,7 @@ module TOC
 
     item Amputation_UpperArm_R
 	{
-		ItemType = base:Clothing,
+		ItemType = base:clothing,
 		DisplayCategory = Amputation,
 		hidden = true,
 
@@ -61,7 +61,7 @@ module TOC
 
     item Amputation_Hand_L
 	{
-		ItemType = base:Clothing,
+		ItemType = base:clothing,
 		DisplayCategory = Amputation,
 		hidden = true,
 
@@ -80,7 +80,7 @@ module TOC
 
     item Amputation_ForeArm_L
 	{
-		ItemType = base:Clothing,
+		ItemType = base:clothing,
 		DisplayCategory = Amputation,
 		hidden = true,
 
@@ -99,7 +99,7 @@ module TOC
 
     item Amputation_UpperArm_L
 	{
-		ItemType = base:Clothing,
+		ItemType = base:clothing,
 		DisplayCategory = Amputation,
 		hidden = true,
 

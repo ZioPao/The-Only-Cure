@@ -6,21 +6,38 @@
         {
             "label": "Create Workshop folder",
             "type": "shell",
-            "options": {"statusbar": {"label": "$(combine) Assemble Mod - B42"}},
-            "command": "python ${config:zomboid_user_folder}/PaosCrap/make_workshop_pack.py \"42\" \"picch\" \"${workspaceFolderBasename}\" \"\"",
+            "options": {
+                "statusbar": {
+                    "label": "$(combine) Assemble Mod - B42"
+                }
+            },
+            "windows": {
+                "command": "python ${config:zomboid_user_folder}/PaosCrap/make_workshop_pack.py \"42\" \"picch\" \"${workspaceFolderBasename}\" \"\"",
+            },
         },
-        
         {
             "label": "Create Workshop folder",
             "type": "shell",
-            "options": {"statusbar": {"label": "$(combine) Assemble Mod (Test)"}},
-            "command": "python ${config:zomboid_user_folder}/PaosCrap/make_workshop_pack.py \"picch\" \"${workspaceFolderBasename}\" \"test\"",
+            "options": {
+                "statusbar": {
+                    "label": "$(combine) Assemble Mod (Test)"
+                }
+            },
+            "windows": {
+                "command": "python ${config:zomboid_user_folder}/PaosCrap/make_workshop_pack.py \"picch\" \"${workspaceFolderBasename}\" \"test\"",
+            }
         },
         {
             "label": "Bump Mod Version",
             "type": "shell",
-            "options": {"statusbar": {"label": "$(arrow-up) Bump Mod Version"}},
-            "command": "python ${config:zomboid_user_folder}/PaosCrap/bump_version.py 42/media/lua/client/TOC/Main.lua",
+            "options": {
+                "statusbar": {
+                    "label": "$(arrow-up) Bump Mod Version"
+                }
+            },
+            "windows": {
+                "command": "python ${config:zomboid_user_folder}/PaosCrap/bump_version.py 42/media/lua/client/TOC/Main.lua",
+            }
         },
         {
             "label": "Run Zomboid Debug No Steam (42)",
@@ -28,12 +45,20 @@
             "presentation": {
                 "group": "groupZomboid"
             },
-            "command": "\"${config:zomboid_folder_b42}\\ProjectZomboid64_Debug_NoSteam.bat\"",
-            "options": {"statusbar": {"label": "$(run) Zomboid client (42)"}},
+            "windows": {
+                "command": "\"${config:zomboid_folder_b42}\\ProjectZomboid64_Debug_NoSteam.bat\""
+            },
+            "linux": {
+                "command": "\"${config:zomboid_folder_b42}/projectzomboid_debug_nosteam.sh\""
+            },
+            "options": {
+                "statusbar": {
+                    "label": "$(run) Zomboid client (42)"
+                }
+            },
             "problemMatcher": [
                 "$eslint-stylish"
             ]
-            
         },
         {
             "label": "Run Zomboid Debug No Steam (42) - 2nd Instance",
@@ -41,73 +66,32 @@
             "presentation": {
                 "group": "groupZomboid"
             },
-            "command": "\"${config:zomboid_folder_b42}\\ProjectZomboid64_Debug_NoSteam.bat\"",
-            "options": {"statusbar": {"label": "$(run) Zomboid client (42) - 2nd Instance"}},
+            "windows": {
+                "command": "\"${config:zomboid_folder_b42}\\ProjectZomboid64_Debug_NoSteam.bat\""
+            },
+            "options": {
+                "statusbar": {
+                    "label": "$(run) Zomboid client (42) - 2nd Instance"
+                }
+            },
             "problemMatcher": [
                 "$eslint-stylish"
             ]
-            
         },
-
-        // {
-        //     "label": "Run Zomboid Debug No Steam",
-        //     "type": "shell",
-        //     "presentation": {
-        //         "group": "groupZomboid"
-        //     },
-        //     "command": "\"${config:zomboid_folder}\\ProjectZomboid64 - nosteam-debug.bat\"",
-        //     "options": {"statusbar": {"label": "$(run) Zomboid client"}},
-        //     "problemMatcher": [
-        //         "$eslint-stylish"
-        //     ]
-        // },
-        // {
-        //     "label": "Run Zomboid Debug No Steam 2",
-        //     "type": "shell",
-        //     "command": "\"${config:zomboid_folder}\\ProjectZomboid64 - nosteam-debug.bat\"",
-        //     "options": {"statusbar": {"hide": true}},
-
-        //     "problemMatcher": [
-        //         "$eslint-stylish"
-        //     ]
-        // },
-        // {
-        //     "label": "Run two instances of Zomboid Debug No Steam",
-        //     "options": {"statusbar": {"label": "$(run-all) Two Zomboid Clients"}},
-        //     "presentation": {
-        //         "reveal": "always",
-        //         "panel": "new"
-        //       },
-        //     "dependsOn": [
-        //         "Run Zomboid Debug No Steam", "Run Zomboid Debug No Steam 2"],
-        //     "problemMatcher": []
-        // },
         {
             "label": "Run Zomboid Test Server",
-            "options": {"statusbar": {"label": "$(run) Zomboid Server (TOC)"}},
+            "options": {
+                "statusbar": {
+                    "label": "$(run) Zomboid Server (TOC)"
+                }
+            },
             "type": "shell",
-            "command":"\"${config:zomboid_server_folder}\\StartServer64_nosteam_custom.bat\" TOC",
+            "windows": {
+                "command": "\"${config:zomboid_server_folder}\\StartServer64_nosteam_custom.bat\" TOC"
+            },
             "problemMatcher": [
                 "$eslint-stylish"
             ]
-        },
-        // {
-        //     "label": "Run Zomboid Test Server 2",
-        //     "options": {"statusbar": {"label": "$(run) Zomboid Server (TOC+FH+BH)"}},
-        //     "type": "shell",
-        //     "command":"\"${config:zomboid_server_folder}\\StartServer64_nosteam_custom.bat\" TOC_FH_BH",
-        //     "problemMatcher": [
-        //         "$eslint-stylish"
-        //     ]
-        // },
-        // {
-        //     "label": "Run Zomboid Test Server 3",
-        //     "options": {"statusbar": {"label": "$(run) Zomboid Server (TOC+FH+BH+iMedsFixed)"}},
-        //     "type": "shell",
-        //     "command":"\"${config:zomboid_server_folder}\\StartServer64_nosteam_custom.bat\" TOC_FH_BH_imeds",
-        //     "problemMatcher": [
-        //         "$eslint-stylish"
-        //     ]
-        // }
+        }
     ]
 }

@@ -2,5 +2,8 @@
     "Sandbox_TOC": "Спасенье в Отсечении",
     "Sandbox_TOC_CicatrizationSpeed": "Скорость заживления",
     "Sandbox_TOC_WoundDirtynessMultiplier": "Множитель загрязнения ран",
-    "Sandbox_TOC_SurgeonAbilityImportance": "Значимость способностей врача-хирурга"
+    "Sandbox_TOC_SurgeonAbilityImportance": "Значимость способностей врача-хирурга",
+    "Sandbox_TOC_EnableZombieAmputations": "Включить ампутации зомби",
+    "Sandbox_TOC_ZombieAmputationDamageThreshold": "Порог урона для ампутаций зомби",
+    "Sandbox_TOC_ZombieAmputationDamageChance": "Шанс урона для ампутаций зомби"
 }

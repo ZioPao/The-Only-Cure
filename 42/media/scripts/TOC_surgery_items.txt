@@ -7,10 +7,8 @@ module TOC
 
     item Surg_Arm_Tourniquet_L
     {
-		ItemType = base:Clothing,
+		ItemType = base:clothing,
         DisplayCategory = Surgery,
-        DisplayName = Tourniquet,
-
         ClothingItem = Surg_Arm_Tourniquet_L,
         ClothingItemExtra = Surg_Arm_Tourniquet_R,
         ClothingItemExtraOption = PutTourniquetArmRight,
@@ -27,9 +25,8 @@ module TOC
 
     item Surg_Arm_Tourniquet_R
     {
-		ItemType = base:Clothing,
+		ItemType = base:clothing,
         DisplayCategory = Surgery,
-        DisplayName = Tourniquet,
 
         ClothingItem = Surg_Arm_Tourniquet_R,
         ClothingItemExtra = Surg_Arm_Tourniquet_L,
