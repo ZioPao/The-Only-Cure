@@ -54,6 +54,7 @@ option MultiplierConfig.ProstFamiliarity
     default = 1.0,
     page = TOC,
     translation = TOC_XPMultiplierProstFamiliarity,
+}
 option TOC.EnableZombieAmputations
 {
     type = boolean,
