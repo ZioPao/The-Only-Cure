@@ -128,7 +128,20 @@ end
 ---@param itemName string
 function AmputationHandler.WearAmputationItem(player, itemName)
     local clothingItem = player:getInventory():FindAndReturn(itemName)
-    player:setWornItem(clothingItem:getBodyLocation(), clothingItem)
+
+    -- In MP the item add can arrive after ReceiveWearAmputation; FindAndReturn may be nil
+    if not clothingItem or not instanceof(clothingItem, "InventoryItem") then
+        TOC_DEBUG.print("Cannot wear amputation item, not found in inventory: " .. tostring(itemName))
+        return
+    end
+
+    local bodyLocation = clothingItem:getBodyLocation()
+    if not bodyLocation then
+        TOC_DEBUG.print("Cannot wear amputation item, no body location: " .. tostring(itemName))
+        return
+    end
+
+    player:setWornItem(bodyLocation, clothingItem)
 end
 
 ---Used to heal an area that has been cut previously. There's an exception for bites, those are managed differently
@@ -139,9 +152,40 @@ function AmputationHandler:healArea()
 
     bodyPart:RestoreToFullHealth()
 
+    -- Clear fracture/splint explicitly: a lingering fracture kept the splint option on
+    -- the amputated part, and applying it overwrote the stump (issue #288).
+    AmputationHandler.ClearInjuries(bodyPart)
+
     syncBodyPart(bodyPart, 0xFFFFFFFFFFF)
 
-    -- fix bleeding is not synced from server to client
+    local adjacentLimb = StaticData.LIMBS_ADJACENT_IND_STR[self.limbName]
+    local adjacentBodyPart = adjacentLimb and bd:getBodyPart(BodyPartType[adjacentLimb])
+    if adjacentBodyPart then
+        AmputationHandler.ClearInjuries(adjacentBodyPart)
+        syncBodyPart(adjacentBodyPart, 0xFFFFFFFFFFF)
+    end
+end
+
+---@param bodyPart BodyPart
+function AmputationHandler.ClearInjuries(bodyPart)
+    bodyPart:setFractureTime(0)
+    bodyPart:setSplint(false, 0)
+    bodyPart:setSplintItem(nil)
+
+    bodyPart:setScratched(false, true)
+    bodyPart:setScratchTime(0)
+
+    bodyPart:setBleeding(false)
+    bodyPart:setBleedingTime(0)
+
+    bodyPart:setCut(false)
+    bodyPart:setCutTime(0)
+
+    bodyPart:setDeepWounded(false)
+    bodyPart:setDeepWoundTime(0)
+
+    bodyPart:setHaveBullet(false, 0)
+    bodyPart:setHaveGlass(false)
 end
 
 --- TO BE TESTED
@@ -190,7 +234,6 @@ function AmputationHandler:damageAfterAmputation(surgeonFactor)
     bodyPart:setBleeding(true)
     bodyPart:setBleedingTime(baseDamage - surgeonFactor)
 
-    -- FIX Not working correctly!
     bodyPart:setDeepWounded(true)
     bodyPart:setDeepWoundTime(baseDamage - surgeonFactor)
     patientStats:set(CharacterStat.ENDURANCE, surgeonFactor)
