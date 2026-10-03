@@ -52,7 +52,7 @@ index 0d1e594..1f80067 100644
          all = Dir.glob('tmp/cache_*').select { |d| File.directory?(d) }.sort
          filter = { sp: 'cache_sp_', server: 'cache_server_', client: 'cache_client_' }
 diff --git a/lib/zbspec/game_launcher.rb b/lib/zbspec/game_launcher.rb
-index ddcb626..241edfd 100644
+index ddcb626..d850ce5 100644
 --- a/lib/zbspec/game_launcher.rb
 +++ b/lib/zbspec/game_launcher.rb
 @@ -9,6 +9,8 @@ module ZBSpec
@@ -189,7 +189,7 @@ index ddcb626..241edfd 100644
          '-classpath', classpath
        ]
  
-@@ -255,33 +308,125 @@ module ZBSpec
+@@ -255,33 +308,127 @@ module ZBSpec
        argv
      end
  
@@ -256,6 +256,8 @@ index ddcb626..241edfd 100644
 +      vm_args << '-Djava.awt.headless=false'
 +      vm_args << "-Dzb.config_dir=#{cache_dir}/.zombie_buddy"
 +      vm_args << agent_option
++      # Dedicated server uses the GameServer main class.
++      main_class = 'zombie.network.GameServer' if config['server_mode']
 +
 +      # Mirror the official wrapper's native library environment.
 +      natives = File.join(install_dir, 'natives')
@@ -330,7 +332,7 @@ index ddcb626..241edfd 100644
        ]
        if @verbosity > 0
          agent_parts << "verbosity=#{@verbosity}"
-@@ -295,7 +440,15 @@ module ZBSpec
+@@ -295,7 +442,15 @@ module ZBSpec
          encoded_title = URI.encode_www_form_component(title)
          agent_parts << "window_title=#{encoded_title}"
        end
@@ -347,7 +349,7 @@ index ddcb626..241edfd 100644
      end
  
      def default_window_title
-@@ -313,9 +466,14 @@ module ZBSpec
+@@ -313,9 +468,14 @@ module ZBSpec
      def zombiebuddy_jar
        @zombiebuddy_jar ||= begin
          candidates = [
@@ -364,7 +366,7 @@ index ddcb626..241edfd 100644
          path = candidates.find { |p| File.file?(p) }
          unless path
            raise GameLaunchError, "ZombieBuddy.jar not found. Checked:\n  #{candidates.join("\n  ")}"
-@@ -324,6 +482,13 @@ module ZBSpec
+@@ -324,6 +484,13 @@ module ZBSpec
        end
      end
  
@@ -378,7 +380,7 @@ index ddcb626..241edfd 100644
      # ZombieBuddy mod root (parent of the directory containing the JAR, e.g. .../ZombieBuddy)
      def zombiebuddy_mod_dir
        File.expand_path(File.join(File.dirname(zombiebuddy_jar), '..'))
-@@ -425,15 +590,16 @@ module ZBSpec
+@@ -425,15 +592,16 @@ module ZBSpec
          end
        end
  
@@ -400,7 +402,7 @@ index ddcb626..241edfd 100644
        config_mod_entries.each do |entry|
          mod = entry['name']
          next if mod == 'ZBSpec' # ZBSpec is handled above
-@@ -441,7 +607,7 @@ module ZBSpec
+@@ -441,7 +609,7 @@ module ZBSpec
          if entry['path']
            src = File.expand_path(entry['path'])
            raise GameLaunchError, "Mod path not found: #{entry['path']} (resolved: #{src})" unless File.exist?(src)
@@ -409,7 +411,7 @@ index ddcb626..241edfd 100644
          elsif (steam_id = entry['steam_id'])
            mod_mods_path = steam_workshop_mods_path(steam_id)
            unless File.exist?(mod_mods_path)
-@@ -449,23 +615,48 @@ module ZBSpec
+@@ -449,23 +617,48 @@ module ZBSpec
            end
            Dir[File.join(mod_mods_path, '*')].each do |dirname|
              if File.directory?(dirname)
@@ -465,7 +467,7 @@ index ddcb626..241edfd 100644
      end
  
      # Config mods as list of hashes with 'id' (or 'name'), optional 'steam_id', optional 'path'
-@@ -489,9 +680,6 @@ module ZBSpec
+@@ -489,9 +682,6 @@ module ZBSpec
      end
  
      def find_executable
@@ -475,7 +477,7 @@ index ddcb626..241edfd 100644
        if mac?
          # macOS: use Java from resolved JAVA_HOME
          java_home = @mac_java_home
-@@ -500,9 +688,30 @@ module ZBSpec
+@@ -500,9 +690,30 @@ module ZBSpec
          raise "Java executable not found: #{java_bin}" unless File.exist?(java_bin)
          java_bin
        else

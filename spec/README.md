@@ -79,6 +79,13 @@ updating the submodule; if it conflicts, rebase it against the new upstream.
 
 ## Known limitations (current status)
 
+### Multiplayer
+`run.sh mp` launches the dedicated server and client; the server and both Lua
+API servers come up, but on this Linux box the client's raknet connection to
+the server drops (`GameClient.connection is null`) under `-nosteam`, so MP
+specs do not run yet. The MP relay specs are `pending`. Singleplayer is fully
+green.
+
 ### Synchronous runner
 ZBSpec's documented runner is synchronous. TOC's MP relay
 (`sendClientCommand` → server → `sendServerCommand` → client) is asynchronous,
