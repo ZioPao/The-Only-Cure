@@ -55,9 +55,6 @@ function ClientDataController.OnDataReceived(key, data)
 
     -- Populate DC and fire WhenReady callbacks
     handler:save(data)
-
-    -- Activate TOC override for the health panel
-    SetHealthPanelTOC()
 end
 
 Events.OnReceiveGlobalModData.Add(ClientDataController.OnDataReceived)

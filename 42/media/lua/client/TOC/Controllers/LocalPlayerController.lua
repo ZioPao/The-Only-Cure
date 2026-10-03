@@ -46,6 +46,9 @@ function LocalPlayerController.InitializePlayer(isForced)
     if isForced then
         sendClientCommand(CommandsData.modules.TOC_ITEMS, "DeleteAllOldAmputationItems", {patientNum = playerObj:getOnlineID()})
     end
+
+    -- SP and MP
+    SetHealthPanelTOC()
 end
 
 
