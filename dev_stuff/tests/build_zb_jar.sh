@@ -1,29 +1,27 @@
 #!/usr/bin/env bash
 #
-# Builds a locally-patched ZombieBuddy.jar for the ZBSpec test harness.
+# Builds ZombieBuddy from master (3.0.0-beta1) for the ZBSpec test harness,
+# and installs it into the Project Zomboid folder.
 #
-# Why: ZombieBuddy v2.3.4's `experimental` agent aborts on Linux because
-# `JavaStateDumper.init()` calls `sun.misc.Signal.handle(new Signal("INFO"), ...)`
-# and "INFO" is not a valid signal on Linux, throwing IllegalArgumentException.
-# ZB swallows the resulting InvocationTargetException, so `experimental.PreMain`
-# never starts the Lua HTTP API server and never writes `zbLuaAPI.txt`, which is
-# what ZBSpec needs. Upstream fixed this in master (unreleased); this script
-# applies the same guard to the released jar.
+# Why not the released v2.3.4 jar?
+#   - ZBSpec requires ZombieBuddy >= 2.4.0 (mod.info), which is unreleased.
+#   - v2.3.4's `experimental` agent aborts on Linux (it registers the INFO
+#     signal, which does not exist there), so the Lua HTTP API server never
+#     starts and ZBSpec hangs on "Discovering API port".
+#   - v2.3.4's LuaHandler also throws a NullPointerException under JDK 25.
+#   ZombieBuddy master (3.0.0-beta1) fixes all of the above.
 #
-# The jar is signed, so replacing a class invalidates its per-entry digest. We
-# therefore also rebuild the jar without the signature block.
+# Requires network (GitHub + Gradle) on first run.
 #
-# Usage: dev_stuff/tests/build_zb_jar.sh [path-to-zulu-jdk]
-#        (downloads a JDK automatically if not provided/found)
+# Usage: dev_stuff/tests/build_zb_jar.sh "<game folder>"
 
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-WORK="${WORK:-/tmp/opencode/zbpatch}"
-ZB_VERSION="2.3.4"
-ZB_SHA256="eb79b9876332010733a8e0d7ce4fe0377846059a9e28859029e2a0fb449f6cf2"
-JDK_URL="https://cdn.azul.com/zulu/bin/zulu25.30.17-ca-jdk25.0.1-linux_x64.tar.gz"
+ZB_REPO="https://github.com/zed-0xff/ZombieBuddy.git"
+GRADLE_VERSION="9.3.1"
+JDK_VERSION="25.30.17-ca-jdk25.0.1"
+GRADLE_URL="https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip"
+JDK_URL="https://cdn.azul.com/zulu/bin/zulu${JDK_VERSION}-linux_x64.tar.gz"
 
 GAME_PATH="${1:-}"
 if [[ -z "$GAME_PATH" ]]; then
@@ -32,127 +30,72 @@ if [[ -z "$GAME_PATH" ]]; then
     exit 2
 fi
 GAME_PATH="${GAME_PATH/#\~/$HOME}"
-JAR="$GAME_PATH/ZombieBuddy.jar"
-
-if [[ ! -f "$JAR" ]]; then
-    echo "error: $JAR not found" >&2
+if [[ ! -d "$GAME_PATH" ]]; then
+    echo "error: game folder not found: $GAME_PATH" >&2
     exit 1
 fi
 
+WORK="${WORK:-/tmp/opencode/zbbuild}"
 mkdir -p "$WORK"
 cd "$WORK"
 
-# Locate a JDK 25 (needed to compile against the game's class files, version 69).
-JDK_BIN="${JDK_BIN:-}"
-if [[ -z "$JDK_BIN" ]]; then
-    for candidate in "$WORK"/zulu25*/bin /usr/lib/jvm/*/bin; do
-        if [[ -x "$candidate/javac" ]]; then JDK_BIN="$candidate"; break; fi
+# --- JDK ---
+JDK_HOME="${JDK_HOME:-}"
+if [[ -z "$JDK_HOME" ]]; then
+    for candidate in "$WORK"/zulu25*/ /usr/lib/jvm/java-25-openjdk*; do
+        [[ -x "$candidate/bin/javac" ]] && JDK_HOME="$candidate" && break
     done
 fi
-if [[ -z "$JDK_BIN" ]]; then
+if [[ -z "$JDK_HOME" ]]; then
     echo "==> Downloading Zulu JDK 25"
     curl -sSL -o zulu25.tar.gz "$JDK_URL"
     tar xzf zulu25.tar.gz
-    JDK_BIN="$WORK/$(ls -d zulu25*/ | head -1)bin"
+    JDK_HOME="$WORK/$(ls -d zulu25*/ | head -1)"
 fi
-echo "==> Using JDK: $($JDK_BIN/javac -version 2>&1)"
+export JAVA_HOME="$JDK_HOME"
+export PATH="$JAVA_HOME/bin:$PATH"
+echo "==> JDK: $("$JAVA_HOME/bin/javac" -version 2>&1)"
 
-if [[ ! -f ZombieBuddy.jar ]]; then
-    echo "==> Downloading ZombieBuddy $ZB_VERSION"
-    curl -sSL -o ZombieBuddy.jar "https://github.com/zed-0xff/ZombieBuddy/releases/download/v${ZB_VERSION}/ZombieBuddy.jar"
-    echo "$ZB_SHA256  ZombieBuddy.jar" | sha256sum -c --status - || {
-        echo "error: checksum mismatch" >&2; exit 1; }
+# --- Gradle ---
+if [[ ! -d "$WORK/gradle-${GRADLE_VERSION}" ]]; then
+    echo "==> Downloading Gradle ${GRADLE_VERSION}"
+    curl -sSL -o gradle.zip "$GRADLE_URL"
+    unzip -q -o gradle.zip
+fi
+GRADLE="$WORK/gradle-${GRADLE_VERSION}/bin/gradle"
+
+# --- ZombieBuddy source ---
+if [[ ! -d "$WORK/ZombieBuddy" ]]; then
+    echo "==> Cloning ZombieBuddy master"
+    git clone --depth 1 "$ZB_REPO" "$WORK/ZombieBuddy"
 fi
 
-echo "==> Preparing source"
-rm -rf src out jarbuild
-mkdir -p src/me/zed_0xff/zombie_buddy/patches/experimental
-cat > src/me/zed_0xff/zombie_buddy/patches/experimental/JavaStateDumper.java <<'JAVA'
-package me.zed_0xff.zombie_buddy.patches.experimental;
+# Resolve the game jar for the compile classpath.
+GAME_JAR="$GAME_PATH/projectzomboid/projectzomboid.jar"
+[[ -f "$GAME_JAR" ]] || GAME_JAR="$GAME_PATH/projectzomboid.jar"
+if [[ ! -f "$GAME_JAR" ]]; then
+    echo "error: projectzomboid.jar not found under $GAME_PATH" >&2
+    exit 1
+fi
 
-import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWKeyCallbackI;
+echo "==> Building ZombieBuddy shadowJar"
+cd "$WORK/ZombieBuddy/java"
+"$GRADLE" shadowJar -PgameClasspath="$GAME_JAR" --no-daemon --console=plain
 
-import sun.misc.Signal;
+BUILT=$(find "$WORK/ZombieBuddy/java" -name 'ZombieBuddy.jar' -path '*libs*' | head -1)
+if [[ -z "$BUILT" ]]; then
+    echo "error: build produced no ZombieBuddy.jar" >&2
+    exit 1
+fi
 
-import me.zed_0xff.zombie_buddy.*;
+echo "==> Installing into $GAME_PATH"
+for target in "$GAME_PATH/ZombieBuddy.jar" "$GAME_PATH/projectzomboid/ZombieBuddy.jar"; do
+    dir="$(dirname "$target")"
+    [[ -d "$dir" ]] || continue
+    [[ -f "$target.orig" ]] || cp "$target" "$target.orig" 2>/dev/null || true
+    cp "$BUILT" "$target"
+    echo "    $target"
+done
 
-public class JavaStateDumper {
-    private static GLFWKeyCallbackI _originalKeyCallback = null;
-    private static boolean _initialized = false;
-    private static long _window = 0;
-
-    static void init() {
-        if (!_initialized) {
-            _initialized = true;
-            Callbacks.onDisplayCreate.register(JavaStateDumper::installKeyCallback);
-            try {
-                Signal.handle(new Signal("INFO"), JavaStateDumper::handleSignal);
-            } catch (IllegalArgumentException e) {
-                Logger.info("SIGINFO is unavailable; keyboard state dump remains enabled.");
-            }
-        }
-    }
-
-    public static void handleSignal(Signal signal) {
-        if ("INFO".equals(signal.getName())) {
-            dumpThreadStacks();
-        } else {
-            Logger.warn("Received unexpected signal: " + signal);
-        }
-    }
-
-    public static void installKeyCallback() {
-        try {
-            if (!org.lwjglx.opengl.Display.isCreated()) return;
-            long window = org.lwjglx.opengl.Display.getWindow();
-            if (window == _window) return;
-            _window = window;
-            _originalKeyCallback = GLFW.glfwSetKeyCallback(window, JavaStateDumper::handleKey);
-            Logger.info("Installed GLFW key callback for Ctrl+T thread dump");
-        } catch (Throwable t) {
-            Logger.warn("Failed to install GLFW key callback: " + t);
-        }
-    }
-
-    private static void handleKey(long window, int key, int scancode, int action, int mods) {
-        if (key == GLFW.GLFW_KEY_T && action == GLFW.GLFW_PRESS && (mods & GLFW.GLFW_MOD_CONTROL) != 0) {
-            dumpThreadStacks();
-        }
-        if (_originalKeyCallback != null) {
-            _originalKeyCallback.invoke(window, key, scancode, action, mods);
-        }
-    }
-
-    public static void dumpThreadStacks() {
-        Logger.info("=== Thread Dump ===");
-        for (var entry : Thread.getAllStackTraces().entrySet()) {
-            Thread t = entry.getKey();
-            StackTraceElement[] stack = entry.getValue();
-            Logger.info(String.format("Thread: %s (id=%d, state=%s)", t.getName(), t.getId(), t.getState()));
-            for (StackTraceElement el : stack) {
-                Logger.info("    at " + el);
-            }
-        }
-        Logger.info("=== End Thread Dump ===");
-    }
-}
-JAVA
-
-echo "==> Compiling"
-"$JDK_BIN/javac" -nowarn -cp "$JAR:$GAME_PATH/projectzomboid/projectzomboid.jar" -d out \
-    src/me/zed_0xff/zombie_buddy/patches/experimental/JavaStateDumper.java
-
-echo "==> Repackaging without signature"
-mkdir jarbuild && cd jarbuild
-unzip -q "$JAR" -x 'META-INF/*.SF' 'META-INF/*.RSA' 'META-INF/*.DSA' || true
-cp "$WORK/out/me/zed_0xff/zombie_buddy/patches/experimental/JavaStateDumper.class" \
-   me/zed_0xff/zombie_buddy/patches/experimental/JavaStateDumper.class
-printf 'Manifest-Version: 1.0\r\nPremain-Class: me.zed_0xff.zombie_buddy.Agent\r\nCan-Redefine-Classes: true\r\nCan-Retransform-Classes: true\r\nImplementation-Version: %s\r\nMulti-Release: true\r\n\r\n' "$ZB_VERSION" > META-INF/MANIFEST.MF
-"$JDK_BIN/jar" --create --file "$WORK/ZombieBuddy-patched.jar" --manifest META-INF/MANIFEST.MF -C . .
-
-echo "==> Backing up original and installing patched jar"
-[[ -f "$JAR.orig" ]] || cp "$JAR" "$JAR.orig"
-cp "$WORK/ZombieBuddy-patched.jar" "$JAR"
-
-echo "==> Done: $JAR patched (original at $JAR.orig)"
+VER=$(unzip -p "$BUILT" META-INF/MANIFEST.MF | grep -i Implementation-Version | tr -d '\r')
+echo "==> Done ($VER)"

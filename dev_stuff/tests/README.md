@@ -35,9 +35,8 @@ The `lint` and `unit` runners need `luajit` or `lua5.1` only. Override with
 `LUA_BIN=...`. The `sp`/`mp` runners use the vendored ZBSpec; run
 `dev_stuff/tests/setup_ingame.sh` (or `setup_ingame.ps1`) once first.
 
-On Linux, also run `dev_stuff/tests/build_zb_jar.sh "<game folder>"` to patch
-the ZombieBuddy jar for SIGINFO (see `spec/README.md` for the current
-ZombieBuddy limitation).
+On Linux, also run `dev_stuff/tests/build_zb_jar.sh "<game folder>"` to build
+ZombieBuddy from master (required for the in-game suite; see `spec/README.md`).
 
 ## Adding a unit spec
 

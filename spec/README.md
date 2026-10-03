@@ -11,8 +11,7 @@ for it.
 
 - Ruby 2.7+ (ZBSpec is a Ruby driver).
 - The gems `amazing_print` and `sugar_png`.
-- ZombieBuddy installed and active (provides the Lua test API). It is
-  compatible with B42.21.
+- **ZombieBuddy built from master (3.0.0-beta1)** — see below.
 - A Project Zomboid install for the targeted version.
 
 ZBSpec itself is vendored under `dev_stuff/vendor/ZBSpec` as a git submodule
@@ -21,8 +20,11 @@ and patched for Windows/Linux by `dev_stuff/vendor/zbspec-windows.patch`.
 ## Setup
 
 ```bash
-# Linux/macOS
+# Linux/macOS: patch ZBSpec, install ZombieBuddy, check Ruby + gems
 dev_stuff/tests/setup_ingame.sh
+
+# Build + install ZombieBuddy from master (required)
+dev_stuff/tests/build_zb_jar.sh "~/.local/share/Steam/steamapps/common/ProjectZomboid"
 ```
 
 ```powershell
@@ -30,22 +32,33 @@ dev_stuff/tests/setup_ingame.sh
 dev_stuff\tests\setup_ingame.ps1
 ```
 
-The setup script initializes the submodule, applies the patch, creates
-`dev_stuff/vendor/ZBSpec/configs/42.21`, and checks Ruby + gems.
-
 ## Running
 
 ```bash
-dev_stuff/tests/run.sh sp     # singleplayer  (zbspec --sp)
-dev_stuff/tests/run.sh mp     # multiplayer   (zbspec --mp, starts a server)
+dev_stuff/tests/run.sh sp     # singleplayer
+dev_stuff/tests/run.sh mp     # multiplayer
 ```
 
 ```powershell
 dev_stuff\tests\run.ps1 sp
-dev_stuff\tests\run.ps1 mp
 ```
 
-Configure paths and version in `spec/zbspec.yml` (`game_path`, `game_version`).
+On Linux, run ZBSpec from a TTY (it reads stdin). The unit/lint runners do not
+need a TTY.
+
+## Why ZombieBuddy must be built from master
+
+The released **ZombieBuddy v2.3.4** does not work with ZBSpec on Build 42.21:
+
+- ZBSpec's `mod.info` requires ZombieBuddy `>= 2.4.0` (unreleased).
+- v2.3.4's `experimental` agent aborts on Linux because it registers the `INFO`
+  signal, which does not exist there — so the Lua HTTP API server never starts
+  and ZBSpec hangs on "Discovering API port".
+- v2.3.4's `LuaHandler` throws a `NullPointerException` under JDK 25.
+
+Master (`3.0.0-beta1`) fixes all of these. `build_zb_jar.sh` clones master,
+builds the shadow jar with Gradle, and installs it next to the game.
+
 
 ## Layout
 
@@ -66,26 +79,14 @@ updating the submodule; if it conflicts, rebase it against the new upstream.
 
 ## Known limitations (current status)
 
-### ZombieBuddy 2.3.4 vs Build 42.21 / JDK 25
-ZBSpec depends on ZombieBuddy's `experimental` Lua HTTP API. With the latest
-released ZombieBuddy (**v2.3.4**) this is not fully working on Linux:
-
-1. `experimental.PreMain` aborts because `JavaStateDumper` registers the `INFO`
-   signal, which does not exist on Linux. Fixed by `dev_stuff/tests/build_zb_jar.sh`,
-   which applies the same guard as ZombieBuddy master and repackages the jar.
-2. After that fix the API server starts and ZBSpec reaches *"SP ready"*, but
-   then ZombieBuddy's `LuaHandler` throws a `NullPointerException`
-   (`LuaReturn.createReturn`), so no spec can execute.
-
-The released ZombieBuddy also advertises `ZBVersionMin=2.4.0`; we lower it to
-`2.3.4` in the vendored `mod.info` (in the patch) since 2.4.0 is unreleased.
-
-**Bottom line:** the harness is wired correctly and launches the game, but a
-ZombieBuddy bug currently blocks the final spec-execution step. This needs a
-ZombieBuddy fix (master / a future release) or a deeper ZombieBuddy patch.
-
 ### Synchronous runner
 ZBSpec's documented runner is synchronous. TOC's MP relay
 (`sendClientCommand` → server → `sendServerCommand` → client) is asynchronous,
 so `spec/mp/relay_spec.lua` is currently `pending`.
+
+### AmputationHandler:execute()
+The full handler path spawns and equips clothing items whose `getVisual()` is
+nil in the headless test instance, so that one spec is `pending`. The cascade
+and cache logic it covers are exercised by the data-layer specs and the unit
+suite.
 

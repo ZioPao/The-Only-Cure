@@ -508,16 +508,6 @@ index ddcb626..241edfd 100644
      end
  
      # macOS: resolve JAVA_HOME and GAME_ROOT paths
-diff --git a/mods/ZBSpec/41/mod.info b/mods/ZBSpec/41/mod.info
-index 7868d36..f2fcd26 100644
---- a/mods/ZBSpec/41/mod.info
-+++ b/mods/ZBSpec/41/mod.info
-@@ -5,4 +5,4 @@ url=https://github.com/zed-0xff
- 
- javaJarFile=media/java/shared/ZBSpec.jar
- javaPkgName=me.zed_0xff.zbspec
--ZBVersionMin=2.4.0
-+ZBVersionMin=2.3.4
 diff --git a/mods/ZBSpec/42/media/java b/mods/ZBSpec/42/media/java
 new file mode 120000
 index 0000000..d3111d2
@@ -526,13 +516,3 @@ index 0000000..d3111d2
 @@ -0,0 +1 @@
 +../../common/media/java
 \ No newline at end of file
-diff --git a/mods/ZBSpec/42/mod.info b/mods/ZBSpec/42/mod.info
-index 7868d36..f2fcd26 100644
---- a/mods/ZBSpec/42/mod.info
-+++ b/mods/ZBSpec/42/mod.info
-@@ -5,4 +5,4 @@ url=https://github.com/zed-0xff
- 
- javaJarFile=media/java/shared/ZBSpec.jar
- javaPkgName=me.zed_0xff.zbspec
--ZBVersionMin=2.4.0
-+ZBVersionMin=2.3.4
