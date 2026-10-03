@@ -1,0 +1,41 @@
+# ZBSpec configuration for The Only Cure.
+# Docs: https://github.com/zed-0xff/ZBSpec
+#
+# The in-game suite runs locally (Windows or Linux). See spec/README.md.
+# Run it with: dev_stuff/tests/run.sh sp   (or run.ps1 on Windows)
+
+startup_timeout: 180
+server_startup_timeout: 120
+shutdown: auto
+debug: true
+same_console: true
+redirect_output: false
+spec_glob: spec/**/*_spec.lua
+
+# Lua helpers from ZBSpec/lua/, loaded before spec/spec_helper.lua.
+helpers:
+  - common_helpers
+
+# Game config version (dev_stuff/vendor/ZBSpec/configs/<version>).
+# ZBSpec keys off `game_versions`; keep `game_version` in sync for the
+# setup/run helpers.
+game_versions:
+  - "42.21"
+game_version: "42.21"
+
+# Uncomment matching your machine:
+#
+# Windows (Steam default):
+# game_path: "C:/Program Files (x86)/Steam/steamapps/common/ProjectZomboid"
+#
+# Linux (Steam default):
+game_path: "~/.local/share/Steam/steamapps/common/ProjectZomboid"
+
+# Enable the mod under test. `TheOnlyCure` is the id in mod.info.
+mods:
+  - { id: "TheOnlyCure", path: "." }
+
+# Optional: forward extra ZombieBuddy agent arguments, e.g. for first-run
+# mod approval on a fresh setup:
+# zb_agent_args:
+#   - "policy=allow-all"

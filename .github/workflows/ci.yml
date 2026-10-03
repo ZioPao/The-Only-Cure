@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [dev, main, "test/**"]
+  pull_request:
+    branches: [dev, main]
+  workflow_dispatch:
+
+jobs:
+  # Fast, no game required. Runs on GitHub-hosted runners.
+  static-and-unit:
+    name: Lint & unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install LuaJIT
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y luajit
+
+      - name: Lint
+        run: ./dev_stuff/tests/run.sh lint
+
+      - name: Unit tests
+        run: ./dev_stuff/tests/run.sh unit
