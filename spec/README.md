@@ -80,11 +80,23 @@ updating the submodule; if it conflicts, rebase it against the new upstream.
 ## Known limitations (current status)
 
 ### Multiplayer
-`run.sh mp` launches the dedicated server and client; the server and both Lua
-API servers come up, but on this Linux box the client's raknet connection to
-the server drops (`GameClient.connection is null`) under `-nosteam`, so MP
-specs do not run yet. The MP relay specs are `pending`. Singleplayer is fully
-green.
+`run.sh mp` launches the dedicated server and client correctly, but the client
+does not complete the connection on this Linux `-nosteam` setup:
+
+- RakNet handshake succeeds: client logs `connection-request-accepted`, server
+  logs `new-incoming-connection`.
+- The client then never sends the Login packet; ~45s later the server logs
+  `connection-attempt-timeout` / `receive-disconnect`.
+- The client falls back to singleplayer (`isClient=false`, `player=true`).
+
+Cause: PZ 42.21's `LoadingQueueState.enter()` calls
+`GameClient.sendLoginQueueRequest()` while `GameClient.connection` is still null
+(it is assigned on the RakNet network thread), throws a NullPointerException,
+and cancels the connect before Login is sent. This is a connection-state race in
+PZ's `-nosteam` path, exposed by ZBSpec's fast automated connect. The connection
+state is not exposed to Lua, so it cannot be worked around from the spec side.
+
+Singleplayer is fully green. The MP relay specs are `pending`.
 
 ### Synchronous runner
 ZBSpec's documented runner is synchronous. TOC's MP relay

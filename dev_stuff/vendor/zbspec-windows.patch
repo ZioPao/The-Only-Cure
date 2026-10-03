@@ -52,7 +52,7 @@ index 0d1e594..1f80067 100644
          all = Dir.glob('tmp/cache_*').select { |d| File.directory?(d) }.sort
          filter = { sp: 'cache_sp_', server: 'cache_server_', client: 'cache_client_' }
 diff --git a/lib/zbspec/game_launcher.rb b/lib/zbspec/game_launcher.rb
-index ddcb626..d850ce5 100644
+index ddcb626..3fcd705 100644
 --- a/lib/zbspec/game_launcher.rb
 +++ b/lib/zbspec/game_launcher.rb
 @@ -9,6 +9,8 @@ module ZBSpec
@@ -64,7 +64,44 @@ index ddcb626..d850ce5 100644
      attr_reader :config, :pid, :label
      attr_accessor :verbosity
  
-@@ -73,16 +75,17 @@ module ZBSpec
+@@ -42,6 +44,36 @@ module ZBSpec
+       m ? m[1].to_i : nil
+     end
+ 
++    # In non-Steam mode the RakNet listener is bound to UDPPort (DefaultPort+1);
++    # DefaultPort is only the Steam connection port. Direct `+connect` clients
++    # must therefore target UDPPort.
++    def read_server_udp_port
++      ini_path = File.join(server_cache_dir_for_version(game_version_name), 'Server', 'servertest.ini')
++      5.times do
++        break if File.exist?(ini_path)
++        sleep 0.2
++      end
++      return nil unless File.exist?(ini_path)
++      content = File.read(ini_path)
++      m = content.match(/UDPPort=\s*(\d+)/)
++      m ? m[1].to_i : nil
++    end
++
++    # Port a direct `+connect` client should dial. Respects an explicit config
++    # override, then the server's DefaultPort (the port RakNet binds in
++    # non-Steam mode), then UDPPort as a fallback.
++    def server_connect_port
++      return config['server_connect_port'] if config['server_connect_port']
++      read_server_game_port || read_server_udp_port
++    end
++
++    # The server picks and persists a random DefaultPort before starting. The
++    # client may launch in parallel, so prefer the persisted value (avoids a
++    # race on the generated servertest.ini).
++    def server_persisted_port
++      read_persisted_game_port(server_cache_dir_for_version(game_version_name))
++    end
++
+     def start
+       # Check for existing PID file
+       if File.exist?(pid_file)
+@@ -73,16 +105,17 @@ module ZBSpec
  
        args = build_launch_args(log_file: log_file)
  
@@ -85,7 +122,7 @@ index ddcb626..d850ce5 100644
        end
        @running = true
  
-@@ -102,7 +105,7 @@ module ZBSpec
+@@ -102,7 +135,7 @@ module ZBSpec
        return unless running?
  
        puts "\n🛑 Stopping game (PID: #{@pid})..."
@@ -94,7 +131,7 @@ index ddcb626..d850ce5 100644
        begin
          Process.wait(@pid, Process::WNOHANG)
        rescue Errno::ECHILD
-@@ -133,13 +136,63 @@ module ZBSpec
+@@ -133,13 +166,63 @@ module ZBSpec
  
      def process_alive?(pid)
        return false unless pid && pid > 0
@@ -162,7 +199,7 @@ index ddcb626..d850ce5 100644
      def write_pid_file
        FileUtils.mkdir_p(get_cache_dir)
        File.write(pid_file, @pid.to_s)
-@@ -170,13 +223,13 @@ module ZBSpec
+@@ -170,13 +253,13 @@ module ZBSpec
      end
  
      def build_launch_args(log_file: nil)
@@ -180,7 +217,7 @@ index ddcb626..d850ce5 100644
        end
      end
  
-@@ -230,7 +283,7 @@ module ZBSpec
+@@ -230,7 +313,7 @@ module ZBSpec
          '-XX:-OmitStackTraceInFastThrow',
          "-Djava.library.path=#{java_lib_paths.join(':')}",
          "-Dzb.config_dir=#{cache_dir}/.zombie_buddy",
@@ -189,7 +226,7 @@ index ddcb626..d850ce5 100644
          '-classpath', classpath
        ]
  
-@@ -255,33 +308,127 @@ module ZBSpec
+@@ -255,33 +338,127 @@ module ZBSpec
        argv
      end
  
@@ -240,10 +277,9 @@ index ddcb626..d850ce5 100644
 +      args.concat(['-novoip', '-nosound', '-nosteam', '-no-worldgen', '-no-foraging', '-no-attachments'])
 +      args << '-debug' unless config['debug'] == false
 +      append_client_connect_args(args)
-       args
-     end
- 
--    def javaagent_arg
++      args
++    end
++
 +    def build_unix_launch_args(_game_exe, cache_dir)
 +      install_dir = unix_install_dir
 +      java_bin = File.join(install_dir, 'jre64', 'bin', 'java')
@@ -282,9 +318,10 @@ index ddcb626..d850ce5 100644
 +      args.concat(['-novoip', '-nosound', '-nosteam', '-no-worldgen', '-no-foraging', '-no-attachments'])
 +      args << '-debug' unless config['debug'] == false
 +      append_client_connect_args(args)
-+      args
-+    end
-+
+       args
+     end
+ 
+-    def javaagent_arg
 +    # Directory containing the bundled JVM / game jars. The user-facing
 +    # game_path may point at the outer Steam folder whose `projectzomboid/`
 +    # subfolder holds the actual install.
@@ -310,7 +347,7 @@ index ddcb626..d850ce5 100644
 +    def append_client_connect_args(args)
 +      return unless config['server_ip']
 +      ip = config['server_ip']
-+      port = config['server_port'] || read_server_game_port || 16261
++      port = config['server_port'] || server_persisted_port || server_connect_port || 16261
 +      password = config['password'] || ''
 +      args << '+connect' << "#{ip}:#{port}"
 +      args << '+password' << password unless password.empty?
@@ -332,7 +369,7 @@ index ddcb626..d850ce5 100644
        ]
        if @verbosity > 0
          agent_parts << "verbosity=#{@verbosity}"
-@@ -295,7 +442,15 @@ module ZBSpec
+@@ -295,7 +472,15 @@ module ZBSpec
          encoded_title = URI.encode_www_form_component(title)
          agent_parts << "window_title=#{encoded_title}"
        end
@@ -349,7 +386,7 @@ index ddcb626..d850ce5 100644
      end
  
      def default_window_title
-@@ -313,9 +468,14 @@ module ZBSpec
+@@ -313,9 +498,14 @@ module ZBSpec
      def zombiebuddy_jar
        @zombiebuddy_jar ||= begin
          candidates = [
@@ -366,7 +403,7 @@ index ddcb626..d850ce5 100644
          path = candidates.find { |p| File.file?(p) }
          unless path
            raise GameLaunchError, "ZombieBuddy.jar not found. Checked:\n  #{candidates.join("\n  ")}"
-@@ -324,6 +484,13 @@ module ZBSpec
+@@ -324,6 +514,13 @@ module ZBSpec
        end
      end
  
@@ -380,7 +417,7 @@ index ddcb626..d850ce5 100644
      # ZombieBuddy mod root (parent of the directory containing the JAR, e.g. .../ZombieBuddy)
      def zombiebuddy_mod_dir
        File.expand_path(File.join(File.dirname(zombiebuddy_jar), '..'))
-@@ -425,15 +592,16 @@ module ZBSpec
+@@ -425,15 +622,16 @@ module ZBSpec
          end
        end
  
@@ -402,7 +439,7 @@ index ddcb626..d850ce5 100644
        config_mod_entries.each do |entry|
          mod = entry['name']
          next if mod == 'ZBSpec' # ZBSpec is handled above
-@@ -441,7 +609,7 @@ module ZBSpec
+@@ -441,7 +639,7 @@ module ZBSpec
          if entry['path']
            src = File.expand_path(entry['path'])
            raise GameLaunchError, "Mod path not found: #{entry['path']} (resolved: #{src})" unless File.exist?(src)
@@ -411,7 +448,7 @@ index ddcb626..d850ce5 100644
          elsif (steam_id = entry['steam_id'])
            mod_mods_path = steam_workshop_mods_path(steam_id)
            unless File.exist?(mod_mods_path)
-@@ -449,23 +617,48 @@ module ZBSpec
+@@ -449,23 +647,48 @@ module ZBSpec
            end
            Dir[File.join(mod_mods_path, '*')].each do |dirname|
              if File.directory?(dirname)
@@ -467,7 +504,7 @@ index ddcb626..d850ce5 100644
      end
  
      # Config mods as list of hashes with 'id' (or 'name'), optional 'steam_id', optional 'path'
-@@ -489,9 +682,6 @@ module ZBSpec
+@@ -489,9 +712,6 @@ module ZBSpec
      end
  
      def find_executable
@@ -477,7 +514,7 @@ index ddcb626..d850ce5 100644
        if mac?
          # macOS: use Java from resolved JAVA_HOME
          java_home = @mac_java_home
-@@ -500,9 +690,30 @@ module ZBSpec
+@@ -500,9 +720,30 @@ module ZBSpec
          raise "Java executable not found: #{java_bin}" unless File.exist?(java_bin)
          java_bin
        else
@@ -510,6 +547,50 @@ index ddcb626..d850ce5 100644
      end
  
      # macOS: resolve JAVA_HOME and GAME_ROOT paths
+diff --git a/lib/zbspec/mp_harness.rb b/lib/zbspec/mp_harness.rb
+index ef5524f..6f45d6d 100644
+--- a/lib/zbspec/mp_harness.rb
++++ b/lib/zbspec/mp_harness.rb
+@@ -80,17 +80,32 @@ module ZBSpec
+ 
+     def launch_instances_parallel
+       puts "\n🚀 Launching instances..." if @verbosity > 0
+-      
+-      threads = []
+-      threads << Thread.new do
++
++      # The server picks and persists its game port while launching, and the
++      # client must dial that exact port. Starting the server first (and waiting
++      # for its persisted port) removes the race where the client would fall
++      # back to a default port.
++      server_thread = Thread.new do
+         @server_launcher.start
+         puts "  ✓ Server started (PID: #{@server_launcher.pid})" if @verbosity > 0
+       end
+-      threads << Thread.new do
+-        @client_launcher.start
+-        puts "  ✓ Client started (PID: #{@client_launcher.pid})" if @verbosity > 0
++
++      wait_for_server_port(server_thread)
++
++      @client_launcher.start
++      puts "  ✓ Client started (PID: #{@client_launcher.pid})" if @verbosity > 0
++      server_thread.join
++    end
++
++    # Wait until the server has persisted its game port (or it failed to start).
++    def wait_for_server_port(server_thread, timeout: 30)
++      deadline = Time.now + timeout
++      while Time.now < deadline
++        break unless server_thread.alive?
++        port = @server_launcher.send(:server_persisted_port)
++        break if port
++        sleep 0.2
+       end
+-      threads.each(&:join)
+     end
+ 
+     def print_startup_banner
 diff --git a/mods/ZBSpec/42/media/java b/mods/ZBSpec/42/media/java
 new file mode 120000
 index 0000000..d3111d2
