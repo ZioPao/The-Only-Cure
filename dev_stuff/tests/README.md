@@ -1,5 +1,7 @@
 # TOC test suite
 
+> Full tutorial (all layers, setup, authoring, fork/git): see [`TESTING.md`](../../TESTING.md).
+
 Automated tests for **The Only Cure**, split by how much of the game they need.
 
 ```
@@ -70,4 +72,5 @@ Use `H.initPlayer("Tester")` to get a clean `DataController`, and
 
 - `lint` + `unit` run in hosted CI on every push/PR (no game, no runner).
 - `sp` / `mp` run in-game, locally, on Windows or Linux.
-- `mp` is currently `pending` in ZBSpec (async relay); see `spec/README.md`.
+- `mp` now completes the client connection; the async client↔server relay
+  scenario is still `pending`. See `spec/README.md` and [`TESTING.md`](../../TESTING.md).

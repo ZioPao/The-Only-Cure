@@ -1,5 +1,7 @@
 # In-game integration specs (ZBSpec)
 
+> Full tutorial (all layers, setup, authoring, fork/git): see [`../TESTING.md`](../TESTING.md).
+
 These specs run **inside Project Zomboid** and exercise the parts of TOC that
 depend on the real Java engine (body damage, timed actions, relays). The fast
 mock-based tests live in `dev_stuff/tests/` instead.
