@@ -66,8 +66,7 @@ builds the shadow jar with Gradle, and installs it next to the game.
 | -------------------- | ---------------------------------------- |
 | `spec/shared/`       | client, server and singleplayer          |
 | `spec/client/`       | client-only (including singleplayer)     |
-| `spec/server/`       | dedicated server only                    |
-| `spec/mp/`           | multiplayer relay scenarios              |
+| `spec/server/`       | dedicated server only (MP relay + shared)|
 
 ## ZBSpec patch
 
@@ -80,28 +79,32 @@ updating the submodule; if it conflicts, rebase it against the new upstream.
 ## Known limitations (current status)
 
 ### Multiplayer
-`run.sh mp` launches the dedicated server and client correctly, but the client
-does not complete the connection on this Linux `-nosteam` setup:
+`run.sh mp` starts the dedicated server and the connecting client. The client
+completes the connection (`isClient()=true`) and the client + server specs run
+against the live server. This works on the Linux `-nosteam` setup.
 
-- RakNet handshake succeeds: client logs `connection-request-accepted`, server
-  logs `new-incoming-connection`.
-- The client then never sends the Login packet; ~45s later the server logs
-  `connection-attempt-timeout` / `receive-disconnect`.
-- The client falls back to singleplayer (`isClient=false`, `player=true`).
+The original blocker was ZBSpec's **singleplayer** debug scenario
+(`ZBSpec_client_SP.lua`) auto-launching the local `TestMap` world on the MP
+client: it called `forceChangeState(LoadingQueueState.new())` while the server
+handshake was in flight, which then cancelled the connect
+(`loading-queue-canceled`) and dropped the client back to singleplayer. Two
+things are required to avoid it:
 
-Cause: PZ 42.21's `LoadingQueueState.enter()` calls
-`GameClient.sendLoginQueueRequest()` while `GameClient.connection` is still null
-(it is assigned on the RakNet network thread), throws a NullPointerException,
-and cancels the connect before Login is sent. This is a connection-state race in
-PZ's `-nosteam` path, exposed by ZBSpec's fast automated connect. The connection
-state is not exposed to Lua, so it cannot be worked around from the spec side.
+- The MP client must not pass `-debug` (`MPHarness#client_config` forces
+  `debug=false`). Otherwise PZ's own debug-mode scenario auto-launch fires at
+  startup, before the connect begins. (It also avoids PZ's `TestTCP` guard,
+  which rejects `-debug` clients whose role lacks `ConnectWithDebug` — though
+  the ZBSpec client logs in as `admin`, which has that capability.)
+- The SP auto-launch hook is guarded with `not isClient() and not isServer()`
+  (in `zbspec-windows.patch`), so it only runs for real singleplayer.
 
-Singleplayer is fully green. The MP relay specs are `pending`.
+Both changes are in `dev_stuff/vendor/zbspec-windows.patch`.
 
 ### Synchronous runner
 ZBSpec's documented runner is synchronous. TOC's MP relay
 (`sendClientCommand` → server → `sendServerCommand` → client) is asynchronous,
-so `spec/mp/relay_spec.lua` is currently `pending`.
+so `spec/mp/relay_spec.lua` remains `pending`. Server-side relay coverage runs
+on the dedicated server via `spec/server/relay_spec.lua`.
 
 ### AmputationHandler:execute()
 The full handler path spawns and equips clothing items whose `getVisual()` is

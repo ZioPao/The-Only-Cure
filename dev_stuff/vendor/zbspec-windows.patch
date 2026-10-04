@@ -551,8 +551,21 @@ diff --git a/lib/zbspec/mp_harness.rb b/lib/zbspec/mp_harness.rb
 index ef5524f..6f45d6d 100644
 --- a/lib/zbspec/mp_harness.rb
 +++ b/lib/zbspec/mp_harness.rb
-@@ -80,17 +80,32 @@ module ZBSpec
- 
+@@ -58,6 +58,12 @@ module ZBSpec
+       cfg['cache_dir'] = client_cache_dir
+       cfg['instance_name'] = 'client'
+       # Client connects to localhost
+       cfg['server_ip'] = '127.0.0.1'
++      # PZ 42.21 ConnectToServerState.TestTCP() force-disconnects a client that
++      # runs with `-debug` when the server-assigned role lacks the
++      # ConnectWithDebug capability (message "connect-debug-used"). The default
++      # "user" role does not grant it, so a test client launched with -debug is
++      # rejected. The MP client does not need debug mode, so never pass -debug.
++      cfg['debug'] = false
+       Config.new(nil).tap { |c| c.merge!(cfg) }
+     end
+@@ -80,17 +86,32 @@ module ZBSpec
+
      def launch_instances_parallel
        puts "\n🚀 Launching instances..." if @verbosity > 0
 -      
@@ -599,3 +612,28 @@ index 0000000..d3111d2
 @@ -0,0 +1 @@
 +../../common/media/java
 \ No newline at end of file
+
+diff --git a/mods/ZBSpec/common/media/lua/client/ZBSpec_client_SP.lua b/mods/ZBSpec/common/media/lua/client/ZBSpec_client_SP.lua
+index 1025f9b..bb9144a 100644
+--- a/mods/ZBSpec/common/media/lua/client/ZBSpec_client_SP.lua
++++ b/mods/ZBSpec/common/media/lua/client/ZBSpec_client_SP.lua
+@@ -34,6 +34,10 @@ if getCore():getGameVersion():getMajor() == 41 then
+ end
+ 
+ -- start the debug scenario even when not in debug mode, to allow running the tests in a normal game
++-- NB: never do this on an MP client. The client is launched with +connect, so isClient()
++-- is true as soon as the connection starts; launching the SP TestMap scenario there forces
++-- LoadingQueueState during the server handshake and cancels the connection
++-- ("loading-queue-canceled"), dropping the client back to singleplayer.
+ if not getDebug() then
+     if type(LoadMainScreenPanelInt) == "function" then
+         local prevLoadMainScreenPanelInt = LoadMainScreenPanelInt
+@@ -41,7 +45,7 @@ if not getDebug() then
+         LoadMainScreenPanelInt = function(ingame, ...)
+             prevLoadMainScreenPanelInt(ingame, ...)
+ 
+-            if not ingame then
++            if not ingame and not isClient() and not isServer() then
+                 doDebugScenarios()
+             end
+         end
