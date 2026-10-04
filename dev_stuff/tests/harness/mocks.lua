@@ -66,6 +66,35 @@ local function installModData()
 end
 
 --* Engine flags / commands *--
+--* Timed-action classes (vanilla ISBaseTimedAction et al.) *--
+-- These exist so engine-coupled modules can be required and their pure helpers
+-- tested. Each is a table with the methods the modules call or override.
+local function timedActionClass(extra)
+    local cls = { Type = extra and extra.Type or nil }
+    cls.update = function() end
+    cls.perform = function() end
+    cls.stop = function() end
+    cls.isValid = function() return true end
+    cls.complete = function() return true end
+    return cls
+end
+
+local function installTimedActions()
+    _G.ISBaseTimedAction = timedActionClass()
+    for _, name in ipairs({
+        "ISWearClothing", "ISClothingExtraAction", "ISUnequipAction",
+        "ISReloadWeaponAction", "ISInsertMagazine", "ISLoadBulletsInMagazine",
+        "ISUnloadBulletsFromFirearm", "ISUnloadBulletsFromMagazine", "ISRackFirearm",
+        "ISUpgradeWeapon", "ISRemoveWeaponUpgrade", "ISBarricadeAction",
+        "ISUnbarricadeAction", "ISChopTreeAction", "ISDismantleAction",
+        "ISDestroyStuffAction", "ISCraftAction", "ISApplyBandage", "ISCleanBandage",
+        "ISDisinfect", "ISRemoveBullet", "ISSplint", "ISStitch", "ISCleanBurn",
+        "ISRemovePatch", "ISPickUpGroundCoverItem", "ISPickAxeGroundCoverItem",
+    }) do
+        _G[name] = timedActionClass({ Type = name })
+    end
+end
+
 local function installEngine()
     _G.isDebugEnabled = function() return false end
     _G.isClient = function() return false end
@@ -104,9 +133,22 @@ local function installEngine()
     _G.syncBodyPart = noop
     _G.SyncXp = noop
     _G.getTexture = function(path) return { path = path } end
+    _G.addXp = noop
+    _G.getText = function(key) return key end
+    _G.sendRemoveItemFromContainer = noop
+    _G.sendAddItemToContainer = noop
+    _G.sendEquip = noop
+    _G.instanceItem = function(name)
+        return {
+            getFullType = function() return name end,
+            getBodyLocation = function() return nil end,
+        }
+    end
 
     _G.ZombRand = function(a) return a or Mocks.state.rand end
     _G.ZombRandFloat = function(a) return a or Mocks.state.rand end
+
+    installTimedActions()
 end
 
 --* Enum-like tables: any key resolves to itself *--
@@ -168,7 +210,11 @@ end
 local function installRegistries()
     if rawget(_G, "_TOCRegistries") == nil then
         _G._TOCRegistries = {
-            traits = { Amputee_Hand = "toc:amputee_hand" },
+            traits = {
+                Amputee_Hand = "toc:amputee_hand",
+                Amputee_ForeArm = "toc:amputee_forearm",
+                Amputee_UpperArm = "toc:amputee_upperarm",
+            },
             bodylocations = {},
         }
     end

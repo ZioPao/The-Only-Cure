@@ -33,6 +33,19 @@ run_lint() {
     echo "==> lint (syntax + requires)"
     find 42/media/lua common/media/lua -name '*.lua' -print \
         | "$LUA_BIN" "$SCRIPT_DIR/lint.lua"
+
+    # Optional deeper static analysis via selene (undefined globals, unused vars).
+    local selene="${SELENE_BIN:-}"
+    if [[ -z "$selene" ]] && command -v selene >/dev/null 2>&1; then
+        selene="selene"
+    fi
+    if [[ -n "$selene" ]]; then
+        echo "==> selene (static analysis)"
+        "$selene" --allow-warnings --config "$ROOT/selene.toml" \
+            $(find 42/media/lua common/media/lua -name '*.lua')
+    else
+        echo "    (selene not found; skipping deeper static analysis)"
+    fi
 }
 
 run_unit() {

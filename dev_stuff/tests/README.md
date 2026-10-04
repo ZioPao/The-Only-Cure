@@ -4,7 +4,7 @@ Automated tests for **The Only Cure**, split by how much of the game they need.
 
 ```
 dev_stuff/tests/
-├── run.sh                 # single entry point: lint | unit | sp | mp | all
+├── run.sh / run.ps1       # single entry point: lint | unit | sp | mp | all
 ├── lint.lua               # syntax + unresolved-require checks (no game)
 ├── run_unit.lua           # unit-test entry point (no game)
 ├── harness/
@@ -12,7 +12,8 @@ dev_stuff/tests/
 │   ├── mocks.lua          # fake PZ engine (Events, ModData, BodyPartType, ...)
 │   └── testkit.lua        # tiny describe/it runner
 ├── spec/                  # mocked unit specs
-└── legacy/Tests.lua       # old in-game TEST_FRAMEWORK suite (reference only)
+├── build_zb_jar.sh/.ps1   # build ZombieBuddy from master for the in-game suite
+└── setup_ingame.sh/.ps1   # one-time in-game setup
 ```
 
 In-game specs live in `../../spec/` and run through [ZBSpec](../spec/README.md).
@@ -34,6 +35,11 @@ dev_stuff\tests\run.ps1 lint|unit|sp|mp|all
 The `lint` and `unit` runners need `luajit` or `lua5.1` only. Override with
 `LUA_BIN=...`. The `sp`/`mp` runners use the vendored ZBSpec; run
 `dev_stuff/tests/setup_ingame.sh` (or `setup_ingame.ps1`) once first.
+
+`lint` also runs [selene](https://github.com/Kampfkarren/selene) when it is on
+`PATH` (or `SELENE_BIN` is set), catching undefined globals and unused
+variables. The PZ standard library lives in `zomboid.yml`; `selene.toml` holds
+the lint config.
 
 On Linux, also run `dev_stuff/tests/build_zb_jar.sh "<game folder>"` to build
 ZombieBuddy from master (required for the in-game suite; see `spec/README.md`).

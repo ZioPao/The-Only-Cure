@@ -20,6 +20,13 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y luajit
 
+      - name: Install selene
+        run: |
+          curl -sSL -o selene.zip https://github.com/Kampfkarren/selene/releases/download/0.28.0/selene-0.28.0-linux.zip
+          unzip -o selene.zip -d "$RUNNER_TEMP/selene"
+          chmod +x "$RUNNER_TEMP/selene/selene"
+          echo "$RUNNER_TEMP/selene" >> "$GITHUB_PATH"
+
       - name: Lint
         run: ./dev_stuff/tests/run.sh lint
 
