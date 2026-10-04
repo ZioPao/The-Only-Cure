@@ -15,12 +15,13 @@ for it.
 - A Project Zomboid install for the targeted version.
 
 ZBSpec itself is vendored under `dev_stuff/vendor/ZBSpec` as a git submodule
-and patched for Windows/Linux by `dev_stuff/vendor/zbspec-windows.patch`.
+pointing at the project fork (`ZioPao/ZBSpec`), which carries the Windows/Linux
+launch support.
 
 ## Setup
 
 ```bash
-# Linux/macOS: patch ZBSpec, install ZombieBuddy, check Ruby + gems
+# Linux/macOS: init ZBSpec, install ZombieBuddy, check Ruby + gems
 dev_stuff/tests/setup_ingame.sh
 
 # Build + install ZombieBuddy from master (required)
@@ -68,13 +69,14 @@ builds the shadow jar with Gradle, and installs it next to the game.
 | `spec/client/`       | client-only (including singleplayer)     |
 | `spec/server/`       | dedicated server only (MP relay + shared)|
 
-## ZBSpec patch
+## ZBSpec fork
 
-`dev_stuff/vendor/zbspec-windows.patch` adds the non-macOS launch path:
-launcher discovery, ZombieBuddy agent injection (`-agentlib:zbNative` on
-Windows, `-javaagent` elsewhere), cachedir mod linking (junction/symlink/copy),
-Steam workshop paths, and Windows-safe process termination. Re-apply it after
-updating the submodule; if it conflicts, rebase it against the new upstream.
+The submodule points at `https://github.com/ZioPao/ZBSpec.git`, which adds the
+non-macOS launch path: launcher discovery, ZombieBuddy agent injection
+(`-agentlib:zbNative` on Windows, `-javaagent` elsewhere), cachedir mod linking
+(junction/symlink/copy), Steam workshop paths, and Windows-safe process
+termination, plus the MP client fixes below. Update the submodule and the fork
+together; there is no patch file anymore.
 
 ## Known limitations (current status)
 
@@ -96,9 +98,9 @@ things are required to avoid it:
   which rejects `-debug` clients whose role lacks `ConnectWithDebug` — though
   the ZBSpec client logs in as `admin`, which has that capability.)
 - The SP auto-launch hook is guarded with `not isClient() and not isServer()`
-  (in `zbspec-windows.patch`), so it only runs for real singleplayer.
+  (`ZBSpec_client_SP.lua` in the fork), so it only runs for real singleplayer.
 
-Both changes are in `dev_stuff/vendor/zbspec-windows.patch`.
+Both changes are committed in the `ZioPao/ZBSpec` fork.
 
 ### Synchronous runner
 ZBSpec's documented runner is synchronous. TOC's MP relay

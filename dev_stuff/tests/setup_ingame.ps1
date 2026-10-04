@@ -3,7 +3,7 @@
   Sets up local in-game ZBSpec tests for The Only Cure.
 
 .DESCRIPTION
-  - initializes the vendored ZBSpec submodule and applies our Windows patch
+  - initializes the vendored ZBSpec submodule (fork: ZioPao/ZBSpec)
   - creates the game config dir for the configured version
   - checks Ruby and the gems ZBSpec needs
 
@@ -17,19 +17,9 @@ $ErrorActionPreference = 'Stop'
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $Root = (Resolve-Path (Join-Path $ScriptDir '..\..')).Path
 $Vendor = Join-Path $Root 'dev_stuff\vendor\ZBSpec'
-$Patch = Join-Path $Root 'dev_stuff\vendor\zbspec-windows.patch'
 
 Write-Host '==> Initializing ZBSpec submodule'
 git -C $Root submodule update --init --recursive dev_stuff/vendor/ZBSpec
-
-Write-Host '==> Applying Windows/Linux compatibility patch'
-git -C $Vendor apply --check $Patch 2>$null
-if ($LASTEXITCODE -eq 0) {
-    git -C $Vendor apply $Patch
-    Write-Host '    applied'
-} else {
-    Write-Host '    already applied (or conflicts); skipping'
-}
 
 Write-Host '==> Ensuring game config dir'
 $configFile = Join-Path $Root 'spec\zbspec.yml'
