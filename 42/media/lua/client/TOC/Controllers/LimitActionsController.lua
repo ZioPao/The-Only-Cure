@@ -48,7 +48,10 @@ end
 
 local function CheckHandFeasibility(limbName)
     --TOC_DEBUG.print("Checking hand feasibility: " .. limbName)
-    local dcInst = DataController.GetInstance(getPlayer():getUsername())
+    local pl = getPlayer()
+    if not pl then return false end
+    local dcInst = DataController.GetInstance(pl:getUsername())
+    if not dcInst then return false end
     local isFeasible = not dcInst:getIsCut(limbName) or dcInst:getIsProstEquipped(limbName)
    -- TOC_DEBUG.print("isFeasible: " .. tostring(isFeasible))
     return isFeasible
@@ -173,6 +176,23 @@ function ISEquipWeaponAction:perform()
     end
 
     --end
+end
+
+-- In SP the engine calls perform() first, then complete() (IsoGameCharacter.update),
+-- and vanilla complete() re-equips the item to self.primary. Without re-applying the
+-- amputation-aware assignment here, a hotbar/belt equip (which bypasses the inventory
+-- context-menu gate) lands in the amputated hand and floats there (#282).
+local og_ISEquipWeaponAction_complete = ISEquipWeaponAction.complete
+---@diagnostic disable-next-line: duplicate-set-field
+function ISEquipWeaponAction:complete()
+    local result = og_ISEquipWeaponAction_complete(self)
+
+    local dcInst = DataController.GetInstance(self.character:getUsername())
+    if dcInst and dcInst:getIsAnyLimbCut() then
+        self:performWithAmputation()
+    end
+
+    return result
 end
 
 function ISInventoryPaneContextMenu.doEquipOption(context, playerObj, isWeapon, items, player)
