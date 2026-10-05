@@ -122,6 +122,24 @@ describe("TOC server relay (dedicated server)", function()
         local dc = DataController.GetInstance(realPlayer:getUsername())
         assert.is_true(dc:getIsProstEquipped("Hand_L"))
     end)
+
+    it("RelayExecuteAmputationAction cuts a self-amputating patient (requires a client)", function()
+        local players = getOnlinePlayers()
+        if players == nil or players:size() == 0 then
+            return
+        end
+        local realPlayer = players:get(0)
+        ServerDataController.Initialize(realPlayer:getUsername(), true)
+        CachedDataHandler.Setup(realPlayer:getUsername())
+
+        -- surgeon == patient (self-amputation), the single-client case.
+        ServerRelayCommands.RelayExecuteAmputationAction(realPlayer, {
+            patientNum = realPlayer:getOnlineID(), limbName = "Hand_L",
+        })
+
+        local dc = DataController.GetInstance(realPlayer:getUsername())
+        assert.is_true(dc:getIsCut("Hand_L"), "self-amputation should mark Hand_L cut")
+    end)
 end)
 
 return ZBSpec.run()

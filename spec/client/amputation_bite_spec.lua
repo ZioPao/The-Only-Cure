@@ -20,6 +20,7 @@ local CachedDataHandler = require("TOC/Handlers/CachedDataHandler")
 local LocalPlayerController = require("TOC/Controllers/LocalPlayerController")
 local ServerDamageSanitizer = require("TOC/Controllers/ServerDamageSanitizer")
 local AmputationHandler = require("TOC/Handlers/AmputationHandler")
+local ItemsController = require("TOC/Controllers/ItemsController")
 
 local function username()
     return getPlayer():getUsername()
@@ -35,7 +36,11 @@ end
 
 ---Reset TOC state and the player's body so tests do not leak into each other.
 local function reset()
-    getPlayer():getBodyDamage():RestoreToFullHealth()
+    local p = getPlayer()
+    p:getBodyDamage():RestoreToFullHealth()
+    p:setPrimaryHandItem(nil)
+    p:setSecondaryHandItem(nil)
+    ItemsController.Player.DeleteAllOldAmputationItems(p)
     ClientDataController.Request(username(), true)
     CachedDataHandler.Setup(username())
     LocalPlayerController.sanitizePollTick = 0
@@ -45,6 +50,10 @@ end
 local function cut(limbName)
     reset()
     getDC():setCutLimb(limbName, false, false, false, 0)
+end
+
+local function execute(limbName, damagePlayer)
+    AmputationHandler:new(getPlayer(), getPlayer(), limbName):execute(damagePlayer)
 end
 
 describe("TOC bite on amputated limb (#290)", function()
@@ -143,6 +152,51 @@ describe("TOC bite on amputated limb (#290)", function()
         AmputationHandler:new(p, p, "Hand_L"):healInfection(true)
         assert.is_true(bd:isInfected())
 
+        reset()
+    end)
+
+    it("amputating a bitten limb clears the bite and an early infection end-to-end", function()
+        reset()
+        local p = getPlayer()
+        part("Hand_L"):SetBitten(true)
+        p:getBodyDamage():setInfected(true)
+        p:getStats():set(CharacterStat.ZOMBIE_INFECTION, 5)
+
+        execute("Hand_L", false)
+
+        assert.is_false(part("Hand_L"):bitten())
+        assert.is_false(p:getBodyDamage():isInfected())
+        reset()
+    end)
+
+    it("#290 sequence: bite a dependent limb, amputate the parent, sanitizer clears the survivor", function()
+        reset()
+        local forearm = part("ForeArm_L")
+        forearm:SetBitten(true)
+        assert.is_true(forearm:bitten())
+
+        execute("UpperArm_L", false) -- removes ForeArm_L as a dependency
+
+        -- healArea does not touch the dependent limb...
+        assert.is_true(part("ForeArm_L"):bitten())
+        -- ...but the on-demand sanitizer does.
+        ServerDamageSanitizer.SanitizePlayer(getPlayer())
+        assert.is_false(part("ForeArm_L"):bitten())
+        reset()
+    end)
+
+    it("sanitizer clears the limb bite but not the body infection (known gap)", function()
+        cut("Hand_L")
+        local p = getPlayer()
+        part("Hand_L"):SetBitten(true)
+        p:getBodyDamage():setInfected(true)
+
+        ServerDamageSanitizer.SanitizePlayer(p)
+
+        assert.is_false(part("Hand_L"):bitten())
+        -- Documented gap: only healInfection (at amputation) clears the virus;
+        -- the sanitizer is per-limb only.
+        assert.is_true(p:getBodyDamage():isInfected())
         reset()
     end)
 end)

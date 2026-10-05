@@ -6,6 +6,8 @@
 
 startup_timeout: 180
 server_startup_timeout: 120
+# Launch a second MP client (username zbspec2) for surgeon<->patient relay tests.
+mp_clients: 2
 # Always stop the instances, even when a spec fails, so a failed run cannot
 # leave a stale server/client that breaks the next run.
 shutdown: always
@@ -25,6 +27,11 @@ game_versions:
   - "42.21"
 game_version: "42.21"
 
+# Keep the per-instance cache OUTSIDE the mod directory. The repo lives in
+# ~/Zomboid/mods/, which PZ scans; a cache under ./tmp would be discovered as a
+# second copy of the mod and break item/clothing script loading.
+cache_root: "~/.cache/zbspec"
+
 # Uncomment matching your machine:
 #
 # Windows (Steam default):
@@ -39,5 +46,8 @@ mods:
 
 # Optional: forward extra ZombieBuddy agent arguments, e.g. for first-run
 # mod approval on a fresh setup:
-# zb_agent_args:
-#   - "policy=allow-all"
+# Bypass ZombieBuddy's Java-mod signature approval. Without it, a failed authors
+# fetch leaves the game waiting at "Waiting for Java mods approval…" and the API
+# never starts. Test-only.
+zb_agent_args:
+  - "policy=allow-all"
