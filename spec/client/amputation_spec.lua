@@ -4,6 +4,8 @@
 -- rendered world (getVisual() is nil in the headless test instance).
 
 if isClient() then
+    -- Singleplayer/server-context specs: no tests run on the MP client; the
+    -- runner reports the file as skipped rather than passed.
     return ZBSpec.run()
 end
 

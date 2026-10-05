@@ -54,7 +54,9 @@ function Invoke-Zbspec([string]$zbspecMode) {
     if (-not (Get-Command ruby -ErrorAction SilentlyContinue)) {
         throw 'ruby not found (need Ruby 2.7+ for ZBSpec).'
     }
-    & ruby "-I$($vendor -replace '\\','/')/lib" (Join-Path $vendor 'bin\zbspec') --mod-dir $Root $zbspecMode
+    # -v lists every executed spec (name + pass/fail); without it ZBSpec only
+    # prints per-section counts, which hides which specs actually ran.
+    & ruby "-I$($vendor -replace '\\','/')/lib" (Join-Path $vendor 'bin\zbspec') --mod-dir $Root -v $zbspecMode
     if ($LASTEXITCODE -ne 0) { throw "zbspec $zbspecMode failed" }
 }
 

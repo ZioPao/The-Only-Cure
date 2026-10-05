@@ -6,7 +6,9 @@
 
 startup_timeout: 180
 server_startup_timeout: 120
-shutdown: auto
+# Always stop the instances, even when a spec fails, so a failed run cannot
+# leave a stale server/client that breaks the next run.
+shutdown: always
 debug: true
 same_console: true
 redirect_output: false

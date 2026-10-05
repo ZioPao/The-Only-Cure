@@ -8,6 +8,9 @@
 -- this file is skipped, like the other spec/client file.
 
 if isClient() then
+    -- Needs the singleplayer/server Lua state (server-authoritative BodyDamage,
+    -- SanitizePlayer). On the MP client this registers no tests; the runner
+    -- reports the file as skipped rather than passed.
     return ZBSpec.run()
 end
 

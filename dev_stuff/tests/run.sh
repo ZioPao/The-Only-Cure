@@ -68,7 +68,9 @@ run_zbspec() {
     fi
 
     # Run the vendored copy directly; it only needs stdlib + amazing_print + sugar_png.
-    exec ruby -I"$vendor/lib" "$vendor/bin/zbspec" --mod-dir "$ROOT" "$mode"
+    # -v lists every executed spec (name + pass/fail); without it ZBSpec only prints
+    # per-section counts, which hides which specs actually ran.
+    exec ruby -I"$vendor/lib" "$vendor/bin/zbspec" --mod-dir "$ROOT" -v "$mode"
 }
 
 case "${1:-all}" in
