@@ -1,7 +1,11 @@
 std = "lua51+zomboid"
 
 [lints]
-# PZ's Kahlua runtime uses globals heavily; don't flag legitimate cross-file globals.
+# PZ's Kahlua runtime exposes thousands of vanilla globals (IS* classes, enums,
+# Java-bound functions). Enumerating them in zomboid.yml is endless churn and
+# undefined_variable has no ignore-pattern option, so don't flag unknown globals.
+undefined_variable = "allow"
+# global_usage only governs _G/shared, not cross-file globals.
 global_usage = "allow"
 # PZ mods create global namespaces (e.g. the compatibility layer).
 unscoped_variables = "allow"
