@@ -247,11 +247,12 @@ function Mocks.makePlayer(opts)
         username = opts.username or "Tester",
         onlineID = opts.onlineID or 0,
         perkLevels = opts.perkLevels or {},
+        bodyDamage = opts.bodyDamage,
     }
     function player:getUsername() return self.username end
     function player:getOnlineID() return self.onlineID end
     function player:getPerkLevel(perk) return (self.perkLevels[perk] or 0) end
-    function player:getOnlineID() return self.onlineID end
+    function player:getBodyDamage() return self.bodyDamage end
     function player:getWornItems()
         return {
             size = function() return #wornItems end,
@@ -272,6 +273,48 @@ function Mocks.wornItem(fullType, bodyLoc)
         bodyLoc = bodyLoc,
         getItem = function() return { getFullType = function() return fullType end } end,
     }
+end
+
+--* Body damage factories *--
+
+---Build a mock BodyPart. Only the wound state LocalPlayerController.HealArea /
+---SanitizePlayer touch is modelled; every mutator is a no-op setter.
+---@param opts table? { bitten : boolean?, infected : boolean? }
+function Mocks.makeBodyPart(opts)
+    opts = opts or {}
+    local bp = {
+        _bitten = opts.bitten or false,
+        _infected = opts.infected or false,
+    }
+    function bp:bitten() return self._bitten end
+    function bp:IsInfected() return self._infected end
+    function bp:SetBitten(v) self._bitten = v end
+    function bp:SetInfected(v) self._infected = v end
+    function bp:setInfected(v) self._infected = v end
+    function bp:setBiteTime(_) end
+    function bp:setInfectionTime(_) end
+    function bp:setFractureTime(_) end
+    function bp:setSplint(_, _) end
+    function bp:setSplintItem(_) end
+    function bp:setScratched(_, _) end
+    function bp:setScratchTime(_) end
+    function bp:setBleeding(_) end
+    function bp:setBleedingTime(_) end
+    function bp:setCut(_) end
+    function bp:setCutTime(_) end
+    function bp:setDeepWounded(_) end
+    function bp:setDeepWoundTime(_) end
+    function bp:setHaveBullet(_, _) end
+    function bp:setHaveGlass(_) end
+    return bp
+end
+
+---Build a mock BodyDamage from a { [bodyPartKey] = BodyPart } map.
+---@param parts table<string, table>
+function Mocks.makeBodyDamage(parts)
+    local bd = { parts = parts or {} }
+    function bd:getBodyPart(bpt) return self.parts[bpt] end
+    return bd
 end
 
 Mocks.install()
