@@ -19,5 +19,6 @@ require("spec.exp_actions_spec")
 require("spec.items_controller_spec")
 require("spec.commands_data_spec")
 require("spec.data_lifecycle_spec")
+require("spec.ignored_actions_spec")
 
 os.exit(t.run())

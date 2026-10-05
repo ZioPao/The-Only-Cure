@@ -90,3 +90,31 @@ function ISDrinkFromBottle:new(character, item, uses)
     o.skipTOC = true
     return o
 end
+
+---Fluid/fuel handling is one-handed in practice: the amputation time penalty
+---must not apply to it (issue #285). These actions are not in ExpActions'
+---WrapUpdate list, so skipTOC costs no TOC XP.
+---@param actionClass table|nil
+local function SkipTOCForAction(actionClass)
+    if not actionClass or not actionClass.new then return end
+    local og_new = actionClass.new
+    function actionClass:new(...)
+        local o = og_new(self, ...)
+        o.skipTOC = true
+        return o
+    end
+end
+
+SkipTOCForAction(ISDrinkFluidAction)              -- drinking from canteens/bottles
+SkipTOCForAction(ISFluidEmptyAction)              -- pour fluid out
+SkipTOCForAction(ISFluidTransferAction)           -- transfer fluid between containers
+SkipTOCForAction(ISAddFluidFromItemAction)        -- pour fluid from an item into an object
+SkipTOCForAction(ISTakeFuel)                      -- fill a gas can at a pump
+SkipTOCForAction(ISRefuelFromGasPump)             -- pump gas into a vehicle
+SkipTOCForAction(ISTakeGasolineFromVehicle)       -- siphon gas from a vehicle
+SkipTOCForAction(ISDumpWaterAction)               -- dump water from a container
+SkipTOCForAction(ISTransferWaterAction)           -- transfer water between containers
+SkipTOCForAction(ISAddFuelAction)                 -- add fuel to a campfire
+SkipTOCForAction(ISInsertLightSourceFuelAction)   -- refill a light source
+SkipTOCForAction(ISRemoveLightSourceFuelAction)   -- empty a light source
+SkipTOCForAction(ISLightFromPetrol)               -- light a fire from petrol

@@ -46,6 +46,18 @@ function ISCampingInfoAction:new(character, campfireObject, campfire)
 end
 
 
+---Fluid panel transfers are one-handed: exempt from the amputation time
+---penalty (issue #285). Client-only class.
+if ISFluidPanelAction then
+    local og_ISFluidPanelAction_new = ISFluidPanelAction.new
+    function ISFluidPanelAction:new(character, container, panelClass, isSource)
+        local action = og_ISFluidPanelAction_new(self, character, container, panelClass, isSource)
+        action.skipTOC = true
+        return action
+    end
+end
+
+
 
 
 
