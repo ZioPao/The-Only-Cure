@@ -27,14 +27,14 @@ function BaseHandler:isInjured()
 end
 
 function BaseHandler:checkItems()
-    for k,v in pairs(self.items) do
+    for _, v in pairs(self.items) do
         table.wipe(v)
     end
 
     local containers = ISInventoryPaneContextMenu.getContainers(self:getDoctor())
     local done = {}
     local childContainers = {}
-    for i=1,containers:size() do
+    for i=1, containers:size() do
         local container = containers:get(i-1)
         done[container] = true
         table.wipe(childContainers)

@@ -248,3 +248,5 @@ local function OnClientRelayCommand(module, command, playerObj, args)
 end
 
 Events.OnClientCommand.Add(OnClientRelayCommand)
+
+return ServerRelayCommands

@@ -111,7 +111,10 @@ function ItemsController.Player.SpawnAmputationItem(playerObj, limbName)
     local texId = ItemsController.Player.GetAmputationTexturesIndex(playerObj, false)
 
     ---@cast clothingItem InventoryItem
-    clothingItem:getVisual():setTextureChoice(texId) -- it counts from 0, so we have to subtract 1
+    -- getVisual() can be nil in headless/loading contexts (and the test harness);
+    -- the item is still spawned/equipped, only the texture choice is skipped.
+    local visual = clothingItem and clothingItem.getVisual and clothingItem:getVisual()
+    if visual then visual:setTextureChoice(texId) end -- it counts from 0, so we have to subtract 1
     sendAddItemToContainer(playerObj:getInventory(), clothingItem)
 
     if isServer() then
@@ -136,18 +139,32 @@ function ItemsController.Player.DropItemsAfterAmputation(playerObj, limbName)
     local wornItems = playerObj:getWornItems()
     -- .print("DropItemsAfterAmputation | wornItems size=" .. tostring(wornItems:size()))
 
+    -- B42 returns a resource location from ItemBodyLocation:toString() (e.g.
+    -- "base:left_ringfinger"), while older builds returned "Left_RingFinger".
+    -- Compare the lowercased suffix so both forms match.
+    local function bodyLocString(bl)
+        if not bl then return "" end
+        if bl.toString then return string.lower(bl:toString()) end
+        return string.lower(tostring(bl))
+    end
+    local function endsWith(s, suffix)
+        return #s >= #suffix and string.sub(s, -#suffix) == suffix
+    end
+    local sideLower = string.lower(sideStr)
+
     -- Unequip worn items blocked by the amputated limb (moves them back to inventory)
     for i = 1, wornItems:size() do
         local it = wornItems:get(i - 1)
         if it then
             local wornItem = it:getItem()
-            local bl = wornItem:getBodyLocation()
+            local bl = bodyLocString(wornItem:getBodyLocation())
             -- TOC_DEBUG.print("DropItemsAfterAmputation | worn bl=" .. tostring(bl))
-            if string.contains(limbName, "Hand_") and (bl == sideStr .. "_MiddleFinger" or bl == sideStr .. "_RingFinger") then
+            if string.contains(limbName, "Hand_")
+                and (endsWith(bl, sideLower .. "_middlefinger") or endsWith(bl, sideLower .. "_ringfinger")) then
                 -- TOC_DEBUG.print("DropItemsAfterAmputation | removing finger item " .. tostring(wornItem))
                 playerObj:removeWornItem(wornItem)
             end
-            if string.contains(limbName, "ForeArm_") and (bl == sideStr .. "Wrist") then
+            if string.contains(limbName, "ForeArm_") and endsWith(bl, sideLower .. "wrist") then
                 -- TOC_DEBUG.print("DropItemsAfterAmputation | removing wrist item " .. tostring(wornItem))
                 playerObj:removeWornItem(wornItem)
             end
@@ -206,7 +223,8 @@ function ItemsController.Player.OverrideAmputationItemVisuals(playerObj, limbNam
 
                 -- change it here
                 local texId = ItemsController.Player.GetAmputationTexturesIndex(playerObj, isCicatrized)
-                wornItem:getVisual():setTextureChoice(texId)
+                local visual = wornItem.getVisual and wornItem:getVisual()
+                if visual then visual:setTextureChoice(texId) end
                 playerObj:resetModelNextFrame()     -- necessary to update the model
                 return
             end

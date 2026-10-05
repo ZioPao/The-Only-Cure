@@ -1,0 +1,15 @@
+std = "lua51+zomboid"
+
+[lints]
+# PZ's Kahlua runtime uses globals heavily; don't flag legitimate cross-file globals.
+global_usage = "allow"
+# PZ mods create global namespaces (e.g. the compatibility layer).
+unscoped_variables = "allow"
+# Mod config tables use numeric 1-based arrays idiomatically.
+multiple_statements = "allow"
+# Some PZ tables use mixed keys.
+mixed_table = "allow"
+# TOC code intentionally shadows Java method names on modded UI classes.
+shadowing = "allow"
+# Intentional across different `if`/`elseif` branches.
+if_same_then_else = "allow"
