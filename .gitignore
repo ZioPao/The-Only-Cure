@@ -2,10 +2,9 @@ dev_stuff/gen_amp_textures/.venv
 dev_stuff/gen_amp_textures/output
 .claude
 .opencode
-tmp
 
 # Test artifacts
 luacov.*.out
 luacov.report.out
-spec/.zbspec*
+tests/**/.zbspec*
 tmp/

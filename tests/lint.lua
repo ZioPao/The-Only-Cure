@@ -5,7 +5,7 @@
 --   2. Verify that every `require("TOC/...")` resolves to a real file in
 --      media/lua/{shared,client,server}.
 --
--- Usage: find ... -name '*.lua' | luajit dev_stuff/tests/lint.lua
+-- Usage: find ... -name '*.lua' | luajit tests/lint.lua
 --
 -- Exits non-zero if any problem is found.
 

@@ -1,8 +1,8 @@
 # ZBSpec configuration for The Only Cure.
 # Docs: https://github.com/zed-0xff/ZBSpec
 #
-# The in-game suite runs locally (Windows or Linux). See spec/README.md.
-# Run it with: dev_stuff/tests/run.sh sp   (or run.ps1 on Windows)
+# The in-game suite runs locally (Windows or Linux). See tests/README.md.
+# Run it with: tests/run.sh sp   (or run.ps1 on Windows)
 
 startup_timeout: 180
 server_startup_timeout: 120
@@ -14,13 +14,15 @@ shutdown: always
 debug: true
 same_console: true
 redirect_output: false
-spec_glob: spec/**/*_spec.lua
+# Folder holding client/ server/ shared/ specs (relative to the repo root).
+spec_dir: tests/spec
+spec_glob: tests/spec/**/*_spec.lua
 
 # Lua helpers from ZBSpec/lua/, loaded before spec/spec_helper.lua.
 helpers:
   - common_helpers
 
-# Game config version (dev_stuff/vendor/ZBSpec/configs/<version>).
+# Game config version (tests/vendor/ZBSpec/configs/<version>).
 # ZBSpec keys off `game_versions`; keep `game_version` in sync for the
 # setup/run helpers.
 game_versions:

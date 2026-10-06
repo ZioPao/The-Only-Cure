@@ -28,7 +28,7 @@ jobs:
           echo "$RUNNER_TEMP/selene" >> "$GITHUB_PATH"
 
       - name: Lint
-        run: ./dev_stuff/tests/run.sh lint
+        run: ./tests/run.sh lint
 
       - name: Unit tests
-        run: ./dev_stuff/tests/run.sh unit
+        run: ./tests/run.sh unit

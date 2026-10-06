@@ -2,16 +2,16 @@
 #
 # The Only Cure — test entry point.
 #
-#   ./dev_stuff/tests/run.sh lint    # syntax + unresolved-require checks (no game)
-#   ./dev_stuff/tests/run.sh unit    # mocked pure-Lua unit tests (no game)
-#   ./dev_stuff/tests/run.sh sp      # in-game singleplayer specs (ZBSpec)
-#   ./dev_stuff/tests/run.sh mp      # in-game multiplayer specs (ZBSpec)
-#   ./dev_stuff/tests/run.sh all     # lint + unit + sp
+#   ./tests/run.sh lint    # syntax + unresolved-require checks (no game)
+#   ./tests/run.sh unit    # mocked pure-Lua unit tests (no game)
+#   ./tests/run.sh sp      # in-game singleplayer specs (ZBSpec)
+#   ./tests/run.sh mp      # in-game multiplayer specs (ZBSpec)
+#   ./tests/run.sh all     # lint + unit + sp
 #
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$ROOT"
 
 LUA_BIN="${LUA_BIN:-}"
@@ -41,7 +41,7 @@ run_lint() {
     fi
     if [[ -n "$selene" ]]; then
         echo "==> selene (static analysis)"
-        "$selene" --allow-warnings --config "$ROOT/selene.toml" \
+        "$selene" --allow-warnings --config "$SCRIPT_DIR/selene.toml" \
             $(find 42/media/lua common/media/lua -name '*.lua')
     else
         echo "    (selene not found; skipping deeper static analysis)"
@@ -56,10 +56,10 @@ run_unit() {
 
 run_zbspec() {
     local mode="$1"
-    local vendor="$ROOT/dev_stuff/vendor/ZBSpec"
+    local vendor="$ROOT/tests/vendor/ZBSpec"
 
     if [[ ! -d "$vendor/lib" ]]; then
-        echo "error: vendored ZBSpec not found. Run dev_stuff/tests/setup_ingame.sh first." >&2
+        echo "error: vendored ZBSpec not found. Run tests/setup_ingame.sh first." >&2
         exit 1
     fi
     if ! command -v ruby >/dev/null 2>&1; then
@@ -70,7 +70,8 @@ run_zbspec() {
     # Run the vendored copy directly; it only needs stdlib + amazing_print + sugar_png.
     # -v lists every executed spec (name + pass/fail); without it ZBSpec only prints
     # per-section counts, which hides which specs actually ran.
-    exec ruby -I"$vendor/lib" "$vendor/bin/zbspec" --mod-dir "$ROOT" -v "$mode"
+    exec ruby -I"$vendor/lib" "$vendor/bin/zbspec" \
+        --mod-dir "$ROOT" --config "$ROOT/tests/spec/zbspec.yml" -v "$mode"
 }
 
 case "${1:-all}" in

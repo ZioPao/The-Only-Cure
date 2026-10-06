@@ -15,14 +15,14 @@ param()
 $ErrorActionPreference = 'Stop'
 
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$Root = (Resolve-Path (Join-Path $ScriptDir '..\..')).Path
-$Vendor = Join-Path $Root 'dev_stuff\vendor\ZBSpec'
+$Root = (Resolve-Path (Join-Path $ScriptDir '..')).Path
+$Vendor = Join-Path $Root 'tests\vendor\ZBSpec'
 
 Write-Host '==> Initializing ZBSpec submodule'
-git -C $Root submodule update --init --recursive dev_stuff/vendor/ZBSpec
+git -C $Root submodule update --init --recursive tests/vendor/ZBSpec
 
 Write-Host '==> Ensuring game config dir'
-$configFile = Join-Path $Root 'spec\zbspec.yml'
+$configFile = Join-Path $Root 'tests\spec\zbspec.yml'
 $version = '42.21'
 $m = Select-String -Path $configFile -Pattern 'game_version:\s*"?([0-9]+\.[0-9]+)' | Select-Object -First 1
 if ($m) { $version = $m.Matches[0].Groups[1].Value }
@@ -44,7 +44,7 @@ if (-not $gamePath) {
     )) { if (Test-Path $c) { $gamePath = $c; break } }
 }
 if (-not $gamePath -or -not (Test-Path $gamePath)) {
-    Write-Error 'Could not locate the Project Zomboid install. Set game_path in spec/zbspec.yml.'
+    Write-Error 'Could not locate the Project Zomboid install. Set game_path in tests/spec/zbspec.yml.'
 }
 Write-Host "    game folder: $gamePath"
 
@@ -69,4 +69,4 @@ if (Get-Command gem -ErrorAction SilentlyContinue) {
 }
 
 Write-Host ''
-Write-Host 'Setup complete. Then run: dev_stuff\tests\run.ps1 sp'
+Write-Host 'Setup complete. Then run: tests\run.ps1 sp'

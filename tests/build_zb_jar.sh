@@ -13,7 +13,7 @@
 #
 # Requires network (GitHub + Gradle) on first run.
 #
-# Usage: dev_stuff/tests/build_zb_jar.sh "<game folder>"
+# Usage: tests/build_zb_jar.sh "<game folder>"
 
 set -euo pipefail
 

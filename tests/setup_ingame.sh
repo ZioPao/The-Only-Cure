@@ -9,14 +9,14 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-VENDOR="$ROOT/dev_stuff/vendor/ZBSpec"
+ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+VENDOR="$ROOT/tests/vendor/ZBSpec"
 
 echo "==> Initializing ZBSpec submodule"
-git -C "$ROOT" submodule update --init --recursive dev_stuff/vendor/ZBSpec
+git -C "$ROOT" submodule update --init --recursive tests/vendor/ZBSpec
 
 echo "==> Ensuring game config dir"
-VERSION="$(grep -oE 'game_version:[[:space:]]*"?[0-9.]+' "$ROOT/spec/zbspec.yml" | grep -oE '[0-9]+\.[0-9]+' | head -1)"
+VERSION="$(grep -oE 'game_version:[[:space:]]*"?[0-9.]+' "$ROOT/tests/spec/zbspec.yml" | grep -oE '[0-9]+\.[0-9]+' | head -1)"
 VERSION="${VERSION:-42.21}"
 if [[ ! -d "$VENDOR/configs/$VERSION" ]]; then
     echo "    creating configs/$VERSION from configs/42.13"
@@ -26,7 +26,7 @@ else
 fi
 
 echo "==> Ensuring ZombieBuddy >= 3.0.0"
-GAME_PATH="$(grep -E '^[[:space:]]*game_path:' "$ROOT/spec/zbspec.yml" | head -1 | sed -E 's/^[[:space:]]*game_path:[[:space:]]*//; s/^"//; s/"[[:space:]]*$//; s/[[:space:]]*#.*$//')"
+GAME_PATH="$(grep -E '^[[:space:]]*game_path:' "$ROOT/tests/spec/zbspec.yml" | head -1 | sed -E 's/^[[:space:]]*game_path:[[:space:]]*//; s/^"//; s/"[[:space:]]*$//; s/[[:space:]]*#.*$//')"
 GAME_PATH="${GAME_PATH/#\~/$HOME}"
 if [[ -z "$GAME_PATH" ]]; then
     for candidate in \
@@ -37,7 +37,7 @@ if [[ -z "$GAME_PATH" ]]; then
 fi
 
 if [[ -z "$GAME_PATH" || ! -d "$GAME_PATH" ]]; then
-    echo "!! Could not locate the Project Zomboid install. Set game_path in spec/zbspec.yml." >&2
+    echo "!! Could not locate the Project Zomboid install. Set game_path in tests/spec/zbspec.yml." >&2
     exit 1
 fi
 echo "    game folder: $GAME_PATH"
@@ -70,4 +70,4 @@ fi
 
 echo
 echo "Setup complete."
-echo "Then run: dev_stuff/tests/run.sh sp"
+echo "Then run: tests/run.sh sp"

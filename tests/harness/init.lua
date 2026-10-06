@@ -1,7 +1,7 @@
 -- Shared harness bootstrap. Sets the TOC require paths and exposes helpers that
 -- reset global state between specs.
 --
--- Must be required after package.path contains `dev_stuff/tests/?.lua`
+-- Must be required after package.path contains `tests/?.lua`
 -- (run_unit.lua does this), and it must be run with the repo root as cwd.
 
 local LUA_ROOTS = {

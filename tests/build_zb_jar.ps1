@@ -3,14 +3,14 @@
   Builds ZombieBuddy from master (3.0.0-beta1) for the ZBSpec harness, on Windows.
 
 .DESCRIPTION
-  Mirrors dev_stuff/tests/build_zb_jar.sh. The released v2.3.4 jar is not
+  Mirrors tests/build_zb_jar.sh. The released v2.3.4 jar is not
   compatible with ZBSpec on Build 42.21 (Linux SIGINFO abort, JDK 25
   LuaHandler NPE, and below the required ZBVersionMin), so we build master.
 
   Requires: git, a JDK 25 (auto-downloaded if absent), and network access.
 
 .EXAMPLE
-  dev_stuff\tests\build_zb_jar.ps1 "C:\Program Files (x86)\Steam\steamapps\common\ProjectZomboid"
+  tests\build_zb_jar.ps1 "C:\Program Files (x86)\Steam\steamapps\common\ProjectZomboid"
 #>
 [CmdletBinding()]
 param(

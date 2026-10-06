@@ -18,6 +18,7 @@
     "Lua.workspace.ignoreDir": [
         ".vscode",
         "dev_stuff",
+        "tests",
         "workshop_files"
     ],
     "Lua.diagnostics.globals": [
