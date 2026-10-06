@@ -48,11 +48,6 @@ t.describe("CommandsData", function()
         local name = "SomePlayer123"
         t.assertEquals(name, CommandsData.GetUsername(CommandsData.GetKey(name)))
     end)
-
-    t.it("GetZombieKey is stable and distinct", function()
-        t.assertString(CommandsData.GetZombieKey())
-        t.assertFalse(CommandsData.GetZombieKey() == CommandsData.GetKey("Bob"))
-    end)
 end)
 
 t.describe("Registries", function()

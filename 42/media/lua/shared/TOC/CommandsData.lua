@@ -72,9 +72,4 @@ function CommandsData.GetUsername(key)
     return string.sub(key, #StaticData.MOD_NAME + 2, #key)      -- Not sure why +2... Something with kahlua, it should be +1
 end
 
-function CommandsData.GetZombieKey()
-    return StaticData.MOD_NAME .. "_ZOMBIES"
-end
-
-
 return CommandsData
