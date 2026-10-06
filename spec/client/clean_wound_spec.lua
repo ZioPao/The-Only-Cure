@@ -1,6 +1,7 @@
 -- Clean-wound bandage consumption. issue #259: in MP the dirty replacement was
 -- created client-side only, leaving a ghost item the server never knew about.
 local DC = require("TOC/Controllers/DataController")
+local ClientDataController = require("TOC/Controllers/ClientDataController")
 local CleanWoundAction = require("TOC/TimedActions/CleanWoundAction")
 
 local function count(pl, fullType)
@@ -37,6 +38,12 @@ describe("TOC clean wound bandage", function()
             end)
         else
             add_item(pl, "Base.AlcoholBandage")
+        end
+
+        -- SP does not auto-init while the character is still named "Bob", so the
+        -- DC may not exist yet; MP already has it from spawn.
+        if not isClient() then
+            ClientDataController.Request(user, true)
         end
 
         local dc = DC.GetInstance(user)
