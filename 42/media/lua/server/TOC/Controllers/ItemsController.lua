@@ -229,45 +229,6 @@ function ItemsController.Player.OverrideAmputationItemVisuals(playerObj, limbNam
     end
 end
 
---* Zombie Methods *--
----@class ItemsController.Zombie
-ItemsController.Zombie = {}
-
----Set an amputation to a zombie
----@param zombie IsoZombie
----@param amputationFullType string Full Type
-function ItemsController.Zombie.SpawnAmputationItem(zombie, amputationFullType)
-    local texId = ItemsController.Zombie.GetAmputationTexturesIndex(zombie)
-    local zombieVisuals = zombie:getItemVisuals()
-    local itemVisual = ItemVisual:new()
-    itemVisual:setItemType(amputationFullType)
-    itemVisual:setTextureChoice(texId)
-    if zombieVisuals then zombieVisuals:add(itemVisual) end
-    zombie:resetModelNextFrame()
-
-    -- Spawn the item too in the inventory to keep track of stuff this way. It's gonna get deleted when we reload the game
-    local zombieInv = zombie:getInventory()
-    zombieInv:AddItem(amputationFullType)
-
-
-    -- TODO Remove objects in that part of the body to prevent items floating in mid air
-end
-
-function ItemsController.Zombie.GetAmputationTexturesIndex(zombie)
-    local x = zombie:getHumanVisual():getSkinTexture()
-
-    -- Starting ID for zombies = 20
-    -- 3 levels
-    local matchedIndex = tonumber(x:match("ZedBody0(%d)")) - 1
-    matchedIndex = matchedIndex * 3
-
-    local level = tonumber(x:match("%d$")) - 1 -- it's from 1 to 3, but we're using it like 0 indexed arrays
-
-    local finalId = 20 + matchedIndex + level
-    --print("Zombie texture index: " .. tostring(finalId))
-    return finalId
-end
-
 Events.OnAmputatedLimb.Add(ItemsController.Player.DropItemsAfterAmputation)
 Events.OnProsthesisUnequipped.Add(ItemsController.Player.DropItemsAfterAmputation)
 

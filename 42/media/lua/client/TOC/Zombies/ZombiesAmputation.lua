@@ -1,9 +1,36 @@
 require "lua_timers"
 
-local ItemsController = require("TOC/Controllers/ItemsController")
 local StaticData = require("TOC/StaticData")
 local CommandsData = require("TOC/CommandsData")
 -------------------------------
+
+---@param zombie IsoZombie
+---@return integer
+local function GetZombieAmputationTexturesIndex(zombie)
+    local x = zombie:getHumanVisual():getSkinTexture()
+
+    -- Starting ID for zombies = 20, 3 levels
+    local matchedIndex = tonumber(x:match("ZedBody0(%d)")) - 1
+    matchedIndex = matchedIndex * 3
+
+    local level = tonumber(x:match("%d$")) - 1
+    return 20 + matchedIndex + level
+end
+
+---@param zombie IsoZombie
+---@param amputationFullType string Full Type
+local function SpawnZombieAmputationItem(zombie, amputationFullType)
+    local texId = GetZombieAmputationTexturesIndex(zombie)
+    local zombieVisuals = zombie:getItemVisuals()
+    local itemVisual = ItemVisual:new()
+    itemVisual:setItemType(amputationFullType)
+    itemVisual:setTextureChoice(texId)
+    if zombieVisuals then zombieVisuals:add(itemVisual) end
+    zombie:resetModelNextFrame()
+
+    -- Spawn the item too in the inventory to keep track of stuff this way. It's gonna get deleted when we reload the game
+    zombie:getInventory():AddItem(amputationFullType)
+end
 
 ---@param zombie IsoZombie|IsoGameCharacter|IsoMovingObject|IsoObject
 ---@return integer trueID
@@ -46,7 +73,7 @@ local function SpawnAmputation(zombie, side)
     local amputationFullType = StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. limb
 
 
-    ItemsController.Zombie.SpawnAmputationItem(zombie, amputationFullType)
+    SpawnZombieAmputationItem(zombie, amputationFullType)
 
 
     -- Add reference and transmit it to server
@@ -140,12 +167,12 @@ local function ReapplyAmputation(zombie)
         else
             local leftAmp = zombiesAmpData['L']
             if leftAmp then
-                ItemsController.Zombie.SpawnAmputationItem(zombie, leftAmp)
+                SpawnZombieAmputationItem(zombie, leftAmp)
             end
 
             local rightAmp = zombiesAmpData['R']
             if rightAmp then
-                ItemsController.Zombie.SpawnAmputationItem(zombie, rightAmp)
+                SpawnZombieAmputationItem(zombie, rightAmp)
             end
 
             -- Removes reference, local only
