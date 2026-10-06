@@ -10,7 +10,8 @@ local CommonMethods = require("TOC/CommonMethods")
 ---@field characterLevel number
 ---@field bandagedPlayerX number
 ---@field bandagedPlayerY number
-local CleanWoundAction = ISBaseTimedAction:derive("CleanWoundAction")
+-- global: NetTimedAction rebuilds the server-side action by name
+CleanWoundAction = ISBaseTimedAction:derive("CleanWoundAction")
 
 ---@param character IsoPlayer doctor performing the action
 ---@param patient IsoPlayer
@@ -93,7 +94,6 @@ function CleanWoundAction:perform()
     self.character:getXp():AddXP(Perks.Doctor, 10)
     local addPain = (60 - (self.characterLevel * 1))
     self.bodyPart:setAdditionalPain(self.bodyPart:getAdditionalPain() + addPain)
-    self.bandage:Use()
 
     -- TOC Data handling
 
@@ -120,6 +120,14 @@ function CleanWoundAction:perform()
 
     -- needed to remove from queue / start next.
     ISBaseTimedAction.perform(self)
+end
+
+-- MP: server-only; UseAndSync consumes and broadcasts the dirty replacement
+function CleanWoundAction:complete()
+    if self.bandage then
+        self.bandage:UseAndSync()
+    end
+    return true
 end
 
 return CleanWoundAction
