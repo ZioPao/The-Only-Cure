@@ -116,12 +116,16 @@ function ItemsController.Player.SpawnAmputationItem(playerObj, limbName)
     if visual then visual:setTextureChoice(texId) end -- it counts from 0, so we have to subtract 1
     sendAddItemToContainer(playerObj:getInventory(), clothingItem)
 
+    -- Wear the stump on this side too. On a dedicated server the server copy is
+    -- authoritative for clothing syncs, so if it does not wear the stump the next
+    -- server->client SyncClothing strips it from the client and the limb visually
+    -- regrows (#257).
+    local AmputationHandler = require("TOC/Handlers/AmputationHandler")
+    AmputationHandler.WearAmputationItem(playerObj, itemName)
+
     if isServer() then
         --sendServerCommand works only in MP
         sendServerCommand(playerObj, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveWearAmputation, {itemName = itemName, texId = texId})
-    else
-        local AmputationHandler = require("TOC/Handlers/AmputationHandler")
-        AmputationHandler.WearAmputationItem(playerObj, itemName)
     end
 end
 

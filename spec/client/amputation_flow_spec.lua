@@ -201,6 +201,36 @@ describe("TOC AmputationHandler:execute (SP)", function()
         assert.is_false(isWorn(p, "Base.Ring_Left_RingFinger_Silver"))
         reset()
     end)
+
+    it("stump clothing survives a clothing change (#257)", function()
+        reset()
+        execute("ForeArm_L", false)
+
+        local p = getPlayer()
+        local stump = StaticData.AMPUTATION_CLOTHING_ITEM_BASE .. "ForeArm_L"
+        assert.is_true(isWorn(p, stump), "stump should be worn after amputation")
+
+        -- Change clothes: toggle an existing non-stump worn item, then rebuild the model.
+        local target = nil
+        local worn = p:getWornItems()
+        for i = 1, worn:size() do
+            local entry = worn:get(i - 1)
+            local it = entry and entry:getItem()
+            if it and it:getFullType() ~= stump and it:getBodyLocation() then
+                target = it
+                break
+            end
+        end
+        assert.is_not_nil(target, "need a worn item to change")
+
+        p:removeWornItem(target)
+        p:setWornItem(target:getBodyLocation(), target)
+        p:resetModelNextFrame()
+
+        assert.is_true(isWorn(p, stump), "stump must survive a clothing change (#257)")
+        assert.is_true(getDC():getIsCut("ForeArm_L"), "limb must stay cut")
+        reset()
+    end)
 end)
 
 return ZBSpec.run()
