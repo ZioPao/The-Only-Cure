@@ -36,9 +36,7 @@ function ServerRelayCommands.UpdateDataControllerFromClient(playerObj, args)
 
     end
 
-    -- DRAFT #279: `if args.flag` drops `false`, so a client clearing isInfected
-    -- (bite on missing limb healed) never reached the server and the flag stayed
-    -- stale. Check for nil instead so both true and false propagate.
+    -- #279: test ~= nil, not truthiness, so a cleared (false) isInfected propagates.
     if args.isInfected ~= nil then
         h:setIsInfected(args.limbName, args.isInfected)
         TOC_DEBUG.print("isInfected = " .. tostring(args.isInfected))
@@ -189,12 +187,7 @@ function ServerRelayCommands.RelayForcedAmputation(adminObj, args)
     h:apply(patientPl)
 end
 
----Clear a bite sitting on the requesting player's own already-amputated limb (#279).
----The client detects it (it can only ever see itself); the server validates and
----clears it authoritatively, since client Lua cannot push BodyDamage. Sender is
----implicitly scoped: we only ever touch playerObj's own data, so a crafted packet
----can at most clear the sender's own phantom bites - nothing it couldn't already
----achieve by playing normally.
+---Clear a bite on the requesting player's own amputated limb (#279). Scoped to the sender.
 ---@param playerObj IsoPlayer
 ---@param args requestSanitizeCutLimbParams
 function ServerRelayCommands.RequestSanitizeCutLimb(playerObj, args)

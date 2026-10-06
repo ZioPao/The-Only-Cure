@@ -50,8 +50,6 @@ CommandsData.server = {
         RelayTriggerBleed = "RelayTriggerBleed",                         ---@alias relayTriggerBleedParams {patientNum : number, limbName : string, bleedingTime : number}
 
         --* BITE ON CUT LIMB (#279) *--
-        -- Client detected a bite on its own already-amputated limb and asks the
-        -- server (BodyDamage owner in MP) to clear it authoritatively.
         RequestSanitizeCutLimb = "RequestSanitizeCutLimb",                 ---@alias requestSanitizeCutLimbParams {limbName : string}
 
         --* PROSTHESES *--

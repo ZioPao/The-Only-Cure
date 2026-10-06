@@ -178,10 +178,7 @@ function ISEquipWeaponAction:perform()
     --end
 end
 
--- In SP the engine calls perform() first, then complete() (IsoGameCharacter.update),
--- and vanilla complete() re-equips the item to self.primary. Without re-applying the
--- amputation-aware assignment here, a hotbar/belt equip (which bypasses the inventory
--- context-menu gate) lands in the amputated hand and floats there (#282).
+-- #282: vanilla complete() re-equips to self.primary; re-apply amputation after it.
 local og_ISEquipWeaponAction_complete = ISEquipWeaponAction.complete
 ---@diagnostic disable-next-line: duplicate-set-field
 function ISEquipWeaponAction:complete()

@@ -111,8 +111,7 @@ function ItemsController.Player.SpawnAmputationItem(playerObj, limbName)
     local texId = ItemsController.Player.GetAmputationTexturesIndex(playerObj, false)
 
     ---@cast clothingItem InventoryItem
-    -- getVisual() can be nil in headless/loading contexts (and the test harness);
-    -- the item is still spawned/equipped, only the texture choice is skipped.
+    -- getVisual() is nil in headless/loading contexts.
     local visual = clothingItem and clothingItem.getVisual and clothingItem:getVisual()
     if visual then visual:setTextureChoice(texId) end -- it counts from 0, so we have to subtract 1
     sendAddItemToContainer(playerObj:getInventory(), clothingItem)
@@ -139,9 +138,7 @@ function ItemsController.Player.DropItemsAfterAmputation(playerObj, limbName)
     local wornItems = playerObj:getWornItems()
     -- .print("DropItemsAfterAmputation | wornItems size=" .. tostring(wornItems:size()))
 
-    -- B42 returns a resource location from ItemBodyLocation:toString() (e.g.
-    -- "base:left_ringfinger"), while older builds returned "Left_RingFinger".
-    -- Compare the lowercased suffix so both forms match.
+    -- B42 returns a resource location (e.g. "base:left_ringfinger") from ItemBodyLocation:toString().
     local function bodyLocString(bl)
         if not bl then return "" end
         if bl.toString then return string.lower(bl:toString()) end
