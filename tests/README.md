@@ -397,6 +397,12 @@ What the fork adds (relative to upstream):
 - A `42/media/java -> common/media/java` symlink so B42 finds the Java patch jar.
 - **Configurable `spec_dir`** (defaults to `spec`) so the suite can live under
   `tests/spec`, and `tests` added to the cache mod-link exclusions.
+- **Config-driven server launch** — `server_path`, `launch_command`,
+  `launcher`, `jvm_args`, `server_args`/`client_args`, `env`, `main_class`,
+  `classpath`, `natives_dir`, `steam`, `debug_jvm`, `headless`. The built-in
+  launcher is the default; these replace a hand-written `.bat`/`.sh`. See the
+  fork README ("Launch overrides") and the commented example in
+  `tests/spec/zbspec.yml`.
 
 ### Updating the submodule
 

@@ -42,6 +42,32 @@ cache_root: "~/.cache/zbspec"
 # Linux (Steam default):
 game_path: "~/.local/share/Steam/steamapps/common/ProjectZomboid"
 
+# Dedicated server + custom launch (optional). By default the dedicated server is
+# launched from `game_path` (the client install, which ships the server classes).
+# To use the real dedicated-server install and/or replace a custom start script,
+# uncomment and adjust:
+#
+# server_path: "~/.local/share/Steam/steamapps/common/Project Zomboid Dedicated Server"
+# steam: false                 # true => -Dzomboid.steam=1 (no -nosteam)
+# debug_jvm: false             # true => also pass -Ddebug=1
+# jvm_args: ["-Xms4g", "-Xmx4g"]
+# server_args: ["-statistic", "0"]
+# Run the install's own wrapper instead of the built-in argv:
+# launcher: "start-server-nosteam-custom.sh"
+# Or spell out the full command (${AGENT} injects ZombieBuddy):
+# launch_command:
+#   - "${JAVA}"
+#   - "-Djava.awt.headless=true"
+#   - "-Dzomboid.steam=0"
+#   - "${AGENT}"
+#   - "-classpath"
+#   - "java/.:java/projectzomboid.jar"
+#   - "zombie/network/GameServer"
+#   - "-cachedir=${CACHEDIR}"
+#   - "${SERVERNAME}"
+#   - "-nosteam"
+
+
 # Enable the mod under test. `TheOnlyCure` is the id in mod.info.
 mods:
   - { id: "TheOnlyCure", path: "." }
