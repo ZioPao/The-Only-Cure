@@ -111,15 +111,21 @@ function ItemsController.Player.SpawnAmputationItem(playerObj, limbName)
     local texId = ItemsController.Player.GetAmputationTexturesIndex(playerObj, false)
 
     ---@cast clothingItem InventoryItem
-    clothingItem:getVisual():setTextureChoice(texId) -- it counts from 0, so we have to subtract 1
+    -- getVisual() is nil in headless/loading contexts.
+    local visual = clothingItem and clothingItem.getVisual and clothingItem:getVisual()
+    if visual then visual:setTextureChoice(texId) end -- it counts from 0, so we have to subtract 1
     sendAddItemToContainer(playerObj:getInventory(), clothingItem)
+
+    -- Wear the stump on this side too. On a dedicated server the server copy is
+    -- authoritative for clothing syncs, so if it does not wear the stump the next
+    -- server->client SyncClothing strips it from the client and the limb visually
+    -- regrows (#257).
+    local AmputationHandler = require("TOC/Handlers/AmputationHandler")
+    AmputationHandler.WearAmputationItem(playerObj, itemName)
 
     if isServer() then
         --sendServerCommand works only in MP
         sendServerCommand(playerObj, CommandsData.modules.TOC_RELAY, CommandsData.client.Relay.ReceiveWearAmputation, {itemName = itemName, texId = texId})
-    else
-        local AmputationHandler = require("TOC/Handlers/AmputationHandler")
-        AmputationHandler.WearAmputationItem(playerObj, itemName)
     end
 end
 
@@ -136,18 +142,30 @@ function ItemsController.Player.DropItemsAfterAmputation(playerObj, limbName)
     local wornItems = playerObj:getWornItems()
     -- .print("DropItemsAfterAmputation | wornItems size=" .. tostring(wornItems:size()))
 
+    -- B42 returns a resource location (e.g. "base:left_ringfinger") from ItemBodyLocation:toString().
+    local function bodyLocString(bl)
+        if not bl then return "" end
+        if bl.toString then return string.lower(bl:toString()) end
+        return string.lower(tostring(bl))
+    end
+    local function endsWith(s, suffix)
+        return #s >= #suffix and string.sub(s, -#suffix) == suffix
+    end
+    local sideLower = string.lower(sideStr)
+
     -- Unequip worn items blocked by the amputated limb (moves them back to inventory)
     for i = 1, wornItems:size() do
         local it = wornItems:get(i - 1)
         if it then
             local wornItem = it:getItem()
-            local bl = wornItem:getBodyLocation()
+            local bl = bodyLocString(wornItem:getBodyLocation())
             -- TOC_DEBUG.print("DropItemsAfterAmputation | worn bl=" .. tostring(bl))
-            if string.contains(limbName, "Hand_") and (bl == sideStr .. "_MiddleFinger" or bl == sideStr .. "_RingFinger") then
+            if string.contains(limbName, "Hand_")
+                and (endsWith(bl, sideLower .. "_middlefinger") or endsWith(bl, sideLower .. "_ringfinger")) then
                 -- TOC_DEBUG.print("DropItemsAfterAmputation | removing finger item " .. tostring(wornItem))
                 playerObj:removeWornItem(wornItem)
             end
-            if string.contains(limbName, "ForeArm_") and (bl == sideStr .. "Wrist") then
+            if string.contains(limbName, "ForeArm_") and endsWith(bl, sideLower .. "wrist") then
                 -- TOC_DEBUG.print("DropItemsAfterAmputation | removing wrist item " .. tostring(wornItem))
                 playerObj:removeWornItem(wornItem)
             end
@@ -206,51 +224,13 @@ function ItemsController.Player.OverrideAmputationItemVisuals(playerObj, limbNam
 
                 -- change it here
                 local texId = ItemsController.Player.GetAmputationTexturesIndex(playerObj, isCicatrized)
-                wornItem:getVisual():setTextureChoice(texId)
+                local visual = wornItem.getVisual and wornItem:getVisual()
+                if visual then visual:setTextureChoice(texId) end
                 playerObj:resetModelNextFrame()     -- necessary to update the model
                 return
             end
         end
     end
-end
-
---* Zombie Methods *--
----@class ItemsController.Zombie
-ItemsController.Zombie = {}
-
----Set an amputation to a zombie
----@param zombie IsoZombie
----@param amputationFullType string Full Type
-function ItemsController.Zombie.SpawnAmputationItem(zombie, amputationFullType)
-    local texId = ItemsController.Zombie.GetAmputationTexturesIndex(zombie)
-    local zombieVisuals = zombie:getItemVisuals()
-    local itemVisual = ItemVisual:new()
-    itemVisual:setItemType(amputationFullType)
-    itemVisual:setTextureChoice(texId)
-    if zombieVisuals then zombieVisuals:add(itemVisual) end
-    zombie:resetModelNextFrame()
-
-    -- Spawn the item too in the inventory to keep track of stuff this way. It's gonna get deleted when we reload the game
-    local zombieInv = zombie:getInventory()
-    zombieInv:AddItem(amputationFullType)
-
-
-    -- TODO Remove objects in that part of the body to prevent items floating in mid air
-end
-
-function ItemsController.Zombie.GetAmputationTexturesIndex(zombie)
-    local x = zombie:getHumanVisual():getSkinTexture()
-
-    -- Starting ID for zombies = 20
-    -- 3 levels
-    local matchedIndex = tonumber(x:match("ZedBody0(%d)")) - 1
-    matchedIndex = matchedIndex * 3
-
-    local level = tonumber(x:match("%d$")) - 1 -- it's from 1 to 3, but we're using it like 0 indexed arrays
-
-    local finalId = 20 + matchedIndex + level
-    --print("Zombie texture index: " .. tostring(finalId))
-    return finalId
 end
 
 Events.OnAmputatedLimb.Add(ItemsController.Player.DropItemsAfterAmputation)

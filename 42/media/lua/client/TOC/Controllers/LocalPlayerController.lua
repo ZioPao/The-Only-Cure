@@ -46,6 +46,8 @@ function LocalPlayerController.InitializePlayer(isForced)
     if isForced then
         sendClientCommand(CommandsData.modules.TOC_ITEMS, "DeleteAllOldAmputationItems", {patientNum = playerObj:getOnlineID()})
     end
+
+    SetHealthPanelTOC()
 end
 
 
@@ -70,10 +72,6 @@ end
 --* Health *--
 
 ---Used to heal an area that has been cut previously. There's an exception for bites, those are managed differently
----DRAFT FIX for #279: bites can still roll on the vanilla BodyPart of an
----already-amputated limb (amputation is modData + stump clothing, prosthesis is
----only a toc:armprost_* item BodyLocation). Clear bite/infection timers too,
----otherwise the health panel keeps showing "Bitten" on a missing limb.
 ---@param bodyPart BodyPart
 function LocalPlayerController.HealArea(bodyPart)
 
@@ -87,9 +85,6 @@ function LocalPlayerController.HealArea(bodyPart)
     bodyPart:setBleedingTime(0)
 
     bodyPart:SetBitten(false)
-    -- DRAFT #279: SetBitten(false) alone leaves BiteTime running, so HasInjury()
-    -- stays true and ISHealthPanel keeps listing the missing limb. Guarded for
-    -- B42 server-side API differences.
     if bodyPart.setBiteTime then bodyPart:setBiteTime(0) end
     if bodyPart.setInfected then bodyPart:setInfected(false) end
     if bodyPart.setInfectionTime then bodyPart:setInfectionTime(0) end
@@ -189,15 +184,11 @@ function LocalPlayerController.HandleDamage(character)
             end
 
             -- Special case for bites\zombie infections
-            -- DRAFT #279: bitten() can be true without IsInfected() yet; both mean
-            -- "zombie hit a missing limb" and must be cleared + synced, otherwise
-            -- the bite persists on the panel with no valid re-amputation target.
             if bodyPart:bitten() or bodyPart:IsInfected() then
                 TOC_DEBUG.print("Healed from zombie infection - " .. limbName)
                 LocalPlayerController.HealZombieInfection(bd, limbName, dcInst)
                 modDataNeedsUpdate = true
             elseif dcInst:getIsInfected(limbName) then
-                -- Injury was cleared above but the modData flag stayed stale.
                 dcInst:setIsInfected(limbName, false)
                 modDataNeedsUpdate = true
             end
@@ -246,28 +237,13 @@ end
 Events.OnPlayerGetDamage.Add(LocalPlayerController.OnGetDamage)
 
 --* Bite-on-cut-limb polling (issue #279) *--
--- Why this exists alongside HandleDamage above (read before touching either):
---  - HandleDamage is REACTIVE: it runs on OnPlayerGetDamage, which the engine does
---    NOT fire for MP zombie hits (victim client forwards the hit via
---    sendZombieHit and applies nothing; the server rolls damage and pushes full
---    BodyDamage back via PlayerDamage packet, eventlessly). So HandleDamage never
---    sees the bite moment in MP - only later INFECTION ticks, if at all.
---  - This poll is DETECTIVE: it runs on OnPlayerUpdate (local-player-only on
---    clients), spots a bite sitting on an already-cut limb, clears it locally for
---    instant display relief via HealArea, and - the part that actually fixes MP -
---    asks the server to clear it authoritatively via RequestSanitizeCutLimb.
---    Client Lua can never push BodyDamage itself (syncBodyPart is a no-op outside
---    the server), hence the round-trip.
--- Both paths are idempotent: clearing already-clean state is a cheap no-op loop.
--- Throttle state below belongs ONLY to this poll; it shares nothing with the
--- hasBeenDamaged lock above.
+-- MP zombie hits never fire OnPlayerGetDamage, so HandleDamage misses them; poll
+-- cut limbs and ask the server to sanitize.
 
----How often (in OnPlayerUpdate ticks) to scan cut limbs. ~60 ticks ~= 1 second.
 LocalPlayerController.sanitizePollInterval = 60
----Minimum ticks between two sanitize requests for the SAME limb. Bounds packets.
 LocalPlayerController.sanitizeRequestCooldown = 600
 LocalPlayerController.sanitizePollTick = 0
----@type table<string, integer> limbName -> poll tick of last sent request
+---@type table<string, integer>
 LocalPlayerController.sanitizeLastRequestTick = {}
 
 ---@param character IsoPlayer|IsoGameCharacter

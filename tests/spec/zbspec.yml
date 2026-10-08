@@ -1,0 +1,81 @@
+# ZBSpec configuration for The Only Cure.
+# Docs: https://github.com/zed-0xff/ZBSpec
+#
+# The in-game suite runs locally (Windows or Linux). See tests/README.md.
+# Run it with: tests/run.sh sp   (or run.ps1 on Windows)
+
+startup_timeout: 180
+server_startup_timeout: 120
+# Launch a second MP client (username zbspec2) for surgeon<->patient relay tests.
+mp_clients: 2
+# Always stop the instances, even when a spec fails, so a failed run cannot
+# leave a stale server/client that breaks the next run.
+shutdown: always
+debug: true
+same_console: true
+redirect_output: false
+# Folder holding client/ server/ shared/ specs (relative to the repo root).
+spec_dir: tests/spec
+spec_glob: tests/spec/**/*_spec.lua
+
+# Lua helpers from ZBSpec/lua/, loaded before spec/spec_helper.lua.
+helpers:
+  - common_helpers
+
+# Game config version (tests/vendor/ZBSpec/configs/<version>).
+# ZBSpec keys off `game_versions`; keep `game_version` in sync for the
+# setup/run helpers.
+game_versions:
+  - "42.21"
+game_version: "42.21"
+
+# Keep the per-instance cache OUTSIDE the mod directory. The repo lives in
+# ~/Zomboid/mods/, which PZ scans; a cache under ./tmp would be discovered as a
+# second copy of the mod and break item/clothing script loading.
+cache_root: "~/.cache/zbspec"
+
+# Uncomment matching your machine:
+#
+# Windows (Steam default):
+# game_path: "C:/Program Files (x86)/Steam/steamapps/common/ProjectZomboid"
+#
+# Linux (Steam default):
+game_path: "~/.local/share/Steam/steamapps/common/ProjectZomboid"
+
+# Dedicated server + custom launch (optional). By default the dedicated server is
+# launched from `game_path` (the client install, which ships the server classes).
+# To use the real dedicated-server install and/or replace a custom start script,
+# uncomment and adjust:
+#
+# server_path: "~/.local/share/Steam/steamapps/common/Project Zomboid Dedicated Server"
+# steam: false                 # true => -Dzomboid.steam=1 (no -nosteam)
+# debug_jvm: false             # true => also pass -Ddebug=1
+# jvm_args: ["-Xms4g", "-Xmx4g"]
+# server_args: ["-statistic", "0"]
+# Run the install's own wrapper instead of the built-in argv:
+# launcher: "start-server-nosteam-custom.sh"
+# Or spell out the full command (${AGENT} injects ZombieBuddy):
+# launch_command:
+#   - "${JAVA}"
+#   - "-Djava.awt.headless=true"
+#   - "-Dzomboid.steam=0"
+#   - "${AGENT}"
+#   - "-classpath"
+#   - "java/.:java/projectzomboid.jar"
+#   - "zombie/network/GameServer"
+#   - "-cachedir=${CACHEDIR}"
+#   - "${SERVERNAME}"
+#   - "-nosteam"
+
+
+# Enable the mod under test. `TheOnlyCure` is the id in mod.info.
+mods:
+  - { id: "TheOnlyCure", path: "." }
+
+# Optional: forward extra ZombieBuddy agent arguments, e.g. for first-run
+# mod approval on a fresh setup:
+# Bypass ZombieBuddy's Java-mod signature approval. Without it, a failed authors
+# fetch leaves the game waiting at "Waiting for Java mods approval…" and the API
+# never starts. Test-only.
+zb_agent_args:
+  - "policy=allow-all"

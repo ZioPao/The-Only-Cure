@@ -89,9 +89,57 @@
             "windows": {
                 "command": "\"${config:zomboid_server_folder}\\StartServer64_nosteam_custom.bat\" TOC"
             },
+            "linux": {
+                "command": "\"${config:zomboid_server_folder}/start-server-nosteam-custom.sh\" TOC"
+            },
             "problemMatcher": [
                 "$eslint-stylish"
             ]
+        },
+        {
+            "label": "TOC: Lint",
+            "type": "shell",
+            "command": "${workspaceFolder}/tests/run.sh lint",
+            "options": {
+                "statusbar": { "label": "$(check) TOC: Lint" }
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "TOC: Unit Tests",
+            "type": "shell",
+            "command": "${workspaceFolder}/tests/run.sh unit",
+            "options": {
+                "statusbar": { "label": "$(beaker) TOC: Unit" }
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "TOC: In-Game SP Tests",
+            "type": "shell",
+            "command": "${workspaceFolder}/tests/run.sh sp",
+            "options": {
+                "statusbar": { "label": "$(beaker) TOC: In-Game SP" }
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "TOC: In-Game MP Tests",
+            "type": "shell",
+            "command": "${workspaceFolder}/tests/run.sh mp",
+            "options": {
+                "statusbar": { "label": "$(beaker) TOC: In-Game MP" }
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "TOC: Test All",
+            "type": "shell",
+            "command": "${workspaceFolder}/tests/run.sh all",
+            "options": {
+                "statusbar": { "label": "$(beaker) TOC: Test All" }
+            },
+            "problemMatcher": []
         }
     ]
 }

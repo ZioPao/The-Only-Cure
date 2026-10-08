@@ -42,13 +42,6 @@ StaticData.PARTS_IND_STR = {
     ForeArm = "ForeArm",
     UpperArm = "UpperArm"
 }
-StaticData.PARTS_STR = {
-    "Hand",
-    "ForeArm",
-    "UpperArm"
-}
-
-
 -- No "MAX" here.
 StaticData.IGNORED_BODYLOCS_BPT = {
     BodyPartType.Foot_L, BodyPartType.Foot_R, BodyPartType.Groin, BodyPartType.Head,
