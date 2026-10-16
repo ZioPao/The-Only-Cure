@@ -4,7 +4,6 @@ module TOC
     {
         CharacterTrait = toc:amputee_hand,
         IsProfessionTrait = false,
-        DisabledInMultiplayer = false,
         Cost = -8,
         UIName = UI_trait_Amputee_Hand,
         UIDescription = UI_trait_Amputee_Hand_desc,
@@ -18,7 +17,6 @@ module TOC
     character_trait_definition toc:amputee_forearm
     {
         IsProfessionTrait = false,
-        DisabledInMultiplayer = false,
         CharacterTrait = toc:amputee_forearm,
         Cost = -10,
         UIName = UI_trait_Amputee_ForeArm,
@@ -30,7 +28,6 @@ module TOC
     character_trait_definition toc:amputee_upperarm
     {
         IsProfessionTrait = false,
-        DisabledInMultiplayer = false,
         CharacterTrait = toc:amputee_upperarm,
         Cost = -20,
         UIName = UI_trait_Amputee_UpperArm,
