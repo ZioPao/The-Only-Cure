@@ -99,7 +99,15 @@
         {
             "label": "TOC: Lint",
             "type": "shell",
-            "command": "${workspaceFolder}/tests/run.sh lint",
+            "windows": {
+                "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"${workspaceFolder}/tests/run.ps1\" lint"
+            },
+            "linux": {
+                "command": "bash \"${workspaceFolder}/tests/run.sh\" lint"
+            },
+            "osx": {
+                "command": "bash \"${workspaceFolder}/tests/run.sh\" lint"
+            },
             "options": {
                 "statusbar": { "label": "$(check) TOC: Lint" }
             },
@@ -108,7 +116,15 @@
         {
             "label": "TOC: Unit Tests",
             "type": "shell",
-            "command": "${workspaceFolder}/tests/run.sh unit",
+            "windows": {
+                "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"${workspaceFolder}/tests/run.ps1\" unit"
+            },
+            "linux": {
+                "command": "bash \"${workspaceFolder}/tests/run.sh\" unit"
+            },
+            "osx": {
+                "command": "bash \"${workspaceFolder}/tests/run.sh\" unit"
+            },
             "options": {
                 "statusbar": { "label": "$(beaker) TOC: Unit" }
             },
@@ -117,7 +133,15 @@
         {
             "label": "TOC: In-Game SP Tests",
             "type": "shell",
-            "command": "${workspaceFolder}/tests/run.sh sp",
+            "windows": {
+                "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"${workspaceFolder}/tests/run.ps1\" sp"
+            },
+            "linux": {
+                "command": "bash \"${workspaceFolder}/tests/run.sh\" sp"
+            },
+            "osx": {
+                "command": "bash \"${workspaceFolder}/tests/run.sh\" sp"
+            },
             "options": {
                 "statusbar": { "label": "$(beaker) TOC: In-Game SP" }
             },
@@ -126,7 +150,15 @@
         {
             "label": "TOC: In-Game MP Tests",
             "type": "shell",
-            "command": "${workspaceFolder}/tests/run.sh mp",
+            "windows": {
+                "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"${workspaceFolder}/tests/run.ps1\" mp"
+            },
+            "linux": {
+                "command": "bash \"${workspaceFolder}/tests/run.sh\" mp"
+            },
+            "osx": {
+                "command": "bash \"${workspaceFolder}/tests/run.sh\" mp"
+            },
             "options": {
                 "statusbar": { "label": "$(beaker) TOC: In-Game MP" }
             },
@@ -135,7 +167,15 @@
         {
             "label": "TOC: Test All",
             "type": "shell",
-            "command": "${workspaceFolder}/tests/run.sh all",
+            "windows": {
+                "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"${workspaceFolder}/tests/run.ps1\" all"
+            },
+            "linux": {
+                "command": "bash \"${workspaceFolder}/tests/run.sh\" all"
+            },
+            "osx": {
+                "command": "bash \"${workspaceFolder}/tests/run.sh\" all"
+            },
             "options": {
                 "statusbar": { "label": "$(beaker) TOC: Test All" }
             },

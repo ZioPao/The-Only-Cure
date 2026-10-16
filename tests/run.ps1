@@ -46,6 +46,43 @@ function Invoke-Unit {
     if ($LASTEXITCODE -ne 0) { throw 'unit tests failed' }
 }
 
+$ZbspecGeneratedConfig = Join-Path $Root 'tests\.zbspec.local.yml'
+
+# The game install path is machine-dependent, so it lives in
+# .vscode/settings.json (`zbspec_game_path`) instead of being hardcoded in
+# tests/spec/zbspec.yml. Returns $null when the setting is absent.
+function Get-ZbspecGamePath {
+    $settingsPath = Join-Path $Root '.vscode\settings.json'
+    if (-not (Test-Path $settingsPath)) { return $null }
+    # VSCode settings are JSONC; drop // line comments before parsing.
+    $json = (Get-Content -Raw $settingsPath) -replace '(?m)^\s*//.*$', ''
+    try {
+        $cfg = $json | ConvertFrom-Json
+    } catch {
+        Write-Warning "could not parse $settingsPath : $_"
+        return $null
+    }
+    if ($cfg.zbspec_game_path) { return [string]$cfg.zbspec_game_path }
+    return $null
+}
+
+# Materialize the config ZBSpec should use: the committed zbspec.yml with a
+# `game_path` appended from the VSCode setting. Falls back to zbspec.yml
+# unchanged (ZBSpec then auto-detects) when no setting is found.
+function Get-ZbspecConfig {
+    $base = Join-Path $Root 'tests\spec\zbspec.yml'
+    $gamePath = Get-ZbspecGamePath
+    if (-not $gamePath) {
+        Write-Host '    (no zbspec_game_path in .vscode/settings.json; ZBSpec will auto-detect the game)'
+        return $base
+    }
+    # Forward slashes keep the YAML scalar valid without backslash escaping.
+    $yamlPath = ($gamePath -replace '\\', '/') -replace "'", "''"
+    $content = (Get-Content -Raw $base).TrimEnd() + "`ngame_path: '$yamlPath'`n"
+    Set-Content -Path $ZbspecGeneratedConfig -Value $content -NoNewline -Encoding utf8
+    return $ZbspecGeneratedConfig
+}
+
 function Invoke-Zbspec([string]$zbspecMode) {
     $vendor = Join-Path $Root 'tests\vendor\ZBSpec'
     if (-not (Test-Path (Join-Path $vendor 'lib'))) {
@@ -56,7 +93,7 @@ function Invoke-Zbspec([string]$zbspecMode) {
     }
     # -v lists every executed spec (name + pass/fail); without it ZBSpec only
     # prints per-section counts, which hides which specs actually ran.
-    $config = Join-Path $Root 'tests\spec\zbspec.yml'
+    $config = Get-ZbspecConfig
     & ruby "-I$($vendor -replace '\\','/')/lib" (Join-Path $vendor 'bin\zbspec') --mod-dir $Root --config $config -v $zbspecMode
     if ($LASTEXITCODE -ne 0) { throw "zbspec $zbspecMode failed" }
 }

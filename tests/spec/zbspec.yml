@@ -34,13 +34,15 @@ game_version: "42.21"
 # second copy of the mod and break item/clothing script loading.
 cache_root: "~/.cache/zbspec"
 
-# Uncomment matching your machine:
+# game_path is machine-dependent, so it is NOT hardcoded here.
+# tests/run.ps1 / tests/run.sh read the `zbspec_game_path` setting from
+# .vscode/settings.json and append `game_path` to a copy of this config at run
+# time (written to tests/.zbspec.local.yml, which is git-ignored).
 #
-# Windows (Steam default):
-# game_path: "C:/Program Files (x86)/Steam/steamapps/common/ProjectZomboid"
-#
-# Linux (Steam default):
-game_path: "~/.local/share/Steam/steamapps/common/ProjectZomboid"
+# When no setting is found the runner leaves this file untouched and ZBSpec
+# auto-detects a Steam-default install. To hardcode a path instead, add an
+# active line below (e.g. for Linux):
+# game_path: "~/.local/share/Steam/steamapps/common/ProjectZomboid"
 
 # Enable the mod under test. `TheOnlyCure` is the id in mod.info.
 mods:

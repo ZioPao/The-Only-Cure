@@ -44,7 +44,7 @@ tests/
 │   ├── client/             # client + SP only
 │   ├── server/             # dedicated server only
 │   ├── shared/             # server AND client AND SP
-│   └── zbspec.yml          # ZBSpec config (game_path, game_version, mods, helpers)
+│   └── zbspec.yml          # ZBSpec config (game_version, mods, helpers; game_path comes from .vscode/settings.json)
 ├── vendor/ZBSpec/          # git submodule: the ZBSpec fork
 ├── setup_ingame.sh/.ps1    # one-time in-game setup (submodule, ZombieBuddy, Ruby)
 └── build_zb_jar.sh/.ps1    # build ZombieBuddy from master (required for in-game)
@@ -79,8 +79,9 @@ Prerequisites:
 - **ZombieBuddy built from master (3.0.0-beta1)** installed next to the game.
   The released v2.3.4 does not work on Linux/B42.21 (SIGINFO abort, JDK-25
   NPE, and it is below ZBSpec's minimum version).
-- A Project Zomboid install for the targeted version (`42.21`), with
-  `game_path` set in `tests/spec/zbspec.yml`.
+- A Project Zomboid install for the targeted version (`42.21`). Its location is
+  machine-dependent, so set `zbspec_game_path` in `.vscode/settings.json` (see
+  §4); `tests/run.*` injects it as `game_path` at run time.
 
 ```bash
 # Linux / macOS — inits the ZBSpec submodule, creates configs/42.21, checks
@@ -118,6 +119,12 @@ Environment overrides:
 
 - `LUA_BIN` — Lua interpreter for `lint`/`unit`.
 - `SELENE_BIN` — selene binary for `lint`.
+
+In-game game path: `sp`/`mp` read `zbspec_game_path` from
+`.vscode/settings.json` and append it as `game_path` to a copy of
+`tests/spec/zbspec.yml` (written to the git-ignored `tests/.zbspec.local.yml`).
+This keeps the machine-dependent install path out of the committed config. If
+the setting is missing, ZBSpec auto-detects a Steam-default install.
 
 Every runner exits non-zero on failure, so they are CI-friendly.
 

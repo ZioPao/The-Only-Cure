@@ -54,6 +54,40 @@ run_unit() {
     "$LUA_BIN" "$SCRIPT_DIR/run_unit.lua"
 }
 
+# The game install path is machine-dependent, so it lives in
+# .vscode/settings.json (`zbspec_game_path`) instead of being hardcoded in
+# tests/spec/zbspec.yml. Prints the value, or nothing when the setting is absent.
+read_vscode_setting() {
+    local key="$1" settings="$ROOT/.vscode/settings.json"
+    [[ -f "$settings" ]] || return 0
+    # VSCode settings are JSONC; drop // line comments before matching.
+    sed -E 's@^[[:space:]]*//.*$@@' "$settings" \
+        | grep -oE "\"$key\"[[:space:]]*:[[:space:]]*\"[^\"]*\"" \
+        | head -n1 \
+        | sed -E "s@^\"$key\"[[:space:]]*:[[:space:]]*\"@@; s@\"\$@@" || true
+}
+
+# Materialize the config ZBSpec should use: the committed zbspec.yml with a
+# `game_path` appended from the VSCode setting. Falls back to zbspec.yml
+# unchanged (ZBSpec then auto-detects) when no setting is found. Prints the path.
+materialize_zbspec_config() {
+    local base="$ROOT/tests/spec/zbspec.yml"
+    local game_path
+    game_path="$(read_vscode_setting zbspec_game_path)"
+    if [[ -z "$game_path" ]]; then
+        echo "    (no zbspec_game_path in .vscode/settings.json; ZBSpec will auto-detect the game)" >&2
+        printf '%s' "$base"
+        return
+    fi
+    # Undo JSON backslash escaping and use forward slashes so the YAML scalar
+    # needs no escaping; double single quotes for YAML.
+    game_path="$(printf '%s' "$game_path" | sed -e 's/\\\\/\//g' -e 's/\\/\//g')"
+    game_path="${game_path//\'/\'\'}"
+    local out="$ROOT/tests/.zbspec.local.yml"
+    { cat "$base"; printf "\ngame_path: '%s'\n" "$game_path"; } > "$out"
+    printf '%s' "$out"
+}
+
 run_zbspec() {
     local mode="$1"
     local vendor="$ROOT/tests/vendor/ZBSpec"
@@ -67,11 +101,14 @@ run_zbspec() {
         exit 1
     fi
 
+    local config
+    config="$(materialize_zbspec_config)"
+
     # Run the vendored copy directly; it only needs stdlib + amazing_print + sugar_png.
     # -v lists every executed spec (name + pass/fail); without it ZBSpec only prints
     # per-section counts, which hides which specs actually ran.
     exec ruby -I"$vendor/lib" "$vendor/bin/zbspec" \
-        --mod-dir "$ROOT" --config "$ROOT/tests/spec/zbspec.yml" -v "$mode"
+        --mod-dir "$ROOT" --config "$config" -v "$mode"
 }
 
 case "${1:-all}" in
