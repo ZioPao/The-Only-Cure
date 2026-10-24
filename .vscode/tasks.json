@@ -89,9 +89,97 @@
             "windows": {
                 "command": "\"${config:zomboid_server_folder}\\StartServer64_nosteam_custom.bat\" TOC"
             },
+            "linux": {
+                "command": "\"${config:zomboid_server_folder}/start-server-nosteam-custom.sh\" TOC"
+            },
             "problemMatcher": [
                 "$eslint-stylish"
             ]
+        },
+        {
+            "label": "TOC: Lint",
+            "type": "shell",
+            "windows": {
+                "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"${workspaceFolder}/tests/run.ps1\" lint"
+            },
+            "linux": {
+                "command": "bash \"${workspaceFolder}/tests/run.sh\" lint"
+            },
+            "osx": {
+                "command": "bash \"${workspaceFolder}/tests/run.sh\" lint"
+            },
+            "options": {
+                "statusbar": { "label": "$(check) TOC: Lint" }
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "TOC: Unit Tests",
+            "type": "shell",
+            "windows": {
+                "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"${workspaceFolder}/tests/run.ps1\" unit"
+            },
+            "linux": {
+                "command": "bash \"${workspaceFolder}/tests/run.sh\" unit"
+            },
+            "osx": {
+                "command": "bash \"${workspaceFolder}/tests/run.sh\" unit"
+            },
+            "options": {
+                "statusbar": { "label": "$(beaker) TOC: Unit" }
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "TOC: In-Game SP Tests",
+            "type": "shell",
+            "windows": {
+                "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"${workspaceFolder}/tests/run.ps1\" sp"
+            },
+            "linux": {
+                "command": "bash \"${workspaceFolder}/tests/run.sh\" sp"
+            },
+            "osx": {
+                "command": "bash \"${workspaceFolder}/tests/run.sh\" sp"
+            },
+            "options": {
+                "statusbar": { "label": "$(beaker) TOC: In-Game SP" }
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "TOC: In-Game MP Tests",
+            "type": "shell",
+            "windows": {
+                "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"${workspaceFolder}/tests/run.ps1\" mp"
+            },
+            "linux": {
+                "command": "bash \"${workspaceFolder}/tests/run.sh\" mp"
+            },
+            "osx": {
+                "command": "bash \"${workspaceFolder}/tests/run.sh\" mp"
+            },
+            "options": {
+                "statusbar": { "label": "$(beaker) TOC: In-Game MP" }
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "TOC: Test All",
+            "type": "shell",
+            "windows": {
+                "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"${workspaceFolder}/tests/run.ps1\" all"
+            },
+            "linux": {
+                "command": "bash \"${workspaceFolder}/tests/run.sh\" all"
+            },
+            "osx": {
+                "command": "bash \"${workspaceFolder}/tests/run.sh\" all"
+            },
+            "options": {
+                "statusbar": { "label": "$(beaker) TOC: Test All" }
+            },
+            "problemMatcher": []
         }
     ]
 }

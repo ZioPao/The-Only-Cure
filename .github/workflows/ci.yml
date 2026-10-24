@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches: [dev, main, "test/**"]
+  pull_request:
+    branches: [dev, main]
+  workflow_dispatch:
+
+jobs:
+  # Fast, no game required. Runs on GitHub-hosted runners.
+  static-and-unit:
+    name: Lint & unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install LuaJIT
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y luajit
+
+      - name: Install selene
+        run: |
+          curl -sSL -o selene.zip https://github.com/Kampfkarren/selene/releases/download/0.28.0/selene-0.28.0-linux.zip
+          unzip -o selene.zip -d "$RUNNER_TEMP/selene"
+          chmod +x "$RUNNER_TEMP/selene/selene"
+          echo "$RUNNER_TEMP/selene" >> "$GITHUB_PATH"
+
+      - name: Lint
+        run: ./tests/run.sh lint
+
+      - name: Unit tests
+        run: ./tests/run.sh unit

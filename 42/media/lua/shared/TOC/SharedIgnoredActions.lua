@@ -90,3 +90,29 @@ function ISDrinkFromBottle:new(character, item, uses)
     o.skipTOC = true
     return o
 end
+
+-- #285: fluid/fuel actions are one-handed; exempt from the amputation time penalty.
+---@param actionClass table|nil
+local function SkipTOCForAction(actionClass)
+    if not actionClass or not actionClass.new then return end
+    local og_new = actionClass.new
+    function actionClass:new(...)
+        local o = og_new(self, ...)
+        o.skipTOC = true
+        return o
+    end
+end
+
+SkipTOCForAction(ISDrinkFluidAction)
+SkipTOCForAction(ISFluidEmptyAction)
+SkipTOCForAction(ISFluidTransferAction)
+SkipTOCForAction(ISAddFluidFromItemAction)
+SkipTOCForAction(ISTakeFuel)
+SkipTOCForAction(ISRefuelFromGasPump)
+SkipTOCForAction(ISTakeGasolineFromVehicle)
+SkipTOCForAction(ISDumpWaterAction)
+SkipTOCForAction(ISTransferWaterAction)
+SkipTOCForAction(ISAddFuelAction)
+SkipTOCForAction(ISInsertLightSourceFuelAction)
+SkipTOCForAction(ISRemoveLightSourceFuelAction)
+SkipTOCForAction(ISLightFromPetrol)

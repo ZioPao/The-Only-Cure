@@ -2,7 +2,6 @@
 -- Client-side async load is handled by ClientDataController.
 
 local CommandsData = require("TOC/CommandsData")
-local CommonMethods = require("TOC/CommonMethods")
 local StaticData = require("TOC/StaticData")
 require("TOC/Events")
 ----------------

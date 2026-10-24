@@ -1,0 +1,3 @@
+[submodule "tests/vendor/ZBSpec"]
+	path = tests/vendor/ZBSpec
+	url = https://github.com/ZioPao/ZBSpec.git

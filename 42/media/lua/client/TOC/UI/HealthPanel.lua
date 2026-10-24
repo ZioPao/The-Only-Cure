@@ -247,27 +247,27 @@ end
 
 local og_ISHealthPanel_getDamagedParts = ISHealthPanel.getDamagedParts
 function ISHealthPanel:getDamagedParts()
-    -- check for imeds or if TOC is ready to display its stuff on the health panel
-    if isReady == false or Compat.handlers['iMeds'].isActive or Compat.handlers['iMedsFixed'].isActive then
+    local patientUsername = self:getPatient():getUsername()
+    local mdh = DataController.GetInstance(patientUsername)
+
+    if isReady == false or not mdh or Compat.handlers['iMeds'].isActive or Compat.handlers['iMedsFixed'].isActive then
         return og_ISHealthPanel_getDamagedParts(self)
-    elseif isReady then
-        local result = {}
-        local bodyParts = self:getPatient():getBodyDamage():getBodyParts()
-        if isClient() and not self:getPatient():isLocalPlayer() then
-            bodyParts = self:getPatient():getBodyDamageRemote():getBodyParts()
-        end
-
-        local patientUsername = self:getPatient():getUsername()
-        local mdh = DataController.GetInstance(patientUsername)
-        for i=1,bodyParts:size() do
-            local bodyPart = bodyParts:get(i-1)
-            local bodyPartTypeStr = BodyPartType.ToString(bodyPart:getType())
-            local limbName = StaticData.LIMBS_IND_STR[bodyPartTypeStr]
-
-            if ISHealthPanel.cheat or bodyPart:HasInjury() or bodyPart:bandaged() or bodyPart:stitched() or bodyPart:getSplintFactor() > 0 or bodyPart:getAdditionalPain() > 10 or bodyPart:getStiffness() > 5 or (mdh:getIsCut(limbName) and mdh:getIsVisible(limbName)) then
-               table.insert(result, bodyPart)
-            end
-        end
-        return result
     end
+
+    local result = {}
+    local bodyParts = self:getPatient():getBodyDamage():getBodyParts()
+    if isClient() and not self:getPatient():isLocalPlayer() then
+        bodyParts = self:getPatient():getBodyDamageRemote():getBodyParts()
+    end
+
+    for i=1,bodyParts:size() do
+        local bodyPart = bodyParts:get(i-1)
+        local bodyPartTypeStr = BodyPartType.ToString(bodyPart:getType())
+        local limbName = StaticData.LIMBS_IND_STR[bodyPartTypeStr]
+
+        if ISHealthPanel.cheat or bodyPart:HasInjury() or bodyPart:bandaged() or bodyPart:stitched() or bodyPart:getSplintFactor() > 0 or bodyPart:getAdditionalPain() > 10 or bodyPart:getStiffness() > 5 or (mdh:getIsCut(limbName) and mdh:getIsVisible(limbName)) then
+           table.insert(result, bodyPart)
+        end
+    end
+    return result
 end

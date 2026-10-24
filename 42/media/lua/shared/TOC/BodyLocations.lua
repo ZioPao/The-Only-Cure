@@ -94,8 +94,8 @@ end
 local results = addBodyLocationsAt("Human", {
     {name = "toc:Arm_L", reference = ItemBodyLocation.FULL_TOP, before = false},
     {name = "toc:Arm_R", reference = ItemBodyLocation.FULL_TOP, before = false},
-    {name = "toc:ArmProst_L", reference = ItemBodyLocation.FULL_TOP, before = false},
-    {name = "toc:ArmProst_R", reference = ItemBodyLocation.FULL_TOP, before = false},
+    {name = "toc:armprost_l", reference = ItemBodyLocation.FULL_TOP, before = false},
+    {name = "toc:armprost_r", reference = ItemBodyLocation.FULL_TOP, before = false},
     {name = "toc:ArmAccessory_L", reference = ItemBodyLocation.FULL_TOP, before = false},
     {name = "toc:ArmAccessory_R", reference = ItemBodyLocation.FULL_TOP, before = false},
 })
@@ -103,7 +103,7 @@ local results = addBodyLocationsAt("Human", {
 
 results['toc:Arm_L']:setMultiItem(false)
 results['toc:Arm_R']:setMultiItem(false)
-results['toc:ArmProst_L']:setMultiItem(false)
-results['toc:ArmProst_R']:setMultiItem(false)
+results['toc:armprost_l']:setMultiItem(false)
+results['toc:armprost_r']:setMultiItem(false)
 results['toc:ArmAccessory_L']:setMultiItem(false)
 results['toc:ArmAccessory_R']:setMultiItem(false)

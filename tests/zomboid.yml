@@ -1,0 +1,357 @@
+---
+base: lua51
+globals:
+  ACTIONS:
+    any: true
+  Action:
+    any: true
+  AdjacentFreeTileFinder:
+    any: true
+  BloodBodyPartType:
+    any: true
+  BloodClothingType:
+    any: true
+  BodyLocations:
+    any: true
+  BodyPartType:
+    any: true
+  CharacterActionAnims:
+    any: true
+  CharacterStat:
+    any: true
+  CharacterTrait:
+    any: true
+  Events:
+    any: true
+  ISApplyBandage:
+    any: true
+  ISAttachItemHotbar:
+    any: true
+  ISBarricadeAction:
+    any: true
+  ISBaseTimedAction:
+    any: true
+  ISBuildingObject:
+    any: true
+  ISCampingInfoAction:
+    any: true
+  ISCharacterInfoWindow:
+    any: true
+  ISChopTreeAction:
+    any: true
+  ISCleanBandage:
+    any: true
+  ISCleanBurn:
+    any: true
+  ISClothingExtraAction:
+    any: true
+  ISContextMenu:
+    any: true
+  ISCraftAction:
+    any: true
+  ISCraftingUI:
+    any: true
+  ISDestroyStuffAction:
+    any: true
+  ISDetachItemHotbar:
+    any: true
+  ISDisinfect:
+    any: true
+  ISDismantleAction:
+    any: true
+  ISDrinkFromBottle:
+    any: true
+  ISEatFoodAction:
+    any: true
+  ISEquipWeaponAction:
+    any: true
+  ISFinalizeDealAction:
+    any: true
+  ISGrabItemAction:
+    any: true
+  ISHealthBodyPartListBox:
+    any: true
+  ISHealthPanel:
+    any: true
+  ISHotbar:
+    any: true
+  ISInsertMagazine:
+    any: true
+  ISInventoryPage:
+    any: true
+  ISInventoryPane:
+    any: true
+  ISInventoryPaneContextMenu:
+    any: true
+  ISInventoryTransferAction:
+    any: true
+  ISInventoryTransferUtil:
+    any: true
+  ISItemsListView:
+    any: true
+  ISLoadBulletsInMagazine:
+    any: true
+  ISMedicalCheckAction:
+    any: true
+  ISModalDialog:
+    any: true
+  ISObjectClickHandler:
+    any: true
+  ISPanel:
+    any: true
+  ISPickAxeGroundCoverItem:
+    any: true
+  ISPickUpGroundCoverItem:
+    any: true
+  ISRackFirearm:
+    any: true
+  ISReadABook:
+    any: true
+  ISReloadWeaponAction:
+    any: true
+  ISRemoveBullet:
+    any: true
+  ISRemovePatch:
+    any: true
+  ISRemoveWeaponUpgrade:
+    any: true
+  ISSplint:
+    any: true
+  ISStitch:
+    any: true
+  ISTakePillAction:
+    any: true
+  ISTakeWaterAction:
+    any: true
+  ISTimedAction:
+    any: true
+  ISTimedActionQueue:
+    any: true
+  ISUIElement:
+    any: true
+  ISUnbarricadeAction:
+    any: true
+  ISUnequipAction:
+    any: true
+  ISUnloadBulletsFromFirearm:
+    any: true
+  ISUnloadBulletsFromMagazine:
+    any: true
+  ISUpgradeWeapon:
+    any: true
+  ISWashYourself:
+    any: true
+  ISWearClothing:
+    any: true
+  ISWorldObjectContextMenu:
+    any: true
+  IsoBall:
+    any: true
+  IsoGameCharacter:
+    any: true
+  IsoPlayer:
+    any: true
+  IsoZombieGiblets:
+    any: true
+  ItemBodyLocation:
+    any: true
+  ItemTag:
+    any: true
+  KahluaUtil:
+    any: true
+  Keyboard:
+    any: true
+  LuaEventManager:
+    any: true
+  MainOptions:
+    any: true
+  Metabolics:
+    any: true
+  ModData:
+    any: true
+  Perks:
+    any: true
+  ProceduralDistributions:
+    any: true
+  ResourceLocation:
+    any: true
+  SandboxVars:
+    any: true
+  SyncFadeOut:
+    any: true
+  SyncXp:
+    any: true
+  UIFont:
+    any: true
+  ZombRand:
+    any: true
+  ZombRandFloat:
+    any: true
+  addBloodSplat:
+    any: true
+  addXp:
+    any: true
+  enableDebug:
+    any: true
+  forceDisconnect:
+    any: true
+  getAccessLevel:
+    any: true
+  getActivatedMods:
+    any: true
+  getAllBodyParts:
+    any: true
+  getAllItems:
+    any: true
+  getBuilding:
+    any: true
+  getCell:
+    any: true
+  getCore:
+    any: true
+  getCoroutineObjStack:
+    any: true
+  getCurrentCoroutine:
+    any: true
+  getDebug:
+    any: true
+  getEffectiveNpcName:
+    any: true
+  getGameClient:
+    any: true
+  getGameSpeed:
+    any: true
+  getGameTime:
+    any: true
+  getGameVersion:
+    any: true
+  getItem:
+    any: true
+  getItemClass:
+    any: true
+  getModInfo:
+    any: true
+  getModInfoByID:
+    any: true
+  getOnlinePlayers:
+    any: true
+  getOnlineUsername:
+    any: true
+  getPlayer:
+    any: true
+  getPlayerByOnlineID:
+    any: true
+  getPlayerScreenLeft:
+    any: true
+  getRandomUUID:
+    any: true
+  getSandboxOptions:
+    any: true
+  getScriptManager:
+    any: true
+  getSoundManager:
+    any: true
+  getSpecificPlayer:
+    any: true
+  getSquare:
+    any: true
+  getSteamID:
+    any: true
+  getText:
+    any: true
+  getTexture:
+    any: true
+  getTimeInMillis:
+    any: true
+  getTimestamp:
+    any: true
+  getWorld:
+    any: true
+  getXp:
+    any: true
+  getZomboidRadio:
+    any: true
+  haveAccess:
+    any: true
+  instanceItem:
+    any: true
+  instanceof:
+    any: true
+  isAdmin:
+    any: true
+  isClient:
+    any: true
+  isDebugEnabled:
+    any: true
+  isGamePaused:
+    any: true
+  isIngameState:
+    any: true
+  isServer:
+    any: true
+  loadstring:
+    any: true
+  luautils:
+    any: true
+  sendAddItemToContainer:
+    any: true
+  sendClientCommand:
+    any: true
+  sendEquip:
+    any: true
+  sendRemoveItemFromContainer:
+    any: true
+  sendServerCommand:
+    any: true
+  setGameSpeed:
+    any: true
+  syncBodyPart:
+    any: true
+  triggerEvent:
+    any: true
+  TOC_DEBUG:
+    any: true
+  _TOCRegistries:
+    any: true
+  Long:
+    any: true
+  ISButton:
+    any: true
+  FHSwapHandsAction:
+    any: true
+  addSound:
+    any: true
+  timer:
+    any: true
+  SetHealthPanelTOC:
+    any: true
+  ItemVisual:
+    any: true
+  ISWalkToTimedAction:
+    any: true
+  ISToolTip:
+    any: true
+  ISRichTextPanel:
+    any: true
+  ISBaseObject:
+    any: true
+  HealthPanelAction:
+    any: true
+  getTextManager:
+    any: true
+  getPlayerContextMenu:
+    any: true
+  string.contains:
+    any: true
+  string.split:
+    any: true
+  string.trim:
+    any: true
+  string.startswith:
+    any: true
+  string.endswith:
+    any: true
+  table.wipe:
+    any: true
+  table.newarray:
+    any: true

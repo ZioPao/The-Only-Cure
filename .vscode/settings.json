@@ -18,10 +18,16 @@
     "Lua.workspace.ignoreDir": [
         ".vscode",
         "dev_stuff",
+        "tests",
         "workshop_files"
     ],
     "Lua.diagnostics.globals": [
         "FHSwapHandsAction",
         "timer"
-    ]
+    ],
+    // Machine-dependent Project Zomboid install used by the in-game ZBSpec
+    // tests. tests/run.ps1 / tests/run.sh read this and inject it as
+    // `game_path` into tests/spec/zbspec.yml at run time.
+    "zbspec_game_path": "C:\\Steam\\steamapps\\common\\ProjectZomboid"
+
 }
