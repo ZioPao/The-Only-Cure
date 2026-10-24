@@ -92,27 +92,96 @@ function ISDrinkFromBottle:new(character, item, uses)
 end
 
 -- #285: fluid/fuel actions are one-handed; exempt from the amputation time penalty.
----@param actionClass table|nil
-local function SkipTOCForAction(actionClass)
-    if not actionClass or not actionClass.new then return end
-    local og_new = actionClass.new
-    function actionClass:new(...)
-        local o = og_new(self, ...)
-        o.skipTOC = true
-        return o
-    end
+-- #292: the parameter names below are the wire args NetTimedAction reads off the
+-- constructor prototype. Never wrap these `new`s with `...`: a vararg prototype
+-- has no named params, so the server would rebuild the action with nil args.
+local og_ISDrinkFluidAction_new = ISDrinkFluidAction.new
+function ISDrinkFluidAction:new(character, item, percentage)
+    local o = og_ISDrinkFluidAction_new(self, character, item, percentage)
+    o.skipTOC = true
+    return o
 end
 
-SkipTOCForAction(ISDrinkFluidAction)
-SkipTOCForAction(ISFluidEmptyAction)
-SkipTOCForAction(ISFluidTransferAction)
-SkipTOCForAction(ISAddFluidFromItemAction)
-SkipTOCForAction(ISTakeFuel)
-SkipTOCForAction(ISRefuelFromGasPump)
-SkipTOCForAction(ISTakeGasolineFromVehicle)
-SkipTOCForAction(ISDumpWaterAction)
-SkipTOCForAction(ISTransferWaterAction)
-SkipTOCForAction(ISAddFuelAction)
-SkipTOCForAction(ISInsertLightSourceFuelAction)
-SkipTOCForAction(ISRemoveLightSourceFuelAction)
-SkipTOCForAction(ISLightFromPetrol)
+local og_ISFluidEmptyAction_new = ISFluidEmptyAction.new
+function ISFluidEmptyAction:new(character, containerObject)
+    local o = og_ISFluidEmptyAction_new(self, character, containerObject)
+    o.skipTOC = true
+    return o
+end
+
+local og_ISFluidTransferAction_new = ISFluidTransferAction.new
+function ISFluidTransferAction:new(character, sourceContainer, sourceFluidObject, targetContainer, targetFluidObject, amount)
+    local o = og_ISFluidTransferAction_new(self, character, sourceContainer, sourceFluidObject, targetContainer, targetFluidObject, amount)
+    o.skipTOC = true
+    return o
+end
+
+local og_ISAddFluidFromItemAction_new = ISAddFluidFromItemAction.new
+function ISAddFluidFromItemAction:new(character, itemFrom, objectTo)
+    local o = og_ISAddFluidFromItemAction_new(self, character, itemFrom, objectTo)
+    o.skipTOC = true
+    return o
+end
+
+local og_ISTakeFuel_new = ISTakeFuel.new
+function ISTakeFuel:new(character, fuelStation, petrolCan)
+    local o = og_ISTakeFuel_new(self, character, fuelStation, petrolCan)
+    o.skipTOC = true
+    return o
+end
+
+local og_ISRefuelFromGasPump_new = ISRefuelFromGasPump.new
+function ISRefuelFromGasPump:new(character, part, fuelStation)
+    local o = og_ISRefuelFromGasPump_new(self, character, part, fuelStation)
+    o.skipTOC = true
+    return o
+end
+
+local og_ISTakeGasolineFromVehicle_new = ISTakeGasolineFromVehicle.new
+function ISTakeGasolineFromVehicle:new(character, part, item, otherItems)
+    local o = og_ISTakeGasolineFromVehicle_new(self, character, part, item, otherItems)
+    o.skipTOC = true
+    return o
+end
+
+local og_ISDumpWaterAction_new = ISDumpWaterAction.new
+function ISDumpWaterAction:new(character, item)
+    local o = og_ISDumpWaterAction_new(self, character, item)
+    o.skipTOC = true
+    return o
+end
+
+local og_ISTransferWaterAction_new = ISTransferWaterAction.new
+function ISTransferWaterAction:new(character, itemFrom, itemTo, itemFromEndingDelta, itemToEndingDelta)
+    local o = og_ISTransferWaterAction_new(self, character, itemFrom, itemTo, itemFromEndingDelta, itemToEndingDelta)
+    o.skipTOC = true
+    return o
+end
+
+local og_ISAddFuelAction_new = ISAddFuelAction.new
+function ISAddFuelAction:new(character, campfire, item, fuelAmt)
+    local o = og_ISAddFuelAction_new(self, character, campfire, item, fuelAmt)
+    o.skipTOC = true
+    return o
+end
+
+local og_ISInsertLightSourceFuelAction_new = ISInsertLightSourceFuelAction.new
+function ISInsertLightSourceFuelAction:new(character, lightSource, fuel)
+    local o = og_ISInsertLightSourceFuelAction_new(self, character, lightSource, fuel)
+    o.skipTOC = true
+    return o
+end
+
+local og_ISRemoveLightSourceFuelAction_new = ISRemoveLightSourceFuelAction.new
+function ISRemoveLightSourceFuelAction:new(character, lightSource)
+    local o = og_ISRemoveLightSourceFuelAction_new(self, character, lightSource)
+    o.skipTOC = true
+    return o
+end
+
+local og_ISLightFromPetrol_new = ISLightFromPetrol.new
+function ISLightFromPetrol:new(character, campfire, lighter, petrol, maxTimeInit)
+    local o = og_ISLightFromPetrol_new(self, character, campfire, lighter, petrol, maxTimeInit)
+    o.skipTOC = true
+    return o
+end
