@@ -14,6 +14,12 @@
             "windows": {
                 "command": "python ${config:zomboid_user_folder}/PaosCrap/make_workshop_pack.py \"42\" \"picch\" \"${workspaceFolderBasename}\" \"\"",
             },
+            "linux": {
+                "command": "python3 ${env:HOME}/Repos/PaosZomboidCrap/make_workshop_pack.py \"42\" \"\" \"${workspaceFolderBasename}\" \"\""
+            },
+            "osx": {
+                "command": "python3 ${env:HOME}/Repos/PaosZomboidCrap/make_workshop_pack.py \"42\" \"\" \"${workspaceFolderBasename}\" \"\""
+            },
         },
         {
             "label": "Create Workshop folder",
@@ -25,6 +31,12 @@
             },
             "windows": {
                 "command": "python ${config:zomboid_user_folder}/PaosCrap/make_workshop_pack.py \"picch\" \"${workspaceFolderBasename}\" \"test\"",
+            },
+            "linux": {
+                "command": "python3 ${env:HOME}/Repos/PaosZomboidCrap/make_workshop_pack.py \"42\" \"\" \"${workspaceFolderBasename}\" \"test\""
+            },
+            "osx": {
+                "command": "python3 ${env:HOME}/Repos/PaosZomboidCrap/make_workshop_pack.py \"42\" \"\" \"${workspaceFolderBasename}\" \"test\""
             }
         },
         {
